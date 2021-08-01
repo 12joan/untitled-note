@@ -36,6 +36,10 @@ body {
     &:not(:focus):hover {
       background-color: $light;
     }
+
+    h1 {
+      @extend .h3;
+    }
   }
 
   .btn-toggle-formatting-toolbar {
