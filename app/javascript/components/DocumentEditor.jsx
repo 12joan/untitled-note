@@ -1,10 +1,31 @@
 import React from 'react'
-import { ReactTrixRTEInput as TrixInput, ReactTrixRTEToolbar as TrixToolbar } from 'react-trix-rte'
+import { useState } from 'react'
+import { TrixEditor } from 'react-trix'
 
 const DocumentEditor = props => {
   const { document } = props
   const toolbarId = `trix-toolbar-document-${document.id}`
   const toolbarCollapseId = `${toolbarId}-collapse`
+
+  const [body, setBody] = useState(document.body)
+
+  const handleChange = body => {
+    setBody(body)
+
+    fetch(`/api/v1/documents/${document.id}`, {
+      method: 'PUT',
+      headers: {
+        "X-CSRF-Token": window.document.querySelector("[name='csrf-token']").content,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        document: {
+          ...document,
+          body,
+        },
+      }),
+    })
+  }
 
   return (
     <div className="document-editor mb-5">
@@ -31,14 +52,15 @@ const DocumentEditor = props => {
       </div>
 
       <div className="collapse" id={toolbarCollapseId}>
-        <TrixToolbar
-          toolbarId={toolbarId} />
+        <trix-toolbar
+          id={toolbarId} />
       </div>
 
-      <TrixInput
-        toolbarId={toolbarId}
+      <TrixEditor
+        toolbar={toolbarId}
         placeholder="Add document body"
-        defaultValue={document.body} />
+        value={body}
+        onChange={handleChange} />
     </div>
   )
 }
