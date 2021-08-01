@@ -13,3 +13,35 @@
  *= require_tree .
  *= require_self
  */
+
+$enable-negative-margins: true;
+$transition-collapse: none;
+
+@import "bootstrap/scss/bootstrap";
+
+body {
+  background-color: $light;
+}
+
+.document-editor {
+  @extend .bg-white;
+  @extend .shadow;
+  padding: 3em;
+  border-radius: 2em;
+
+  trix-editor {
+    @extend .p-0;
+    border: none;
+
+    &:not(:focus):hover {
+      background-color: $light;
+    }
+  }
+
+  .btn-toggle-formatting-toolbar {
+    @extend .btn;
+    @extend .text-secondary;
+    @extend .p-0;
+    font-size: 1.25em;
+  }
+}
