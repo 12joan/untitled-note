@@ -48,7 +48,7 @@ const DocumentEditor = props => {
   }
 
   return (
-    <div className="document-editor mb-5">
+    <div className="document-editor">
       {
         doc === undefined
           ? <>Loading&hellip;</>
@@ -85,6 +85,7 @@ const DocumentEditor = props => {
             </div>
 
             <TrixEditor
+              className={props.fullHeight ? 'trix-editor-full-height' : ''}
               toolbar={toolbarId}
               placeholder="Add document body"
               value={doc.body}

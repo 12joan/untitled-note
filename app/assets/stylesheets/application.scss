@@ -37,6 +37,10 @@ body {
       background-color: $light;
     }
 
+    &.trix-editor-full-height {
+      min-height: calc(max(calc(100vh - 15em), 5em));
+    }
+
     h1 {
       @extend .h3;
     }

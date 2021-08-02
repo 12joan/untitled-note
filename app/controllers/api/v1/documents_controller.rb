@@ -4,7 +4,7 @@ module API
       before_action :set_document, only: %i[ show edit update destroy ]
 
       def index
-        @documents = Document.all
+        @documents = Document.all.order(:created_at)
       end
 
       def show
