@@ -1,24 +1,24 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import DocumentEditor from 'components/DocumentEditor'
 
 const App = props => {
-  const [existingDocuments, setExistingDocuments] = useState([])
+  const [existingDocuments, setExistingDocuments] = useState(undefined)
 
-  useEffect(() => {
-    fetch('/api/v1/documents.json')
-      .then(response => response.json())
-      .then(setExistingDocuments)
-      .catch(console.error)
-  }, [])
+  useEffect(() => DocumentsAPI.index().then(setExistingDocuments), [])
 
   return (
     <div className="container p-3">
       {
-        existingDocuments.map(document => (
-          <DocumentEditor key={document.id} document={document} />
-        ))
+        existingDocuments === undefined
+          ? <>Loading&hellip;</>
+          : existingDocuments.map(({ id }) => (
+            <DocumentEditor key={id} id={id} />
+          ))
       }
+
+      <DocumentEditor />
     </div>
   )
 }
