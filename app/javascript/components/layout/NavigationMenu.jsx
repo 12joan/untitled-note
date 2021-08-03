@@ -7,7 +7,7 @@ const NavigationMenu = props => (
       {
         [
           { path: '/documents', text: 'All documents' },
-        ].map(itemProps => <NavigationMenuItem {...itemProps} />)
+        ].map(itemProps => <NavigationMenuItem key={itemProps.path} {...itemProps} />)
       }
     </ul>
   </div>
