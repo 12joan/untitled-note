@@ -10,7 +10,7 @@ const DocumentIndex = props => {
 
   return (
     <div className="h-100 d-flex">
-      <div className="h-100 flex-grow-1 overflow-scroll d-flex flex-column-reverse px-3">
+      <div className="h-100 flex-grow-1 overflow-scroll d-flex flex-column-reverse px-3 py-4">
         <div>
           {
             existingDocuments === undefined
@@ -23,7 +23,7 @@ const DocumentIndex = props => {
           }
 
           <div className="py-4">
-            <DocumentEditor fullHeight />
+            <DocumentEditor />
           </div>
         </div>
       </div>
