@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { TrixEditor } from 'react-trix'
+import { Link } from 'react-router-dom'
+import { BoxArrowUpRight } from 'react-bootstrap-icons'
 import { v4 as uuid } from 'uuid'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
@@ -48,13 +50,24 @@ const DocumentEditor = props => {
   }
 
   return (
-    <div className="document-editor">
+    <div className={`document-editor ${props.fullHeight ? 'h-100' : ''} d-flex flex-column`}>
       {
         doc === undefined
           ? <>Loading&hellip;</>
           : <>
             <div className="container-fluid">
-              <div className="row mx-n3 g-3 align-items-center mb-2">
+              <div className="document-editor-top-bar d-flex align-items-end">
+                {
+                  doc.id !== undefined && (
+                    <Link to={`/documents/${doc.id}`} className="btn text-secondary ms-auto me-n3">
+                      <BoxArrowUpRight className="bi" />
+                      <span className="visually-hidden">Show document</span>
+                    </Link>
+                  )
+                }
+              </div>
+
+              <div className="row g-3 align-items-center mb-2">
                 <div className="col flex-grow-1">
                   <h1 className="border-bottom">
                     {
@@ -74,6 +87,7 @@ const DocumentEditor = props => {
                     aria-expanded="false"
                     aria-controls={toolbarCollapseId}>
                     Aa
+                    <span className="visually-hidden">Toggle formatting controls</span>
                   </button>
                 </div>
               </div>
@@ -85,7 +99,6 @@ const DocumentEditor = props => {
             </div>
 
             <TrixEditor
-              className={props.fullHeight ? 'trix-editor-full-height' : ''}
               toolbar={toolbarId}
               placeholder="Add document body"
               value={doc.body}

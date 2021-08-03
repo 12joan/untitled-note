@@ -23,22 +23,33 @@ html, body {
   height: 100%;
 }
 
+// Bootstrap Icons
+.bi {
+  vertical-align: -.125em;
+}
+
 .document-editor {
   @extend .bg-white;
   @extend .shadow;
   padding: 3em;
   border-radius: 2em;
 
+  .document-editor-top-bar {
+    margin-top: -3em;
+    min-height: 3em;
+  }
+
+  [id^="trix-editor-top-level"] {
+    @extend .flex-grow-1;
+  }
+
   trix-editor {
+    @extend .h-100;
     @extend .p-0;
     border: none;
 
     &:not(:focus):hover {
       background-color: $light;
-    }
-
-    &.trix-editor-full-height {
-      min-height: calc(max(calc(100vh - 15em), 5em));
     }
 
     h1 {

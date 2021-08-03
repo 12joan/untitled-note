@@ -21,10 +21,6 @@ const DocumentIndex = props => {
                 </div>
               ))
           }
-
-          <div className="py-4">
-            <DocumentEditor />
-          </div>
         </div>
       </div>
     </div>

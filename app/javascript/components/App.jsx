@@ -4,6 +4,8 @@ import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NavigationMenu from 'components/layout/NavigationMenu'
 import DocumentIndex from 'components/documents/DocumentIndex'
+import NewDocument from 'components/documents/NewDocument'
+import ShowDocument from 'components/documents/ShowDocument'
 
 const App = props => {
   return (
@@ -25,7 +27,19 @@ const App = props => {
           <div className="col mh-100 overflow-scroll bg-light">
             <Switch>
               <Route path="/documents">
-                <DocumentIndex />
+                <Switch>
+                  <Route path="/documents/new">
+                    <NewDocument />
+                  </Route>
+
+                  <Route path="/documents/:id" component={({ match }) => (
+                    <ShowDocument id={match.params.id} />
+                  )} />
+
+                  <Route path="/documents">
+                    <DocumentIndex />
+                  </Route>
+                </Switch>
               </Route>
 
               <Redirect from="/" to="/documents" />
