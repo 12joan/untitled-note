@@ -1,9 +1,9 @@
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NavigationMenu from 'components/layout/NavigationMenu'
-import ContentArea from 'components/layout/ContentArea'
+import DocumentIndex from 'components/documents/DocumentIndex'
 
 const App = props => {
   return (
@@ -23,7 +23,14 @@ const App = props => {
           </div>
 
           <div className="col mh-100 overflow-scroll bg-light">
-            <ContentArea />
+            <Switch>
+              <Route path="/documents">
+                <DocumentIndex />
+              </Route>
+
+              <Redirect from="/" to="/documents" />
+              <Redirect to="/" />
+            </Switch>
           </div>
         </div>
       </div>

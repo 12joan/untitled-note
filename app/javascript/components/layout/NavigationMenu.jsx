@@ -15,7 +15,10 @@ const NavigationMenu = props => (
 
 const NavigationMenuItem = props => (
   <li className="nav-item">
-    <NavLink to={props.path} className="nav-link rounded-0 mx-n3 px-3 py-1 text-start" activeClassName="active">
+    <NavLink
+      to={props.path}
+      className="nav-link rounded-0 mx-n3 px-3 py-1 text-start"
+      activeClassName="active">
       {props.text}
     </NavLink>
   </li>
