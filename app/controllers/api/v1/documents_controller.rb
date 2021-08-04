@@ -42,7 +42,7 @@ module API
 
       # Only allow a list of trusted parameters through.
       def document_params
-        params.require(:document).permit(:body)
+        params.require(:document).permit(:title, :body)
       end
     end
   end

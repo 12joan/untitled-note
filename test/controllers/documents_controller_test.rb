@@ -12,10 +12,11 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create document' do
     assert_difference('Document.count') do
-      post api_v1_documents_url, params: { document: { body: '<div>Hello world</div>' } }
+      post api_v1_documents_url, params: { document: { title: 'New title', body: '<div>Hello world</div>' } }
     end
 
     assert_response :success
+    assert_equal 'New title', Document.last.title
   end
 
   test 'should show document' do
@@ -24,8 +25,9 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update document' do
-    patch api_v1_document_url(@document), params: { document: { body: '<div>Hello world</div>' } }
+    patch api_v1_document_url(@document), params: { document: { title: 'New title', body: '<div>Hello world</div>' } }
     assert_response :success
+    assert_equal 'New title', Document.find(@document.id).title
   end
 
   test 'should destroy document' do
