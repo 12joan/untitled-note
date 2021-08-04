@@ -30,6 +30,7 @@ const DocumentsAPI = new ResourcesAPI({
 
   transformRequestParams: doc => ({
     document: {
+      title: doc.title,
       body: doc.body,
     },
   }),

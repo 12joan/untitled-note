@@ -39,6 +39,19 @@ html, body {
     min-height: 3em;
   }
 
+  .title-input {
+    @extend .h1;
+    @extend .w-100;
+    @extend .border-0;
+    @extend .border-bottom;
+
+    outline: none;
+
+    &:focus-visible {
+      border-color: $primary !important;
+    }
+  }
+
   [id^="trix-editor-top-level"] {
     @extend .flex-grow-1;
   }

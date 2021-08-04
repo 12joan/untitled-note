@@ -12,7 +12,7 @@ const DocumentEditor = props => {
   const toolbarId = `trix-toolbar-${editorUUID}`
   const toolbarCollapseId = `${toolbarId}-collapse`
 
-  const [doc, setDoc] = useState(props.id === undefined ? { body: '' } : undefined)
+  const [doc, setDoc] = useState(props.id === undefined ? { title: '', body: '' } : undefined)
   const [isDirty, setIsDirty] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
@@ -69,13 +69,11 @@ const DocumentEditor = props => {
 
               <div className="row g-3 align-items-center mb-2">
                 <div className="col flex-grow-1">
-                  <h1 className="border-bottom">
-                    {
-                      doc.id === undefined
-                        ? 'New Document'
-                        : `Document ${doc.id}`
-                    }
-                  </h1>
+                  <input
+                    className="title-input"
+                    value={doc.title}
+                    placeholder="Title"
+                    onChange={event => updateDocument({ title: event.target.value })} />
                 </div>
 
                 <div className="col-auto">
