@@ -1,20 +1,21 @@
 module API
   module V1
     class DocumentsController < ApplicationController
+      before_action :set_project
       before_action :set_document, only: %i[ show edit update destroy ]
 
       def index
-        @documents = Document.all.order(:created_at)
+        @documents = @project.documents.all.order(:created_at)
       end
 
       def show
       end
 
       def create
-        @document = Document.new(document_params)
+        @document = @project.documents.build(document_params)
 
         if @document.save
-          render :show, status: :created, location: api_v1_document_url(@document)
+          render :show, status: :created, location: api_v1_project_document_url(@project, @document)
         else
           render json: @document.errors, status: :unprocessable_entity
         end
@@ -22,7 +23,7 @@ module API
 
       def update
         if @document.update(document_params)
-          render :show, status: :ok, location: api_v1_document_url(@document)
+          render :show, status: :created, location: api_v1_project_document_url(@project, @document)
         else
           render json: @document.errors, status: :unprocessable_entity
         end
@@ -36,8 +37,13 @@ module API
       private
 
       # Use callbacks to share common setup or constraints between actions.
+
+      def set_project
+        @project = Project.find(params[:project_id])
+      end
+
       def set_document
-        @document = Document.find(params[:id])
+        @document = @project.documents.find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.

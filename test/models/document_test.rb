@@ -3,7 +3,7 @@ require 'test_helper'
 class DocumentTest < ActiveSupport::TestCase
   test 'creating a document creates a new title alias' do
     assert_difference('Alias.count') do
-      Document.create
+      create(:document)
     end
 
     title = Alias.last
@@ -14,7 +14,7 @@ class DocumentTest < ActiveSupport::TestCase
 
   test 'creating a document with a specified title creates a new title alias with that title' do
     assert_difference('Alias.count') do
-      Document.create(title: 'Hello World')
+      create(:document, title: 'Hello World')
     end
 
     title = Alias.last
