@@ -37,27 +37,64 @@ html, body {
   }
 }
 
-.btn-project {
-  @extend .text-start;
+.btn-icon {
+  @extend .px-2;
+  @extend .py-1;
 
-  &:not(.selected) {
+  &:hover, &:focus {
+    @extend .bg-light;
+  }
+}
+
+@mixin btn-selectable($selected-selector) {
+  &:not(#{$selected-selector}) {
     @extend .btn-light;
   }
 
-  &.selected {
+  &#{$selected-selector} {
     @extend .btn-primary;
+  }
+}
+
+.btn-project {
+  @extend .text-start;
+  @include btn-selectable('.selected');
+}
+
+.dim-on-hover {
+  @include transition($btn-transition);
+
+  &:not(:focus):hover {
+    @extend .bg-light;
   }
 }
 
 .document-editor {
   @extend .bg-white;
   @extend .shadow;
+
   padding: 3em;
   border-radius: 2em;
 
-  .document-editor-top-bar {
-    margin-top: -3em;
+  .document-editor-header {
+    @extend .bg-white;
+
+    margin: -3em -3em 0 -3em;
     min-height: 3em;
+    border-radius: 2em 2em 0 0;
+
+    &:not(:hover) .document-editor-header-link {
+      @extend .visually-hidden-focusable;
+    }
+  }
+
+  .document-editor-footer {
+    @extend .bg-white;
+
+    margin: 0 -3em -3em -3em;
+    padding: 0 3em 0 3em;
+    min-height: 3em;
+    border-radius: 0 0 2em 2em;
   }
 
   .title-input {
@@ -65,12 +102,10 @@ html, body {
     @extend .w-100;
     @extend .border-0;
     @extend .border-bottom;
+    @extend .dim-on-hover;
 
+    font-family: Georgia, "Times New Roman", serif;
     outline: none;
-
-    &:focus-visible {
-      border-color: $primary !important;
-    }
   }
 
   [id^="trix-editor-top-level"] {
@@ -80,21 +115,31 @@ html, body {
   trix-editor {
     @extend .h-100;
     @extend .p-0;
-    border: none;
+    @extend .rounded-0;
+    @extend .dim-on-hover;
 
-    &:not(:focus):hover {
-      background-color: $light;
-    }
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.125em;
+    border: none;
 
     h1 {
       @extend .h3;
     }
   }
 
-  .btn-toggle-formatting-toolbar {
-    @extend .btn;
-    @extend .text-secondary;
-    @extend .p-0;
-    font-size: 1.25em;
+  trix-toolbar {
+    .trix-button-group {
+      @extend .btn-group;
+      @extend .border-0;
+    }
+
+    .trix-button {
+      @extend .btn;
+      @include btn-selectable('.trix-active');
+
+      &.trix-active::before {
+        filter: invert(1);
+      }
+    }
   }
 }
