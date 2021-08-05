@@ -1,5 +1,8 @@
 import React from 'react'
+import { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import RouteConfig from 'lib/RouteConfig'
+import ProjectContext from 'lib/contexts/ProjectContext'
 import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NavigationMenu from 'components/layout/NavigationMenu'
@@ -10,44 +13,57 @@ import ShowDocument from 'components/documents/ShowDocument'
 const App = props => {
   return (
     <Router>
-      <div className="continer-fluid h-100 d-flex flex-column ">
-        <div className="row g-0 flex-shrink-0">
-          <TopBar />
-        </div>
+      <Switch>
+        <Route path={RouteConfig.projects.show(':projectId').url} component={({ match }) => {
+          const { projectId } = match.params
 
-        <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
-          <div className="col-auto mh-100 overflow-scroll">
-            <ProjectsBar />
-          </div>
+          const documentsRoutes = RouteConfig.projects.show(projectId).documents
 
-          <div className="col-auto mh-100 overflow-scroll">
-            <NavigationMenu />
-          </div>
+          return (
+            <ProjectContext.Provider value={projectId}>
+              <div className="continer-fluid h-100 d-flex flex-column ">
+                <div className="row g-0 flex-shrink-0">
+                  <TopBar />
+                </div>
 
-          <div className="col mh-100 overflow-scroll bg-light">
-            <Switch>
-              <Route path="/documents">
-                <Switch>
-                  <Route path="/documents/new">
-                    <NewDocument />
-                  </Route>
+                <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
+                  <div className="col-auto mh-100 overflow-scroll">
+                    <ProjectsBar />
+                  </div>
 
-                  <Route path="/documents/:id" component={({ match }) => (
-                    <ShowDocument id={match.params.id} />
-                  )} />
+                  <div className="col-auto mh-100 overflow-scroll">
+                    <NavigationMenu />
+                  </div>
 
-                  <Route path="/documents">
-                    <DocumentIndex />
-                  </Route>
-                </Switch>
-              </Route>
+                  <div className="col mh-100 overflow-scroll bg-light">
+                    <Switch>
+                      <Route path={documentsRoutes.url}>
+                        <Switch>
+                          <Route path={documentsRoutes.new.url}>
+                            <NewDocument />
+                          </Route>
 
-              <Redirect from="/" to="/documents" />
-              <Redirect to="/" />
-            </Switch>
-          </div>
-        </div>
-      </div>
+                          <Route path={documentsRoutes.show(':id').url} component={({ match }) => (
+                            <ShowDocument id={match.params.id} />
+                          )} />
+
+                          <Route path={documentsRoutes.url}>
+                            <DocumentIndex />
+                          </Route>
+                        </Switch>
+                      </Route>
+
+                      <Redirect to={documentsRoutes.url} />
+                    </Switch>
+                  </div>
+                </div>
+              </div>
+            </ProjectContext.Provider>
+          )
+        }} />
+
+        <Redirect to={RouteConfig.projects.show(1).url} />
+      </Switch>
     </Router>
   )
 }

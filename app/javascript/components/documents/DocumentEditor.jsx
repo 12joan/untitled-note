@@ -1,9 +1,11 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { TrixEditor } from 'react-trix'
 import { Link } from 'react-router-dom'
 import { BoxArrowUpRight } from 'react-bootstrap-icons'
 import { v4 as uuid } from 'uuid'
+import ProjectContext from 'lib/contexts/ProjectContext'
+import RouteConfig from 'lib/RouteConfig'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 const DocumentEditor = props => {
@@ -16,9 +18,11 @@ const DocumentEditor = props => {
   const [isDirty, setIsDirty] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
+  const projectId = useContext(ProjectContext)
+
   useEffect(() => {
     if (props.id !== undefined) {
-      DocumentsAPI.show(props.id)
+      DocumentsAPI(projectId).show(props.id)
         .then(setDoc)
     }
   }, [props.id])
@@ -28,8 +32,8 @@ const DocumentEditor = props => {
       setIsUploading(true)
 
       const uploadDocumentPromise = doc.id === undefined
-        ? DocumentsAPI.create(doc).then(setDoc)
-        : DocumentsAPI.update(doc)
+        ? DocumentsAPI(projectId).create(doc).then(setDoc)
+        : DocumentsAPI(projectId).update(doc)
 
       uploadDocumentPromise
         .catch(console.error)
@@ -59,7 +63,9 @@ const DocumentEditor = props => {
               <div className="document-editor-top-bar d-flex align-items-end">
                 {
                   doc.id !== undefined && (
-                    <Link to={`/documents/${doc.id}`} className="btn text-secondary ms-auto me-n3">
+                    <Link
+                      to={RouteConfig.projects.show(projectId).documents.show(doc.id).url}
+                      className="btn text-secondary ms-auto me-n3">
                       <BoxArrowUpRight className="bi" />
                       <span className="visually-hidden">Show document</span>
                     </Link>

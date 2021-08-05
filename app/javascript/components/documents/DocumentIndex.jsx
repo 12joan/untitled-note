@@ -1,12 +1,15 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import ProjectContext from 'lib/contexts/ProjectContext'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
 const DocumentIndex = props => {
   const [existingDocuments, setExistingDocuments] = useState(undefined)
 
-  useEffect(() => DocumentsAPI.index().then(setExistingDocuments), [])
+  const projectId = useContext(ProjectContext)
+
+  useEffect(() => DocumentsAPI(projectId).index().then(setExistingDocuments), [projectId])
 
   return (
     <div className="h-100 d-flex">

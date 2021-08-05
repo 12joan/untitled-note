@@ -28,6 +28,27 @@ html, body {
   vertical-align: -.125em;
 }
 
+.btn-light {
+  @extend .bg-white;
+  @extend .border;
+
+  &:hover, &:focus {
+    @extend .bg-light;
+  }
+}
+
+.btn-project {
+  @extend .text-start;
+
+  &:not(.selected) {
+    @extend .btn-light;
+  }
+
+  &.selected {
+    @extend .btn-primary;
+  }
+}
+
 .document-editor {
   @extend .bg-white;
   @extend .shadow;
