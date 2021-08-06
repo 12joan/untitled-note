@@ -1,9 +1,14 @@
 import React from 'react'
-import ShowDocument from 'components/documents/ShowDocument'
+import DocumentEditor from 'components/documents/DocumentEditor'
 
 const NewDocument = props => {
   return (
-    <ShowDocument id={undefined} />
+    <div className="p-4">
+      <DocumentEditor document={{
+        title: '',
+        body: '',
+      }} fullHeight openable />
+    </div>
   )
 }
 

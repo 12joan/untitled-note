@@ -14,20 +14,13 @@ const DocumentEditor = props => {
   const toolbarId = `trix-toolbar-${editorUUID}`
   const toolbarCollapseId = `${toolbarId}-collapse`
 
-  const [doc, setDoc] = useState(props.id === undefined ? { title: '', body: '' } : undefined)
+  const [doc, setDoc] = useState(props.document)
 
   const [localVersion, setLocalVersion] = useState(0)
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
   const projectId = useContext(ProjectContext)
-
-  useEffect(() => {
-    if (props.id !== undefined) {
-      DocumentsAPI(projectId).show(props.id)
-        .then(setDoc)
-    }
-  }, [props.id])
 
   useEffect(() => {
     if (localVersion > remoteVersion && !isUploading) {
@@ -67,7 +60,7 @@ const DocumentEditor = props => {
             <>
               <div className="container-fluid">
                 {
-                  props.openable && (
+                  props.openable && doc.id !== undefined && (
                     <div className="document-editor-header dim-on-hover position-relative d-flex justify-content-center align-items-center">
                       <Link
                         to={RouteConfig.projects.show(projectId).documents.show(doc.id).url}
