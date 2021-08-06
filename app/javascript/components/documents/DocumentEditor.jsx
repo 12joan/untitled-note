@@ -15,7 +15,9 @@ const DocumentEditor = props => {
   const toolbarCollapseId = `${toolbarId}-collapse`
 
   const [doc, setDoc] = useState(props.id === undefined ? { title: '', body: '' } : undefined)
-  const [isDirty, setIsDirty] = useState(false)
+
+  const [localVersion, setLocalVersion] = useState(0)
+  const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
   const projectId = useContext(ProjectContext)
@@ -28,29 +30,32 @@ const DocumentEditor = props => {
   }, [props.id])
 
   useEffect(() => {
-    if (isDirty && !isUploading) {
+    if (localVersion > remoteVersion && !isUploading) {
       setIsUploading(true)
+      const uploadingVersion = localVersion
 
       const uploadDocumentPromise = doc.id === undefined
-        ? DocumentsAPI(projectId).create(doc).then(setDoc)
+        ? DocumentsAPI(projectId).create(doc).then(doc => updateDocument({ id: doc.id }, false))
         : DocumentsAPI(projectId).update(doc)
 
       uploadDocumentPromise
         .catch(console.error)
         .then(() => {
-          setIsDirty(false)
+          setRemoteVersion(uploadingVersion)
           setIsUploading(false)
         })
     }
-  }, [doc, isDirty])
+  }, [localVersion, remoteVersion, isUploading])
 
-  const updateDocument = params => {
+  const updateDocument = (params, incrementLocalVersion = true) => {
     setDoc(doc => ({
       ...doc,
       ...params,
     }))
 
-    setIsDirty(true)
+    if (incrementLocalVersion) {
+      setLocalVersion(localVersion => localVersion + 1)
+    }
   }
 
   return (
