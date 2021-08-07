@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
 import { TrixEditor } from 'react-trix'
 import { Link } from 'react-router-dom'
 import { BoxArrowUpRight, ThreeDots, Palette, At as Mention } from 'react-bootstrap-icons'
@@ -10,6 +10,8 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 const DocumentEditor = props => {
   const [editorUUID] = useState(() => uuid())
+
+  const editorEl = useRef()
 
   const toolbarId = `trix-toolbar-${editorUUID}`
   const toolbarCollapseId = `${toolbarId}-collapse`
@@ -49,6 +51,11 @@ const DocumentEditor = props => {
     if (incrementLocalVersion) {
       setLocalVersion(localVersion => localVersion + 1)
     }
+  }
+
+  const handleEditorReady = () => {
+    const editor = editorEl.current.editor
+    editor.loadHTML(doc.body)
   }
 
   return (
@@ -91,9 +98,10 @@ const DocumentEditor = props => {
 
               <div className="flex-grow-1 d-flex flex-column position-relative">
                 <TrixEditor
+                  ref={editorEl}
                   toolbar={toolbarId}
                   placeholder="Add document body"
-                  value={doc.body}
+                  onEditorReady={handleEditorReady}
                   onChange={body => updateDocument({ body })} />
 
                 <div className="document-editor-footer position-sticky bottom-0 mt-3 py-3">
