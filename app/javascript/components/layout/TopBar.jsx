@@ -6,7 +6,7 @@ import RouteConfig from 'lib/RouteConfig'
 import ProjectContext from 'lib/contexts/ProjectContext'
 
 const TopBar = props => {
-  const projectId = useContext(ProjectContext)
+  const { id: projectId } = useContext(ProjectContext)
 
   const documentsRoutes = RouteConfig.projects.show(projectId).documents
 

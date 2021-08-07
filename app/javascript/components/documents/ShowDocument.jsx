@@ -6,7 +6,7 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
 const ShowDocument = props => {
-  const projectId = useContext(ProjectContext)
+  const { id: projectId } = useContext(ProjectContext)
 
   return (
     <div className="p-4">

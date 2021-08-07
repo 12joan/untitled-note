@@ -54,6 +54,19 @@ html, body {
   padding: 3em;
 }
 
+.dropdown-item {
+  &.dropdown-item-danger {
+    &:active {
+      @extend .bg-danger;
+      @extend .text-white;
+    }
+
+    &:not(:active) {
+      @extend .text-danger;
+    }
+  }
+}
+
 @mixin btn-selectable($selected-selector) {
   &:not(#{$selected-selector}) {
     @extend .btn-light;

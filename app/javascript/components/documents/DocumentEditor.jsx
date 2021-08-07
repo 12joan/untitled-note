@@ -20,7 +20,7 @@ const DocumentEditor = props => {
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
-  const projectId = useContext(ProjectContext)
+  const { id: projectId } = useContext(ProjectContext)
 
   useEffect(() => {
     if (localVersion > remoteVersion && !isUploading) {

@@ -46,7 +46,11 @@ const App = props => {
                 <Route path={RouteConfig.projects.show(':projectId').url} component={({ match }) => {
                   const { projectId } = match.params
 
-                  if (!projects.some(project => project.id == projectId)) { // '==' for lax equality checking
+                  const project = projects.filter(project =>
+                    project.id == projectId // '==' for lax equality checking
+                  )[0]
+
+                  if (project === undefined) {
                     return (
                       <Redirect to={RouteConfig.rootUrl} />
                     )
@@ -55,7 +59,7 @@ const App = props => {
                   const documentsRoutes = RouteConfig.projects.show(projectId).documents
 
                   return (
-                    <ProjectContext.Provider value={projectId}>
+                    <ProjectContext.Provider value={project}>
                       <div className="continer-fluid h-100 d-flex flex-column ">
                         <div className="row g-0 flex-shrink-0">
                           <TopBar />
