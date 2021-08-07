@@ -1,15 +1,21 @@
 import React from 'react'
 import { useRef, useState, useEffect } from 'react'
 import { Modal } from 'bootstrap'
+import useRemountKey from 'lib/useRemountKey'
 import NewProjectForm from 'components/projects/NewProjectForm'
 
 const NewProjectModal = props => {
   const modalEl = useRef(null)
 
   const [modalObject, setModalObject] = useState()
+  const [formKey, remountForm] = useRemountKey()
 
   useEffect(() => {
     setModalObject(new Modal(modalEl.current))
+
+    modalEl.current.addEventListener('show.bs.modal', event => {
+      remountForm()
+    })
   }, [])
 
   return (
@@ -30,6 +36,7 @@ const NewProjectModal = props => {
 
           <div className="modal-body p-0 pt-3 mb-n3">
             <NewProjectForm
+              key={formKey}
               onComplete={() => modalObject.hide()} />
           </div>
         </div>
