@@ -10,6 +10,7 @@ import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NewProjectModal from 'components/projects/NewProjectModal'
 import EditProjectModal from 'components/projects/EditProjectModal'
+import DeleteProjectModal from 'components/projects/DeleteProjectModal'
 import NavigationMenu from 'components/layout/NavigationMenu'
 import DocumentIndex from 'components/documents/DocumentIndex'
 import NewDocument from 'components/documents/NewDocument'
@@ -107,6 +108,7 @@ const App = props => {
 
               <NewProjectModal />
               <EditProjectModal />
+              <DeleteProjectModal />
             </Router>
           )
         }} />

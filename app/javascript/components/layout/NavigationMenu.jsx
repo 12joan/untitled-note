@@ -2,13 +2,10 @@ import React from 'react'
 import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ThreeDots } from 'react-bootstrap-icons'
-import EventDelegateContext from 'lib/contexts/EventDelegateContext'
 import RouteConfig from 'lib/RouteConfig'
-import ProjectsAPI from 'lib/resources/ProjectsAPI'
 import ProjectContext from 'lib/contexts/ProjectContext'
 
 const NavigationMenu = props => {
-  const eventDelegate = useContext(EventDelegateContext)
   const project = useContext(ProjectContext)
 
   const documentsRoutes = RouteConfig.projects.show(project.id).documents
@@ -49,10 +46,9 @@ const NavigationMenu = props => {
                   <button
                     type="button"
                     className="dropdown-item dropdown-item-danger"
-                    onClick={() => {
-                      ProjectsAPI.destroy(project)
-                      eventDelegate.reloadProjects()
-                    }}>
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-project-modal"
+                    data-bs-project={JSON.stringify(project)}>
                     Delete project
                   </button>
                 </li>
