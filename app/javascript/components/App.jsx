@@ -1,21 +1,22 @@
 import React from 'react'
-import { useReducer } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import EventDelegateContext from 'lib/contexts/EventDelegateContext'
 import RouteConfig from 'lib/RouteConfig'
+import useRemountKey from 'lib/useRemountKey'
 import ProjectsAPI from 'lib/resources/ProjectsAPI'
 import ProjectContext from 'lib/contexts/ProjectContext'
 import LoadPromise from 'components/LoadPromise'
 import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NewProjectModal from 'components/projects/NewProjectModal'
+import EditProjectModal from 'components/projects/EditProjectModal'
 import NavigationMenu from 'components/layout/NavigationMenu'
 import DocumentIndex from 'components/documents/DocumentIndex'
 import NewDocument from 'components/documents/NewDocument'
 import ShowDocument from 'components/documents/ShowDocument'
 
 const App = props => {
-  const [reloadProjectsKey, reloadProjects] = useReducer(count => count + 1, 0)
+  const [reloadProjectsKey, reloadProjects] = useRemountKey()
 
   const eventDelegate = {
     reloadProjects,
@@ -105,6 +106,7 @@ const App = props => {
               </Switch>
 
               <NewProjectModal />
+              <EditProjectModal />
             </Router>
           )
         }} />

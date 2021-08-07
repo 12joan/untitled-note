@@ -35,7 +35,12 @@ const NavigationMenu = props => {
 
               <ul className="dropdown-menu" aria-labelledby="project-dropdown-button">
                 <li>
-                  <button type="button" className="dropdown-item">
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit-project-modal"
+                    data-bs-project={JSON.stringify(project)}>
                     Edit project
                   </button>
                 </li>
