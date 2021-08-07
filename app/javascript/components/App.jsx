@@ -1,70 +1,110 @@
 import React from 'react'
-import { useState } from 'react'
+import { useReducer } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import EventDelegateContext from 'lib/contexts/EventDelegateContext'
 import RouteConfig from 'lib/RouteConfig'
+import ProjectsAPI from 'lib/resources/ProjectsAPI'
 import ProjectContext from 'lib/contexts/ProjectContext'
+import LoadPromise from 'components/LoadPromise'
 import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
+import NewProjectModal from 'components/projects/NewProjectModal'
 import NavigationMenu from 'components/layout/NavigationMenu'
 import DocumentIndex from 'components/documents/DocumentIndex'
 import NewDocument from 'components/documents/NewDocument'
 import ShowDocument from 'components/documents/ShowDocument'
 
 const App = props => {
-  return (
-    <Router>
-      <Switch>
-        <Route path={RouteConfig.projects.show(':projectId').url} component={({ match }) => {
-          const { projectId } = match.params
+  const [reloadProjectsKey, reloadProjects] = useReducer(count => count + 1, 0)
 
-          const documentsRoutes = RouteConfig.projects.show(projectId).documents
+  const eventDelegate = {
+    reloadProjects,
+  }
+
+  return (
+    <EventDelegateContext.Provider value={eventDelegate}>
+      <LoadPromise
+        dependencies={[reloadProjectsKey]}
+        promise={() => ProjectsAPI.index()}
+
+        loading={() => <></>}
+
+        error={error => {
+          console.error(error)
 
           return (
-            <ProjectContext.Provider value={projectId}>
-              <div className="continer-fluid h-100 d-flex flex-column ">
-                <div className="row g-0 flex-shrink-0">
-                  <TopBar />
-                </div>
+            <div className="alert alert-danger">
+              <strong>Failed to load projects:</strong> An unexpected error occurred
+            </div>
+          )
+        }}
 
-                <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
-                  <div className="col-auto mh-100 overflow-scroll">
-                    <ProjectsBar />
-                  </div>
+        success={projects => {
+          return (
+            <Router>
+              <Switch>
+                <Route path={RouteConfig.projects.show(':projectId').url} component={({ match }) => {
+                  const { projectId } = match.params
 
-                  <div className="col-auto mh-100 overflow-scroll">
-                    <NavigationMenu />
-                  </div>
+                  if (!projects.some(project => project.id == projectId)) { // '==' for lax equality checking
+                    return (
+                      <Redirect to={RouteConfig.rootUrl} />
+                    )
+                  }
 
-                  <div className="col mh-100 overflow-scroll bg-light">
-                    <Switch>
-                      <Route path={documentsRoutes.url}>
-                        <Switch>
-                          <Route path={documentsRoutes.new.url}>
-                            <NewDocument />
-                          </Route>
+                  const documentsRoutes = RouteConfig.projects.show(projectId).documents
 
-                          <Route path={documentsRoutes.show(':id').url} component={({ match }) => (
-                            <ShowDocument id={match.params.id} />
-                          )} />
+                  return (
+                    <ProjectContext.Provider value={projectId}>
+                      <div className="continer-fluid h-100 d-flex flex-column ">
+                        <div className="row g-0 flex-shrink-0">
+                          <TopBar />
+                        </div>
 
-                          <Route path={documentsRoutes.url}>
-                            <DocumentIndex />
-                          </Route>
-                        </Switch>
-                      </Route>
+                        <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
+                          <div className="col-auto mh-100 overflow-scroll">
+                            <ProjectsBar projects={projects} />
+                          </div>
 
-                      <Redirect to={documentsRoutes.url} />
-                    </Switch>
-                  </div>
-                </div>
-              </div>
-            </ProjectContext.Provider>
+                          <div className="col-auto mh-100 overflow-scroll">
+                            <NavigationMenu />
+                          </div>
+
+                          <div className="col mh-100 overflow-scroll bg-light">
+                            <Switch>
+                              <Route path={documentsRoutes.url}>
+                                <Switch>
+                                  <Route path={documentsRoutes.new.url}>
+                                    <NewDocument />
+                                  </Route>
+
+                                  <Route path={documentsRoutes.show(':id').url} component={({ match }) => (
+                                    <ShowDocument id={match.params.id} />
+                                  )} />
+
+                                  <Route path={documentsRoutes.url}>
+                                    <DocumentIndex />
+                                  </Route>
+                                </Switch>
+                              </Route>
+
+                              <Redirect to={documentsRoutes.url} />
+                            </Switch>
+                          </div>
+                        </div>
+                      </div>
+                    </ProjectContext.Provider>
+                  )
+                }} />
+
+                <Redirect to={RouteConfig.projects.show(1).url} />
+              </Switch>
+
+              <NewProjectModal />
+            </Router>
           )
         }} />
-
-        <Redirect to={RouteConfig.projects.show(1).url} />
-      </Switch>
-    </Router>
+    </EventDelegateContext.Provider>
   )
 }
 

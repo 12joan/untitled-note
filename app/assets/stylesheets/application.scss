@@ -46,6 +46,14 @@ html, body {
   }
 }
 
+.rounded-lg {
+  border-radius: 2em;
+}
+
+.p-lg {
+  padding: 3em;
+}
+
 @mixin btn-selectable($selected-selector) {
   &:not(#{$selected-selector}) {
     @extend .btn-light;
@@ -72,9 +80,8 @@ html, body {
 .document-editor {
   @extend .bg-white;
   @extend .shadow;
-
-  padding: 3em;
-  border-radius: 2em;
+  @extend .rounded-lg;
+  @extend .p-lg;
 
   .document-editor-header {
     @extend .bg-white;

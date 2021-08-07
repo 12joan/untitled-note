@@ -26,6 +26,7 @@ class ResourcesAPI {
     return fetchAPIEndpoint(this.apiEndpoints.create, {
       body: JSON.stringify(this.transformRequestParams(resource)),
     })
+      .then(this.checkResponseStatus)
       .then(response => response.json())
       .then(this.transformResponseParams)
   }
@@ -42,6 +43,17 @@ class ResourcesAPI {
   destroy(resource) {
     return fetchAPIEndpoint(this.apiEndpoints.destroy, {
       urlArgs: [this.resourceId(resource)],
+    })
+  }
+
+  checkResponseStatus(response) {
+    if (String(response.status).match(/2\d{2}/)) {
+      return response
+    }
+
+    return Promise.reject({
+      notOkayStatus: true,
+      response,
     })
   }
 }

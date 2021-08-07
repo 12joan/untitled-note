@@ -1,9 +1,7 @@
 const RouteConfig = {
+  rootUrl: '/',
+
   projects: {
-    url: '/projects',
-
-    new: { url: '/projects/new' },
-
     show: projectId => ({
       url: `/projects/${projectId}`,
 
