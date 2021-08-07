@@ -37,6 +37,11 @@ html, body {
   }
 }
 
+.btn-link {
+  @extend .p-0;
+  @extend .align-baseline;
+}
+
 .btn-icon {
   @extend .px-2;
   @extend .py-1;

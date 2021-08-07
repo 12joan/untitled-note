@@ -8,8 +8,8 @@ class ResourcesAPI {
     this.resourceId = resourceId || (x => x.id)
   }
 
-  index() {
-    return fetchAPIEndpoint(this.apiEndpoints.index)
+  index(options = {}) {
+    return fetchAPIEndpoint(this.apiEndpoints.index, options)
       .then(response => response.json())
       .then(resources => resources.map(this.transformResponseParams))
   }

@@ -1,5 +1,11 @@
-const fetchAPIEndpoint = (apiEndpoint, options = {}) => (
-  fetch(apiEndpoint.url(...(options.urlArgs || [])), {
+const fetchAPIEndpoint = (apiEndpoint, options = {}) => {
+  let url = apiEndpoint.url(...(options.urlArgs || []))
+
+  if (options.searchParams !== undefined) {
+    url += '?' + new URLSearchParams(options.searchParams).toString()
+  }
+
+  return fetch(url, {
     method: apiEndpoint.method || 'GET',
 
     headers: {
@@ -9,6 +15,6 @@ const fetchAPIEndpoint = (apiEndpoint, options = {}) => (
 
     body: options.body,
   })
-)
+}
 
 export default fetchAPIEndpoint

@@ -76,7 +76,7 @@ const App = props => {
                             <NavigationMenu />
                           </div>
 
-                          <div className="col mh-100 overflow-scroll bg-light">
+                          <div className="col mh-100 d-flex flex-column">
                             <Switch>
                               <Route path={documentsRoutes.url}>
                                 <Switch>

@@ -5,7 +5,13 @@ module API
       before_action :set_document, only: %i[ show edit update destroy ]
 
       def index
-        @documents = @project.documents.all.order(:created_at)
+        sort_param = params[:sort_by]
+
+        unless ['created_at', 'updated_at'].include?(sort_param)
+          sort_param = 'created_at'
+        end
+
+        @documents = @project.documents.all.order(sort_param)
       end
 
       def show
