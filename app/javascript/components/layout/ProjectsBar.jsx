@@ -1,12 +1,11 @@
 import React from 'react'
-import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { PlusLg as Plus } from 'react-bootstrap-icons'
-import RouteConfig from 'lib/RouteConfig'
-import ProjectContext from 'lib/contexts/ProjectContext'
+
+import { useContext } from 'lib/context'
 
 const ProjectsBar = props => {
-  const { id: currentProjectId } = useContext(ProjectContext)
+  const { project: currentProject, projects, setParams } = useContext()
 
   return (
     <div className="h-100 border-end p-3" style={{ width: '12em' }}>
@@ -30,17 +29,17 @@ const ProjectsBar = props => {
       </div>
 
       {
-        props.projects.map(project => {
-          const isCurrent = currentProjectId === project.id
+        projects.map(project => {
+          const isCurrent = currentProject.id === project.id
 
           return (
             <div key={project.id} className="d-grid mb-2">
-              <NavLink
-                to={RouteConfig.projects.show(project.id).url}
-                className={`btn btn-project`}
-                activeClassName="selected">
+              <button
+                type="button"
+                className={`btn btn-project ${isCurrent ? 'selected' :''}`}
+                onClick={() => setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })}>
                 {project.name}
-              </NavLink>
+              </button>
             </div>
           )
         })

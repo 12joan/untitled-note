@@ -1,17 +1,15 @@
 import React from 'react'
-import { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
-import { ThreeDots } from 'react-bootstrap-icons'
-import RouteConfig from 'lib/RouteConfig'
-import ProjectContext from 'lib/contexts/ProjectContext'
+
+import { useContext } from 'lib/context'
+
+import NavLink from 'components/NavLink'
+import ProjectDropdownMenu from 'components/layout/ProjectDropdownMenu'
 
 const NavigationMenu = props => {
-  const project = useContext(ProjectContext)
-
-  const documentsRoutes = RouteConfig.projects.show(project.id).documents
+  const { project } = useContext()
 
   return (
-    <div className="h-100 border-end p-3" style={{ width: '18em' }}>
+    <div className="h-100 border-end p-3 navigation-menu">
       <div className="container-fluid mt-2 mb-3">
         <div className="row gx-3 align-items-center">
           <div className="col">
@@ -19,63 +17,60 @@ const NavigationMenu = props => {
           </div>
 
           <div className="col-auto">
-            <div className="dropdown">
-              <button
-                type="button"
-                id="project-dropdown-button"
-                className="btn btn-icon text-secondary"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <ThreeDots className="bi" />
-                <span className="visually-hidden">Toggle dropdown</span>
-              </button>
-
-              <ul className="dropdown-menu" aria-labelledby="project-dropdown-button">
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit-project-modal"
-                    data-bs-project={JSON.stringify(project)}>
-                    Edit project
-                  </button>
-                </li>
-
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item dropdown-item-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#delete-project-modal"
-                    data-bs-project={JSON.stringify(project)}>
-                    Delete project
-                  </button>
-                </li>
-              </ul>
-            </div>
+            <ProjectDropdownMenu />
           </div>
         </div>
       </div>
 
-      <ul className="nav nav-pills flex-column">
+      <ul className="nav nav-pills flex-column mb-3">
+        <NavigationMenuItem
+          params={{ keywordId: undefined, documentId: undefined }}
+          activeParams={['keywordId']}>
+          All documents
+        </NavigationMenuItem>
+      </ul>
+
+      <KeywordsMenu />
+    </div>
+  )
+}
+const KeywordsMenu = props => {
+  const { keywords } = useContext()
+
+  return (
+    <>
+      <div className="container-fluid mb-2">
+        <div className="row gx-3 align-items-center">
+          <div className="col">
+            <h6 className="small text-secondary m-0">Keywords</h6>
+          </div>
+        </div>
+      </div>
+
+      <ul className="nav nav-pills flex-column mb-3">
         {
-          [
-            { path: documentsRoutes.url, text: 'All documents' },
-          ].map(itemProps => <NavigationMenuItem key={itemProps.path} {...itemProps} />)
+          keywords.map(keyword => (
+            <NavigationMenuItem
+              key={keyword.id}
+              params={{ keywordId: keyword.id, documentId: undefined }}
+              activeParams={['keywordId']}>
+              {keyword.text}
+            </NavigationMenuItem>
+          ))
         }
       </ul>
-    </div>
+    </>
   )
 }
 
 const NavigationMenuItem = props => (
   <li className="nav-item">
     <NavLink
-      to={props.path}
-      className="nav-link rounded-0 mx-n3 px-3 py-1 text-start"
-      activeClassName="active">
-      {props.text}
+      className="nav-link"
+      activeClassName="active"
+      params={props.params}
+      activeParams={props.activeParams}>
+      {props.children}
     </NavLink>
   </li>
 )

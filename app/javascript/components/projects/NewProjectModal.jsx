@@ -1,10 +1,15 @@
 import React from 'react'
 import { useRef } from 'react'
+
+import { useContext } from 'lib/context'
 import useRemountKey from 'lib/useRemountKey'
+
 import Modal from 'components/Modal'
 import NewProjectForm from 'components/projects/NewProjectForm'
 
 const NewProjectModal = props => {
+  const { setParams } = useContext()
+
   const modal = useRef(null)
 
   const [formKey, remountForm] = useRemountKey()
@@ -17,7 +22,10 @@ const NewProjectModal = props => {
       onShow={remountForm}>
       <NewProjectForm
         key={formKey}
-        onComplete={() => modal.current.hide()} />
+        onComplete={project => {
+          modal.current.hide()
+          setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })
+        }} />
     </Modal>
   )
 }

@@ -1,20 +1,21 @@
 import React from 'react'
-import { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { TrixEditor } from 'react-trix'
 import { Link } from 'react-router-dom'
 import { BoxArrowUpRight, ThreeDots, Palette, At as Mention } from 'react-bootstrap-icons'
 import { v4 as uuid } from 'uuid'
-import ProjectContext from 'lib/contexts/ProjectContext'
-import RouteConfig from 'lib/RouteConfig'
+
+import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 const DocumentEditor = props => {
+  const { projectId, setParams } = useContext()
+
+  const documentsAPI = DocumentsAPI(projectId)
+
   const [editorUUID] = useState(() => uuid())
 
   const editorEl = useRef()
-
-  const toolbarId = `trix-toolbar-${editorUUID}`
-  const toolbarCollapseId = `${toolbarId}-collapse`
 
   const [doc, setDoc] = useState(props.document)
 
@@ -22,7 +23,8 @@ const DocumentEditor = props => {
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
-  const { id: projectId } = useContext(ProjectContext)
+  const toolbarId = `trix-toolbar-${editorUUID}`
+  const toolbarCollapseId = `${toolbarId}-collapse`
 
   useEffect(() => {
     if (localVersion > remoteVersion && !isUploading) {
@@ -30,8 +32,8 @@ const DocumentEditor = props => {
       const uploadingVersion = localVersion
 
       const uploadDocumentPromise = doc.id === undefined
-        ? DocumentsAPI(projectId).create(doc).then(doc => updateDocument({ id: doc.id }, false))
-        : DocumentsAPI(projectId).update(doc)
+        ? documentsAPI.create(doc).then(doc => updateDocument({ id: doc.id }, false))
+        : documentsAPI.update(doc)
 
       uploadDocumentPromise
         .catch(console.error)
@@ -69,11 +71,15 @@ const DocumentEditor = props => {
                 {
                   props.openable && doc.id !== undefined && (
                     <div className="document-editor-header dim-on-hover position-relative d-flex justify-content-center align-items-center">
-                      <Link
-                        to={RouteConfig.projects.show(projectId).documents.show(doc.id).url}
-                        className="stretched-link document-editor-header-link text-secondary text-decoration-none">
+                      <a
+                        className="stretched-link document-editor-header-link text-secondary text-decoration-none"
+                        href="#"
+                        onClick={event => {
+                          event.preventDefault()
+                          setParams({ documentId: doc.id })
+                        }}>
                         <BoxArrowUpRight className="bi" /> Open document
-                      </Link>
+                      </a>
                     </div>
                   )
                 }

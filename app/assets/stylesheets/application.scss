@@ -95,6 +95,23 @@ html, body {
   }
 }
 
+.navigation-menu {
+  width: 18em;
+
+  .nav-link {
+    @extend .rounded-0;
+    @extend .mx-n3;
+    @extend .px-3;
+    @extend .py-1;
+    @extend .text-start;
+
+    &:not(.active) {
+      @extend .text-dark;
+      @extend .dim-on-hover;
+    }
+  }
+}
+
 .document-editor {
   @extend .bg-white;
   @extend .shadow;

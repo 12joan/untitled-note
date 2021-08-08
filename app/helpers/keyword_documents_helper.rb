@@ -1,0 +1,2 @@
+module KeywordDocumentsHelper
+end

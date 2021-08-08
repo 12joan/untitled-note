@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { Modal as BootstrapModal } from 'bootstrap'
+
 import useRemountKey from 'lib/useRemountKey'
 
 const Modal = forwardRef((props, ref) => {

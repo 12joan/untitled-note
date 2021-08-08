@@ -1,36 +1,24 @@
 import React from 'react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { CaretLeftFill } from 'react-bootstrap-icons'
+
+import { useContext } from 'lib/context'
+
+import NewDocument from 'components/documents/NewDocument'
+import ShowDocument from 'components/documents/ShowDocument'
+import DocumentIndex from 'components/documents/DocumentIndex'
 
 const ContentArea = props => {
-  const backButtonUI = props.backButton !== undefined && (
-    <Link to={props.backButton.url} className="text-decoration-none">
-      <CaretLeftFill className="bi" /> {props.backButton.label}
-    </Link>
-  )
+  const { documentId } = useContext()
 
-  const scrollableArea = (
-    <div className="flex-grow-1 overflow-scroll bg-light">
-      {props.children}
-    </div>
-  )
+  switch (documentId) {
+    case undefined:
+      return <DocumentIndex />
 
-  return (
-    <>
-      <div className="border-bottom p-3 d-flex justify-content-between">
-        <div>
-          {backButtonUI || null}
-        </div>
+    case 'new':
+      return <NewDocument />
 
-        <div>
-          {props.sortingControls || null}
-        </div>
-      </div>
-
-      {scrollableArea}
-    </>
-  )
+    default:
+      return <ShowDocument id={documentId} />
+  }
 }
 
 export default ContentArea

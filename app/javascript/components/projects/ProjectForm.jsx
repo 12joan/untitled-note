@@ -1,11 +1,10 @@
 import React from 'react'
-import { useState, useContext } from 'react'
-import { withRouter } from 'react-router-dom'
-import EventDelegateContext from 'lib/contexts/EventDelegateContext'
-import RouteConfig from 'lib/RouteConfig'
+import { useState } from 'react'
 
-const ProjectForm = withRouter(props => {
-  const eventDelegate = useContext(EventDelegateContext)
+import { useContext } from 'lib/context'
+
+const ProjectForm = props => {
+  const { reloadProjects } = useContext()
 
   const [name, setName] = useState(props.initialProject.name || '')
 
@@ -29,9 +28,8 @@ const ProjectForm = withRouter(props => {
     props.action(project)
       .then(project => {
         setErrors({})
-        props.onComplete()
-        eventDelegate.reloadProjects()
-        props.history.push(RouteConfig.projects.show(project.id).url)
+        props.onComplete(project)
+        reloadProjects()
       })
       .catch(error => {
         if (error.notOkayStatus && error.response.statusText === 'Unprocessable Entity') {
@@ -72,6 +70,6 @@ const ProjectForm = withRouter(props => {
       </div>
     </form>
   )
-})
+}
 
 export default ProjectForm

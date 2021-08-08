@@ -1,23 +1,21 @@
 import React from 'react'
-import { useRef, useState, useContext } from 'react'
+import { useRef, useState } from 'react'
 import { withRouter } from 'react-router-dom'
-import Modal from 'components/Modal'
-import EventDelegateContext from 'lib/contexts/EventDelegateContext'
-import RouteConfig from 'lib/RouteConfig'
+
+import { useContext } from 'lib/context'
 import ProjectsAPI from 'lib/resources/ProjectsAPI'
 
+import Modal from 'components/Modal'
+
 const NewProjectModal = withRouter(props => {
-  const eventDelegate = useContext(EventDelegateContext)
+  const { project, reloadProjects, setParams } = useContext()
 
   const modal = useRef(null)
 
-  const [project, setProject] = useState(undefined)
   const [deleting, setDeleting] = useState(false)
   const [confirmation, setConfirmation] = useState(false)
 
   const onShow = event => {
-    const project = JSON.parse(event.relatedTarget.getAttribute('data-bs-project'))
-    setProject(project)
     setConfirmation(false)
   }
 
@@ -27,8 +25,8 @@ const NewProjectModal = withRouter(props => {
     ProjectsAPI.destroy(project)
       .then(() => {
         modal.current.hide()
-        props.history.push(RouteConfig.rootUrl)
-        eventDelegate.reloadProjects()
+        setParams({ projectId: undefined, keywordId: undefined, documentId: undefined })
+        reloadProjects()
       })
       .catch(error => {
         console.error(error)

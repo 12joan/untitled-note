@@ -7,7 +7,10 @@ const LoadPromise = props => {
 
   useEffect(() => {
     const promise = (typeof props.promise === 'function') ? props.promise() : props.promise
-    setState({ type: 'loading' })
+
+    if (props.hideContentWhileReloading) {
+      setState({ type: 'loading' })
+    }
 
     let upToDate = true
 
