@@ -17,6 +17,7 @@ const NewDocument = props => {
         <DocumentEditor document={{
           title: '',
           body: '',
+          keywords: [],
         }} fullHeight openable />
       </div>
     </ContentArea>

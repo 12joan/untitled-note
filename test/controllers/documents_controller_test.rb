@@ -13,7 +13,18 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create document' do
     assert_difference('Document.count') do
-      post api_v1_project_documents_url(@project), params: { document: { title: 'New title', body: '<div>Hello world</div>' } }
+      assert_difference('Keyword.count', 2) do
+        post api_v1_project_documents_url(@project), params: {
+          document: {
+            title: 'New title',
+            body: '<div>Hello world</div>',
+            keywords_attributes: [
+              { text: 'Hello' },
+              { text: 'World' },
+            ],
+          },
+        }
+      end
     end
 
     assert_response :success
@@ -26,7 +37,21 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update document' do
-    patch api_v1_project_document_url(@project, @document), params: { document: { title: 'New title', body: '<div>Hello world</div>' } }
+    existing_keyword = create(:keyword, project: @project)
+
+    assert_difference('Keyword.count', 1) do
+      patch api_v1_project_document_url(@project, @document), params: {
+        document: {
+          title: 'New title',
+          body: '<div>Hello world</div>',
+          keywords_attributes: [
+            { text: 'Hello' },
+            { text: existing_keyword.text },
+          ],
+        },
+      }
+    end
+
     assert_response :success
     assert_equal 'New title', Document.find(@document.id).title
   end

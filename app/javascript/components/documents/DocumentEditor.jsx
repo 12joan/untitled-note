@@ -96,6 +96,21 @@ const DocumentEditor = props => {
                 </div>
               </div>
 
+              <div className="row mb-2">
+                <div className="col">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Modify keywords" 
+                    onFocus={event => event.target.value = doc.keywords.map(x => x.text).join(',')}
+                    onBlur={event => updateDocument({
+                      keywords: event.target.value.split(',').map(x => ({
+                        text: x,
+                      })),
+                    })} />
+                </div>
+              </div>
+
               <div className="flex-grow-1 d-flex flex-column position-relative">
                 <TrixEditor
                   ref={editorEl}

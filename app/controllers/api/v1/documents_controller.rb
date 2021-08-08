@@ -20,15 +20,26 @@ module API
       def create
         @document = @project.documents.build(document_params)
 
+        if keywords_attributes.present?
+          @document.keywords_attributes = keywords_attributes
+        end
+
         if @document.save
           render :show, status: :created, location: api_v1_project_document_url(@project, @document)
         else
+          puts @document.errors.inspect
           render json: @document.errors, status: :unprocessable_entity
         end
       end
 
       def update
-        if @document.update(document_params)
+        @document.assign_attributes(document_params)
+
+        if keywords_attributes.present?
+          @document.keywords_attributes = keywords_attributes
+        end
+
+        if @document.save
           render :show, status: :created, location: api_v1_project_document_url(@project, @document)
         else
           render json: @document.errors, status: :unprocessable_entity
@@ -55,6 +66,10 @@ module API
       # Only allow a list of trusted parameters through.
       def document_params
         params.require(:document).permit(:title, :body)
+      end
+
+      def keywords_attributes
+        params.require(:document).permit(keywords_attributes: [:text]).fetch(:keywords_attributes, nil)
       end
     end
   end

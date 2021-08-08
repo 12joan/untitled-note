@@ -74,7 +74,6 @@ ActiveRecord::Schema.define(version: 2021_08_08_090510) do
     t.bigint "keyword_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["document_id", "keyword_id"], name: "index_documents_keywords_on_document_id_and_keyword_id", unique: true
     t.index ["document_id"], name: "index_documents_keywords_on_document_id"
     t.index ["keyword_id"], name: "index_documents_keywords_on_keyword_id"
   end
