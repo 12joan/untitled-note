@@ -2,6 +2,8 @@ class Document < ApplicationRecord
   belongs_to :project
   has_rich_text :body
   has_many :aliases, dependent: :destroy
+  has_and_belongs_to_many :keywords
+  accepts_nested_attributes_for :keywords
 
   after_initialize do |document|
     # Ensure document has a title (side effect of #title_record)
@@ -22,6 +24,23 @@ class Document < ApplicationRecord
   def title=(value)
     title_record.text = value
     @title_dirty = true
+  end
+
+  def keywords_attributes=(keywords_attributes)
+    keywords.clear
+
+    keywords_attributes.uniq { _1[:text] }.each do |keyword_attributes|
+      keyword = Keyword.find_or_initialize_by(
+        project: project,
+        text: keyword_attributes[:text]
+      )
+
+      if keyword.new_record?
+        keywords.build(text: keyword.text, project: project)
+      else
+        keywords << keyword
+      end
+    end
   end
 
   private

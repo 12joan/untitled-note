@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :projects do
         resources :documents
+        resources :keywords
       end
     end
   end

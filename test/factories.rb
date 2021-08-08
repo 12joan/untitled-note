@@ -11,4 +11,9 @@ FactoryBot.define do
     document
     text { 'An alias' }
   end
+
+  factory :keyword do
+    project
+    sequence(:text) { |n| "Keyword #{n}" }
+  end
 end
