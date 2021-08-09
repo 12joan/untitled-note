@@ -1,17 +1,13 @@
 module API
   module V1
     class DocumentsController < ApplicationController
+      include DocumentsQueryable
+
       before_action :set_project
       before_action :set_document, only: %i[ show edit update destroy ]
 
       def index
-        sort_param = params[:sort_by]
-
-        unless ['created_at', 'updated_at'].include?(sort_param)
-          sort_param = 'created_at'
-        end
-
-        @documents = @project.documents.all.order(sort_param)
+        @documents = query_documents(@project.documents, params)
       end
 
       def show

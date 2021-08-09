@@ -1,11 +1,13 @@
 module API
   module V1
     class KeywordDocumentsController < ApplicationController
+      include DocumentsQueryable
+
       before_action :set_project
       before_action :set_keyword
 
       def index
-        @documents = @keyword.documents.all.order(:created_at)
+        @documents = query_documents(@keyword.documents, params)
 
         render template: '/api/v1/documents/index'
       end
