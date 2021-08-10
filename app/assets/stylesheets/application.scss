@@ -171,13 +171,25 @@ html, body {
     }
 
     .react-tags__suggestions {
-      z-index: 1;
+      ul {
+        @extend .dropdown-menu;
+        @extend .show;
 
-      li {
-        @extend .bg-white;
+        li {
+          @extend .dropdown-item;
 
-        &.is-active {
-          @extend .bg-light;
+          &.is-active {
+            @extend .bg-primary;
+
+            &, mark {
+              @extend .text-white;
+            }
+          }
+
+          mark {
+            @extend .p-0;
+            @extend .text-decoration-none;
+          }
         }
       }
     }
