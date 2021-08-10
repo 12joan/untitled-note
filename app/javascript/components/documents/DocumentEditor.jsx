@@ -63,7 +63,7 @@ const DocumentEditor = props => {
   }
 
   const afterCreate = createdDoc => {
-    updateDocument({ id: doc.id }, false)
+    updateDocument({ id: createdDoc.id }, false)
     updateLocalKeywords(createdDoc)
   }
 
