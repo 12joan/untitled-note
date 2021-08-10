@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRef } from 'react'
 import ReactTags from 'react-tag-autocomplete'
 import { X as Cross } from 'react-bootstrap-icons'
 
@@ -8,6 +9,8 @@ import NavLink from 'components/NavLink'
 
 const DocumentEditorKeywords = props => {
   const { keywords: allKeywords } = useContext()
+
+  const reactTags = useRef()
 
   const keywordToTag = keyword => ({
     id: keyword.id,
@@ -34,8 +37,21 @@ const DocumentEditorKeywords = props => {
 
   const suggestions = allKeywords.map(keywordToTag).filter(tag => !tagAlreadySelected(tag))
 
+  const autoSelectFirstItem = () => {
+    const currentIndex = reactTags.current.state.index
+
+    if (currentIndex === -1) {
+      reactTags.current.setState({
+        index: 0,
+      })
+    } else if (currentIndex === undefined) {
+      console.error('Breaking change: ReactTags.state no longer contains index')
+    }
+  }
+
   return (
     <ReactTags
+      ref={reactTags}
       tags={tags}
       suggestions={suggestions}
       minQueryLength={1}
@@ -66,6 +82,9 @@ const DocumentEditorKeywords = props => {
           return newTags
         })
       )}
+
+      onInput={autoSelectFirstItem}
+      onFocus={autoSelectFirstItem}
 
       tagComponent={Tag} />
   )
