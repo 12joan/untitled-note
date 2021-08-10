@@ -20,11 +20,19 @@ const DocumentEditorKeywords = props => {
 
   const tags = props.keywords.map(keywordToTag)
 
-  const suggestions = allKeywords.map(keywordToTag)
-
   const setTags = mapFunction => props.updateDocument({
     keywords: mapFunction(tags).map(tagToKeyword),
   })
+
+  const transformKeywordText = text => (
+    text.trim().replaceAll(/[ ]{2,}/g, ' ')
+  )
+
+  const tagAlreadySelected = tag => (
+    props.keywords.some(keyword => keyword.text === transformKeywordText(tag.name))
+  )
+
+  const suggestions = allKeywords.map(keywordToTag).filter(tag => !tagAlreadySelected(tag))
 
   return (
     <ReactTags
@@ -37,14 +45,16 @@ const DocumentEditorKeywords = props => {
       newTagText="New keyword:"
       allowNew
 
-      onValidate={tag => /[^\s]+/.test(tag.name)}
+      onValidate={tag => (
+        /[^\s]+/.test(tag.name) && !tagAlreadySelected(tag)
+      )}
 
       onAddition={tag => (
         setTags(tags => ([
           ...tags,
           {
             ...tag,
-            name: tag.name.trim().replaceAll(/[ ]{2,}/g,' '),
+            name: transformKeywordText(tag.name),
           },
         ]))
       )}
