@@ -37,10 +37,15 @@ const DocumentEditorKeywords = props => {
       newTagText="New keyword:"
       allowNew
 
+      onValidate={tag => /[^\s]+/.test(tag.name)}
+
       onAddition={tag => (
         setTags(tags => ([
           ...tags,
-          tag,
+          {
+            ...tag,
+            name: tag.name.trim().replaceAll(/[ ]{2,}/g,' '),
+          },
         ]))
       )}
 
