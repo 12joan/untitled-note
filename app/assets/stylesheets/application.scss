@@ -150,6 +150,39 @@ html, body {
     outline: none;
   }
 
+  .react-tags {
+    @extend .border-0;
+    @extend .p-0;
+
+    .keyword-tag {
+      background-color: lighten($blue-100, 5%);
+
+      &:hover, &:focus {
+        background-color: $blue-100;
+      }
+
+      .btn-delete {
+        background-color: lighten($blue-100, 5%);
+
+        &:hover, &:focus {
+          background-color: $blue-100;
+        }
+      }
+    }
+
+    .react-tags__suggestions {
+      z-index: 1;
+
+      li {
+        @extend .bg-white;
+
+        &.is-active {
+          @extend .bg-light;
+        }
+      }
+    }
+  }
+
   [id^="trix-editor-top-level"] {
     @extend .flex-grow-1;
   }

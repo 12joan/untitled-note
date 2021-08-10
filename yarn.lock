@@ -5684,6 +5684,11 @@ react-router@5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
+react-tag-autocomplete@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/react-tag-autocomplete/-/react-tag-autocomplete-6.2.0.tgz#f5aefaa4ff972c8163d5340d2e6ad20e31391f46"
+  integrity sha512-sBBwYoBVdJFQffhqOjjvcN2/1M92cG1YRKeyFgXEN44xxlTIUyneqzkw8l096pA3DSmUmgNc9z3JFG26xZRnbg==
+
 react-trix@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/react-trix/-/react-trix-0.9.0.tgz#348b222c713f92642f824fcc4683f892e9237a55"
