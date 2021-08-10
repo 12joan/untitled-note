@@ -1,23 +1,17 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import ReactTags from 'react-tag-autocomplete'
 import { TrixEditor } from 'react-trix'
-import { BoxArrowUpRight, ThreeDots, Palette, At as Mention, X as Cross } from 'react-bootstrap-icons'
+import { BoxArrowUpRight, ThreeDots, Palette, At as Mention } from 'react-bootstrap-icons'
 import { v4 as uuid } from 'uuid'
 
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import NavLink from 'components/NavLink'
+import DocumentEditorKeywords from 'components/documents/DocumentEditorKeywords'
 
 const DocumentEditor = props => {
   const { projectId, keywords: allKeywords, reloadKeywords, setParams } = useContext()
-
-  const documentsAPI = DocumentsAPI(projectId)
-
-  const [editorUUID] = useState(() => uuid())
-
-  const editorEl = useRef()
 
   const [doc, setDoc] = useState(props.document)
 
@@ -25,37 +19,24 @@ const DocumentEditor = props => {
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
 
+  const [editorUUID] = useState(() => uuid())
+
   const toolbarId = `trix-toolbar-${editorUUID}`
   const toolbarCollapseId = `${toolbarId}-collapse`
 
-  const updateLocalKeywords = updatedDoc => {
-    updateDocument({
-      keywords: doc.keywords.map(oldKeyword => {
-        const newKeyword = updatedDoc.keywords.find(keyword => keyword.text === oldKeyword.text)
+  const editorEl = useRef()
 
-        if (oldKeyword.id === undefined && newKeyword !== undefined) {
-          reloadKeywords()
-          return newKeyword
-        } else {
-          return oldKeyword
-        }
-      }),
-    }, false)
-  }
-
-  const afterCreate = createdDoc => {
-    updateDocument({ id: doc.id }, false)
-    updateLocalKeywords(createdDoc)
-  }
-
-  const afterUpdate = updatedDoc => {
-    updateLocalKeywords(updatedDoc)
+  const handleEditorReady = () => {
+    const editor = editorEl.current.editor
+    editor.loadHTML(doc.body)
   }
 
   useEffect(() => {
     if (localVersion > remoteVersion && !isUploading) {
       setIsUploading(true)
       const uploadingVersion = localVersion
+
+      const documentsAPI = DocumentsAPI(projectId)
 
       const uploadDocumentPromise = doc.id === undefined
         ? documentsAPI.create(doc).then(afterCreate)
@@ -81,18 +62,29 @@ const DocumentEditor = props => {
     }
   }
 
-  const handleEditorReady = () => {
-    const editor = editorEl.current.editor
-    editor.loadHTML(doc.body)
+  const afterCreate = createdDoc => {
+    updateDocument({ id: doc.id }, false)
+    updateLocalKeywords(createdDoc)
   }
 
-  const tags = doc.keywords.map(keyword => ({ id: keyword.id, name: keyword.text }))
+  const afterUpdate = updatedDoc => {
+    updateLocalKeywords(updatedDoc)
+  }
 
-  console.log(tags.map(tag => tag.id))
+  const updateLocalKeywords = updatedDoc => {
+    updateDocument({
+      keywords: doc.keywords.map(oldKeyword => {
+        const newKeyword = updatedDoc.keywords.find(keyword => keyword.text === oldKeyword.text)
 
-  const setTags = mapFunction => updateDocument({
-    keywords: mapFunction(tags).map(tag => ({ text: tag.name })),
-  })
+        if (oldKeyword.id === undefined && newKeyword !== undefined) {
+          reloadKeywords()
+          return newKeyword
+        } else {
+          return oldKeyword
+        }
+      }),
+    }, false)
+  }
 
   return (
     <div className={`document-editor ${props.fullHeight ? 'h-100' : ''} d-flex flex-column`}>
@@ -129,49 +121,7 @@ const DocumentEditor = props => {
 
       <div className="row">
         <div className="col">
-          <ReactTags
-            tags={tags}
-            suggestions={allKeywords.map(keyword => ({ id: keyword.id, name: keyword.text }))}
-            minQueryLength={1}
-            placeholderText="Add keywords..."
-            removeButtonText="Remove keyword"
-            noSuggestionsText="Keyword not found"
-            allowNew
-            newTagText="New keyword:"
-            onAddition={tag => (
-              setTags(tags => ([
-                ...tags,
-                tag,
-              ]))
-            )}
-            onDelete={index => (
-              setTags(tags => {
-                let newTags = tags.slice(0)
-                newTags.splice(index, 1)
-                return newTags
-              })
-            )}
-            tagComponent={({ tag, removeButtonText, onDelete }) => (
-              <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 mb-2 me-2 text-primary">
-                <span className="mx-1">
-                  {tag.name}
-                </span>
-
-                <NavLink
-                  className="stretched-link"
-                  params={{ keywordId: tag.id, documentId: undefined }} />
-
-                <button
-                  className="btn-delete position-relative border-0 p-0 rounded-circle text-primary"
-                  style={{ width: '1.2em', height: '1.2em', zIndex: 2 }}
-                  title={removeButtonText}
-                  onClick={onDelete}
-                  title={removeButtonText}>
-                  <Cross className="bi" />
-                  <span className="visually-hidden">{removeButtonText}</span>
-                </button>
-              </div>
-            )} />
+          <DocumentEditorKeywords keywords={doc.keywords} updateDocument={updateDocument} />
         </div>
       </div>
 
