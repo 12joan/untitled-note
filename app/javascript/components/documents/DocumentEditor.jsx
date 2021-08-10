@@ -120,7 +120,7 @@ const DocumentEditor = props => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row mb-2">
         <div className="col">
           <DocumentEditorKeywords keywords={doc.keywords} updateDocument={updateDocument} />
         </div>

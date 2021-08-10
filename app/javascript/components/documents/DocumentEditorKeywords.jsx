@@ -62,7 +62,7 @@ const DocumentEditorKeywords = props => {
 }
 
 const Tag = props => (
-  <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 mb-2 me-2 text-primary">
+  <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 me-2 text-primary">
     <span className="mx-1">
       {props.tag.name}
     </span>

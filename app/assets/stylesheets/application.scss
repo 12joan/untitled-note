@@ -90,7 +90,7 @@ html, body {
 .dim-on-hover {
   @include transition($btn-transition);
 
-  &:not(:focus):hover {
+  &:not(:focus):not(:focus-within):hover {
     @extend .bg-light;
   }
 }
@@ -152,7 +152,11 @@ html, body {
 
   .react-tags {
     @extend .border-0;
-    @extend .p-0;
+    @extend .py-0;
+    @extend .px-1;
+    @extend .mx-n1;
+    @extend .rounded-pill;
+    @extend .dim-on-hover;
 
     .keyword-tag {
       background-color: lighten($blue-100, 5%);
@@ -167,6 +171,14 @@ html, body {
         &:hover, &:focus {
           background-color: $blue-100;
         }
+      }
+    }
+
+    .react-tags__search {
+      @extend .mb-0;
+
+      .react-tags__search-input {
+        @extend .bg-transparent;
       }
     }
 
