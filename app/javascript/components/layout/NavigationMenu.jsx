@@ -37,6 +37,10 @@ const NavigationMenu = props => {
 const KeywordsMenu = props => {
   const { keywords } = useContext()
 
+  if (keywords.length === 0) {
+    return null
+  }
+
   return (
     <>
       <div className="container-fluid mb-2">
