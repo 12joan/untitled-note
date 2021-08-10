@@ -1,4 +1,6 @@
 class Document < ApplicationRecord
+  include Deleteable
+
   belongs_to :project
   has_rich_text :body
   has_many :aliases, dependent: :destroy
