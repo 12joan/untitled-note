@@ -93,11 +93,9 @@ class DocumentTest < ActiveSupport::TestCase
 
     assert_equal 2, document.keywords.count, 'should have 2 keywords'
 
-    assert_no_difference('Keyword.count') do
-      document.update(keywords_attributes: [
-        { text: keyword1.text },
-      ])
-    end
+    document.update(keywords_attributes: [
+      { text: keyword1.text },
+    ])
 
     assert_equal 1, document.keywords.count, 'should have 1 keyword'
   end
