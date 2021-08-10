@@ -16,7 +16,7 @@ module API
       def create
         @document = @project.documents.build(document_params)
 
-        if keywords_attributes.present?
+        unless keywords_attributes.nil?
           @document.keywords_attributes = keywords_attributes
         end
 
@@ -31,7 +31,7 @@ module API
       def update
         @document.assign_attributes(document_params)
 
-        if keywords_attributes.present?
+        unless keywords_attributes.nil?
           @document.keywords_attributes = keywords_attributes
         end
 

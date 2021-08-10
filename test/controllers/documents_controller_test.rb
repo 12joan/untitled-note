@@ -56,6 +56,26 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'New title', Document.find(@document.id).title
   end
 
+  test 'can remove last keyword of document' do
+    assert_difference('Keyword.count', 1) do
+      patch api_v1_project_document_url(@project, @document), params: {
+        document: {
+          keywords_attributes: [
+            { text: 'Hello' },
+          ],
+        },
+      }
+    end
+
+    assert_difference('Keyword.count', -1) do
+      patch api_v1_project_document_url(@project, @document), params: {
+        document: {
+          keywords_attributes: [],
+        },
+      }
+    end
+  end
+
   test 'should destroy document' do
     assert_difference('Document.count', -1) do
       delete api_v1_project_document_url(@project, @document)

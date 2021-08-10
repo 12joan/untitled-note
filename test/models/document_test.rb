@@ -99,4 +99,22 @@ class DocumentTest < ActiveSupport::TestCase
 
     assert_equal 1, document.keywords.count, 'should have 1 keyword'
   end
+
+  test 'can remove the last keyword' do
+    project = create(:project)
+
+    keyword = create(:keyword, project: project)
+
+    document = Document.create!(project: project, keywords_attributes: [
+      { text: keyword.text },
+    ])
+
+    assert_equal 1, document.keywords.count, 'should have 1 keyword'
+
+    document.update(keywords_attributes: [])
+
+    document.reload
+
+    assert_empty document.keywords
+  end
 end

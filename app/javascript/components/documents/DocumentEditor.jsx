@@ -77,13 +77,14 @@ const DocumentEditor = props => {
         const newKeyword = updatedDoc.keywords.find(keyword => keyword.text === oldKeyword.text)
 
         if (oldKeyword.id === undefined && newKeyword !== undefined) {
-          reloadKeywords()
           return newKeyword
         } else {
           return oldKeyword
         }
       }),
     }, false)
+
+    reloadKeywords()
   }
 
   return (
