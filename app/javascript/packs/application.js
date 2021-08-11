@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom'
 import * as ActiveStorage from '@rails/activestorage'
 import 'channels'
 import 'bootstrap'
+import 'stylesheets/application'
 
 import App from 'components/App'
 
