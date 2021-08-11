@@ -1,1 +1,1 @@
-json.partial! 'document', document: @document
+json.partial! '/api/v1/documents/document', document: @document

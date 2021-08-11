@@ -8,6 +8,8 @@ class Document < ApplicationRecord
   has_many :keywords, through: :documents_keywords
   accepts_nested_attributes_for :keywords
 
+  scope :not_blank, -> { where(blank: false) }
+
   after_initialize do |document|
     # Ensure document has a title (side effect of #title_record)
     raise 'Failed to create title for document' if title_record.nil?

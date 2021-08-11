@@ -6,7 +6,7 @@ module DocumentsQueryable
   end
 
   def query_documents(collection, options = {})
-    scope =
+    deletion_scope =
       case options.fetch(:deleted, 'false')
       when 'false'
         collection.not_deleted
@@ -18,7 +18,7 @@ module DocumentsQueryable
         raise ArgumentError.new('Invalid value for deleted')
       end
 
-    scope.order(
+    deletion_scope.not_blank.order(
       validate_param(
         options.fetch(:sort_by, 'created_at'),
         allowed_values: ['created_at', 'updated_at'],

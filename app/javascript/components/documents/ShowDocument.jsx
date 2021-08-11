@@ -15,7 +15,7 @@ const ShowDocument = props => {
         dependencies={[props.id]}
         promise={() => DocumentsAPI(projectId).show(props.id)}
 
-        success={doc => <DocumentEditor document={doc} fullHeight />}
+        success={doc => <DocumentEditor key={doc.id} document={doc} fullHeight />}
 
         loading={() => <></>}
 

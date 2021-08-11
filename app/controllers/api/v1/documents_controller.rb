@@ -61,7 +61,7 @@ module API
 
       # Only allow a list of trusted parameters through.
       def document_params
-        params.require(:document).permit(:title, :body, :deleted_at)
+        params.require(:document).permit(:title, :body, :deleted_at, :blank)
       end
 
       def keywords_attributes
