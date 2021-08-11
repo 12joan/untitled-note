@@ -7,7 +7,7 @@ import LoadPromise from 'components/LoadPromise'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
 const ShowDocument = props => {
-  const { projectId } = useContext()
+  const { projectId, keyword } = useContext()
 
   return (
     <div className="p-4">
@@ -15,7 +15,16 @@ const ShowDocument = props => {
         dependencies={[props.id]}
         promise={() => DocumentsAPI(projectId).show(props.id)}
 
-        success={doc => <DocumentEditor key={doc.id} document={doc} />}
+        success={doc => (
+          <DocumentEditor
+            key={doc.id}
+            document={{
+              ...doc,
+              keywords: (doc.blank && keyword !== undefined)
+                ? [...doc.keywords, keyword]
+                : doc.keywords,
+            }} />
+        )}
 
         loading={() => <></>}
 
