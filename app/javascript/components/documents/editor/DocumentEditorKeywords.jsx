@@ -21,7 +21,7 @@ const DocumentEditorKeywords = props => {
     text: tag.name,
   })
 
-  const tags = props.keywords.map(keywordToTag)
+  const tags = props.doc.keywords.map(keywordToTag)
 
   const setTags = mapFunction => props.updateDocument({
     keywords: mapFunction(tags).map(tagToKeyword),
@@ -32,7 +32,7 @@ const DocumentEditorKeywords = props => {
   )
 
   const tagAlreadySelected = tag => (
-    props.keywords.some(keyword => keyword.text === transformKeywordText(tag.name))
+    props.doc.keywords.some(keyword => keyword.text === transformKeywordText(tag.name))
   )
 
   const suggestions = allKeywords.map(keywordToTag).filter(tag => !tagAlreadySelected(tag))
@@ -47,6 +47,26 @@ const DocumentEditorKeywords = props => {
     } else if (currentIndex === undefined) {
       console.error('Breaking change: ReactTags.state no longer contains index')
     }
+  }
+
+  const afterAddition = ({ localRecord, remoteRecord }) => {
+    reloadKeywords()
+
+    props.updateDocument({
+      keywords: localRecord.keywords.map(oldKeyword => {
+        const newKeyword = remoteRecord.keywords.find(keyword => keyword.text === oldKeyword.text)
+
+        if (oldKeyword.id === undefined && newKeyword !== undefined) {
+          return newKeyword
+        } else {
+          return oldKeyword
+        }
+      }),
+    }, false)
+  }
+
+  const afterDelete = () => {
+    reloadKeywords()
   }
 
   useEffect(() => {
@@ -92,7 +112,7 @@ const DocumentEditorKeywords = props => {
             name: transformKeywordText(tag.name),
           },
         ]))
-          .then(reloadKeywords)
+          .then(afterAddition)
       }}
 
       onDelete={index => {
@@ -101,7 +121,7 @@ const DocumentEditorKeywords = props => {
           newTags.splice(index, 1)
           return newTags
         })
-          .then(reloadKeywords)
+          .then(afterDelete)
       }}
 
       onInput={autoSelectFirstItem}
