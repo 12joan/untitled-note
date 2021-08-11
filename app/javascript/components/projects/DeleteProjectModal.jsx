@@ -51,7 +51,7 @@ const NewProjectModal = withRouter(props => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                value={confirmation}
+                checked={confirmation}
                 onChange={event => setConfirmation(event.target.checked)}
                 id="confirm-deletion-checkbox" />
 
