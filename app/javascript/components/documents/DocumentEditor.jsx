@@ -16,7 +16,7 @@ const DocumentEditor = props => {
 
   const [doc, setDoc] = useState(props.document)
 
-  const isDeleted = doc.deleted_at !== undefined && doc.deleted_at !== null
+  const isDeleted = doc.deleted_at !== null
   const readOnly = isDeleted || props.readOnly
 
   const [localVersion, setLocalVersion] = useState(0)
@@ -41,15 +41,10 @@ const DocumentEditor = props => {
       setIsUploading(true)
       const uploadingVersion = localVersion
 
-      const documentsAPI = DocumentsAPI(projectId)
-
-      const uploadDocumentPromise = doc.id === undefined
-        ? documentsAPI.create(doc).then(afterCreate)
-        : documentsAPI.update(doc).then(afterUpdate)
-
       const callbacks = updatePromiseCallbacks.filter(({ version }) => uploadingVersion >= version)
 
-      uploadDocumentPromise
+      DocumentsAPI(projectId).update(doc)
+        .then(afterUpdate)
         .catch(error => {
           console.error(error)
           callbacks.forEach(callback => callback.reject(error))
@@ -80,16 +75,7 @@ const DocumentEditor = props => {
     }
   }
 
-  const afterCreate = createdDoc => {
-    updateDocument({ id: createdDoc.id }, false)
-    updateLocalKeywords(createdDoc)
-  }
-
   const afterUpdate = updatedDoc => {
-    updateLocalKeywords(updatedDoc)
-  }
-
-  const updateLocalKeywords = updatedDoc => {
     updateDocument({
       keywords: doc.keywords.map(oldKeyword => {
         const newKeyword = updatedDoc.keywords.find(keyword => keyword.text === oldKeyword.text)
@@ -104,10 +90,10 @@ const DocumentEditor = props => {
   }
 
   return (
-    <div className={`document-editor ${props.fullHeight ? 'h-100' : ''} d-flex flex-column ${readOnly ? 'readOnly' : ''}`}>
+    <div className={`document-editor d-flex flex-column ${readOnly ? 'readOnly' : ''}`}>
       <div className="container-fluid">
         {
-          props.openable && doc.id !== undefined && (
+          props.openable && (
             <div className="document-editor-header dim-on-hover position-relative d-flex justify-content-center align-items-center">
               <NavLink
                 className="stretched-link document-editor-header-link text-secondary text-decoration-none"

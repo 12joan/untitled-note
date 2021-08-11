@@ -59,10 +59,6 @@ const computeView = params => {
     return { type: 'index', deleted: true }
   }
 
-  if (params.documentId === 'new') {
-    return { type: 'new' }
-  }
-
   return { type: 'show' }
 }
 

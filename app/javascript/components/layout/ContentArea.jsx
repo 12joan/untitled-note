@@ -2,7 +2,6 @@ import React from 'react'
 
 import { useContext } from 'lib/context'
 
-import NewDocument from 'components/documents/NewDocument'
 import ShowDocument from 'components/documents/ShowDocument'
 import DocumentIndex from 'components/documents/DocumentIndex'
 
@@ -12,9 +11,6 @@ const ContentArea = props => {
   switch (view.type) {
     case 'index':
       return <DocumentIndex deletedOnly={view.deleted} />
-
-    case 'new':
-      return <NewDocument />
 
     case 'show':
       return <ShowDocument id={documentId} />
