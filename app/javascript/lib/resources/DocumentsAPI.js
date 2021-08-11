@@ -35,6 +35,7 @@ const DocumentsAPI = projectId => new ResourcesAPI({
       keywords_attributes: doc.keywords.map(keyword => ({
         text: keyword.text,
       })),
+      deleted_at: doc.deleted_at,
     },
   }),
 })

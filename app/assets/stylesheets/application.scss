@@ -118,6 +118,18 @@ html, body {
   @extend .rounded-lg;
   @extend .p-lg;
 
+  &:not(.readOnly) {
+    .title-input, .react-tags, .trix-editor {
+      @extend .dim-on-hover;
+    }
+  }
+
+  &.readOnly {
+    .react-tags__search-input {
+      @extend .d-none;
+    }
+  }
+
   .document-editor-header {
     @extend .bg-white;
 
@@ -144,7 +156,6 @@ html, body {
     @extend .w-100;
     @extend .border-0;
     @extend .border-bottom;
-    @extend .dim-on-hover;
 
     font-family: Georgia, "Times New Roman", serif;
     outline: none;
@@ -156,7 +167,6 @@ html, body {
     @extend .px-1;
     @extend .mx-n1;
     @extend .rounded-pill;
-    @extend .dim-on-hover;
 
     .keyword-tag {
       background-color: lighten($blue-100, 5%);
@@ -207,19 +217,21 @@ html, body {
     }
   }
 
-  [id^="trix-editor-top-level"] {
-    @extend .flex-grow-1;
+  trix-editor {
+    @extend .trix-editor;
   }
 
-  trix-editor {
+  .trix-editor {
     @extend .h-100;
+    @extend .m-0;
     @extend .p-0;
     @extend .rounded-0;
-    @extend .dim-on-hover;
 
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.125em;
     border: none;
+    outline: none;
+    min-height: 5em;
 
     h1 {
       @extend .h3;

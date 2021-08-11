@@ -7,17 +7,20 @@ import ShowDocument from 'components/documents/ShowDocument'
 import DocumentIndex from 'components/documents/DocumentIndex'
 
 const ContentArea = props => {
-  const { documentId } = useContext()
+  const { view, documentId } = useContext()
 
-  switch (documentId) {
-    case undefined:
-      return <DocumentIndex />
+  switch (view.type) {
+    case 'index':
+      return <DocumentIndex deletedOnly={view.deleted} />
 
     case 'new':
       return <NewDocument />
 
-    default:
+    case 'show':
       return <ShowDocument id={documentId} />
+
+    default:
+      return null
   }
 }
 

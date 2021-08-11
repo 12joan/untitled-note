@@ -1,23 +1,28 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { TrixEditor } from 'react-trix'
-import { BoxArrowUpRight, ThreeDots, Palette, At as Mention } from 'react-bootstrap-icons'
+import { BoxArrowUpRight, Palette, At as Mention } from 'react-bootstrap-icons'
 import { v4 as uuid } from 'uuid'
 
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import NavLink from 'components/NavLink'
+import DocumentDropdownMenu from 'components/documents/DocumentDropdownMenu'
 import DocumentEditorKeywords from 'components/documents/DocumentEditorKeywords'
 
 const DocumentEditor = props => {
-  const { projectId, keywords: allKeywords, reloadKeywords, setParams } = useContext()
+  const { projectId, keywords: allKeywords, setParams } = useContext()
 
   const [doc, setDoc] = useState(props.document)
+
+  const isDeleted = doc.deleted_at !== undefined && doc.deleted_at !== null
+  const readOnly = isDeleted || props.readOnly
 
   const [localVersion, setLocalVersion] = useState(0)
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
+  const [updatePromiseCallbacks, setUpdatePromiseCallbacks] = useState([])
 
   const [editorUUID] = useState(() => uuid())
 
@@ -42,11 +47,17 @@ const DocumentEditor = props => {
         ? documentsAPI.create(doc).then(afterCreate)
         : documentsAPI.update(doc).then(afterUpdate)
 
+      const callbacks = updatePromiseCallbacks.filter(({ version }) => uploadingVersion >= version)
+
       uploadDocumentPromise
-        .catch(console.error)
+        .catch(error => {
+          console.error(error)
+          callbacks.forEach(callback => callback.reject(error))
+        })
         .then(() => {
           setRemoteVersion(uploadingVersion)
           setIsUploading(false)
+          callbacks.forEach(callback => callback.resolve())
         })
     }
   }, [localVersion, remoteVersion, isUploading])
@@ -59,6 +70,13 @@ const DocumentEditor = props => {
 
     if (incrementLocalVersion) {
       setLocalVersion(localVersion => localVersion + 1)
+
+      return new Promise((resolve, reject) => {
+        setUpdatePromiseCallbacks(callbacks => [
+          ...callbacks,
+          { version: localVersion, resolve, reject },
+        ])
+      })
     }
   }
 
@@ -83,12 +101,10 @@ const DocumentEditor = props => {
         }
       }),
     }, false)
-
-    reloadKeywords()
   }
 
   return (
-    <div className={`document-editor ${props.fullHeight ? 'h-100' : ''} d-flex flex-column`}>
+    <div className={`document-editor ${props.fullHeight ? 'h-100' : ''} d-flex flex-column ${readOnly ? 'readOnly' : ''}`}>
       <div className="container-fluid">
         {
           props.openable && doc.id !== undefined && (
@@ -108,31 +124,42 @@ const DocumentEditor = props => {
               className="title-input"
               value={doc.title}
               placeholder="Title"
+              readOnly={readOnly}
               onChange={event => updateDocument({ title: event.target.value })} />
           </div>
 
           <div className="col-auto">
-            <button className="btn btn-icon fs-4 text-secondary">
-              <ThreeDots className="bi" />
-              <span className="visually-hidden">Toggle dropdown menu</span>
-            </button>
+            <DocumentDropdownMenu
+              doc={doc}
+              isDeleted={isDeleted}
+              editorUUID={editorUUID}
+              updateDocument={updateDocument} />
           </div>
         </div>
       </div>
 
       <div className="row mb-2">
         <div className="col">
-          <DocumentEditorKeywords keywords={doc.keywords} updateDocument={updateDocument} />
+          <DocumentEditorKeywords
+            keywords={doc.keywords}
+            updateDocument={updateDocument}
+            readOnly={readOnly} />
         </div>
       </div>
 
-      <div className="flex-grow-1 d-flex flex-column position-relative">
-        <TrixEditor
-          ref={editorEl}
-          toolbar={toolbarId}
-          placeholder="Add document body"
-          onEditorReady={handleEditorReady}
-          onChange={body => updateDocument({ body })} />
+      <div className="flex-grow-1">
+        {
+          readOnly
+            ? <div className="trix-editor" dangerouslySetInnerHTML={{ __html: doc.body }} />
+            : (
+              <TrixEditor
+                ref={editorEl}
+                toolbar={toolbarId}
+                placeholder="Add document body"
+                onEditorReady={handleEditorReady}
+                onChange={body => updateDocument({ body })} />
+            )
+        }
 
         <div className="document-editor-footer position-sticky bottom-0 mt-3 py-3">
           <div className="container-fluid">
@@ -150,6 +177,7 @@ const DocumentEditor = props => {
                   data-bs-toggle="collapse"
                   data-bs-target={`#${toolbarCollapseId}`}
                   title="Toggle formatting controls"
+                  disabled={readOnly}
                   aria-expanded="false"
                   aria-controls={toolbarCollapseId}>
                   <Palette className="bi" />

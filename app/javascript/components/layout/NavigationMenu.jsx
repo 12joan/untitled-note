@@ -6,7 +6,7 @@ import NavLink from 'components/NavLink'
 import ProjectDropdownMenu from 'components/layout/ProjectDropdownMenu'
 
 const NavigationMenu = props => {
-  const { project } = useContext()
+  const { project, documentId } = useContext()
 
   return (
     <div className="h-100 border-end p-3 navigation-menu">
@@ -25,8 +25,15 @@ const NavigationMenu = props => {
       <ul className="nav nav-pills flex-column mb-3">
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: undefined }}
-          activeParams={['keywordId']}>
+          activeParams={['keywordId']}
+          isActive={() => documentId !== 'deleted'}>
           All documents
+        </NavigationMenuItem>
+
+        <NavigationMenuItem
+          params={{ keywordId: undefined, documentId: 'deleted' }}
+          activeParams={['documentId']}>
+          Recently deleted
         </NavigationMenuItem>
       </ul>
 
@@ -35,7 +42,7 @@ const NavigationMenu = props => {
   )
 }
 const KeywordsMenu = props => {
-  const { keywords } = useContext()
+  const { keywords, documentId } = useContext()
 
   if (keywords.length === 0) {
     return null
@@ -57,7 +64,8 @@ const KeywordsMenu = props => {
             <NavigationMenuItem
               key={keyword.id}
               params={{ keywordId: keyword.id, documentId: undefined }}
-              activeParams={['keywordId']}>
+              activeParams={['keywordId']}
+              isActive={() => documentId !== 'deleted'}>
               {keyword.text}
             </NavigationMenuItem>
           ))
@@ -73,7 +81,8 @@ const NavigationMenuItem = props => (
       className="nav-link"
       activeClassName="active"
       params={props.params}
-      activeParams={props.activeParams}>
+      activeParams={props.activeParams}
+      isActive={props.isActive}>
       {props.children}
     </NavLink>
   </li>

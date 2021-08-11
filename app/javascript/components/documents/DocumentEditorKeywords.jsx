@@ -8,7 +8,7 @@ import { useContext } from 'lib/context'
 import NavLink from 'components/NavLink'
 
 const DocumentEditorKeywords = props => {
-  const { keywords: allKeywords } = useContext()
+  const { keywords: allKeywords, reloadKeywords } = useContext()
 
   const reactTags = useRef()
 
@@ -65,7 +65,7 @@ const DocumentEditorKeywords = props => {
         /[^\s]+/.test(tag.name) && !tagAlreadySelected(tag)
       )}
 
-      onAddition={tag => (
+      onAddition={tag => {
         setTags(tags => ([
           ...tags,
           {
@@ -73,20 +73,22 @@ const DocumentEditorKeywords = props => {
             name: transformKeywordText(tag.name),
           },
         ]))
-      )}
+          .then(reloadKeywords)
+      }}
 
-      onDelete={index => (
+      onDelete={index => {
         setTags(tags => {
           let newTags = tags.slice(0)
           newTags.splice(index, 1)
           return newTags
         })
-      )}
+          .then(reloadKeywords)
+      }}
 
       onInput={autoSelectFirstItem}
       onFocus={autoSelectFirstItem}
 
-      tagComponent={Tag} />
+      tagComponent={options => <Tag {...options} readOnly={props.readOnly} />} />
   )
 }
 
@@ -104,6 +106,7 @@ const Tag = props => (
       className="btn-delete position-relative border-0 p-0 rounded-circle text-primary"
       style={{ width: '1.2em', height: '1.2em', zIndex: 2 }}
       onClick={props.onDelete}
+      disabled={props.readOnly}
       title={props.removeButtonText}>
       <Cross className="bi" />
       <span className="visually-hidden">{props.removeButtonText}</span>

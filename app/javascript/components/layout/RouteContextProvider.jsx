@@ -14,6 +14,7 @@ const RouteContextProvider = props => {
   const context = {
     ...props.params,
     setParams,
+    view: computeView(props.params),
   }
 
   return (
@@ -43,6 +44,26 @@ const buildUrl = ({ projectId, keywordId, documentId }) => {
 
     return url
   }
+}
+
+const computeView = params => {
+  if (params.projectId === undefined) {
+    return { type: 'unknown' }
+  }
+
+  if (params.documentId === undefined) {
+    return { type: 'index', deleted: false }
+  }
+
+  if (params.documentId === 'deleted') {
+    return { type: 'index', deleted: true }
+  }
+
+  if (params.documentId === 'new') {
+    return { type: 'new' }
+  }
+
+  return { type: 'show' }
 }
 
 export default RouteContextProvider

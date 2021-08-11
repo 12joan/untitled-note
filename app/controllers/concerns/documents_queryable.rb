@@ -6,7 +6,19 @@ module DocumentsQueryable
   end
 
   def query_documents(collection, options = {})
-    collection.all.order(
+    scope =
+      case options.fetch(:deleted, 'false')
+      when 'false'
+        collection.not_deleted
+      when 'true'
+        collection.deleted
+      when 'any'
+        collection.all
+      else
+        raise ArgumentError.new('Invalid value for deleted')
+      end
+
+    scope.order(
       validate_param(
         options.fetch(:sort_by, 'created_at'),
         allowed_values: ['created_at', 'updated_at'],

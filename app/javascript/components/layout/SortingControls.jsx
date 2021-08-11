@@ -5,9 +5,9 @@ import { useContext } from 'lib/context'
 import LinkSelect from 'components/LinkSelect'
 
 const SortingControls = props => {
-  const { documentId, sortParameter, setSortParameter } = useContext()
+  const { view, sortParameter, setSortParameter } = useContext()
 
-  if (documentId !== undefined) {
+  if (view.type !== 'index') {
     return null
   }
 
