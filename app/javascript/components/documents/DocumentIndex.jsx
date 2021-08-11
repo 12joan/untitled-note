@@ -21,7 +21,7 @@ const DocumentIndex = props => {
 
   return (
     <div className="h-100 d-flex">
-      <div className="h-100 flex-grow-1 overflow-scroll d-flex flex-column-reverse px-4 pt-4 mb-n4">
+      <div className="h-100 flex-grow-1 overflow-auto d-flex flex-column-reverse px-4 pt-4 mb-n4">
         <div>
           <LoadPromise
             dependencies={[projectId, keywordId, searchParams, documentIndexKey]}

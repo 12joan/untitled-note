@@ -18,18 +18,18 @@ const AppLayout = props => {
         </div>
 
         <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
-          <div className="col-auto mh-100 overflow-scroll">
+          <div className="col-auto mh-100">
             <ProjectsBar />
           </div>
 
-          <div className="col-auto mh-100 overflow-scroll">
+          <div className="col-auto mh-100">
             <NavigationMenu />
           </div>
 
           <div className="col mh-100 d-flex flex-column">
             <ContentHeader />
 
-            <div className="flex-grow-1 overflow-scroll bg-light">
+            <div className="flex-grow-1 overflow-auto bg-light">
               <ContentArea />
             </div>
           </div>

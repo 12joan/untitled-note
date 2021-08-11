@@ -9,7 +9,7 @@ const NavigationMenu = props => {
   const { project, documentId } = useContext()
 
   return (
-    <div className="h-100 border-end p-3 navigation-menu">
+    <div className="h-100 border-end p-3 navigation-menu overflow-auto">
       <div className="container-fluid mt-2 mb-3">
         <div className="row gx-3 align-items-center">
           <div className="col">
