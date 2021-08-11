@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import ReactTags from 'react-tag-autocomplete'
 import { X as Cross } from 'react-bootstrap-icons'
 
@@ -48,6 +48,25 @@ const DocumentEditorKeywords = props => {
       console.error('Breaking change: ReactTags.state no longer contains index')
     }
   }
+
+  useEffect(() => {
+    const inputEl = reactTags.current.input?.current?.input?.current
+
+    if (inputEl === undefined) {
+      console.error('Breaking change: Cannot find input element of ReactTags')
+    }
+
+    const onKeydown = event => {
+      if (event.key === 'Tab' && inputEl.value === '') {
+        // Prevent ReactTags from interrupting the tab
+        event.stopPropagation()
+      }
+    }
+
+    inputEl.addEventListener('keydown', onKeydown)
+
+    return () => inputEl.removeEventListener('keydown', onKeydown)
+  }, [])
 
   return (
     <ReactTags
