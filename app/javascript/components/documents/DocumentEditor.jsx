@@ -90,7 +90,7 @@ const DocumentEditor = props => {
   }
 
   return (
-    <div className={`document-editor d-flex flex-column ${readOnly ? 'readOnly' : ''}`}>
+    <div className={`document-editor ${readOnly ? 'readOnly' : ''}`}>
       <div className="container-fluid">
         {
           props.openable && (
@@ -133,7 +133,7 @@ const DocumentEditor = props => {
         </div>
       </div>
 
-      <div className="flex-grow-1">
+      <div>
         {
           readOnly
             ? <div className="trix-editor" dangerouslySetInnerHTML={{ __html: doc.body }} />
@@ -147,7 +147,7 @@ const DocumentEditor = props => {
             )
         }
 
-        <div className="document-editor-footer position-sticky bottom-0 mt-3 py-3">
+        <div className="document-editor-footer position-sticky bottom-0 py-3">
           <div className="container-fluid">
             <div className="row gx-3 align-items-center mb-n3">
               <div className="col mb-3">

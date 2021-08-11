@@ -20,32 +20,28 @@ const DocumentIndex = props => {
   }
 
   return (
-    <div className="h-100 d-flex">
-      <div className="h-100 flex-grow-1 overflow-auto d-flex flex-column-reverse px-4 pt-4 mb-n4">
-        <div>
-          <LoadPromise
-            dependencies={[projectId, keywordId, searchParams, documentIndexKey]}
-            promise={() => action({ searchParams })}
+    <div className="p-4 pb-0">
+      <LoadPromise
+        dependencies={[projectId, keywordId, searchParams, documentIndexKey]}
+        promise={() => action({ searchParams })}
 
-            success={documents => documents.map(doc => (
-              <div key={doc.id} className="mb-4">
-                <DocumentEditor document={doc} openable />
-              </div>
-            ))}
+        success={documents => documents.map(doc => (
+          <div key={doc.id} className="mb-4">
+            <DocumentEditor document={doc} openable />
+          </div>
+        ))}
 
-            loading={() => <></>}
+          loading={() => <></>}
 
-            error={error => {
-              console.error(error)
+        error={error => {
+          console.error(error)
 
-              return (
-                <div className="alert alert-danger">
-                  <strong>Failed to load documents:</strong> An unexpected error occurred
-                </div>
-              )
-            }} />
-        </div>
-      </div>
+          return (
+            <div className="alert alert-danger">
+              <strong>Failed to load documents:</strong> An unexpected error occurred
+            </div>
+          )
+        }} />
     </div>
   )
 }
