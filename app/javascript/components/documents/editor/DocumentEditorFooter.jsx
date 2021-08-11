@@ -1,11 +1,18 @@
 import React from 'react'
+import { useState } from 'react'
 import { Palette, At as Mention } from 'react-bootstrap-icons'
 
 const DocumentEditorFooter = props => {
   const toolbarCollapseId = `${props.toolbarId}-collapse`
 
+  const [sticky, setSticky] = useState(false)
+
+  const updateSticky = event => {
+    setSticky(event.currentTarget.getAttribute('aria-expanded') === 'true')
+  }
+
   return (
-    <div className="document-editor-footer position-sticky bottom-0 py-3">
+    <div className={`document-editor-footer ${sticky ? 'position-sticky' : ''} bottom-0 py-3`}>
       <div className="container-fluid">
         <div className="row gx-3 align-items-center mb-n3">
           <div className="col mb-3">
@@ -23,7 +30,8 @@ const DocumentEditorFooter = props => {
               title="Toggle formatting controls"
               disabled={props.readOnly}
               aria-expanded="false"
-              aria-controls={toolbarCollapseId}>
+              aria-controls={toolbarCollapseId}
+              onClick={updateSticky}>
               <Palette className="bi" />
               <span className="visually-hidden">Toggle formatting controls</span>
             </button>
