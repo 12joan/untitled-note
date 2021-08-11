@@ -174,7 +174,7 @@ const DocumentEditor = props => {
                   className="btn btn-icon fs-5 text-secondary ms-1"
                   type="button"
                   title="Related documents">
-                  <Mention className="bi" style={{ transform: 'scale(140%)' }} />
+                  <Mention className="bi" style={{ transform: 'scale(1.4)' }} />
                   <span className="visually-hidden">Open related documents sidebar</span>
                 </button>
               </div>
