@@ -28,7 +28,7 @@ const ProjectForm = props => {
     props.action(project)
       .then(project => {
         setErrors({})
-        props.onComplete(project)
+        props.onComplete?.(project)
         reloadProjects()
       })
       .catch(error => {
@@ -53,7 +53,8 @@ const ProjectForm = props => {
           placeholder="Project Name"
           disabled={isUploading}
           value={name}
-          onChange={event => setName(event.target.value)} />
+          onChange={event => setName(event.target.value)}
+          autoFocus={props.autoFocus} />
 
         <label htmlFor="project-name">
           Project Name

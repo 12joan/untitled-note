@@ -28,7 +28,11 @@ const AwaitProjects = props => {
 
       success={projects => (
         <ContextProvider projects={projects} reloadProjects={reloadProjects}>
-          {props.children}
+          {
+            projects.length === 0
+              ? props.noProjects()
+              : props.children
+          }
         </ContextProvider>
       )} />
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import AwaitProjects from 'components/layout/AwaitProjects'
+import NoProjectsView from 'components/layout/NoProjectsView'
 import GetRouteParams from 'components/layout/GetRouteParams'
 import ProjectContextProvider from 'components/layout/ProjectContextProvider'
 import AwaitKeywords from 'components/layout/AwaitKeywords'
@@ -10,7 +11,7 @@ import AppLayout from 'components/layout/AppLayout'
 
 const App = props => {
   return (
-    <AwaitProjects>
+    <AwaitProjects noProjects={() => <NoProjectsView />}>
       <GetRouteParams>
         <ProjectContextProvider>
           <AwaitKeywords>

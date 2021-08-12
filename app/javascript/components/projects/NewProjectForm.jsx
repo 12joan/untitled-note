@@ -10,7 +10,8 @@ const NewProjectForm = props => {
       initialProject={{}}
       submitButtonLabel="Create Project"
       action={project => ProjectsAPI.create(project)}
-      onComplete={props.onComplete} />
+      onComplete={props.onComplete}
+      autoFocus={props.autoFocus} />
   )
 }
 
