@@ -52,16 +52,11 @@ const DocumentEditor = props => {
       </div>
 
       <div>
-        {
-          readOnly
-            ? <div className="trix-editor" dangerouslySetInnerHTML={{ __html: doc.body }} />
-            : (
-              <DocumentEditorBodyEditor 
-                doc={doc}
-                toolbarId={toolbarId}
-                updateDocument={updateDocument} />
-            )
-        }
+        <DocumentEditorBodyEditor
+          doc={doc}
+          readOnly={readOnly}
+          toolbarId={toolbarId}
+          updateDocument={updateDocument} />
 
         <DocumentEditorFooter
           toolbarId={toolbarId}
