@@ -223,6 +223,12 @@ html, body {
     h1 {
       @extend .h3;
     }
+
+    blockquote {
+      @extend .p-3;
+
+      border-left: 0.35em solid $secondary;
+    }
   }
 
   trix-toolbar {
