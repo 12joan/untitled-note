@@ -6,27 +6,30 @@ module DocumentsQueryable
   end
 
   def query_documents(collection, options = {})
-    deletion_scope =
-      case options.fetch(:deleted, 'false')
-      when 'false'
-        collection.not_deleted
-      when 'true'
-        collection.deleted
-      when 'any'
-        collection.all
-      else
-        raise ArgumentError.new('Invalid value for deleted')
-      end
+    scoped_collection = apply_scopes(collection, [
+      options.fetch(:deleted, false) ? :deleted : :not_deleted,
+      options.fetch(:pinned, false) ? :pinned : :all,
+      :not_blank,
+    ])
 
-    deletion_scope.not_blank.order(
-      validate_param(
-        options.fetch(:sort_by, 'created_at'),
-        allowed_values: ['created_at', 'updated_at'],
-      ) => :desc
+    sort_param = validate_param(
+      options.fetch(:sort_by, 'created_at'),
+      allowed_values: ['created_at', 'updated_at', 'pinned_at'],
     )
+
+    sort_direction = validate_param(
+      options.fetch(:sort_direction, 'desc'),
+      allowed_values: ['asc', 'desc'],
+    )
+
+    scoped_collection.order(sort_param => sort_direction)
   end
 
   private
+
+  def apply_scopes(collection, scopes)
+    scopes.reduce(collection) { |collection, scope| collection.send(scope) }
+  end
 
   def validate_param(value, allowed_values:)
     allowed_values.map { [_1, _1] }.to_h.fetch(value)

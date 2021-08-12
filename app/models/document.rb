@@ -9,6 +9,7 @@ class Document < ApplicationRecord
   accepts_nested_attributes_for :keywords
 
   scope :not_blank, -> { where(blank: false) }
+  scope :pinned, -> { where.not(pinned_at: nil) }
 
   after_initialize do |document|
     # Ensure document has a title (side effect of #title_record)

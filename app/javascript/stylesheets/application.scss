@@ -95,10 +95,14 @@ html, body {
     @extend .px-3;
     @extend .py-1;
     @extend .text-start;
+    @include transition($btn-transition);
 
     &:not(.active) {
       @extend .text-dark;
-      @extend .dim-on-hover;
+
+      &:hover {
+        @extend .bg-light;
+      }
     }
   }
 }

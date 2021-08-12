@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react'
 
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
@@ -16,13 +17,16 @@ const DocumentIndex = props => {
 
   const searchParams = {
     'sort_by': sortParameter,
-    'deleted': props.deletedOnly ? 'true' : 'false',
+  }
+
+  if (props.deletedOnly) {
+    searchParams.deleted = true
   }
 
   return (
     <div className="p-4 pb-0">
       <LoadPromise
-        dependencies={[projectId, keywordId, searchParams, documentIndexKey]}
+        dependencies={[projectId, keywordId, sortParameter, props.deletedOnly, documentIndexKey]}
         promise={() => action({ searchParams })}
 
         success={documents => documents.map(doc => (

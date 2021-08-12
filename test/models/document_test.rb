@@ -121,4 +121,15 @@ class DocumentTest < ActiveSupport::TestCase
 
     assert_empty document.keywords
   end
+
+  test 'pinned scope contains all pinned documents' do
+    document1 = create(:document, pinned_at: nil)
+    document2 = create(:document, pinned_at: nil)
+    document3 = create(:document, pinned_at: DateTime.now)
+    document4 = create(:document, pinned_at: DateTime.now)
+    document5 = create(:document, pinned_at: nil)
+    document6 = create(:document, pinned_at: DateTime.now)
+
+    assert_equal [document3, document4, document6], Document.pinned
+  end
 end

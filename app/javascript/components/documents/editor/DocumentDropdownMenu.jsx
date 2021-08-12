@@ -5,7 +5,16 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import { useContext } from 'lib/context'
 
 const DocumentDropdownMenu = props => {
-  const { projectId, documentId, setParams, reloadDocumentIndex, reloadKeywords } = useContext()
+  const { projectId, documentId, setParams, reloadDocumentIndex, reloadKeywords, reloadPinnedDocuments } = useContext()
+
+  const pinned = props.doc.pinned_at !== null
+
+  const togglePinned = () => {
+    props.updateDocument({
+      pinned_at: pinned ? null : new Date().toISOString(),
+    })
+      .then(reloadPinnedDocuments)
+  }
 
   const performSoftDeletion = () => {
     props.updateDocument({ deleted_at: new Date().toISOString() })
@@ -38,45 +47,47 @@ const DocumentDropdownMenu = props => {
       </button>
 
       <ul className="dropdown-menu" aria-labelledby={`document-${props.editorUUID}-dropdown-button`}>
+        <DropdownItem onClick={togglePinned}>
+          {pinned ? 'Unpin document' : 'Pin document'}
+        </DropdownItem>
+
         { 
           props.isDeleted
             ? (
               <>
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    onClick={revertSoftDeletion}>
-                    Recover document
-                  </button>
-                </li>
+                <DropdownItem onClick={revertSoftDeletion}>
+                  Recover document
+                </DropdownItem>
 
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item dropdown-item-danger"
-                    onClick={performDestroy}>
-                    Delete permanently
-                  </button>
-                </li>
+                <DropdownItem onClick={performDestroy} className="dropdown-item-danger">
+                  Delete permanently
+                </DropdownItem>
               </>
             )
 
             : (
               <>
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item dropdown-item-danger"
-                    onClick={performSoftDeletion}>
-                    Delete document
-                  </button>
-                </li>
+                <DropdownItem onClick={performSoftDeletion} className="dropdown-item-danger">
+                  Delete document
+                </DropdownItem>
               </>
             )
         }
       </ul>
     </div>
+  )
+}
+
+const DropdownItem = props => {
+  return (
+    <li>
+      <button
+        type="button"
+        className={`dropdown-item ${props.className || ''}`}
+        onClick={props.onClick}>
+        {props.children}
+      </button>
+    </li>
   )
 }
 

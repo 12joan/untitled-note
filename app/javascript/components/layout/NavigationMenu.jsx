@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { useContext } from 'lib/context'
+import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import NavLink from 'components/NavLink'
+import LoadPromise from 'components/LoadPromise'
 import ProjectDropdownMenu from 'components/layout/ProjectDropdownMenu'
 
 const NavigationMenu = props => {
@@ -10,19 +12,14 @@ const NavigationMenu = props => {
 
   return (
     <div className="h-100 border-end p-3 navigation-menu overflow-auto">
-      <div className="container-fluid mt-2 mb-3">
-        <div className="row gx-3 align-items-center">
-          <div className="col">
-            <h2 className="fs-5 m-0">{project.name}</h2>
-          </div>
+      <SectionHeader
+        button={
+          <ProjectDropdownMenu />
+        }>
+        <h2 className="fs-5 m-0">{project.name}</h2>
+      </SectionHeader>
 
-          <div className="col-auto">
-            <ProjectDropdownMenu />
-          </div>
-        </div>
-      </div>
-
-      <ul className="nav nav-pills flex-column mb-3">
+      <SectionList>
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: undefined }}
           activeParams={['keywordId']}
@@ -35,12 +32,72 @@ const NavigationMenu = props => {
           activeParams={['documentId']}>
           Recently deleted
         </NavigationMenuItem>
-      </ul>
+      </SectionList>
+
+      <PinnedDocumentsMenu />
 
       <KeywordsMenu />
     </div>
   )
 }
+
+const PinnedDocumentsMenu = props => {
+  const { projectId, documentIndexKey, pinnedDocumentsKey } = useContext()
+
+  return (
+    <LoadPromise
+      dependencies={[projectId, documentIndexKey, pinnedDocumentsKey]}
+      promise={() => DocumentsAPI(projectId).index({
+        searchParams: {
+          'sort_by': 'pinned_at',
+          'sort_direction': 'asc',
+          'pinned': true,
+        },
+      })}
+
+      loading={() => <></>}
+
+      error={error => {
+        console.error(error)
+
+        return (
+          <div className="alert alert-danger">
+            <strong>Failed to load pinned documents</strong>
+          </div>
+        )
+      }}
+
+      success={pinnedDocuments => {
+        if (pinnedDocuments.length === 0) {
+          return null
+        }
+
+        return (
+          <>
+            <SectionHeader>
+              <h6 className="small text-secondary m-0">
+                Pinned documents
+              </h6>
+            </SectionHeader>
+
+            <SectionList>
+              {
+                pinnedDocuments.map(doc => (
+                  <NavigationMenuItem
+                    key={doc.id}
+                    params={{ keywordId: undefined, documentId: doc.id }}
+                    isActive={() => false}>
+                    {doc.title || 'Untitled document'}
+                  </NavigationMenuItem>
+                ))
+              }
+            </SectionList>
+          </>
+        )
+      }} />
+  )
+}
+
 const KeywordsMenu = props => {
   const { keywords, documentId } = useContext()
 
@@ -50,15 +107,13 @@ const KeywordsMenu = props => {
 
   return (
     <>
-      <div className="container-fluid mb-2">
-        <div className="row gx-3 align-items-center">
-          <div className="col">
-            <h6 className="small text-secondary m-0">Keywords</h6>
-          </div>
-        </div>
-      </div>
+      <SectionHeader>
+        <h6 className="small text-secondary m-0">
+          Keywords
+        </h6>
+      </SectionHeader>
 
-      <ul className="nav nav-pills flex-column mb-3">
+      <SectionList>
         {
           keywords.map(keyword => (
             <NavigationMenuItem
@@ -70,8 +125,36 @@ const KeywordsMenu = props => {
             </NavigationMenuItem>
           ))
         }
-      </ul>
+      </SectionList>
     </>
+  )
+}
+
+const SectionHeader = props => {
+  return (
+    <div className={`container-fluid mb-2 ${props.className || ''}`}>
+      <div className="row gx-3 align-items-center">
+        <div className="col">
+          {props.children}
+        </div>
+
+        {
+          props.button && (
+            <div className="col-auto">
+              {props.button}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  )
+}
+
+const SectionList = props => {
+  return (
+    <ul className="nav nav-pills flex-column mb-3">
+      {props.children}
+    </ul>
   )
 }
 
