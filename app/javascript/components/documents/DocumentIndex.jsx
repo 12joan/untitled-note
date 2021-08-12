@@ -31,7 +31,7 @@ const DocumentIndex = props => {
           </div>
         ))}
 
-          loading={() => <></>}
+        loading={() => <></>}
 
         error={error => {
           console.error(error)

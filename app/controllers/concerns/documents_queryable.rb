@@ -22,7 +22,7 @@ module DocumentsQueryable
       validate_param(
         options.fetch(:sort_by, 'created_at'),
         allowed_values: ['created_at', 'updated_at'],
-      )
+      ) => :desc
     )
   end
 
