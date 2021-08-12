@@ -7,15 +7,13 @@ import RunOnMount from 'components/RunOnMount'
 const KeywordContextProvider = props => {
   const { keywordId, keywords, setParams } = useContext()
 
-  if (keywordId === undefined) {
-    return props.children
-  }
+  const currentKeyword = keywordId === undefined
+    ? undefined
+    : keywords.find(keyword =>
+      keyword.id == keywordId // '==' for lax equality checking
+    )
 
-  const currentKeyword = keywords.filter(keyword =>
-    keyword.id == keywordId // '==' for lax equality checking
-  )[0]
-
-  if (currentKeyword === undefined) {
+  if (keywordId !== undefined && currentKeyword === undefined) {
     return (
       <RunOnMount onMount={() => setParams({ keywordId: undefined, documentId: undefined })} />
     )
