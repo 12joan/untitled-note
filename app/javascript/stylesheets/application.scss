@@ -33,6 +33,10 @@ html, body {
   @extend .px-2;
   @extend .py-1;
 
+  &.btn-icon-inline {
+    @extend .my-n1;
+  }
+
   &:hover, &:focus {
     @extend .bg-light;
   }

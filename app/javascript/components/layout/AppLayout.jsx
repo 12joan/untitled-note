@@ -3,7 +3,6 @@ import React from 'react'
 import TopBar from 'components/layout/TopBar'
 import ProjectsBar from 'components/layout/ProjectsBar'
 import NavigationMenu from 'components/layout/NavigationMenu'
-import ContentHeader from 'components/layout/ContentHeader'
 import ContentArea from 'components/layout/ContentArea'
 import NewProjectModal from 'components/projects/NewProjectModal'
 import EditProjectModal from 'components/projects/EditProjectModal'
@@ -27,11 +26,7 @@ const AppLayout = props => {
           </div>
 
           <div className="col mh-100 d-flex flex-column">
-            <ContentHeader />
-
-            <div className="flex-grow-1 overflow-auto bg-light">
-              <ContentArea />
-            </div>
+            <ContentArea />
           </div>
         </div>
       </div>

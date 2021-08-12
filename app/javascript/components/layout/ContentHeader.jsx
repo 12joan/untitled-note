@@ -5,7 +5,7 @@ import SortingControls from 'components/layout/SortingControls'
 
 const ContentHeader = props => {
   return (
-    <div className="border-bottom p-3 d-flex justify-content-between">
+    <div className="border-bottom p-3 d-flex justify-content-between align-items-center">
       <div>
         <BackButton />
       </div>
