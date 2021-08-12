@@ -6,11 +6,19 @@ const LoadPromise = props => {
   const [state, setState] = useState({ type: 'loading' })
 
   useEffect(() => {
-    const promise = (typeof props.promise === 'function') ? props.promise() : props.promise
-
-    if (props.hideContentWhileReloading) {
+    if (state.type !== 'loading') {
       setState({ type: 'loading' })
+
+      return loadPromise()
     }
+  }, props.dependenciesRequiringClear)
+
+  useEffect(() => {
+    return loadPromise()
+  }, props.dependencies)
+
+  const loadPromise = () => {
+    const promise = (typeof props.promise === 'function') ? props.promise() : props.promise
 
     let upToDate = true
 
@@ -21,7 +29,7 @@ const LoadPromise = props => {
     return () => {
       upToDate = false
     }
-  }, props.dependencies)
+  }
 
   switch (state.type) {
     case 'loading':
@@ -40,6 +48,7 @@ const LoadPromise = props => {
 
 LoadPromise.defaultProps = {
   dependencies: [],
+  dependenciesRequiringClear: [],
 }
 
 LoadPromise.propTypes = {

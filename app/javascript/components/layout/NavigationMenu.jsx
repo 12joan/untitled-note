@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
+import KeywordsAPI from 'lib/resources/KeywordsAPI'
 
 import NavLink from 'components/NavLink'
 import LoadPromise from 'components/LoadPromise'
@@ -46,7 +47,8 @@ const PinnedDocumentsMenu = props => {
 
   return (
     <LoadPromise
-      dependencies={[projectId, documentIndexKey, pinnedDocumentsKey]}
+      dependencies={[documentIndexKey, pinnedDocumentsKey]}
+      dependenciesRequiringClear={[projectId]}
       promise={() => DocumentsAPI(projectId).index({
         searchParams: {
           'sort_by': 'pinned_at',
@@ -99,34 +101,55 @@ const PinnedDocumentsMenu = props => {
 }
 
 const KeywordsMenu = props => {
-  const { keywords, documentId } = useContext()
-
-  if (keywords.length === 0) {
-    return null
-  }
+  const { projectId, documentId, reloadKeywordsKey } = useContext()
 
   return (
-    <>
-      <SectionHeader>
-        <h6 className="small text-secondary m-0">
-          Keywords
-        </h6>
-      </SectionHeader>
+    <LoadPromise
+      dependencies={[reloadKeywordsKey]}
+      dependenciesRequiringClear={[projectId]}
+      promise={() => KeywordsAPI(projectId).index()}
 
-      <SectionList>
-        {
-          keywords.map(keyword => (
-            <NavigationMenuItem
-              key={keyword.id}
-              params={{ keywordId: keyword.id, documentId: undefined }}
-              activeParams={['keywordId']}
-              isActive={() => documentId !== 'deleted'}>
-              {keyword.text}
-            </NavigationMenuItem>
-          ))
+      loading={() => <></>}
+
+      error={error => {
+        console.error(error)
+
+        return (
+          <div className="alert alert-danger">
+            <strong>Failed to load keywords</strong>
+          </div>
+        )
+      }}
+
+      success={keywords => {
+        if (keywords.length === 0) {
+          return null
         }
-      </SectionList>
-    </>
+
+        return (
+          <>
+            <SectionHeader>
+              <h6 className="small text-secondary m-0">
+                Keywords
+              </h6>
+            </SectionHeader>
+
+            <SectionList>
+              {
+                keywords.map(keyword => (
+                  <NavigationMenuItem
+                    key={keyword.id}
+                    params={{ keywordId: keyword.id, documentId: undefined }}
+                    activeParams={['keywordId']}
+                    isActive={() => documentId !== 'deleted'}>
+                    {keyword.text}
+                  </NavigationMenuItem>
+                ))
+              }
+            </SectionList>
+          </>
+        )
+      }} />
   )
 }
 

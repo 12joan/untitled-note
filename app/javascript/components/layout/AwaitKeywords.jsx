@@ -29,7 +29,7 @@ const AwaitKeywords = props => {
       }}
 
       success={keywords => (
-        <ContextProvider keywords={keywords} reloadKeywords={reloadKeywords}>
+        <ContextProvider keywords={keywords} reloadKeywordsKey={reloadKeywordsKey} reloadKeywords={reloadKeywords}>
           {props.children}
         </ContextProvider>
       )} />

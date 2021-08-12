@@ -26,7 +26,8 @@ const DocumentIndex = props => {
   return (
     <div className="p-4 pb-0">
       <LoadPromise
-        dependencies={[projectId, keywordId, sortParameter, props.deletedOnly, documentIndexKey]}
+        dependencies={[sortParameter, documentIndexKey]}
+        dependenciesRequiringClear={[projectId, keywordId, props.deletedOnly]}
         promise={() => action({ searchParams })}
 
         success={documents => documents.map(doc => (

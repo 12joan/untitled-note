@@ -12,7 +12,7 @@ const ShowDocument = props => {
   return (
     <div className="p-4">
       <LoadPromise
-        dependencies={[props.id]}
+        dependenciesRequiringClear={[props.id]}
         promise={() => DocumentsAPI(projectId).show(props.id)}
 
         success={doc => (
