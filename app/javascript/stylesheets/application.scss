@@ -229,6 +229,16 @@ html, body {
 
       border-left: 0.35em solid $secondary;
     }
+
+    pre {
+      @extend .card;
+      @extend .card-body;
+      @extend .bg-transparent;
+
+      br {
+        margin-top: 1em;
+      }
+    }
   }
 
   trix-toolbar {
