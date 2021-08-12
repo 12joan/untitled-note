@@ -19,6 +19,8 @@ ActiveStorage.start()
 require('trix')
 require('@rails/actiontext')
 
+require('lib/trixNewlinePatch')
+
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <App />,
