@@ -1,5 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import useLocalStorage from 'react-use-localstorage'
+
+import { useContext } from 'lib/context'
 
 import RouteContextProvider from 'components/layout/RouteContextProvider'
 
@@ -13,21 +16,36 @@ const GetRouteParams = props => (
   </Router>
 )
 
-const ProjectRoute = props => (
-  <Switch>
-    <Route path={`${props.baseUrl}/projects/:projectId`} render={({ match }) => (
-      <KeywordRoute
-        baseUrl={match.url}
-        params={{
-          ...props.params,
-          projectId: match.params.projectId,
-        }}
-        render={props.render} />
-    )} />
+const ProjectRoute = props => {
+  const { projects } = useContext()
+  const [lastViewedProjectId, setLastViewedProjectId] = useLocalStorage('last-viewed-project', undefined)
 
-    <Redirect to={`${props.baseUrl}/projects/1`} />
-  </Switch>
-)
+  const initialProject = projects.find(project => project.id == lastViewedProjectId) || projects[0]
+
+  return (
+    <Switch>
+      <Route path={`${props.baseUrl}/projects/:projectId`} render={({ match }) => {
+        const { projectId } = match.params
+
+        if (lastViewedProjectId !== projectId) {
+          setTimeout(() => setLastViewedProjectId(projectId), 0)
+        }
+
+        return (
+          <KeywordRoute
+            baseUrl={match.url}
+            params={{
+              ...props.params,
+              projectId,
+            }}
+            render={props.render} />
+        )
+      }} />
+
+      <Redirect to={`${props.baseUrl}/projects/${initialProject.id}`} />
+    </Switch>
+  )
+}
 
 const KeywordRoute = props => (
   <Switch>
@@ -47,21 +65,23 @@ const KeywordRoute = props => (
   </Switch>
 )
 
-const DocumentRoute = props => (
-  <Switch>
-    <Route path={`${props.baseUrl}/documents/:documentId`} render={({ match }) => (
-      props.render({
-        ...props.params,
-        documentId: match.params.documentId,
-      })
-    )} />
+const DocumentRoute = props => {
+  return (
+    <Switch>
+      <Route path={`${props.baseUrl}/documents/:documentId`} render={({ match }) => (
+        props.render({
+          ...props.params,
+          documentId: match.params.documentId,
+        })
+      )} />
 
-    <Route path={`${props.baseUrl}/documents`} render={({ match }) => (
-      props.render(props.params)
-    )} />
+      <Route path={`${props.baseUrl}/documents`} render={({ match }) => (
+        props.render(props.params)
+      )} />
 
-    <Redirect to={`${props.baseUrl}/documents`} />
-  </Switch>
-)
+      <Redirect to={`${props.baseUrl}/documents`} />
+    </Switch>
+  )
+}
 
 export default GetRouteParams
