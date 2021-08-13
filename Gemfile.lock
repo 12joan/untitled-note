@@ -154,6 +154,8 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (2.1.1)
+    reverse_markdown (2.0.0)
+      nokogiri
     rexml (3.2.5)
     rubyzip (2.3.2)
     sass-rails (6.0.0)
@@ -221,6 +223,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.4)
+  reverse_markdown (~> 2.0)
   rexml (~> 3.2)
   sass-rails (>= 6)
   selenium-webdriver

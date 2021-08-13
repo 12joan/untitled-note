@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :projects do
-        resources :documents
+        resources :documents do
+          resource :markdown, only: [:show], controller: 'document_markdown'
+        end
+
         resource :blank_document, only: [:create]
 
         resources :keywords do
