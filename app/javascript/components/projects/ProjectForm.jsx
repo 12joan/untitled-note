@@ -28,8 +28,8 @@ const ProjectForm = props => {
     props.action(project)
       .then(project => {
         setErrors({})
-        props.onComplete?.(project)
         reloadProjects()
+          .then(() => props.onComplete?.(project))
       })
       .catch(error => {
         if (error.notOkayStatus && error.response.statusText === 'Unprocessable Entity') {

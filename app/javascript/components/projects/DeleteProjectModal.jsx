@@ -25,8 +25,10 @@ const NewProjectModal = withRouter(props => {
     ProjectsAPI.destroy(project)
       .then(() => {
         modal.current.hide()
-        setParams({ projectId: undefined, keywordId: undefined, documentId: undefined })
         reloadProjects()
+          .then(() => {
+            setParams({ projectId: undefined, keywordId: undefined, documentId: undefined })
+          })
       })
       .catch(error => {
         console.error(error)
