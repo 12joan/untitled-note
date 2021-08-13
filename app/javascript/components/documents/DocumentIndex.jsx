@@ -32,7 +32,7 @@ const DocumentIndex = props => {
 
         success={documents => documents.map(doc => (
           <div key={doc.id} className="mb-4">
-            <DocumentEditor document={doc} openable />
+            <DocumentEditor document={doc} openable startCollapsedIfLong />
           </div>
         ))}
 

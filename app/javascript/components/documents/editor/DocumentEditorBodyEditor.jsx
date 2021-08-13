@@ -1,12 +1,12 @@
 import React from 'react'
+import { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import { TrixEditor } from 'react-trix'
 
 const DocumentEditorBodyEditor = props => {
-  const editorEl = useRef()
-  const readOnlyEl = useRef()
+  const [collapsed, setCollapsed] = useState(props.startCollapsedIfLong ? undefined : false)
 
-  const onClick = event => {
+  const handleClick = event => {
     const { target } = event
 
     if (target.tagName === 'A') {
@@ -20,41 +20,81 @@ const DocumentEditorBodyEditor = props => {
     }
   }
 
-  const handleEditorReady = () => {
-    const editor = editorEl.current.editor
-    editor.loadHTML(props.doc.body)
-    editor.element.addEventListener('click', onClick)
-  }
-
-  useEffect(() => {
-    const container = readOnlyEl.current
-
-    if (container === undefined || container === null) {
-      return
-    }
-
-    container.addEventListener('click', onClick)
-
-    return () => container.removeEventListener('click', onClick)
-  }, [props.readOnly, readOnlyEl.current])
-
-  if (props.readOnly) {
+  if (props.readOnly || collapsed !== false) {
     return (
-      <div
-        ref={readOnlyEl}
-        className="trix-editor"
-        dangerouslySetInnerHTML={{ __html: props.doc.body }} />
+      <StaticBody
+        doc={props.doc}
+        gotPreferredHeight={height => setCollapsed(height > 300)}
+        collapsed={collapsed}
+        onClick={handleClick}
+        setCollapsed={setCollapsed} />
     )
   } else {
     return (
-      <TrixEditor
-        ref={editorEl}
-        toolbar={props.toolbarId}
-        placeholder="Add document body"
-        onEditorReady={handleEditorReady}
-        onChange={body => props.updateDocument({ body })} />
+      <BodyEditor
+        doc={props.doc}
+        toolbarId={props.toolbarId}
+        updateDocument={props.updateDocument}
+        onClick={handleClick} />
     )
   }
+}
+
+const StaticBody = props => {
+  const bodyEl = useRef()
+
+  useEffect(() => {
+    props.gotPreferredHeight(bodyEl.current.scrollHeight)
+  }, [])
+
+  return (
+    <div className="position-relative">
+      <div
+        ref={bodyEl}
+        className={`trix-editor ${props.collapsed ? 'collapsed' : ''}`}
+        dangerouslySetInnerHTML={{ __html: props.doc.body }}
+        onClick={event => {
+          props.setCollapsed(false)
+          props.onClick(event)
+        }} />
+
+      {
+        props.collapsed && (
+          <div className="position-absolute bottom-0 w-100 d-flex justify-content-center">
+            <a
+              href="#"
+              className="position-absolute bottom-0 btn btn-lg btn-light rounded-pill"
+              style={{ transform: 'translateY(50%)', zIndex: 1 }}
+              onClick={event => {
+                event.preventDefault()
+                props.setCollapsed(false)
+              }}>
+              Show more
+            </a>
+          </div>
+        )
+      }
+    </div>
+  )
+}
+
+const BodyEditor = props => {
+  const editorEl = useRef()
+
+  const handleEditorReady = () => {
+    const editor = editorEl.current.editor
+    editor.loadHTML(props.doc.body)
+    editor.element.addEventListener('click', props.onClick)
+  }
+
+  return (
+    <TrixEditor
+      ref={editorEl}
+      toolbar={props.toolbarId}
+      placeholder="Add document body"
+      onEditorReady={handleEditorReady}
+      onChange={body => props.updateDocument({ body })} />
+  )
 }
 
 export default DocumentEditorBodyEditor

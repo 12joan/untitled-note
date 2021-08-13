@@ -55,6 +55,7 @@ const DocumentEditor = props => {
         <DocumentEditorBodyEditor
           doc={doc}
           readOnly={readOnly}
+          startCollapsedIfLong={props.startCollapsedIfLong}
           toolbarId={toolbarId}
           updateDocument={updateDocument} />
 
