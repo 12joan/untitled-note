@@ -5,7 +5,7 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import { useContext } from 'lib/context'
 
 const DocumentDropdownMenu = props => {
-  const { projectId, documentId, setParams, reloadDocumentIndex, reloadKeywords, reloadPinnedDocuments } = useContext()
+  const { projectId, setParams, reloadDocumentIndex, reloadKeywords, reloadPinnedDocuments } = useContext()
 
   const pinned = props.doc.pinned_at !== null
 
@@ -14,6 +14,10 @@ const DocumentDropdownMenu = props => {
       pinned_at: pinned ? null : new Date().toISOString(),
     })
       .then(reloadPinnedDocuments)
+  }
+
+  const downloadAsMarkdown = () => {
+    window.location.href = `/api/v1/projects/${projectId}/documents/${props.doc.id}/markdown`
   }
 
   const performSoftDeletion = () => {
@@ -49,6 +53,10 @@ const DocumentDropdownMenu = props => {
       <ul className="dropdown-menu" aria-labelledby={`document-${props.editorUUID}-dropdown-button`}>
         <DropdownItem onClick={togglePinned}>
           {pinned ? 'Unpin document' : 'Pin document'}
+        </DropdownItem>
+
+        <DropdownItem onClick={downloadAsMarkdown}>
+          Download as Markdown
         </DropdownItem>
 
         { 
