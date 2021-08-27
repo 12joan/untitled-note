@@ -3,6 +3,8 @@
 
 $enable-negative-margins: true;
 $transition-collapse: none;
+$offcanvas-transition-duration: 0.3s;
+$carousel-transition-duration: 0.3s;
 
 @import "bootstrap/scss/bootstrap";
 
@@ -87,9 +89,13 @@ html, body {
   }
 }
 
-.navigation-menu {
-  width: 18em;
+#sidebar {
+  &:not(.offcanvas) {
+    width: $offcanvas-horizontal-width;
+  }
+}
 
+.navigation-menu {
   .nav-link {
     @extend .rounded-0;
     @extend .mx-n3;

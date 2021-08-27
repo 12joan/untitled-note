@@ -1,12 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
-import { PencilSquare } from 'react-bootstrap-icons'
+import { LayoutSidebar, PencilSquare } from 'react-bootstrap-icons'
 
 import { useContext } from 'lib/context'
 import BlankDocumentAPI from 'lib/resources/BlankDocumentAPI'
 
 const TopBar = props => {
-  const { projectId, setParams } = useContext()
+  const { projectId, setParams, toggleSidebarEvent } = useContext()
 
   const [loadingBlankDocument, setLoadingBlankDocument] = useState(false)
 
@@ -24,7 +24,16 @@ const TopBar = props => {
   }
 
   return (
-    <nav className="navbar navbar-light border-bottom d-flex justify-content-end p-2">
+    <nav className="navbar navbar-light border-bottom d-flex justify-content-between p-2">
+      <button
+        type="button"
+        className="btn btn-lg btn-icon btn-icon-inline text-secondary"
+        title="Toggle sidebar"
+        onClick={toggleSidebarEvent.invoke}>
+        <LayoutSidebar className="bi" />
+        <span className="visually-hidden">Toggle sidebar</span>
+      </button>
+
       <button
         className="btn btn-dark"
         onClick={openBlankDocument}

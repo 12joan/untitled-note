@@ -20,6 +20,7 @@ const NavLink = props => {
       onClick={event => {
         event.preventDefault()
         setParams(props.params)
+        props.onClick?.(event)
       }}>
       {props.children}
     </a>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { CaretLeftFill } from 'react-bootstrap-icons'
 
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
@@ -12,7 +13,16 @@ const NavigationMenu = props => {
   const { project, documentId } = useContext()
 
   return (
-    <div className="h-100 border-end p-3 navigation-menu overflow-auto">
+    <div className="h-100 p-3 navigation-menu overflow-auto">
+      <div className="mb-2">
+        <button
+          className="btn btn-link text-decoration-none"
+          data-bs-target="#sidebar-carousel"
+          data-bs-slide-to="0">
+          <CaretLeftFill className="bi" /> All projects
+        </button>
+      </div>
+
       <SectionHeader
         button={
           <ProjectDropdownMenu />
@@ -24,20 +34,24 @@ const NavigationMenu = props => {
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: undefined }}
           activeParams={['keywordId']}
-          isActive={() => documentId !== 'deleted'}>
+          isActive={() => documentId !== 'deleted'}
+          dismissOffcanvas={props.dismissOffcanvas}>
           All documents
         </NavigationMenuItem>
 
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: 'deleted' }}
-          activeParams={['documentId']}>
+          activeParams={['documentId']}
+          dismissOffcanvas={props.dismissOffcanvas}>
           Recently deleted
         </NavigationMenuItem>
       </SectionList>
 
-      <PinnedDocumentsMenu />
+      <PinnedDocumentsMenu
+        dismissOffcanvas={props.dismissOffcanvas} />
 
-      <KeywordsMenu />
+      <KeywordsMenu
+        dismissOffcanvas={props.dismissOffcanvas} />
     </div>
   )
 }
@@ -88,7 +102,8 @@ const PinnedDocumentsMenu = props => {
                   <NavigationMenuItem
                     key={doc.id}
                     params={{ keywordId: undefined, documentId: doc.id }}
-                    isActive={() => false}>
+                    isActive={() => false}
+                    dismissOffcanvas={props.dismissOffcanvas}>
                     {doc.title || 'Untitled document'}
                   </NavigationMenuItem>
                 ))
@@ -141,7 +156,8 @@ const KeywordsMenu = props => {
                     key={keyword.id}
                     params={{ keywordId: keyword.id, documentId: undefined }}
                     activeParams={['keywordId']}
-                    isActive={() => documentId !== 'deleted'}>
+                    isActive={() => documentId !== 'deleted'}
+                    dismissOffcanvas={props.dismissOffcanvas}>
                     {keyword.text}
                   </NavigationMenuItem>
                 ))
@@ -188,7 +204,8 @@ const NavigationMenuItem = props => (
       activeClassName="active"
       params={props.params}
       activeParams={props.activeParams}
-      isActive={props.isActive}>
+      isActive={props.isActive}
+      onClick={props.dismissOffcanvas}>
       {props.children}
     </NavLink>
   </li>

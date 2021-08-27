@@ -8,7 +8,7 @@ const ProjectsBar = props => {
   const { project: currentProject, projects, setParams } = useContext()
 
   return (
-    <div className="h-100 border-end p-3 overflow-auto" style={{ width: '12em' }}>
+    <div className="h-100 p-3 overflow-auto">
       <div className="container-fluid mb-2">
         <div className="row gx-3 align-items-center">
           <div className="col">
@@ -37,7 +37,9 @@ const ProjectsBar = props => {
               <button
                 type="button"
                 className={`btn btn-project ${isCurrent ? 'selected' :''}`}
-                onClick={() => setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })}>
+                onClick={() => setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })}
+                data-bs-target="#sidebar-carousel"
+                data-bs-slide-to="1">
                 {project.name}
               </button>
             </div>

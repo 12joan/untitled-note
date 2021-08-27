@@ -1,8 +1,7 @@
 import React from 'react'
 
 import TopBar from 'components/layout/TopBar'
-import ProjectsBar from 'components/layout/ProjectsBar'
-import NavigationMenu from 'components/layout/NavigationMenu'
+import Sidebar from 'components/layout/Sidebar'
 import ContentArea from 'components/layout/ContentArea'
 import NewProjectModal from 'components/projects/NewProjectModal'
 import EditProjectModal from 'components/projects/EditProjectModal'
@@ -17,13 +16,7 @@ const AppLayout = props => {
         </div>
 
         <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
-          <div className="col-auto mh-100">
-            <ProjectsBar />
-          </div>
-
-          <div className="col-auto mh-100">
-            <NavigationMenu />
-          </div>
+          <Sidebar />
 
           <div className="col mh-100 d-flex flex-column">
             <ContentArea />
