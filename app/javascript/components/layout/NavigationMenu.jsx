@@ -102,7 +102,7 @@ const PinnedDocumentsMenu = props => {
                   <NavigationMenuItem
                     key={doc.id}
                     params={{ keywordId: undefined, documentId: doc.id }}
-                    isActive={() => false}
+                    activeParams={['documentId']}
                     dismissOffcanvas={props.dismissOffcanvas}>
                     {doc.title || 'Untitled document'}
                   </NavigationMenuItem>
