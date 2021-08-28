@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { Palette, At as Mention } from 'react-bootstrap-icons'
 
+import DocumentEditorToolbar from 'components/documents/editor/DocumentEditorToolbar'
+
 const DocumentEditorFooter = props => {
   const toolbarCollapseId = `${props.toolbarId}-collapse`
 
@@ -9,10 +11,8 @@ const DocumentEditorFooter = props => {
     <div className={`document-editor-footer position-sticky bottom-0 py-3`}>
       <div className="container-fluid">
         <div className="row gx-3 align-items-center mb-n3">
-          <div className="col mb-3">
-            <div className="collapse" style={{ marginBottom: '-10px' }} id={toolbarCollapseId}>
-              <trix-toolbar id={props.toolbarId} />
-            </div>
+          <div className="col mb-3" style={{ width: 0 }}>
+            <DocumentEditorToolbar toolbarId={props.toolbarId} toolbarCollapseId={toolbarCollapseId} />
           </div>
 
           <div className="col-auto ms-auto mb-3">

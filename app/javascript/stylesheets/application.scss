@@ -276,18 +276,31 @@ html, body {
     }
   }
 
-  trix-toolbar {
-    .trix-button-group {
-      @extend .btn-group;
-      @extend .border-0;
-    }
+  .trix-toolbar {
+    overflow-x: auto;
+    white-space: nowrap;
 
-    .trix-button {
-      @extend .btn;
+    .btn-toolbar {
       @include btn-selectable('.trix-active');
 
-      &.trix-active::before {
-        filter: invert(1);
+      @extend .fs-5;
+      @extend .px-2;
+      @extend .py-1;
+
+      &:not(.trix-active) {
+        @extend .text-secondary;
+      }
+    }
+
+    .trix-dialog {
+      @extend .position-absolute;
+      @extend .card;
+      @extend .card-body;
+
+      bottom: 4rem;
+
+      &:not(.trix-active) {
+        @extend .d-none;
       }
     }
   }
