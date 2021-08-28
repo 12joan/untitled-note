@@ -19,7 +19,7 @@ const NavigationMenu = props => {
           className="btn btn-link text-decoration-none"
           data-bs-target="#sidebar-carousel"
           data-bs-slide-to="0">
-          <CaretLeftFill className="bi" /> All projects
+          <CaretLeftFill className="bi" /> All Projects
         </button>
       </div>
 
@@ -36,14 +36,14 @@ const NavigationMenu = props => {
           activeParams={['keywordId']}
           isActive={() => documentId !== 'deleted'}
           dismissOffcanvas={props.dismissOffcanvas}>
-          All documents
+          All Documents
         </NavigationMenuItem>
 
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: 'deleted' }}
           activeParams={['documentId']}
           dismissOffcanvas={props.dismissOffcanvas}>
-          Recently deleted
+          Recently Deleted
         </NavigationMenuItem>
       </SectionList>
 
