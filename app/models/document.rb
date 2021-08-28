@@ -32,6 +32,11 @@ class Document < ApplicationRecord
     @title_dirty = true
   end
 
+  def has_changes_to_save?
+    # Make sure updated_at gets updated
+    super || @title_dirty
+  end
+
   def keywords_attributes=(keywords_attributes)
     documents_keywords.each do |documents_keyword|
       if keywords_attributes.none? { |keyword_attributes| keyword_attributes[:text] == documents_keyword.keyword.text }

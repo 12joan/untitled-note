@@ -29,11 +29,18 @@ class DocumentTest < ActiveSupport::TestCase
 
   test '#update(title: ...) modifies the title alias' do
     document = create(:document)
+    travel 1.minute
+
+    prior_updated_at = document.updated_at
     document.update title: 'New title'
+    new_updated_at = document.updated_at
+
     assert_equal 'New title', document.title, 'in-memory instance should be updated'
 
     reloaded_document = Document.find(document.id)
     assert_equal 'New title', reloaded_document.title, 'in-database instance should be updated'
+
+    refute_equal prior_updated_at, new_updated_at, 'document#updated_at should be updated'
   end
 
   test 'accepts keywords when keyword does not exist' do
