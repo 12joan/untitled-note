@@ -10,7 +10,7 @@ import DeleteProjectModal from 'components/projects/DeleteProjectModal'
 const AppLayout = props => {
   return (
     <>
-      <div className="continer-fluid h-100 d-flex flex-column">
+      <div className="continer-fluid h-100 d-flex flex-column position-fixed top-0 bottom-0 start-0 end-0">
         <div className="row g-0 flex-shrink-0">
           <TopBar />
         </div>
