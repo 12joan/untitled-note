@@ -37,7 +37,7 @@ const ProjectsBar = props => {
               <button
                 type="button"
                 className={`btn btn-project ${isCurrent ? 'selected' :''}`}
-                onClick={() => setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })}
+                onClick={() => !isCurrent && setParams({ projectId: project.id, keywordId: undefined, documentId: undefined })}
                 data-bs-target="#sidebar-carousel"
                 data-bs-slide-to="1">
                 {project.name}
