@@ -80,10 +80,16 @@ const StaticBody = props => {
 
 const BodyEditor = props => {
   const editorEl = useRef()
+  const editorLoaded = useRef(false)
 
   const handleEditorReady = () => {
+    editorLoaded.current = false
+
     const editor = editorEl.current.editor
     editor.loadHTML(props.doc.body)
+
+    editorLoaded.current = true
+
     editor.element.addEventListener('click', props.onClick)
   }
 
@@ -93,7 +99,7 @@ const BodyEditor = props => {
       toolbar={props.toolbarId}
       placeholder="Add document body"
       onEditorReady={handleEditorReady}
-      onChange={body => props.updateDocument({ body })} />
+      onChange={body => editorLoaded.current && props.updateDocument({ body })} />
   )
 }
 
