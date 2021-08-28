@@ -62,15 +62,15 @@ const Sidebar = props => {
         className={`col-auto mh-100 ${isOffcanvas ? '' : 'collapse collapse-horizontal'}`}
         id="sidebar-collapse">
         <div
-          className={isOffcanvas ? 'offcanvas offcanvas-start' : 'h-100 border-end visible'}
+          className={`h-100 ${isOffcanvas ? 'offcanvas offcanvas-start' : 'border-end visible'}`}
           id="sidebar">
-          <div className="carousel slide" data-bs-interval="false" id="sidebar-carousel">
-            <div className="carousel-inner">
-              <div className="carousel-item">
+          <div className="h-100 carousel slide" data-bs-interval="false" id="sidebar-carousel">
+            <div className="h-100 carousel-inner">
+              <div className="h-100 carousel-item">
                 <ProjectsBar />
               </div>
 
-              <div className="carousel-item active">
+              <div className="h-100 carousel-item active">
                 <NavigationMenu dismissOffcanvas={dismissOffcanvas} />
               </div>
             </div>
