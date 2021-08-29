@@ -1,7 +1,7 @@
 import React from 'react'
 import { CaretLeftFill } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
+import { useContext, ContextProvider } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import KeywordsAPI from 'lib/resources/KeywordsAPI'
 
@@ -13,43 +13,41 @@ const NavigationMenu = props => {
   const { project, documentId } = useContext()
 
   return (
-    <div className="h-100 p-3 navigation-menu overflow-auto">
-      <div className="mb-2">
-        <button
-          className="btn btn-link text-decoration-none"
-          data-bs-target="#sidebar-carousel"
-          data-bs-slide-to="0">
-          <CaretLeftFill className="bi" /> All Projects
-        </button>
+    <ContextProvider dismissOffcanvas={props.dismissOffcanvas}>
+      <div className="h-100 p-3 navigation-menu overflow-auto">
+        <div className="mb-2">
+          <button
+            className="btn btn-link text-decoration-none"
+            data-bs-target="#sidebar-carousel"
+            data-bs-slide-to="0">
+            <CaretLeftFill className="bi" /> All Projects
+          </button>
+        </div>
+
+        <SectionHeader
+          button={
+            <ProjectDropdownMenu />
+          }>
+          <h2 className="fs-5 m-0">{project.name}</h2>
+        </SectionHeader>
+
+        <SectionList>
+          <NavigationMenuItem
+            params={{ keywordId: undefined, documentId: undefined }}>
+            All Documents
+          </NavigationMenuItem>
+
+          <NavigationMenuItem
+            params={{ keywordId: undefined, documentId: 'deleted' }}>
+            Recently Deleted
+          </NavigationMenuItem>
+        </SectionList>
+
+        <PinnedDocumentsMenu />
+
+        <KeywordsMenu />
       </div>
-
-      <SectionHeader
-        button={
-          <ProjectDropdownMenu />
-        }>
-        <h2 className="fs-5 m-0">{project.name}</h2>
-      </SectionHeader>
-
-      <SectionList>
-        <NavigationMenuItem
-          params={{ keywordId: undefined, documentId: undefined }}
-          dismissOffcanvas={props.dismissOffcanvas}>
-          All Documents
-        </NavigationMenuItem>
-
-        <NavigationMenuItem
-          params={{ keywordId: undefined, documentId: 'deleted' }}
-          dismissOffcanvas={props.dismissOffcanvas}>
-          Recently Deleted
-        </NavigationMenuItem>
-      </SectionList>
-
-      <PinnedDocumentsMenu
-        dismissOffcanvas={props.dismissOffcanvas} />
-
-      <KeywordsMenu
-        dismissOffcanvas={props.dismissOffcanvas} />
-    </div>
+    </ContextProvider>
   )
 }
 
@@ -98,8 +96,7 @@ const PinnedDocumentsMenu = props => {
                 pinnedDocuments.map(doc => (
                   <NavigationMenuItem
                     key={doc.id}
-                    params={{ keywordId: undefined, documentId: doc.id }}
-                    dismissOffcanvas={props.dismissOffcanvas}>
+                    params={{ keywordId: undefined, documentId: doc.id }}>
                     {doc.title || 'Untitled document'}
                   </NavigationMenuItem>
                 ))
@@ -150,8 +147,7 @@ const KeywordsMenu = props => {
                 keywords.map(keyword => (
                   <NavigationMenuItem
                     key={keyword.id}
-                    params={{ keywordId: keyword.id, documentId: undefined }}
-                    dismissOffcanvas={props.dismissOffcanvas}>
+                    params={{ keywordId: keyword.id, documentId: undefined }}>
                     {keyword.text}
                   </NavigationMenuItem>
                 ))
@@ -185,22 +181,24 @@ const SectionHeader = props => {
 
 const SectionList = props => {
   return (
-    <ul className="nav nav-pills flex-column mb-3">
+    <div className="flex-column mb-3">
       {props.children}
-    </ul>
+    </div>
   )
 }
 
-const NavigationMenuItem = props => (
-  <li className="nav-item">
+const NavigationMenuItem = props => {
+  const { dismissOffcanvas } = useContext()
+
+  return (
     <NavLink
-      className="nav-link"
+      className="navigation-menu-item"
       activeClassName="active"
       params={props.params}
-      onClick={props.dismissOffcanvas}>
+      onClick={dismissOffcanvas}>
       {props.children}
     </NavLink>
-  </li>
-)
+  )
+}
 
 export default NavigationMenu

@@ -82,8 +82,6 @@ html, body {
 }
 
 .dim-on-hover {
-  @include transition($btn-transition);
-
   &:not(:focus):not(:focus-within):hover {
     @extend .bg-light;
   }
@@ -96,13 +94,17 @@ html, body {
 }
 
 .navigation-menu {
-  .nav-link {
-    @extend .rounded-0;
+  .navigation-menu-item {
+    @extend .d-block;
     @extend .mx-n3;
     @extend .px-3;
     @extend .py-1;
-    @extend .text-start;
-    @include transition($btn-transition);
+    @extend .text-decoration-none;
+
+    &.active {
+      @extend .bg-primary;
+      @extend .text-white;
+    }
 
     &:not(.active) {
       @extend .text-dark;
