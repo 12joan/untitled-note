@@ -156,6 +156,8 @@ html, body {
   .title-input {
     @extend .h1;
     @extend .w-100;
+    @extend .rounded-0;
+    @extend .p-0;
     @extend .border-0;
     @extend .border-bottom;
 
