@@ -132,14 +132,12 @@ const DocumentEditorKeywords = props => {
 }
 
 const Tag = props => (
-  <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 me-2 text-primary">
-    <span className="mx-1">
-      {props.tag.name}
-    </span>
-
+  <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 me-2 my-1 text-primary">
     <NavLink
-      className="stretched-link"
-      params={{ keywordId: props.tag.id, documentId: undefined }} />
+      className="stretched-link text-decoration-none mx-1"
+      params={{ keywordId: props.tag.id, documentId: undefined }}>
+      {props.tag.name}
+    </NavLink>
 
     <button
       className="btn-delete position-relative border-0 p-0 rounded-circle text-primary"

@@ -170,7 +170,8 @@ html, body {
     @extend .py-0;
     @extend .px-1;
     @extend .mx-n1;
-    @extend .rounded-pill;
+
+    border-radius: 1rem;
 
     .keyword-tag {
       background-color: lighten($blue-100, 5%);
