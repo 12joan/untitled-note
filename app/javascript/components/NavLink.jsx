@@ -7,11 +7,9 @@ const NavLink = props => {
 
   const params = { projectId, keywordId, documentId }
 
-  const activeParams = props.activeParams || Object.keys(props.params)
-
-  const isActive = activeParams.every(key =>
+  const isActive = Object.keys(props.params).every(key =>
     props.params[key] == params[key] // '==' for lax equality checking
-  ) && props.isActive()
+  )
 
   return (
     <a
@@ -28,7 +26,6 @@ const NavLink = props => {
 }
 
 NavLink.defaultProps = {
-  isActive: () => true,
   className: '',
   activeClassName: '',
   inactiveClassName: '',

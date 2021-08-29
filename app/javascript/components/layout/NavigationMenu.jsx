@@ -33,15 +33,12 @@ const NavigationMenu = props => {
       <SectionList>
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: undefined }}
-          activeParams={['keywordId']}
-          isActive={() => documentId !== 'deleted'}
           dismissOffcanvas={props.dismissOffcanvas}>
           All Documents
         </NavigationMenuItem>
 
         <NavigationMenuItem
           params={{ keywordId: undefined, documentId: 'deleted' }}
-          activeParams={['documentId']}
           dismissOffcanvas={props.dismissOffcanvas}>
           Recently Deleted
         </NavigationMenuItem>
@@ -102,7 +99,6 @@ const PinnedDocumentsMenu = props => {
                   <NavigationMenuItem
                     key={doc.id}
                     params={{ keywordId: undefined, documentId: doc.id }}
-                    activeParams={['documentId']}
                     dismissOffcanvas={props.dismissOffcanvas}>
                     {doc.title || 'Untitled document'}
                   </NavigationMenuItem>
@@ -155,8 +151,6 @@ const KeywordsMenu = props => {
                   <NavigationMenuItem
                     key={keyword.id}
                     params={{ keywordId: keyword.id, documentId: undefined }}
-                    activeParams={['keywordId']}
-                    isActive={() => documentId !== 'deleted'}
                     dismissOffcanvas={props.dismissOffcanvas}>
                     {keyword.text}
                   </NavigationMenuItem>
@@ -203,8 +197,6 @@ const NavigationMenuItem = props => (
       className="nav-link"
       activeClassName="active"
       params={props.params}
-      activeParams={props.activeParams}
-      isActive={props.isActive}
       onClick={props.dismissOffcanvas}>
       {props.children}
     </NavLink>
