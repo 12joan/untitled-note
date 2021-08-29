@@ -47,8 +47,6 @@ const DocumentEditorToolbar = props => {
           <ToolbarButton shortcut="shift+z" action="redo" title="Redo" icon={Redo} />
         </ButtonGroup>
       </div>
-
-      <Dialogs />
     </div>
   )
 }
@@ -75,30 +73,6 @@ const ToolbarButton = props => {
       <IconComponent className="bi" />
       <span className="visually-hidden">{props.title}</span>
     </button>
-  )
-}
-
-const Dialogs = props => {
-  return (
-    <div className="trix-dialogs" data-trix-dialogs="">
-      <div className="trix-dialog" data-trix-dialog="href" data-trix-dialog-attribute="href">
-        <div className="d-md-flex mb-n3">
-          <input
-            type="url"
-            name="href"
-            className="form-control me-3 mb-3"
-            placeholder="Enter a URL…"
-            aria-label="URL"
-            required
-            data-trix-input="" />
-
-          <div className="btn-group mb-3">
-            <button type="button" className="btn btn-light" data-trix-method="setAttribute">Link</button>
-            <button type="button" className="btn btn-light" data-trix-method="removeAttribute">Unlink</button>
-          </div>
-        </div>
-      </div>
-    </div>
   )
 }
 

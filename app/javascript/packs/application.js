@@ -20,6 +20,7 @@ require('trix')
 require('@rails/actiontext')
 
 require('lib/trixNewlinePatch')
+require('lib/trixDialogPatch')
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

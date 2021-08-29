@@ -6,6 +6,7 @@ import ContentArea from 'components/layout/ContentArea'
 import NewProjectModal from 'components/projects/NewProjectModal'
 import EditProjectModal from 'components/projects/EditProjectModal'
 import DeleteProjectModal from 'components/projects/DeleteProjectModal'
+import TrixDialogs from 'components/layout/TrixDialogs'
 
 const AppLayout = props => {
   return (
@@ -27,6 +28,7 @@ const AppLayout = props => {
       <NewProjectModal />
       <EditProjectModal />
       <DeleteProjectModal />
+      <TrixDialogs />
     </>
   )
 }

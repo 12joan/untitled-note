@@ -291,17 +291,11 @@ html, body {
         @extend .text-secondary;
       }
     }
+  }
+}
 
-    .trix-dialog {
-      @extend .position-absolute;
-      @extend .card;
-      @extend .card-body;
-
-      bottom: 4rem;
-
-      &:not(.trix-active) {
-        @extend .d-none;
-      }
-    }
+#trix-dialogs {
+  .trix-validate {
+    @extend .is-invalid;
   }
 }
