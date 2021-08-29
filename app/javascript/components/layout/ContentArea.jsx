@@ -2,7 +2,6 @@ import React from 'react'
 
 import { useContext, ContextProvider } from 'lib/context'
 
-import ContentHeader from 'components/layout/ContentHeader'
 import ShowDocument from 'components/documents/ShowDocument'
 import DocumentIndex from 'components/documents/DocumentIndex'
 
@@ -12,8 +11,6 @@ const ContentArea = props => {
 
   return (
     <ContextProvider view={view}>
-      <ContentHeader />
-
       <div className="flex-grow-1 overflow-auto bg-light" style={{ scrollPaddingBottom: '5rem' }}>
         {renderView(view)}
       </div>

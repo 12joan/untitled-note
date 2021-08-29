@@ -18,19 +18,17 @@ const BackButton = props => {
     <NavLink
       className="text-decoration-none"
       params={backButtonConfig.params}>
-      <CaretLeftFill className="bi" /> {backButtonConfig.label}
+      <CaretLeftFill className="bi" /> Back
     </NavLink>
   )
 }
 
 const getBackButtonConfig = ({ keywordId, documentId, keyword }) => {
   const allDocumentsConfig = {
-    label: 'All Documents',
     params: { keywordId: undefined, documentId: undefined },
   }
 
   const keywordConfig = {
-    label: keyword?.text,
     params: { keywordId: keywordId, documentId: undefined },
   }
 

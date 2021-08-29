@@ -3,6 +3,7 @@ import React from 'react'
 import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
+import ContentHeader from 'components/layout/ContentHeader'
 import LoadPromise from 'components/LoadPromise'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
@@ -10,7 +11,11 @@ const ShowDocument = props => {
   const { projectId, keyword } = useContext()
 
   return (
-    <div className="p-4">
+    <div className="p-3">
+      <div className="mb-3">
+        <ContentHeader />
+      </div>
+
       <LoadPromise
         dependenciesRequiringClear={[props.id]}
         promise={() => DocumentsAPI(projectId).show(props.id)}

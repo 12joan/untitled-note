@@ -1,17 +1,16 @@
 import React from 'react'
 
 import BackButton from 'components/layout/BackButton'
-import SortingControls from 'components/layout/SortingControls'
 
 const ContentHeader = props => {
   return (
-    <div className="border-bottom p-3 d-flex justify-content-between align-items-center">
-      <div>
+    <div className="d-flex gap-3 align-items-center">
+      <div className="py-1">
         <BackButton />
       </div>
 
-      <div>
-        <SortingControls />
+      <div className="flex-grow-1 mx-auto text-center py-1" style={{ width: 0 }}>
+        {props.children}
       </div>
     </div>
   )
