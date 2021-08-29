@@ -11,7 +11,7 @@ const Sidebar = props => {
   const { toggleSidebarEvent } = useContext()
 
   const viewportWidth = useViewportWidth()
-  const isOffcanvas = viewportWidth < 992
+  const isOffcanvas = (viewportWidth === undefined) || viewportWidth < 992
 
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
 
