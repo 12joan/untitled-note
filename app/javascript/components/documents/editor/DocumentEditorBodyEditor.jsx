@@ -63,7 +63,7 @@ const StaticBody = props => {
           <div className="position-absolute bottom-0 w-100 d-flex justify-content-center">
             <a
               href="#"
-              className="position-absolute bottom-0 btn btn-lg btn-light rounded-pill"
+              className="position-absolute bottom-0 btn btn-light rounded-pill"
               style={{ transform: 'translateY(50%)', zIndex: 1 }}
               onClick={event => {
                 event.preventDefault()
