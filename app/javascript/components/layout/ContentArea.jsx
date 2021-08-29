@@ -11,7 +11,7 @@ const ContentArea = props => {
 
   return (
     <ContextProvider view={view}>
-      <div className="flex-grow-1 overflow-auto bg-light" style={{ scrollPaddingBottom: '5rem' }}>
+      <div className="flex-grow-1 overflow-auto bg-light" style={{ scrollPaddingBottom: '4rem' }}>
         {renderView(view)}
       </div>
     </ContextProvider>

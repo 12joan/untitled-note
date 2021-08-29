@@ -8,6 +8,20 @@ $carousel-transition-duration: 0.3s;
 
 @import "bootstrap/scss/bootstrap";
 
+:root {
+  --sheet-padding: 1.5rem;
+  --sheet-header-min-height: 2.5em;
+  --sheet-border-radius: 1rem;
+}
+
+@include media-breakpoint-up(md) {
+  :root {
+    --sheet-padding: 3rem;
+    --sheet-header-min-height: 3em;
+    --sheet-border-radius: 2rem;
+  }
+}
+
 html, body {
   height: 100%;
   overflow-wrap: anywhere;
@@ -46,11 +60,11 @@ html, body {
 }
 
 .rounded-lg {
-  border-radius: 2em;
+  border-radius: var(--sheet-border-radius);
 }
 
 .p-lg {
-  padding: 3em;
+  padding: var(--sheet-padding);
 }
 
 .dropdown-item {
@@ -137,9 +151,9 @@ html, body {
   .document-editor-header {
     @extend .bg-white;
 
-    margin: -3em -3em 0 -3em;
-    min-height: 3em;
-    border-radius: 2em 2em 0 0;
+    margin: calc(-1 * var(--sheet-padding)) calc(-1 * var(--sheet-padding)) 0 calc(-1 * var(--sheet-padding));
+    min-height: var(--sheet-header-min-height);
+    border-radius: var(--sheet-border-radius) var(--sheet-border-radius) 0 0;
 
     &:not(:hover) .document-editor-header-link {
       @extend .visually-hidden-focusable;
@@ -149,10 +163,9 @@ html, body {
   .document-editor-footer {
     @extend .bg-white;
 
-    margin: 0 -3em -3em -3em;
-    padding: 0 3em 0 3em;
-    min-height: 3em;
-    border-radius: 0 0 2em 2em;
+    margin: 0 calc(-1 * var(--sheet-padding)) calc(-1 * var(--sheet-padding)) calc(-1 * var(--sheet-padding));
+    padding: 0 var(--sheet-padding) 0 var(--sheet-padding);
+    border-radius: 0 0 var(--sheet-border-radius) var(--sheet-border-radius);
   }
 
   .title-input {
