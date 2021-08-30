@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { buildUrl } from 'lib/routes'
 import { useContext } from 'lib/context'
 
 const NavLink = props => {
@@ -13,7 +14,7 @@ const NavLink = props => {
 
   return (
     <a
-      href="#"
+      href={buildUrl({ ...params, ...props.params })}
       className={`${props.className} ${isActive ? props.activeClassName : props.inactiveClassName}`}
       onClick={event => {
         event.preventDefault()

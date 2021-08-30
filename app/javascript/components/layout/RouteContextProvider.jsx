@@ -1,6 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
+import { buildUrl } from 'lib/routes'
 import { ContextProvider } from 'lib/context'
 
 const RouteContextProvider = props => {
@@ -21,28 +22,6 @@ const RouteContextProvider = props => {
       {props.children}
     </ContextProvider>
   )
-}
-
-const buildUrl = ({ projectId, keywordId, documentId }) => {
-  let url = ''
-
-  if (projectId === undefined) {
-    return '/'
-  } else {
-    url += `/projects/${projectId}`
-
-    if (keywordId !== undefined) {
-      url += `/keywords/${keywordId}`
-    }
-
-    url += '/documents'
-
-    if (documentId !== undefined) {
-      url += `/${documentId}`
-    }
-
-    return url
-  }
 }
 
 export default RouteContextProvider

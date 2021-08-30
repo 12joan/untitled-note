@@ -61,8 +61,8 @@ const StaticBody = props => {
       {
         props.collapsed && (
           <div className="position-absolute bottom-0 w-100 d-flex justify-content-center">
-            <a
-              href="#"
+            <button
+              type="button"
               className="position-absolute bottom-0 btn btn-light rounded-pill"
               style={{ transform: 'translateY(50%)', zIndex: 1 }}
               onClick={event => {
@@ -70,7 +70,7 @@ const StaticBody = props => {
                 props.setCollapsed(false)
               }}>
               Show more
-            </a>
+            </button>
           </div>
         )
       }
