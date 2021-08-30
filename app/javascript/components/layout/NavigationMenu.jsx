@@ -15,13 +15,23 @@ const NavigationMenu = props => {
   return (
     <ContextProvider dismissOffcanvas={props.dismissOffcanvas}>
       <div className="h-100 p-3 navigation-menu overflow-auto">
-        <div className="mb-2">
-          <button
-            className="btn btn-link text-decoration-none"
-            data-bs-target="#sidebar-carousel"
-            data-bs-slide-to="0">
-            <CaretLeftFill className="bi" /> All Projects
-          </button>
+        <div className="d-flex gap-2 align-items-center mb-2">
+          <div>
+            <button
+              className="btn btn-link text-decoration-none"
+              data-bs-target="#sidebar-carousel"
+              data-bs-slide-to="0">
+              <CaretLeftFill className="bi" /> All Projects
+            </button>
+          </div>
+
+          {
+            props.isOffcanvas && (
+              <div className="ms-auto">
+                <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" />
+              </div>
+            )
+          }
         </div>
 
         <SectionHeader

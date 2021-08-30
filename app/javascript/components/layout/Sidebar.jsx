@@ -71,7 +71,7 @@ const Sidebar = props => {
               </div>
 
               <div className="h-100 carousel-item active">
-                <NavigationMenu dismissOffcanvas={dismissOffcanvas} />
+                <NavigationMenu isOffcanvas={isOffcanvas} dismissOffcanvas={dismissOffcanvas} />
               </div>
             </div>
           </div>
