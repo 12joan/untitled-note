@@ -16,7 +16,7 @@ const AppLayout = props => {
           <TopBar />
         </div>
 
-        <div className="row g-0 flex-fill" style={{ minHeight: 0 }}>
+        <div className="row g-0 flex-fill flex-nowrap" style={{ minHeight: 0 }}>
           <Sidebar />
 
           <div className="col mh-100 d-flex flex-column">

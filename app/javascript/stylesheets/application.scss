@@ -24,6 +24,8 @@ $carousel-transition-duration: 0.3s;
 
 html, body {
   height: 100%;
+  word-break: break-all;
+  overflow-wrap: break-word;
   overflow-wrap: anywhere;
 }
 
@@ -61,6 +63,10 @@ html, body {
 
 .rounded-lg {
   border-radius: var(--sheet-border-radius);
+}
+
+.rounded-1rem {
+  border-radius: 1rem;
 }
 
 .p-lg {
@@ -186,7 +192,7 @@ html, body {
     @extend .px-1;
     @extend .mx-n1;
 
-    border-radius: 1rem;
+    @extend .rounded-1rem;
 
     .keyword-tag {
       background-color: lighten($blue-100, 5%);

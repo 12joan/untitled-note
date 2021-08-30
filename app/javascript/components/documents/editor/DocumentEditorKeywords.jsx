@@ -94,6 +94,7 @@ const DocumentEditorKeywords = props => {
       tags={tags}
       suggestions={suggestions}
       minQueryLength={1}
+      autoresize={false}
       placeholderText="Add keywords..."
       removeButtonText="Remove keyword"
       noSuggestionsText="Keyword not found"
@@ -132,7 +133,7 @@ const DocumentEditorKeywords = props => {
 }
 
 const Tag = props => (
-  <div className="keyword-tag d-inline-block position-relative rounded-pill p-1 me-2 my-1 text-primary">
+  <div className="keyword-tag d-inline-block position-relative rounded-1rem p-1 me-2 my-1 text-primary">
     <NavLink
       className="stretched-link text-decoration-none mx-1"
       params={{ keywordId: props.tag.id, documentId: undefined }}>
