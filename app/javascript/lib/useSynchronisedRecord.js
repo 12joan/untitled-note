@@ -1,19 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
-const useSynchronisedRecord = ({ initialRecord, synchroniseRecord, uncontrolledParams = [] }) => {
+import useUnmounting from 'lib/useUnmounting'
+
+const useSynchronisedRecord = ({
+  initialRecord,
+  synchroniseRecord,
+  uncontrolledParams = [],
+  syncInterval = 1500,
+}) => {
   const [record, setRecord] = useState(initialRecord)
 
+  const [clock, setClock] = useState(0)
   const [localVersion, setLocalVersion] = useState(0)
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
-  const [updatePromiseCallbacks, setUpdatePromiseCallbacks] = useState([])
+
+  const isDirty = localVersion > remoteVersion
+
+  const updatePromiseCallbacks = useRef([])
+  const unmounting = useUnmounting()
 
   useEffect(() => {
-    if (localVersion > remoteVersion && !isUploading) {
+    const timeout = setInterval(() => setClock(clock => clock + 1), syncInterval)
+    return () => clearTimeout(timeout)
+  }, [syncInterval])
+
+  useEffect(() => {
+    if (isDirty && !isUploading) {
       setIsUploading(true)
+
       const uploadingVersion = localVersion
 
-      const callbacks = updatePromiseCallbacks.filter(({ version }) => uploadingVersion >= version)
+      const callbacks = updatePromiseCallbacks.current.filter(({ version }) => uploadingVersion >= version)
 
       synchroniseRecord(record)
         .then(updatedRecord => {
@@ -25,6 +43,8 @@ const useSynchronisedRecord = ({ initialRecord, synchroniseRecord, uncontrolledP
             false
           )
 
+          setRemoteVersion(uploadingVersion)
+
           callbacks.forEach(callback => callback.resolve({
             localRecord: record,
             remoteRecord: updatedRecord,
@@ -35,11 +55,37 @@ const useSynchronisedRecord = ({ initialRecord, synchroniseRecord, uncontrolledP
           callbacks.forEach(callback => callback.reject(error))
         })
         .then(() => {
-          setRemoteVersion(uploadingVersion)
           setIsUploading(false)
         })
     }
-  }, [localVersion, remoteVersion, isUploading])
+  }, [clock])
+
+  useEffect(() => () => {
+    if (unmounting.current && isDirty) {
+      synchroniseRecord(record)
+    }
+  }, [isDirty, record])
+
+  useEffect(() => {
+    const onBeforeunload = event => {
+      synchroniseRecord(record)
+
+      event.preventDefault()
+      event.returnValue = 'There are unsaved changes'
+      return event.returnValue
+    }
+
+    const removeEventListener = () => {
+      window.removeEventListener('beforeunload', onBeforeunload)
+    }
+
+    if (isDirty) {
+      window.addEventListener('beforeunload', onBeforeunload)
+      return removeEventListener
+    } else {
+      removeEventListener()
+    }
+  }, [isDirty, record])
 
   const updateRecord = (params, incrementLocalVersion = true) => {
     setRecord(record => ({
@@ -51,15 +97,20 @@ const useSynchronisedRecord = ({ initialRecord, synchroniseRecord, uncontrolledP
       setLocalVersion(localVersion => localVersion + 1)
 
       return new Promise((resolve, reject) => {
-        setUpdatePromiseCallbacks(callbacks => [
-          ...callbacks,
-          { version: localVersion, resolve, reject },
-        ])
+        updatePromiseCallbacks.current.push({
+          version: localVersion,
+          resolve,
+          reject,
+        })
       })
     }
   }
 
-  return [record, updateRecord]
+  const syncStatus = isDirty
+    ? (isUploading ? 'uploading' : 'dirty')
+    : 'upToDate'
+
+  return [record, updateRecord, syncStatus]
 }
 
 export default useSynchronisedRecord

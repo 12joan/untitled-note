@@ -15,7 +15,7 @@ import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFoot
 const DocumentEditor = props => {
   const { projectId } = useContext()
 
-  const [doc, updateDocument] = useSynchronisedRecord({
+  const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
     synchroniseRecord: doc => DocumentsAPI(projectId).update(doc),
     uncontrolledParams: ['updated_at'],
