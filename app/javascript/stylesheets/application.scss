@@ -303,6 +303,7 @@ html, body {
   .trix-toolbar {
     overflow-x: auto;
     white-space: nowrap;
+    height: 2rem;
 
     .btn-toolbar {
       @include btn-selectable('.trix-active');
