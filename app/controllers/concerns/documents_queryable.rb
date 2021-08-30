@@ -7,7 +7,6 @@ module DocumentsQueryable
 
   def query_documents(collection, options = {})
     scoped_collection = apply_scopes(collection, [
-      options.fetch(:deleted, false) ? :deleted : :not_deleted,
       options.fetch(:pinned, false) ? :pinned : :all,
       :not_blank,
     ])

@@ -20,15 +20,12 @@ const DocumentEditor = props => {
     synchroniseRecord: doc => DocumentsAPI(projectId).update(doc),
   })
 
-  const isDeleted = doc.deleted_at !== null
-  const readOnly = isDeleted || props.readOnly
-
   const [editorUUID] = useState(() => uuid())
 
   const toolbarId = `trix-toolbar-${editorUUID}`
 
   return (
-    <div className={`document-editor ${readOnly ? 'readOnly' : ''}`}>
+    <div className={`document-editor ${props.readOnly ? 'readOnly' : ''}`}>
       <div className="container-fluid">
         <DocumentEditorHeader
           doc={doc}
@@ -36,8 +33,7 @@ const DocumentEditor = props => {
 
         <DocumentEditorTitleBar
           doc={doc}
-          readOnly={readOnly}
-          isDeleted={isDeleted}
+          readOnly={props.readOnly}
           editorUUID={editorUUID}
           updateDocument={updateDocument} />
       </div>
@@ -47,21 +43,21 @@ const DocumentEditor = props => {
           <DocumentEditorKeywords
             doc={doc}
             updateDocument={updateDocument}
-            readOnly={readOnly} />
+            readOnly={props.readOnly} />
         </div>
       </div>
 
       <div>
         <DocumentEditorBodyEditor
           doc={doc}
-          readOnly={readOnly}
+          readOnly={props.readOnly}
           startCollapsedIfLong={props.startCollapsedIfLong}
           toolbarId={toolbarId}
           updateDocument={updateDocument} />
 
         <DocumentEditorFooter
           toolbarId={toolbarId}
-          readOnly={readOnly} />
+          readOnly={props.readOnly} />
       </div>
     </div>
   )

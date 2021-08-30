@@ -22,14 +22,6 @@ const buildView = context => {
   if (context.documentId === undefined) {
     return {
       type: 'index',
-      deleted: false,
-    }
-  }
-
-  if (context.documentId === 'deleted') {
-    return {
-      type: 'index',
-      deleted: true,
     }
   }
 
@@ -42,7 +34,7 @@ const buildView = context => {
 const renderView = view => {
   switch (view.type) {
     case 'index':
-      return <DocumentIndex deletedOnly={view.deleted} />
+      return <DocumentIndex />
 
     case 'show':
       return <ShowDocument id={view.documentId} />

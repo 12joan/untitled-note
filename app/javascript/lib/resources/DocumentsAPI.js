@@ -37,7 +37,6 @@ const DocumentsAPI = projectId => new ResourcesAPI({
       })),
       blank: false,
       pinned_at: doc.pinned_at,
-      deleted_at: doc.deleted_at,
     },
   }),
 })

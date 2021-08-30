@@ -46,11 +46,6 @@ const NavigationMenu = props => {
             params={{ keywordId: undefined, documentId: undefined }}>
             All Documents
           </NavigationMenuItem>
-
-          <NavigationMenuItem
-            params={{ keywordId: undefined, documentId: 'deleted' }}>
-            Recently Deleted
-          </NavigationMenuItem>
         </SectionList>
 
         <PinnedDocumentsMenu />

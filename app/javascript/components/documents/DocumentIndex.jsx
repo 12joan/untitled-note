@@ -24,13 +24,9 @@ const DocumentIndex = props => {
     'sort_by': sortParameter,
   }
 
-  if (props.deletedOnly) {
-    searchParams.deleted = true
-  }
-
-  const viewDropdownLabel = props.deletedOnly
-    ? 'Recently Deleted'
-    : (keywordId === undefined ? 'All Documents' : keyword.text)
+  const viewDropdownLabel = (keywordId === undefined)
+    ? 'All Documents'
+    : keyword.text
 
   return (
     <div className="p-3 pb-0">
@@ -57,7 +53,7 @@ const DocumentIndex = props => {
 
       <LoadPromise
         dependencies={[sortParameter, documentIndexKey]}
-        dependenciesRequiringClear={[projectId, keywordId, props.deletedOnly]}
+        dependenciesRequiringClear={[projectId, keywordId]}
         promise={() => action({ searchParams })}
 
         success={documents => documents.map(doc => (

@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class DocumentTest < ActiveSupport::TestCase
-  extend DeleteableTest
-
-  deleteable_tests(model_klass: Document, factory: :document)
-
   test 'creating a document creates a new title alias' do
     assert_difference('Alias.count') do
       create(:document)

@@ -20,20 +20,9 @@ const DocumentDropdownMenu = props => {
     window.location.href = `/api/v1/projects/${projectId}/documents/${props.doc.id}/markdown`
   }
 
-  const performSoftDeletion = () => {
-    props.updateDocument({ deleted_at: new Date().toISOString() })
-      .then(() => setParams({ documentId: undefined }))
-      .then(reloadDocumentIndex)
-  }
-
-  const revertSoftDeletion = () => {
-    props.updateDocument({ deleted_at: null })
-      .then(reloadDocumentIndex)
-  }
-
   const performDestroy = () => {
     DocumentsAPI(projectId).destroy(props.doc)
-      .then(() => setParams({ documentId: 'deleted' }))
+      .then(() => setParams({ documentId: undefined }))
       .then(reloadKeywords)
       .then(reloadDocumentIndex)
   }
@@ -59,28 +48,9 @@ const DocumentDropdownMenu = props => {
           Download as Markdown
         </DropdownItem>
 
-        { 
-          props.isDeleted
-            ? (
-              <>
-                <DropdownItem onClick={revertSoftDeletion}>
-                  Recover document
-                </DropdownItem>
-
-                <DropdownItem onClick={performDestroy} className="dropdown-item-danger">
-                  Delete permanently
-                </DropdownItem>
-              </>
-            )
-
-            : (
-              <>
-                <DropdownItem onClick={performSoftDeletion} className="dropdown-item-danger">
-                  Delete document
-                </DropdownItem>
-              </>
-            )
-        }
+        <DropdownItem onClick={performDestroy} className="dropdown-item-danger">
+          Delete document
+        </DropdownItem>
       </ul>
     </div>
   )

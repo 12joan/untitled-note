@@ -24,7 +24,6 @@ const DocumentEditorTitleBar = props => {
       <div className="col-auto">
         <DocumentDropdownMenu
           doc={props.doc}
-          isDeleted={props.isDeleted}
           editorUUID={props.editorUUID}
           updateDocument={props.updateDocument} />
       </div>
