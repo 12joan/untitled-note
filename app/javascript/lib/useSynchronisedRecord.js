@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const useSynchronisedRecord = ({ initialRecord, synchroniseRecord }) => {
+const useSynchronisedRecord = ({ initialRecord, synchroniseRecord, uncontrolledParams = [] }) => {
   const [record, setRecord] = useState(initialRecord)
 
   const [localVersion, setLocalVersion] = useState(0)
@@ -16,10 +16,20 @@ const useSynchronisedRecord = ({ initialRecord, synchroniseRecord }) => {
       const callbacks = updatePromiseCallbacks.filter(({ version }) => uploadingVersion >= version)
 
       synchroniseRecord(record)
-        .then(updatedRecord => callbacks.forEach(callback => callback.resolve({
-          localRecord: record,
-          remoteRecord: updatedRecord,
-        })))
+        .then(updatedRecord => {
+          updateRecord(
+            uncontrolledParams.reduce(
+              (paramsToUpdate, key) => ({ ...paramsToUpdate, [key]: updatedRecord[key] }),
+              {}
+            ),
+            false
+          )
+
+          callbacks.forEach(callback => callback.resolve({
+            localRecord: record,
+            remoteRecord: updatedRecord,
+          }))
+        })
         .catch(error => {
           console.error(error)
           callbacks.forEach(callback => callback.reject(error))

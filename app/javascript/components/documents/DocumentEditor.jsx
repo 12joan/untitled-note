@@ -18,6 +18,7 @@ const DocumentEditor = props => {
   const [doc, updateDocument] = useSynchronisedRecord({
     initialRecord: props.document,
     synchroniseRecord: doc => DocumentsAPI(projectId).update(doc),
+    uncontrolledParams: ['updated_at'],
   })
 
   const [editorUUID] = useState(() => uuid())

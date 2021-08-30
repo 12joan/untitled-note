@@ -39,7 +39,7 @@ const DocumentDropdownMenu = props => {
         <span className="visually-hidden">Toggle dropdown</span>
       </button>
 
-      <ul className="dropdown-menu" aria-labelledby={`document-${props.editorUUID}-dropdown-button`}>
+      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`document-${props.editorUUID}-dropdown-button`}>
         <DropdownItem onClick={togglePinned}>
           {pinned ? 'Unpin document' : 'Pin document'}
         </DropdownItem>
@@ -51,6 +51,17 @@ const DocumentDropdownMenu = props => {
         <DropdownItem onClick={performDestroy} className="dropdown-item-danger">
           Delete document
         </DropdownItem>
+
+        <div className="dropdown-divider" />
+
+        {
+          [['Created at', props.doc.created_at], ['Updated at', props.doc.updated_at]].map(([label, value]) => (
+            <li key={label} className="text-secondary px-3 py-1">
+              <h6 className="dropdown-header p-0">{label}</h6>
+              {new Date(value).toLocaleString()}
+            </li>
+          ))
+        }
       </ul>
     </div>
   )
