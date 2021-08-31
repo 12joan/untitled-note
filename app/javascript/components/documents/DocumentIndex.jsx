@@ -7,9 +7,9 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import KeywordDocumentsAPI from 'lib/resources/KeywordDocumentsAPI'
 
 import ContentHeader from 'components/layout/ContentHeader'
-import LoadPromise from 'components/LoadPromise'
 import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
-import DocumentEditor from 'components/documents/DocumentEditor'
+import LoadPromise from 'components/LoadPromise'
+import LoadDocument from 'components/documents/LoadDocument'
 
 const DocumentIndex = props => {
   const { projectId, keywordId, keyword, documentIndexKey, reloadDocumentIndex } = useContext()
@@ -22,6 +22,7 @@ const DocumentIndex = props => {
 
   const searchParams = {
     'sort_by': sortParameter,
+    'select': 'id',
   }
 
   const viewDropdownLabel = (keywordId === undefined)
@@ -58,7 +59,13 @@ const DocumentIndex = props => {
 
         success={documents => documents.map(doc => (
           <div key={doc.id} className="mb-3">
-            <DocumentEditor document={doc} openable startCollapsedIfLong />
+            <LoadDocument
+              id={doc.id}
+              editorProps={doc => ({
+                document: doc,
+                openable: true,
+                startCollapsedIfLong: true,
+              })} />
           </div>
         ))}
 

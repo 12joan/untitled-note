@@ -68,6 +68,7 @@ const PinnedDocumentsMenu = props => {
           'sort_by': 'pinned_at',
           'sort_direction': 'asc',
           'pinned': true,
+          'select': 'id,title',
         },
       })}
 

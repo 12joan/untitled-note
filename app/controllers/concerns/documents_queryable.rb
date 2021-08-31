@@ -26,6 +26,21 @@ module DocumentsQueryable
 
   private
 
+  def set_requested_attributes
+    @requested_attributes =
+      if (select = params.fetch(:select, nil)).present?
+        select
+          .split(',')
+          .map { |attr_name| validate_param(attr_name, allowed_values: allowed_attributes).to_sym }
+      else
+        nil
+      end
+  end
+
+  def allowed_attributes
+    ['id', 'title', 'blank', 'created_at', 'updated_at', 'pinned_at', 'body', 'keywords']
+  end
+
   def apply_scopes(collection, scopes)
     scopes.reduce(collection) { |collection, scope| collection.send(scope) }
   end

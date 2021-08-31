@@ -5,6 +5,7 @@ module API
 
       before_action :set_project
       before_action :set_document, only: %i[ show edit update destroy ]
+      before_action :set_requested_attributes, only: %i[ index show ]
 
       def index
         @documents = query_documents(@project.documents, params)
