@@ -48,7 +48,9 @@ const StaticBody = props => {
   }, [])
 
   return (
-    <div className="position-relative">
+    <div
+      className="position-relative"
+      style={props.collapsed === undefined ? { height: 0, overflow: 'hidden' } : {}}>
       <div
         ref={bodyEl}
         className={`trix-editor ${props.collapsed ? 'collapsed' : ''}`}
