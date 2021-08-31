@@ -7,12 +7,12 @@ import LoadPromise from 'components/LoadPromise'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
 const LoadDocument = props => {
-  const { projectId, keyword } = useContext()
+  const { projectId, loadDocumentCache, keyword } = useContext()
 
   return (
     <LoadPromise
       dependenciesRequiringClear={[props.id]}
-      promise={() => DocumentsAPI(projectId).show(props.id)}
+      promise={loadDocumentCache.cachePromise(props.id, () => DocumentsAPI(projectId).show(props.id))}
 
       success={doc => (
         <DocumentEditor

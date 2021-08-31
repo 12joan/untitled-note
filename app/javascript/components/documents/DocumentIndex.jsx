@@ -12,7 +12,7 @@ import LoadPromise from 'components/LoadPromise'
 import LoadDocument from 'components/documents/LoadDocument'
 
 const DocumentIndex = props => {
-  const { projectId, keywordId, keyword, documentIndexKey, reloadDocumentIndex } = useContext()
+  const { projectId, keywordId, keyword, documentIndexKey } = useContext()
 
   const [sortParameter, setSortParameter] = useLocalStorage('document-index-sort-parameter', 'created_at')
 
@@ -46,7 +46,9 @@ const DocumentIndex = props => {
             </button>
 
             <ul className="dropdown-menu" aria-labelledby="view-dropdown">
-              <DocumentIndexMenu sortParameter={sortParameter} setSortParameter={setSortParameter} />
+              <DocumentIndexMenu
+                sortParameter={sortParameter}
+                setSortParameter={setSortParameter} />
             </ul>
           </div>
         </ContentHeader>

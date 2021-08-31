@@ -13,11 +13,14 @@ import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditor
 import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFooter'
 
 const DocumentEditor = props => {
-  const { projectId } = useContext()
+  const { projectId, loadDocumentCache } = useContext()
 
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
-    synchroniseRecord: doc => DocumentsAPI(projectId).update(doc),
+    synchroniseRecord: doc => {
+      loadDocumentCache.push(doc.id, doc)
+      return DocumentsAPI(projectId).update(doc)
+    },
     uncontrolledParams: ['updated_at'],
   })
 
