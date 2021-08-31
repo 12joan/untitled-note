@@ -10,6 +10,7 @@ import ContentHeader from 'components/layout/ContentHeader'
 import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
 import LoadPromise from 'components/LoadPromise'
 import LoadDocument from 'components/documents/LoadDocument'
+import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
 
 const DocumentIndex = props => {
   const { projectId, keywordId, keyword, documentIndexKey } = useContext()
@@ -71,7 +72,13 @@ const DocumentIndex = props => {
           </div>
         ))}
 
-        loading={() => <></>}
+        loading={() => (
+          <>
+            <div className="mb-3" children={<DocumentPlaceholder />} />
+            <div className="mb-3" children={<DocumentPlaceholder />} />
+            <div className="mb-3" children={<DocumentPlaceholder />} />
+          </>
+        )}
 
         error={error => {
           console.error(error)

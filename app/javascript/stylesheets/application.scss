@@ -73,6 +73,10 @@ html, body {
   padding: var(--sheet-padding);
 }
 
+.placeholder {
+  background-color: $gray-300;
+}
+
 .dropdown-item {
   &.dropdown-item-danger {
     &:active {
@@ -134,6 +138,14 @@ html, body {
       }
     }
   }
+}
+
+.document-placeholder {
+  @extend .placeholder;
+  @extend .d-block;
+
+  padding: var(--sheet-padding);
+  border-radius: var(--sheet-border-radius);
 }
 
 .document-editor {
@@ -272,20 +284,20 @@ html, body {
     font-size: 1.125em;
     border: none;
     outline: none;
-    min-height: 5em;
+    min-height: 80px;
 
     &.collapsed {
-      max-height: 300px;
+      max-height: 80px;
       overflow: hidden;
       cursor: pointer;
 
       &::after {
         content: '';
         position: absolute;
+        top: 0;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 8em;
         background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
       }
     }

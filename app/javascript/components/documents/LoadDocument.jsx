@@ -4,6 +4,7 @@ import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import LoadPromise from 'components/LoadPromise'
+import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
 const LoadDocument = props => {
@@ -20,7 +21,7 @@ const LoadDocument = props => {
           {...props.editorProps(doc)} />
       )}
 
-      loading={() => <></>}
+      loading={() => <DocumentPlaceholder />}
 
       error={error => {
         console.error(error)

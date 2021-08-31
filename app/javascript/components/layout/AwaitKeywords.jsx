@@ -5,6 +5,7 @@ import useRemountKey from 'lib/useRemountKey'
 import KeywordsAPI from 'lib/resources/KeywordsAPI'
 
 import LoadPromise from 'components/LoadPromise'
+import AppPlaceholder from 'components/layout/AppPlaceholder'
 
 const AwaitKeywords = props => {
   const { projectId } = useContext()
@@ -16,7 +17,7 @@ const AwaitKeywords = props => {
       dependencies={[projectId, reloadKeywordsKey]}
       promise={() => KeywordsAPI(projectId).index()}
 
-      loading={() => <></>}
+      loading={() => <AppPlaceholder />}
 
       error={error => {
         console.error(error)

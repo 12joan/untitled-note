@@ -72,7 +72,7 @@ const PinnedDocumentsMenu = props => {
         },
       })}
 
-      loading={() => <></>}
+      loading={() => <SectionListPlaceholder />}
 
       error={error => {
         console.error(error)
@@ -123,7 +123,7 @@ const KeywordsMenu = props => {
       dependenciesRequiringClear={[projectId]}
       promise={() => KeywordsAPI(projectId).index()}
 
-      loading={() => <></>}
+      loading={() => <SectionListPlaceholder />}
 
       error={error => {
         console.error(error)
@@ -189,6 +189,18 @@ const SectionList = props => {
   return (
     <div className="flex-column mb-3">
       {props.children}
+    </div>
+  )
+}
+
+const SectionListPlaceholder = props => {
+  return (
+    <div className="placeholder-glow">
+      <span className="placeholder col-7"></span>{' '}
+      <span className="placeholder col-4"></span>{' '}
+      <span className="placeholder col-4"></span>{' '}
+      <span className="placeholder col-6"></span>{' '}
+      <span className="placeholder col-8"></span>
     </div>
   )
 }

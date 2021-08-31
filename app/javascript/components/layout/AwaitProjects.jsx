@@ -6,6 +6,7 @@ import useRemountKey from 'lib/useRemountKey'
 import ProjectsAPI from 'lib/resources/ProjectsAPI'
 
 import LoadPromise from 'components/LoadPromise'
+import AppPlaceholder from 'components/layout/AppPlaceholder'
 import RunOnMount from 'components/RunOnMount'
 
 const AwaitProjects = props => {
@@ -35,7 +36,7 @@ const AwaitProjects = props => {
           })
       }}
 
-      loading={() => <></>}
+      loading={() => <AppPlaceholder />}
 
       error={error => {
         console.error(error)

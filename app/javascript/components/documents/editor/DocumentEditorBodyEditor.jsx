@@ -24,7 +24,7 @@ const DocumentEditorBodyEditor = props => {
     return (
       <StaticBody
         doc={props.doc}
-        gotPreferredHeight={height => setCollapsed(height > 300)}
+        gotPreferredHeight={height => setCollapsed(height > 80)}
         collapsed={collapsed}
         onClick={handleClick}
         setCollapsed={setCollapsed} />
