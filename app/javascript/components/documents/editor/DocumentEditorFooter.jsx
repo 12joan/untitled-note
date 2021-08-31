@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Palette, At as Mention } from 'react-bootstrap-icons'
 
+import DocumentEditorSyncStatusIndicator from 'components/documents/editor/DocumentEditorSyncStatusIndicator'
 import DocumentEditorToolbar from 'components/documents/editor/DocumentEditorToolbar'
 
 const DocumentEditorFooter = props => {
@@ -36,6 +37,10 @@ const DocumentEditorFooter = props => {
               <Mention className="bi" style={{ transform: 'scale(1.4)' }} />
               <span className="visually-hidden">Open related documents sidebar</span>
             </button>
+          </div>
+
+          <div className="col-auto mb-3">
+            <DocumentEditorSyncStatusIndicator syncStatus={props.syncStatus} />
           </div>
         </div>
       </div>

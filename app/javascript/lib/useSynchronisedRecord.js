@@ -14,6 +14,7 @@ const useSynchronisedRecord = ({
   const [localVersion, setLocalVersion] = useState(0)
   const [remoteVersion, setRemoteVersion] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
+  const [lastUploadFailed, setLastUploadFailed] = useState(false)
 
   const isDirty = localVersion > remoteVersion
 
@@ -44,6 +45,7 @@ const useSynchronisedRecord = ({
           )
 
           setRemoteVersion(uploadingVersion)
+          setLastUploadFailed(false)
 
           callbacks.forEach(callback => callback.resolve({
             localRecord: record,
@@ -52,6 +54,7 @@ const useSynchronisedRecord = ({
         })
         .catch(error => {
           console.error(error)
+          setLastUploadFailed(true)
           callbacks.forEach(callback => callback.reject(error))
         })
         .then(() => {
@@ -107,7 +110,7 @@ const useSynchronisedRecord = ({
   }
 
   const syncStatus = isDirty
-    ? (isUploading ? 'uploading' : 'dirty')
+    ? (lastUploadFailed ? 'failed' : 'dirty')
     : 'upToDate'
 
   return [record, updateRecord, syncStatus]

@@ -137,6 +137,7 @@ html, body {
 }
 
 .document-editor {
+  @extend .position-relative;
   @extend .bg-white;
   @extend .shadow;
   @extend .rounded-lg;
@@ -152,6 +153,20 @@ html, body {
     .react-tags__search-input {
       @extend .d-none;
     }
+  }
+
+  &.sync-failed::after {
+    @extend .bg-danger;
+
+    content: '';
+    border-radius: var(--sheet-border-radius);
+    opacity: 0.2;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .document-editor-header {

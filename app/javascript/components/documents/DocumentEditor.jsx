@@ -18,8 +18,16 @@ const DocumentEditor = props => {
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
     synchroniseRecord: doc => {
+      const priorCachedVersion = loadDocumentCache.pull(doc.id)
+
       loadDocumentCache.push(doc.id, doc)
-      return DocumentsAPI(projectId).update(doc)
+
+      return DocumentsAPI(projectId)
+        .update(doc)
+        .catch(error => {
+          loadDocumentCache.push(doc.id, priorCachedVersion)
+          return Promise.reject(error)
+        })
     },
     uncontrolledParams: ['updated_at'],
   })
@@ -29,7 +37,7 @@ const DocumentEditor = props => {
   const toolbarId = `trix-toolbar-${editorUUID}`
 
   return (
-    <div className={`document-editor ${props.readOnly ? 'readOnly' : ''}`}>
+    <div className={`document-editor ${props.readOnly ? 'readOnly' : ''} ${syncStatus === 'failed' ? 'sync-failed' : ''}`}>
       <div className="container-fluid">
         <DocumentEditorHeader
           doc={doc}
@@ -61,7 +69,8 @@ const DocumentEditor = props => {
 
         <DocumentEditorFooter
           toolbarId={toolbarId}
-          readOnly={props.readOnly} />
+          readOnly={props.readOnly}
+          syncStatus={syncStatus} />
       </div>
     </div>
   )
