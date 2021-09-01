@@ -9,7 +9,7 @@ const DocumentEditorFooter = props => {
   const toolbarCollapseId = `${props.toolbarId}-collapse`
 
   return (
-    <div className={`document-editor-footer position-sticky py-1`} style={{ bottom: '-1rem' }}>
+    <div className={`document-editor-footer position-sticky py-1`} style={{ bottom: '-1rem', zIndex: 3 }}>
       <div className="container-fluid mb-3">
         <div className="row gx-3 align-items-center">
           <div className="col" style={{ width: 0 }}>

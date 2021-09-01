@@ -66,7 +66,7 @@ const StaticBody = props => {
             <button
               type="button"
               className="position-absolute bottom-0 btn btn-light rounded-pill"
-              style={{ transform: 'translateY(50%)', zIndex: 1 }}
+              style={{ zIndex: 1 }}
               onClick={event => {
                 event.preventDefault()
                 props.setCollapsed(false)
