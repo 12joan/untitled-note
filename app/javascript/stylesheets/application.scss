@@ -154,7 +154,7 @@ html, body {
   @extend .p-lg;
 
   &:not(.readOnly) {
-    .title-input, .react-tags, .trix-editor {
+    .title-input, .react-tags {
       @extend .dim-on-hover;
     }
   }

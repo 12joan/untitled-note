@@ -51,12 +51,16 @@ const DocumentEditor = props => {
           readOnly={props.readOnly} />
       </div>
 
-      <DocumentEditorBodyEditor
-        doc={doc}
-        readOnly={props.readOnly}
-        startCollapsedIfLong={props.startCollapsedIfLong}
-        toolbarId={toolbarId}
-        updateDocument={updateDocument} />
+      <div className="d-flex">
+        <div className="flex-grow-1 overflow-auto" style={{ width: 0 }}>
+          <DocumentEditorBodyEditor
+            doc={doc}
+            readOnly={props.readOnly}
+            startCollapsedIfLong={props.startCollapsedIfLong}
+            toolbarId={toolbarId}
+            updateDocument={updateDocument} />
+        </div>
+      </div>
 
       <DocumentEditorFooter
         toolbarId={toolbarId}
