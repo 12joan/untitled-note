@@ -16,6 +16,7 @@ const NavLink = props => {
     <a
       href={buildUrl({ ...params, ...props.params })}
       className={`${props.className} ${isActive ? props.activeClassName : props.inactiveClassName}`}
+      title={props.title}
       onClick={event => {
         event.preventDefault()
         setParams(props.params)

@@ -6,7 +6,6 @@ import { useContext } from 'lib/context'
 import useSynchronisedRecord from 'lib/useSynchronisedRecord'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
-import DocumentEditorHeader from 'components/documents/editor/DocumentEditorHeader'
 import DocumentEditorTitleBar from 'components/documents/editor/DocumentEditorTitleBar'
 import DocumentEditorKeywords from 'components/documents/editor/DocumentEditorKeywords'
 import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditorBodyEditor'
@@ -38,40 +37,31 @@ const DocumentEditor = props => {
 
   return (
     <div className={`document-editor ${props.readOnly ? 'readOnly' : ''} ${syncStatus === 'failed' ? 'sync-failed' : ''}`}>
-      <div className="container-fluid">
-        <DocumentEditorHeader
-          doc={doc}
-          openable={props.openable} />
+      <DocumentEditorTitleBar
+        doc={doc}
+        readOnly={props.readOnly}
+        editorUUID={editorUUID}
+        updateDocument={updateDocument}
+        showOpenButton={props.openable} />
 
-        <DocumentEditorTitleBar
+      <div className="mb-2">
+        <DocumentEditorKeywords
           doc={doc}
-          readOnly={props.readOnly}
-          editorUUID={editorUUID}
-          updateDocument={updateDocument} />
+          updateDocument={updateDocument}
+          readOnly={props.readOnly} />
       </div>
 
-      <div className="row mb-2">
-        <div className="col">
-          <DocumentEditorKeywords
-            doc={doc}
-            updateDocument={updateDocument}
-            readOnly={props.readOnly} />
-        </div>
-      </div>
+      <DocumentEditorBodyEditor
+        doc={doc}
+        readOnly={props.readOnly}
+        startCollapsedIfLong={props.startCollapsedIfLong}
+        toolbarId={toolbarId}
+        updateDocument={updateDocument} />
 
-      <div>
-        <DocumentEditorBodyEditor
-          doc={doc}
-          readOnly={props.readOnly}
-          startCollapsedIfLong={props.startCollapsedIfLong}
-          toolbarId={toolbarId}
-          updateDocument={updateDocument} />
-
-        <DocumentEditorFooter
-          toolbarId={toolbarId}
-          readOnly={props.readOnly}
-          syncStatus={syncStatus} />
-      </div>
+      <DocumentEditorFooter
+        toolbarId={toolbarId}
+        readOnly={props.readOnly}
+        syncStatus={syncStatus} />
     </div>
   )
 }
