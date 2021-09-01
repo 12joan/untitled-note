@@ -288,6 +288,10 @@ html, body {
       }
     }
 
+    & > :last-child {
+      margin-bottom: 0 !important;
+    }
+
     h1 {
       @extend .h3;
     }

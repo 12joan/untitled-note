@@ -9,14 +9,14 @@ const DocumentEditorFooter = props => {
   const toolbarCollapseId = `${props.toolbarId}-collapse`
 
   return (
-    <div className={`document-editor-footer position-sticky bottom-0 pb-3`}>
-      <div className="container-fluid">
-        <div className="row gx-3 align-items-center mb-n3">
-          <div className="col mb-3" style={{ width: 0 }}>
+    <div className={`document-editor-footer position-sticky py-1`} style={{ bottom: '-1rem' }}>
+      <div className="container-fluid mb-3">
+        <div className="row gx-3 align-items-center">
+          <div className="col" style={{ width: 0 }}>
             <DocumentEditorToolbar toolbarId={props.toolbarId} toolbarCollapseId={toolbarCollapseId} />
           </div>
 
-          <div className="col-auto ms-auto mb-3">
+          <div className="col-auto ms-auto">
             <button
               className="btn btn-icon fs-5 text-secondary ms-1"
               type="button"
@@ -39,7 +39,7 @@ const DocumentEditorFooter = props => {
             </button>
           </div>
 
-          <div className="col-auto mb-3">
+          <div className="col-auto">
             <DocumentEditorSyncStatusIndicator syncStatus={props.syncStatus} />
           </div>
         </div>
