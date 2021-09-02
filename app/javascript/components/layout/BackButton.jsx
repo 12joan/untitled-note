@@ -16,6 +16,7 @@ const BackButton = props => {
 
   return (
     <NavLink
+      id="back-button"
       className="text-decoration-none"
       params={backButtonConfig.params}>
       <CaretLeftFill className="bi" /> {backButtonConfig.label}

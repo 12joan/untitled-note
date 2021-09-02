@@ -68,6 +68,7 @@ const keyBindings = focusedDocument => {
 
       blur(event.target)
     },
+    'backspace': () => click(document.querySelector('#back-button')),
     'n': () => click(document.querySelector('#new-document-button')),
     's': () => click(document.querySelector('#toggle-sidebar-button')),
     'a': () => click(document.querySelector('#all-documents-link')),

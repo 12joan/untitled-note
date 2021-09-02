@@ -43,6 +43,7 @@ const KeyboardNavigationModal = props => {
       <ShortcutsTable
         config={[
           { keys: 'Escape', description: 'Defocus the current input' },
+          { keys: 'Backspace', description: 'Go back to the parent view' },
           { keys: 'N', description: 'Create a new document' },
           { keys: 'A', description: 'Show All Documents' },
           { keys: 'P', description: 'Show Projects' },
