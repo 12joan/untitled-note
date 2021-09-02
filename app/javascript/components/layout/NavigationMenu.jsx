@@ -18,6 +18,7 @@ const NavigationMenu = props => {
         <div className="d-flex gap-2 align-items-center mb-2">
           <div>
             <button
+              id="all-projects-link"
               className="btn btn-link text-decoration-none"
               data-bs-target="#sidebar-carousel"
               data-bs-slide-to="0">
@@ -34,19 +35,22 @@ const NavigationMenu = props => {
           }
         </div>
 
-        <SectionHeader
-          button={
-            <ProjectDropdownMenu />
-          }>
-          <h2 className="fs-5 m-0">{project.name}</h2>
-        </SectionHeader>
+        <Section>
+          <SectionHeader
+            button={
+              <ProjectDropdownMenu />
+            }>
+            <h2 className="fs-5 m-0">{project.name}</h2>
+          </SectionHeader>
 
-        <SectionList>
-          <NavigationMenuItem
-            params={{ keywordId: undefined, documentId: undefined }}>
-            All Documents
-          </NavigationMenuItem>
-        </SectionList>
+          <SectionList>
+            <NavigationMenuItem
+              id="all-documents-link"
+              params={{ keywordId: undefined, documentId: undefined }}>
+              All Documents
+            </NavigationMenuItem>
+          </SectionList>
+        </Section>
 
         <PinnedDocumentsMenu />
 
@@ -90,10 +94,10 @@ const PinnedDocumentsMenu = props => {
         }
 
         return (
-          <>
+          <Section id="pinned-documents-section">
             <SectionHeader>
               <h6 className="small text-secondary m-0">
-                Pinned documents
+                Pinned Documents
               </h6>
             </SectionHeader>
 
@@ -108,7 +112,7 @@ const PinnedDocumentsMenu = props => {
                 ))
               }
             </SectionList>
-          </>
+          </Section>
         )
       }} />
   )
@@ -141,7 +145,7 @@ const KeywordsMenu = props => {
         }
 
         return (
-          <>
+          <Section id="keywords-section">
             <SectionHeader>
               <h6 className="small text-secondary m-0">
                 Keywords
@@ -159,9 +163,17 @@ const KeywordsMenu = props => {
                 ))
               }
             </SectionList>
-          </>
+          </Section>
         )
       }} />
+  )
+}
+
+const Section = props => {
+  return (
+    <div id={props.id}>
+      {props.children}
+    </div>
   )
 }
 
@@ -210,6 +222,7 @@ const NavigationMenuItem = props => {
 
   return (
     <NavLink
+      id={props.id}
       className="navigation-menu-item"
       activeClassName="active"
       params={props.params}

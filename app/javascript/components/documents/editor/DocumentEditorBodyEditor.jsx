@@ -65,7 +65,7 @@ const StaticBody = props => {
           <div className="position-absolute bottom-0 w-100 d-flex justify-content-center">
             <button
               type="button"
-              className="position-absolute bottom-0 btn btn-light rounded-pill"
+              className="show-more-button position-absolute bottom-0 btn btn-light rounded-pill"
               style={{ zIndex: 1 }}
               onClick={event => {
                 event.preventDefault()

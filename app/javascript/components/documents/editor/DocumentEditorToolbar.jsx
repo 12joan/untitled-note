@@ -60,12 +60,25 @@ const ButtonGroup = props => {
 }
 
 const ToolbarButton = props => {
+  const onKeyDown = event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.target.dispatchEvent(new MouseEvent('mousedown', {
+        'bubbles': true,
+        'cancelable': true,
+      }))
+
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   const IconComponent = props.icon
 
   return (
     <button
       type="button"
       className="btn btn-toolbar"
+      onKeyDown={onKeyDown}
       data-trix-attribute={props.attribute}
       data-trix-action={props.action}
       data-trix-key={props.shortcut}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { useContext } from 'lib/context'
@@ -12,7 +12,7 @@ import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditor
 import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFooter'
 
 const DocumentEditor = props => {
-  const { projectId, loadDocumentCache } = useContext()
+  const { projectId, loadDocumentCache, focusedDocument } = useContext()
 
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
@@ -31,12 +31,17 @@ const DocumentEditor = props => {
     uncontrolledParams: ['updated_at'],
   })
 
-  const [editorUUID] = useState(() => uuid())
+  const documentEditorRef = useRef()
 
+  const [editorUUID] = useState(() => uuid())
   const toolbarId = `trix-toolbar-${editorUUID}`
 
   return (
-    <div className={`document-editor ${props.readOnly ? 'readOnly' : ''} ${syncStatus === 'failed' ? 'sync-failed' : ''}`}>
+    <div
+      ref={documentEditorRef}
+      className={`document-editor ${props.readOnly ? 'readOnly' : ''} ${syncStatus === 'failed' ? 'sync-failed' : ''}`}
+      tabIndex="0"
+      onFocus={() => focusedDocument.set(documentEditorRef.current)}>
       <DocumentEditorTitleBar
         doc={doc}
         readOnly={props.readOnly}

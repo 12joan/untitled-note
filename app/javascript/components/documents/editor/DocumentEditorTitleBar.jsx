@@ -32,7 +32,7 @@ const DocumentEditorTitleBar = props => {
         {
           props.showOpenButton && (
             <NavLink
-              className="btn btn-icon fs-4 text-secondary"
+              className="open-document-button btn btn-icon fs-4 text-secondary"
               params={{ documentId: props.doc.id }}
               title="Open Document">
               <BoxArrowUpRight className="bi" style={{ transform: 'scale(0.75)' }} />

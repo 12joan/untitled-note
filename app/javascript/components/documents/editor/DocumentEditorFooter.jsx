@@ -18,7 +18,7 @@ const DocumentEditorFooter = props => {
 
           <div className="col-auto ms-auto">
             <button
-              className="btn btn-icon fs-5 text-secondary ms-1"
+              className="toggle-formatting-controls btn btn-icon fs-5 text-secondary ms-1"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#${toolbarCollapseId}`}

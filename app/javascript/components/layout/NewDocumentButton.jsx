@@ -25,6 +25,7 @@ const NewDocumentButton = props => {
 
   return (
     <button
+      id="new-document-button"
       className="btn btn-light rounded-pill"
       onClick={openBlankDocument}
       disabled={loadingBlankDocument}>

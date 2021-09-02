@@ -15,6 +15,7 @@ const NavLink = props => {
   return (
     <a
       href={buildUrl({ ...params, ...props.params })}
+      id={props.id}
       className={`${props.className} ${isActive ? props.activeClassName : props.inactiveClassName}`}
       title={props.title}
       onClick={event => {

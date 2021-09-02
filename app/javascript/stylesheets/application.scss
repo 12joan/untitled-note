@@ -75,6 +75,23 @@ html, body {
   background-color: $gray-300;
 }
 
+.focusable:focus {
+  &:focus {
+    box-shadow: $input-focus-box-shadow;
+    outline: none;
+  }
+}
+
+kbd {
+  @extend .border;
+  @extend .bg-light;
+  @extend .text-dark;
+
+  display: inline-block;
+  text-align: center;
+  min-width: 2em;
+}
+
 .dropdown-item {
   &.dropdown-item-danger {
     &:active {
@@ -122,6 +139,7 @@ html, body {
     @extend .px-3;
     @extend .py-1;
     @extend .text-decoration-none;
+    @extend .focusable;
 
     &.active {
       @extend .bg-primary;
@@ -131,7 +149,7 @@ html, body {
     &:not(.active) {
       @extend .text-dark;
 
-      &:hover {
+      &:hover, &:focus {
         @extend .bg-light;
       }
     }
@@ -152,6 +170,11 @@ html, body {
   @extend .shadow;
   @extend .rounded-lg;
   @extend .p-lg;
+  @extend .focusable;
+
+  &:focus {
+    box-shadow: $input-focus-box-shadow, $box-shadow !important;
+  }
 
   &:not(.readOnly) {
     .title-input, .react-tags {

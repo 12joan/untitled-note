@@ -32,7 +32,7 @@ const DocumentDropdownMenu = props => {
       <button
         type="button"
         id={`document-${props.editorUUID}-dropdown-button`}
-        className="btn btn-icon fs-4 text-secondary"
+        className="document-dropdown-button btn btn-icon fs-4 text-secondary"
         data-bs-toggle="dropdown"
         aria-expanded="false">
         <ThreeDots className="bi" />
