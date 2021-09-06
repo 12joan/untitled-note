@@ -4,8 +4,6 @@ import { useContext } from 'lib/context'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import LoadPromise from 'components/LoadPromise'
-import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
-import DocumentEditor from 'components/documents/DocumentEditor'
 
 const LoadDocument = props => {
   const { projectId, loadDocumentCache, keyword } = useContext()
@@ -15,13 +13,8 @@ const LoadDocument = props => {
       dependenciesRequiringClear={[props.id]}
       promise={loadDocumentCache.cachePromise(props.id, () => DocumentsAPI(projectId).show(props.id))}
 
-      success={doc => (
-        <DocumentEditor
-          key={doc.id}
-          {...props.editorProps(doc)} />
-      )}
-
-      loading={() => <DocumentPlaceholder />}
+      success={props.success}
+      loading={props.loading}
 
       error={error => {
         console.error(error)

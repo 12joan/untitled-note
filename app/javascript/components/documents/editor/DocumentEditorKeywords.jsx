@@ -128,7 +128,7 @@ const DocumentEditorKeywords = props => {
       onInput={autoSelectFirstItem}
       onFocus={autoSelectFirstItem}
 
-      tagComponent={options => <Tag {...options} readOnly={props.readOnly} />} />
+      tagComponent={options => <Tag {...options} />} />
   )
 }
 
@@ -144,7 +144,6 @@ const Tag = props => (
       className="btn-delete position-relative border-0 p-0 rounded-circle text-primary"
       style={{ width: '1.2em', height: '1.2em', zIndex: 2 }}
       onClick={props.onDelete}
-      disabled={props.readOnly}
       title={props.removeButtonText}>
       <Cross className="bi" />
       <span className="visually-hidden">{props.removeButtonText}</span>

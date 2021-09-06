@@ -17,10 +17,6 @@ const KeyboardNavigationModal = props => {
 
       <ShortcutsTable
         config={[
-          {
-            keys: [ { icon: '↑', label: 'Up arrow' }, { icon: '↓', label: 'Down arrow' } ],
-            description: 'Move focus between documents',
-          },
           { keys: 'T', description: 'Select title' },
           { keys: 'K', description: 'Select keyword field' },
           { keys: 'I', description: 'Focus body' },
@@ -48,6 +44,7 @@ const KeyboardNavigationModal = props => {
           { keys: 'A', description: 'Show All Documents' },
           { keys: 'P', description: 'Show Projects' },
           { keys: 'S', description: 'Toggle sidebar' },
+          { keys: 'shift+D', description: 'Focus documents' },
           { keys: 'shift+T', description: 'Focus top bar' },
           { keys: 'shift+S', description: 'Focus sidebar' },
           { keys: 'shift+N', description: 'Focus active item in navigation menu' },

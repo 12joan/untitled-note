@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThreeDots } from 'react-bootstrap-icons'
+import { ThreeDotsVertical } from 'react-bootstrap-icons'
 
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import { useContext } from 'lib/context'
@@ -35,7 +35,7 @@ const DocumentDropdownMenu = props => {
         className="document-dropdown-button btn btn-icon fs-4 text-secondary"
         data-bs-toggle="dropdown"
         aria-expanded="false">
-        <ThreeDots className="bi" />
+        <ThreeDotsVertical className="bi" />
         <span className="visually-hidden">Toggle dropdown</span>
       </button>
 

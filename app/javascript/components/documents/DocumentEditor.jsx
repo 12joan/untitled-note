@@ -12,7 +12,7 @@ import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditor
 import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFooter'
 
 const DocumentEditor = props => {
-  const { projectId, loadDocumentCache, focusedDocument } = useContext()
+  const { projectId, loadDocumentCache } = useContext()
 
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
@@ -42,31 +42,23 @@ const DocumentEditor = props => {
       className={`
         document-editor d-flex flex-column
         ${props.fullHeight ? 'flex-grow-1' : ''}
-        ${props.readOnly ? 'readOnly' : ''}
         ${syncStatus === 'failed' ? 'sync-failed' : ''}
-      `}
-      tabIndex="0"
-      onFocus={() => focusedDocument.set(documentEditorRef.current)}>
+      `}>
       <DocumentEditorTitleBar
         doc={doc}
-        readOnly={props.readOnly}
         editorUUID={editorUUID}
-        updateDocument={updateDocument}
-        showOpenButton={props.openable} />
+        updateDocument={updateDocument} />
 
       <div className="mb-2">
         <DocumentEditorKeywords
           doc={doc}
-          updateDocument={updateDocument}
-          readOnly={props.readOnly} />
+          updateDocument={updateDocument} />
       </div>
 
       <div className="flex-grow-1 d-flex">
         <div className="flex-grow-1 d-flex flex-column overflow-auto" style={{ width: 0 }}>
           <DocumentEditorBodyEditor
             doc={doc}
-            readOnly={props.readOnly}
-            startCollapsedIfLong={props.startCollapsedIfLong}
             toolbarId={toolbarId}
             updateDocument={updateDocument} />
         </div>
@@ -74,7 +66,6 @@ const DocumentEditor = props => {
 
       <DocumentEditorFooter
         toolbarId={toolbarId}
-        readOnly={props.readOnly}
         syncStatus={syncStatus} />
     </div>
   )

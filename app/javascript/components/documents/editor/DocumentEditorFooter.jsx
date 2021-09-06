@@ -23,7 +23,6 @@ const DocumentEditorFooter = props => {
               data-bs-toggle="collapse"
               data-bs-target={`#${toolbarCollapseId}`}
               title="Toggle formatting controls"
-              disabled={props.readOnly}
               aria-expanded="false"
               aria-controls={toolbarCollapseId}>
               <Palette className="bi" />

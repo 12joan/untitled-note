@@ -2,6 +2,7 @@
 @import "./actiontext";
 
 $enable-negative-margins: true;
+$enable-cssgrid: true;
 $transition-collapse: none;
 $offcanvas-transition-duration: 0.3s;
 $carousel-transition-duration: 0.3s;
@@ -75,10 +76,14 @@ html, body {
   background-color: $gray-300;
 }
 
+.focused {
+  box-shadow: $input-focus-box-shadow;
+  outline: none;
+}
+
 .focusable:focus {
   &:focus {
-    box-shadow: $input-focus-box-shadow;
-    outline: none;
+    @extend .focused;
   }
 }
 
@@ -156,6 +161,47 @@ kbd {
   }
 }
 
+.document-grid-tile {
+  position: relative;
+
+  &:focus-within .document-grid-tile-card {
+    @extend .focused;
+  }
+
+  &:hover, &:focus-within {
+    .document-grid-tile-card {
+      @extend .bg-light;
+    }
+  }
+
+  .document-grid-tile-card {
+    @extend .card;
+    @extend .card-body;
+    @extend .ratio;
+    @extend .ratio-16x9;
+
+    overflow: hidden;
+    border-radius: calc(var(--sheet-border-radius) * 0.75);
+
+    .document-grid-tile-preview {
+      position: absolute;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+
+      transform: scale(0.5);
+      transform-origin: top;
+      pointer-events: none;
+
+      padding: calc(var(--sheet-padding) * 0.75);
+    }
+  }
+
+  .document-grid-tile-label a {
+    outline: none;
+  }
+}
+
 .document-placeholder {
   @extend .placeholder;
   @extend .d-block;
@@ -170,22 +216,9 @@ kbd {
   @extend .shadow;
   @extend .rounded-lg;
   @extend .p-lg;
-  @extend .focusable;
 
-  &:focus {
-    box-shadow: $input-focus-box-shadow, $box-shadow !important;
-  }
-
-  &:not(.readOnly) {
-    .title-input, .react-tags {
-      @extend .dim-on-hover;
-    }
-  }
-
-  &.readOnly {
-    .react-tags__search-input {
-      @extend .d-none;
-    }
+  .title-input, .react-tags {
+    @extend .dim-on-hover;
   }
 
   &.sync-failed::after {
@@ -285,64 +318,7 @@ kbd {
   }
 
   trix-editor {
-    @extend .trix-editor;
-  }
-
-  .trix-editor {
-    @extend .h-100;
-    @extend .m-0;
-    @extend .p-0;
-    @extend .rounded-0;
-
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.125em;
-    border: none;
-    outline: none;
-    min-height: 80px;
-
-    &.collapsed {
-      max-height: 80px;
-      overflow: hidden;
-      cursor: pointer;
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-      }
-    }
-
-    & > :last-child {
-      margin-bottom: 0 !important;
-    }
-
-    h1 {
-      @extend .h3;
-    }
-
-    blockquote {
-      @extend .p-3;
-
-      border-left: 0.35em solid $secondary;
-    }
-
-    pre {
-      @extend .card;
-      @extend .card-body;
-      @extend .bg-transparent;
-
-      br {
-        margin-top: 1em;
-      }
-    }
-
-    a {
-      cursor: pointer;
-    }
+    @extend .document-body;
   }
 
   .trix-toolbar {
@@ -361,6 +337,47 @@ kbd {
         @extend .text-secondary;
       }
     }
+  }
+}
+
+.document-body {
+  @extend .h-100;
+  @extend .m-0;
+  @extend .p-0;
+  @extend .rounded-0;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.125em;
+  border: none;
+  outline: none;
+  min-height: 80px;
+
+  & > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  h1:not(.title) {
+    @extend .h3;
+  }
+
+  blockquote {
+    @extend .p-3;
+
+    border-left: 0.35em solid $secondary;
+  }
+
+  pre {
+    @extend .card;
+    @extend .card-body;
+    @extend .bg-transparent;
+
+    br {
+      margin-top: 1em;
+    }
+  }
+
+  a {
+    cursor: pointer;
   }
 }
 

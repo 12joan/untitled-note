@@ -7,7 +7,7 @@ import { useContext } from 'lib/context'
  * Don't forget to update KeyboardNavigationModal with changes
  */
 
-const keyBindings = focusedDocument => {
+const keyBindings = event => {
   // Limit keyboard shortcuts to the currently open modal of offcanvas if present
   const scope = document.querySelector('.modal.show') || document.querySelector('.offcanvas.show') || document
 
@@ -36,38 +36,18 @@ const keyBindings = focusedDocument => {
     }
   }
 
-  const changeFocusedDocument = delta => {
-    focusedDocument.then(doc => {
-      const allDocuments = [...document.querySelectorAll('.document-editor')]
-      focus(allDocuments[allDocuments.indexOf(doc) + delta])
-    })
-  }
-
   return {
   // Document shortcuts
-    't': () => select(focusedDocument.then(doc => doc.querySelector('.title-input'))),
-    'k': () => select(focusedDocument.then(doc => doc.querySelector('.react-tags__search-input'))),
-    'i': () => focusedDocument.then(doc => {
-      click(doc.querySelector('.show-more-button'))
-      focus(doc.querySelector('trix-editor'))
-    }),
-    'm': () => focus(focusedDocument.then(doc => doc.querySelector('.document-dropdown-button'))),
-    'o': () => click(focusedDocument.then(doc => doc.querySelector('.open-document-button'))),
-    'f': () => focus(focusedDocument.then(doc => doc.querySelector('.toggle-formatting-controls'))),
+    't': () => select(document.querySelector('.document-editor .title-input')),
+    'k': () => select(document.querySelector('.document-editor .react-tags__search-input')),
+    'i': () => focus(document.querySelector('.document-editor trix-editor')),
+    'm': () => focus(document.querySelector('.document-editor .document-dropdown-button')),
+    'f': () => focus(document.querySelector('.document-editor .toggle-formatting-controls')),
     'arrowdown': () => changeFocusedDocument(1),
     'arrowup': () => changeFocusedDocument(-1),
 
     // General shortcuts
-    'escape': () => {
-      for (let node = event.target; node.parentNode !== null; node = node.parentNode) {
-        if (node.matches?.('.document-editor')) {
-          focus(node)
-          return
-        }
-      }
-
-      blur(event.target)
-    },
+    'escape': () => blur(event.target),
     'backspace': () => click(document.querySelector('#back-button')),
     'n': () => click(document.querySelector('#new-document-button')),
     's': () => click(document.querySelector('#toggle-sidebar-button')),
@@ -76,6 +56,7 @@ const keyBindings = focusedDocument => {
       click(document.querySelector('#all-projects-link'))
       focus(document.querySelector('.btn-project.selected'))
     },
+    'shift+d': () => focus(document.querySelector('.document-grid-tile .document-grid-tile-label a')),
     'shift+s': () => focus(document.querySelector('#sidebar-focusable')),
     'shift+n': () => {
       focus(document.querySelector('#sidebar-focusable'))
@@ -89,8 +70,6 @@ const keyBindings = focusedDocument => {
 }
 
 const KeyboardShortcutHandler = props => {
-  const { focusedDocument } = useContext()
-
   useEffect(() => {
     const onKeyDown = event => {
       // Prevent unintentionally overriding browser or OS keyboard shortcuts
@@ -104,7 +83,7 @@ const KeyboardShortcutHandler = props => {
 
       const key = `${event.shiftKey ? 'shift+' : ''}${event.key.toLowerCase()}`
 
-      const handler = keyBindings(focusedDocument)[key]
+      const handler = keyBindings(event)[key]
 
       if (handler !== undefined) {
         event.preventDefault()
@@ -115,7 +94,7 @@ const KeyboardShortcutHandler = props => {
     document.addEventListener('keydown', onKeyDown)
 
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [focusedDocument])
+  }, [])
 
   return props.children
 }

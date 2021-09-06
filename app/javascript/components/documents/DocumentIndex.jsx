@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEffect } from 'react'
 import useLocalStorage from 'react-use-localstorage'
 
 import { useContext } from 'lib/context'
@@ -10,7 +9,7 @@ import ContentHeader from 'components/layout/ContentHeader'
 import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
 import LoadPromise from 'components/LoadPromise'
 import LoadDocument from 'components/documents/LoadDocument'
-import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
+import DocumentGridTile from 'components/documents/DocumentGridTile'
 
 const DocumentIndex = props => {
   const { projectId, keywordId, keyword, documentIndexKey } = useContext()
@@ -55,40 +54,36 @@ const DocumentIndex = props => {
         </ContentHeader>
       </div>
 
-      <LoadPromise
-        dependencies={[sortParameter, documentIndexKey]}
-        dependenciesRequiringClear={[projectId, keywordId]}
-        promise={() => action({ searchParams })}
+      <div className="grid">
+        <LoadPromise
+          dependencies={[sortParameter, documentIndexKey]}
+          dependenciesRequiringClear={[projectId, keywordId]}
+          promise={() => action({ searchParams })}
 
-        success={documents => documents.map(doc => (
-          <div key={doc.id} className="mb-3">
+          success={documents => documents.map(doc => (
             <LoadDocument
+              key={doc.id}
               id={doc.id}
-              editorProps={doc => ({
-                document: doc,
-                openable: true,
-                startCollapsedIfLong: true,
-              })} />
-          </div>
-        ))}
 
-        loading={() => (
-          <>
-            <div className="mb-3" children={<DocumentPlaceholder />} />
-            <div className="mb-3" children={<DocumentPlaceholder />} />
-            <div className="mb-3" children={<DocumentPlaceholder />} />
-          </>
-        )}
+              loading={() => <></>}
 
-        error={error => {
-          console.error(error)
+              success={doc => (
+                <DocumentGridTile doc={doc} />
+              )} />
+          ))}
 
-          return (
-            <div className="alert alert-danger">
-              <strong>Failed to load documents:</strong> An unexpected error occurred
-            </div>
-          )
-        }} />
+          loading={() => <></>}
+
+          error={error => {
+            console.error(error)
+
+            return (
+              <div className="alert alert-danger">
+                <strong>Failed to load documents:</strong> An unexpected error occurred
+              </div>
+            )
+          }} />
+      </div>
     </div>
   )
 }

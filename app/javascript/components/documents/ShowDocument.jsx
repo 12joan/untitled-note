@@ -4,6 +4,8 @@ import { useContext } from 'lib/context'
 
 import ContentHeader from 'components/layout/ContentHeader'
 import LoadDocument from 'components/documents/LoadDocument'
+import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
+import DocumentEditor from 'components/documents/DocumentEditor'
 
 const ShowDocument = props => {
   const { keyword } = useContext()
@@ -16,16 +18,21 @@ const ShowDocument = props => {
 
       <LoadDocument
         id={props.id}
-        editorProps={doc => ({
-          document: {
-            ...doc,
-            keywords: (doc.blank && keyword !== undefined)
-              ? [...doc.keywords, keyword]
-              : doc.keywords,
-          },
 
-          fullHeight: true,
-        })} />
+        loading={() => (
+          <DocumentPlaceholder fullHeight />
+        )}
+
+        success={doc => (
+          <DocumentEditor
+            document={doc}
+            keywords={
+              (doc.blank && keyword !== undefined)
+                ? [...doc.keywords, keyword]
+                : doc.keywords
+            }
+            fullHeight />
+        )} />
     </div>
   )
 }
