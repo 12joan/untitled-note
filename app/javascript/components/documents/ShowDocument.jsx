@@ -9,7 +9,7 @@ const ShowDocument = props => {
   const { keyword } = useContext()
 
   return (
-    <div className="p-3">
+    <div className="p-3 d-flex flex-column" style={{ minHeight: '100%' }}>
       <div className="mb-3">
         <ContentHeader />
       </div>
@@ -23,6 +23,8 @@ const ShowDocument = props => {
               ? [...doc.keywords, keyword]
               : doc.keywords,
           },
+
+          fullHeight: true,
         })} />
     </div>
   )

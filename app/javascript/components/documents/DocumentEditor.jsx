@@ -39,7 +39,12 @@ const DocumentEditor = props => {
   return (
     <div
       ref={documentEditorRef}
-      className={`document-editor ${props.readOnly ? 'readOnly' : ''} ${syncStatus === 'failed' ? 'sync-failed' : ''}`}
+      className={`
+        document-editor d-flex flex-column
+        ${props.fullHeight ? 'flex-grow-1' : ''}
+        ${props.readOnly ? 'readOnly' : ''}
+        ${syncStatus === 'failed' ? 'sync-failed' : ''}
+      `}
       tabIndex="0"
       onFocus={() => focusedDocument.set(documentEditorRef.current)}>
       <DocumentEditorTitleBar
@@ -56,8 +61,8 @@ const DocumentEditor = props => {
           readOnly={props.readOnly} />
       </div>
 
-      <div className="d-flex">
-        <div className="flex-grow-1 overflow-auto" style={{ width: 0 }}>
+      <div className="flex-grow-1 d-flex">
+        <div className="flex-grow-1 d-flex flex-column overflow-auto" style={{ width: 0 }}>
           <DocumentEditorBodyEditor
             doc={doc}
             readOnly={props.readOnly}

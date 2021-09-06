@@ -280,6 +280,10 @@ kbd {
     }
   }
 
+  [id^="trix-editor-top-level-"] {
+    flex-grow: 1;
+  }
+
   trix-editor {
     @extend .trix-editor;
   }
