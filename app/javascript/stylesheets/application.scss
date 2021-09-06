@@ -200,6 +200,7 @@ kbd {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1035; // Just below offcanvas-backdrop
   }
 
   .document-editor-footer {
