@@ -166,7 +166,7 @@ kbd {
   }
 
   &:hover, &:focus-within {
-    .document-grid-tile-card {
+    .document-grid-tile-card:not(.placeholder) {
       @extend .bg-light;
     }
   }

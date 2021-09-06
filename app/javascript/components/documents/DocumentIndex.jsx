@@ -9,7 +9,7 @@ import ContentHeader from 'components/layout/ContentHeader'
 import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
 import LoadPromise from 'components/LoadPromise'
 import LoadDocument from 'components/documents/LoadDocument'
-import DocumentGridTile from 'components/documents/DocumentGridTile'
+import { DocumentGridTile, DocumentGridTilePlaceholder } from 'components/documents/DocumentGridTile'
 
 const DocumentIndex = props => {
   const { projectId, keywordId, keyword, documentIndexKey } = useContext()
@@ -30,7 +30,7 @@ const DocumentIndex = props => {
     : keyword.text
 
   return (
-    <div className="p-3 pb-0">
+    <div className="p-3">
       <div className="mb-3">
         <ContentHeader>
           <div className="dropdown">
@@ -65,7 +65,7 @@ const DocumentIndex = props => {
               key={doc.id}
               id={doc.id}
 
-              loading={() => <></>}
+              loading={() => <DocumentGridTilePlaceholder />}
 
               success={doc => (
                 <DocumentGridTile doc={doc} />

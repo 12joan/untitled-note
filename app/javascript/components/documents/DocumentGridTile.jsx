@@ -18,8 +18,10 @@ const DocumentGridTile = props => {
   }, [])
 
   return (
-    <div id={cardId} className="document-grid-tile g-col-12 g-col-sm-6 g-col-md-4 g-col-xl-3">
-      <div className="document-grid-tile-card">
+    <DocumentGridTileContainer
+      cardId={cardId}
+
+      cardBody={
         <div className="document-grid-tile-preview">
           <div ref={documentBodyRef} className="document-body">
             {
@@ -31,21 +33,41 @@ const DocumentGridTile = props => {
             <div dangerouslySetInnerHTML={{ __html: props.doc.body }} />
           </div>
         </div>
+      }
+
+      label={
+        <label htmlFor={cardId} className="document-grid-tile-label d-block text-center py-1">
+          <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
+            {
+              (/[^\s]/.test(props.doc.title || ''))
+                ? props.doc.title 
+                : (
+                  <span className="visually-hidden">Untitled Document</span>
+                )
+            }
+          </NavLink>
+        </label>
+      } />
+  )
+}
+
+const DocumentGridTilePlaceholder = props => {
+  return (
+    <DocumentGridTileContainer
+      cardClassName="placeholder border-0" />
+  )
+}
+
+const DocumentGridTileContainer = props => {
+  return (
+    <div id={props.cardId} className="document-grid-tile g-col-12 g-col-sm-6 g-col-md-4 g-col-xl-3">
+      <div className={`document-grid-tile-card ${props.cardClassName || ''}`}>
+        {props.cardBody}
       </div>
 
-      <label htmlFor={cardId} className="document-grid-tile-label d-block text-center py-1">
-        <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
-          {
-            (/[^\s]/.test(props.doc.title || ''))
-              ? props.doc.title 
-              : (
-                <span className="visually-hidden">Untitled Document</span>
-              )
-          }
-        </NavLink>
-      </label>
+      {props.label}
     </div>
   )
 }
 
-export default DocumentGridTile
+export { DocumentGridTile, DocumentGridTilePlaceholder }
