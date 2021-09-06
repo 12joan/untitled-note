@@ -11,13 +11,12 @@ const TopBar = props => {
   return (
     <nav
       id="top-bar"
-      className="focusable navbar navbar-light bg-white border-bottom d-flex p-2 gap-3"
-      tabIndex="0"
+      className="navbar navbar-light bg-white border-bottom d-flex p-2 gap-3"
       style={{ zIndex: 1030 }}>
       <button
         type="button"
         id="toggle-sidebar-button"
-        className="btn btn-lg btn-icon btn-icon-inline text-secondary"
+        className="focus-target btn btn-lg btn-icon btn-icon-inline text-secondary"
         title="Toggle sidebar"
         onClick={toggleSidebarEvent.invoke}>
         <LayoutSidebar className="bi" />

@@ -65,7 +65,7 @@ const Sidebar = props => {
           className={`h-100 ${isOffcanvas ? 'offcanvas offcanvas-start' : 'border-end visible'}`}
           id="sidebar">
           <div className="h-100 carousel slide" data-bs-interval="false" id="sidebar-carousel">
-            <div className="focusable h-100 carousel-inner" tabIndex="0" id="sidebar-focusable">
+            <div className="h-100 carousel-inner">
               <div className="h-100 carousel-item">
                 <ProjectsBar />
               </div>

@@ -46,10 +46,9 @@ const KeyboardNavigationModal = props => {
           { keys: 'S', description: 'Toggle sidebar' },
           { keys: 'shift+D', description: 'Focus documents' },
           { keys: 'shift+T', description: 'Focus top bar' },
-          { keys: 'shift+S', description: 'Focus sidebar' },
-          { keys: 'shift+N', description: 'Focus active item in navigation menu' },
-          { keys: 'shift+P', description: 'Focus Pinned Documents section' },
-          { keys: 'shift+K', description: 'Focus Keywords section' },
+          { keys: 'shift+N', description: 'Focus navigation menu' },
+          { keys: 'shift+P', description: 'Focus Pinned Documents section of navigation menu' },
+          { keys: 'shift+K', description: 'Focus Keywords section of navigation menu' },
           { keys: 'shift+?', description: 'Show keyboard navigation help' },
         ]} />
 

@@ -19,7 +19,7 @@ const NavigationMenu = props => {
           <div>
             <button
               id="all-projects-link"
-              className="btn btn-link text-decoration-none"
+              className="focus-target btn btn-link text-decoration-none"
               data-bs-target="#sidebar-carousel"
               data-bs-slide-to="0">
               <CaretLeftFill className="bi" /> All Projects

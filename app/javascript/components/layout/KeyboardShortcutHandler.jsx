@@ -57,14 +57,13 @@ const keyBindings = event => {
       focus(document.querySelector('.btn-project.selected'))
     },
     'shift+d': () => focus(document.querySelector('.document-grid-tile .document-grid-tile-label a')),
-    'shift+s': () => focus(document.querySelector('#sidebar-focusable')),
     'shift+n': () => {
-      focus(document.querySelector('#sidebar-focusable'))
+      focus(document.querySelector('.navigation-menu .focus-target'))
       focus(document.querySelector('.navigation-menu-item.active'))
     },
     'shift+p': () => focus(document.querySelector('#pinned-documents-section .navigation-menu-item')),
     'shift+k': () => focus(document.querySelector('#keywords-section .navigation-menu-item')),
-    'shift+t': () => focus(document.querySelector('#top-bar')),
+    'shift+t': () => focus(document.querySelector('#top-bar .focus-target')),
     'shift+?': () => click(document.querySelector('#keyboard-navigation-button')),
   }
 }

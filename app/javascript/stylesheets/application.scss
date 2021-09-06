@@ -81,12 +81,6 @@ html, body {
   outline: none;
 }
 
-.focusable:focus {
-  &:focus {
-    @extend .focused;
-  }
-}
-
 kbd {
   @extend .border;
   @extend .bg-light;
@@ -144,7 +138,10 @@ kbd {
     @extend .px-3;
     @extend .py-1;
     @extend .text-decoration-none;
-    @extend .focusable;
+
+    &:focus {
+      @extend .focused;
+    }
 
     &.active {
       @extend .bg-primary;
