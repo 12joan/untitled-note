@@ -43,8 +43,6 @@ const keyBindings = event => {
     'i': () => focus(document.querySelector('.document-editor trix-editor')),
     'm': () => focus(document.querySelector('.document-editor .document-dropdown-button')),
     'f': () => focus(document.querySelector('.document-editor .toggle-formatting-controls')),
-    'arrowdown': () => changeFocusedDocument(1),
-    'arrowup': () => changeFocusedDocument(-1),
 
     // General shortcuts
     'escape': () => blur(event.target),
