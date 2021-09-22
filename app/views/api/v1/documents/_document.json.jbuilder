@@ -9,6 +9,5 @@ if_requested(:created_at) { json.created_at document.created_at }
 if_requested(:updated_at) { json.updated_at document.updated_at }
 if_requested(:pinned_at) { json.pinned_at document.pinned_at }
 
-if_requested(:url) { json.url api_v1_project_document_url(document.project, document, format: :json) }
 if_requested(:body) { json.body document.body.body.as_json }
 if_requested(:keywords) { json.keywords document.keywords, partial: '/api/v1/keywords/keyword', as: :keyword }

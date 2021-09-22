@@ -9,6 +9,9 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
+  include Queryable.permit(*%i[id title blank created_at updated_at pinned_at body_content keywords])
+  include Listenable
+
   after_initialize do |document|
     # Ensure document has a title (side effect of #title_record)
     raise 'Failed to create title for document' if title_record.nil?
@@ -33,6 +36,10 @@ class Document < ApplicationRecord
   def has_changes_to_save?
     # Make sure updated_at gets updated
     super || @title_dirty
+  end
+
+  def body_content
+    body.body.as_json
   end
 
   def keywords_attributes=(keywords_attributes)
