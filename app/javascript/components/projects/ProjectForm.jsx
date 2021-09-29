@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { useContext } from 'lib/context'
 
 const ProjectForm = props => {
-  const { reloadProjects } = useContext()
-
   const [name, setName] = useState(props.initialProject.name || '')
 
   const [isUploading, setIsUploading] = useState(false)
@@ -28,8 +26,7 @@ const ProjectForm = props => {
     props.action(project)
       .then(project => {
         setErrors({})
-        reloadProjects()
-          .then(() => props.onComplete?.(project))
+        props.onComplete?.(project)
       })
       .catch(error => {
         if (error.notOkayStatus && error.response.statusText === 'Unprocessable Entity') {

@@ -3,22 +3,82 @@ require 'test_helper'
 class DocumentsAPITest < APITestCase
   setup do
     @project = create(:project)
-    @documents = 3.times.map { create(:document, project: @project) }
+    @keyword = create(:keyword, project: @project)
 
-    @params = {
+    @documents = [].tap do |documents|
+      documents << create(:document, project: @project, updated_at: 3.days.ago, pinned_at: 1.hour.ago)
+      documents << create(:document, project: @project, updated_at: 1.days.ago, keywords: [@keyword])
+      documents << create(:document, project: @project, updated_at: 2.days.ago, keywords: [@keyword], pinned_at: 1.hour.ago)
+      documents << create(:document, project: @project, updated_at: 2.days.ago, blank: true)
+    end
+
+    @index_params = {
       project_id: @project.id,
-      query: :all,
+      query: { id: true },
+      sort_by: 'created_at',
+      sort_direction: 'asc',
+    }
+
+    @shown_document = @documents.first
+
+    @show_params = {
+      project_id: @project.id,
+      id: @shown_document.id,
+      query: { id: true },
     }
   end
 
   test 'DocumentsAPI#index respects query' do
-    @params.merge!(query: { id: true })
-    assert_equal @documents.map { ({ id: _1.id }) }, documents_api.index
+    assert_equal \
+      [@documents.first, @documents.second, @documents.third].map { ({ id: _1.id }) },
+      index_result
+  end
+
+  test 'DocumentsAPI#index filters by keyword_id if present' do
+    @index_params.merge!(keyword_id: @keyword.id)
+
+    assert_equal \
+      [@documents.second, @documents.third].map(&:id),
+      index_result.map { _1.fetch(:id) }
+  end
+
+  test 'DocumentsAPI#index applies sort_by and sort_direction if present' do
+    @index_params.merge!(sort_by: 'updated_at', sort_direction: 'desc')
+
+    assert_equal \
+      [@documents.second, @documents.third, @documents.first].map(&:id),
+      index_result.map { _1.fetch(:id) }
+  end
+
+  test 'DocumentsAPI#index excludes blank documents' do
+    refute_includes \
+      index_result.map { _1.fetch(:id) },
+      @documents.fourth.id
+  end
+
+  test 'DocumentsAPI#index returns only pinned documents if pinned param is set' do
+    @index_params.merge!(pinned: true)
+
+    assert_equal \
+      [@documents.first, @documents.third].map(&:id),
+      index_result.map { _1.fetch(:id) }
+  end
+
+  test 'DocumentsAPI#show respects query' do
+    @show_params.merge!(query: { id: true, title: true })
+
+    assert_equal \
+      ({ id: @shown_document.id, title: @shown_document.title }),
+      show_result
   end
 
   private
 
-  def documents_api
-    DocumentsAPI.new(@params)
+  def index_result
+    DocumentsAPI.new(@index_params).index
+  end
+
+  def show_result
+    DocumentsAPI.new(@show_params).show
   end
 end

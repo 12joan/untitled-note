@@ -1,13 +1,9 @@
 import React from 'react'
 import { BoxArrowUpRight } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
-
 import DocumentDropdownMenu from 'components/documents/editor/DocumentDropdownMenu'
 
 const DocumentEditorTitleBar = props => {
-  const { reloadPinnedDocuments } = useContext()
-
   return (
     <div className="row gx-3 align-items-center">
       <div className="col flex-grow-1">
@@ -17,7 +13,6 @@ const DocumentEditorTitleBar = props => {
           placeholder="Title"
           onChange={event => {
             props.updateDocument({ title: event.target.value })
-              .then(reloadPinnedDocuments)
           }} />
       </div>
 

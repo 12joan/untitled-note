@@ -20,15 +20,15 @@ const NewProjectModal = withRouter(props => {
   }
 
   const performDeletion = () => {
+    const currentModal = modal.current
+
     setDeleting(true)
 
     ProjectsAPI.destroy(project)
       .then(() => {
-        modal.current.hide()
+        currentModal.hide()
         reloadProjects()
-          .then(() => {
-            setParams({ projectId: undefined, keywordId: undefined, documentId: undefined })
-          })
+        setParams({ projectId: undefined, keywordId: undefined, documentId: undefined })
       })
       .catch(error => {
         console.error(error)

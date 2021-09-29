@@ -1,25 +1,22 @@
 import consumer from './consumer'
 
-const streamAction = (model, action, params) => consumer.subscriptions.create(
+const streamAction = (model, action, params, callback) => consumer.subscriptions.create(
   {
     channel: 'DataChannel',
     model,
     action,
-    params,
+    params: {
+      ...params,
+      __subscription_id: Math.random(), // Allow multiple identical subscriptions
+    },
   },
 
   {
-    connected() {
-      // Called when the subscription is ready for use on the server
-    },
-
-    disconnected() {
-      // Called when the subscription has been terminated by the server
-    },
+    connected() {},
+    disconnected() {},
 
     received(data) {
-      // Called when there's incoming data on the websocket for this channel
-      console.log('Received:', data)
+      callback(JSON.parse(data))
     },
   },
 )

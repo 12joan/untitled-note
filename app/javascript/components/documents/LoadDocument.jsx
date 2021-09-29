@@ -1,17 +1,21 @@
 import React from 'react'
 
 import { useContext } from 'lib/context'
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
+import DocumentsStream from 'lib/streams/DocumentsStream'
 
-import LoadPromise from 'components/LoadPromise'
+import LoadAsync from 'components/LoadAsync'
 
 const LoadDocument = props => {
-  const { projectId, loadDocumentCache, keyword } = useContext()
+  const { projectId } = useContext()
 
   return (
-    <LoadPromise
+    <LoadAsync
       dependenciesRequiringClear={[props.id]}
-      promise={loadDocumentCache.cachePromise(props.id, () => DocumentsAPI(projectId).show(props.id))}
+
+      provider={(resolve, reject) => {
+        const subscription = DocumentsStream(projectId).show(props.id, {}, resolve)
+        return () => subscription.unsubscribe()
+      }}
 
       success={props.success}
       loading={props.loading}

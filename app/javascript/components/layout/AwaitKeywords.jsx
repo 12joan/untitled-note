@@ -1,21 +1,22 @@
 import React from 'react'
 
 import { useContext, ContextProvider } from 'lib/context'
-import useRemountKey from 'lib/useRemountKey'
-import KeywordsAPI from 'lib/resources/KeywordsAPI'
+import KeywordsStream from 'lib/streams/KeywordsStream'
 
-import LoadPromise from 'components/LoadPromise'
+import LoadAsync from 'components/LoadAsync'
 import AppPlaceholder from 'components/layout/AppPlaceholder'
 
 const AwaitKeywords = props => {
   const { projectId } = useContext()
 
-  const [reloadKeywordsKey, reloadKeywords] = useRemountKey()
-
   return (
-    <LoadPromise
-      dependencies={[projectId, reloadKeywordsKey]}
-      promise={() => KeywordsAPI(projectId).index()}
+    <LoadAsync
+      dependencies={[projectId]}
+
+      provider={(resolve, reject) => {
+        const subscription = KeywordsStream(projectId).index({}, resolve)
+        return () => subscription.unsubscribe()
+      }}
 
       loading={() => <AppPlaceholder />}
 
@@ -30,7 +31,7 @@ const AwaitKeywords = props => {
       }}
 
       success={keywords => (
-        <ContextProvider keywords={keywords} reloadKeywordsKey={reloadKeywordsKey} reloadKeywords={reloadKeywords}>
+        <ContextProvider keywords={keywords}>
           {props.children}
         </ContextProvider>
       )} />

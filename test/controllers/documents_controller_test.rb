@@ -6,11 +6,6 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     @project = @document.project
   end
 
-  test 'should get index' do
-    get api_v1_project_documents_url(@project)
-    assert_response :success
-  end
-
   test 'should create document' do
     assert_difference('Document.count') do
       assert_difference('Keyword.count', 2) do
@@ -29,11 +24,6 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal 'New title', Document.last.title
-  end
-
-  test 'should show document' do
-    get api_v1_project_document_url(@project, @document)
-    assert_response :success
   end
 
   test 'should update document' do

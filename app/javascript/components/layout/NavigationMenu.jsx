@@ -2,11 +2,10 @@ import React from 'react'
 import { CaretLeftFill } from 'react-bootstrap-icons'
 
 import { useContext, ContextProvider } from 'lib/context'
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
-import KeywordsAPI from 'lib/resources/KeywordsAPI'
+import DocumentsStream from 'lib/streams/DocumentsStream'
 
 import NavLink from 'components/NavLink'
-import LoadPromise from 'components/LoadPromise'
+import LoadAsync from 'components/LoadAsync'
 import ProjectDropdownMenu from 'components/layout/ProjectDropdownMenu'
 
 const NavigationMenu = props => {
@@ -61,20 +60,23 @@ const NavigationMenu = props => {
 }
 
 const PinnedDocumentsMenu = props => {
-  const { projectId, documentIndexKey, pinnedDocumentsKey } = useContext()
+  const { projectId } = useContext()
+
+  const indexParams = {
+    query: { id: true, title: true },
+    pinned: true,
+    sort_by: 'pinned_at',
+    sort_direction: 'asc',
+  }
 
   return (
-    <LoadPromise
-      dependencies={[documentIndexKey, pinnedDocumentsKey]}
+    <LoadAsync
       dependenciesRequiringClear={[projectId]}
-      promise={() => DocumentsAPI(projectId).index({
-        searchParams: {
-          'sort_by': 'pinned_at',
-          'sort_direction': 'asc',
-          'pinned': true,
-          'select': 'id,title',
-        },
-      })}
+
+      provider={(resolve, reject) => {
+        const subscription = DocumentsStream(projectId).index(indexParams, resolve)
+        return () => subscription.unsubscribe()
+      }}
 
       loading={() => <SectionListPlaceholder />}
 
@@ -119,53 +121,32 @@ const PinnedDocumentsMenu = props => {
 }
 
 const KeywordsMenu = props => {
-  const { projectId, documentId, reloadKeywordsKey } = useContext()
+  const { keywords } = useContext()
+
+  if (keywords.length === 0) {
+    return null
+  }
 
   return (
-    <LoadPromise
-      dependencies={[reloadKeywordsKey]}
-      dependenciesRequiringClear={[projectId]}
-      promise={() => KeywordsAPI(projectId).index()}
+    <Section id="keywords-section">
+      <SectionHeader>
+        <h6 className="small text-secondary m-0">
+          Keywords
+        </h6>
+      </SectionHeader>
 
-      loading={() => <SectionListPlaceholder />}
-
-      error={error => {
-        console.error(error)
-
-        return (
-          <div className="alert alert-danger">
-            <strong>Failed to load keywords</strong>
-          </div>
-        )
-      }}
-
-      success={keywords => {
-        if (keywords.length === 0) {
-          return null
+      <SectionList>
+        {
+          keywords.map(keyword => (
+            <NavigationMenuItem
+              key={keyword.id}
+              params={{ keywordId: keyword.id, documentId: undefined }}>
+              {keyword.text}
+            </NavigationMenuItem>
+          ))
         }
-
-        return (
-          <Section id="keywords-section">
-            <SectionHeader>
-              <h6 className="small text-secondary m-0">
-                Keywords
-              </h6>
-            </SectionHeader>
-
-            <SectionList>
-              {
-                keywords.map(keyword => (
-                  <NavigationMenuItem
-                    key={keyword.id}
-                    params={{ keywordId: keyword.id, documentId: undefined }}>
-                    {keyword.text}
-                  </NavigationMenuItem>
-                ))
-              }
-            </SectionList>
-          </Section>
-        )
-      }} />
+      </SectionList>
+    </Section>
   )
 }
 

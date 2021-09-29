@@ -6,4 +6,5 @@ class Keyword < ApplicationRecord
   validates :text, presence: true, uniqueness: { scope: :project }
 
   include Queryable.permit(*%i[id text project_id created_at updated_at])
+  include Listenable
 end

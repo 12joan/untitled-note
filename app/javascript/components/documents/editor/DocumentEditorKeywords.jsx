@@ -8,7 +8,7 @@ import { useContext } from 'lib/context'
 import NavLink from 'components/NavLink'
 
 const DocumentEditorKeywords = props => {
-  const { keywords: allKeywords, reloadKeywords } = useContext()
+  const { keywords: allKeywords } = useContext()
 
   const reactTags = useRef()
 
@@ -50,8 +50,6 @@ const DocumentEditorKeywords = props => {
   }
 
   const afterAddition = ({ localRecord, remoteRecord }) => {
-    reloadKeywords()
-
     props.updateDocument({
       keywords: localRecord.keywords.map(oldKeyword => {
         const newKeyword = remoteRecord.keywords.find(keyword => keyword.text === oldKeyword.text)
@@ -65,9 +63,7 @@ const DocumentEditorKeywords = props => {
     }, false)
   }
 
-  const afterDelete = () => {
-    reloadKeywords()
-  }
+  const afterDelete = () => {}
 
   useEffect(() => {
     const inputEl = reactTags.current.input?.current?.input?.current

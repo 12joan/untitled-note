@@ -1,18 +1,8 @@
 module API
   module V1
     class DocumentsController < ApplicationController
-      include DocumentsQueryable
-
       before_action :set_project
-      before_action :set_document, only: %i[ show edit update destroy ]
-      before_action :set_requested_attributes, only: %i[ index show ]
-
-      def index
-        @documents = query_documents(@project.documents, params)
-      end
-
-      def show
-      end
+      before_action :set_document, only: %i[ update destroy ]
 
       def create
         @document = @project.documents.build(document_params)
@@ -22,7 +12,7 @@ module API
         end
 
         if @document.save
-          render :show, status: :created, location: api_v1_project_document_url(@project, @document)
+          render json: @document.query(:all)
         else
           puts @document.errors.inspect
           render json: @document.errors, status: :unprocessable_entity
@@ -37,7 +27,7 @@ module API
         end
 
         if @document.save
-          render :show, status: :created, location: api_v1_project_document_url(@project, @document)
+          render json: @document.query(:all)
         else
           render json: @document.errors, status: :unprocessable_entity
         end

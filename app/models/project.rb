@@ -5,4 +5,5 @@ class Project < ApplicationRecord
   validates :name, presence: true
 
   include Queryable.permit(*%i[id name created_at updated_at])
+  include Listenable
 end
