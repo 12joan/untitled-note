@@ -1,20 +1,13 @@
 module API
   module V1
     class ProjectsController < ApplicationController
-      before_action :set_project, only: %i[ show edit update destroy ]
-
-      def index
-        @projects = Project.all.order(:created_at)
-      end
-
-      def show
-      end
+      before_action :set_project, only: %i[ update destroy ]
 
       def create
         @project = Project.new(project_params)
 
         if @project.save
-          render :show, status: :created, location: api_v1_project_url(@project)
+          render json: @project.query(:all)
         else
           render json: @project.errors, status: :unprocessable_entity
         end
@@ -22,7 +15,7 @@ module API
 
       def update
         if @project.update(project_params)
-          render :show, status: :created, location: api_v1_project_url(@project)
+          render json: @project.query(:all)
         else
           render json: @project.errors, status: :unprocessable_entity
         end

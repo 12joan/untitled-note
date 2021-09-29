@@ -2,27 +2,23 @@ import React from 'react'
 import useLocalStorage from 'react-use-localstorage'
 
 import { useContext } from 'lib/context'
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
-import KeywordDocumentsAPI from 'lib/resources/KeywordDocumentsAPI'
+import DocumentsStream from 'lib/streams/DocumentsStream'
 
 import ContentHeader from 'components/layout/ContentHeader'
 import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
-import LoadPromise from 'components/LoadPromise'
+import LoadAsync from 'components/LoadAsync'
 import LoadDocument from 'components/documents/LoadDocument'
 import { DocumentGridTile, DocumentGridTilePlaceholder } from 'components/documents/DocumentGridTile'
 
 const DocumentIndex = props => {
-  const { projectId, keywordId, keyword, documentIndexKey } = useContext()
+  const { projectId, keywordId, keyword } = useContext()
 
   const [sortParameter, setSortParameter] = useLocalStorage('document-index-sort-parameter', 'created_at')
 
-  const action = keywordId === undefined
-    ? (...args) => DocumentsAPI(projectId).index(...args)
-    : (...args) => KeywordDocumentsAPI(projectId, keywordId).index(...args)
-
-  const searchParams = {
-    'sort_by': sortParameter,
-    'select': 'id',
+  const indexParams = {
+    query: { id: true },
+    keyword_id: keywordId,
+    sort_by: sortParameter,
   }
 
   const viewDropdownLabel = (keywordId === undefined)
@@ -55,10 +51,13 @@ const DocumentIndex = props => {
       </div>
 
       <div className="grid">
-        <LoadPromise
-          dependencies={[sortParameter, documentIndexKey]}
+        <LoadAsync
+          dependencies={[sortParameter]}
           dependenciesRequiringClear={[projectId, keywordId]}
-          promise={() => action({ searchParams })}
+          provider={(resolve, reject) => {
+            const subscription = DocumentsStream(projectId).index(indexParams, resolve)
+            return () => subscription.unsubscribe()
+          }}
 
           success={documents => documents.map(doc => (
             <LoadDocument

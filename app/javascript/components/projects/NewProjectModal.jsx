@@ -8,7 +8,7 @@ import Modal from 'components/Modal'
 import NewProjectForm from 'components/projects/NewProjectForm'
 
 const NewProjectModal = props => {
-  const { setParams, reloadProjects } = useContext()
+  const { setParams } = useContext()
 
   const modal = useRef(null)
 

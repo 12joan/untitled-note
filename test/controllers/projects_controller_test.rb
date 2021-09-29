@@ -5,21 +5,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project = create(:project)
   end
 
-  test 'should get index' do
-    get api_v1_projects_url
-    assert_response :success
-  end
-
   test 'should create project' do
     assert_difference('Project.count') do
       post api_v1_projects_url, params: { project: { name: 'New project' } }
     end
 
-    assert_response :success
-  end
-
-  test 'should show project' do
-    get api_v1_project_url(@project)
     assert_response :success
   end
 

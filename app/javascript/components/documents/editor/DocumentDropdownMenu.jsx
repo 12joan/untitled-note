@@ -5,7 +5,7 @@ import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import { useContext } from 'lib/context'
 
 const DocumentDropdownMenu = props => {
-  const { projectId, setParams, reloadDocumentIndex, reloadKeywords, reloadPinnedDocuments } = useContext()
+  const { projectId, setParams } = useContext()
 
   const pinned = props.doc.pinned_at !== null
 
@@ -13,7 +13,6 @@ const DocumentDropdownMenu = props => {
     props.updateDocument({
       pinned_at: pinned ? null : new Date().toISOString(),
     })
-      .then(reloadPinnedDocuments)
   }
 
   const downloadAsMarkdown = () => {
@@ -23,8 +22,6 @@ const DocumentDropdownMenu = props => {
   const performDestroy = () => {
     DocumentsAPI(projectId).destroy(props.doc)
       .then(() => setParams({ documentId: undefined }))
-      .then(reloadKeywords)
-      .then(reloadDocumentIndex)
   }
 
   return (

@@ -2,16 +2,6 @@ import ResourcesAPI from 'lib/ResourcesAPI'
 
 const DocumentsAPI = projectId => new ResourcesAPI({
   apiEndpoints: {
-    index: {
-      url: () => `/api/v1/projects/${projectId}/documents`,
-      method: 'GET',
-    },
-
-    show: {
-      url: id => `/api/v1/projects/${projectId}/documents/${id}`,
-      method: 'GET',
-    },
-
     create: {
       url: () => `/api/v1/projects/${projectId}/documents`,
       method: 'POST',

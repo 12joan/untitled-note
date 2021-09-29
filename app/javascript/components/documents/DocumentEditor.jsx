@@ -12,21 +12,12 @@ import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditor
 import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFooter'
 
 const DocumentEditor = props => {
-  const { projectId, loadDocumentCache } = useContext()
+  const { projectId } = useContext()
 
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
     synchroniseRecord: doc => {
-      const priorCachedVersion = loadDocumentCache.pull(doc.id)
-
-      loadDocumentCache.push(doc.id, doc)
-
-      return DocumentsAPI(projectId)
-        .update(doc)
-        .catch(error => {
-          loadDocumentCache.push(doc.id, priorCachedVersion)
-          return Promise.reject(error)
-        })
+      return DocumentsAPI(projectId).update(doc)
     },
     uncontrolledParams: ['updated_at'],
   })

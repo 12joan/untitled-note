@@ -1,39 +1,22 @@
 import React from 'react'
-import { useState } from 'react'
 
 import { ContextProvider } from 'lib/context'
 import useRemountKey from 'lib/useRemountKey'
-import ProjectsAPI from 'lib/resources/ProjectsAPI'
+import ProjectsStream from 'lib/streams/ProjectsStream'
 
-import LoadPromise from 'components/LoadPromise'
+import LoadAsync from 'components/LoadAsync'
 import AppPlaceholder from 'components/layout/AppPlaceholder'
-import RunOnMount from 'components/RunOnMount'
 
 const AwaitProjects = props => {
   const [reloadProjectsKey, reloadProjects] = useRemountKey()
-  const [projectsUpdatedKey, projectsUpdated] = useRemountKey()
-  const [promiseCallbacks, setPromiseCallbacks] = useState(undefined)
-
-  const reloadProjectsAndWait = () => {
-    return new Promise((resolve, reject) => {
-      setPromiseCallbacks({ resolve, reject })
-      reloadProjects()
-    })
-  }
 
   return (
-    <LoadPromise
-      dependencies={[reloadProjectsKey]}
-      promise={() => {
-        return ProjectsAPI.index()
-          .then(projects => {
-            projectsUpdated()
-            return projects
-          })
-          .catch(error => {
-            projectsUpdated()
-            return Promise.reject(error)
-          })
+    <LoadAsync
+      dependenciesRequiringClear={[reloadProjectsKey]}
+
+      provider={(resolve, reject) => {
+        const subscription = ProjectsStream.index({}, resolve)
+        return () => subscription.unsubscribe()
       }}
 
       loading={() => <AppPlaceholder />}
@@ -41,16 +24,8 @@ const AwaitProjects = props => {
       error={error => {
         console.error(error)
 
-        promiseCallbacks?.reject(error)
-        setPromiseCallbacks(undefined)
-
         return (
           <>
-            <RunOnMount onMount={() => {
-              promiseCallbacks?.reject()
-              setPromiseCallbacks(undefined)
-            }} dependencies={[projectsUpdatedKey]} />
-
             <div className="alert alert-danger">
               <strong>Failed to load projects:</strong> An unexpected error occurred
             </div>
@@ -59,12 +34,7 @@ const AwaitProjects = props => {
       }}
 
       success={projects => (
-        <ContextProvider projects={projects} reloadProjects={reloadProjectsAndWait}>
-          <RunOnMount onMount={() => {
-            promiseCallbacks?.resolve(projects)
-            setPromiseCallbacks(undefined)
-          }} dependencies={[projectsUpdatedKey]} />
-
+        <ContextProvider projects={projects} reloadProjects={reloadProjects}>
           {
             projects.length === 0
               ? props.noProjects()
