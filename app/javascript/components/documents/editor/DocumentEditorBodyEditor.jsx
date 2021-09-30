@@ -15,7 +15,7 @@ const DocumentEditorBodyEditor = props => {
 
     editorLoaded.current = true
 
-    editor.element.addEventListener('click', props.onClick)
+    editor.element.addEventListener('click', handleClick)
   }
 
   const handleClick = event => {
