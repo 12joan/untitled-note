@@ -12,8 +12,11 @@ const DocumentGridTile = props => {
       // Prevent tab focus within preview
       element.setAttribute('tabindex', '-1')
 
-      // Prevent visible scrollbars inside preview 
-      element.style.overflow = 'hidden'
+      // Prevent visible scrollbars inside preview
+      // (Hiding overflow on list items interferes with visibility of bullets and numbers)
+      if (element.tagName !== 'LI') {
+        element.style.overflow = 'hidden'
+      }
     })
   }, [])
 
