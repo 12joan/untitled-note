@@ -1,5 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
+import { Modal, Offcanvas } from 'bootstrap'
 
 import { useContext } from 'lib/context'
 
@@ -45,7 +46,19 @@ const keyBindings = event => {
     'f': () => focus(document.querySelector('.document-editor .toggle-formatting-controls')),
 
     // General shortcuts
-    'escape': () => blur(event.target),
+    'escape': () => {
+      let modalOrOffcanvas
+
+      if (modalOrOffcanvas = document.querySelector('.modal.show')) {
+        Modal.getInstance(modalOrOffcanvas).hide()
+        event.stopPropagation()
+      } else if (modalOrOffcanvas = document.querySelector('.offcanvas.show')) {
+        Offcanvas.getInstance(modalOrOffcanvas).hide()
+        event.stopPropagation()
+      } else {
+        blur(event.target)
+      }
+    },
     'backspace': () => click(document.querySelector('#back-button')),
     'n': () => click(document.querySelector('#new-document-button')),
     's': () => click(document.querySelector('#toggle-sidebar-button')),
@@ -88,9 +101,9 @@ const KeyboardShortcutHandler = props => {
       }
     }
 
-    document.addEventListener('keydown', onKeyDown)
+    document.addEventListener('keydown', onKeyDown, true)
 
-    return () => document.removeEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown, true)
   }, [])
 
   return props.children
