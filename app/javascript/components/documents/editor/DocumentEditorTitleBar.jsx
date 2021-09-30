@@ -11,6 +11,7 @@ const DocumentEditorTitleBar = props => {
           className="title-input"
           value={props.doc.title}
           placeholder="Title"
+          autoFocus={props.doc.blank}
           onChange={event => {
             props.updateDocument({ title: event.target.value })
           }} />
