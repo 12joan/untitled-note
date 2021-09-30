@@ -1,4 +1,5 @@
 import React from 'react'
+import { forwardRef } from 'react'
 
 import { useContext } from 'lib/context'
 
@@ -7,7 +8,7 @@ import LoadDocument from 'components/documents/LoadDocument'
 import DocumentPlaceholder from 'components/documents/DocumentPlaceholder'
 import DocumentEditor from 'components/documents/DocumentEditor'
 
-const ShowDocument = props => {
+const ShowDocument = forwardRef((props, ref) => {
   const { keyword } = useContext()
 
   return (
@@ -35,6 +36,6 @@ const ShowDocument = props => {
         )} />
     </div>
   )
-}
+})
 
 export default ShowDocument

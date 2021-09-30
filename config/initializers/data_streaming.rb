@@ -29,8 +29,10 @@ Rails.application.reloader.to_prepare do
 
     listeners: {
       Document: ->(document) {
-        broadcast "Document#index(project_id: #{document.project_id})"
-        broadcast "Document#show(project_id: #{document.project_id}, id: #{document.id})"
+        unless document.blank
+          broadcast "Document#index(project_id: #{document.project_id})"
+          broadcast "Document#show(project_id: #{document.project_id}, id: #{document.id})"
+        end
       },
 
       Keyword: ->(keyword) {

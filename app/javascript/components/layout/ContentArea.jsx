@@ -1,4 +1,6 @@
 import React from 'react'
+import { useRef } from 'react'
+import { useBottomScrollListener } from 'react-bottom-scroll-listener'
 
 import { useContext, ContextProvider } from 'lib/context'
 
@@ -8,11 +10,21 @@ import DocumentIndex from 'components/documents/DocumentIndex'
 const ContentArea = props => {
   const context = useContext()
   const view = buildView(context)
+  const viewRef = useRef()
+
+  const scrollContainer = useBottomScrollListener(
+    () => viewRef.current?.onScrollToBottom?.(),
+    {
+      triggerOnNoScroll: true,
+      debounce: 0,
+      offset: 400,
+    },
+  )
 
   return (
     <ContextProvider view={view}>
-      <div className="flex-grow-1 overflow-auto bg-light" style={{ scrollPaddingBottom: '3rem' }}>
-        {renderView(view)}
+      <div ref={scrollContainer} className="flex-grow-1 overflow-auto bg-light" style={{ scrollPaddingBottom: '3rem' }}>
+        {renderView(view, viewRef)}
       </div>
     </ContextProvider>
   )
@@ -31,13 +43,13 @@ const buildView = context => {
   }
 }
 
-const renderView = view => {
+const renderView = (view, ref) => {
   switch (view.type) {
     case 'index':
-      return <DocumentIndex />
+      return <DocumentIndex ref={ref} />
 
     case 'show':
-      return <ShowDocument id={view.documentId} />
+      return <ShowDocument ref={ref} id={view.documentId} />
 
     default:
       return null

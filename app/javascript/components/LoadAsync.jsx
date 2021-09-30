@@ -62,7 +62,7 @@ LoadAsync.propTypes = {
 
   success: PropTypes.func.isRequired,
   loading: PropTypes.func.isRequired,
-  error: PropTypes.func.isRequired,
+  error: PropTypes.func,
 }
 
 export default LoadAsync
