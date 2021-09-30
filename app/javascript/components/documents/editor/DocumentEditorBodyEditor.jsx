@@ -39,7 +39,7 @@ const DocumentEditorBodyEditor = props => {
       toolbar={props.toolbarId}
       placeholder="Add document body"
       onEditorReady={handleEditorReady}
-      onChange={body => editorLoaded.current && props.updateDocument({ body })} />
+      onChange={body => editorLoaded.current && props.updateDocument({ body }, { updateImmediately: false })} />
   )
 }
 

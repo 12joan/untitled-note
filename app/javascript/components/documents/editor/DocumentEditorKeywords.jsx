@@ -60,7 +60,7 @@ const DocumentEditorKeywords = props => {
           return oldKeyword
         }
       }),
-    }, false)
+    }, { uploadChanges: false })
   }
 
   const afterDelete = () => {}

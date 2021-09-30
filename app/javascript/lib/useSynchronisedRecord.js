@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 
+import useCounter from 'lib/useCounter'
 import useUnmounting from 'lib/useUnmounting'
 
 const useSynchronisedRecord = ({
@@ -10,9 +11,9 @@ const useSynchronisedRecord = ({
 }) => {
   const [record, setRecord] = useState(initialRecord)
 
-  const [clock, setClock] = useState(0)
-  const [localVersion, setLocalVersion] = useState(0)
-  const [remoteVersion, setRemoteVersion] = useState(0)
+  const [clock, incrementClock] = useCounter()
+  const [localVersion, incrementLocalVersion] = useCounter()
+  const [remoteVersion, setRemoteVersion] = useState(localVersion)
   const [isUploading, setIsUploading] = useState(false)
   const [lastUploadFailed, setLastUploadFailed] = useState(false)
 
@@ -22,7 +23,7 @@ const useSynchronisedRecord = ({
   const unmounting = useUnmounting()
 
   useEffect(() => {
-    const timeout = setInterval(() => setClock(clock => clock + 1), syncInterval)
+    const timeout = setInterval(incrementClock, syncInterval)
     return () => clearTimeout(timeout)
   }, [syncInterval])
 
@@ -41,7 +42,7 @@ const useSynchronisedRecord = ({
               (paramsToUpdate, key) => ({ ...paramsToUpdate, [key]: updatedRecord[key] }),
               {}
             ),
-            false
+            { uploadChanges: false },
           )
 
           setRemoteVersion(uploadingVersion)
@@ -90,14 +91,24 @@ const useSynchronisedRecord = ({
     }
   }, [isDirty, record])
 
-  const updateRecord = (params, incrementLocalVersion = true) => {
+  const updateRecord = (params, options = {}) => {
+    options = {
+      uploadChanges: true,
+      updateImmediately: true,
+      ...options,
+    }
+
     setRecord(record => ({
       ...record,
       ...params,
     }))
 
-    if (incrementLocalVersion) {
-      setLocalVersion(localVersion => localVersion + 1)
+    if (options.uploadChanges) {
+      incrementLocalVersion()
+
+      if (options.updateImmediately) {
+        incrementClock()
+      }
 
       return new Promise((resolve, reject) => {
         updatePromiseCallbacks.current.push({

@@ -13,7 +13,7 @@ const DocumentEditorTitleBar = props => {
           placeholder="Title"
           autoFocus={props.doc.blank}
           onChange={event => {
-            props.updateDocument({ title: event.target.value })
+            props.updateDocument({ title: event.target.value }, { updateImmediately: false })
           }} />
       </div>
 
