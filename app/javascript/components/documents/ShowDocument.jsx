@@ -25,12 +25,12 @@ const ShowDocument = props => {
 
         success={doc => (
           <DocumentEditor
-            document={doc}
-            keywords={
-              (doc.blank && keyword !== undefined)
+            document={{
+              ...doc,
+              keywords: (doc.blank && keyword !== undefined)
                 ? [...doc.keywords, keyword]
-                : doc.keywords
-            }
+                : doc.keywords,
+            }}
             fullHeight />
         )} />
     </div>
