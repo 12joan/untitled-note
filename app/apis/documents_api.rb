@@ -23,7 +23,14 @@ class DocumentsAPI < ApplicationAPI
       allowed_values: %w(asc desc),
     )
 
-    documents.not_blank.order(sort_by => sort_direction).map do |document|
+    documents = documents.not_blank
+    documents = documents.order(sort_by => sort_direction)
+
+    if params[:per_page].present?
+      documents = documents.page(params.fetch(:page, 1)).per(params.fetch(:per_page))
+    end
+
+    documents.map do |document|
       document.query(params[:query])
     end
   end
