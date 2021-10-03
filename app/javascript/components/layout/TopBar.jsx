@@ -6,7 +6,7 @@ import { useContext } from 'lib/context'
 import NewDocumentButton from 'components/layout/NewDocumentButton'
 
 const TopBar = props => {
-  const { toggleSidebarEvent } = useContext()
+  const { sendSidebarEvent } = useContext()
 
   return (
     <nav
@@ -18,7 +18,7 @@ const TopBar = props => {
         id="toggle-sidebar-button"
         className="focus-target btn btn-lg btn-icon btn-icon-inline text-secondary"
         title="Toggle sidebar"
-        onClick={toggleSidebarEvent.invoke}>
+        onClick={() => sendSidebarEvent.invoke('toggle')}>
         <LayoutSidebar className="bi" />
         <span className="visually-hidden">Toggle sidebar</span>
       </button>

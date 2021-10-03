@@ -8,7 +8,7 @@ import { useContext } from 'lib/context'
  * Don't forget to update KeyboardNavigationModal with changes
  */
 
-const keyBindings = event => {
+const keyBindings = (event, context) => {
   // Limit keyboard shortcuts to the currently open modal of offcanvas if present
   const scope = document.querySelector('.modal.show') || document.querySelector('.offcanvas.show') || document
 
@@ -37,6 +37,12 @@ const keyBindings = event => {
     }
   }
 
+  const sendSidebarEvent = eventType => {
+    if (scope.contains(document.querySelector('#sidebar'))) {
+      context.sendSidebarEvent.invoke(eventType)
+    }
+  }
+
   return {
   // Document shortcuts
     't': () => select(document.querySelector('.document-editor .title-input')),
@@ -61,25 +67,35 @@ const keyBindings = event => {
     },
     'backspace': () => click(document.querySelector('#back-button')),
     'n': () => click(document.querySelector('#new-document-button')),
-    's': () => click(document.querySelector('#toggle-sidebar-button')),
+    's': () => sendSidebarEvent('toggle'),
     'a': () => click(document.querySelector('#all-documents-link')),
     'p': () => {
+      sendSidebarEvent('show')
       click(document.querySelector('#all-projects-link'))
       focus(document.querySelector('.btn-project.selected'))
     },
-    'shift+d': () => focus(document.querySelector('.document-grid-tile .document-grid-tile-label a')),
     'shift+n': () => {
+      sendSidebarEvent('show')
       focus(document.querySelector('.navigation-menu .focus-target'))
       focus(document.querySelector('.navigation-menu-item.active'))
     },
-    'shift+p': () => focus(document.querySelector('#pinned-documents-section .navigation-menu-item')),
-    'shift+k': () => focus(document.querySelector('#keywords-section .navigation-menu-item')),
+    'shift+p': () => {
+      sendSidebarEvent('show')
+      focus(document.querySelector('#pinned-documents-section .navigation-menu-item'))
+    },
+    'shift+k': () => {
+      sendSidebarEvent('show')
+      focus(document.querySelector('#keywords-section .navigation-menu-item'))
+    },
+    'shift+d': () => focus(document.querySelector('.document-grid-tile .document-grid-tile-label a')),
     'shift+t': () => focus(document.querySelector('#top-bar .focus-target')),
     'shift+?': () => click(document.querySelector('#keyboard-navigation-button')),
   }
 }
 
 const KeyboardShortcutHandler = props => {
+  const context = useContext()
+
   useEffect(() => {
     const onKeyDown = event => {
       // Prevent unintentionally overriding browser or OS keyboard shortcuts
@@ -93,7 +109,7 @@ const KeyboardShortcutHandler = props => {
 
       const key = `${event.shiftKey ? 'shift+' : ''}${event.key.toLowerCase()}`
 
-      const handler = keyBindings(event)[key]
+      const handler = keyBindings(event, context)[key]
 
       if (handler !== undefined) {
         event.preventDefault()

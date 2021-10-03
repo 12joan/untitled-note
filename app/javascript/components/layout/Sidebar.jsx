@@ -8,7 +8,7 @@ import ProjectsBar from 'components/layout/ProjectsBar'
 import NavigationMenu from 'components/layout/NavigationMenu'
 
 const Sidebar = props => {
-  const { toggleSidebarEvent } = useContext()
+  const { sendSidebarEvent } = useContext()
 
   const viewportWidth = useViewportWidth()
   const isOffcanvas = (viewportWidth === undefined) || viewportWidth < 992
@@ -18,8 +18,21 @@ const Sidebar = props => {
   const collapseInstance = useRef(undefined)
   const offcanvasInstance = useRef(undefined)
 
-  const showOffcanvas = () => offcanvasInstance.current?.show()
-  const dismissOffcanvas = () => offcanvasInstance.current?.hide()
+  const showSidebar = () => {
+    if (isOffcanvas) {
+      offcanvasInstance.current?.show()
+    } else {
+      setSidebarExpanded(true)
+    }
+  }
+
+  const toggleSidebar = () => {
+    if (isOffcanvas) {
+      offcanvasInstance.current?.toggle()
+    } else {
+      setSidebarExpanded(sidebarExpanded => !sidebarExpanded)
+    }
+  }
 
   useEffect(() => {
     if (isOffcanvas) {
@@ -31,19 +44,23 @@ const Sidebar = props => {
         document.querySelector('#sidebar-collapse')
       )
 
-      dismissOffcanvas()
+      offcanvasInstance.current?.hide()
     }
 
-    const onToggle = () => {
-      if (isOffcanvas) {
-        showOffcanvas()
-      } else {
-        setSidebarExpanded(expanded => !expanded)
+    const onSidebarEvent = eventType => {
+      switch (eventType) {
+        case 'toggle':
+          toggleSidebar()
+          break
+
+        case 'show':
+          showSidebar()
+          break
       }
     }
 
-    toggleSidebarEvent.addEventListener(onToggle)
-    return () => toggleSidebarEvent.removeEventListener(onToggle)
+    sendSidebarEvent.addEventListener(onSidebarEvent)
+    return () => sendSidebarEvent.removeEventListener(onSidebarEvent)
   }, [isOffcanvas])
 
   useEffect(() => {
@@ -71,7 +88,7 @@ const Sidebar = props => {
               </div>
 
               <div className="h-100 carousel-item active">
-                <NavigationMenu isOffcanvas={isOffcanvas} dismissOffcanvas={dismissOffcanvas} />
+                <NavigationMenu isOffcanvas={isOffcanvas} dismissOffcanvas={() => offcanvasInstance.current?.hide()} />
               </div>
             </div>
           </div>

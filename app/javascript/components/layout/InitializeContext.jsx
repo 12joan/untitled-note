@@ -5,11 +5,11 @@ import useVirtualEvent from 'lib/useVirtualEvent'
 import { ContextProvider } from 'lib/context'
 
 const InitializeContext = props => {
-  const toggleSidebarEvent = useVirtualEvent()
+  const sendSidebarEvent = useVirtualEvent()
 
   return (
     <ContextProvider
-      toggleSidebarEvent={toggleSidebarEvent}>
+      sendSidebarEvent={sendSidebarEvent}>
       {props.children}
     </ContextProvider>
   )
