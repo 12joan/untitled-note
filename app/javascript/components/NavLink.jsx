@@ -8,22 +8,23 @@ const NavLink = props => {
 
   const params = { projectId, keywordId, documentId }
 
-  const isActive = Object.keys(props.params).every(key =>
-    props.params[key] == params[key] // '==' for lax equality checking
+  const { params: propsParams, className, activeClassName, inactiveClassName, onClick, children, ...otherProps } = props
+
+  const isActive = Object.keys(propsParams).every(key =>
+    propsParams[key] == params[key] // '==' for lax equality checking
   )
 
   return (
     <a
-      href={buildUrl({ ...params, ...props.params })}
-      id={props.id}
-      className={`${props.className} ${isActive ? props.activeClassName : props.inactiveClassName}`}
-      title={props.title}
+      href={buildUrl({ ...params, ...propsParams })}
+      className={`${className} ${isActive ? activeClassName : inactiveClassName}`}
       onClick={event => {
         event.preventDefault()
-        setParams(props.params)
+        setParams(propsParams)
         props.onClick?.(event)
-      }}>
-      {props.children}
+      }}
+      {...otherProps}>
+      {children}
     </a>
   )
 }

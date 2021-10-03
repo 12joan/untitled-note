@@ -72,6 +72,14 @@ html, body {
   padding: var(--sheet-padding);
 }
 
+.mw-fit-content {
+  min-width: fit-content !important;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
 .placeholder {
   background-color: $gray-300;
 }

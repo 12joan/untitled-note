@@ -7,7 +7,8 @@ import useCounter from 'lib/useCounter'
 import DocumentsStream from 'lib/streams/DocumentsStream'
 
 import ContentHeader from 'components/layout/ContentHeader'
-import DocumentIndexMenu from 'components/documents/DocumentIndexMenu'
+import NavLink from 'components/NavLink'
+import DocumentIndexSortButton from 'components/documents/DocumentIndexSortButton'
 import LoadAsync from 'components/LoadAsync'
 import LoadDocument from 'components/documents/LoadDocument'
 import { DocumentGridTile, DocumentGridTilePlaceholder } from 'components/documents/DocumentGridTile'
@@ -52,26 +53,20 @@ const DocumentIndex = forwardRef((props, ref) => {
   return (
     <div className="p-3">
       <div className="mb-3">
-        <ContentHeader>
-          <div className="dropdown">
-            <button
-              type="button"
-              id="view-dropdown"
-              className="btn btn-link text-decoration-none dropdown-toggle"
-              style={{ fontWeight: 500, whiteSpace: 'inherit' }}
-              data-bs-toggle="dropdown"
-              data-bs-auto-close="outside"
-              aria-expanded="false">
+        <ContentHeader
+          middle={
+            <NavLink
+              params={{ keywordId, documentId: undefined }}
+              className="text-decoration-none"
+              style={{ fontWeight: 500 }}>
               {viewDropdownLabel}
-            </button>
-
-            <ul className="dropdown-menu" aria-labelledby="view-dropdown">
-              <DocumentIndexMenu
-                sortParameter={sortParameter}
-                setSortParameter={setSortParameter} />
-            </ul>
-          </div>
-        </ContentHeader>
+            </NavLink>
+          }
+          right={
+            <DocumentIndexSortButton
+              sortParameter={sortParameter}
+              setSortParameter={setSortParameter} />
+          } />
       </div>
 
       <div className="grid">
