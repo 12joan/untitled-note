@@ -26,7 +26,7 @@ const NewDocumentButton = props => {
   return (
     <button
       id="new-document-button"
-      className="btn btn-light rounded-pill"
+      className="btn btn-light btn-sm rounded-pill"
       onClick={openBlankDocument}
       disabled={loadingBlankDocument}>
       <PencilSquare className="bi" /> New Document

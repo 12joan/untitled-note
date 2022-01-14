@@ -22,12 +22,10 @@ const Modal = forwardRef((props, ref) => {
 
   return (
     <div ref={modalEl} id={id} className="modal fade" tabIndex="-1" {...otherProps}>
-      <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content border-0 rounded-lg p-lg">
-          <div className="modal-header border-0 p-0 mb-2">
-            <h1 className="modal-title h2">
-              {title}
-            </h1>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content border-0 shadow" style={{ borderRadius: '0.75rem' }}>
+          <div className="modal-header border-0 p-4">
+            <h2 className="fw-bold mb-0">{title}</h2>
 
             <button
               type="button"
@@ -36,7 +34,7 @@ const Modal = forwardRef((props, ref) => {
               aria-label="Close" />
           </div>
 
-          <div className="modal-body p-0 mb-n3">
+          <div className="modal-body p-4 pt-0">
             {children}
           </div>
         </div>

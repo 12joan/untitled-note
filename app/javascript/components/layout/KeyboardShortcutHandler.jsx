@@ -49,7 +49,6 @@ const keyBindings = (event, context) => {
     'k': () => select(document.querySelector('.document-editor .react-tags__search-input')),
     'i': () => focus(document.querySelector('.document-editor trix-editor')),
     'm': () => focus(document.querySelector('.document-editor .document-dropdown-button')),
-    'f': () => focus(document.querySelector('.document-editor .toggle-formatting-controls')),
 
     // General shortcuts
     'escape': () => {

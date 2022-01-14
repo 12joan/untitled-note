@@ -1,6 +1,16 @@
 require 'test_helper'
 
 class DocumentTest < ActiveSupport::TestCase
+  test 'safe_title == title when title is present' do
+    document = create(:document, title: 'Hi')
+    assert_equal 'Hi', document.safe_title
+  end
+
+  test 'safe_title takes a default value when title is absent' do
+    document = create(:document, title: '')
+    assert_equal 'Untitled document', document.safe_title
+  end
+
   test 'creating a document creates a new title alias' do
     assert_difference('Alias.count') do
       create(:document)

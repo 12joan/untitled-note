@@ -74,27 +74,25 @@ const Sidebar = props => {
   }, [sidebarExpanded, isOffcanvas])
 
   return (
-    <>
+    <div
+      className={`col-auto mh-100 ${isOffcanvas ? '' : 'collapse collapse-horizontal'}`}
+      id="sidebar-collapse">
       <div
-        className={`col-auto mh-100 ${isOffcanvas ? '' : 'collapse collapse-horizontal'}`}
-        id="sidebar-collapse">
-        <div
-          className={`h-100 ${isOffcanvas ? 'offcanvas offcanvas-start' : 'border-end visible'}`}
-          id="sidebar">
-          <div className="h-100 carousel slide" data-bs-interval="false" id="sidebar-carousel">
-            <div className="h-100 carousel-inner">
-              <div className="h-100 carousel-item">
-                <ProjectsBar />
-              </div>
+        className={`h-100 ${isOffcanvas ? 'offcanvas offcanvas-start' : 'border-end visible'}`}
+        id="sidebar">
+        <div className="h-100 carousel slide" data-bs-interval="false" id="sidebar-carousel">
+          <div className="h-100 carousel-inner">
+            <div className="h-100 carousel-item">
+              <ProjectsBar />
+            </div>
 
-              <div className="h-100 carousel-item active">
-                <NavigationMenu isOffcanvas={isOffcanvas} dismissOffcanvas={() => offcanvasInstance.current?.hide()} />
-              </div>
+            <div className="h-100 carousel-item active">
+              <NavigationMenu isOffcanvas={isOffcanvas} dismissOffcanvas={() => offcanvasInstance.current?.hide()} />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

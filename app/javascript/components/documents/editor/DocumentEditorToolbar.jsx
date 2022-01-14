@@ -19,41 +19,31 @@ import {
 
 const DocumentEditorToolbar = props => {
   return (
-    <div className="trix-toolbar" id={props.toolbarId}>
-      <div className="collapse" id={props.toolbarCollapseId}>
-        <ButtonGroup>
-          <ToolbarButton shortcut="b" attribute="bold" title="Bold" icon={Bold} />
-          <ToolbarButton shortcut="i" attribute="italic" title="Italic" icon={Italic} />
-          <ToolbarButton attribute="strike" title="Strikethrough" icon={Strikethrough} />
-          <ToolbarButton shortcut="k" attribute="href" action="link" title="Link" icon={Link} />
-        </ButtonGroup>
+    <div className="layout-row trix-toolbar p-2 pe-0" id={props.toolbarId}>
+        <ToolbarButton shortcut="b" attribute="bold" title="Bold" icon={Bold} />
+        <ToolbarButton shortcut="i" attribute="italic" title="Italic" icon={Italic} />
+        <ToolbarButton attribute="strike" title="Strikethrough" icon={Strikethrough} />
+        <ToolbarButton shortcut="k" attribute="href" action="link" title="Link" icon={Link} />
 
-        <ButtonGroup>
-          <ToolbarButton shortcut="1" attribute="heading1" title="Heading" icon={Heading} />
-          <ToolbarButton attribute="quote" title="Quote" icon={Quote} />
-          <ToolbarButton attribute="code" title="Code" icon={Code} />
-          <ToolbarButton attribute="bullet" title="Bulleted List" icon={BulletedList} />
-          <ToolbarButton attribute="number" title="Numbered List" icon={NumberedList} />
-          <ToolbarButton action="decreaseNestingLevel" title="Decrease Level" icon={Outdent} />
-          <ToolbarButton action="increaseNestingLevel" title="Increase Level" icon={Indent} />
-        </ButtonGroup>
+        <ToolbarButton shortcut="1" attribute="heading1" title="Heading" icon={Heading} />
+        <ToolbarButton attribute="quote" title="Quote" icon={Quote} />
+        <ToolbarButton attribute="code" title="Code" icon={Code} />
+        <ToolbarButton attribute="bullet" title="Bulleted List" icon={BulletedList} />
+        <ToolbarButton attribute="number" title="Numbered List" icon={NumberedList} />
+        <ToolbarButton action="decreaseNestingLevel" title="Decrease Level" icon={Outdent} />
+        <ToolbarButton action="increaseNestingLevel" title="Increase Level" icon={Indent} />
 
-        <ButtonGroup>
-          <ToolbarButton action="attachFiles" title="Attach Files" icon={Attachment} />
-        </ButtonGroup>
+        <ToolbarButton action="attachFiles" title="Attach Files" icon={Attachment} />
 
-        <ButtonGroup>
-          <ToolbarButton shortcut="z" action="undo" title="Undo" icon={Undo} />
-          <ToolbarButton shortcut="shift+z" action="redo" title="Redo" icon={Redo} />
-        </ButtonGroup>
-      </div>
+        <ToolbarButton shortcut="z" action="undo" title="Undo" icon={Undo} />
+        <ToolbarButton shortcut="shift+z" action="redo" title="Redo" icon={Redo} />
     </div>
   )
 }
 
 const ButtonGroup = props => {
   return (
-    <div className="btn-group me-3">
+    <div className="x-btn-group d-inline-flex me-2">
       {props.children}
     </div>
   )
@@ -77,7 +67,7 @@ const ToolbarButton = props => {
   return (
     <button
       type="button"
-      className="btn btn-toolbar"
+      className="btn btn-toolbar rounded-pill fs-5 px-2 py-1 me-1"
       onKeyDown={onKeyDown}
       data-trix-attribute={props.attribute}
       data-trix-action={props.action}

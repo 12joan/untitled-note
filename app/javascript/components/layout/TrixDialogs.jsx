@@ -14,7 +14,7 @@ const TrixDialogs = props => {
         data-trix-dialog="href"
         data-trix-dialog-attribute="href"
         onShow={() => inputEl.current.select()}>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-4">
           <input
             ref={inputEl}
             type="url"
@@ -29,10 +29,10 @@ const TrixDialogs = props => {
           <label htmlFor="trix-dialog-href-input">Link URL</label>
         </div>
 
-        <div className="mb-3">
+        <div className="d-grid gap-2">
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-lg btn-primary"
             data-trix-method="setAttribute">
             Create Link
           </button>
@@ -41,7 +41,7 @@ const TrixDialogs = props => {
 
           <button
             type="button"
-            className="btn btn-light text-danger"
+            className="btn btn-lg btn-light text-danger"
             data-trix-method="removeAttribute">
             Remove Link
           </button>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useRef, useEffect } from 'react'
 
 import NavLink from 'components/NavLink'
+import LoadingPlaceholder from 'components/LoadingPlaceholder'
 
 const DocumentGridTile = props => {
   const documentBodyRef = useRef()
@@ -21,43 +22,33 @@ const DocumentGridTile = props => {
   }, [])
 
   return (
-    <DocumentGridTileContainer
-      cardId={cardId}
+    <DocumentGridTileContainer cardId={cardId} label={
+      <label htmlFor={cardId} className="document-grid-tile-label d-block text-center py-1">
+        <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
+          {props.doc.safe_title}
+        </NavLink>
+      </label>
+      }>
+      <div className="document-grid-tile-preview">
+        <div ref={documentBodyRef} className="document-body">
+          {
+            props.doc.title && (
+              <h1 className="title h2 border-bottom">{props.doc.title}</h1>
+            )
+          }
 
-      cardBody={
-        <div className="document-grid-tile-preview">
-          <div ref={documentBodyRef} className="document-body">
-            {
-              props.doc.title && (
-                <h1 className="title h2 border-bottom">{props.doc.title}</h1>
-              )
-            }
-
-            <div dangerouslySetInnerHTML={{ __html: props.doc.body }} />
-          </div>
+          <div dangerouslySetInnerHTML={{ __html: props.doc.body }} />
         </div>
-      }
-
-      label={
-        <label htmlFor={cardId} className="document-grid-tile-label d-block text-center py-1">
-          <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
-            {
-              (/[^\s]/.test(props.doc.title || ''))
-                ? props.doc.title 
-                : (
-                  <span className="visually-hidden">Untitled Document</span>
-                )
-            }
-          </NavLink>
-        </label>
-      } />
+      </div>
+    </DocumentGridTileContainer>
   )
 }
 
 const DocumentGridTilePlaceholder = props => {
   return (
-    <DocumentGridTileContainer
-      cardClassName="placeholder border-0" />
+    <DocumentGridTileContainer cardClassName="border-0">
+      <LoadingPlaceholder className="position-absolute top-0 bottom-0" />
+    </DocumentGridTileContainer>
   )
 }
 
@@ -65,7 +56,7 @@ const DocumentGridTileContainer = props => {
   return (
     <div id={props.cardId} className="document-grid-tile g-col-12 g-col-sm-6 g-col-md-4 g-col-xl-3">
       <div className={`document-grid-tile-card ${props.cardClassName || ''}`}>
-        {props.cardBody}
+        {props.children}
       </div>
 
       {props.label}

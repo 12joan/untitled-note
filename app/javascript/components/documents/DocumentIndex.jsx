@@ -1,6 +1,8 @@
 import React from 'react'
-import { useState, useEffect, forwardRef, useImperativeHandle } from 'react'
+import { useState, useEffect, useImperativeHandle } from 'react'
+import { useRef } from 'react'
 import useLocalStorage from 'react-use-localstorage'
+import { useBottomScrollListener } from 'react-bottom-scroll-listener'
 
 import { useContext } from 'lib/context'
 import useCounter from 'lib/useCounter'
@@ -10,11 +12,12 @@ import ContentHeader from 'components/layout/ContentHeader'
 import NavLink from 'components/NavLink'
 import DocumentIndexSortButton from 'components/documents/DocumentIndexSortButton'
 import LoadAsync from 'components/LoadAsync'
+import LoadingPlaceholder from 'components/LoadingPlaceholder'
 import LoadDocument from 'components/documents/LoadDocument'
 import { DocumentGridTile, DocumentGridTilePlaceholder } from 'components/documents/DocumentGridTile'
 import RunOnMount from 'components/RunOnMount'
 
-const DocumentIndex = forwardRef((props, ref) => {
+const DocumentIndex = props => {
   const { projectId, keywordId, keyword } = useContext()
 
   const [sortParameter, setSortParameter] = useLocalStorage('document-index-sort-parameter', 'created_at')
@@ -29,10 +32,6 @@ const DocumentIndex = forwardRef((props, ref) => {
     sort_by: sortParameter,
     per_page: 12,
   }
-
-  useImperativeHandle(ref, () => ({
-    onScrollToBottom: () => setBottomReached(true),
-  }))
 
   useEffect(() => {
     if (lastPageLoaded && bottomReached && !lastPageIsEmpty) {
@@ -50,9 +49,18 @@ const DocumentIndex = forwardRef((props, ref) => {
     ? 'All Documents'
     : keyword.text
 
+  const scrollContainer = useBottomScrollListener(
+    () => setBottomReached(true),
+    {
+      triggerOnNoScroll: true,
+      debounce: 0,
+      offset: 400,
+    },
+  )
+
   return (
-    <div className="p-3">
-      <div className="mb-3">
+    <div ref={scrollContainer} className="flex-grow-1 overflow-auto p-3">
+      <div className="mb-2">
         <ContentHeader
           middle={
             <NavLink
@@ -83,7 +91,7 @@ const DocumentIndex = forwardRef((props, ref) => {
                 return () => subscription.unsubscribe()
               }}
 
-              loading={() => <></>}
+              loading={() => <LoadingPlaceholder className="g-col-12" />}
 
               success={documents => (
                 <>
@@ -114,12 +122,11 @@ const DocumentIndex = forwardRef((props, ref) => {
       </div>
 
       {
-        !lastPageIsEmpty && (
+        (lastPageLoaded && !lastPageIsEmpty) && (
           <div className="d-flex justify-content-center">
             <button
               type="button"
               className="btn btn-light rounded-pill"
-              disabled={!lastPageLoaded}
               onClick={showNextPage}>
               Load More
             </button>
@@ -128,6 +135,6 @@ const DocumentIndex = forwardRef((props, ref) => {
       }
     </div>
   )
-})
+}
 
 export default DocumentIndex

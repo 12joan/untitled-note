@@ -5,7 +5,7 @@ import useRemountKey from 'lib/useRemountKey'
 import ProjectsStream from 'lib/streams/ProjectsStream'
 
 import LoadAsync from 'components/LoadAsync'
-import AppPlaceholder from 'components/layout/AppPlaceholder'
+import LoadingPlaceholder from 'components/LoadingPlaceholder'
 
 const AwaitProjects = props => {
   const [reloadProjectsKey, reloadProjects] = useRemountKey()
@@ -19,7 +19,7 @@ const AwaitProjects = props => {
         return () => subscription.unsubscribe()
       }}
 
-      loading={() => <AppPlaceholder />}
+      loading={() => <LoadingPlaceholder className="h-100" />}
 
       error={error => {
         console.error(error)

@@ -7,29 +7,28 @@ import { useContext } from 'lib/context'
 
 import NavLink from 'components/NavLink'
 
+const keywordToTag = keyword => ({
+  id: keyword.id,
+  name: keyword.text,
+})
+
+const tagToKeyword = tag => ({
+  text: tag.name,
+})
+
+const transformKeywordText = text => (
+  text.trim().replaceAll(/[ ]{2,}/g, ' ')
+)
+
 const DocumentEditorKeywords = props => {
   const { keywords: allKeywords } = useContext()
-
   const reactTags = useRef()
-
-  const keywordToTag = keyword => ({
-    id: keyword.id,
-    name: keyword.text,
-  })
-
-  const tagToKeyword = tag => ({
-    text: tag.name,
-  })
 
   const tags = props.doc.keywords.map(keywordToTag)
 
   const setTags = mapFunction => props.updateDocument({
     keywords: mapFunction(tags).map(tagToKeyword),
   })
-
-  const transformKeywordText = text => (
-    text.trim().replaceAll(/[ ]{2,}/g, ' ')
-  )
 
   const tagAlreadySelected = tag => (
     props.doc.keywords.some(keyword => keyword.text === transformKeywordText(tag.name))

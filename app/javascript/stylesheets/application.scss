@@ -5,27 +5,24 @@ $enable-negative-margins: true;
 $enable-cssgrid: true;
 $transition-collapse: none;
 $offcanvas-transition-duration: 0.3s;
+$offcanvas-horizontal-width: 300px;
 $carousel-transition-duration: 0.3s;
 
 @import "bootstrap/scss/bootstrap";
-
-:root {
-  --sheet-padding: 1.5rem;
-  --sheet-border-radius: 1rem;
-}
-
-@include media-breakpoint-up(md) {
-  :root {
-    --sheet-padding: 3rem;
-    --sheet-border-radius: 2rem;
-  }
-}
 
 html, body {
   height: 100%;
   word-break: break-word;
   overflow-wrap: break-word;
   overflow-wrap: anywhere;
+}
+
+.layout-column, .layout-row {
+  @extend .d-flex;
+}
+
+.layout-column {
+  @extend .flex-column;
 }
 
 // Bootstrap Icons
@@ -56,20 +53,8 @@ html, body {
   }
 
   &:hover, &:focus {
-    @extend .bg-light;
+    @extend .dimmed;
   }
-}
-
-.rounded-lg {
-  border-radius: var(--sheet-border-radius);
-}
-
-.rounded-1rem {
-  border-radius: 1rem;
-}
-
-.p-lg {
-  padding: var(--sheet-padding);
 }
 
 .mw-fit-content {
@@ -127,9 +112,13 @@ kbd {
   @include btn-selectable('.selected');
 }
 
-.dim-on-hover {
-  &:not(:focus):not(:focus-within):hover {
-    @extend .bg-light;
+.dimmed {
+  background-color: rgba(0, 0, 0, 100% - lightness($light));
+}
+
+.modal-body {
+  .form-control, .btn {
+    border-radius: 0.5rem;
   }
 }
 
@@ -141,12 +130,6 @@ kbd {
 
 .navigation-menu {
   .navigation-menu-item {
-    @extend .d-block;
-    @extend .mx-n3;
-    @extend .px-3;
-    @extend .py-1;
-    @extend .text-decoration-none;
-
     &:focus {
       @extend .focused;
     }
@@ -160,7 +143,7 @@ kbd {
       @extend .text-dark;
 
       &:hover, &:focus {
-        @extend .bg-light;
+        @extend .dimmed;
       }
     }
   }
@@ -186,10 +169,13 @@ kbd {
     @extend .ratio-16x9;
 
     overflow: hidden;
-    border-radius: calc(var(--sheet-border-radius) * 0.75);
+    border-radius: 1rem;
 
     .document-grid-tile-preview {
+      @extend .p-3;
+
       position: absolute;
+      top: 0.5rem;
       left: -50%;
       width: 200%;
       height: 200%;
@@ -197,8 +183,6 @@ kbd {
       transform: scale(0.5);
       transform-origin: top;
       pointer-events: none;
-
-      padding: calc(var(--sheet-padding) * 0.75);
     }
   }
 
@@ -210,43 +194,13 @@ kbd {
 .document-placeholder {
   @extend .placeholder;
   @extend .d-block;
-
-  padding: var(--sheet-padding);
-  border-radius: var(--sheet-border-radius);
 }
 
 .document-editor {
-  @extend .position-relative;
-  @extend .bg-white;
-  @extend .shadow;
-  @extend .rounded-lg;
-  @extend .p-lg;
-
   .title-input, .react-tags {
-    @extend .dim-on-hover;
-  }
-
-  &.sync-failed::after {
-    @extend .bg-danger;
-
-    content: '';
-    border-radius: var(--sheet-border-radius);
-    opacity: 0.2;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1035; // Just below offcanvas-backdrop
-  }
-
-  .document-editor-footer {
-    @extend .bg-white;
-
-    margin: 0 calc(-1 * var(--sheet-padding)) calc(-1 * var(--sheet-padding)) calc(-1 * var(--sheet-padding));
-    padding: 0 var(--sheet-padding) 0 var(--sheet-padding);
-    border-radius: 0 0 var(--sheet-border-radius) var(--sheet-border-radius);
+    &:not(:focus):not(:focus-within):hover {
+      @extend .dimmed;
+    }
   }
 
   .title-input {
@@ -267,10 +221,11 @@ kbd {
     @extend .px-1;
     @extend .mx-n1;
 
-    @extend .rounded-1rem;
+    border-radius: 1rem;
 
     .keyword-tag {
       background-color: lighten($blue-100, 5%);
+      border-radius: 1rem;
 
       &:hover, &:focus {
         background-color: $blue-100;
@@ -325,30 +280,14 @@ kbd {
   trix-editor {
     @extend .document-body;
   }
-
-  .trix-toolbar {
-    overflow-x: auto;
-    white-space: nowrap;
-    height: 2rem;
-
-    .btn-toolbar {
-      @include btn-selectable('.trix-active');
-
-      @extend .fs-5;
-      @extend .px-2;
-      @extend .py-1;
-
-      &:not(.trix-active) {
-        @extend .text-secondary;
-      }
-    }
-  }
 }
 
 .document-body {
   @extend .h-100;
   @extend .m-0;
-  @extend .p-0;
+  @extend .pt-0;
+  @extend .px-3;
+  @extend .pb-3;
   @extend .rounded-0;
 
   font-family: Georgia, "Times New Roman", serif;
@@ -383,6 +322,26 @@ kbd {
 
   a {
     cursor: pointer;
+  }
+}
+
+.trix-toolbar {
+  overflow-x: auto;
+  white-space: nowrap;
+
+  .btn-toolbar {
+    &:hover, &:focus {
+      @extend .dimmed;
+    }
+
+    &:not(.trix-active) {
+      @extend .text-secondary;
+    }
+
+    &.trix-active {
+      @extend .bg-primary;
+      @extend .text-white;
+    }
   }
 }
 

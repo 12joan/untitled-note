@@ -11,12 +11,12 @@ const TopBar = props => {
   return (
     <nav
       id="top-bar"
-      className="navbar navbar-light bg-white border-bottom d-flex p-2 gap-3"
+      className="layout-row navbar navbar-light border-bottom p-2 gap-3"
       style={{ zIndex: 1030 }}>
       <button
         type="button"
         id="toggle-sidebar-button"
-        className="focus-target btn btn-lg btn-icon btn-icon-inline text-secondary"
+        className="focus-target btn btn-icon btn-icon-inline text-secondary"
         title="Toggle sidebar"
         onClick={() => sendSidebarEvent.invoke('toggle')}>
         <LayoutSidebar className="bi" />

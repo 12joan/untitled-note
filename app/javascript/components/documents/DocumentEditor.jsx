@@ -1,11 +1,14 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { useState, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { useContext } from 'lib/context'
 import useSynchronisedRecord from 'lib/useSynchronisedRecord'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
+import classList from 'lib/classList'
 
+import DocumentEditorSyncFailedToast from 'components/documents/editor/DocumentEditorSyncFailedToast'
 import DocumentEditorTitleBar from 'components/documents/editor/DocumentEditorTitleBar'
 import DocumentEditorKeywords from 'components/documents/editor/DocumentEditorKeywords'
 import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditorBodyEditor'
@@ -28,37 +31,38 @@ const DocumentEditor = props => {
   const toolbarId = `trix-toolbar-${editorUUID}`
 
   return (
-    <div
-      ref={documentEditorRef}
-      className={`
-        document-editor d-flex flex-column
-        ${props.fullHeight ? 'flex-grow-1' : ''}
-        ${syncStatus === 'failed' ? 'sync-failed' : ''}
-      `}>
-      <DocumentEditorTitleBar
-        doc={doc}
-        editorUUID={editorUUID}
-        updateDocument={updateDocument} />
+    <>
+      <div ref={documentEditorRef} className="document-editor layout-column flex-grow-1">
+        <DocumentEditorSyncFailedToast syncStatus={syncStatus} />
 
-      <div className="mb-2">
-        <DocumentEditorKeywords
+        <DocumentEditorTitleBar
           doc={doc}
+          editorUUID={editorUUID}
           updateDocument={updateDocument} />
-      </div>
 
-      <div className="flex-grow-1 d-flex">
-        <div className="flex-grow-1 d-flex flex-column overflow-auto" style={{ width: 0 }}>
-          <DocumentEditorBodyEditor
+        <div className="mb-2">
+          <DocumentEditorKeywords
             doc={doc}
-            toolbarId={toolbarId}
             updateDocument={updateDocument} />
+        </div>
+
+        <div className="flex-grow-1 d-flex mx-n3 mb-n3">
+          <div className="flex-grow-1 d-flex flex-column overflow-auto" style={{ width: 0 }}>
+            <DocumentEditorBodyEditor
+              doc={doc}
+              toolbarId={toolbarId}
+              updateDocument={updateDocument} />
+          </div>
         </div>
       </div>
 
-      <DocumentEditorFooter
-        toolbarId={toolbarId}
-        syncStatus={syncStatus} />
-    </div>
+      {
+        ReactDOM.createPortal(
+          <DocumentEditorFooter toolbarId={toolbarId} syncStatus={syncStatus} />,
+          props.footerEl,
+        )
+      }
+    </>
   )
 }
 

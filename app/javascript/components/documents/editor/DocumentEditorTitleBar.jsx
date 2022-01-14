@@ -1,12 +1,11 @@
 import React from 'react'
-import { BoxArrowUpRight } from 'react-bootstrap-icons'
 
 import DocumentDropdownMenu from 'components/documents/editor/DocumentDropdownMenu'
 
 const DocumentEditorTitleBar = props => {
   return (
-    <div className="row gx-3 align-items-center">
-      <div className="col flex-grow-1">
+    <div className="layout-row gap-3 align-items-center">
+      <div className="flex-grow-1">
         <input
           className="title-input"
           value={props.doc.title}
@@ -17,12 +16,10 @@ const DocumentEditorTitleBar = props => {
           }} />
       </div>
 
-      <div className="col-auto d-flex gap-2">
-        <DocumentDropdownMenu
-          doc={props.doc}
-          editorUUID={props.editorUUID}
-          updateDocument={props.updateDocument} />
-      </div>
+      <DocumentDropdownMenu
+        doc={props.doc}
+        editorUUID={props.editorUUID}
+        updateDocument={props.updateDocument} />
     </div>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { buildUrl } from 'lib/routes'
 import { useContext } from 'lib/context'
+import classList from 'lib/classList'
 
 const NavLink = props => {
   const { projectId, keywordId, documentId, setParams } = useContext()
@@ -17,7 +18,7 @@ const NavLink = props => {
   return (
     <a
       href={buildUrl({ ...params, ...propsParams })}
-      className={`${className} ${isActive ? activeClassName : inactiveClassName}`}
+      className={classList([className, isActive ? activeClassName : inactiveClassName])}
       onClick={event => {
         event.preventDefault()
         setParams(propsParams)

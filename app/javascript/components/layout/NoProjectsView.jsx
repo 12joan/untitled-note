@@ -14,7 +14,7 @@ const NoProjectsView = props => {
               <div className="my-auto py-3">
                 <h1>Welcome to Note App</h1>
                 <p className="lead">To get started, create a new project. <a href="#">Learn more</a></p>
-                <NewProjectForm autoFocus />
+                <NewProjectForm />
               </div>
             </div>
           </SetBodyBackground>

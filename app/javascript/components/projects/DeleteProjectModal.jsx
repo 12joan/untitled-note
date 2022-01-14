@@ -49,7 +49,7 @@ const NewProjectModal = withRouter(props => {
               The project <strong>{project.name}</strong> and all associated documents will be permanently deleted.
             </p>
 
-            <div className="form-check mb-3">
+            <div className="form-check mb-4">
               <input
                 className="form-check-input"
                 type="checkbox"
@@ -62,15 +62,13 @@ const NewProjectModal = withRouter(props => {
               </label>
             </div>
 
-            <div className="mb-3">
-              <button
-                type="button"
-                className="btn btn-danger"
-                disabled={!confirmation || deleting}
-                onClick={performDeletion}>
-                Delete Project
-              </button>
-            </div>
+            <button
+              type="button"
+              className="btn btn-lg btn-danger w-100"
+              disabled={!confirmation || deleting}
+              onClick={performDeletion}>
+              Delete Project
+            </button>
           </>
         )
       }

@@ -21,7 +21,6 @@ const KeyboardNavigationModal = props => {
           { keys: 'K', description: 'Select keyword field' },
           { keys: 'I', description: 'Focus body' },
           { keys: 'M', description: 'Focus document menu button' },
-          { keys: 'F', description: 'Focus formatting controls button' },
         ]} />
 
       <h2 className="h3">Text Formatting Shortcuts</h2>

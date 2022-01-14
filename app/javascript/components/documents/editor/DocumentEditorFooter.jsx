@@ -6,41 +6,15 @@ import DocumentEditorSyncStatusIndicator from 'components/documents/editor/Docum
 import DocumentEditorToolbar from 'components/documents/editor/DocumentEditorToolbar'
 
 const DocumentEditorFooter = props => {
-  const toolbarCollapseId = `${props.toolbarId}-collapse`
-
   return (
-    <div className={`document-editor-footer position-sticky py-1`} style={{ bottom: '-1rem', zIndex: 3 }}>
-      <div className="container-fluid mb-3">
-        <div className="row gx-3 align-items-center">
-          <div className="col" style={{ width: 0 }}>
-            <DocumentEditorToolbar toolbarId={props.toolbarId} toolbarCollapseId={toolbarCollapseId} />
-          </div>
+    <div className="document-editor-footer bg-white p-2 pt-0">
+      <div className="layout-row gap-3 align-items-center bg-light rounded-pill">
+        <div className="flex-grow-1" style={{ width: 0 }}>
+          <DocumentEditorToolbar toolbarId={props.toolbarId} />
+        </div>
 
-          <div className="col-auto ms-auto">
-            <button
-              className="toggle-formatting-controls btn btn-icon fs-5 text-secondary ms-1"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target={`#${toolbarCollapseId}`}
-              title="Toggle formatting controls"
-              aria-expanded="false"
-              aria-controls={toolbarCollapseId}>
-              <Palette className="bi" />
-              <span className="visually-hidden">Toggle formatting controls</span>
-            </button>
-
-            <button
-              className="btn btn-icon fs-5 text-secondary ms-1"
-              type="button"
-              title="Related documents">
-              <Mention className="bi" style={{ transform: 'scale(1.4)' }} />
-              <span className="visually-hidden">Open related documents sidebar</span>
-            </button>
-          </div>
-
-          <div className="col-auto">
-            <DocumentEditorSyncStatusIndicator syncStatus={props.syncStatus} />
-          </div>
+        <div className="ms-auto p-2">
+          <DocumentEditorSyncStatusIndicator syncStatus={props.syncStatus} />
         </div>
       </div>
     </div>

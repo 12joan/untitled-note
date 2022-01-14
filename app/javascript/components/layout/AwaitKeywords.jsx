@@ -4,21 +4,21 @@ import { useContext, ContextProvider } from 'lib/context'
 import KeywordsStream from 'lib/streams/KeywordsStream'
 
 import LoadAsync from 'components/LoadAsync'
-import AppPlaceholder from 'components/layout/AppPlaceholder'
+import LoadingPlaceholder from 'components/LoadingPlaceholder'
 
 const AwaitKeywords = props => {
   const { projectId } = useContext()
 
   return (
     <LoadAsync
-      dependencies={[projectId]}
+      dependenciesRequiringClear={[projectId]}
 
       provider={(resolve, reject) => {
         const subscription = KeywordsStream(projectId).index({}, resolve)
         return () => subscription.unsubscribe()
       }}
 
-      loading={() => <AppPlaceholder />}
+      loading={() => <LoadingPlaceholder className="h-100" />}
 
       error={error => {
         console.error(error)

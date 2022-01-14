@@ -9,7 +9,7 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title blank created_at updated_at pinned_at body_content keywords])
+  include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
   include Listenable
 
   after_initialize do |document|
@@ -31,6 +31,10 @@ class Document < ApplicationRecord
   def title=(value)
     title_record.text = value
     @title_dirty = true
+  end
+
+  def safe_title
+    title.presence || 'Untitled document'
   end
 
   def has_changes_to_save?

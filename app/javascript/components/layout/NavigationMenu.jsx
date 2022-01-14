@@ -13,46 +13,40 @@ const NavigationMenu = props => {
 
   return (
     <ContextProvider dismissOffcanvas={props.dismissOffcanvas}>
-      <div className="h-100 p-3 navigation-menu overflow-auto">
-        <div className="d-flex gap-2 align-items-center mb-2">
-          <div>
-            <button
-              id="all-projects-link"
-              className="focus-target btn btn-link text-decoration-none"
-              data-bs-target="#sidebar-carousel"
-              data-bs-slide-to="0">
-              <CaretLeftFill className="bi" /> All Projects
-            </button>
-          </div>
+      <div className="h-100 navigation-menu overflow-auto p-3">
+        <div className="layout-row align-items-center mb-2 gap-2">
+          <button
+            type="button"
+            id="all-projects-link"
+            className="btn btn-link text-decoration-none focus-target"
+            data-bs-target="#sidebar-carousel"
+            data-bs-slide-to="0">
+            <CaretLeftFill className="bi" /> All Projects
+          </button>
 
           {
             props.isOffcanvas && (
               <div className="ms-auto">
-                <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" />
+                <button type="button" className="btn-close text-reset" onClick={props.dismissOffcanvas} aria-label="Close" />
               </div>
             )
           }
         </div>
 
-        <Section>
-          <SectionHeader
-            button={
-              <ProjectDropdownMenu />
-            }>
-            <h2 className="fs-5 m-0">{project.name}</h2>
-          </SectionHeader>
+        <div className="layout-row align-items-center mb-2 gap-2">
+          <h2 className="fs-5 m-0">{project.name}</h2>
+          <div className="ms-auto"><ProjectDropdownMenu /></div>
+        </div>
 
-          <SectionList>
-            <NavigationMenuItem
-              id="all-documents-link"
-              params={{ keywordId: undefined, documentId: undefined }}>
-              All Documents
-            </NavigationMenuItem>
-          </SectionList>
+        <Section>
+          <NavigationMenuItem
+            id="all-documents-link"
+            params={{ keywordId: undefined, documentId: undefined }}>
+            All Documents
+          </NavigationMenuItem>
         </Section>
 
         <PinnedDocumentsMenu />
-
         <KeywordsMenu />
       </div>
     </ContextProvider>
@@ -63,7 +57,7 @@ const PinnedDocumentsMenu = props => {
   const { projectId } = useContext()
 
   const indexParams = {
-    query: { id: true, title: true },
+    query: { id: true, safe_title: true },
     pinned: true,
     sort_by: 'pinned_at',
     sort_direction: 'asc',
@@ -97,23 +91,17 @@ const PinnedDocumentsMenu = props => {
 
         return (
           <Section id="pinned-documents-section">
-            <SectionHeader>
-              <h6 className="small text-secondary m-0">
-                Pinned Documents
-              </h6>
-            </SectionHeader>
+            <SectionHeader>Pinned Documents</SectionHeader>
 
-            <SectionList>
-              {
-                pinnedDocuments.map(doc => (
-                  <NavigationMenuItem
-                    key={doc.id}
-                    params={{ keywordId: undefined, documentId: doc.id }}>
-                    {doc.title || 'Untitled document'}
-                  </NavigationMenuItem>
-                ))
-              }
-            </SectionList>
+            {
+              pinnedDocuments.map(doc => (
+                <NavigationMenuItem
+                  key={doc.id}
+                  params={{ keywordId: undefined, documentId: doc.id }}>
+                  {doc.safe_title}
+                </NavigationMenuItem>
+              ))
+            }
           </Section>
         )
       }} />
@@ -129,30 +117,24 @@ const KeywordsMenu = props => {
 
   return (
     <Section id="keywords-section">
-      <SectionHeader>
-        <h6 className="small text-secondary m-0">
-          Keywords
-        </h6>
-      </SectionHeader>
+      <SectionHeader>Keywords</SectionHeader>
 
-      <SectionList>
-        {
-          keywords.map(keyword => (
-            <NavigationMenuItem
-              key={keyword.id}
-              params={{ keywordId: keyword.id, documentId: undefined }}>
-              {keyword.text}
-            </NavigationMenuItem>
-          ))
-        }
-      </SectionList>
+      {
+        keywords.map(keyword => (
+          <NavigationMenuItem
+            key={keyword.id}
+            params={{ keywordId: keyword.id, documentId: undefined }}>
+            {keyword.text}
+          </NavigationMenuItem>
+        ))
+      }
     </Section>
   )
 }
 
 const Section = props => {
   return (
-    <div id={props.id}>
+    <div id={props.id} className="mb-3">
       {props.children}
     </div>
   )
@@ -160,29 +142,9 @@ const Section = props => {
 
 const SectionHeader = props => {
   return (
-    <div className={`container-fluid mb-2 ${props.className || ''}`}>
-      <div className="row gx-3 align-items-center">
-        <div className="col">
-          {props.children}
-        </div>
-
-        {
-          props.button && (
-            <div className="col-auto">
-              {props.button}
-            </div>
-          )
-        }
-      </div>
-    </div>
-  )
-}
-
-const SectionList = props => {
-  return (
-    <div className="flex-column mb-3">
+    <h6 className="small text-secondary mb-1">
       {props.children}
-    </div>
+    </h6>
   )
 }
 
@@ -204,7 +166,7 @@ const NavigationMenuItem = props => {
   return (
     <NavLink
       id={props.id}
-      className="navigation-menu-item"
+      className="navigation-menu-item d-block text-decoration-none mx-n3 px-3 py-1"
       activeClassName="active"
       params={props.params}
       onClick={dismissOffcanvas}>

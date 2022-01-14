@@ -18,8 +18,10 @@ services:
       - '3035:3035'
     volumes:
       - .:/app
+      - node_modules:/app/node_modules
     depends_on:
       - db
 
 volumes:
   pgdata:
+  node_modules:
