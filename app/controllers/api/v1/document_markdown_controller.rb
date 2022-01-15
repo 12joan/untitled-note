@@ -5,10 +5,13 @@ module API
       before_action :set_document
 
       def show
-        preprocessed_html = @document.body.to_s.tap do |html|
+        preprocessed_html = @document.body.to_s.dup.tap do |html|
           # Ensure newlines are not removed from code blocks
           html.gsub!('<pre>', '<pre><code>')
           html.gsub!('</pre>', '</code></pre>')
+
+          # Strip whitespace from beginning and end of each line
+          html.gsub!(/\s*(\n+)\s*/, '\1')
         end
 
         preprocessed_markdown = ReverseMarkdown.convert(preprocessed_html, github_flavored: true).tap do |markdown|
