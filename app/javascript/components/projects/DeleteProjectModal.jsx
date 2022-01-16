@@ -49,7 +49,7 @@ const NewProjectModal = withRouter(props => {
               The project <strong>{project.name}</strong> and all associated documents will be permanently deleted.
             </p>
 
-            <div className="form-check mb-4">
+            <div className="form-check mb-3">
               <input
                 className="form-check-input"
                 type="checkbox"

@@ -3,9 +3,10 @@ import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 're
 import { Modal as BootstrapModal } from 'bootstrap'
 
 import useRemountKey from 'lib/useRemountKey'
+import classList from 'lib/classList'
 
 const Modal = forwardRef((props, ref) => {
-  const { id, title, children, onShow, ...otherProps } = props
+  const { id, title, centered, children, onShow, ...otherProps } = props
 
   const modalEl = useRef(null)
 
@@ -13,7 +14,10 @@ const Modal = forwardRef((props, ref) => {
 
   useEffect(() => {
     setModalObject(new BootstrapModal(modalEl.current))
-    modalEl.current.addEventListener('shown.bs.modal', event => onShow?.(event))
+    modalEl.current.addEventListener('shown.bs.modal', event => {
+      modalEl.current.querySelector('[autofocus]')?.focus?.()
+      onShow?.(event)
+    })
   }, [])
 
   useImperativeHandle(ref, () => ({
@@ -21,10 +25,10 @@ const Modal = forwardRef((props, ref) => {
   }))
 
   return (
-    <div ref={modalEl} id={id} className="modal fade" tabIndex="-1" {...otherProps}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content border-0 shadow" style={{ borderRadius: '0.75rem' }}>
-          <div className="modal-header border-0 p-4">
+    <div ref={modalEl} id={id} className="modal" tabIndex="-1" {...otherProps}>
+      <div className={classList(["modal-dialog", { 'modal-dialog-centered' : centered }])}>
+        <div className="modal-content overflow-hidden border-0 shadow" style={{ borderRadius: '0.75rem' }}>
+          <div className="modal-header border-0 p-4 pb-3">
             <h2 className="fw-bold mb-0">{title}</h2>
 
             <button
@@ -40,8 +44,11 @@ const Modal = forwardRef((props, ref) => {
         </div>
       </div>
     </div>
-
   )
 })
+
+Modal.defaultProps = {
+  centered: true,
+}
 
 export default Modal

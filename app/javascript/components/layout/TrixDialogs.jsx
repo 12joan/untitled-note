@@ -14,7 +14,7 @@ const TrixDialogs = props => {
         data-trix-dialog="href"
         data-trix-dialog-attribute="href"
         onShow={() => inputEl.current.select()}>
-        <div className="form-floating mb-4">
+        <div className="form-floating mb-3">
           <input
             ref={inputEl}
             type="url"

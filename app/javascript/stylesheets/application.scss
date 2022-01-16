@@ -116,12 +116,6 @@ kbd {
   background-color: rgba(0, 0, 0, 100% - lightness($light));
 }
 
-.modal-body {
-  .form-control, .btn {
-    border-radius: 0.5rem;
-  }
-}
-
 #sidebar {
   &:not(.offcanvas) {
     width: $offcanvas-horizontal-width;
@@ -342,6 +336,28 @@ kbd {
       @extend .bg-primary;
       @extend .text-white;
     }
+  }
+}
+
+.modal-body {
+  .form-control, .btn {
+    border-radius: 0.5rem;
+  }
+}
+
+.project-list {
+  .list-group-item {
+    &:focus-within:not(:hover) {
+      @extend .dimmed;
+    }
+
+    &:hover {
+      @extend .active;
+    }
+  }
+
+  .stretched-link {
+    outline: none;
   }
 }
 

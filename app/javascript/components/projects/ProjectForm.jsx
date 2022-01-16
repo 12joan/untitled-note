@@ -42,7 +42,7 @@ const ProjectForm = props => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="form-floating mb-4">
+      <div className="form-floating mb-3">
         <input
           id="project-name"
           type="text"
