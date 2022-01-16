@@ -69,6 +69,10 @@ html, body {
   background-color: $gray-300;
 }
 
+.stretched-link {
+  outline: none;
+}
+
 .focused {
   box-shadow: $input-focus-box-shadow;
   outline: none;
@@ -342,22 +346,6 @@ kbd {
 .modal-body {
   .form-control, .btn {
     border-radius: 0.5rem;
-  }
-}
-
-.project-list {
-  .list-group-item {
-    &:focus-within:not(:hover) {
-      @extend .dimmed;
-    }
-
-    &:hover {
-      @extend .active;
-    }
-  }
-
-  .stretched-link {
-    outline: none;
   }
 }
 
