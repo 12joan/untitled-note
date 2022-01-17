@@ -19,10 +19,10 @@ const NavigationMenu = props => {
             <button
               type="button"
               id="project-dropdown-button"
-              className="btn btn-link text-decoration-none text-dark dropdown-toggle"
+              className="btn btn-link text-decoration-none text-dark text-start dropdown-toggle"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <h2 className="d-inline fs-5 m-0">{project.name}</h2>
+              <h2 className="d-inline fs-5 text-wrap m-0">{project.name}</h2>
             </button>
           </ProjectDropdownMenu>
 
