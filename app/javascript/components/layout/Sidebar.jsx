@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react'
-import { Collapse, Offcanvas } from 'bootstrap'
+import { Offcanvas } from 'bootstrap'
 
 import { useContext } from 'lib/context'
 import classList from 'lib/classList'

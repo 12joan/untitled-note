@@ -1,0 +1,65 @@
+.layout-column, .layout-row {
+  @extend .d-flex;
+}
+
+.layout-column {
+  @extend .flex-column;
+}
+
+.btn-light {
+  @extend .bg-white;
+  @extend .border;
+
+  &:hover, &:focus {
+    @extend .bg-light;
+  }
+}
+
+.btn-icon {
+  @extend .px-2;
+  @extend .py-1;
+
+  &.btn-icon-inline {
+    @extend .my-n1;
+  }
+
+  &:hover, &:focus {
+    @extend .dimmed;
+  }
+}
+
+.btn-circle {
+  @extend .rounded-pill;
+  padding: 0.375rem;
+  width: 2.375rem;
+}
+
+.mw-fit-content {
+  min-width: fit-content !important;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.focused {
+  box-shadow: $input-focus-box-shadow;
+  outline: none;
+}
+
+.dimmed {
+  background-color: rgba(0, 0, 0, 100% - lightness($light));
+}
+
+.dropdown-item {
+  &.dropdown-item-danger {
+    &:active {
+      @extend .bg-danger;
+      @extend .text-white;
+    }
+
+    &:not(:active) {
+      @extend .text-danger;
+    }
+  }
+}

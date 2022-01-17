@@ -2,8 +2,6 @@ import React from 'react'
 import { Check as Check } from 'react-bootstrap-icons'
 
 const DocumentEditorSyncStatusIndicator = props => {
-  const toolbarCollapseId = `${props.toolbarId}-collapse`
-
   const spinner = (
     <div style={{ transform: 'scale(0.8)' }}>
       <span className="spinner-border spinner-border-sm text-white" />

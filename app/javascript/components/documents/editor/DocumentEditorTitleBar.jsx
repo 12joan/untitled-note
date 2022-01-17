@@ -5,16 +5,14 @@ import DocumentDropdownMenu from 'components/documents/editor/DocumentDropdownMe
 const DocumentEditorTitleBar = props => {
   return (
     <div className="layout-row gap-3 align-items-center">
-      <div className="flex-grow-1">
-        <input
-          className="title-input"
-          value={props.doc.title}
-          placeholder="Title"
-          autoFocus={props.doc.blank}
-          onChange={event => {
-            props.updateDocument({ title: event.target.value }, { updateImmediately: false })
-          }} />
-      </div>
+      <input
+        className="title-input flex-grow-1 h1 rounded-0 border-0 border-bottom p-0"
+        value={props.doc.title}
+        placeholder="Title"
+        autoFocus={props.doc.blank}
+        onChange={event => {
+          props.updateDocument({ title: event.target.value }, { updateImmediately: false })
+        }} />
 
       <DocumentDropdownMenu
         doc={props.doc}

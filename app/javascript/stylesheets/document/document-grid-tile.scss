@@ -1,0 +1,41 @@
+.document-grid-tile {
+  position: relative;
+
+  &:focus-within .document-grid-tile-card {
+    @extend .focused;
+  }
+
+  &:hover, &:focus-within {
+    .document-grid-tile-card:not(.placeholder) {
+      @extend .bg-light;
+    }
+  }
+
+  .document-grid-tile-card {
+    @extend .card;
+    @extend .card-body;
+    @extend .ratio;
+    @extend .ratio-16x9;
+
+    overflow: hidden;
+    border-radius: 1rem;
+
+    .document-grid-tile-preview {
+      @extend .p-3;
+
+      position: absolute;
+      top: 0.5rem;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+
+      transform: scale(0.5);
+      transform-origin: top;
+      pointer-events: none;
+    }
+  }
+
+  .document-grid-tile-label a {
+    outline: none;
+  }
+}

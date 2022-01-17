@@ -1,0 +1,45 @@
+@import "./document/document-grid-tile";
+@import "./document/document-editor";
+
+.document-body {
+  @extend .h-100;
+  @extend .m-0;
+  @extend .pt-0;
+  @extend .px-3;
+  @extend .pb-3;
+  @extend .rounded-0;
+
+  font-family: var(--document-font);
+  font-size: 1.125em;
+  border: none;
+  outline: none;
+  min-height: 80px;
+
+  & > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  h1:not(.title) {
+    @extend .h3;
+  }
+
+  blockquote {
+    @extend .p-3;
+
+    border-left: 0.35em solid $secondary;
+  }
+
+  pre {
+    @extend .card;
+    @extend .card-body;
+    @extend .bg-transparent;
+
+    br {
+      margin-top: 1em;
+    }
+  }
+
+  a {
+    cursor: pointer;
+  }
+}

@@ -19,7 +19,7 @@ import {
 
 const DocumentEditorToolbar = props => {
   return (
-    <div className="layout-row trix-toolbar p-2 pe-0" id={props.toolbarId}>
+    <div className="layout-row trix-toolbar overflow-auto p-2 pe-0" id={props.toolbarId}>
         <ToolbarButton shortcut="b" attribute="bold" title="Bold" icon={Bold} />
         <ToolbarButton shortcut="i" attribute="italic" title="Italic" icon={Italic} />
         <ToolbarButton attribute="strike" title="Strikethrough" icon={Strikethrough} />

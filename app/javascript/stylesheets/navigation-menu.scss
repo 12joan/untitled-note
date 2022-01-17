@@ -1,0 +1,20 @@
+.navigation-menu {
+  .navigation-menu-item {
+    &:focus {
+      @extend .focused;
+    }
+
+    &.active {
+      @extend .bg-primary;
+      @extend .text-white;
+    }
+
+    &:not(.active) {
+      @extend .text-dark;
+
+      &:hover, &:focus {
+        @extend .dimmed;
+      }
+    }
+  }
+}
