@@ -13,8 +13,19 @@ const NavigationMenu = props => {
 
   return (
     <ContextProvider dismissOffcanvas={props.dismissOffcanvas}>
-      <div className="h-100 navigation-menu overflow-auto p-3">
-        <div className="layout-row align-items-center gap-2">
+      <div className="flex-grow-1 navigation-menu overflow-auto p-3">
+        <div className="layout-row align-items-center mb-2 gap-2">
+          <ProjectDropdownMenu>
+            <button
+              type="button"
+              id="project-dropdown-button"
+              className="btn btn-link text-decoration-none text-dark dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <h2 className="d-inline fs-5 m-0">{project.name}</h2>
+            </button>
+          </ProjectDropdownMenu>
+
           {
             props.isOffcanvas && (
               <div className="ms-auto">
@@ -22,11 +33,6 @@ const NavigationMenu = props => {
               </div>
             )
           }
-        </div>
-
-        <div className="layout-row align-items-center mb-2 gap-2">
-          <h2 className="fs-5 m-0">{project.name}</h2>
-          <div className="ms-auto"><ProjectDropdownMenu /></div>
         </div>
 
         <Section>

@@ -17,6 +17,10 @@ html, body {
   overflow-wrap: anywhere;
 }
 
+:root {
+  --offcanvas-horizontal-width: #{$offcanvas-horizontal-width};
+}
+
 .layout-column, .layout-row {
   @extend .d-flex;
 }
@@ -124,12 +128,6 @@ kbd {
 
 .dimmed {
   background-color: rgba(0, 0, 0, 100% - lightness($light));
-}
-
-#sidebar {
-  &:not(.offcanvas) {
-    width: $offcanvas-horizontal-width;
-  }
 }
 
 .navigation-menu {
