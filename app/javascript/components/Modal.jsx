@@ -15,7 +15,7 @@ const Modal = forwardRef((props, ref) => {
   useEffect(() => {
     setModalObject(new BootstrapModal(modalEl.current))
     modalEl.current.addEventListener('shown.bs.modal', event => {
-      modalEl.current.querySelector('[autofocus]')?.focus?.()
+      setTimeout(() => modalEl.current.querySelector('[autofocus], [data-auto-focus]')?.focus?.(), 0)
       onShow?.(event)
     })
   }, [])

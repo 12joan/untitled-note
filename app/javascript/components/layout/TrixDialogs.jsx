@@ -23,7 +23,7 @@ const TrixDialogs = props => {
             className="form-control"
             placeholder="Link URL"
             required
-            autoFocus
+            data-auto-focus
             data-trix-input />
 
           <label htmlFor="trix-dialog-href-input">Link URL</label>
