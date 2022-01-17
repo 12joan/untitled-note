@@ -20,14 +20,15 @@ const DocumentEditorBodyEditor = props => {
 
   const handleClick = event => {
     const { target } = event
+    const anchorTag = target.closest('a')
 
     // Open all links with target _blank
-    if (target.tagName === 'A') {
+    if (anchorTag !== null) {
       event.preventDefault()
       event.stopPropagation()
 
       const newAnchorTag = document.createElement('a')
-      newAnchorTag.href = target.href
+      newAnchorTag.href = anchorTag.href
       newAnchorTag.target = '_blank'
       newAnchorTag.click()
     }
