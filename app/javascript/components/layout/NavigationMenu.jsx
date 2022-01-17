@@ -14,16 +14,7 @@ const NavigationMenu = props => {
   return (
     <ContextProvider dismissOffcanvas={props.dismissOffcanvas}>
       <div className="h-100 navigation-menu overflow-auto p-3">
-        <div className="layout-row align-items-center mb-2 gap-2">
-          <button
-            type="button"
-            id="all-projects-link"
-            className="btn btn-link text-decoration-none focus-target"
-            data-bs-toggle="modal"
-            data-bs-target="#switch-project-modal">
-            <CaretLeftFill className="bi" /> All Projects
-          </button>
-
+        <div className="layout-row align-items-center gap-2">
           {
             props.isOffcanvas && (
               <div className="ms-auto">

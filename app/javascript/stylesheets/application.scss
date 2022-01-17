@@ -57,6 +57,12 @@ html, body {
   }
 }
 
+.btn-circle {
+  @extend .rounded-pill;
+  padding: 0.375rem;
+  width: 2.375rem;
+}
+
 .mw-fit-content {
   min-width: fit-content !important;
 }

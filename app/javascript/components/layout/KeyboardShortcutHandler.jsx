@@ -68,11 +68,7 @@ const keyBindings = (event, context) => {
     'n': () => click(document.querySelector('#new-document-button')),
     's': () => sendSidebarEvent('toggle'),
     'a': () => click(document.querySelector('#all-documents-link')),
-    'p': () => {
-      sendSidebarEvent('show')
-      click(document.querySelector('#all-projects-link'))
-      focus(document.querySelector('.btn-project.selected'))
-    },
+    'p': () => click(document.querySelector('#all-projects-link')),
     'shift+n': () => {
       sendSidebarEvent('show')
       focus(document.querySelector('.navigation-menu .focus-target'))
