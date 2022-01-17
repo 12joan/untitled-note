@@ -3,6 +3,13 @@ import React from 'react'
 import DocumentDropdownMenu from 'components/documents/editor/DocumentDropdownMenu'
 
 const DocumentEditorTitleBar = props => {
+  const handleKeyDown = event => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      document.querySelector('trix-editor').focus()
+    }
+  }
+
   return (
     <div className="layout-row gap-3 align-items-center">
       <input
@@ -12,7 +19,8 @@ const DocumentEditorTitleBar = props => {
         autoFocus={props.doc.blank}
         onChange={event => {
           props.updateDocument({ title: event.target.value }, { updateImmediately: false })
-        }} />
+        }}
+        onKeyDown={handleKeyDown} />
 
       <DocumentDropdownMenu
         doc={props.doc}
