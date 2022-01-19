@@ -15,6 +15,16 @@ const fetchAPIEndpoint = (apiEndpoint, options = {}) => {
 
     body: options.body,
   })
+    .then(response => {
+      if (String(response.status).match(/2\d{2}/)) {
+        return response
+      }
+
+      return Promise.reject({
+        notOkayStatus: true,
+        response,
+      })
+    })
 }
 
 export default fetchAPIEndpoint

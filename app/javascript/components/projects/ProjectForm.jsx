@@ -17,6 +17,7 @@ const ProjectForm = props => {
     }
 
     setIsUploading(true)
+    setErrors({})
 
     const project = {
       ...props.initialProject,
@@ -25,13 +26,11 @@ const ProjectForm = props => {
 
     props.action(project)
       .then(project => {
-        setErrors({})
         props.onComplete?.(project)
       })
       .catch(error => {
         if (error.notOkayStatus && error.response.statusText === 'Unprocessable Entity') {
-          error.response.json()
-            .then(setErrors)
+          error.response.json().then(setErrors)
         } else {
           console.error(error)
         }
@@ -42,6 +41,14 @@ const ProjectForm = props => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {
+        errors['name'] && (
+          <div className="text-danger mb-3">
+            Name {errors['name']}
+          </div>
+        )
+      }
+
       <div className="form-floating mb-3">
         <input
           id="project-name"
