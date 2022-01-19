@@ -1,10 +1,14 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
+import useTitle from 'lib/useTitle'
+
 import SetBodyBackground from 'components/SetBodyBackground'
 import NewProjectForm from 'components/projects/NewProjectForm'
 
 const NoProjectsView = props => {
+  useTitle('Welcome', { layer: 1 })
+
   return (
     <Router>
       <Switch>

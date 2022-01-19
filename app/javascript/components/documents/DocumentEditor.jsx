@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid'
 import { useContext } from 'lib/context'
 import useSynchronisedRecord from 'lib/useSynchronisedRecord'
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
+import useTitle from 'lib/useTitle'
 import classList from 'lib/classList'
 
 import DocumentEditorSyncFailedToast from 'components/documents/editor/DocumentEditorSyncFailedToast'
@@ -24,6 +25,8 @@ const DocumentEditor = props => {
     },
     uncontrolledParams: ['updated_at'],
   })
+
+  useTitle(doc.safe_title, { layer: 2 })
 
   const documentEditorRef = useRef()
 

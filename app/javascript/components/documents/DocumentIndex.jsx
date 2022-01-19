@@ -6,6 +6,7 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener'
 
 import { useContext } from 'lib/context'
 import useCounter from 'lib/useCounter'
+import useTitle from 'lib/useTitle'
 import DocumentsStream from 'lib/streams/DocumentsStream'
 
 import ContentHeader from 'components/layout/ContentHeader'
@@ -45,9 +46,11 @@ const DocumentIndex = props => {
     incrementShowPages()
   }
 
-  const viewDropdownLabel = (keywordId === undefined)
+  const viewTitle = (keywordId === undefined)
     ? 'All Documents'
     : keyword.text
+
+  useTitle(viewTitle, { layer: 2 })
 
   const scrollContainer = useBottomScrollListener(
     () => setBottomReached(true),
@@ -67,7 +70,7 @@ const DocumentIndex = props => {
               params={{ keywordId, documentId: undefined }}
               className="text-decoration-none"
               style={{ fontWeight: 500 }}>
-              {viewDropdownLabel}
+              {viewTitle}
             </NavLink>
           }
           right={
