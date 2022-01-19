@@ -12,34 +12,8 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
   include Listenable
 
-  after_initialize do |document|
-    # Ensure document has a title (side effect of #title_record)
-    raise 'Failed to create title for document' if title_record.nil?
-  end
-
-  after_save do |document|
-    if @title_dirty
-      title_record.save!
-      @title_dirty = false
-    end
-  end
-
-  def title
-    title_record.text
-  end
-
-  def title=(value)
-    title_record.text = value
-    @title_dirty = true
-  end
-
   def safe_title
     title.presence || 'Untitled document'
-  end
-
-  def has_changes_to_save?
-    # Make sure updated_at gets updated
-    super || @title_dirty
   end
 
   def body_content
@@ -65,13 +39,5 @@ class Document < ApplicationRecord
         keywords << keyword
       end
     end
-  end
-
-  private
-
-  def title_record
-    @title_record ||=
-      aliases.filter(&:title?).first ||
-      aliases.build(title: true, text: '')
   end
 end
