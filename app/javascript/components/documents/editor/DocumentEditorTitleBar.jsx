@@ -1,6 +1,7 @@
 import React from 'react'
+import { ThreeDotsVertical } from 'react-bootstrap-icons'
 
-import DocumentDropdownMenu from 'components/documents/editor/DocumentDropdownMenu'
+import DocumentDropdownMenu from 'components/documents/DocumentDropdownMenu'
 
 const DocumentEditorTitleBar = props => {
   const handleKeyDown = event => {
@@ -24,8 +25,18 @@ const DocumentEditorTitleBar = props => {
 
       <DocumentDropdownMenu
         doc={props.doc}
-        editorUUID={props.editorUUID}
-        updateDocument={props.updateDocument} />
+        updateDocument={props.updateDocument}
+        labelledBy={`document-${props.editorUUID}-dropdown-button`}>
+        <button
+          type="button"
+          id={`document-${props.editorUUID}-dropdown-button`}
+          className="document-dropdown-button btn btn-icon fs-4 text-secondary"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <ThreeDotsVertical className="bi" />
+          <span className="visually-hidden">Toggle dropdown</span>
+        </button>
+      </DocumentDropdownMenu>
     </div>
   )
 }

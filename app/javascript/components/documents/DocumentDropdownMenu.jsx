@@ -1,5 +1,4 @@
 import React from 'react'
-import { ThreeDotsVertical } from 'react-bootstrap-icons'
 
 import DocumentsAPI from 'lib/resources/DocumentsAPI'
 import { useContext } from 'lib/context'
@@ -26,17 +25,9 @@ const DocumentDropdownMenu = props => {
 
   return (
     <div className="dropdown">
-      <button
-        type="button"
-        id={`document-${props.editorUUID}-dropdown-button`}
-        className="document-dropdown-button btn btn-icon fs-4 text-secondary"
-        data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <ThreeDotsVertical className="bi" />
-        <span className="visually-hidden">Toggle dropdown</span>
-      </button>
+      {props.children}
 
-      <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`document-${props.editorUUID}-dropdown-button`}>
+      <ul className="dropdown-menu" aria-labelledby={props.labelledby}>
         <DropdownItem onClick={togglePinned}>
           {pinned ? 'Unpin document' : 'Pin document'}
         </DropdownItem>

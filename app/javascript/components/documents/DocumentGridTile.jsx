@@ -1,10 +1,17 @@
 import React from 'react'
 import { useRef, useEffect } from 'react'
+import { ThreeDots } from 'react-bootstrap-icons'
+
+import { useContext } from 'lib/context'
+import DocumentsAPI from 'lib/resources/DocumentsAPI'
 
 import NavLink from 'components/NavLink'
 import LoadingPlaceholder from 'components/LoadingPlaceholder'
+import DocumentDropdownMenu from 'components/documents/DocumentDropdownMenu'
 
 const DocumentGridTile = props => {
+  const { projectId } = useContext()
+
   const documentBodyRef = useRef()
   const cardId = `document-${props.doc.id}`
 
@@ -23,12 +30,29 @@ const DocumentGridTile = props => {
 
   return (
     <DocumentGridTileContainer cardId={cardId} label={
-      <label htmlFor={cardId} className="document-grid-tile-label d-block text-center py-1">
+      <label htmlFor={cardId} className="layout-row justify-content-center align-items-center py-1">
         <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
           {props.doc.safe_title}
         </NavLink>
+
+        <DocumentDropdownMenu
+          doc={props.doc}
+          updateDocument={params => DocumentsAPI(projectId).update({ ...props.doc, ...params })}
+          labelledBy={`document-${props.doc.id}-dropdown-button`}>
+          <button
+            type="button"
+            id={`document-${props.doc.id}-dropdown-button`}
+            className="btn btn-icon text-secondary position-relative"
+            style={{ zIndex: 1 }}
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <ThreeDots className="bi" />
+            <span className="visually-hidden">Toggle dropdown</span>
+          </button>
+        </DocumentDropdownMenu>
       </label>
       }>
+
       <div className="document-grid-tile-preview">
         <div ref={documentBodyRef} className="document-body">
           {

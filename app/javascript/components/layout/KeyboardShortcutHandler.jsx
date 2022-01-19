@@ -82,7 +82,7 @@ const keyBindings = (event, context) => {
       sendSidebarEvent('show')
       focus(document.querySelector('#keywords-section .navigation-menu-item'))
     },
-    'shift+d': () => focus(document.querySelector('.document-grid-tile .document-grid-tile-label a')),
+    'shift+d': () => focus(document.querySelector('.document-grid-tile .stretched-link')),
     'shift+t': () => focus(document.querySelector('#top-bar .focus-target')),
     'shift+?': () => click(document.querySelector('#keyboard-navigation-button')),
   }
