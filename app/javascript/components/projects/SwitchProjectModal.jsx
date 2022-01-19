@@ -77,7 +77,7 @@ const SwitchProjectForm = props => {
                 }])}
                 {...nthSuggestionProps(index)}>
                 <h5 className="fw-normal mb-0">{project.name}</h5>
-                <ChevronRight className="bi ms-auto" />
+                <div className="ms-auto"><ChevronRight className="bi" /></div>
                 <NavLink
                   className="stretched-link"
                   tabIndex="-1"
