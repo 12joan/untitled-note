@@ -14,7 +14,6 @@ module API
         if @document.save
           render json: @document.query(:all)
         else
-          puts @document.errors.inspect
           render json: @document.errors, status: :unprocessable_entity
         end
       end
