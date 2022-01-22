@@ -17,7 +17,9 @@ class Document < ApplicationRecord
   end
 
   def body_content
-    SanitizeHtml.(body.body.as_json)
+    unless body.body.nil?
+      SanitizeHtml.(body.body.to_html)
+    end
   end
 
   def keywords_attributes=(keywords_attributes)

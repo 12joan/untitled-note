@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SanitizeHtmlTest < ActiveSupport::TestCase
   test 'permits listed tags and attributes' do
-    html = <<~HTML
+    html = <<~HTML.delete("\n")
       <p>Paragraph</p>
       <p>Line<br>break</p>
       <p><a href="https://example.com">Safe link</a></p>
@@ -23,5 +23,15 @@ class SanitizeHtmlTest < ActiveSupport::TestCase
 
   test 'strips out javascript protocol' do
     refute_includes SanitizeHtml.('<a href="javascript:alert(\'xss\')">click me</a>'), 'xss'
+  end
+
+  test 'permits block comments' do
+    html = '<li><!--block-->Hello world</li>'
+
+    assert_equal html, SanitizeHtml.(html)
+  end
+
+  test 'strips out arbitrary comments' do
+    refute_includes SanitizeHtml.('<!--xss-->'), 'xss'
   end
 end
