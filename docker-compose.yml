@@ -22,6 +22,15 @@ services:
     depends_on:
       - db
 
+  elasticsearch:
+    image: elasticsearch:6.8.23
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+
 volumes:
   pgdata:
   node_modules:
+  elasticsearch:

@@ -12,6 +12,13 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
   include Listenable
 
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  def as_indexed_json(options = nil)
+    self.as_json(only: %i[title], methods: %i[plain_body])
+  end
+
   def safe_title
     title.presence || 'Untitled document'
   end
@@ -19,6 +26,12 @@ class Document < ApplicationRecord
   def body_content
     unless body.body.nil?
       SanitizeHtml.(body.body.to_html)
+    end
+  end
+
+  def plain_body
+    unless body.body.nil?
+      body.body.to_plain_text
     end
   end
 
