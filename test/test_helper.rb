@@ -5,8 +5,8 @@ require 'minitest/autorun'
 require_relative 'api_test_case'
 
 class ActiveSupport::TestCase
-  # Run tests in parallel with specified workers
-  parallelize(workers: :number_of_processors)
+  ## Parallelization breaks Elasticsearch tests
+  # parallelize(workers: :number_of_processors)
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all

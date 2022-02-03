@@ -14,9 +14,10 @@ class Document < ApplicationRecord
 
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  index_name "#{Rails.env}_documents"
 
   def as_indexed_json(options = nil)
-    self.as_json(only: %i[title], methods: %i[plain_body])
+    self.as_json(only: %i[project_id title], methods: %i[plain_body])
   end
 
   def safe_title

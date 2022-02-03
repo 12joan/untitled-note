@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         end
 
         resource :blank_document, only: %i[ create ]
+
+        resource :document_search, only: %i[ show ], controller: 'document_search'
       end
     end
   end
