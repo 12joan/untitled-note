@@ -174,6 +174,8 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rack_authorised_proxy (1.0.0)
+      activesupport (>= 5.0)
     rails (6.1.4)
       actioncable (= 6.1.4)
       actionmailbox (= 6.1.4)
@@ -277,6 +279,7 @@ DEPENDENCIES
   pry
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
+  rack_authorised_proxy
   rails (~> 6.1.4)
   reverse_markdown (~> 2.0)
   rexml (~> 3.2)
