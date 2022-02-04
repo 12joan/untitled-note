@@ -1,0 +1,8 @@
+<div class="container py-3">
+  <p><%= link_to '< Back', admin_elasticsearch_path, class: 'text-decoration-none fw-bold' %></p>
+
+  <code>
+    <div class="mb-2"><strong><%= @command %>:</strong></div>
+    <pre><%= @response %></pre>
+  </code>
+</div>

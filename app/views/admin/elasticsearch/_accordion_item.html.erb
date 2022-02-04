@@ -1,0 +1,19 @@
+<div class="accordion-item">
+  <h2 class="accordion-header" id="<%= accordion %>-heading-<%= key %>">
+    <button
+      class="accordion-button collapsed"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#<%= accordion %>-collapse-<%= key %>"
+      aria-expanded="false"
+      aria-controls="<%= accordion %>-collapse-<%= key %>">
+      <%= title %>
+    </button>
+  </h2>
+
+  <div id="<%= accordion %>-collapse-<%= key %>" class="accordion-collapse collapse" aria-labelledby="<%= accordion %>-heading-<%= key %>">
+    <div class="accordion-body">
+      <%= yield %>
+    </div>
+  </div>
+</div>

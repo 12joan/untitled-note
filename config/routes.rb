@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resource :elasticsearch, only: %i[ show create ], controller: 'elasticsearch'
+  end
+
   root 'app#index'
   get '*path', to: 'app#index'
 end
