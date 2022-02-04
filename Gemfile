@@ -37,8 +37,8 @@ gem 'reverse_markdown', '~> 2.0'
 gem 'kaminari', '>= 1.2.1'
 
 # Elasticsearch integration
-gem 'elasticsearch-model', '~> 6'
-gem 'elasticsearch-rails', '~> 6'
+gem 'elasticsearch-model', '~> 7'
+gem 'elasticsearch-rails', '~> 7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

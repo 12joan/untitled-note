@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { PencilSquare, ChevronRight } from 'react-bootstrap-icons'
 
 import { useContext } from 'lib/context'
@@ -18,21 +18,11 @@ const SwitchProjectForm = props => {
   const filteredProjects = projects.filter(project => localeIncludes(project.name, filterText, { sensitivity: 'base' }))
   const nthSuggestionId = index => `project-list-item-${index}`
 
-  const { selectedIndex, comboBoxProps, suggestionListProps, nthSuggestionProps } = useComboBox({
+  const { selectedIndex, comboBoxProps, suggestionListProps, nthSuggestionProps, nthKeyboardShortcutBadge } = useComboBox({
     suggestionCount: filteredProjects.length,
     suggestionListId: 'project-list',
     nthSuggestionId,
   })
-
-  const handleKeyDown = event => {
-    if (event.key === 'Enter' && selectedIndex !== null) {
-      document.getElementById(nthSuggestionId(selectedIndex))
-        .querySelector('.stretched-link')
-        .click()
-
-      event.preventDefault()
-    }
-  }
 
   return (
     <>
@@ -58,10 +48,6 @@ const SwitchProjectForm = props => {
           onChange={event => {
             setFilterText(event.target.value)
             comboBoxProps.onChange(event)
-          }}
-          onKeyDown={event => {
-            handleKeyDown(event)
-            comboBoxProps.onKeyDown(event)
           }} />
       </div>
 
@@ -72,17 +58,21 @@ const SwitchProjectForm = props => {
             : filteredProjects.map((project, index) => (
               <div
                 key={project.id}
-                className={classList(["list-group-item list-group-item-action layout-row align-items-center px-4 py-3", {
+                className={classList(["list-group-item list-group-item-action layout-row align-items-center gap-3 px-4 py-3", {
                   active: index === selectedIndex,
                 }])}
                 {...nthSuggestionProps(index)}>
-                <h5 className="fw-normal mb-0">{project.name}</h5>
-                <div className="ms-auto"><ChevronRight className="bi" /></div>
-                <NavLink
-                  className="stretched-link"
-                  tabIndex="-1"
-                  params={{ projectId: project.id, keywordId: undefined, documentId: undefined }}
-                  data-bs-dismiss="modal" />
+                {nthKeyboardShortcutBadge(index)}
+
+                <div className="flex-grow-1 layout-row">
+                  <h5 className="fw-normal mb-0">{project.name}</h5>
+                  <div className="ms-auto"><ChevronRight className="bi" /></div>
+                  <NavLink
+                    className="stretched-link"
+                    tabIndex="-1"
+                    params={{ projectId: project.id, keywordId: undefined, documentId: undefined }}
+                    data-bs-dismiss="modal" />
+                </div>
               </div>
             ))
         }
@@ -92,12 +82,10 @@ const SwitchProjectForm = props => {
 }
 
 const SwitchProjectModal = props => {
-  const modal = useRef(null)
   const [formKey, remountForm] = useRemountKey()
 
   return (
     <Modal
-      ref={modal}
       id="switch-project-modal"
       title="Projects"
       centered={false}

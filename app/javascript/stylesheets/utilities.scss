@@ -42,6 +42,10 @@
   flex: 1;
 }
 
+.no-focus-outline {
+  box-shadow: none !important;
+}
+
 .focused {
   box-shadow: $input-focus-box-shadow;
   outline: none;

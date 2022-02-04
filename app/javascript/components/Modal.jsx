@@ -6,7 +6,7 @@ import useRemountKey from 'lib/useRemountKey'
 import classList from 'lib/classList'
 
 const Modal = forwardRef((props, ref) => {
-  const { id, title, centered, children, onShow, ...otherProps } = props
+  const { id, title, modalDialogProps, centered, modalBodyProps, children, onShow, ...otherProps } = props
 
   const modalEl = useRef(null)
 
@@ -26,19 +26,23 @@ const Modal = forwardRef((props, ref) => {
 
   return (
     <div ref={modalEl} id={id} className="modal" tabIndex="-1" {...otherProps}>
-      <div className={classList(["modal-dialog", { 'modal-dialog-centered' : centered }])}>
+      <div className={classList(["modal-dialog", { 'modal-dialog-centered' : centered }])} {...modalDialogProps}>
         <div className="modal-content overflow-hidden border-0 shadow" style={{ borderRadius: '0.75rem' }}>
-          <div className="modal-header border-0 p-4 pb-3">
-            <h2 className="fw-bold mb-0">{title}</h2>
+          {
+            title !== undefined && (
+              <div className="modal-header border-0 p-4 pb-3">
+                <h2 className="fw-bold mb-0">{title}</h2>
 
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close" />
-          </div>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close" />
+              </div>
+            )
+          }
 
-          <div className="modal-body p-4 pt-0">
+          <div className="modal-body p-4 pt-0" {...modalBodyProps}>
             {children}
           </div>
         </div>

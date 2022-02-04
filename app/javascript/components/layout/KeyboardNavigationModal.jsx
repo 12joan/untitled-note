@@ -42,6 +42,7 @@ const KeyboardNavigationModal = props => {
           { keys: 'N', description: 'Create a new document' },
           { keys: 'A', description: 'Show All Documents' },
           { keys: 'P', description: 'Show Projects' },
+          { keys: 'G', description: 'Search' },
           { keys: 'S', description: 'Toggle sidebar' },
           { keys: 'shift+D', description: 'Focus documents' },
           { keys: 'shift+T', description: 'Focus top bar' },

@@ -9,6 +9,7 @@ import SwitchProjectModal from 'components/projects/SwitchProjectModal'
 import NewProjectModal from 'components/projects/NewProjectModal'
 import EditProjectModal from 'components/projects/EditProjectModal'
 import DeleteProjectModal from 'components/projects/DeleteProjectModal'
+import SearchModal from 'components/layout/SearchModal'
 import TrixDialogs from 'components/layout/TrixDialogs'
 import KeyboardNavigationModal from 'components/layout/KeyboardNavigationModal'
 
@@ -33,6 +34,7 @@ const AppLayout = props => {
       <NewProjectModal />
       <EditProjectModal />
       <DeleteProjectModal />
+      <SearchModal />
       <TrixDialogs />
       <KeyboardNavigationModal />
     </>

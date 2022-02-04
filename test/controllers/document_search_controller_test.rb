@@ -43,21 +43,41 @@ class DocumentSearchControllerTest < ActionDispatch::IntegrationTest
     assert_equal ids([@boosting_document_2, @boosting_document_1]), ids(search('two', project: @boosting_project))
   end
 
+  test 'matches words out of order' do
+    results = search('document first')
+    assert_search_includes(results, @first_document)
+  end
+
+  test 'ignores non-matching words in query' do
+    results = search('the first document')
+    assert_search_includes(results, @first_document)
+  end
+
+  test 'ignores non-matching words in text' do
+    results = search('my document')
+    assert_search_includes(results, @first_document)
+  end
+
+  test 'matches the beginning of a term' do
+    results = search('docu')
+    assert_search_includes(results, @first_document)
+  end
+
   private
 
   def search(query, project: @project, select: 'all')
     get api_v1_project_document_search_url(project, q: query, select: select)
     assert_response :success
 
-    JSON.parse(response.body)
+    JSON.parse(response.body).map { _1.fetch('document') }
   end
 
-  def assert_search_includes(search_results, document)
-    assert_includes ids(search_results), document.id
+  def assert_search_includes(search_results, document, *args)
+    assert_includes ids(search_results), document.id, *args
   end
 
-  def refute_search_includes(search_results, document)
-    refute_includes ids(search_results), document.id
+  def refute_search_includes(search_results, document, *args)
+    refute_includes ids(search_results), document.id, *args
   end
 
   def ids(collection)
