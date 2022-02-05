@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { Search } from 'react-bootstrap-icons'
 
 import { useContext } from 'lib/context'
+import useDirty from 'lib/useDirty'
 import useRemountKey from 'lib/useRemountKey'
 import useComboBox from 'lib/useComboBox'
-import { useTimeout } from 'lib/useTimer'
 import classList from 'lib/classList'
 import DocumentSearchAPI from 'lib/DocumentSearchAPI'
 
@@ -17,32 +17,27 @@ const SearchForm = props => {
   const { project } = useContext()
 
   const [query, setQuery] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [searchResults, setSearchResults] = useState([])
+
+  const fetchSearchResults = () => {
+    const promise = /[^\s]/.test(query)
+      ? DocumentSearchAPI(project.id).search(query)
+      : Promise.resolve([])
+
+    return promise.then(setSearchResults)
+  }
+
+  const { isDirty, makeDirty, enqueueFetch } = useDirty(fetchSearchResults, 100)
 
   const handleChange = event => {
     const query = event.target.value
     setQuery(query)
+    makeDirty()
 
-    const nonEmpty = /[^\s]/.test(query)
-
-    setIsLoading(nonEmpty)
-
-    if (!nonEmpty) {
-      setSearchResults([])
+    if (!/[^\s]/.test(query)) {
+      enqueueFetch()
     }
   }
-
-  useTimeout(() => {
-    if (/[^\s]/.test(query)) {
-      DocumentSearchAPI(project.id)
-        .search(query)
-        .then(setSearchResults)
-        .then(() => setIsLoading(false))
-    } else {
-      setSearchResults([])
-    }
-  }, 250, [query])
 
   const { selectedIndex, comboBoxProps, suggestionListProps, nthSuggestionProps, nthKeyboardShortcutBadge } = useComboBox({
     suggestionCount: searchResults.length,
@@ -81,7 +76,7 @@ const SearchForm = props => {
                 ? (
                   <div className="list-group-item layout-row justify-content-center align-items-center bg-light text-muted" style={{ minHeight: '10rem' }}>
                     {
-                      isLoading
+                      isDirty
                         ? <LoadingPlaceholder />
                         : 'No matching documents'
                     }

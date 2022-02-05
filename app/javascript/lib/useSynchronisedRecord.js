@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 
-import useCounter from 'lib/useCounter'
+import useDirty from 'lib/useDirty'
 import useUnmounting from 'lib/useUnmounting'
 
 const useSynchronisedRecord = ({
@@ -11,58 +11,32 @@ const useSynchronisedRecord = ({
 }) => {
   const [record, setRecord] = useState(initialRecord)
 
-  const [clock, incrementClock] = useCounter()
-  const [localVersion, incrementLocalVersion] = useCounter()
-  const [remoteVersion, setRemoteVersion] = useState(localVersion)
-  const [isUploading, setIsUploading] = useState(false)
-  const [lastUploadFailed, setLastUploadFailed] = useState(false)
-
-  const isDirty = localVersion > remoteVersion
-
   const updatePromiseCallbacks = useRef([])
   const unmounting = useUnmounting()
 
-  useEffect(() => {
-    const timeout = setInterval(incrementClock, syncInterval)
-    return () => clearTimeout(timeout)
-  }, [syncInterval])
+  const { isDirty, localVersion, makeDirty, enqueueFetch, lastFetchFailed } = useDirty(uploadingVersion => {
+    const callbacks = updatePromiseCallbacks.current.filter(({ version }) => uploadingVersion >= version)
 
-  useEffect(() => {
-    if (isDirty && !isUploading) {
-      setIsUploading(true)
+    return synchroniseRecord(record)
+      .then(updatedRecord => {
+        updateRecord(
+          uncontrolledParams.reduce(
+            (paramsToUpdate, key) => ({ ...paramsToUpdate, [key]: updatedRecord[key] }),
+            {}
+          ),
+          { uploadChanges: false },
+        )
 
-      const uploadingVersion = localVersion
-
-      const callbacks = updatePromiseCallbacks.current.filter(({ version }) => uploadingVersion >= version)
-
-      synchroniseRecord(record)
-        .then(updatedRecord => {
-          updateRecord(
-            uncontrolledParams.reduce(
-              (paramsToUpdate, key) => ({ ...paramsToUpdate, [key]: updatedRecord[key] }),
-              {}
-            ),
-            { uploadChanges: false },
-          )
-
-          setRemoteVersion(uploadingVersion)
-          setLastUploadFailed(false)
-
-          callbacks.forEach(callback => callback.resolve({
-            localRecord: record,
-            remoteRecord: updatedRecord,
-          }))
-        })
-        .catch(error => {
-          console.error(error)
-          setLastUploadFailed(true)
-          callbacks.forEach(callback => callback.reject(error))
-        })
-        .then(() => {
-          setIsUploading(false)
-        })
-    }
-  }, [clock])
+        callbacks.forEach(callback => callback.resolve({
+          localRecord: record,
+          remoteRecord: updatedRecord,
+        }))
+      })
+      .catch(error => {
+        callbacks.forEach(callback => callback.reject(error))
+        return Promise.reject(error)
+      })
+  }, syncInterval)
 
   useEffect(() => () => {
     if (unmounting.current && isDirty) {
@@ -104,10 +78,10 @@ const useSynchronisedRecord = ({
     }))
 
     if (options.uploadChanges) {
-      incrementLocalVersion()
+      makeDirty()
 
       if (options.updateImmediately) {
-        incrementClock()
+        enqueueFetch()
       }
 
       return new Promise((resolve, reject) => {
@@ -121,7 +95,7 @@ const useSynchronisedRecord = ({
   }
 
   const syncStatus = isDirty
-    ? (lastUploadFailed ? 'failed' : 'dirty')
+    ? (lastFetchFailed ? 'failed' : 'dirty')
     : 'upToDate'
 
   return [record, updateRecord, syncStatus]
