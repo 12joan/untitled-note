@@ -15,7 +15,7 @@ const DocumentEditorTitleBar = props => {
     <div className="layout-row gap-3 align-items-center">
       <input
         className="title-input flex-grow-1 h1 rounded-0 border-0 border-bottom p-0"
-        value={props.doc.title}
+        value={props.doc.title || ''}
         placeholder="Title"
         autoFocus={props.doc.blank}
         onChange={event => {
