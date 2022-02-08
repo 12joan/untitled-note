@@ -2,12 +2,14 @@ import React from 'react'
 import { useRef, useEffect } from 'react'
 import { TrixEditor } from 'react-trix'
 
+import { useContext } from 'lib/context'
 import { useInterval } from 'lib/useTimer'
 
-// Adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
-const escapeRegExp = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
 const DocumentEditorBodyEditor = props => {
+  const { mentionables: mentionablesByDocument, setParams } = useContext()
+
+  const mentionables = Object.values({ ...mentionablesByDocument, [props.doc.id]: [] }).flat()
+
   const editorEl = useRef()
   const ignoreChanges = useRef(true)
   const getEditor = () => editorEl.current.editor
@@ -21,6 +23,8 @@ const DocumentEditorBodyEditor = props => {
     editor.element.addEventListener('click', handleClick)
 
     ignoreChanges.current = false
+
+    highlightMentions()
   }
 
   const handleClick = event => {
@@ -44,7 +48,14 @@ const DocumentEditorBodyEditor = props => {
       event.preventDefault()
       event.stopPropagation()
 
-      alert(actualTarget.innerText)
+      const mentionText = actualTarget.innerText
+
+      for (const [documentId, mentionables] of Object.entries(mentionablesByDocument)) {
+        if (mentionables.some(mentionable => mentionable.toLowerCase() === mentionText.toLowerCase())) {
+          setParams({ keywordId: undefined, documentId })
+          break
+        }
+      }
     }
   }
 
@@ -55,29 +66,28 @@ const DocumentEditorBodyEditor = props => {
     props.updateDocument({ body }, { updateImmediately: false })
   }
 
-  const previousText = useRef()
+  const previousRanges = useRef()
 
   const highlightMentions = () => {
     const text = getEditor().getDocument().toString()
 
-    if (previousText.current === text)
-      return
+    const ranges = mentionables.map(mentionable => {
+      // escapeRegExp adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+      const escapeRegExp = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-    const aliases = ['Project', 'Keyword', 'Document', 'Mention', 'Note App']
-
-    const ranges = aliases.map(alias => {
-      const regExp = new RegExp('\\b' + escapeRegExp(alias) + '\\b', 'gi')
+      const regExp = new RegExp('\\b' + escapeRegExp(mentionable) + '\\b', 'gi')
 
       return Array(...text.matchAll(regExp))
-        .map(({ index }) => [index, index + alias.length])
+        .map(({ index }) => [index, index + mentionable.length])
     }).flat()
 
-    setMentionRanges(ranges)
-
-    previousText.current = text
+    if (previousRanges.current?.toString() !== ranges.toString()) {
+      setMentionRanges(ranges)
+      previousRanges.current = ranges
+    }
   }
 
-  useInterval(highlightMentions, 100)
+  useInterval(highlightMentions, 200, [mentionables])
 
   const setMentionRanges = ranges => {
     // Adapted from https://embed.plnkr.co/QU3oRc/

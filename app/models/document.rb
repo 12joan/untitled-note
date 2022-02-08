@@ -36,6 +36,10 @@ class Document < ApplicationRecord
     end
   end
 
+  def mentionables
+    ([title].compact + aliases.pluck(:text)).flat_map { [_1, _1.pluralize] }.uniq
+  end
+
   def keywords_attributes=(keywords_attributes)
     documents_keywords.each do |documents_keyword|
       if keywords_attributes.none? { |keyword_attributes| keyword_attributes[:text] == documents_keyword.keyword.text }

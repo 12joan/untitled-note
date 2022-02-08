@@ -65,4 +65,21 @@ LoadAsync.propTypes = {
   error: PropTypes.func,
 }
 
+const allProviders = providers => (resolve, reject) => {
+  const None = new Object()
+  const values = new Array(providers.length).fill(None)
+
+  const setValue = i => value => {
+    values[i] = value
+
+    if (!values.some(value => value === None))
+      resolve(values)
+  }
+
+  const interruptCallbacks = providers.map((provider, i) => provider(setValue(i), reject))
+
+  return () => interruptCallbacks.forEach(interruptCallback => interruptCallback?.())
+}
+
 export default LoadAsync
+export { allProviders }

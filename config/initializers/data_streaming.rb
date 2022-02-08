@@ -25,6 +25,14 @@ Rails.application.reloader.to_prepare do
           index: ->(params) { "Project#index" },
         },
       },
+
+      Mentionable: {
+        api_controller: MentionablesAPI,
+
+        actions: {
+          index: -> (params) { "Mentionable#index(project_id: #{params.fetch(:project_id)})" },
+        },
+      }
     },
 
     listeners: {
@@ -32,6 +40,7 @@ Rails.application.reloader.to_prepare do
         unless document.blank
           broadcast "Document#index(project_id: #{document.project_id})"
           broadcast "Document#show(project_id: #{document.project_id}, id: #{document.id})"
+          broadcast "Mentionable#index(project_id: #{document.project_id})"
         end
       },
 
