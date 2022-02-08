@@ -42,4 +42,19 @@
   a {
     cursor: pointer;
   }
+
+  x-mention {
+    padding: 0 0.25em;
+    text-decoration: none;
+    color: $primary;
+    cursor: pointer;
+    background-color: lighten($blue-100, 5%);
+    border: 2px solid lighten($blue-100, 5%);
+    border-radius: 0.25em;
+
+    &:hover, &:focus {
+      background-color: $blue-100;
+      border-color: $blue-100;
+    }
+  }
 }
