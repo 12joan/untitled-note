@@ -22,4 +22,5 @@ end
 
 SanitizeHtml = lambda do |html|
   Rails::Html::SafeListSanitizer.new.sanitize(html, scrubber: DocumentBodyScrubber.new)
+    .gsub(/\n*(<\/?ul>|<\/ol>|<\/?li>)\n*/, '\1')
 end

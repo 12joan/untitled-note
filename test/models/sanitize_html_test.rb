@@ -26,9 +26,9 @@ class SanitizeHtmlTest < ActiveSupport::TestCase
   end
 
   test 'permits block comments' do
-    html = '<li><!--block-->Hello world</li>'
+    html = '<li><!--block--> Hello world</li>'
 
-    assert_equal html.delete("\n"), SanitizeHtml.(html).delete("\n")
+    assert_equal html, SanitizeHtml.(html)
   end
 
   test 'strips out arbitrary comments' do
