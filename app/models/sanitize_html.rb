@@ -21,5 +21,5 @@ class DocumentBodyScrubber < Rails::Html::PermitScrubber
 end
 
 SanitizeHtml = lambda do |html|
-  Rails::Html::SafeListSanitizer.new.sanitize(html, scrubber: DocumentBodyScrubber.new).delete("\n")
+  Rails::Html::SafeListSanitizer.new.sanitize(html, scrubber: DocumentBodyScrubber.new)
 end

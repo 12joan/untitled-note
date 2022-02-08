@@ -28,10 +28,16 @@ class SanitizeHtmlTest < ActiveSupport::TestCase
   test 'permits block comments' do
     html = '<li><!--block-->Hello world</li>'
 
-    assert_equal html, SanitizeHtml.(html)
+    assert_equal html.delete("\n"), SanitizeHtml.(html).delete("\n")
   end
 
   test 'strips out arbitrary comments' do
     refute_includes SanitizeHtml.('<!--xss-->'), 'xss'
+  end
+
+  test 'permits newline characters in pre tags' do
+    html = "<pre>hello\nworld</pre>"
+
+    assert_equal html, SanitizeHtml.(html)
   end
 end
