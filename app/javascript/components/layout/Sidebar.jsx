@@ -76,7 +76,7 @@ const CollapsibleSidebar = forwardRef((props, ref) => {
   return (
     <div
       id={props.id}
-      className={classList([props.className, 'border-end', { 'd-none': !visible }])} style={{ width: 'var(--offcanvas-horizontal-width)' }}>
+      className={classList([props.className, 'flex-shrink-0 border-end', { 'd-none': !visible }])} style={{ width: 'var(--offcanvas-horizontal-width)' }}>
       {props.children}
     </div>
   )
