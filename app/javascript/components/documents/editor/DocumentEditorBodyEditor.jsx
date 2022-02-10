@@ -93,7 +93,9 @@ const DocumentEditorBodyEditor = props => {
     // Adapted from https://embed.plnkr.co/QU3oRc/
     const editor = getEditor()
 
+    const previousActiveElement = document.activeElement
     const previousSelectedRange = editor.getSelectedRange()
+
     // Remove all existing mentions
     editor.setSelectedRange([0, editor.getDocument().toString().length])
     editor.deactivateAttribute('mention')
@@ -106,6 +108,11 @@ const DocumentEditorBodyEditor = props => {
 
     // Restore selection state
     editor.setSelectedRange(previousSelectedRange)
+
+    previousActiveElement.focus()
+
+    if (document.activeElement !== previousActiveElement)
+      document.activeElement.blur()
   }
 
   return (
