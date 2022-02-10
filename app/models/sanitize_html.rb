@@ -21,6 +21,14 @@ class DocumentBodyScrubber < Rails::Html::PermitScrubber
 end
 
 SanitizeHtml = lambda do |html|
-  Rails::Html::SafeListSanitizer.new.sanitize(html, scrubber: DocumentBodyScrubber.new)
-    .gsub(/\n*(<\/?ul>|<\/ol>|<\/?li>)\n*/, '\1')
+  sanitized_html = Rails::Html::SafeListSanitizer.new.sanitize(html, scrubber: DocumentBodyScrubber.new)
+
+  # Remove newlines from all elements except direct children of <pre>
+  Nokogiri::HTML.fragment(sanitized_html).tap do |root|
+    root.traverse do |node|
+      if node.text? && /\n/.match?(node.text) && node.parent.node_name != 'pre'
+        node.content = ''
+      end
+    end
+  end.to_html
 end

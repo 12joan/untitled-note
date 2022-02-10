@@ -35,6 +35,12 @@ class SanitizeHtmlTest < ActiveSupport::TestCase
     refute_includes SanitizeHtml.('<!--xss-->'), 'xss'
   end
 
+  test 'removes newlines from h1 tags' do
+    html = "<h1>\n<!--block-->hello world</h1>"
+
+    assert_equal html.delete("\n"), SanitizeHtml.(html)
+  end
+
   test 'permits newline characters in pre tags' do
     html = "<pre>hello\nworld</pre>"
 
