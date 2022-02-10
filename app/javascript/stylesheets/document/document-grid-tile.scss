@@ -18,18 +18,18 @@
     @extend .ratio-16x9;
 
     overflow: hidden;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
 
     .document-grid-tile-preview {
-      @extend .p-3;
+      padding: 2rem;
+
+      --shrink-factor: 2.5;
 
       position: absolute;
-      top: 0.5rem;
-      left: -50%;
-      width: 200%;
-      height: 200%;
+      left: calc(-50% * (var(--shrink-factor) - 1));
+      width: calc(100% * var(--shrink-factor));
 
-      transform: scale(0.5);
+      transform: scale(calc(1 / var(--shrink-factor)));
       transform-origin: top;
       pointer-events: none;
     }

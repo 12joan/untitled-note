@@ -31,7 +31,7 @@ const DocumentGridTile = props => {
   return (
     <DocumentGridTileContainer cardId={cardId} label={
       <label htmlFor={cardId} className="layout-row justify-content-center align-items-center py-1">
-        <NavLink className="stretched-link text-decoration-none text-secondary" params={{ documentId: props.doc.id }}>
+        <NavLink className="stretched-link text-decoration-none text-secondary text-center" params={{ documentId: props.doc.id }}>
           {props.doc.safe_title}
         </NavLink>
 
@@ -43,7 +43,7 @@ const DocumentGridTile = props => {
             type="button"
             id={`document-${props.doc.id}-dropdown-button`}
             className="btn btn-icon text-secondary position-relative"
-            style={{ zIndex: 1 }}
+            style={{ zIndex: 1, verticalAlign: '-0.5rem' }}
             data-bs-toggle="dropdown"
             aria-expanded="false">
             <ThreeDots className="bi" />
