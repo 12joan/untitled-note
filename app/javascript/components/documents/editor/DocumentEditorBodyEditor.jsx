@@ -22,9 +22,9 @@ const DocumentEditorBodyEditor = props => {
     editor.loadHTML(props.doc.body)
     editor.element.addEventListener('click', handleClick)
 
-    ignoreChanges.current = false
-
     highlightMentions()
+
+    ignoreChanges.current = false
   }
 
   const handleClick = event => {
