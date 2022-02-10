@@ -63,7 +63,7 @@ const DocumentIndex = props => {
 
   return (
     <div ref={scrollContainer} className="flex-grow-1 overflow-auto p-3">
-      <div className="mb-2">
+      <div className="mb-3">
         <ContentHeader
           middle={
             <NavLink
