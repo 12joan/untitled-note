@@ -23,7 +23,7 @@ const DocumentEditor = props => {
     synchroniseRecord: doc => {
       return DocumentsAPI(projectId).update(doc)
     },
-    uncontrolledParams: ['updated_at'],
+    uncontrolledParams: ['updated_at', 'safe_title'],
   })
 
   useTitle(doc.safe_title, { layer: 2 })
