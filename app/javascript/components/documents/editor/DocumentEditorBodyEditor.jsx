@@ -5,6 +5,9 @@ import { TrixEditor } from 'react-trix'
 import { useContext } from 'lib/context'
 import { useInterval } from 'lib/useTimer'
 
+// escapeRegExp adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+const escapeRegExp = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 const DocumentEditorBodyEditor = props => {
   const { mentionables: mentionablesByDocument, setParams } = useContext()
 
@@ -22,7 +25,7 @@ const DocumentEditorBodyEditor = props => {
     editor.loadHTML(props.doc.body)
     editor.element.addEventListener('click', handleClick)
 
-    highlightMentions()
+    applyTextFormatting()
 
     ignoreChanges.current = false
   }
@@ -68,16 +71,41 @@ const DocumentEditorBodyEditor = props => {
 
   const previousRanges = useRef()
 
-  const highlightMentions = () => {
-    const text = getEditor().getDocument().toString()
+  const applyTextFormatting = () => {
+    const editor = getEditor()
+    const text = editor.getDocument().toString()
+
+    Array(
+      ['# ', 'heading1'],
+      ['> ', 'quote'],
+      ['- ', 'bullet'],
+      ['1. ', 'number'],
+    ).forEach(([pattern, attribute]) => {
+      const regExp = new RegExp('^' + escapeRegExp(pattern), 'gm')
+
+      Array.from(text.matchAll(regExp)).forEach(({ index }) => {
+        const previousSelectedRange = editor.getSelectedRange()
+
+        editor.setSelectedRange([index, index + pattern.length])
+        editor.deleteInDirection('forward')
+        editor.activateAttribute(attribute)
+
+        // Restore selection state
+        if (previousSelectedRange[0] < index) {
+          // Selection is before replacement; leave as is
+          editor.setSelectedRange(previousSelectedRange)
+        } else {
+          // Selection is in or after replaced range
+          const selectionOffset = Math.min(previousSelectedRange[0] - index, pattern.length)
+          editor.setSelectedRange(previousSelectedRange.map(x => x - selectionOffset))
+        }
+      })
+    })
 
     const ranges = mentionables.map(mentionable => {
-      // escapeRegExp adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
-      const escapeRegExp = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
       const regExp = new RegExp('\\b' + escapeRegExp(mentionable) + '\\b', 'gi')
 
-      return Array(...text.matchAll(regExp))
+      return Array.from(text.matchAll(regExp))
         .map(({ index }) => [index, index + mentionable.length])
     }).flat()
 
@@ -87,7 +115,7 @@ const DocumentEditorBodyEditor = props => {
     }
   }
 
-  useInterval(highlightMentions, 200, [mentionables])
+  useInterval(applyTextFormatting, 200, [mentionables])
 
   const setMentionRanges = ranges => {
     // Adapted from https://embed.plnkr.co/QU3oRc/
