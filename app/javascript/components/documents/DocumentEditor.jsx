@@ -20,9 +20,10 @@ const DocumentEditor = props => {
 
   const [doc, updateDocument, syncStatus] = useSynchronisedRecord({
     initialRecord: props.document,
-    synchroniseRecord: doc => {
-      return DocumentsAPI(projectId).update(doc)
-    },
+    synchroniseRecord: doc => Promise.race([
+      DocumentsAPI(projectId).update(doc),
+      new Promise((resolve, reject) => setTimeout(() => reject('Update timed out'), 10000)),
+    ]),
     uncontrolledParams: ['updated_at', 'safe_title'],
   })
 
@@ -36,7 +37,11 @@ const DocumentEditor = props => {
   return (
     <>
       <div ref={documentEditorRef} className="document-editor layout-column flex-grow-1">
-        <DocumentEditorSyncFailedToast syncStatus={syncStatus} />
+        {
+          syncStatus === 'failed' && (
+            <DocumentEditorSyncFailedToast />
+          )
+        }
 
         <DocumentEditorTitleBar
           doc={doc}
