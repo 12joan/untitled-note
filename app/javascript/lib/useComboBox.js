@@ -53,7 +53,6 @@ const useComboBox = ({ suggestionCount, suggestionListId, nthSuggestionId }) => 
 
       case 'Tab':
         handleTab(event.shiftKey ? -1 : 1, event)
-        event.preventDefault()
         break
 
       case 'Enter':
@@ -109,12 +108,11 @@ const useComboBox = ({ suggestionCount, suggestionListId, nthSuggestionId }) => 
 
     return (
       <span
-        className={classList(['bg-light text-dark text-center small rounded border px-2 py-1', { 'opacity-0': !showBadge }])}
+        className={classList(['bg-light text-dark text-center small rounded border px-2 py-1', { 'invisible': !showBadge }])}
         aria-hidden={!showBadge}
         style={{ minWidth: '3em' }}>
         {
-          showBadge &&
-            (selected ? '↵' : `${modifierKey}${index + 1}`)
+          selected ? '↵' : `${modifierKey}${index + 1}`
         }
       </span>
     )

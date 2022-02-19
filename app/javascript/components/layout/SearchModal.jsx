@@ -57,7 +57,7 @@ const SearchForm = props => {
         <Search className="bi text-muted fs-5" />
 
         <input
-          className="flex-grow-1 form-control form-control-lg border-0 rounded-0 px-2 py-3 no-focus-outline"
+          className="flex-grow-1 form-control form-control-lg border-0 rounded-0 p-3 no-focus-outline"
           placeholder={`Search ${project.name}`}
           value={query}
           data-auto-focus
@@ -88,7 +88,7 @@ const SearchForm = props => {
                   return (
                     <div
                       key={doc.id}
-                      className={classList(["list-group-item list-group-item-action layout-row align-items-center gap-3 p-3", { active }])}
+                      className={classList(["list-group-item layout-row align-items-center gap-3 p-3", { active }])}
                       {...nthSuggestionProps(index)}>
                       {nthKeyboardShortcutBadge(index)}
 

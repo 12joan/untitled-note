@@ -51,28 +51,26 @@ const SwitchProjectForm = props => {
           }} />
       </div>
 
-      <div className="project-list list-group list-group-flush border-top border-bottom mx-n4" {...suggestionListProps}>
+      <div className="project-list list-group list-group-flush border-top mx-n4" {...suggestionListProps}>
         {
           filteredProjects.length === 0
             ? <div className="text-muted text-center px-4 py-3">No matching projects</div>
             : filteredProjects.map((project, index) => (
               <div
                 key={project.id}
-                className={classList(["list-group-item list-group-item-action layout-row align-items-center gap-3 px-4 py-3", {
+                className={classList(["list-group-item layout-row align-items-center gap-3 px-4 py-3", {
                   active: index === selectedIndex,
                 }])}
                 {...nthSuggestionProps(index)}>
                 {nthKeyboardShortcutBadge(index)}
 
-                <div className="flex-grow-1 layout-row">
-                  <h5 className="fw-normal mb-0">{project.name}</h5>
-                  <div className="ms-auto"><ChevronRight className="bi" /></div>
-                  <NavLink
-                    className="stretched-link"
-                    tabIndex="-1"
-                    params={{ projectId: project.id, keywordId: undefined, documentId: undefined }}
-                    data-bs-dismiss="modal" />
-                </div>
+                <h5 className="fw-normal mb-0">{project.name}</h5>
+
+                <NavLink
+                  className="stretched-link"
+                  tabIndex="-1"
+                  params={{ projectId: project.id, keywordId: undefined, documentId: undefined }}
+                  data-bs-dismiss="modal" />
               </div>
             ))
         }
@@ -88,6 +86,8 @@ const SwitchProjectModal = props => {
     <Modal
       id="switch-project-modal"
       title="Projects"
+      modalDialogProps={{ className: 'modal-dialog modal-lg' }}
+      modalBodyProps={{ className: 'modal-body px-4 py-0' }}
       centered={false}
       onShow={remountForm}>
       <SwitchProjectForm key={formKey} />
