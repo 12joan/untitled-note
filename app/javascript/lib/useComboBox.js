@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
+import modifierKey from 'lib/modifierKey'
 import classList from 'lib/classList'
 
 const mod = (n, d) => ((n % d) + d) % d
@@ -96,7 +97,6 @@ const useComboBox = ({ suggestionCount, suggestionListId, nthSuggestionId }) => 
   })
 
   const isPhone = /phone/i.test(navigator.userAgent)
-  const modifierKey = /mac/i.test(navigator.userAgent) ? '⌘' : '^'
 
   const nthKeyboardShortcutBadge = index => {
     if (isPhone)
@@ -112,7 +112,7 @@ const useComboBox = ({ suggestionCount, suggestionListId, nthSuggestionId }) => 
         aria-hidden={!showBadge}
         style={{ minWidth: '3em' }}>
         {
-          selected ? '↵' : `${modifierKey}${index + 1}`
+          selected ? '↵' : `${modifierKey.symbol}${index + 1}`
         }
       </span>
     )
