@@ -107,4 +107,19 @@ class DocumentTest < ActiveSupport::TestCase
 
     assert_equal [document3, document4, document6], Document.pinned
   end
+
+  test 'calling extract_definitive_mentions affects the result of definitive_mentions' do
+    document = create(:document)
+    assert_empty document.definitive_mentions
+    document.extract_definitive_mentions(body_with_definitive_mentions(%w(one two three)))
+    assert_equal %w(one two three), document.definitive_mentions
+  end
+
+  private
+
+  def body_with_definitive_mentions(definitive_mentions)
+    definitive_mentions
+      .map { |text| "<p><x-definitive-mention>#{text}</x-definitive-mention></p>" }
+      .join
+  end
 end

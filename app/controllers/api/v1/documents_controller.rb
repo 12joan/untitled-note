@@ -6,30 +6,12 @@ module API
 
       def create
         @document = @project.documents.build(document_params)
-
-        unless keywords_attributes.nil?
-          @document.keywords_attributes = keywords_attributes
-        end
-
-        if @document.save
-          render json: @document.query(:all)
-        else
-          render json: @document.errors, status: :unprocessable_entity
-        end
+        save_document
       end
 
       def update
         @document.assign_attributes(document_params)
-
-        unless keywords_attributes.nil?
-          @document.keywords_attributes = keywords_attributes
-        end
-
-        if @document.save
-          render json: @document.query(:all)
-        else
-          render json: @document.errors, status: :unprocessable_entity
-        end
+        save_document
       end
 
       def destroy
@@ -56,6 +38,22 @@ module API
 
       def keywords_attributes
         params.require(:document).permit(keywords_attributes: [:text]).fetch(:keywords_attributes, nil)
+      end
+
+      def save_document
+        unless document_params[:body].nil?
+          @document.extract_definitive_mentions(document_params[:body])
+        end
+
+        unless keywords_attributes.nil?
+          @document.keywords_attributes = keywords_attributes
+        end
+
+        if @document.save
+          render json: @document.query(:all)
+        else
+          render json: @document.errors, status: :unprocessable_entity
+        end
       end
     end
   end

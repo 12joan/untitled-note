@@ -5,6 +5,7 @@ class Document < ApplicationRecord
   has_many :documents_keywords, dependent: :destroy
   has_many :keywords, through: :documents_keywords
   accepts_nested_attributes_for :keywords
+  serialize :definitive_mentions, Array
 
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
@@ -36,8 +37,13 @@ class Document < ApplicationRecord
     end
   end
 
+  def extract_definitive_mentions(body)
+    self.definitive_mentions = Nokogiri::HTML.fragment(body).css('x-definitive-mention').map(&:text)
+  end
+
   def mentionables
-    ([title].compact + aliases.pluck(:text)).flat_map { [_1, _1.pluralize] }.uniq
+    ([title].compact + aliases.pluck(:text) + definitive_mentions)
+      .flat_map { [_1, _1.pluralize] }.uniq
   end
 
   def keywords_attributes=(keywords_attributes)
