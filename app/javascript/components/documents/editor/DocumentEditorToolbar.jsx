@@ -5,6 +5,7 @@ import {
   TypeItalic as Italic,
   TypeStrikethrough as Strikethrough,
   Link45deg as Link,
+  Book,
   TypeH1 as Heading,
   BlockquoteLeft as Quote,
   Code as Code,
@@ -34,6 +35,7 @@ const DocumentEditorToolbar = props => {
         <ToolbarButton action="increaseNestingLevel" title="Increase Level" icon={Indent} />
 
         <ToolbarButton action="attachFiles" title="Attach Files" icon={Attachment} />
+        <ToolbarButton attribute="definitiveMention" title="Definitive Mention" icon={Book} />
 
         <ToolbarButton shortcut="z" action="undo" title="Undo" icon={Undo} />
         <ToolbarButton shortcut="shift+z" action="redo" title="Redo" icon={Redo} />

@@ -17,6 +17,7 @@ require('@rails/actiontext')
 require('lib/trixNewlinePatch')
 require('lib/trixDialogPatch')
 require('lib/trixMentionPatch')
+require('lib/trixDefinitiveMentionPatch')
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

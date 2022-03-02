@@ -3,7 +3,7 @@ require 'test_helper'
 class SanitizeHtmlTest < ActiveSupport::TestCase
   test 'permits listed tags and attributes' do
     html = <<~HTML.delete("\n")
-      <p>Paragraph</p>
+      <p><x-definitive-mention>Paragraph</x-definitive-mention></p>
       <p>Line<br>break</p>
       <p><a href="https://example.com">Safe link</a></p>
     HTML
