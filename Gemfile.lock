@@ -295,7 +295,7 @@ DEPENDENCIES
   webpacker (~> 5.0)
 
 RUBY VERSION
-   ruby 3.0.1p64
+   ruby 3.0.4
 
 BUNDLED WITH
    2.2.15
