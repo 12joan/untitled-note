@@ -1,4 +1,4 @@
-import fetchAPIEndpoint from 'lib/fetchAPIEndpoint'
+import fetchAPIEndpoint from '~/lib/fetchAPIEndpoint'
 
 class ResourcesAPI {
   constructor({ apiEndpoints, transformRequestParams, transformResponseParams, resourceId }) {

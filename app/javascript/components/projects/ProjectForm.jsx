@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
 const ProjectForm = props => {
   const [name, setName] = useState(props.initialProject.name || '')

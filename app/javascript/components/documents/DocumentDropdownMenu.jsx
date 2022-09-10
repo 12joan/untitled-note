@@ -1,7 +1,7 @@
 import React from 'react'
 
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
-import { useContext } from 'lib/context'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import { useContext } from '~/lib/context'
 
 const DocumentDropdownMenu = props => {
   const { projectId, setParams } = useContext()

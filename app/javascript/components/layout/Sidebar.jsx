@@ -2,10 +2,10 @@ import React from 'react'
 import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react'
 import { Offcanvas } from 'bootstrap'
 
-import { useContext } from 'lib/context'
-import classList from 'lib/classList'
+import { useContext } from '~/lib/context'
+import classList from '~/lib/classList'
 
-import NavigationMenu from 'components/layout/NavigationMenu'
+import NavigationMenu from '~/components/layout/NavigationMenu'
 
 const Sidebar = props => {
   const { sendSidebarEvent } = useContext()

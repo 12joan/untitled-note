@@ -1,4 +1,4 @@
-import ResourcesAPI from 'lib/ResourcesAPI'
+import ResourcesAPI from '~/lib/ResourcesAPI'
 
 const BlankDocumentAPI = (projectId) => new ResourcesAPI({
   apiEndpoints: {

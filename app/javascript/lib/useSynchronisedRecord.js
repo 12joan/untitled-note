@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 
-import useDirty from 'lib/useDirty'
-import useUnmounting from 'lib/useUnmounting'
+import useDirty from '~/lib/useDirty'
+import useUnmounting from '~/lib/useUnmounting'
 
 const useSynchronisedRecord = ({
   initialRecord,

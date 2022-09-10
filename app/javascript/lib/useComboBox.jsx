@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 
-import modifierKey from 'lib/modifierKey'
-import classList from 'lib/classList'
+import modifierKey from '~/lib/modifierKey'
+import classList from '~/lib/classList'
 
 const mod = (n, d) => ((n % d) + d) % d
 

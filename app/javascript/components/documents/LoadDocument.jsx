@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useContext } from 'lib/context'
-import DocumentsStream from 'lib/streams/DocumentsStream'
+import { useContext } from '~/lib/context'
+import DocumentsStream from '~/lib/streams/DocumentsStream'
 
-import LoadAsync from 'components/LoadAsync'
+import LoadAsync from '~/components/LoadAsync'
 
 const LoadDocument = props => {
   const { projectId } = useContext()

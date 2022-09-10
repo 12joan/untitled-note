@@ -1,8 +1,8 @@
 import React from 'react'
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import ShowDocument from 'components/documents/ShowDocument'
-import DocumentIndex from 'components/documents/DocumentIndex'
+import ShowDocument from '~/components/documents/ShowDocument'
+import DocumentIndex from '~/components/documents/DocumentIndex'
 
 const ContentArea = props => {
   const { documentId } = useContext()

@@ -2,10 +2,10 @@ import React from 'react'
 import { useRef, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import { useContext } from 'lib/context'
-import ProjectsAPI from 'lib/resources/ProjectsAPI'
+import { useContext } from '~/lib/context'
+import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 
-import Modal from 'components/Modal'
+import Modal from '~/components/Modal'
 
 const NewProjectModal = withRouter(props => {
   const { project, reloadProjects, setParams } = useContext()

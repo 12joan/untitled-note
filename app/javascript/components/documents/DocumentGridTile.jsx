@@ -2,12 +2,12 @@ import React from 'react'
 import { useRef, useEffect } from 'react'
 import { ThreeDots } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
+import { useContext } from '~/lib/context'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 
-import NavLink from 'components/NavLink'
-import LoadingPlaceholder from 'components/LoadingPlaceholder'
-import DocumentDropdownMenu from 'components/documents/DocumentDropdownMenu'
+import NavLink from '~/components/NavLink'
+import LoadingPlaceholder from '~/components/LoadingPlaceholder'
+import DocumentDropdownMenu from '~/components/documents/DocumentDropdownMenu'
 
 const DocumentGridTile = props => {
   const { projectId } = useContext()

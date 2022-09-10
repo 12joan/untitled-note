@@ -2,8 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { Palette, At as Mention } from 'react-bootstrap-icons'
 
-import DocumentEditorSyncStatusIndicator from 'components/documents/editor/DocumentEditorSyncStatusIndicator'
-import DocumentEditorToolbar from 'components/documents/editor/DocumentEditorToolbar'
+import DocumentEditorSyncStatusIndicator from '~/components/documents/editor/DocumentEditorSyncStatusIndicator'
+import DocumentEditorToolbar from '~/components/documents/editor/DocumentEditorToolbar'
 
 const DocumentEditorFooter = props => {
   return (

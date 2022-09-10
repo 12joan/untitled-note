@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRef } from 'react'
 
-import Modal from 'components/Modal'
+import Modal from '~/components/Modal'
 
 const TrixDialogs = props => {
   const inputEl = useRef(null)

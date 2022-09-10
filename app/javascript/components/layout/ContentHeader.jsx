@@ -1,6 +1,6 @@
 import React from 'react'
 
-import BackButton from 'components/layout/BackButton'
+import BackButton from '~/components/layout/BackButton'
 
 const ContentHeader = props => {
   return (

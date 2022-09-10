@@ -2,8 +2,8 @@ import React from 'react'
 import { useRef, useEffect } from 'react'
 import { TrixEditor } from 'react-trix'
 
-import { useContext } from 'lib/context'
-import { useInterval } from 'lib/useTimer'
+import { useContext } from '~/lib/context'
+import { useInterval } from '~/lib/useTimer'
 
 // escapeRegExp adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
 const escapeRegExp = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

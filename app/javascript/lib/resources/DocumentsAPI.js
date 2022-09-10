@@ -1,4 +1,4 @@
-import ResourcesAPI from 'lib/ResourcesAPI'
+import ResourcesAPI from '~/lib/ResourcesAPI'
 
 const DocumentsAPI = projectId => new ResourcesAPI({
   apiEndpoints: {

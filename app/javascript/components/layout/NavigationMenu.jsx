@@ -1,12 +1,12 @@
 import React from 'react'
 import { CaretLeftFill } from 'react-bootstrap-icons'
 
-import { useContext, ContextProvider } from 'lib/context'
-import DocumentsStream from 'lib/streams/DocumentsStream'
+import { useContext, ContextProvider } from '~/lib/context'
+import DocumentsStream from '~/lib/streams/DocumentsStream'
 
-import NavLink from 'components/NavLink'
-import LoadAsync from 'components/LoadAsync'
-import ProjectDropdownMenu from 'components/layout/ProjectDropdownMenu'
+import NavLink from '~/components/NavLink'
+import LoadAsync from '~/components/LoadAsync'
+import ProjectDropdownMenu from '~/components/layout/ProjectDropdownMenu'
 
 const NavigationMenu = props => {
   const { project, documentId } = useContext()

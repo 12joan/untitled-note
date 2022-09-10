@@ -1,7 +1,7 @@
 import React from 'react'
 import { SortAlphaDown } from 'react-bootstrap-icons'
 
-import LinkSelect from 'components/LinkSelect'
+import LinkSelect from '~/components/LinkSelect'
 
 const DocumentIndexSortButton = props => {
   return (

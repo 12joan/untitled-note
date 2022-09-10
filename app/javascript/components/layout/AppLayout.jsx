@@ -1,17 +1,17 @@
 import React from 'react'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import TopBar from 'components/layout/TopBar'
-import Sidebar from 'components/layout/Sidebar'
-import ContentArea from 'components/layout/ContentArea'
-import SwitchProjectModal from 'components/projects/SwitchProjectModal'
-import NewProjectModal from 'components/projects/NewProjectModal'
-import EditProjectModal from 'components/projects/EditProjectModal'
-import DeleteProjectModal from 'components/projects/DeleteProjectModal'
-import SearchModal from 'components/layout/SearchModal'
-import TrixDialogs from 'components/layout/TrixDialogs'
-import KeyboardNavigationModal from 'components/layout/KeyboardNavigationModal'
+import TopBar from '~/components/layout/TopBar'
+import Sidebar from '~/components/layout/Sidebar'
+import ContentArea from '~/components/layout/ContentArea'
+import SwitchProjectModal from '~/components/projects/SwitchProjectModal'
+import NewProjectModal from '~/components/projects/NewProjectModal'
+import EditProjectModal from '~/components/projects/EditProjectModal'
+import DeleteProjectModal from '~/components/projects/DeleteProjectModal'
+import SearchModal from '~/components/layout/SearchModal'
+import TrixDialogs from '~/components/layout/TrixDialogs'
+import KeyboardNavigationModal from '~/components/layout/KeyboardNavigationModal'
 
 const AppLayout = props => {
   const { projectId, keywordId, documentId } = useContext()

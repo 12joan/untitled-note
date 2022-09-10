@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
-import useCounter from 'lib/useCounter'
-import { useInterval } from 'lib/useTimer'
+import useCounter from '~/lib/useCounter'
+import { useInterval } from '~/lib/useTimer'
 
 const useDirty = (fetch, interval) => {
   const [clock, incrementClock] = useCounter()

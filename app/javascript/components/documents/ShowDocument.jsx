@@ -1,12 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import ContentHeader from 'components/layout/ContentHeader'
-import LoadDocument from 'components/documents/LoadDocument'
-import LoadingPlaceholder from 'components/LoadingPlaceholder'
-import DocumentEditor from 'components/documents/DocumentEditor'
+import ContentHeader from '~/components/layout/ContentHeader'
+import LoadDocument from '~/components/documents/LoadDocument'
+import LoadingPlaceholder from '~/components/LoadingPlaceholder'
+import DocumentEditor from '~/components/documents/DocumentEditor'
 
 const ShowDocument = props => {
   const { keyword } = useContext()

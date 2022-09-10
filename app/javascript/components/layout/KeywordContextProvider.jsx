@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { useContext, ContextProvider } from 'lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 
-import RunOnMount from 'components/RunOnMount'
+import RunOnMount from '~/components/RunOnMount'
 
 const KeywordContextProvider = props => {
   const { keywordId, keywords, setParams } = useContext()

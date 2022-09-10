@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom'
 import { useState, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import { useContext } from 'lib/context'
-import useSynchronisedRecord from 'lib/useSynchronisedRecord'
-import DocumentsAPI from 'lib/resources/DocumentsAPI'
-import useTitle from 'lib/useTitle'
-import classList from 'lib/classList'
+import { useContext } from '~/lib/context'
+import useSynchronisedRecord from '~/lib/useSynchronisedRecord'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import useTitle from '~/lib/useTitle'
+import classList from '~/lib/classList'
 
-import DocumentEditorSyncFailedToast from 'components/documents/editor/DocumentEditorSyncFailedToast'
-import DocumentEditorTitleBar from 'components/documents/editor/DocumentEditorTitleBar'
-import DocumentEditorKeywords from 'components/documents/editor/DocumentEditorKeywords'
-import DocumentEditorBodyEditor from 'components/documents/editor/DocumentEditorBodyEditor'
-import DocumentEditorFooter from 'components/documents/editor/DocumentEditorFooter'
+import DocumentEditorSyncFailedToast from '~/components/documents/editor/DocumentEditorSyncFailedToast'
+import DocumentEditorTitleBar from '~/components/documents/editor/DocumentEditorTitleBar'
+import DocumentEditorKeywords from '~/components/documents/editor/DocumentEditorKeywords'
+import DocumentEditorBodyEditor from '~/components/documents/editor/DocumentEditorBodyEditor'
+import DocumentEditorFooter from '~/components/documents/editor/DocumentEditorFooter'
 
 const DocumentEditor = props => {
   const { projectId } = useContext()

@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { Modal, Offcanvas } from 'bootstrap'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
 /* ⚠️ 
  * Don't forget to update KeyboardNavigationModal with changes

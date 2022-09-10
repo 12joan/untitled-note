@@ -1,9 +1,9 @@
 import React from 'react'
 import { CaretLeftFill } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import NavLink from 'components/NavLink'
+import NavLink from '~/components/NavLink'
 
 const BackButton = props => {
   const { keywordId, documentId, keyword } = useContext()

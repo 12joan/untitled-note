@@ -1,10 +1,10 @@
 import React from 'react'
 import { LayoutSidebar, QuestionLg } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import SearchBar from 'components/layout/SearchBar'
-import NewDocumentButton from 'components/layout/NewDocumentButton'
+import SearchBar from '~/components/layout/SearchBar'
+import NewDocumentButton from '~/components/layout/NewDocumentButton'
 
 const TopBar = props => {
   const { project, sendSidebarEvent } = useContext()

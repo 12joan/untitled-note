@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { ContextProvider } from 'lib/context'
-import useRemountKey from 'lib/useRemountKey'
-import ProjectsStream from 'lib/streams/ProjectsStream'
+import { ContextProvider } from '~/lib/context'
+import useRemountKey from '~/lib/useRemountKey'
+import ProjectsStream from '~/lib/streams/ProjectsStream'
 
-import LoadAsync from 'components/LoadAsync'
-import LoadingPlaceholder from 'components/LoadingPlaceholder'
+import LoadAsync from '~/components/LoadAsync'
+import LoadingPlaceholder from '~/components/LoadingPlaceholder'
 
 const AwaitProjects = props => {
   const [reloadProjectsKey, reloadProjects] = useRemountKey()

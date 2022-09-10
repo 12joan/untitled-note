@@ -13,6 +13,7 @@ services:
     environment:
       DATABASE_URL: postgres://postgres@db
       RAILS_ENV: development
+    command: 'yarn dev'
     ports:
       - '3000:3000'
       - '3035:3035'

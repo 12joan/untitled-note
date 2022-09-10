@@ -1,8 +1,8 @@
 import React from 'react'
 import { useRef } from 'react'
 
-import useVirtualEvent from 'lib/useVirtualEvent'
-import { ContextProvider } from 'lib/context'
+import useVirtualEvent from '~/lib/useVirtualEvent'
+import { ContextProvider } from '~/lib/context'
 
 const InitializeContext = props => {
   const sendSidebarEvent = useVirtualEvent()

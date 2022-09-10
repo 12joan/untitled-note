@@ -1,11 +1,11 @@
 import React from 'react'
 import { useRef, useState } from 'react'
 
-import { useContext } from 'lib/context'
-import useRemountKey from 'lib/useRemountKey'
+import { useContext } from '~/lib/context'
+import useRemountKey from '~/lib/useRemountKey'
 
-import Modal from 'components/Modal'
-import EditProjectForm from 'components/projects/EditProjectForm'
+import Modal from '~/components/Modal'
+import EditProjectForm from '~/components/projects/EditProjectForm'
 
 const EditProjectModal = props => {
   const { project } = useContext()

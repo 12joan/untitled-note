@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThreeDotsVertical } from 'react-bootstrap-icons'
 
-import DocumentDropdownMenu from 'components/documents/DocumentDropdownMenu'
+import DocumentDropdownMenu from '~/components/documents/DocumentDropdownMenu'
 
 const DocumentEditorTitleBar = props => {
   const handleKeyDown = event => {

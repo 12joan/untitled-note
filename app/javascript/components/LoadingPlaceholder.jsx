@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-import classList from 'lib/classList'
+import classList from '~/lib/classList'
 
 const LoadingPlaceholder = props => {
   return (

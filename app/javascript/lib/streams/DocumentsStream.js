@@ -1,4 +1,4 @@
-import { streamAction } from 'channels/data_channel'
+import { streamAction } from '~/channels/data_channel'
 
 const DocumentsStream = projectId => ({
   index(params, callback) {

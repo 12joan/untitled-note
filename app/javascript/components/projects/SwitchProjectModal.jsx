@@ -2,14 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import { PencilSquare, ChevronRight } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
-import useRemountKey from 'lib/useRemountKey'
-import localeIncludes from 'lib/localeIncludes'
-import useComboBox from 'lib/useComboBox'
-import classList from 'lib/classList'
+import { useContext } from '~/lib/context'
+import useRemountKey from '~/lib/useRemountKey'
+import localeIncludes from '~/lib/localeIncludes'
+import useComboBox from '~/lib/useComboBox'
+import classList from '~/lib/classList'
 
-import Modal from 'components/Modal'
-import NavLink from 'components/NavLink'
+import Modal from '~/components/Modal'
+import NavLink from '~/components/NavLink'
 
 const SwitchProjectForm = props => {
   const { projects } = useContext()

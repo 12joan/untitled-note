@@ -2,16 +2,16 @@ import React from 'react'
 import { useState } from 'react'
 import { Search } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
-import useDirty from 'lib/useDirty'
-import useRemountKey from 'lib/useRemountKey'
-import useComboBox from 'lib/useComboBox'
-import classList from 'lib/classList'
-import DocumentSearchAPI from 'lib/DocumentSearchAPI'
+import { useContext } from '~/lib/context'
+import useDirty from '~/lib/useDirty'
+import useRemountKey from '~/lib/useRemountKey'
+import useComboBox from '~/lib/useComboBox'
+import classList from '~/lib/classList'
+import DocumentSearchAPI from '~/lib/DocumentSearchAPI'
 
-import Modal from 'components/Modal'
-import NavLink from 'components/NavLink'
-import LoadingPlaceholder from 'components/LoadingPlaceholder'
+import Modal from '~/components/Modal'
+import NavLink from '~/components/NavLink'
+import LoadingPlaceholder from '~/components/LoadingPlaceholder'
 
 const SearchForm = props => {
   const { project } = useContext()

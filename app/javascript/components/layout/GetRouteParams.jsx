@@ -2,9 +2,9 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import useLocalStorage from 'react-use-localstorage'
 
-import { useContext } from 'lib/context'
+import { useContext } from '~/lib/context'
 
-import RouteContextProvider from 'components/layout/RouteContextProvider'
+import RouteContextProvider from '~/components/layout/RouteContextProvider'
 
 const GetRouteParams = props => (
   <Router>

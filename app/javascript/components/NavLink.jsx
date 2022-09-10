@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { buildUrl } from 'lib/routes'
-import { useContext } from 'lib/context'
-import classList from 'lib/classList'
+import { buildUrl } from '~/lib/routes'
+import { useContext } from '~/lib/context'
+import classList from '~/lib/classList'
 
 const NavLink = props => {
   const { projectId, keywordId, documentId, setParams } = useContext()

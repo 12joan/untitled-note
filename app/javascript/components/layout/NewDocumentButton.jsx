@@ -2,8 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { PencilSquare } from 'react-bootstrap-icons'
 
-import { useContext } from 'lib/context'
-import BlankDocumentAPI from 'lib/resources/BlankDocumentAPI'
+import { useContext } from '~/lib/context'
+import BlankDocumentAPI from '~/lib/resources/BlankDocumentAPI'
 
 const NewDocumentButton = props => {
   const { projectId, setParams } = useContext()

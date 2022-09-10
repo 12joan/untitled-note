@@ -2,8 +2,8 @@ import React from 'react'
 import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { Modal as BootstrapModal } from 'bootstrap'
 
-import useRemountKey from 'lib/useRemountKey'
-import classList from 'lib/classList'
+import useRemountKey from '~/lib/useRemountKey'
+import classList from '~/lib/classList'
 
 const Modal = forwardRef((props, ref) => {
   const { id, title, modalDialogProps, centered, modalBodyProps, children, onShow, ...otherProps } = props

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useContext, ContextProvider } from 'lib/context'
-import useTitle from 'lib/useTitle'
+import { useContext, ContextProvider } from '~/lib/context'
+import useTitle from '~/lib/useTitle'
 
-import RunOnMount from 'components/RunOnMount'
+import RunOnMount from '~/components/RunOnMount'
 
 const ProjectContextProvider = props => {
   const { projectId, projects, setParams } = useContext()

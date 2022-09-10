@@ -1,8 +1,8 @@
 import React from 'react'
 
-import modifierKey from 'lib/modifierKey'
+import modifierKey from '~/lib/modifierKey'
 
-import Modal from 'components/Modal'
+import Modal from '~/components/Modal'
 
 const KeyboardNavigationModal = props => {
   const meta = key => ({

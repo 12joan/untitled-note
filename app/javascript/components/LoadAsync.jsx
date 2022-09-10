@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import useEffectAfterFirst from 'lib/useEffectAfterFirst'
+import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 
 const LoadAsync = props => {
   const [state, setState] = useState({ type: 'loading' })

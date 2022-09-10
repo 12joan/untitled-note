@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { useContext, ContextProvider } from 'lib/context'
-import KeywordsStream from 'lib/streams/KeywordsStream'
-import MentionablesStream from 'lib/streams/MentionablesStream'
+import { useContext, ContextProvider } from '~/lib/context'
+import KeywordsStream from '~/lib/streams/KeywordsStream'
+import MentionablesStream from '~/lib/streams/MentionablesStream'
 
-import LoadAsync, { allProviders } from 'components/LoadAsync'
-import LoadingPlaceholder from 'components/LoadingPlaceholder'
+import LoadAsync, { allProviders } from '~/components/LoadAsync'
+import LoadingPlaceholder from '~/components/LoadingPlaceholder'
 
 const AwaitDataForProject = props => {
   const { projectId } = useContext()

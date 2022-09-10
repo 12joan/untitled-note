@@ -1,4 +1,4 @@
-import fetchAPIEndpoint from 'lib/fetchAPIEndpoint'
+import fetchAPIEndpoint from '~/lib/fetchAPIEndpoint'
 
 const DocumentSearchAPI = projectId => ({
   search: (q, options = {}) => fetchAPIEndpoint({
