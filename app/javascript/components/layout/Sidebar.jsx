@@ -11,14 +11,16 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
       className="fixed bottom-0 overflow-y-auto p-5 pr-0 w-48 space-y-5"
       {...otherProps}
     >
-      <section>
-        <ul className="-ml-3">
-          {[['Overview', OverviewIcon], ['New document', NewDocumentIcon], ['Search', SearchIcon]].map(([label, Icon], index) => (
-            <li key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
-              <Icon size="1.25em" /> {label}
-            </li>
-          ))}
-        </ul>
+      <section className="-ml-3">
+        {[
+          ['Overview', OverviewIcon],
+          ['New document', NewDocumentIcon],
+          ['Search', SearchIcon],
+        ].map(([label, Icon], index) => (
+          <button key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
+            <Icon size="1.25em" /> {label}
+          </button>
+        ))}
       </section>
 
       <section>
@@ -26,13 +28,13 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           Pinned documents
         </strong>
 
-        <ul className="-ml-3">
+        <div className="-ml-3">
           {['Document 1', 'Document 2', 'Document 3'].map((label, index) => (
-            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
               {label}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       </section>
 
       <section>
@@ -40,13 +42,13 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           Recently viewed
         </strong>
 
-        <ul className="-ml-3">
+        <div className="-ml-3">
           {['Document 4', 'Document 5', 'Document 6'].map((label, index) => (
-            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
               {label}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       </section>
 
       <section>
@@ -54,13 +56,13 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           Tags
         </strong>
 
-        <ul className="-ml-3">
+        <div className="-ml-3">
           {['Tag 1', 'Tag 2', 'Tag 3'].map((label, index) => (
-            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
               {label}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       </section>
     </nav>
   )

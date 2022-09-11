@@ -12,6 +12,7 @@
     "@popperjs/core": "^2.9.2",
     "@rails/actioncable": "^6.0.0",
     "@rails/actiontext": "^6.1.4",
+    "@tippyjs/react": "^4.2.6",
     "bootstrap": "^5.0.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

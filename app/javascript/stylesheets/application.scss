@@ -29,6 +29,10 @@
   }
 }
 
+.tippy-box[data-theme~='custom'] {
+  @apply text-inherit bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur font-medium shadow;
+}
+
 /*@import "./react-tags";
 @import "./actiontext";*/
 

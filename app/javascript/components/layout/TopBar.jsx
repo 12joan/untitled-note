@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
 
+import Tooltip from '~/components/Tooltip'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
@@ -29,10 +30,17 @@ const TopBar = forwardRef(({ ...otherProps }, ref) => {
       </div>
 
       <div className="space-x-2 -m-2">
-        {[NewDocumentIcon, SearchIcon, SettingsIcon, AccountIcon].map((Icon, index) => (
-          <button key={index} type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
-            <Icon size="1.25em" />
-          </button>
+        {[
+          ['New document', NewDocumentIcon],
+          ['Search', SearchIcon],
+          ['Settings', SettingsIcon],
+          ['Account', AccountIcon],
+        ].map(([label, Icon], index) => (
+          <Tooltip key={index} content={label} placement="bottom">
+            <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
+              <Icon size="1.25em" />
+            </button>
+          </Tooltip>
         ))}
       </div>
     </nav>
