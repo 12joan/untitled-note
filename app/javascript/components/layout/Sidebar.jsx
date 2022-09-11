@@ -1,5 +1,31 @@
-import React from 'react'
-import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react'
+import React, { forwardRef } from 'react'
+
+import OverviewIcon from '~/components/icons/OverviewIcon'
+import SearchIcon from '~/components/icons/SearchIcon'
+
+const Sidebar = forwardRef(({ ...otherProps }, ref) => {
+  return (
+    <nav
+      ref={ref}
+      className="fixed bottom-0 overflow-y-auto p-5 pr-0 w-48"
+      {...otherProps}
+    >
+      <section>
+        <ul className="-ml-3">
+          <li className="px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer flex gap-2 items-center">
+            <OverviewIcon size="1.25em" /> Overview
+          </li>
+
+          <li className="px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer flex gap-2 items-center">
+            <SearchIcon size="1.25em" /> Search
+          </li>
+        </ul>
+      </section>
+    </nav>
+  )
+})
+
+/*import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react'
 import { Offcanvas } from 'bootstrap'
 
 import { useContext } from '~/lib/context'
@@ -97,6 +123,6 @@ const useViewportWidth = () => {
   }, [])
 
   return viewportWidth
-}
+}*/
 
 export default Sidebar

@@ -1,12 +1,42 @@
-import React from 'react'
-import { LayoutSidebar, QuestionLg } from 'react-bootstrap-icons'
+import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
 
-import SearchBar from '~/components/layout/SearchBar'
-import NewDocumentButton from '~/components/layout/NewDocumentButton'
+import SettingsIcon from '~/components/icons/SettingsIcon'
+import AccountIcon from '~/components/icons/AccountIcon'
 
-const TopBar = props => {
+/*import { LayoutSidebar, QuestionLg } from 'react-bootstrap-icons'
+
+
+import SearchBar from '~/components/layout/SearchBar'
+import NewDocumentButton from '~/components/layout/NewDocumentButton'*/
+
+const TopBar = forwardRef(({ ...otherProps }, ref) => {
+  const { project } = useContext()
+
+  return (
+    <nav
+      ref={ref}
+      className="fixed top-0 right-0 p-5 pointer-events-none flex justify-between gap-6"
+      {...otherProps}
+    >
+      <div>
+        <div className="inline-block font-medium -mx-3 -my-2 px-3 py-2 rounded-lg bg-white/75 backdrop-blur pointer-events-auto">
+          {project.name}
+        </div>
+      </div>
+
+      <div className="space-x-2 -m-2">
+        {[SettingsIcon, AccountIcon].map((Icon, index) => (
+          <button key={index} type="button" className="p-2 aspect-square rounded-full bg-white/75 backdrop-blur pointer-events-auto hover:bg-slate-100/75">
+            <Icon size="1.25em" />
+          </button>
+        ))}
+      </div>
+    </nav>
+  )
+
+  /*
   const { project, sendSidebarEvent } = useContext()
 
   return (
@@ -53,6 +83,7 @@ const TopBar = props => {
       </div>
     </nav>
   )
-}
+  */
+})
 
 export default TopBar
