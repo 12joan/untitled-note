@@ -7,18 +7,58 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
   return (
     <nav
       ref={ref}
-      className="fixed bottom-0 overflow-y-auto p-5 pr-0 w-48"
+      className="fixed bottom-0 overflow-y-auto p-5 pr-0 w-48 space-y-5"
       {...otherProps}
     >
       <section>
         <ul className="-ml-3">
-          <li className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
-            <OverviewIcon size="1.25em" /> Overview
-          </li>
+          {[['Overview', OverviewIcon], ['Search', SearchIcon]].map(([label, Icon], index) => (
+            <li key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
+              <Icon size="1.25em" /> {label}
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <li className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
-            <SearchIcon size="1.25em" /> Search
-          </li>
+      <section>
+        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+          Pinned documents
+        </strong>
+
+        <ul className="-ml-3">
+          {['Document 1', 'Document 2', 'Document 3'].map((label, index) => (
+            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+              {label}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+          Recent documents
+        </strong>
+
+        <ul className="-ml-3">
+          {['Document 4', 'Document 5', 'Document 6'].map((label, index) => (
+            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+              {label}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+          Tags
+        </strong>
+
+        <ul className="-ml-3">
+          {['Tag 1', 'Tag 2', 'Tag 3'].map((label, index) => (
+            <li key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+              {label}
+            </li>
+          ))}
         </ul>
       </section>
     </nav>
