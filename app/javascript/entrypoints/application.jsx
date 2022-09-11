@@ -10,6 +10,7 @@ import '~/lib/trixNewlinePatch'
 import '~/lib/trixDialogPatch'
 import '~/lib/trixMentionPatch'
 import '~/lib/trixDefinitiveMentionPatch'
+
 import App from '~/components/App'
 
 document.addEventListener('DOMContentLoaded', () => {

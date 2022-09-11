@@ -1,19 +1,23 @@
-@import "./react-tags";
-@import "./actiontext";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*@import "./react-tags";
+@import "./actiontext";*/
 
 $enable-negative-margins: true;
 $enable-cssgrid: true;
 $offcanvas-transition-duration: 0.3s;
 $offcanvas-horizontal-width: 300px;
 
-@import "bootstrap/scss/bootstrap";
+// @import "bootstrap/scss/bootstrap";
 
-@import "./utilities";
-@import "./bootstrap-overrides";
+// @import "./utilities";
+// @import "./bootstrap-overrides";
 
-@import "./navigation-menu";
-@import "./document";
-
+// @import "./navigation-menu";
+// @import "./document";
+/*
 :root {
   --offcanvas-horizontal-width: #{$offcanvas-horizontal-width};
   --document-font: Georgia, "Times New Roman", serif;
@@ -35,3 +39,4 @@ kbd {
   text-align: center;
   min-width: 2em;
 }
+*/
