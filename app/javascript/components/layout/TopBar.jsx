@@ -2,6 +2,8 @@ import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
 
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
+import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
 import AccountIcon from '~/components/icons/AccountIcon'
 
@@ -21,14 +23,14 @@ const TopBar = forwardRef(({ ...otherProps }, ref) => {
       {...otherProps}
     >
       <div>
-        <div className="inline-block font-medium -mx-3 -my-2 px-3 py-2 rounded-lg transparent-blur pointer-events-auto">
+        <div className="inline-block font-medium -mx-3 -my-1 px-3 py-1 rounded-full transparent-blur pointer-events-auto">
           {project.name}
         </div>
       </div>
 
       <div className="space-x-2 -m-2">
-        {[SettingsIcon, AccountIcon].map((Icon, index) => (
-          <button key={index} type="button" className="btn btn-transparent-blur p-2 aspect-square pointer-events-auto">
+        {[NewDocumentIcon, SearchIcon, SettingsIcon, AccountIcon].map((Icon, index) => (
+          <button key={index} type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
             <Icon size="1.25em" />
           </button>
         ))}

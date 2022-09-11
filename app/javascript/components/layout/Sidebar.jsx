@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react'
 
 import OverviewIcon from '~/components/icons/OverviewIcon'
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 
 const Sidebar = forwardRef(({ ...otherProps }, ref) => {
@@ -12,7 +13,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
     >
       <section>
         <ul className="-ml-3">
-          {[['Overview', OverviewIcon], ['Search', SearchIcon]].map(([label, Icon], index) => (
+          {[['Overview', OverviewIcon], ['New document', NewDocumentIcon], ['Search', SearchIcon]].map(([label, Icon], index) => (
             <li key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
               <Icon size="1.25em" /> {label}
             </li>
@@ -36,7 +37,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
 
       <section>
         <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
-          Recent documents
+          Recently viewed
         </strong>
 
         <ul className="-ml-3">
