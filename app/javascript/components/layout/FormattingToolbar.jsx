@@ -21,7 +21,7 @@ const FormattingToolbar = forwardRef(({ ...otherProps }, ref) => {
     >
       <ul className="my-auto space-y-2">
         {[BoldIcon, ItalicIcon, StrikethroughIcon, LinkIcon, HeadingOneIcon, QuoteIcon, CodeBlockIcon, BulletedListIcon, NumberedListIcon, IndentIcon, UnindentIcon].map((Icon, index) => (
-          <li key={index} className="p-3 aspect-square rounded-lg hover:bg-slate-100 cursor-pointer text-center">
+          <li key={index} className="btn btn-transparent p-3 aspect-square text-center">
             <Icon size="1.25em" />
           </li>
         ))}

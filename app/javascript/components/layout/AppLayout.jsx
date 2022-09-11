@@ -58,7 +58,7 @@ const AppLayout = props => {
 
       {/* Sample dialog */}
       <div className="fixed inset-0 flex p-5 overflow-y-auto hidden">
-        <div className="m-auto inline-block bg-slate-100/50 backdrop-blur-xl shadow-dialog rounded-lg p-5 w-full max-w-sm text-center flex flex-col justify-center gap-5">
+        <div className="m-auto inline-block bg-slate-100/50 backdrop-blur-xl shadow-dialog rounded-lg p-5 w-full max-w-sm text-center flex flex-col justify-center gap-5 dark:bg-slate-800/50">
           <h2 className="text-xl font-medium">Add link</h2>
 
           <label className="space-y-3">
@@ -66,14 +66,14 @@ const AppLayout = props => {
 
             <input
               type="text"
-              className="block w-full rounded-lg bg-black/5 focus:bg-white p-2"
+              className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
               placeholder="https://example.com/"
             />
           </label>
 
           <div className="grid flex-wrap gap-3">
-            <button type="button" className="grow bg-black/5 px-3 py-2 rounded-lg hover:bg-black/10">Add link</button>
-            <button type="button" className="grow bg-black/5 px-3 py-2 rounded-lg hover:bg-black/10">Cancel</button>
+            <button type="button" className="grow bg-black/5 px-3 py-2 rounded-lg hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10">Add link</button>
+            <button type="button" className="grow bg-black/5 px-3 py-2 rounded-lg hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10">Cancel</button>
           </div>
         </div>
       </div>

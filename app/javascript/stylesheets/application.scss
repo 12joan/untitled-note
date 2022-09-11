@@ -2,11 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  *:focus-visible {
+    outline: none;
+    @apply ring-2 ring-blue-500;
+  }
+}
+
+@layer utilities {
+  .transparent-blur {
+    @apply bg-page-bg-light/75 dark:bg-page-bg-dark/75 backdrop-blur;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded-lg cursor-pointer;
+
+    &.btn-transparent {
+      @apply hover:bg-slate-100 dark:hover:bg-slate-700;
+    }
+
+    &.btn-transparent-blur {
+      @apply transparent-blur hover:bg-slate-100/75 dark:hover:bg-slate-700/75;
+    }
+  }
+}
+
 /*@import "./react-tags";
 @import "./actiontext";*/
 
-$enable-negative-margins: true;
-$enable-cssgrid: true;
+// $enable-negative-margins: true;
+// $enable-cssgrid: true;
 $offcanvas-transition-duration: 0.3s;
 $offcanvas-horizontal-width: 300px;
 

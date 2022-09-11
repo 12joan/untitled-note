@@ -9,14 +9,14 @@ const ProjectsBar = forwardRef(({ ...otherProps }, ref) => {
   return (
     <nav
       ref={ref}
-      className="fixed top-0 bottom-0 left-0 overflow-y-auto w-20 border-r p-3 bg-slate-100"
+      className="fixed top-0 bottom-0 left-0 overflow-y-auto w-20 border-r p-3 bg-slate-100 dark:bg-black/25 dark:border-transparent"
       {...otherProps}
     >
       <ul className="space-y-3">
         {projects.map(project => (
           <li
             key={project.id}
-            className="bg-white aspect-square rounded-lg shadow hover:bg-slate-100 cursor-pointer flex items-center justify-center text-xl font-light p-1"
+            className="btn bg-white aspect-square shadow hover:bg-slate-100 flex items-center justify-center text-xl font-light p-1 dark:bg-slate-800 dark:hover:bg-slate-700"
           >
             {abbreviate(project.name, 2)}
           </li>

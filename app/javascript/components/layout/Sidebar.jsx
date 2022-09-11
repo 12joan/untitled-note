@@ -12,11 +12,11 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
     >
       <section>
         <ul className="-ml-3">
-          <li className="px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer flex gap-2 items-center">
+          <li className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
             <OverviewIcon size="1.25em" /> Overview
           </li>
 
-          <li className="px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer flex gap-2 items-center">
+          <li className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
             <SearchIcon size="1.25em" /> Search
           </li>
         </ul>

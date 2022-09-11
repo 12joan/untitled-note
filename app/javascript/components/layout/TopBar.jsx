@@ -21,14 +21,14 @@ const TopBar = forwardRef(({ ...otherProps }, ref) => {
       {...otherProps}
     >
       <div>
-        <div className="inline-block font-medium -mx-3 -my-2 px-3 py-2 rounded-lg bg-white/75 backdrop-blur pointer-events-auto">
+        <div className="inline-block font-medium -mx-3 -my-2 px-3 py-2 rounded-lg transparent-blur pointer-events-auto">
           {project.name}
         </div>
       </div>
 
       <div className="space-x-2 -m-2">
         {[SettingsIcon, AccountIcon].map((Icon, index) => (
-          <button key={index} type="button" className="p-2 aspect-square rounded-full bg-white/75 backdrop-blur pointer-events-auto hover:bg-slate-100/75">
+          <button key={index} type="button" className="btn btn-transparent-blur p-2 aspect-square pointer-events-auto">
             <Icon size="1.25em" />
           </button>
         ))}

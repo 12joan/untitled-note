@@ -2,7 +2,7 @@ import React from 'react'
 
 const EditorView = () => {
   return (
-    <div className="p-5 max-w-screen-md mx-auto space-y-3 text-black">
+    <div className="p-5 max-w-screen-md mx-auto space-y-3 text-black dark:text-white">
       <h1 className="text-3xl font-medium">My First Document</h1>
 
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas maecenas pharetra convallis posuere morbi leo. Sed faucibus turpis in eu. Diam ut venenatis tellus in metus vulputate eu. Id cursus metus aliquam eleifend mi in nulla. Enim ut sem viverra aliquet. Et magnis dis parturient montes nascetur ridiculus mus mauris vitae. Convallis a cras semper auctor neque vitae tempus quam pellentesque. Dis parturient montes nascetur ridiculus mus mauris vitae. Nascetur ridiculus mus mauris vitae. Id consectetur purus ut faucibus pulvinar elementum. Sodales ut etiam sit amet. Ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget gravida. Tortor vitae purus faucibus ornare suspendisse sed nisi.</p>
