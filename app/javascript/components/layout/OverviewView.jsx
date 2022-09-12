@@ -19,47 +19,47 @@ const OverviewView = () => {
       <Section
         title="Pinned documents"
         cardsPerRow={cardsPerRow}
-        documents={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
       />
 
       <Section
         title="Recently viewed"
         cardsPerRow={cardsPerRow}
         showAllButton={true}
-        documents={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
       />
 
       <Section
         title="Tags"
         cardsPerRow={cardsPerRow}
         showAllButton={true}
-        documents={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        items={['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8']}
       />
 
       <Section
         title="All documents"
         cardsPerRow={cardsPerRow}
-        documents={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
       />
     </div>
   )
 }
 
-const Section = ({ title, documents, cardsPerRow, showAllButton = false }) => {
+const Section = ({ title, items, cardsPerRow, showAllButton = false }) => {
   const SectionComponent = cardsPerRow > 1 ? CardsSection : ListSection
 
   return (
     <SectionComponent
       title={<h1 className="text-2xl font-medium select-none" children={title} />}
-      documents={documents}
+      items={items}
       showAllButton={showAllButton}
       cardsPerRow={cardsPerRow}
     />
   )
 }
 
-const CardsSection = ({ title, documents, showAllButton, cardsPerRow }) => {
-  const cappedDocuments = showAllButton ? documents.slice(0, cardsPerRow) : documents
+const CardsSection = ({ title, items, showAllButton, cardsPerRow }) => {
+  const cappedItems = showAllButton ? items.slice(0, cardsPerRow) : items
 
   return (
     <section className="space-y-3">
@@ -78,7 +78,7 @@ const CardsSection = ({ title, documents, showAllButton, cardsPerRow }) => {
       }
 
       <div className="flex flex-wrap gap-5">
-        {cappedDocuments.map((doc, index) => (
+        {cappedItems.map((doc, index) => (
           <button key={index} type="button" className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent">
             <strong className="text-lg font-medium" children={doc} />
 
@@ -92,31 +92,48 @@ const CardsSection = ({ title, documents, showAllButton, cardsPerRow }) => {
   )
 }
 
-const ListSection = ({ title, documents, showAllButton }) => {
-  const cappedDocuments = showAllButton ? documents.slice(0, 5) : documents
+const ListSection = ({ title, items, showAllButton }) => {
+  const cappedItems = showAllButton ? items.slice(0, 5) : items
 
   return (
     <section className="space-y-3">
-      {title}
+      {showAllButton
+        ? (
+          <div className="flex justify-between items-center gap-3">
+            {title}
 
-      <div className="rounded-lg border divide-y dark:bg-slate-800 overflow-hidden">
-        {cappedDocuments.map((doc, index) => (
-          <div key={index} className="p-3 flex items-center gap-5 even:bg-slate-50 dark:even:bg-slate-900">
+            <button type="button" className="btn btn-link">
+              Show all
+            </button>
+          </div>
+        )
+        : title
+      }
+
+      <div className="rounded-lg border dark:border-transparent divide-y">
+        {cappedItems.map((doc, index) => (
+          <ListItem key={index}>
             <span className="shrink-0" children={doc} />
             <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl.
             </span>
-          </div>
+          </ListItem>
         ))}
-
-        {showAllButton && (
-          <button type="button" className="w-full text-left p-3 even:bg-slate-50 dark:even:bg-slate-900">
-            Show all
-          </button>
-        )}
       </div>
     </section>
   )
 }
+
+const ListItem = ({ children, ...otherProps }) => {
+  return (
+    <button
+      type="button"
+      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
+      children={children}
+      {...otherProps}
+    />
+  )
+}
+
 
 export default OverviewView
