@@ -17,7 +17,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           ['New document', NewDocumentIcon],
           ['Search', SearchIcon],
         ].map(([label, Icon], index) => (
-          <button key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
+          <button key={index} className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center">
             <Icon size="1.25em" noAriaLabel /> {label}
           </button>
         ))}
@@ -30,7 +30,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
 
         <div className="-ml-3">
           {['Document 1', 'Document 2', 'Document 3'].map((label, index) => (
-            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent w-full px-3 py-1 flex gap-2 items-center">
               {label}
             </button>
           ))}
@@ -44,7 +44,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
 
         <div className="-ml-3">
           {['Document 4', 'Document 5', 'Document 6'].map((label, index) => (
-            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent w-full px-3 py-1 flex gap-2 items-center">
               {label}
             </button>
           ))}
@@ -58,7 +58,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
 
         <div className="-ml-3">
           {['Tag 1', 'Tag 2', 'Tag 3'].map((label, index) => (
-            <button key={index} className="btn btn-transparent px-3 py-1 flex gap-2 items-center">
+            <button key={index} className="btn btn-transparent w-full px-3 py-1 flex gap-2 items-center">
               {label}
             </button>
           ))}
