@@ -1,5 +1,6 @@
 const colors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
+const lineClamp = require('@tailwindcss/line-clamp')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -32,8 +33,12 @@ module.exports = {
     },
   },
   plugins: [
+    lineClamp,
     plugin(({ addVariant, e }) => {
       addVariant('trix-active', '&.trix-active')
+      addVariant('window-inactive', 'body.inactive &')
+      addVariant('hocus', ['&:hover', '&:focus-visible'])
+      addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &'])
     }),
   ],
 }

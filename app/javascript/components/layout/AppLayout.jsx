@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 
+import { useContext } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useElementSize from '~/lib/useElementSize'
 
@@ -7,6 +8,7 @@ import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
+import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
 
 /*
@@ -20,7 +22,9 @@ import TrixDialogs from '~/components/layout/TrixDialogs'
 import KeyboardNavigationModal from '~/components/layout/KeyboardNavigationModal'
 */
 
-const AppLayout = props => {
+const AppLayout = () => {
+  const { documentId } = useContext()
+
   const projectsBarRef = useRef()
   const topBarRef = useRef()
   const sideBarRef = useRef()
@@ -32,6 +36,18 @@ const AppLayout = props => {
   const { width: formattingBarWidth } = useElementSize(formattingBarRef)
 
   const { isMd, isXl } = useBreakpoints()
+
+  const { viewComponent, centreView, showFormattingToolbar } = documentId === undefined
+    ? {
+      viewComponent: <OverviewView topBarHeight={topBarHeight} />,
+      centreView: false,
+      showFormattingToolbar: false,
+    }
+    : {
+      viewComponent: <EditorView />,
+      centreView: isXl,
+      showFormattingToolbar: true,
+    }
 
   return (
     <>
@@ -53,7 +69,10 @@ const AppLayout = props => {
 
       <FormattingToolbar
         ref={formattingBarRef}
-        style={{ top: topBarHeight }}
+        style={{
+          top: topBarHeight,
+          display: showFormattingToolbar ? undefined : 'none',
+        }}
       />
 
       {/* Sample dialog */}
@@ -82,13 +101,12 @@ const AppLayout = props => {
         style={{
           paddingTop: topBarHeight,
           paddingLeft: projectsBarWidth + sideBarWidth,
-          paddingRight: isXl
+          paddingRight: centreView
             ? Math.max(formattingBarWidth, projectsBarWidth + sideBarWidth)
             : formattingBarWidth,
         }}
-      >
-        <EditorView />
-      </main>
+        children={viewComponent}
+      />
     </>
   )
 

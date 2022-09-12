@@ -8,7 +8,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
   return (
     <nav
       ref={ref}
-      className="fixed bottom-0 overflow-y-auto p-5 pr-0 w-48 space-y-5"
+      className="fixed bottom-0 overflow-y-auto p-5 pr-1 w-48 space-y-5"
       {...otherProps}
     >
       <section className="-ml-3">
@@ -18,7 +18,11 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           ['Search', SearchIcon],
         ].map(([label, Icon], index) => (
           <button key={index} className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center">
-            <Icon size="1.25em" noAriaLabel /> {label}
+            <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+              <Icon size="1.25em" noAriaLabel />
+            </span>
+
+            {label}
           </button>
         ))}
       </section>

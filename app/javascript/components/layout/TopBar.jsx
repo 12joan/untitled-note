@@ -20,7 +20,7 @@ const TopBar = forwardRef(({ ...otherProps }, ref) => {
   return (
     <nav
       ref={ref}
-      className="fixed top-0 right-0 p-5 pointer-events-none flex justify-between gap-6"
+      className="fixed top-0 right-0 p-5 pointer-events-none flex justify-between gap-6 z-10"
       {...otherProps}
     >
       <div>

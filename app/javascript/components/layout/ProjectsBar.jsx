@@ -16,7 +16,7 @@ const ProjectsBar = forwardRef(({ ...otherProps }, ref) => {
     >
         {projects.map(project => (
           <Tooltip key={project.id} content={project.name} placement="right">
-            <button className="btn bg-white w-full aspect-square shadow hover:bg-slate-100 flex items-center justify-center text-xl font-light p-1 dark:bg-slate-800 dark:hover:bg-slate-700">
+            <button className="btn btn-solid w-full aspect-square border flex items-center justify-center text-xl font-light p-1 dark:border-transparent">
               {abbreviate(project.name, 2)}
             </button>
           </Tooltip>

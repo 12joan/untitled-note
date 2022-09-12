@@ -5,7 +5,11 @@
 @layer base {
   *:focus-visible {
     outline: none;
-    @apply ring-2 ring-primary-500 dark:ring-primary-700;
+    @apply ring-2 ring-primary-500 dark:ring-primary-400 border-transparent relative;
+  }
+
+  *, ::before, ::after {
+    @apply border-slate-200 dark:border-slate-700;
   }
 }
 
@@ -25,6 +29,18 @@
 
     &.btn-transparent-blur {
       @apply transparent-blur hover:bg-slate-100/75 dark:hover:bg-slate-700/75;
+    }
+
+    &.btn-solid {
+      @apply bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700;
+    }
+
+    &.btn-link {
+      @apply text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500 window-inactive:text-slate-500 dark:window-inactive:text-slate-400;
+    }
+
+    &.btn-link-subtle {
+      @apply hocus:text-primary-500 dark:hocus:text-primary-400;
     }
   }
 }
