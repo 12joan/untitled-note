@@ -38,7 +38,7 @@ const TopBar = forwardRef(({ ...otherProps }, ref) => {
         ].map(([label, Icon], index) => (
           <Tooltip key={index} content={label} placement="bottom">
             <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
-              <Icon size="1.25em" />
+              <Icon size="1.25em" ariaLabel={label} />
             </button>
           </Tooltip>
         ))}

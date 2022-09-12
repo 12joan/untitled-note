@@ -18,7 +18,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           ['Search', SearchIcon],
         ].map(([label, Icon], index) => (
           <button key={index} className="btn btn-transparent px-3 py-2 flex gap-2 items-center">
-            <Icon size="1.25em" /> {label}
+            <Icon size="1.25em" noAriaLabel /> {label}
           </button>
         ))}
       </section>

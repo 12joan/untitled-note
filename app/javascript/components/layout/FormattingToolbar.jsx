@@ -36,7 +36,7 @@ const FormattingToolbar = forwardRef(({ ...otherProps }, ref) => {
         ].map(([label, Icon], index) => (
           <Tooltip key={index} content={label} placement="left">
             <button className="block btn btn-transparent p-3 aspect-square text-center">
-              <Icon size="1.25em" />
+              <Icon size="1.25em" ariaLabel={label} />
             </button>
           </Tooltip>
         ))}
