@@ -24,7 +24,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
       </section>
 
       <section>
-        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+        <strong className="text-slate-500 text-xs uppercase tracking-wide select-none dark:text-slate-400">
           Pinned documents
         </strong>
 
@@ -38,7 +38,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
       </section>
 
       <section>
-        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+        <strong className="text-slate-500 text-xs uppercase tracking-wide select-none dark:text-slate-400">
           Recently viewed
         </strong>
 
@@ -52,7 +52,7 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
       </section>
 
       <section>
-        <strong className="text-slate-500 text-xs uppercase tracking-wide dark:text-slate-400">
+        <strong className="text-slate-500 text-xs uppercase tracking-wide select-none dark:text-slate-400">
           Tags
         </strong>
 
