@@ -1,8 +1,11 @@
 import React, { forwardRef } from 'react'
+import Tippy from '@tippyjs/react/headless'
 
 import { useContext } from '~/lib/context'
+import useBreakpoints from '~/lib/useBreakpoints'
 
 import Tooltip from '~/components/Tooltip'
+import MenuIcon from '~/components/icons/MenuIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
@@ -16,33 +19,69 @@ import NewDocumentButton from '~/components/layout/NewDocumentButton'*/
 
 const TopBar = forwardRef(({ ...otherProps }, ref) => {
   const { project } = useContext()
+  const { isXs } = useBreakpoints()
 
   return (
     <nav
       ref={ref}
-      className="fixed top-0 right-0 p-5 pointer-events-none flex justify-between gap-6 z-10"
+      className="fixed top-0 right-0 p-5 pointer-events-none flex justify-between items-center gap-6 z-10"
       {...otherProps}
     >
-      <div>
-        <div className="inline-block font-medium -mx-3 -my-1 px-3 py-1 rounded-full transparent-blur pointer-events-auto">
-          {project.name}
-        </div>
+      <div className="font-medium -mx-3 -my-1 px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate">
+        {project.name}
       </div>
 
-      <div className="space-x-2 -m-2">
-        {[
-          ['New document', NewDocumentIcon],
-          ['Search', SearchIcon],
-          ['Settings', SettingsIcon],
-          ['Account', AccountIcon],
-        ].map(([label, Icon], index) => (
-          <Tooltip key={index} content={label} placement="bottom">
+      {isXs
+        ? (
+          <div className="shrink-0 space-x-2 -m-2">
+            {[
+              ['New document', NewDocumentIcon],
+                ['Search', SearchIcon],
+                ['Settings', SettingsIcon],
+                ['Account', AccountIcon],
+            ].map(([label, Icon], index) => (
+              <Tooltip key={index} content={label} placement="bottom">
+                <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
+                  <Icon size="1.25em" ariaLabel={label} />
+                </button>
+              </Tooltip>
+            ))}
+          </div>
+        )
+        : (
+          <Tippy
+            render={attrs => (
+              <div
+                className="rounded-lg backdrop-blur shadow-lg w-48 max-w-full pointer-events-auto"
+                tabIndex={-1}
+                {...attrs}
+              >
+                {[
+                  ['New document', NewDocumentIcon],
+                  ['Search', SearchIcon],
+                  ['Settings', SettingsIcon],
+                  ['Account', AccountIcon],
+                ].map(([label, Icon], index) => (
+                  <button type="button" className="block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg">
+                    <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+                      <Icon size="1.25em" noAriaLabel />
+                    </span>
+
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+            placement="bottom-end"
+            trigger="click"
+            interactive
+          >
             <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
-              <Icon size="1.25em" ariaLabel={label} />
+              <MenuIcon size="1.25em" ariaLabel="Menu" />
             </button>
-          </Tooltip>
-        ))}
-      </div>
+          </Tippy>
+        )
+      }
     </nav>
   )
 

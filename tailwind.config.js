@@ -1,3 +1,4 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
 const lineClamp = require('@tailwindcss/line-clamp')
@@ -26,10 +27,16 @@ module.exports = {
           '800': '#20197d',
           '900': '#0d0a4d',
         },
-        //'primary': colors.blue,
         'page-bg-light': colors.white,
         'page-bg-dark': colors.slate[900],
       },
+    },
+    screens: {
+      '4xs': '128px',
+      '3xs': '256px',
+      '2xs': '384px',
+      'xs': '512px',
+      ...defaultTheme.screens,
     },
   },
   plugins: [
