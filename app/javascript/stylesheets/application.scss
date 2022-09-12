@@ -5,7 +5,7 @@
 @layer base {
   *:focus-visible {
     outline: none;
-    @apply ring-2 ring-blue-500;
+    @apply ring-2 ring-primary-500 dark:ring-primary-700;
   }
 }
 

@@ -37,7 +37,7 @@ const FormattingToolbar = forwardRef(({ ...otherProps }, ref) => {
           <Tooltip key={index} content={label} placement="left">
             <button
               type="button"
-              className="block btn btn-transparent p-3 aspect-square text-center"
+              className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed trix-active:text-primary-500 dark:trix-active:text-primary-400"
               data-trix-key={shortcut}
               data-trix-attribute={attribute}
               data-trix-action={action}
