@@ -12,9 +12,9 @@ const DocumentEditorTitleBar = props => {
   }
 
   return (
-    <div className="layout-row gap-3 align-items-center">
+    <div className="flex gap-3 items-center">
       <input
-        className="title-input flex-grow-1 h1 rounded-0 border-0 border-bottom p-0"
+        className="grow text-3xl font-medium bg-transparent"
         value={props.doc.title || ''}
         placeholder="Title"
         autoFocus={props.doc.blank}
@@ -23,7 +23,7 @@ const DocumentEditorTitleBar = props => {
         }}
         onKeyDown={handleKeyDown} />
 
-      <DocumentDropdownMenu
+      {/*<DocumentDropdownMenu
         doc={props.doc}
         updateDocument={props.updateDocument}
         labelledBy={`document-${props.editorUUID}-dropdown-button`}>
@@ -36,7 +36,7 @@ const DocumentEditorTitleBar = props => {
           <ThreeDotsVertical className="bi" />
           <span className="visually-hidden">Toggle dropdown</span>
         </button>
-      </DocumentDropdownMenu>
+      </DocumentDropdownMenu>*/}
     </div>
   )
 }

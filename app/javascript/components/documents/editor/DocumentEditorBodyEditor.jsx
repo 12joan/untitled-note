@@ -115,7 +115,7 @@ const DocumentEditorBodyEditor = props => {
     }
   }
 
-  useInterval(applyTextFormatting, 200, [mentionables])
+  // useInterval(applyTextFormatting, 200, [mentionables])
 
   const setMentionRanges = ranges => {
     // Adapted from https://embed.plnkr.co/QU3oRc/

@@ -1,29 +1,19 @@
 import React from 'react'
 
+import LoadDocument from '~/components/documents/LoadDocument'
+import DocumentEditor from '~/components/documents/DocumentEditor'
+
 const EditorView = () => {
   return (
     <div className="p-5 max-w-screen-md mx-auto space-y-3 text-black dark:text-white">
-      <h1 className="text-3xl font-medium">My First Document</h1>
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas maecenas pharetra convallis posuere morbi leo. Sed faucibus turpis in eu. Diam ut venenatis tellus in metus vulputate eu. Id cursus metus aliquam eleifend mi in nulla. Enim ut sem viverra aliquet. Et magnis dis parturient montes nascetur ridiculus mus mauris vitae. Convallis a cras semper auctor neque vitae tempus quam pellentesque. Dis parturient montes nascetur ridiculus mus mauris vitae. Nascetur ridiculus mus mauris vitae. Id consectetur purus ut faucibus pulvinar elementum. Sodales ut etiam sit amet. Ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget gravida. Tortor vitae purus faucibus ornare suspendisse sed nisi.</p>
-
-      <p>Cursus in hac habitasse platea dictumst quisque sagittis. Convallis convallis tellus id interdum velit laoreet. Egestas congue quisque egestas diam. Volutpat lacus laoreet non curabitur gravida arcu ac tortor. Feugiat nisl pretium fusce id velit ut tortor pretium. Lacus suspendisse faucibus interdum posuere. Lacus laoreet non curabitur gravida. Consectetur a erat nam at lectus urna duis convallis convallis. Id diam maecenas ultricies mi eget mauris pharetra et. Orci ac auctor augue mauris augue. Id nibh tortor id aliquet lectus proin nibh nisl. Purus gravida quis blandit turpis cursus in hac habitasse platea. Lorem sed risus ultricies tristique nulla aliquet enim. Malesuada bibendum arcu vitae elementum.</p>
-
-      <p>Dolor sed viverra ipsum nunc aliquet bibendum enim. Arcu dui vivamus arcu felis bibendum ut. Quisque id diam vel quam elementum pulvinar etiam non quam. Turpis massa sed elementum tempus egestas. Cras adipiscing enim eu turpis egestas pretium. Nibh tortor id aliquet lectus proin nibh nisl condimentum. Amet aliquam id diam maecenas ultricies mi eget mauris pharetra. Et netus et malesuada fames. Nunc sed id semper risus in. Ullamcorper sit amet risus nullam eget. Ac tincidunt vitae semper quis lectus nulla at. Congue quisque egestas diam in arcu cursus.</p>
-
-      <p>Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. Dolor sit amet consectetur adipiscing elit duis. Semper viverra nam libero justo laoreet sit amet. Justo donec enim diam vulputate. Ac placerat vestibulum lectus mauris. Purus in massa tempor nec feugiat nisl pretium fusce. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Rhoncus mattis rhoncus urna neque viverra justo. Vulputate enim nulla aliquet porttitor lacus luctus accumsan. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat in. Proin nibh nisl condimentum id. Facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris. Tristique senectus et netus et malesuada. Mauris pharetra et ultrices neque ornare aenean euismod.</p>
-
-      <p>Mattis nunc sed blandit libero volutpat. Cursus risus at ultrices mi tempus imperdiet nulla. Diam vel quam elementum pulvinar etiam non. Leo urna molestie at elementum eu facilisis sed. Orci sagittis eu volutpat odio facilisis mauris sit amet. Sed velit dignissim sodales ut eu sem. Sed egestas egestas fringilla phasellus. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Orci phasellus egestas tellus rutrum. Convallis a cras semper auctor neque vitae.</p>
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas maecenas pharetra convallis posuere morbi leo. Sed faucibus turpis in eu. Diam ut venenatis tellus in metus vulputate eu. Id cursus metus aliquam eleifend mi in nulla. Enim ut sem viverra aliquet. Et magnis dis parturient montes nascetur ridiculus mus mauris vitae. Convallis a cras semper auctor neque vitae tempus quam pellentesque. Dis parturient montes nascetur ridiculus mus mauris vitae. Nascetur ridiculus mus mauris vitae. Id consectetur purus ut faucibus pulvinar elementum. Sodales ut etiam sit amet. Ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget gravida. Tortor vitae purus faucibus ornare suspendisse sed nisi.</p>
-
-      <p>Cursus in hac habitasse platea dictumst quisque sagittis. Convallis convallis tellus id interdum velit laoreet. Egestas congue quisque egestas diam. Volutpat lacus laoreet non curabitur gravida arcu ac tortor. Feugiat nisl pretium fusce id velit ut tortor pretium. Lacus suspendisse faucibus interdum posuere. Lacus laoreet non curabitur gravida. Consectetur a erat nam at lectus urna duis convallis convallis. Id diam maecenas ultricies mi eget mauris pharetra et. Orci ac auctor augue mauris augue. Id nibh tortor id aliquet lectus proin nibh nisl. Purus gravida quis blandit turpis cursus in hac habitasse platea. Lorem sed risus ultricies tristique nulla aliquet enim. Malesuada bibendum arcu vitae elementum.</p>
-
-      <p>Dolor sed viverra ipsum nunc aliquet bibendum enim. Arcu dui vivamus arcu felis bibendum ut. Quisque id diam vel quam elementum pulvinar etiam non quam. Turpis massa sed elementum tempus egestas. Cras adipiscing enim eu turpis egestas pretium. Nibh tortor id aliquet lectus proin nibh nisl condimentum. Amet aliquam id diam maecenas ultricies mi eget mauris pharetra. Et netus et malesuada fames. Nunc sed id semper risus in. Ullamcorper sit amet risus nullam eget. Ac tincidunt vitae semper quis lectus nulla at. Congue quisque egestas diam in arcu cursus.</p>
-
-      <p>Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. Dolor sit amet consectetur adipiscing elit duis. Semper viverra nam libero justo laoreet sit amet. Justo donec enim diam vulputate. Ac placerat vestibulum lectus mauris. Purus in massa tempor nec feugiat nisl pretium fusce. Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Rhoncus mattis rhoncus urna neque viverra justo. Vulputate enim nulla aliquet porttitor lacus luctus accumsan. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat in. Proin nibh nisl condimentum id. Facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris. Tristique senectus et netus et malesuada. Mauris pharetra et ultrices neque ornare aenean euismod.</p>
-
-      <p>Mattis nunc sed blandit libero volutpat. Cursus risus at ultrices mi tempus imperdiet nulla. Diam vel quam elementum pulvinar etiam non. Leo urna molestie at elementum eu facilisis sed. Orci sagittis eu volutpat odio facilisis mauris sit amet. Sed velit dignissim sodales ut eu sem. Sed egestas egestas fringilla phasellus. Dictum at tempor commodo ullamcorper a lacus vestibulum sed. Orci phasellus egestas tellus rutrum. Convallis a cras semper auctor neque vitae.</p>
+      {/* <h1 className="text-3xl font-medium">My First Document</h1> */}
+      <LoadDocument
+        id="1"
+        loading={() => <p>Loading...</p>}
+        success={doc => (
+          <DocumentEditor document={doc} />
+        )}
+      />
     </div>
   )
 }

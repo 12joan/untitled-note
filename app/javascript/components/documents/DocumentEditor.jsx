@@ -36,7 +36,7 @@ const DocumentEditor = props => {
 
   return (
     <>
-      <div ref={documentEditorRef} className="document-editor layout-column flex-grow-1">
+      <div ref={documentEditorRef} className="space-y-3">
         {
           syncStatus === 'failed' && (
             <DocumentEditorSyncFailedToast />
@@ -48,28 +48,24 @@ const DocumentEditor = props => {
           editorUUID={editorUUID}
           updateDocument={updateDocument} />
 
-        <div className="mb-2">
+        {/*<div className="mb-2">
           <DocumentEditorKeywords
             doc={doc}
             updateDocument={updateDocument} />
-        </div>
+        </div>*/}
 
-        <div className="flex-grow-1 d-flex mx-n3 mb-n3">
-          <div className="flex-grow-1 d-flex flex-column overflow-auto" style={{ width: 0 }}>
-            <DocumentEditorBodyEditor
-              doc={doc}
-              toolbarId={toolbarId}
-              updateDocument={updateDocument} />
-          </div>
-        </div>
+        <DocumentEditorBodyEditor
+          doc={doc}
+          toolbarId="trix-toolbar"
+          updateDocument={updateDocument} />
       </div>
 
-      {
+      {/*
         ReactDOM.createPortal(
           <DocumentEditorFooter toolbarId={toolbarId} syncStatus={syncStatus} />,
           props.footerEl,
         )
-      }
+        */}
     </>
   )
 }

@@ -20,22 +20,28 @@ const FormattingToolbar = forwardRef(({ ...otherProps }, ref) => {
       className="fixed bottom-0 right-0 p-5 pl-1 overflow-y-auto flex"
       {...otherProps}
     >
-      <div className="my-auto space-y-2">
+      <div className="my-auto space-y-2" id="trix-toolbar">
         {[
-          ['Bold', BoldIcon],
-          ['Italic', ItalicIcon],
-          ['Strikethrough', StrikethroughIcon],
-          ['Link', LinkIcon],
-          ['Heading', HeadingOneIcon],
-          ['Quote', QuoteIcon],
-          ['Code block', CodeBlockIcon],
-          ['Bulleted list', BulletedListIcon],
-          ['Numbered list', NumberedListIcon],
-          ['Indent', IndentIcon],
-          ['Unindent', UnindentIcon],
-        ].map(([label, Icon], index) => (
+          { label: 'Bold', icon: BoldIcon, shortcut: 'b', attribute: 'bold' },
+          { label: 'Italic', icon: ItalicIcon, shortcut: 'i', attribute: 'italic' },
+          { label: 'Strikethrough', icon: StrikethroughIcon, attribute: 'strike' },
+          { label: 'Link', icon: LinkIcon, shortcut: 'k', attribute: 'href', action: 'link' },
+          { label: 'Heading', icon: HeadingOneIcon, shortcut: '1', attribute: 'heading1' },
+          { label: 'Quote', icon: QuoteIcon, attribute: 'quote' },
+          { label: 'Code block', icon: CodeBlockIcon, attribute: 'code' },
+          { label: 'Bulleted list', icon: BulletedListIcon, attribute: 'bullet' },
+          { label: 'Numbered list', icon: NumberedListIcon, attribute: 'number' },
+          { label: 'Indent', icon: IndentIcon, action: 'increaseNestingLevel' },
+          { label: 'Unindent', icon: UnindentIcon, action: 'decreaseNestingLevel' },
+        ].map(({ label, icon: Icon, shortcut, attribute, action }, index) => (
           <Tooltip key={index} content={label} placement="left">
-            <button className="block btn btn-transparent p-3 aspect-square text-center">
+            <button
+              type="button"
+              className="block btn btn-transparent p-3 aspect-square text-center"
+              data-trix-key={shortcut}
+              data-trix-attribute={attribute}
+              data-trix-action={action}
+            >
               <Icon size="1.25em" ariaLabel={label} />
             </button>
           </Tooltip>
