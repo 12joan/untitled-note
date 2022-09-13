@@ -9,7 +9,7 @@ import ProjectContextProvider from '~/components/layout/ProjectContextProvider'
 import AwaitDataForProject from '~/components/layout/AwaitDataForProject'
 import KeywordContextProvider from '~/components/layout/KeywordContextProvider'
 import InitializeContext from '~/components/layout/InitializeContext'
-import KeyboardShortcutHandler from '~/components/layout/KeyboardShortcutHandler'
+// import KeyboardShortcutHandler from '~/components/layout/KeyboardShortcutHandler'
 import AppLayout from '~/components/layout/AppLayout'
 
 const App = props => {
@@ -22,9 +22,9 @@ const App = props => {
           <AwaitDataForProject>
             <KeywordContextProvider>
               <InitializeContext>
-                <KeyboardShortcutHandler>
+                {/*<KeyboardShortcutHandler>*/}
                   <AppLayout />
-                </KeyboardShortcutHandler>
+                {/*</KeyboardShortcutHandler>*/}
               </InitializeContext>
             </KeywordContextProvider>
           </AwaitDataForProject>

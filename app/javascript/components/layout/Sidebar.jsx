@@ -1,16 +1,12 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 
-const Sidebar = forwardRef(({ ...otherProps }, ref) => {
+const Sidebar = () => {
   return (
-    <nav
-      ref={ref}
-      className="fixed bottom-0 overflow-y-auto p-5 pr-1 w-48 space-y-5"
-      {...otherProps}
-    >
+    <div className="w-full max-w-48 space-y-5 pb-3">
       <section className="-ml-3">
         {[
           ['Overview', OverviewIcon],
@@ -68,9 +64,9 @@ const Sidebar = forwardRef(({ ...otherProps }, ref) => {
           ))}
         </div>
       </section>
-    </nav>
+    </div>
   )
-})
+}
 
 /*import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react'
 import { Offcanvas } from 'bootstrap'

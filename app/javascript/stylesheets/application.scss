@@ -24,7 +24,7 @@
     @apply rounded-lg cursor-pointer;
 
     &.btn-transparent {
-      @apply hover:bg-slate-100 dark:hover:bg-slate-700;
+      @apply hover:bg-slate-100/75 dark:hover:bg-slate-700/75;
     }
 
     &.btn-transparent-blur {
