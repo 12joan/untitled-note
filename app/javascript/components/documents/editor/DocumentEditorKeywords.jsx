@@ -5,7 +5,7 @@ import { X as Cross } from 'react-bootstrap-icons'
 
 import { useContext } from '~/lib/context'
 
-import NavLink from '~/components/NavLink'
+// import NavLink from '~/components/NavLink'
 
 const keywordToTag = keyword => ({
   id: keyword.id,
@@ -129,11 +129,11 @@ const DocumentEditorKeywords = props => {
 
 const Tag = props => (
   <div className="keyword-tag d-inline-block position-relative rounded-1rem p-1 me-2 my-1 text-primary">
-    <NavLink
+    {/*<NavLink
       className="stretched-link text-decoration-none mx-1"
       params={{ keywordId: props.tag.id, documentId: undefined }}>
       {props.tag.name}
-    </NavLink>
+    </NavLink>*/}
 
     <button
       className="btn-delete position-relative border-0 p-0 rounded-circle text-primary"

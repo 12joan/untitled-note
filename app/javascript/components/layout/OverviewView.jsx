@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 
+import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
@@ -79,13 +80,17 @@ const CardsSection = ({ title, items, showAllButton, cardsPerRow }) => {
 
       <div className="flex flex-wrap gap-5">
         {cappedItems.map((doc, index) => (
-          <button key={index} type="button" className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent">
+          <DocumentLink
+            key={index}
+            documentId={1}
+            className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent"
+          >
             <strong className="text-lg font-medium" children={doc} />
 
             <p className="text-sm line-clamp-4 text-slate-500 dark:text-slate-400">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl.
             </p>
-          </button>
+          </DocumentLink>
         ))}
       </div>
     </section>
@@ -126,10 +131,11 @@ const ListSection = ({ title, items, showAllButton }) => {
 
 const ListItem = ({ children, ...otherProps }) => {
   return (
-    <button
-      type="button"
+    <DocumentLink
+      documentId={1}
       className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
       children={children}
+      onClick={() => navigateToDocument(1)}
       {...otherProps}
     />
   )

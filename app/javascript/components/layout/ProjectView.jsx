@@ -13,20 +13,7 @@ import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
 
-/*
-import ContentArea from '~/components/layout/ContentArea'
-import SwitchProjectModal from '~/components/projects/SwitchProjectModal'
-import NewProjectModal from '~/components/projects/NewProjectModal'
-import EditProjectModal from '~/components/projects/EditProjectModal'
-import DeleteProjectModal from '~/components/projects/DeleteProjectModal'
-import SearchModal from '~/components/layout/SearchModal'
-import TrixDialogs from '~/components/layout/TrixDialogs'
-import KeyboardNavigationModal from '~/components/layout/KeyboardNavigationModal'
-*/
-
-const AppLayout = () => {
-  const { documentId } = useContext()
-
+const ProjectView = ({ childView }) => {
   const projectsBarRef = useRef()
   const topBarRef = useRef()
   const sideBarRef = useRef()
@@ -47,17 +34,18 @@ const AppLayout = () => {
     }
   }, [isMd])
 
-  const { viewComponent, centreView, showFormattingToolbar } = documentId === undefined
-    ? {
-      viewComponent: <OverviewView topBarHeight={topBarHeight} />,
+  const { ChildView, centreView, showFormattingToolbar } = {
+    overview: {
+      ChildView: OverviewView,
       centreView: false,
       showFormattingToolbar: false,
-    }
-    : {
-      viewComponent: <EditorView />,
+    },
+    editor: {
+      ChildView: EditorView,
       centreView: isXl,
       showFormattingToolbar: true,
-    }
+    },
+  }[childView.type]
 
   return (
     <>
@@ -160,34 +148,14 @@ const AppLayout = () => {
             ? Math.max(formattingBarWidth, projectsBarWidth + sideBarWidth)
             : formattingBarWidth,
         }}
-        children={viewComponent}
-      />
+      >
+        <ChildView
+          topBarHeight={topBarHeight}
+          {...childView.props}
+        />
+      </main>
     </>
   )
-
-  /*return (
-    <>
-      <div className="layout-column position-fixed top-0 bottom-0 start-0 end-0 bg-light">
-        <TopBar />
-
-        <div className="layout-row flex-grow-1 overflow-hidden">
-          <Sidebar />
-
-          <div className="layout-column flex-grow-1 overflow-hidden">
-            <ContentArea key={[projectId, keywordId, documentId]} />
-          </div>
-        </div>
-      </div>
-
-      <SwitchProjectModal />
-      <NewProjectModal />
-      <EditProjectModal />
-      <DeleteProjectModal />
-      <SearchModal />
-      <TrixDialogs />
-      <KeyboardNavigationModal />
-    </>
-  )*/
 }
 
-export default AppLayout
+export default ProjectView

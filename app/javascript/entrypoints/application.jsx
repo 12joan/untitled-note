@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 import 'trix'
 import '@rails/actiontext'
 
@@ -30,7 +31,7 @@ setInterval(() => {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <App />,
+    <BrowserRouter children={<App />} />,
     document.querySelector('#application'),
   )
 })
