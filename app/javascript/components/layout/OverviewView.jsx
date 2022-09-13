@@ -1,11 +1,15 @@
 import React, { useRef } from 'react'
 
+import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
 
 const OverviewView = () => {
+  const { futurePartialDocuments } = useContext()
+  const partialDocuments = futurePartialDocuments.orDefault([])
+
   const viewRef = useRef()
   const { width: viewWidth } = useElementSize(viewRef)
 
@@ -40,7 +44,7 @@ const OverviewView = () => {
       <Section
         title="All documents"
         cardsPerRow={cardsPerRow}
-        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        items={partialDocuments.map(doc => doc.safe_title)}
       />
     </div>
   )

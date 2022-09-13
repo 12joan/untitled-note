@@ -13,13 +13,13 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
   include Listenable
 
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-  index_name "#{Rails.env}_documents"
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
+  # index_name "#{Rails.env}_documents"
 
-  def as_indexed_json(options = nil)
-    self.as_json(only: %i[project_id title], methods: %i[plain_body])
-  end
+  # def as_indexed_json(options = nil)
+  #   self.as_json(only: %i[project_id title], methods: %i[plain_body])
+  # end
 
   def safe_title
     title.presence || 'Untitled document'

@@ -6,6 +6,7 @@ const useStream = (getStream, dependencies) => {
   const [future, setFuture] = useState(Future.pending())
 
   useEffect(() => {
+    setFuture(Future.pending())
     const stream = getStream(data => setFuture(Future.resolved(data)))
     return () => stream.unsubscribe()
   }, dependencies)
