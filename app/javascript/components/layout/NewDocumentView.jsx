@@ -15,11 +15,11 @@ const NewDocumentView = () => {
 
   useEffect(() => {
     BlankDocumentAPI(projectId).create()
-      .then(unlessUnmounting(doc => navigate(documentPath(projectId, doc.id))))
+      .then(unlessUnmounting(doc => navigate(documentPath(projectId, doc.id), { replace: true })))
       .catch(unlessUnmounting(error => {
         // TODO: Display the error somewhere
         console.error(error)
-        navigate(projectPath(projectId))
+        navigate(projectPath(projectId), { replace: true })
       }))
   }, [])
 

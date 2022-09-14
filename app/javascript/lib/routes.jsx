@@ -25,12 +25,12 @@ const routesComponent = (
             <ProjectView childView={{ type: 'editor', props: { documentId } }} />
           ))} />
 
-          <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} />} />
+          <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} replace />} />
         </Routes>
       </StreamProjectData>
     ))} />
 
-    <Route path="*" element={<Navigate to="/projects/1/overview" />} />
+    <Route path="*" element={<Navigate to="/projects/1/overview" replace />} />
   </Routes>
 )
 
