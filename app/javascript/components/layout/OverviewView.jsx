@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { followCursor } from 'tippy.js'
 
 import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
@@ -6,6 +7,7 @@ import useElementSize from '~/lib/useElementSize'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
+import Dropdown, { DropdownItem } from '~/components/Dropdown'
 
 const OverviewView = () => {
   const { futureProject, futurePartialDocuments } = useContext()
@@ -151,7 +153,7 @@ const Card = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
 const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
     <Item
-      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
+      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg"
       {...itemProps}
       {...otherProps}
     >
@@ -168,11 +170,31 @@ const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
 
 const Item = ({ as: ItemComponent, buttonProps, children, ...otherProps }) => {
   return (
-    <ItemComponent
-      {...buttonProps}
-      {...otherProps}
-      children={children}
-    />
+    <div className="group">
+      <Dropdown
+        plugins={[followCursor]}
+        followCursor="initial"
+        trigger="contextmenu"
+        placement="bottom-start"
+        offset={0}
+        items={
+          <>
+            <DropdownItem>Open document</DropdownItem>
+            <DropdownItem>Copy link</DropdownItem>
+            <DropdownItem>Delete</DropdownItem>
+          </>
+        }
+      >
+        <ItemComponent
+          {...buttonProps}
+          {...otherProps}
+          children={children}
+          onContextMenu={event => {
+            event.preventDefault()
+          }}
+        />
+      </Dropdown>
+    </div>
   )
 }
 

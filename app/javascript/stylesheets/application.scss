@@ -59,3 +59,8 @@
 .tippy-box[data-theme~='custom'] {
   @apply text-inherit bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur font-medium shadow;
 }
+
+[data-tippy-root] {
+  // Side effect of mounting tooltip as a child of .divide-y
+  border: none !important;
+}
