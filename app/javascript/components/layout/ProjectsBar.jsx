@@ -17,10 +17,10 @@ const ProjectsBar = forwardRef(({ ...otherProps }, ref) => {
           <ProjectLink
             nav
             projectId={project.id}
-            className="btn btn-solid w-full aspect-square border flex items-center justify-center text-xl font-light p-1 dark:border-transparent relative nav-active:no-focus-ring group"
+            className="btn btn-solid w-full aspect-square border flex items-center justify-center font-light p-1 dark:border-transparent relative nav-active:no-focus-ring group"
           >
             {abbreviate(project.name, 2)}
-            <div className="absolute inset-0 ring ring-slate-700 dark:ring-slate-200 rounded-lg scale-[115%] hidden nav-active:block group-focus-ring" />
+            <div className="absolute -inset-1 ring ring-slate-700 dark:ring-slate-300 rounded-xl hidden nav-active:block group-focus-ring" />
           </ProjectLink>
         </Tooltip>
       ))).orDefault(

@@ -57,7 +57,7 @@ const ProjectView = ({ childView }) => {
     <>
       <nav
         ref={projectsBarRef}
-        className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r p-3 bg-slate-100 dark:bg-black/25 dark:border-transparent w-20"
+        className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r p-3 bg-slate-100 dark:bg-black/25 dark:border-transparent w-[4.5rem]"
         style={{
           display: isMd ? undefined : 'none',
         }}
@@ -86,7 +86,7 @@ const ProjectView = ({ childView }) => {
               opacity: offcanvasSidebarVisible ? 1 : 0,
             }}
           >
-            <div className="shrink-0 p-3 w-20 overflow-y-auto bg-slate-200/75 dark:bg-slate-900/25 border-r dark:border-transparent">
+            <div className="shrink-0 p-3 w-[4.5rem] overflow-y-auto bg-slate-200/75 dark:bg-slate-900/25 border-r dark:border-transparent">
               <ProjectsBar />
             </div>
 
