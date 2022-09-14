@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import forwardParams from '~/lib/forwardParams'
 import { useContext } from '~/lib/context'
@@ -8,6 +8,7 @@ import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
 import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
+import Link from '~/components/Link'
 
 const routesComponent = (
   <Routes>
@@ -31,25 +32,25 @@ const routesComponent = (
   </Routes>
 )
 
-const projectPath = projectId => `/projects/${projectId}/overview`
+const projectPath = projectId => `/projects/${projectId}`
+const overviewPath = projectId => `/projects/${projectId}/overview`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 
-const ProjectLink = ({ projectId: overrideProjectId, ...otherProps }) => {
+const makeLinkComponent = pathFunc => ({ projectId: overrideProjectId, documentId, ...otherProps }) => {
   const { projectId: currentProject } = useContext()
   const projectId = overrideProjectId ?? currentProject
-  return <Link to={projectPath(projectId)} {...otherProps} />
+  return <Link to={pathFunc(projectId, documentId)} {...otherProps} />
 }
 
-const DocumentLink = ({ projectId: overrideProjectId, documentId, ...otherProps }) => {
-  const { projectId: currentProject } = useContext()
-  const projectId = overrideProjectId ?? currentProject
-  return <Link to={documentPath(projectId, documentId)} {...otherProps} />
-}
+const ProjectLink = makeLinkComponent(projectPath)
+const OverviewLink = makeLinkComponent(overviewPath)
+const DocumentLink = makeLinkComponent(documentPath)
 
 export {
   routesComponent,
   projectPath,
   documentPath,
   ProjectLink,
+  OverviewLink,
   DocumentLink,
 }

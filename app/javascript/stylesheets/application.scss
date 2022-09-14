@@ -20,6 +20,14 @@
   .transparent-blur {
     @apply bg-page-bg-light/75 dark:bg-page-bg-dark/75 backdrop-blur;
   }
+
+  .no-focus-ring:focus-visible {
+    @apply ring-0;
+  }
+
+  .group-focus-ring {
+    @apply group-focus-visible:ring-primary-500 group-focus-visible:dark:ring-primary-400;
+  }
 }
 
 @layer components {

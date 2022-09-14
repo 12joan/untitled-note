@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { ProjectLink } from '~/lib/routes'
+import { OverviewLink } from '~/lib/routes'
 
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
@@ -12,17 +12,17 @@ const Sidebar = () => {
     <div className="w-full max-w-48 space-y-5 pb-3">
       <section className="-ml-3">
         {[
-          ['Overview', OverviewIcon, () => navigateToProject()],
-          ['New document', NewDocumentIcon, () => {}],
-          ['Search', SearchIcon, () => {}],
-        ].map(([label, Icon, onClick], index) => (
-          <ProjectLink key={index} className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center">
+          ['Overview', OverviewIcon],
+          ['New document', NewDocumentIcon],
+          ['Search', SearchIcon],
+        ].map(([label, Icon], index) => (
+          <OverviewLink key={index} className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center">
             <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
               <Icon size="1.25em" noAriaLabel />
             </span>
 
             {label}
-          </ProjectLink>
+          </OverviewLink>
         ))}
       </section>
 
