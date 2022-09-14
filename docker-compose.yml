@@ -24,20 +24,20 @@ services:
     depends_on:
       - db
       - redis
-      - elasticsearch
+    # - elasticsearch
 
   redis:
     image: redis
 
-  elasticsearch:
-    image: elasticsearch:7.17.0
-    environment:
-      - discovery.type=single-node
-    volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+# elasticsearch:
+#   image: elasticsearch:7.17.0
+#   environment:
+#     - discovery.type=single-node
+#   volumes:
+#     - elasticsearch:/usr/share/elasticsearch/data
 
 
 volumes:
   pgdata:
   node_modules:
-  elasticsearch:
+# elasticsearch:

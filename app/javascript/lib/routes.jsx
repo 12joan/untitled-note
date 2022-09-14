@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import forwardParams from '~/lib/forwardParams'
@@ -39,11 +39,11 @@ const overviewPath = projectId => `/projects/${projectId}/overview`
 const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 
-const makeLinkComponent = pathFunc => ({ projectId: overrideProjectId, documentId, ...otherProps }) => {
+const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, ...otherProps }, ref) => {
   const { projectId: currentProject } = useContext()
   const projectId = overrideProjectId ?? currentProject
-  return <Link to={pathFunc(projectId, documentId)} {...otherProps} />
-}
+  return <Link ref={ref} to={pathFunc(projectId, documentId)} {...otherProps} />
+})
 
 const ProjectLink = makeLinkComponent(projectPath)
 const OverviewLink = makeLinkComponent(overviewPath)

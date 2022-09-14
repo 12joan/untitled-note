@@ -34,13 +34,11 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     >
       {showSidebarButton && (
         <Tooltip content="Show sidebar">
-          <div>
-            <NavButton
-              icon={SidebarIcon}
-              label="Show sidebar"
-              onClick={onSidebarButtonClick}
-            />
-          </div>
+          <NavButton
+            icon={SidebarIcon}
+            label="Show sidebar"
+            onClick={onSidebarButtonClick}
+          />
         </Tooltip>
       )}
 
@@ -53,9 +51,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
       {isXs
         ? navButtons.map(({ label, ...otherProps }) => (
           <Tooltip key={label} content={label}>
-            <div>
-              <NavButton label={label} {...otherProps} />
-            </div>
+            <NavButton label={label} {...otherProps} />
           </Tooltip>
         ))
         : (
@@ -66,20 +62,16 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
                 tabIndex={-1}
                 {...attrs}
               >
-                <div>
-                  {navButtons.map((config, i) => (
-                    <DropdownButton key={i} {...config} key={config.label} />
-                  ))}
-                </div>
+                {navButtons.map((config, i) => (
+                  <DropdownButton key={i} {...config} key={config.label} />
+                ))}
               </div>
             )}
             placement="bottom-end"
             trigger="click"
             interactive
           >
-            <div>
-              <NavButton icon={MenuIcon} label="Menu" />
-            </div>
+            <NavButton icon={MenuIcon} label="Menu" />
           </Tippy>
         )
       }
@@ -87,11 +79,12 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
   )
 })
 
-const NavButton = ({ icon: Icon, label, as: Component = 'button', ...otherProps }) => {
+const NavButton = forwardRef(({ icon: Icon, label, as: Component = 'button', ...otherProps }, ref) => {
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
 
   return (
     <Component
+      ref={ref}
       {...buttonProps}
       className="block btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
       {...otherProps}
@@ -99,7 +92,7 @@ const NavButton = ({ icon: Icon, label, as: Component = 'button', ...otherProps 
       <Icon size="1.25em" ariaLabel={label} />
     </Component>
   )
-}
+})
 
 const DropdownButton = ({ icon: Icon, label, as: Component = 'button', ...otherProps }) => {
   const buttonProps = Component === 'button' ? { type: 'button' } : {}

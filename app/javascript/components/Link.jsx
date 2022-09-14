@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import * as ReactRouter from 'react-router-dom'
 
-const Link = ({ nav = false, className: userClassName = '', ...otherProps }) => {
+const Link = forwardRef(({ nav = false, className: userClassName = '', ...otherProps }, ref) => {
   const className = `select-none ${userClassName}`
 
   if (nav) {
     return (
       <ReactRouter.NavLink
+        ref={ref}
         className={({ isActive }) => isActive
           ? `${className} nav-active`
           : className
@@ -17,11 +18,12 @@ const Link = ({ nav = false, className: userClassName = '', ...otherProps }) => 
   } else {
     return (
       <ReactRouter.Link
+        ref={ref}
         className={className}
         {...otherProps}
       />
     )
   }
-}
+})
 
 export default Link
