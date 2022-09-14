@@ -1,7 +1,9 @@
 import React from 'react'
 import * as ReactRouter from 'react-router-dom'
 
-const Link = ({ nav = false, className = '', ...otherProps }) => {
+const Link = ({ nav = false, className: userClassName = '', ...otherProps }) => {
+  const className = `select-none ${userClassName}`
+
   if (nav) {
     return (
       <ReactRouter.NavLink

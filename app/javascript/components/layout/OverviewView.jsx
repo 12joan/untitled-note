@@ -4,10 +4,11 @@ import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
+import { InlinePlaceholder } from '~/components/Placeholder'
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
 
 const OverviewView = () => {
-  const { futurePartialDocuments } = useContext()
+  const { futureProject, futurePartialDocuments } = useContext()
   const partialDocuments = futurePartialDocuments.orDefault([])
 
   const viewRef = useRef()
@@ -19,9 +20,22 @@ const OverviewView = () => {
   const cardGap = 5 / 4 * remPixels
   const cardsPerRow = Math.max(1, Math.floor((viewWidth - viewPadding + cardGap) / (cardWidth + cardGap)))
 
+  const itemForDocument = doc => ({
+    label: doc.safe_title,
+    preview: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
+    as: DocumentLink,
+    buttonProps: {
+      documentId: doc.id,
+    },
+  })
+
   return (
     <div ref={viewRef} className="p-5 space-y-5">
-      <Section
+      <h1 className="text-3xl font-medium">
+        {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
+      </h1>
+
+      {/*<Section
         title="Pinned documents"
         cardsPerRow={cardsPerRow}
         items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
@@ -39,12 +53,12 @@ const OverviewView = () => {
         cardsPerRow={cardsPerRow}
         showAllButton={true}
         items={['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8']}
-      />
+      />*/}
 
       <Section
         title="All documents"
         cardsPerRow={cardsPerRow}
-        items={partialDocuments.map(doc => doc.safe_title)}
+        items={partialDocuments.map(itemForDocument)}
       />
     </div>
   )
@@ -83,18 +97,8 @@ const CardsSection = ({ title, items, showAllButton, cardsPerRow }) => {
       }
 
       <div className="flex flex-wrap gap-5">
-        {cappedItems.map((doc, index) => (
-          <DocumentLink
-            key={index}
-            documentId={1}
-            className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent"
-          >
-            <strong className="text-lg font-medium" children={doc} />
-
-            <p className="text-sm line-clamp-4 text-slate-500 dark:text-slate-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl.
-            </p>
-          </DocumentLink>
+        {cappedItems.map((item, index) => (
+          <Card key={index} item={item} />
         ))}
       </div>
     </section>
@@ -120,30 +124,56 @@ const ListSection = ({ title, items, showAllButton }) => {
       }
 
       <div className="rounded-lg border dark:border-transparent divide-y">
-        {cappedItems.map((doc, index) => (
-          <ListItem key={index}>
-            <span className="shrink-0" children={doc} />
-            <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nunc aliquet nunc, eget aliquet nunc nisl eget nisl.
-            </span>
-          </ListItem>
+        {cappedItems.map((item, index) => (
+          <ListItem key={index} item={item} />
         ))}
       </div>
     </section>
   )
 }
 
-const ListItem = ({ children, ...otherProps }) => {
+const Card = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
-    <DocumentLink
-      documentId={1}
-      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
-      children={children}
-      onClick={() => navigateToDocument(1)}
+    <Item
+      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent"
+      {...itemProps}
       {...otherProps}
-    />
+    >
+      <strong className="text-lg font-medium" children={label} />
+
+      <p className="text-sm line-clamp-4 text-slate-500 dark:text-slate-400">
+        {preview}
+      </p>
+    </Item>
   )
 }
 
+const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
+  return (
+    <Item
+      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
+      {...itemProps}
+      {...otherProps}
+    >
+      <span className="shrink-0">
+        {label}
+      </span>
+
+      <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+        {preview}
+      </span>
+    </Item>
+  )
+}
+
+const Item = ({ as: ItemComponent, buttonProps, children, ...otherProps }) => {
+  return (
+    <ItemComponent
+      {...buttonProps}
+      {...otherProps}
+      children={children}
+    />
+  )
+}
 
 export default OverviewView

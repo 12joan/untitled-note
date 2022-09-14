@@ -6,8 +6,6 @@ import { useContext } from '~/lib/context'
 
 import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
-import OverviewView from '~/components/layout/OverviewView'
-import EditorView from '~/components/layout/EditorView'
 import Link from '~/components/Link'
 
 const routesComponent = (
@@ -15,11 +13,15 @@ const routesComponent = (
     <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
       <StreamProjectData projectId={projectId}>
         <Routes>
-          <Route path="overview/*" element={(
+          <Route path="overview" element={(
             <ProjectView childView={{ type: 'overview', props: {} }} />
           )} />
 
-          <Route path="editor/:documentId/*" element={forwardParams(({ documentId }) => (
+          <Route path="editor/new" element={(
+            <ProjectView childView={{ type: 'newDocument', props: {} }} />
+          )} />
+
+          <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
             <ProjectView childView={{ type: 'editor', props: { documentId } }} />
           ))} />
 
@@ -34,6 +36,7 @@ const routesComponent = (
 
 const projectPath = projectId => `/projects/${projectId}`
 const overviewPath = projectId => `/projects/${projectId}/overview`
+const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 
 const makeLinkComponent = pathFunc => ({ projectId: overrideProjectId, documentId, ...otherProps }) => {
@@ -44,6 +47,7 @@ const makeLinkComponent = pathFunc => ({ projectId: overrideProjectId, documentI
 
 const ProjectLink = makeLinkComponent(projectPath)
 const OverviewLink = makeLinkComponent(overviewPath)
+const NewDocumentLink = makeLinkComponent(newDocumentPath)
 const DocumentLink = makeLinkComponent(documentPath)
 
 export {
@@ -52,5 +56,6 @@ export {
   documentPath,
   ProjectLink,
   OverviewLink,
+  NewDocumentLink,
   DocumentLink,
 }

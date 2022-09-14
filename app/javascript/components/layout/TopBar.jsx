@@ -3,6 +3,7 @@ import Tippy from '@tippyjs/react/headless'
 
 import { useContext } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
+import { NewDocumentLink } from '~/lib/routes'
 
 import Tooltip from '~/components/Tooltip'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -18,6 +19,13 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
 
   const { isXs } = useBreakpoints()
 
+  const navButtons = [
+    { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
+    { icon: SearchIcon, label: 'Search' },
+    { icon: SettingsIcon, label: 'Settings' },
+    { icon: AccountIcon, label: 'Account' },
+  ]
+
   return (
     <nav
       ref={ref}
@@ -26,13 +34,13 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     >
       {showSidebarButton && (
         <Tooltip content="Show sidebar">
-          <button
-            type="button"
-            className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
-            onClick={onSidebarButtonClick}
-          >
-            <SidebarIcon size="1.25em" ariaLabel="Show sidebar" />
-          </button>
+          <div>
+            <NavButton
+              icon={SidebarIcon}
+              label="Show sidebar"
+              onClick={onSidebarButtonClick}
+            />
+          </div>
         </Tooltip>
       )}
 
@@ -43,20 +51,13 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
       <div className="grow" />
 
       {isXs
-        ? (
-            [
-              ['New document', NewDocumentIcon],
-                ['Search', SearchIcon],
-                ['Settings', SettingsIcon],
-                ['Account', AccountIcon],
-            ].map(([label, Icon], index) => (
-              <Tooltip key={index} content={label} placement="bottom">
-                <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
-                  <Icon size="1.25em" ariaLabel={label} />
-                </button>
-              </Tooltip>
-            ))
-        )
+        ? navButtons.map(({ label, ...otherProps }) => (
+          <Tooltip key={label} content={label}>
+            <div>
+              <NavButton label={label} {...otherProps} />
+            </div>
+          </Tooltip>
+        ))
         : (
           <Tippy
             render={attrs => (
@@ -65,34 +66,57 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
                 tabIndex={-1}
                 {...attrs}
               >
-                {[
-                  ['New document', NewDocumentIcon],
-                  ['Search', SearchIcon],
-                  ['Settings', SettingsIcon],
-                  ['Account', AccountIcon],
-                ].map(([label, Icon], index) => (
-                  <button key={index} type="button" className="block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg">
-                    <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
-                      <Icon size="1.25em" noAriaLabel />
-                    </span>
-
-                    {label}
-                  </button>
-                ))}
+                <div>
+                  {navButtons.map((config, i) => (
+                    <DropdownButton key={i} {...config} key={config.label} />
+                  ))}
+                </div>
               </div>
             )}
             placement="bottom-end"
             trigger="click"
             interactive
           >
-            <button type="button" className="btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto">
-              <MenuIcon size="1.25em" ariaLabel="Menu" />
-            </button>
+            <div>
+              <NavButton icon={MenuIcon} label="Menu" />
+            </div>
           </Tippy>
         )
       }
     </nav>
   )
 })
+
+const NavButton = ({ icon: Icon, label, as: Component = 'button', ...otherProps }) => {
+  const buttonProps = Component === 'button' ? { type: 'button' } : {}
+
+  return (
+    <Component
+      {...buttonProps}
+      className="block btn btn-transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
+      {...otherProps}
+    >
+      <Icon size="1.25em" ariaLabel={label} />
+    </Component>
+  )
+}
+
+const DropdownButton = ({ icon: Icon, label, as: Component = 'button', ...otherProps }) => {
+  const buttonProps = Component === 'button' ? { type: 'button' } : {}
+
+  return (
+    <Component
+      {...buttonProps}
+      className="block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg"
+      {...otherProps}
+    >
+      <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+        <Icon size="1.25em" noAriaLabel />
+      </span>
+
+      {label}
+    </Component>
+  )
+}
 
 export default TopBar

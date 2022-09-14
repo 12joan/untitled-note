@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { OverviewLink } from '~/lib/routes'
+import { OverviewLink, NewDocumentLink } from '~/lib/routes'
 
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
@@ -11,7 +11,7 @@ const Sidebar = () => {
     <div className="w-full max-w-48 space-y-5 pb-3">
       <section className="-ml-3">
         <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
-        <ButtonWithIcon icon={NewDocumentIcon} label="New document" />
+        <ButtonWithIcon as={NewDocumentLink} icon={NewDocumentIcon} label="New document" />
         <ButtonWithIcon icon={SearchIcon} label="Search" />
       </section>
 

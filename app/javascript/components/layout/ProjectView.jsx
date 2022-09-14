@@ -12,6 +12,7 @@ import Sidebar from '~/components/layout/Sidebar'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
+import NewDocumentView from '~/components/layout/NewDocumentView'
 
 const ProjectView = ({ childView }) => {
   const projectsBarRef = useRef()
@@ -44,6 +45,11 @@ const ProjectView = ({ childView }) => {
       ChildView: EditorView,
       centreView: isXl,
       showFormattingToolbar: true,
+    },
+    newDocument: {
+      ChildView: NewDocumentView,
+      centreView: true,
+      showFormattingToolbar: false,
     },
   }[childView.type]
 
