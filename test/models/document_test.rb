@@ -129,6 +129,23 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal 'This is a heading This is a paragraph • One • Two • Three', document.plain_body
   end
 
+  test 'preview returns up to 100 characters of plain_body without breaking part way through a word' do
+    body = 'The quick brown fox jumps over the lazy dog ' * 3
+
+    # body.slice(0, 100)
+    # => 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick br'
+
+    expected_preview = 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick'
+
+    document = create(:document, body: body)
+    assert_equal expected_preview, document.preview
+  end
+
+  test 'preview breaks at 100 if there are no spaces' do
+    document = create(:document, body: 'a' * 200)
+    assert_equal 'a' * 100, document.preview
+  end
+
   private
 
   def body_with_definitive_mentions(definitive_mentions)

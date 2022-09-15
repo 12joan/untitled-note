@@ -10,7 +10,7 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
+  include Queryable.permit(*%i[id title safe_title preview body_content keywords blank created_at updated_at pinned_at])
   include Listenable
 
   after_save do
@@ -39,6 +39,11 @@ class Document < ApplicationRecord
     unless body.body.nil?
       SanitizeHtml.(body.body.to_html)
     end
+  end
+
+  def preview
+    # Avoid breaking part way through a word if possible
+    (plain_body || '').match(/.{0,100}\b/).to_s.strip.presence || (plain_body || '').slice(0, 100)
   end
 
   def extract_definitive_mentions(body)
