@@ -4,13 +4,17 @@ import { followCursor } from 'tippy.js'
 import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
-import CaretRightIcon from '~/components/icons/CaretRightIcon'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
+import CaretRightIcon from '~/components/icons/CaretRightIcon'
+import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
+import CopyIcon from '~/components/icons/CopyIcon'
+import DeleteIcon from '~/components/icons/DeleteIcon'
 
 const OverviewView = () => {
-  const { futureProject, futurePartialDocuments } = useContext()
+  const { projectId, futureProject, futurePartialDocuments } = useContext()
   const partialDocuments = futurePartialDocuments.orDefault([])
 
   const viewRef = useRef()
@@ -23,12 +27,40 @@ const OverviewView = () => {
   const cardsPerRow = Math.max(1, Math.floor((viewWidth - viewPadding + cardGap) / (cardWidth + cardGap)))
 
   const itemForDocument = doc => ({
+    key: doc.id,
     label: doc.safe_title,
     preview: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
     as: DocumentLink,
     buttonProps: {
       documentId: doc.id,
     },
+    contextMenu: (
+      <>
+        <DropdownItem
+          icon={OpenInNewTabIcon}
+          as={DocumentLink}
+          documentId={doc.id}
+          target="_blank"
+        >
+          Open in new tab
+        </DropdownItem>
+
+        <DropdownItem
+          icon={CopyIcon}
+          onClick={() => alert('Not implemented yet')}
+        >
+          Copy link
+        </DropdownItem>
+
+        <DropdownItem
+          icon={DeleteIcon}
+          className="children:text-red-500 dark:children:text-red-500"
+          onClick={() => DocumentsAPI(projectId).destroy(doc)}
+        >
+          Delete
+        </DropdownItem>
+      </>
+    ),
   })
 
   return (
@@ -99,8 +131,8 @@ const CardsSection = ({ title, items, showAllButton, cardsPerRow }) => {
       }
 
       <div className="flex flex-wrap gap-5">
-        {cappedItems.map((item, index) => (
-          <Card key={index} item={item} />
+        {cappedItems.map(item => (
+          <Card key={item.key} item={item} />
         ))}
       </div>
     </section>
@@ -126,8 +158,8 @@ const ListSection = ({ title, items, showAllButton }) => {
       }
 
       <div className="rounded-lg border dark:border-transparent divide-y">
-        {cappedItems.map((item, index) => (
-          <ListItem key={index} item={item} />
+        {cappedItems.map(item => (
+          <ListItem key={item.key} item={item} />
         ))}
       </div>
     </section>
@@ -168,32 +200,34 @@ const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
   )
 }
 
-const Item = ({ as: ItemComponent, buttonProps, children, ...otherProps }) => {
+const Item = ({ as: ItemComponent, buttonProps, contextMenu, children, ...otherProps }) => {
+  const itemComponent = (
+    <ItemComponent
+      {...buttonProps}
+      {...otherProps}
+      children={children}
+      onContextMenu={contextMenu !== undefined && (event => {
+        event.preventDefault()
+      })}
+    />
+  )
+
   return (
-    <div className="group">
-      <Dropdown
-        plugins={[followCursor]}
-        followCursor="initial"
-        trigger="contextmenu"
-        placement="bottom-start"
-        offset={0}
-        items={
-          <>
-            <DropdownItem>Open document</DropdownItem>
-            <DropdownItem>Copy link</DropdownItem>
-            <DropdownItem>Delete</DropdownItem>
-          </>
-        }
-      >
-        <ItemComponent
-          {...buttonProps}
-          {...otherProps}
-          children={children}
-          onContextMenu={event => {
-            event.preventDefault()
-          }}
-        />
-      </Dropdown>
+    <div className="group flex">
+      {contextMenu === undefined
+        ? itemComponent
+        : (
+          <Dropdown
+            plugins={[followCursor]}
+            followCursor="initial"
+            trigger="contextmenu"
+            placement="bottom-start"
+            offset={0}
+            items={contextMenu}
+            children={itemComponent}
+          />
+        )
+      }
     </div>
   )
 }

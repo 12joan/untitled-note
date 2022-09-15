@@ -35,13 +35,13 @@ const Dropdown = ({ items, className: userClassName = '', ...otherProps }) => {
   )
 }
 
-const DropdownItem = ({ icon: Icon, children, as: Component = 'button', ...otherProps }) => {
+const DropdownItem = ({ icon: Icon, children, as: Component = 'button', className = '', ...otherProps }) => {
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
 
   return (
     <Component
       {...buttonProps}
-      className="block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg"
+      className={`block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
       {...otherProps}
     >
       {Icon && (
