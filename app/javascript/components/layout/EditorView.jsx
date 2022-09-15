@@ -1,7 +1,8 @@
 import React from 'react'
 
 import LoadDocument from '~/components/documents/LoadDocument'
-import DocumentEditor from '~/components/documents/DocumentEditor'
+// import DocumentEditor from '~/components/documents/DocumentEditor'
+import Editor from '~/components/Editor'
 
 const EditorView = ({ documentId }) => {
   return (
@@ -10,7 +11,7 @@ const EditorView = ({ documentId }) => {
         id={documentId}
         loading={() => <p>Loading...</p>}
         success={doc => (
-          <DocumentEditor document={doc} />
+          <Editor upstreamDocument={doc} />
         )}
       />
     </div>

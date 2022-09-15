@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
 const lineClamp = require('@tailwindcss/line-clamp')
+const typography = require('@tailwindcss/typography')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -41,6 +42,7 @@ module.exports = {
   },
   plugins: [
     lineClamp,
+    typography,
     plugin(({ addVariant, e }) => {
       addVariant('trix-active', '&.trix-active')
       addVariant('window-inactive', 'body.inactive &')
