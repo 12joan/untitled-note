@@ -34,8 +34,15 @@ class Document < ApplicationRecord
   end
 
   def preview
-    # Avoid breaking part way through a word if possible
-    (plain_body || '').match(/.{0,100}\b/).to_s.strip.presence || (plain_body || '').slice(0, 100)
+    plain_body.split(/\b/).reduce('') do |preview, word|
+      if preview.length + word.length <= 100
+        preview + word
+      elsif preview.blank?
+        word.slice(0, 100)
+      else
+        preview
+      end
+    end.strip
   end
 
   def extract_definitive_mentions(body)

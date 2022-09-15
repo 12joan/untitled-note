@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_102556) do
     t.datetime "pinned_at"
     t.string "title"
     t.text "definitive_mentions"
-    t.text "plain_body"
+    t.text "plain_body", default: "", null: false
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 

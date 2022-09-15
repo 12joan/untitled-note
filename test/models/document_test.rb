@@ -146,6 +146,12 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal 'a' * 100, document.preview
   end
 
+  test 'preview does not stop early at punctuation' do
+    body = 'This, is! a. sentence; \'with\' ~punctuation~'
+    document = create(:document, body: body)
+    assert_equal body, document.preview
+  end
+
   private
 
   def body_with_definitive_mentions(definitive_mentions)
