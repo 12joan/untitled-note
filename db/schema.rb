@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_02_144828) do
+ActiveRecord::Schema.define(version: 2022_09_15_102556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_144828) do
     t.datetime "pinned_at"
     t.string "title"
     t.text "definitive_mentions"
+    t.text "plain_body"
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 

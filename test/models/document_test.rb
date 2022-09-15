@@ -115,6 +115,20 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal %w(one two three), document.definitive_mentions
   end
 
+  test 'extracts plain_body from HTML body' do
+    document = create(:document, body: <<~HTML)
+      <h1>This is a heading</h1>
+      <p>This is a paragraph</p>
+      <ul>
+        <li>One</li>
+        <li>Two</li>
+        <li>Three</li>
+      </ul>
+    HTML
+
+    assert_equal 'This is a heading This is a paragraph • One • Two • Three', document.plain_body
+  end
+
   private
 
   def body_with_definitive_mentions(definitive_mentions)

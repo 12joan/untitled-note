@@ -13,6 +13,16 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title blank created_at updated_at pinned_at body_content keywords])
   include Listenable
 
+  after_save do
+    if body.body.present?
+      local_plain_body = body.body.to_plain_text.gsub(/\s+/, ' ')
+
+      if local_plain_body != plain_body
+        update_attribute(:plain_body, local_plain_body)
+      end
+    end
+  end
+
   # include Elasticsearch::Model
   # include Elasticsearch::Model::Callbacks
   # index_name "#{Rails.env}_documents"
@@ -28,12 +38,6 @@ class Document < ApplicationRecord
   def body_content
     unless body.body.nil?
       SanitizeHtml.(body.body.to_html)
-    end
-  end
-
-  def plain_body
-    unless body.body.nil?
-      body.body.to_plain_text
     end
   end
 
