@@ -29,7 +29,7 @@ const OverviewView = () => {
   const itemForDocument = doc => ({
     key: doc.id,
     label: doc.safe_title,
-    preview: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
+    preview: doc.preview,
     as: DocumentLink,
     buttonProps: {
       documentId: doc.id,

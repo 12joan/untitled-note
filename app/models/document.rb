@@ -13,15 +13,7 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title preview body_content keywords blank created_at updated_at pinned_at])
   include Listenable
 
-  after_save do
-    if body.body.present?
-      local_plain_body = body.body.to_plain_text.gsub(/\s+/, ' ')
-
-      if local_plain_body != plain_body
-        update_attribute(:plain_body, local_plain_body)
-      end
-    end
-  end
+  after_save :extract_plain_body
 
   # include Elasticsearch::Model
   # include Elasticsearch::Model::Callbacks
@@ -48,6 +40,16 @@ class Document < ApplicationRecord
 
   def extract_definitive_mentions(body)
     self.definitive_mentions = Nokogiri::HTML.fragment(body).css('x-definitive-mention').map(&:text)
+  end
+
+  def extract_plain_body
+    if body.body.present?
+      local_plain_body = body.body.to_plain_text.gsub(/\s+/, ' ')
+
+      if local_plain_body != plain_body
+        update_attribute(:plain_body, local_plain_body)
+      end
+    end
   end
 
   def mentionables
