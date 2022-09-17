@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useElementSize from '~/lib/useElementSize'
 
@@ -9,7 +9,6 @@ import CloseIcon from '~/components/icons/CloseIcon'
 import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
-import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
 import NewDocumentView from '~/components/layout/NewDocumentView'
@@ -35,26 +34,26 @@ const ProjectView = ({ childView }) => {
     }
   }, [isMd])
 
-  const { ChildView, centreView, showFormattingToolbar } = {
+  const {
+    ChildView,
+    centreView = isXl,
+    showFormattingToolbar = false,
+  } = {
     overview: {
       ChildView: OverviewView,
       centreView: false,
-      showFormattingToolbar: false,
     },
     editor: {
       ChildView: EditorView,
-      centreView: isXl,
       showFormattingToolbar: true,
     },
     newDocument: {
       ChildView: NewDocumentView,
-      centreView: true,
-      showFormattingToolbar: false,
     },
   }[childView.type]
 
   return (
-    <>
+    <ContextProvider formattingToolbarRef={formattingBarRef}>
       <nav
         ref={projectsBarRef}
         className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r p-3 bg-slate-100 dark:bg-black/25 dark:border-transparent w-[4.5rem]"
@@ -107,7 +106,7 @@ const ProjectView = ({ childView }) => {
 
       <nav
         ref={sideBarRef}
-        className="fixed bottom-0 overflow-y-auto p-5 pr-1"
+        className="fixed bottom-0 overflow-y-auto p-5 pt-1 pr-1"
         style={{
           top: topBarHeight,
           left: projectsBarWidth,
@@ -116,8 +115,9 @@ const ProjectView = ({ childView }) => {
         children={<Sidebar />}
       />
 
-      <FormattingToolbar
+      <aside
         ref={formattingBarRef}
+        className="fixed bottom-0 right-0 p-5 pt-1 pl-1 overflow-y-auto flex"
         style={{
           top: topBarHeight,
           display: showFormattingToolbar ? undefined : 'none',
@@ -147,6 +147,7 @@ const ProjectView = ({ childView }) => {
       </div>
 
       <main
+        className="min-h-screen flex flex-col"
         style={{
           paddingTop: topBarHeight,
           paddingLeft: projectsBarWidth + sideBarWidth,
@@ -155,12 +156,14 @@ const ProjectView = ({ childView }) => {
             : formattingBarWidth,
         }}
       >
-        <ChildView
-          topBarHeight={topBarHeight}
-          {...childView.props}
-        />
+        <div className="grow flex flex-col p-5 pt-1">
+          <ChildView
+            topBarHeight={topBarHeight}
+            {...childView.props}
+          />
+        </div>
       </main>
-    </>
+    </ContextProvider>
   )
 }
 

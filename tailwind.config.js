@@ -44,13 +44,13 @@ module.exports = {
     lineClamp,
     typography,
     plugin(({ addVariant, e }) => {
-      addVariant('trix-active', '&.trix-active')
       addVariant('window-inactive', 'body.inactive &')
       addVariant('hocus', ['&:hover', '&:focus-visible'])
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &'])
       addVariant('group-focus-visible', ['.group:focus-visible &'])
       addVariant('nav-active', ['&.nav-active', '.nav-active &'])
       addVariant('children', '& > *')
+      addVariant('data-active', '&[data-active="true"]')
     }),
   ],
 }

@@ -6,12 +6,17 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <script type="text/javascript">
+      // Fix error in Draft.js
+      const global = globalThis
+    </script>
+
     <%= vite_client_tag %>
     <%= vite_react_refresh_tag %>
     <%= yield :head %>
   </head>
 
-  <body class="bg-page-bg-light text-slate-700 dark:bg-page-bg-dark dark:text-slate-200">
+  <body class="bg-page-bg-light text-slate-700 dark:bg-page-bg-dark dark:text-slate-200 min-h-screen">
     <%= yield %>
   </body>
 </html>

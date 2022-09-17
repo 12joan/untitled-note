@@ -1,4 +1,23 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
+import {
+  getPluginType,
+  someNode,
+  toggleNodeType,
+  isMarkActive,
+  toggleMark,
+  toggleList,
+  indentListItems,
+  unindentListItems,
+  MARK_BOLD,
+  MARK_ITALIC,
+  MARK_STRIKETHROUGH,
+  ELEMENT_H1,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_LI,
+} from '@udecode/plate-headless'
 
 import Tooltip from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
@@ -13,42 +32,65 @@ import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon'
 import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
-const FormattingToolbar = forwardRef(({ ...otherProps }, ref) => {
+const FormattingToolbar = ({ editor }) => {
+  const toggleElementProps = element => {
+    const pluginType = getPluginType(editor, element)
+
+    return {
+      active: someNode(editor, { match: { type: pluginType } }),
+      onClick: () => toggleNodeType(editor, { activeType: pluginType }),
+    }
+  }
+
+  const toggleMarkProps = mark => {
+    const pluginType = getPluginType(editor, mark)
+
+    return {
+      active: isMarkActive(editor, pluginType),
+      onClick: () => toggleMark(editor, { key: pluginType }),
+    }
+  }
+
+  const toggleListProps = listType => {
+    const pluginType = getPluginType(editor, listType)
+
+    return {
+      active: someNode(editor, { match: { type: pluginType } }),
+      onClick: () => toggleList(editor, { type: pluginType }),
+    }
+  }
+
+  const formattingButtons = [
+    { label: 'Bold', icon: BoldIcon, ...toggleMarkProps(MARK_BOLD) },
+    { label: 'Italic', icon: ItalicIcon, ...toggleMarkProps(MARK_ITALIC) },
+    { label: 'Strikethrough', icon: StrikethroughIcon, ...toggleMarkProps(MARK_STRIKETHROUGH) },
+    // { label: 'Link', icon: LinkIcon, ...makeInlineFormatting('LINK') },
+    { label: 'Heading 1', icon: HeadingOneIcon, ...toggleElementProps(ELEMENT_H1) },
+    { label: 'Quote', icon: QuoteIcon, ...toggleElementProps(ELEMENT_BLOCKQUOTE) },
+    { label: 'Code block', icon: CodeBlockIcon, ...toggleElementProps(ELEMENT_CODE_BLOCK) },
+    { label: 'Bulleted list', icon: BulletedListIcon, ...toggleListProps(ELEMENT_UL) },
+    { label: 'Numbered list', icon: NumberedListIcon, ...toggleListProps(ELEMENT_OL) },
+    { label: 'Indent', icon: IndentIcon, onClick: () => indentListItems(editor) },
+    { label: 'Unindent', icon: UnindentIcon, onClick: () => unindentListItems(editor) },
+  ]
+
   return (
-    <aside
-      ref={ref}
-      className="fixed bottom-0 right-0 p-5 pl-1 overflow-y-auto flex"
-      {...otherProps}
-    >
-      <div className="my-auto space-y-2" id="trix-toolbar">
-        {[
-          { label: 'Bold', icon: BoldIcon, shortcut: 'b', attribute: 'bold' },
-          { label: 'Italic', icon: ItalicIcon, shortcut: 'i', attribute: 'italic' },
-          { label: 'Strikethrough', icon: StrikethroughIcon, attribute: 'strike' },
-          { label: 'Link', icon: LinkIcon, shortcut: 'k', attribute: 'href', action: 'link' },
-          { label: 'Heading', icon: HeadingOneIcon, shortcut: '1', attribute: 'heading1' },
-          { label: 'Quote', icon: QuoteIcon, attribute: 'quote' },
-          { label: 'Code block', icon: CodeBlockIcon, attribute: 'code' },
-          { label: 'Bulleted list', icon: BulletedListIcon, attribute: 'bullet' },
-          { label: 'Numbered list', icon: NumberedListIcon, attribute: 'number' },
-          { label: 'Indent', icon: IndentIcon, action: 'increaseNestingLevel' },
-          { label: 'Unindent', icon: UnindentIcon, action: 'decreaseNestingLevel' },
-        ].map(({ label, icon: Icon, shortcut, attribute, action }, index) => (
-          <Tooltip key={index} content={label} placement="left">
-            <button
-              type="button"
-              className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed trix-active:text-primary-500 dark:trix-active:text-primary-400"
-              data-trix-key={shortcut}
-              data-trix-attribute={attribute}
-              data-trix-action={action}
-            >
-              <Icon size="1.25em" ariaLabel={label} />
-            </button>
-          </Tooltip>
-        ))}
-      </div>
-    </aside>
+    <div className="my-auto space-y-2">
+      {formattingButtons.map(({ label, icon: Icon, active, onClick }, index) => (
+        <Tooltip key={index} content={label} placement="left">
+          <button
+            type="button"
+            className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed data-active:text-primary-500 dark:data-active:text-primary-400"
+            data-active={active}
+            onClick={onClick}
+            onMouseDown={event => event.preventDefault()}
+          >
+            <Icon size="1.25em" ariaLabel={label} className={active ? 'stroke-[0.5] stroke-current' : undefined} />
+          </button>
+        </Tooltip>
+      ))}
+    </div>
   )
-})
+}
 
 export default FormattingToolbar

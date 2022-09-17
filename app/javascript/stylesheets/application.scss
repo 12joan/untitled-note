@@ -15,6 +15,18 @@
     @apply border-slate-200 dark:border-slate-700;
   }
 
+  input::placeholder, textarea::placeholder, [data-slate-placeholder] {
+    @apply text-slate-400 dark:text-slate-500;
+  }
+
+  [data-slate-placeholder] {
+    // Fix editor placeholder causing body to scroll horizontally
+    width: auto !important;
+
+    // Remove opacity: 0.333 from placeholder
+    opacity: 1 !important;
+  }
+
   .prose {
     // Prevent overflow when a text contains no spaces
     @apply overflow-wrap-break-word;
@@ -38,6 +50,10 @@
     // Set link colour
     a {
       @apply text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500;
+    }
+
+    h1 {
+      @apply text-2xl font-medium;
     }
   }
 }

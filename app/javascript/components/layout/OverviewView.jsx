@@ -64,7 +64,7 @@ const OverviewView = () => {
   })
 
   return (
-    <div ref={viewRef} className="p-5 space-y-5">
+    <div ref={viewRef} className="space-y-5">
       <h1 className="text-3xl font-medium">
         {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
       </h1>
