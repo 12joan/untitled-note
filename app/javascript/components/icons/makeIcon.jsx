@@ -1,9 +1,11 @@
 import React from 'react'
 
-const makeIcon = children => ({ size = '1em', ariaLabel, noAriaLabel = false, ...otherProps }) => {
+const makeIcon = children => ({ size = '1em', ariaLabel, noAriaLabel = false, className: userClassName = '', ...otherProps }) => {
   if (ariaLabel === undefined && !noAriaLabel) {
     console.error('Icon component must have either an ariaLabel or noAriaLabel prop')
   }
+
+  const className = `pointer-events-none ${userClassName}`
 
   return (
     <svg
@@ -16,6 +18,7 @@ const makeIcon = children => ({ size = '1em', ariaLabel, noAriaLabel = false, ..
       fill="currentColor"
       aria-label={ariaLabel}
       aria-hidden={noAriaLabel}
+      className={className}
       {...otherProps}
     >
       {children}

@@ -1,9 +1,13 @@
-// @import "./actiontext";
-// @import "./react-tags";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Z-index:
+ * 10 - TopBar
+ * 20 - Tippy
+ * 30 - Modals
+ * 40 - Tippy inside modal
+ */
 
 @layer base {
   *:focus-visible {
@@ -19,12 +23,34 @@
     @apply text-slate-400 dark:text-slate-500;
   }
 
-  [data-slate-placeholder] {
-    // Fix editor placeholder causing body to scroll horizontally
-    width: auto !important;
+  button {
+    @apply select-none;
+  }
+}
 
-    // Remove opacity: 0.333 from placeholder
-    opacity: 1 !important;
+@layer utilities {
+  .text-ui {
+    @apply text-slate-700 dark:text-slate-200;
+  }
+
+  .transparent-blur {
+    @apply bg-page-bg-light/75 dark:bg-page-bg-dark/75 backdrop-blur;
+  }
+
+  .no-focus-ring:focus-visible {
+    @apply ring-0;
+  }
+
+  .group-focus-ring {
+    @apply group-focus-visible:ring-primary-500 group-focus-visible:dark:ring-primary-400;
+  }
+
+  .overflow-wrap-break-word {
+    overflow-wrap: break-word;
+  }
+
+  .overflow-wrap-normal {
+    overflow-wrap: normal;
   }
 
   .prose {
@@ -55,28 +81,6 @@
     h1 {
       @apply text-2xl font-medium;
     }
-  }
-}
-
-@layer utilities {
-  .transparent-blur {
-    @apply bg-page-bg-light/75 dark:bg-page-bg-dark/75 backdrop-blur;
-  }
-
-  .no-focus-ring:focus-visible {
-    @apply ring-0;
-  }
-
-  .group-focus-ring {
-    @apply group-focus-visible:ring-primary-500 group-focus-visible:dark:ring-primary-400;
-  }
-
-  .overflow-wrap-break-word {
-    overflow-wrap: break-word;
-  }
-
-  .overflow-wrap-normal {
-    overflow-wrap: normal;
   }
 }
 
@@ -113,4 +117,13 @@
 [data-tippy-root] {
   // Side effect of mounting tooltip as a child of .divide-y
   border: none !important;
+  @apply select-none;
+}
+
+[data-slate-placeholder] {
+  // Fix editor placeholder causing body to scroll horizontally
+  width: auto !important;
+
+  // Remove opacity: 0.333 from placeholder
+  opacity: 1 !important;
 }

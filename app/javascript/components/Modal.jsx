@@ -1,58 +1,40 @@
 import React from 'react'
-import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react'
-import { Modal as BootstrapModal } from 'bootstrap'
+import { Dialog } from '@headlessui/react'
 
-import useRemountKey from '~/lib/useRemountKey'
-import classList from '~/lib/classList'
+import { ContextProvider } from '~/lib/context'
 
-const Modal = forwardRef((props, ref) => {
-  const { id, title, modalDialogProps, centered, modalBodyProps, children, onShow, ...otherProps } = props
-
-  const modalEl = useRef(null)
-
-  const [modalObject, setModalObject] = useState()
-
-  useEffect(() => {
-    setModalObject(new BootstrapModal(modalEl.current))
-    modalEl.current.addEventListener('shown.bs.modal', event => {
-      setTimeout(() => modalEl.current.querySelector('[autofocus], [data-auto-focus]')?.focus?.(), 0)
-      onShow?.(event)
-    })
-  }, [])
-
-  useImperativeHandle(ref, () => ({
-    hide: () => modalObject.hide(),
-  }))
+const ModalRoot = ({ open, onClose, className: userClassName = '', ...otherProps }) => {
+  const className = `${userClassName} modal-root relative z-30 ${open ? '' : 'pointer-events-none'}`
 
   return (
-    <div ref={modalEl} id={id} className="modal" tabIndex="-1" {...otherProps}>
-      <div className={classList(["modal-dialog", { 'modal-dialog-centered' : centered }])} {...modalDialogProps}>
-        <div className="modal-content overflow-hidden border-0 shadow" style={{ borderRadius: '0.75rem' }}>
-          {
-            title !== undefined && (
-              <div className="modal-header border-0 p-4 pb-3">
-                <h2 className="fw-bold mb-0">{title}</h2>
-
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close" />
-              </div>
-            )
-          }
-
-          <div className="modal-body p-4 pt-0" {...modalBodyProps}>
-            {children}
-          </div>
-        </div>
-      </div>
-    </div>
+    <ContextProvider inModal={true}>
+      <Dialog
+        static
+        open={open}
+        onClose={onClose}
+        className={className}
+        aria-hidden={!open}
+        {...otherProps}
+      />
+    </ContextProvider>
   )
-})
-
-Modal.defaultProps = {
-  centered: true,
 }
 
-export default Modal
+const ModalTitle = ({ children }) => {
+  return (
+    <Dialog.Title
+      className="text-xl font-medium select-none"
+      children={children}
+    />
+  )
+}
+
+const ModalPanel = Dialog.Panel
+const ModalDescription = Dialog.Description
+
+export {
+  ModalRoot,
+  ModalPanel,
+  ModalTitle,
+  ModalDescription,
+}

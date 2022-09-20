@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  usePlateEditorState,
   getPluginType,
   someNode,
   toggleNodeType,
@@ -8,6 +9,8 @@ import {
   toggleList,
   indentListItems,
   unindentListItems,
+  useHotkeys,
+  isRangeAcrossBlocks,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
@@ -19,6 +22,9 @@ import {
   ELEMENT_LI,
 } from '@udecode/plate-headless'
 
+import { isLinkInSelection, toggleLink } from '~/lib/editorLinkUtils'
+
+import LinkModal from '~/components/LinkModal'
 import Tooltip from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
 import ItalicIcon from '~/components/icons/formatting/ItalicIcon'
@@ -32,7 +38,9 @@ import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon'
 import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
-const FormattingToolbar = ({ editor }) => {
+const FormattingToolbar = () => {
+  const editor = usePlateEditorState('editor')
+
   const toggleElementProps = element => {
     const pluginType = getPluginType(editor, element)
 
@@ -60,11 +68,29 @@ const FormattingToolbar = ({ editor }) => {
     }
   }
 
+  const linkInSelection = isLinkInSelection(editor)
+
+  useHotkeys(
+    'command+k, ctrl+k',
+    event => {
+      event.preventDefault()
+      toggleLink(editor)
+    },
+    { enableOnContentEditable: true },
+    [linkInSelection, editor]
+  )
+
   const formattingButtons = [
     { label: 'Bold', icon: BoldIcon, ...toggleMarkProps(MARK_BOLD) },
     { label: 'Italic', icon: ItalicIcon, ...toggleMarkProps(MARK_ITALIC) },
     { label: 'Strikethrough', icon: StrikethroughIcon, ...toggleMarkProps(MARK_STRIKETHROUGH) },
-    // { label: 'Link', icon: LinkIcon, ...makeInlineFormatting('LINK') },
+    {
+      label: linkInSelection ? 'Remove link' : 'Add link',
+      active: linkInSelection,
+      icon: LinkIcon,
+      disabled: isRangeAcrossBlocks(editor, { at: editor.selection }),
+      onClick: () => toggleLink(editor),
+    },
     { label: 'Heading 1', icon: HeadingOneIcon, ...toggleElementProps(ELEMENT_H1) },
     { label: 'Quote', icon: QuoteIcon, ...toggleElementProps(ELEMENT_BLOCKQUOTE) },
     { label: 'Code block', icon: CodeBlockIcon, ...toggleElementProps(ELEMENT_CODE_BLOCK) },
@@ -76,12 +102,13 @@ const FormattingToolbar = ({ editor }) => {
 
   return (
     <div className="my-auto space-y-2">
-      {formattingButtons.map(({ label, icon: Icon, active, onClick }, index) => (
+      {formattingButtons.map(({ label, icon: Icon, active, onClick, disabled = false }, index) => (
         <Tooltip key={index} content={label} placement="left">
           <button
             type="button"
             className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed data-active:text-primary-500 dark:data-active:text-primary-400"
             data-active={active}
+            disabled={disabled}
             onClick={onClick}
             onMouseDown={event => event.preventDefault()}
           >

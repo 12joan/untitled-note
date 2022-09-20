@@ -10,6 +10,7 @@ import {
   createBoldPlugin,
   createItalicPlugin,
   createStrikethroughPlugin,
+  createLinkPlugin,
   createHeadingPlugin,
   createBlockquotePlugin,
   createCodeBlockPlugin,
@@ -18,6 +19,7 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  ELEMENT_LINK,
   ELEMENT_H1,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -27,6 +29,7 @@ import {
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
+import { LinkComponent } from '~/lib/editorLinkUtils'
 
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 
@@ -39,13 +42,20 @@ const Editor = ({ upstreamDocument }) => {
     ...modification,
   }), upstreamDocument)
 
-  const makeElementComponent = (Component) => ({ children }) => <Component children={children} />
+  const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
+    <Component
+      {...nodeProps}
+      {...props}
+      children={children}
+    />
+  )
 
   const plugins = createPlugins([
     createParagraphPlugin(),
     createBoldPlugin(),
     createItalicPlugin(),
     createStrikethroughPlugin(),
+    createLinkPlugin(),
     createHeadingPlugin({ options: { levels: 1 } }),
     createBlockquotePlugin(),
     createCodeBlockPlugin(),
@@ -56,6 +66,7 @@ const Editor = ({ upstreamDocument }) => {
       [MARK_BOLD]: makeElementComponent('strong'),
       [MARK_ITALIC]: makeElementComponent('em'),
       [MARK_STRIKETHROUGH]: makeElementComponent('del'),
+      [ELEMENT_LINK]: LinkComponent,
       [ELEMENT_H1]: makeElementComponent('h1'),
       [ELEMENT_BLOCKQUOTE]: makeElementComponent('blockquote'),
       [ELEMENT_CODE_BLOCK]: makeElementComponent('pre'),
@@ -65,7 +76,15 @@ const Editor = ({ upstreamDocument }) => {
     },
   })
 
-  const editor = useMemo(() => createPlateEditor({ plugins }), [])
+  const { initialEditor, initialValue } = useMemo(() => {
+    const initialEditor = createPlateEditor({ id: 'editor', plugins })
+    
+    const initialValue = upstreamDocument.body_content
+      ? deserializeHtml(initialEditor, { element: upstreamDocument.body_content })
+      : [{ children: [{ text: '' }] }]
+
+    return { initialEditor, initialValue }
+  }, [])
 
   return (
     <>
@@ -74,22 +93,23 @@ const Editor = ({ upstreamDocument }) => {
           ref={titleRef}
           type="text"
           className="block mx-auto w-full min-w-0 max-w-screen-sm text-3xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
-          value={workingDocument.title}
+          value={workingDocument.title || ''}
           placeholder="Untitled document"
           onChange={event => updateWorkingDocument({ title: event.target.value.replace(/[\n\r]+/g, '') })}
         />
       </div>
 
       <Plate
-        editor={editor}
-        initialValue={deserializeHtml(editor, { element: upstreamDocument.body_content })}
+        id="editor"
+        editor={initialEditor}
+        initialValue={initialValue}
         normalizeInitialValue
         editableProps={{
           className: 'grow pt-3 prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full',
           placeholder: 'Write something...',
         }}
         children={createPortal(
-          <FormattingToolbar editor={editor} />,
+          <FormattingToolbar />,
           formattingToolbarRef.current,
         )}
       />

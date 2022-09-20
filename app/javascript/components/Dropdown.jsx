@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
-import Tippy from '@tippyjs/react/headless'
-import 'tippy.js/dist/tippy.css'
 
 import useEventListener from '~/lib/useEventListener'
+
+import Tippy from '~/components/Tippy'
 
 const Dropdown = ({ items, className: userClassName = '', ...otherProps }) => {
   const tippyRef = useRef()
