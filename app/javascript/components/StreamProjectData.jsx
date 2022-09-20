@@ -17,6 +17,7 @@ const StreamProjectData = ({ projectId, children }) => {
         id: true,
         safe_title: true,
         preview: true,
+        remote_version: true,
       },
     }, resolve),
     [projectId]

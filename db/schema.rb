@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_15_102556) do
+ActiveRecord::Schema.define(version: 2022_09_20_155637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_102556) do
     t.string "title"
     t.text "definitive_mentions"
     t.text "plain_body", default: "", null: false
+    t.integer "remote_version", default: 1, null: false
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 

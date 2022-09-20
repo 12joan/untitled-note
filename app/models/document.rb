@@ -10,7 +10,7 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title safe_title preview body_content keywords blank created_at updated_at pinned_at])
+  include Queryable.permit(*%i[id title safe_title preview body_content keywords blank remote_version created_at updated_at pinned_at])
   include Listenable
 
   after_save :extract_plain_body

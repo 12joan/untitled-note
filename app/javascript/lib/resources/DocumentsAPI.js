@@ -31,6 +31,7 @@ const DocumentsAPI = projectId => new ResourcesAPI({
         text: keyword.text,
       })),
       blank: false,
+      remote_version: doc.remote_version,
       pinned_at: doc.pinned_at,
     },
   }),

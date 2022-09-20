@@ -25,11 +25,11 @@ const globalDataStore = {
     return this.recordsWithMetadata.get(key).record
   },
 
-  setInitial({ key, record, uploadRecord, uncontrolledAttributes }) {
+  setInitial({ key, record, getRemoteVersion, uploadRecord, uncontrolledAttributes }) {
     this.recordsWithMetadata.set(key, {
       record,
-      localVersion: 0,
-      remoteVersion: 0,
+      localVersion: getRemoteVersion(record),
+      getRemoteVersion,
       uploadRecord,
       uploadMutex: new Mutex(),
       uncontrolledAttributes,
@@ -85,7 +85,7 @@ const globalDataStore = {
 
   recordIsDirty(key) {
     const recordWithMetadata = this.recordsWithMetadata.get(key)
-    return recordWithMetadata.localVersion > recordWithMetadata.remoteVersion
+    return recordWithMetadata.localVersion > recordWithMetadata.getRemoteVersion(recordWithMetadata.record)
   },
 
   async uploadRecord(key, { waitForLock }) {
@@ -103,28 +103,32 @@ const globalDataStore = {
 
     await withLock(recordWithMetadata.uploadMutex, async () => {
       const uploadingVersion = recordWithMetadata.localVersion
-      const updatedRecord = await recordWithMetadata.uploadRecord(recordWithMetadata.record)
-      recordWithMetadata.remoteVersion = uploadingVersion
+      const updatedRecord = await recordWithMetadata.uploadRecord(recordWithMetadata.record, uploadingVersion)
       recordWithMetadata.onUpload(updatedRecord)
     })
   }
 }
 
-const uploadDirtyRecords = () => {
-  setTimeout(async () => {
-    await Promise.allSettled(globalDataStore.allRecordKeys().map(async key => {
-      if (globalDataStore.recordIsDirty(key)) {
-        await globalDataStore.uploadRecord(key, { waitForLock: false })
-      }
-    }))
+const uploadDirtyRecords = ({ waitForLock = false } = {}) => {
+  const dirtyRecordKeys = globalDataStore.allRecordKeys().filter(key => globalDataStore.recordIsDirty(key))
 
-    uploadDirtyRecords()
-  }, UPLOAD_INTERVAL)
+  Promise.allSettled(dirtyRecordKeys.map(
+    key => globalDataStore.uploadRecord(key, { waitForLock })
+  )).then(() => setTimeout(uploadDirtyRecords, UPLOAD_INTERVAL))
+
+  return dirtyRecordKeys.length > 0
 }
 
-uploadDirtyRecords()
+setTimeout(uploadDirtyRecords, UPLOAD_INTERVAL)
 
-const useSynchronisedRecord = ({ key, fetchRecord, uploadRecord, attributeBehaviours = {} }) => {
+window.addEventListener('beforeunload', event => {
+  if (uploadDirtyRecords({ waitForLock: true })) {
+    event.preventDefault()
+    event.returnValue = ''
+  }
+})
+
+const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord, uploadRecord, attributeBehaviours = {} }) => {
   const [futureRecord, setFutureRecord] = useState(() => Future.pending())
 
   const uncontrolledAttributes = useMemo(() => Object.entries(attributeBehaviours)
@@ -133,11 +137,11 @@ const useSynchronisedRecord = ({ key, fetchRecord, uploadRecord, attributeBehavi
   , [attributeBehaviours])
 
   useEffect(() => {
-    if (globalDataStore.has(key)) {
+    if (globalDataStore.has(key) && isUpToDate(getRemoteVersion(globalDataStore.get(key)))) {
       setFutureRecord(Future.resolved(globalDataStore.get(key)))
     } else {
       fetchRecord(key).then(
-        record => globalDataStore.setInitial({ key, record, uploadRecord, uncontrolledAttributes }),
+        record => globalDataStore.setInitial({ key, record, getRemoteVersion, uploadRecord, uncontrolledAttributes }),
         error => console.error(error) // TODO: handle error
       )
     }
@@ -182,7 +186,7 @@ const useSynchronisedRecord = ({ key, fetchRecord, uploadRecord, attributeBehavi
     })
   }
 
-  return [futureRecord, updateRecord]
+  return futureRecord.map(record => [record, updateRecord])
 }
 
 export default useSynchronisedRecord
