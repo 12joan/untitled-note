@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { useContext } from '~/lib/context'
 import useSynchronisedRecord, { BEHAVIOUR_DELAYED_UPDATE, BEHAVIOUR_UNCONTROLLED } from '~/lib/synchroniseRecords'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import { ProjectLink } from '~/lib/routes'
 
 import Editor from '~/components/Editor'
 
@@ -33,7 +34,7 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
   const { projectId } = useContext()
   const api = useMemo(() => DocumentsAPI(projectId), [projectId])
 
-  const futureSynchronisedRecord = useSynchronisedRecord({
+  const fsrSynchronisedRecord = useSynchronisedRecord({
     key: `document-${documentId}`,
     getRemoteVersion: doc => doc.remote_version,
     isUpToDate: version => partialDocument.remote_version <= version,
@@ -48,9 +49,11 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     },
   })
 
-  return futureSynchronisedRecord.unwrap({
+  return fsrSynchronisedRecord.unwrap({
     pending: () => loadingView,
-    resolved: ([workingDocument, updateDocument]) => (
+    success: ([workingDocument, updateDocument, errorDuringUpload]) => (
+      // TODO: Handle errorDuringUpload
+
       <div className="grow flex flex-col">
         <Editor
           workingDocument={workingDocument}
@@ -58,6 +61,31 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
         />
       </div>
     ),
+    failure: error => {
+      const doesNotExist = error?.response?.status === 404
+
+      if (!doesNotExist) {
+        console.error(error)
+      }
+
+      const { heading, explanation } = doesNotExist
+        ? {
+          heading: 'Document not found',
+          explanation: 'This document does not exist.',
+        }
+        : {
+          heading: 'Error loading document',
+          explanation: 'An error occurred while loading this document. Make sure you are connected to the internet and try again.',
+        }
+
+      return (
+        <div className="mx-auto w-full max-w-screen-sm space-y-3">
+          <h1 className="text-3xl font-medium">{heading}</h1>
+          <p className="text-lg font-light">{explanation}</p>
+          <p><ProjectLink className="btn btn-link">Go back</ProjectLink></p>
+        </div>
+      )
+    },
   })
 }
 

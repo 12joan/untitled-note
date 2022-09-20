@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Mutex, tryAcquire } from 'async-mutex'
 
-import Future from '~/lib/future'
+import { FutureServiceResult } from '~/lib/future'
 
 const UPLOAD_INTERVAL = 1500
 
@@ -34,6 +34,7 @@ const globalDataStore = {
       uploadMutex: new Mutex(),
       uncontrolledAttributes,
       onUpload: () => {},
+      onUploadFailure: () => {},
     })
 
     this.notifySubscribers(key)
@@ -51,7 +52,7 @@ const globalDataStore = {
     this.subscribers.get(key).delete(subscriber)
   },
 
-  update(key, delta, { incrementLocalVersion = true } = {}) {
+  update(key, delta, { incrementLocalVersion = true, onUpload, onUploadFailure } = {}) {
     const recordWithMetadata = this.recordsWithMetadata.get(key)
 
     const newRecord = {
@@ -67,15 +68,21 @@ const globalDataStore = {
 
     this.notifySubscribers(key)
 
-    return new Promise(resolve => {
-      const oldOnUpload = recordWithMetadata.onUpload
+    const oldOnUpload = recordWithMetadata.onUpload
+    const oldOnUploadFailure = recordWithMetadata.onUploadFailure
 
-      recordWithMetadata.onUpload = updatedRecord => {
-        oldOnUpload(updatedRecord)
-        resolve(updatedRecord)
-        recordWithMetadata.onUpload = () => {}
-      }
-    })
+    recordWithMetadata.onUpload = updatedRecord => {
+      oldOnUpload(updatedRecord)
+      onUpload(updatedRecord)
+      recordWithMetadata.onUpload = () => {}
+      recordWithMetadata.onUploadFailure = () => {}
+    }
+
+    recordWithMetadata.onUploadFailure = error => {
+      oldOnUploadFailure(error)
+      onUploadFailure(error)
+      recordWithMetadata.onUploadFailure = () => {}
+    }
   },
 
   notifySubscribers(key) {
@@ -101,10 +108,25 @@ const globalDataStore = {
 
     const recordWithMetadata = this.recordsWithMetadata.get(key)
 
-    await withLock(recordWithMetadata.uploadMutex, async () => {
+    await withLock(recordWithMetadata.uploadMutex, () => {
       const uploadingVersion = recordWithMetadata.localVersion
-      const updatedRecord = await recordWithMetadata.uploadRecord(recordWithMetadata.record, uploadingVersion)
-      recordWithMetadata.onUpload(updatedRecord)
+
+      return recordWithMetadata.uploadRecord(recordWithMetadata.record, uploadingVersion).then(
+        updatedRecord => {
+          this.update(
+            key,
+            recordWithMetadata.uncontrolledAttributes.reduce((acc, attribute) => ({
+              ...acc,
+              [attribute]: updatedRecord[attribute],
+            }), {}),
+            { incrementLocalVersion: false }
+          )
+
+          recordWithMetadata.onUpload(updatedRecord)
+        },
+
+        error => recordWithMetadata.onUploadFailure(error)
+      )
     })
   }
 }
@@ -129,7 +151,8 @@ window.addEventListener('beforeunload', event => {
 })
 
 const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord, uploadRecord, attributeBehaviours = {} }) => {
-  const [futureRecord, setFutureRecord] = useState(() => Future.pending())
+  const [fsrRecord, setFsrRecord] = useState(() => FutureServiceResult.pending())
+  const [errorDuringUpload, setErrorDuringUpload] = useState(false)
 
   const uncontrolledAttributes = useMemo(() => Object.entries(attributeBehaviours)
     .filter(([, behaviour]) => behaviour === BEHAVIOUR_UNCONTROLLED)
@@ -138,15 +161,15 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
 
   useEffect(() => {
     if (globalDataStore.has(key) && isUpToDate(getRemoteVersion(globalDataStore.get(key)))) {
-      setFutureRecord(Future.resolved(globalDataStore.get(key)))
+      setFsrRecord(FutureServiceResult.success(globalDataStore.get(key)))
     } else {
       fetchRecord(key).then(
         record => globalDataStore.setInitial({ key, record, getRemoteVersion, uploadRecord, uncontrolledAttributes }),
-        error => console.error(error) // TODO: handle error
+        error => setFsrRecord(FutureServiceResult.failure(error))
       )
     }
 
-    const subscription = record => setFutureRecord(Future.resolved(record))
+    const subscription = record => setFsrRecord(FutureServiceResult.success(record))
 
     globalDataStore.subscribe(key, subscription)
     return () => globalDataStore.unsubscribe(key, subscription)
@@ -166,27 +189,20 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
       }
     })
 
-    const promise = globalDataStore.update(key, delta)
+    globalDataStore.update(key, delta, {
+      onUpload: () => setErrorDuringUpload(false),
+      onUploadFailure: error => {
+        console.error(error)
+        setErrorDuringUpload(true)
+      },
+    })
 
     if (hasInstantUpdateKeys) {
       globalDataStore.uploadRecord(key, { waitForLock: true })
     }
-
-    return promise.then(updatedRecord => {
-      globalDataStore.update(
-        key,
-        uncontrolledAttributes.reduce((acc, attribute) => ({
-          ...acc,
-          [attribute]: updatedRecord[attribute],
-        }), {}),
-        { incrementLocalVersion: false }
-      )
-
-      return updatedRecord
-    })
   }
 
-  return futureRecord.map(record => [record, updateRecord])
+  return fsrRecord.map(record => [record, updateRecord, errorDuringUpload])
 }
 
 export default useSynchronisedRecord
