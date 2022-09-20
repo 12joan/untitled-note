@@ -10,7 +10,7 @@ const EditorView = ({ documentId }) => {
   const { futurePartialDocuments } = useContext()
 
   const futurePartialDocument = futurePartialDocuments.map(
-    partialDocuments => partialDocuments.find(doc => doc.id == documentId)
+    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || { remote_version: -1 }
   )
 
   const loadingView = (
