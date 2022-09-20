@@ -2,7 +2,11 @@ module API
   module V1
     class DocumentsController < ApplicationController
       before_action :set_project
-      before_action :set_document, only: %i[ update destroy ]
+      before_action :set_document, only: %i[ show update destroy ]
+
+      def show
+        render json: @document.query(:all)
+      end
 
       def create
         @document = @project.documents.build(document_params)

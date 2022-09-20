@@ -1,4 +1,4 @@
-import React, { useRef, useReducer, useMemo } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import TextareaAutosize from 'react-textarea-autosize'
 import {
@@ -33,14 +33,9 @@ import { LinkComponent } from '~/lib/editorLinkUtils'
 
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 
-const Editor = ({ upstreamDocument }) => {
+const Editor = ({ workingDocument, updateDocument }) => {
   const { formattingToolbarRef } = useContext()
   const titleRef = useRef()
-
-  const [workingDocument, updateWorkingDocument] = useReducer((state, modification) => ({
-    ...state,
-    ...modification,
-  }), upstreamDocument)
 
   const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
     <Component
@@ -79,8 +74,8 @@ const Editor = ({ upstreamDocument }) => {
   const { initialEditor, initialValue } = useMemo(() => {
     const initialEditor = createPlateEditor({ id: 'editor', plugins })
     
-    const initialValue = upstreamDocument.body_content
-      ? deserializeHtml(initialEditor, { element: upstreamDocument.body_content })
+    const initialValue = workingDocument.body_content
+      ? deserializeHtml(initialEditor, { element: workingDocument.body_content })
       : [{ children: [{ text: '' }] }]
 
     return { initialEditor, initialValue }
@@ -95,7 +90,9 @@ const Editor = ({ upstreamDocument }) => {
           className="block mx-auto w-full min-w-0 max-w-screen-sm text-3xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
           value={workingDocument.title || ''}
           placeholder="Untitled document"
-          onChange={event => updateWorkingDocument({ title: event.target.value.replace(/[\n\r]+/g, '') })}
+          onChange={event => updateDocument({
+            title: event.target.value.replace(/[\n\r]+/g, ''),
+          })}
         />
       </div>
 
