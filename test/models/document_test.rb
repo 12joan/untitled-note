@@ -115,27 +115,26 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal %w(one two three), document.definitive_mentions
   end
 
-  test 'preview returns up to 100 characters of plain_body without breaking part way through a word' do
-    plain_body = 'The quick brown fox jumps over the lazy dog ' * 3
-
-    # plain_body.slice(0, 100)
-    # => 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick br'
-
-    expected_preview = 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick'
-
-    document = create(:document, plain_body: plain_body)
-    assert_equal expected_preview, document.preview
-  end
-
-  test 'preview breaks at 100 if there are no spaces' do
-    document = create(:document, plain_body: 'a' * 200)
-    assert_equal 'a' * 100, document.preview
-  end
-
-  test 'preview does not stop early at punctuation' do
-    plain_body = 'This, is! a. sentence; \'with\' ~punctuation~'
-    document = create(:document, plain_body: plain_body)
-    assert_equal plain_body, document.preview
+  test 'preview returns up to 100 characters of plain_body' do
+    [
+      ['a' * 200, 'a' * 100],
+      ['', 'This document has no content'],
+      [
+        'The quick brown fox jumps over the lazy dog ' * 3,
+        'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick',
+      ],
+      [
+        'This, is! a. sentence; \'with\' ~punctuation~',
+        'This, is! a. sentence; \'with\' ~punctuation~',
+      ],
+      [
+        ('a' * 92) + ' loooooooooong short',
+        'a' * 92,
+      ],
+    ].each do |plain_body, expected_preview|
+      document = create(:document, plain_body: plain_body)
+      assert_equal expected_preview, document.preview, "preview for #{plain_body.inspect}"
+    end
   end
 
   private

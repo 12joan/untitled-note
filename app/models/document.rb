@@ -25,15 +25,19 @@ class Document < ApplicationRecord
   end
 
   def preview
-    plain_body.split(/\b/).reduce('') do |preview, word|
+    return 'This document has no content' if plain_body.blank?
+
+    preview = ''
+
+    plain_body.split(/\b/).each do |word|
       if preview.length + word.length <= 100
-        preview + word
-      elsif preview.blank?
-        word.slice(0, 100)
+        preview += word
       else
-        preview
+        break
       end
-    end.strip
+    end
+
+    (preview.presence || plain_body.slice(0, 100)).strip
   end
 
   def extract_definitive_mentions(body)
