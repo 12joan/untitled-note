@@ -60,7 +60,19 @@ const Editor = ({ workingDocument, updateDocument }) => {
     createLinkPlugin(),
     createHeadingPlugin({ options: { levels: 1 } }),
     createBlockquotePlugin(),
-    createCodeBlockPlugin(),
+    createCodeBlockPlugin({
+      deserializeHtml: {
+        rules: [
+          {
+            validNodeName: 'PRE',
+          },
+        ],
+        getNode: el => ({
+          type: ELEMENT_CODE_BLOCK,
+          children: [{ text: el.textContent }],
+        }),
+      },
+    }),
     createListPlugin(),
     createSoftBreakPlugin({
       options: {
@@ -133,7 +145,10 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
     const initialValue = {
       empty: () => [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
-      html: body => deserializeHtml(initialEditor, { element: body }),
+      html: body => deserializeHtml(initialEditor, {
+        element: body,
+        stripWhitespace: false,
+      }),
       json: body => JSON.parse(body),
     }[bodyFormat](workingDocument.body)
 
