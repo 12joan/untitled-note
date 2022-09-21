@@ -7,136 +7,16 @@ import {
   usePlateEditorState,
   getNodeTexts,
   deserializeHtml,
-  isSelectionAtBlockStart,
-  createPlugins,
-  createParagraphPlugin,
-  createBoldPlugin,
-  createItalicPlugin,
-  createStrikethroughPlugin,
-  createLinkPlugin,
-  createHeadingPlugin,
-  createBlockquotePlugin,
-  createCodeBlockPlugin,
-  createListPlugin,
-  createSoftBreakPlugin,
-  createResetNodePlugin,
-  createExitBreakPlugin,
-  ELEMENT_PARAGRAPH,
-  MARK_BOLD,
-  MARK_ITALIC,
-  MARK_STRIKETHROUGH,
-  ELEMENT_LINK,
-  ELEMENT_H1,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_UL,
-  ELEMENT_OL,
-  ELEMENT_LI,
-  KEYS_HEADING,
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
-import { LinkComponent } from '~/lib/editorLinkUtils'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
+import plugins from '~/lib/editor/plugins'
 
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
-
-  const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
-    <Component
-      {...nodeProps}
-      {...props}
-      children={children}
-    />
-  )
-
-  const plugins = createPlugins([
-    createParagraphPlugin(),
-    createBoldPlugin(),
-    createItalicPlugin(),
-    createStrikethroughPlugin(),
-    createLinkPlugin(),
-    createHeadingPlugin({ options: { levels: 1 } }),
-    createBlockquotePlugin(),
-    createCodeBlockPlugin({
-      deserializeHtml: {
-        rules: [
-          {
-            validNodeName: 'PRE',
-          },
-        ],
-        getNode: el => ({
-          type: ELEMENT_CODE_BLOCK,
-          children: [{ text: el.textContent }],
-        }),
-      },
-    }),
-    createListPlugin(),
-    createSoftBreakPlugin({
-      options: {
-        rules: [
-          {
-            hotkey: 'shift+enter',
-          },
-          {
-            hotkey: 'enter',
-            query: {
-              allow: [ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK],
-            },
-          },
-        ],
-      },
-    }),
-    createResetNodePlugin({
-      options: {
-        rules: [
-          {
-            types: [ELEMENT_H1, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK],
-            defaultType: ELEMENT_PARAGRAPH,
-            hotkey: 'backspace',
-            predicate: isSelectionAtBlockStart,
-          },
-        ],
-      },
-    }),
-    createExitBreakPlugin({
-      options: {
-        rules: [
-          {
-            hotkey: 'mod+enter',
-          },
-          {
-            hotkey: 'mod+shift+enter',
-            before: true,
-          },
-          {
-            hotkey: 'enter',
-            query: {
-              start: true,
-              end: true,
-              allow: KEYS_HEADING,
-            },
-          },
-        ],
-      },
-    }),
-  ], {
-    components: {
-      [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
-      [MARK_BOLD]: makeElementComponent('strong'),
-      [MARK_ITALIC]: makeElementComponent('em'),
-      [MARK_STRIKETHROUGH]: makeElementComponent('del'),
-      [ELEMENT_LINK]: LinkComponent,
-      [ELEMENT_H1]: makeElementComponent('h1'),
-      [ELEMENT_BLOCKQUOTE]: makeElementComponent('blockquote'),
-      [ELEMENT_CODE_BLOCK]: makeElementComponent('pre'),
-      [ELEMENT_UL]: makeElementComponent('ul'),
-      [ELEMENT_OL]: makeElementComponent('ol'),
-      [ELEMENT_LI]: makeElementComponent('li'),
-    },
-  })
 
   const { initialEditor, initialValue } = useMemo(() => {
     const initialEditor = createPlateEditor({ id: 'editor', plugins })

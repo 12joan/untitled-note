@@ -21,9 +21,8 @@ import {
   ELEMENT_LI,
 } from '@udecode/plate-headless'
 
-import { isLinkInSelection, toggleLink } from '~/lib/editorLinkUtils'
+import { isLinkInSelection, toggleLink } from '~/lib/editor/links'
 
-import LinkModal from '~/components/LinkModal'
 import Tooltip from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
 import ItalicIcon from '~/components/icons/formatting/ItalicIcon'
