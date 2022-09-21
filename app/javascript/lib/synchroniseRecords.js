@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Mutex, tryAcquire } from 'async-mutex'
 
 import { FutureServiceResult } from '~/lib/future'
+import useStateWhileMounted from '~/lib/useStateWhileMounted'
 
 const UPLOAD_INTERVAL = 1500
 
@@ -151,8 +152,8 @@ window.addEventListener('beforeunload', event => {
 })
 
 const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord, uploadRecord, attributeBehaviours = {} }) => {
-  const [fsrRecord, setFsrRecord] = useState(() => FutureServiceResult.pending())
-  const [errorDuringUpload, setErrorDuringUpload] = useState(false)
+  const [fsrRecord, setFsrRecord] = useStateWhileMounted(() => FutureServiceResult.pending())
+  const [errorDuringUpload, setErrorDuringUpload] = useStateWhileMounted(false)
 
   const uncontrolledAttributes = useMemo(() => Object.entries(attributeBehaviours)
     .filter(([, behaviour]) => behaviour === BEHAVIOUR_UNCONTROLLED)
