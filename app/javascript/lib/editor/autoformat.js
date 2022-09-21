@@ -16,79 +16,38 @@ import {
   ELEMENT_LI,
 } from '@udecode/plate-headless'
 
-const blockBaseRule = {
+const blockRule = (type, match, otherProps = {}) => ({
   mode: 'block',
+  type,
+  match,
   preFormat: editor => unwrapList(editor),
-}
+  ...otherProps,
+})
 
-const markBaseRule = {
+const markRule = (type, match, otherProps = {}) => ({
   mode: 'mark',
-}
-
-const unlessCodeBlock = f => editor => {
-  const [node] = getParentNode(editor, editor.selection)
-
-  if (!isType(editor, node, ELEMENT_CODE_BLOCK)) {
-    f(editor)
-  }
-}
+  type,
+  match,
+  ...otherProps,
+})
 
 const autoformatPlugins = [
   createAutoformatPlugin({
     options: {
       rules: [
-        {
-          ...blockBaseRule,
-          type: ELEMENT_H1,
-          match: '# ',
-        },
-        {
-          ...blockBaseRule,
-          type: ELEMENT_BLOCKQUOTE,
-          match: '> ',
-        },
-        {
-          ...blockBaseRule,
-          type: ELEMENT_CODE_BLOCK,
-          match: '```',
-        },
-        {
-          ...blockBaseRule,
-          type: ELEMENT_LI,
-          match: ['* ', '- '],
-          format: unlessCodeBlock(editor => toggleList(editor, { type: ELEMENT_UL })),
-        },
-        {
-          ...blockBaseRule,
-          type: ELEMENT_LI,
-          match: ['1. ', '1) '],
-          format: unlessCodeBlock(editor => toggleList(editor, { type: ELEMENT_OL })),
-        },
-        {
-          ...markBaseRule,
-          type: [MARK_BOLD, MARK_ITALIC],
-          match: '***',
-        },
-        {
-          ...markBaseRule,
-          type: MARK_BOLD,
-          match: '**',
-        },
-        {
-          ...markBaseRule,
-          type: MARK_ITALIC,
-          match: ['*', '_'],
-        },
-        {
-          ...markBaseRule,
-          type: MARK_ITALIC,
-          match: '_',
-        },
-        {
-          ...markBaseRule,
-          type: MARK_STRIKETHROUGH,
-          match: '~',
-        },
+        blockRule(ELEMENT_H1, '# '),
+        blockRule(ELEMENT_BLOCKQUOTE, '> '),
+        blockRule(ELEMENT_CODE_BLOCK, '```'),
+        blockRule(ELEMENT_LI, ['* ', '- '], {
+          format: editor => toggleList(editor, { type: ELEMENT_UL }),
+        }),
+        blockRule(ELEMENT_LI, ['1. ', '1) '], {
+          format: editor => toggleList(editor, { type: ELEMENT_OL }),
+        }),
+        markRule([MARK_BOLD, MARK_ITALIC], '***'),
+        markRule(MARK_BOLD, '**'),
+        markRule(MARK_ITALIC, ['*', '_']),
+        markRule(MARK_STRIKETHROUGH, '~'),
       ],
       enabledUndoOnDelete: true,
     },

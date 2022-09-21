@@ -7,6 +7,7 @@ import {
   usePlateEditorState,
   getNodeTexts,
   deserializeHtml,
+  ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
@@ -41,7 +42,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
         <TextareaAutosize
           ref={titleRef}
           type="text"
-          className="block mx-auto w-full min-w-0 max-w-screen-sm text-3xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
+          className="block mx-auto w-full min-w-0 max-w-screen-sm text-4xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
           value={workingDocument.title || ''}
           placeholder="Untitled document"
           onChange={event => updateDocument({
@@ -56,7 +57,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
         initialValue={initialValue}
         normalizeInitialValue
         editableProps={{
-          className: 'grow pt-3 prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full',
+          className: 'grow pt-3 prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full pb-[50vh]',
           placeholder: 'Write something...',
         }}
       >
