@@ -169,11 +169,11 @@ const ListSection = ({ title, items, showAllButton }) => {
 const Card = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
     <Item
-      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border text-left flex flex-col dark:border-transparent"
+      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent overflow-wrap-break-word"
       {...itemProps}
       {...otherProps}
     >
-      <strong className="text-lg font-medium" children={label} />
+      <strong className="block text-lg font-medium" children={label} />
 
       <p className="text-sm line-clamp-4 text-slate-500 dark:text-slate-400">
         {preview}
@@ -185,17 +185,17 @@ const Card = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
 const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
     <Item
-      className="w-full p-3 flex items-center gap-5 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg"
+      className="w-full p-3 space-y-1 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg"
       {...itemProps}
       {...otherProps}
     >
-      <span className="shrink-0">
+      <div className="overflow-wrap-break-word">
         {label}
-      </span>
+      </div>
 
-      <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
         {preview}
-      </span>
+      </p>
     </Item>
   )
 }
