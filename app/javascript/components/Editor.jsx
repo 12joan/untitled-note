@@ -4,6 +4,8 @@ import TextareaAutosize from 'react-textarea-autosize'
 import {
   Plate,
   createPlateEditor,
+  usePlateEditorState,
+  getNodeTexts,
   deserializeHtml,
   createPlugins,
   createParagraphPlugin,
@@ -30,11 +32,11 @@ import {
 
 import { useContext } from '~/lib/context'
 import { LinkComponent } from '~/lib/editorLinkUtils'
+import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 
 const Editor = ({ workingDocument, updateDocument }) => {
-  const { formattingToolbarRef } = useContext()
   const titleRef = useRef()
 
   const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
@@ -73,10 +75,14 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
   const { initialEditor, initialValue } = useMemo(() => {
     const initialEditor = createPlateEditor({ id: 'editor', plugins })
-    
-    const initialValue = workingDocument.body_content
-      ? deserializeHtml(initialEditor, { element: workingDocument.body_content })
-      : [{ children: [{ text: '' }] }]
+
+    const bodyFormat = workingDocument.body_type.split('/')[0]
+
+    const initialValue = {
+      empty: () => [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
+      html: body => deserializeHtml(initialEditor, { element: body }),
+      json: body => JSON.parse(body),
+    }[bodyFormat](workingDocument.body)
 
     return { initialEditor, initialValue }
   }, [])
@@ -105,12 +111,37 @@ const Editor = ({ workingDocument, updateDocument }) => {
           className: 'grow pt-3 prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full',
           placeholder: 'Write something...',
         }}
-        children={createPortal(
-          <FormattingToolbar />,
-          formattingToolbarRef.current,
-        )}
-      />
+      >
+        <WithEditorState
+          workingDocument={workingDocument}
+          updateDocument={updateDocument}
+        />
+      </Plate>
     </>
+  )
+}
+
+const WithEditorState = ({ workingDocument, updateDocument }) => {
+  const editor = usePlateEditorState('editor')
+  const { formattingToolbarRef } = useContext()
+
+  useEffectAfterFirst(() => {
+    const plainBody = Array.from(getNodeTexts(editor))
+      .map(([{ text }]) => text)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    updateDocument({
+      body: JSON.stringify(editor.children),
+      body_type: 'json/slate',
+      plain_body: plainBody,
+    })
+  }, [editor.children])
+
+  return createPortal(
+    <FormattingToolbar editor={editor} />,
+    formattingToolbarRef.current,
   )
 }
 

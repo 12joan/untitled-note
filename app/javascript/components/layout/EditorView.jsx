@@ -46,6 +46,9 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     attributeBehaviours: {
       remote_version: BEHAVIOUR_UNCONTROLLED,
       title: BEHAVIOUR_DELAYED_UPDATE,
+      body: BEHAVIOUR_DELAYED_UPDATE,
+      body_type: BEHAVIOUR_DELAYED_UPDATE,
+      plain_body: BEHAVIOUR_DELAYED_UPDATE,
     },
   })
 

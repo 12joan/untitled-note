@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  usePlateEditorState,
   getPluginType,
   someNode,
   toggleNodeType,
@@ -38,9 +37,7 @@ import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon'
 import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
-const FormattingToolbar = () => {
-  const editor = usePlateEditorState('editor')
-
+const FormattingToolbar = ({ editor }) => {
   const toggleElementProps = element => {
     const pluginType = getPluginType(editor, element)
 

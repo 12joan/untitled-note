@@ -27,6 +27,8 @@ const DocumentsAPI = projectId => new ResourcesAPI({
     document: {
       title: doc.title,
       body: doc.body,
+      body_type: doc.body_type,
+      plain_body: doc.plain_body,
       keywords_attributes: doc.keywords.map(keyword => ({
         text: keyword.text,
       })),

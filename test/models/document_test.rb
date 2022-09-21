@@ -115,41 +115,27 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal %w(one two three), document.definitive_mentions
   end
 
-  test 'extracts plain_body from HTML body' do
-    document = create(:document, body: <<~HTML)
-      <h1>This is a heading</h1>
-      <p>This is a paragraph</p>
-      <ul>
-        <li>One</li>
-        <li>Two</li>
-        <li>Three</li>
-      </ul>
-    HTML
-
-    assert_equal 'This is a heading This is a paragraph • One • Two • Three', document.plain_body
-  end
-
   test 'preview returns up to 100 characters of plain_body without breaking part way through a word' do
-    body = 'The quick brown fox jumps over the lazy dog ' * 3
+    plain_body = 'The quick brown fox jumps over the lazy dog ' * 3
 
-    # body.slice(0, 100)
+    # plain_body.slice(0, 100)
     # => 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick br'
 
     expected_preview = 'The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick'
 
-    document = create(:document, body: body)
+    document = create(:document, plain_body: plain_body)
     assert_equal expected_preview, document.preview
   end
 
   test 'preview breaks at 100 if there are no spaces' do
-    document = create(:document, body: 'a' * 200)
+    document = create(:document, plain_body: 'a' * 200)
     assert_equal 'a' * 100, document.preview
   end
 
   test 'preview does not stop early at punctuation' do
-    body = 'This, is! a. sentence; \'with\' ~punctuation~'
-    document = create(:document, body: body)
-    assert_equal body, document.preview
+    plain_body = 'This, is! a. sentence; \'with\' ~punctuation~'
+    document = create(:document, plain_body: plain_body)
+    assert_equal plain_body, document.preview
   end
 
   private

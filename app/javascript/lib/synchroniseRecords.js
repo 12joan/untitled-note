@@ -73,14 +73,14 @@ const globalDataStore = {
 
     recordWithMetadata.onUpload = updatedRecord => {
       oldOnUpload(updatedRecord)
-      onUpload(updatedRecord)
+      onUpload?.(updatedRecord)
       recordWithMetadata.onUpload = () => {}
       recordWithMetadata.onUploadFailure = () => {}
     }
 
     recordWithMetadata.onUploadFailure = error => {
       oldOnUploadFailure(error)
-      onUploadFailure(error)
+      onUploadFailure?.(error)
       recordWithMetadata.onUploadFailure = () => {}
     }
   },

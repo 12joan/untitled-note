@@ -21,7 +21,7 @@ class DocumentMarkdownControllerTest < ActionDispatch::IntegrationTest
 
       > This is a blockquote
 
-      This tag is not supported by markdown
+      <marquee>This tag is not supported by markdown</marquee>
      MARKDOWN
   end
 end
