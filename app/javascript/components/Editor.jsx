@@ -7,6 +7,7 @@ import {
   usePlateEditorState,
   getNodeTexts,
   deserializeHtml,
+  isSelectionAtBlockStart,
   createPlugins,
   createParagraphPlugin,
   createBoldPlugin,
@@ -17,6 +18,9 @@ import {
   createBlockquotePlugin,
   createCodeBlockPlugin,
   createListPlugin,
+  createSoftBreakPlugin,
+  createResetNodePlugin,
+  createExitBreakPlugin,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
   MARK_ITALIC,
@@ -28,6 +32,7 @@ import {
   ELEMENT_UL,
   ELEMENT_OL,
   ELEMENT_LI,
+  KEYS_HEADING,
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
@@ -57,6 +62,54 @@ const Editor = ({ workingDocument, updateDocument }) => {
     createBlockquotePlugin(),
     createCodeBlockPlugin(),
     createListPlugin(),
+    createSoftBreakPlugin({
+      options: {
+        rules: [
+          {
+            hotkey: 'shift+enter',
+          },
+          {
+            hotkey: 'enter',
+            query: {
+              allow: [ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK],
+            },
+          },
+        ],
+      },
+    }),
+    createResetNodePlugin({
+      options: {
+        rules: [
+          {
+            types: [ELEMENT_H1, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK],
+            defaultType: ELEMENT_PARAGRAPH,
+            hotkey: 'backspace',
+            predicate: isSelectionAtBlockStart,
+          },
+        ],
+      },
+    }),
+    createExitBreakPlugin({
+      options: {
+        rules: [
+          {
+            hotkey: 'mod+enter',
+          },
+          {
+            hotkey: 'mod+shift+enter',
+            before: true,
+          },
+          {
+            hotkey: 'enter',
+            query: {
+              start: true,
+              end: true,
+              allow: KEYS_HEADING,
+            },
+          },
+        ],
+      },
+    }),
   ], {
     components: {
       [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
