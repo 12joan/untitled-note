@@ -38,8 +38,10 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
     const bodyFormat = workingDocument.body_type.split('/')[0]
 
+    const emptyDocument = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]
+
     const initialValue = {
-      empty: () => [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
+      empty: () => emptyDocument,
       html: body => deserializeHtml(initialEditor, {
         element: body,
         stripWhitespace: false,
@@ -47,7 +49,10 @@ const Editor = ({ workingDocument, updateDocument }) => {
       json: body => JSON.parse(body),
     }[bodyFormat](workingDocument.body)
 
-    return { initialEditor, initialValue }
+    return {
+      initialEditor,
+      initialValue: initialValue.length === 0 ? emptyDocument : initialValue,
+    }
   }, [])
 
   const documentMenu = (
