@@ -12,6 +12,7 @@ import {
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
+import { useGlobalEvent } from '~/lib/globalEvents'
 import { projectPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
@@ -25,6 +26,12 @@ const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
   const navigate = useNavigate()
   const { projectId } = useContext()
+
+  useGlobalEvent('document:delete', ({ documentId }) => {
+    if (documentId === workingDocument.id) {
+      navigate(projectPath(projectId))
+    }
+  })
 
   const { initialEditor, initialValue } = useMemo(() => {
     const initialEditor = createPlateEditor({ id: 'editor', plugins })
@@ -47,7 +54,6 @@ const Editor = ({ workingDocument, updateDocument }) => {
     <DocumentMenu
       document={workingDocument}
       updateDocument={updateDocument}
-      onDelete={() => navigate(projectPath(projectId))}
     />
   )
 
