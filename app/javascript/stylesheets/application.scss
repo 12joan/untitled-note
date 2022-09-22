@@ -96,6 +96,17 @@
       }
     }
 
+    // Round the left border of blockquotes
+    blockquote {
+      @apply border-l-0 relative;
+
+      &::before {
+        @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
+        content: '';
+        background-color: var(--tw-prose-quote-borders);
+      }
+    }
+
     // Set link colour
     a {
       @apply text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500;
