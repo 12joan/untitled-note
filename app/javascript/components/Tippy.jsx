@@ -1,5 +1,5 @@
 import React, { forwardRef} from 'react'
-import UpstreamTippy from '@tippyjs/react'
+import UpstreamTippy from '@tippyjs/react/headless'
 import 'tippy.js/dist/tippy.css'
 
 import { useContext } from '~/lib/context'
