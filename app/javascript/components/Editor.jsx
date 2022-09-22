@@ -1,5 +1,6 @@
 import React, { useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 import TextareaAutosize from 'react-textarea-autosize'
 import {
   Plate,
@@ -11,13 +12,19 @@ import {
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
+import { projectPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
 
+import Dropdown from '~/components/Dropdown'
+import DocumentMenu from '~/components/DocumentMenu'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
+import DocumentInfoIcon from '~/components/icons/DocumentInfoIcon'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
+  const navigate = useNavigate()
+  const { projectId } = useContext()
 
   const { initialEditor, initialValue } = useMemo(() => {
     const initialEditor = createPlateEditor({ id: 'editor', plugins })
@@ -36,19 +43,34 @@ const Editor = ({ workingDocument, updateDocument }) => {
     return { initialEditor, initialValue }
   }, [])
 
+  const documentMenu = (
+    <DocumentMenu
+      document={workingDocument}
+      onDelete={() => navigate(projectPath(projectId))}
+    />
+  )
+
   return (
     <>
       <div className="cursor-text" onClick={() => titleRef.current.focus()}>
-        <TextareaAutosize
-          ref={titleRef}
-          type="text"
-          className="block mx-auto w-full min-w-0 max-w-screen-sm text-4xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
-          value={workingDocument.title || ''}
-          placeholder="Untitled document"
-          onChange={event => updateDocument({
-            title: event.target.value.replace(/[\n\r]+/g, ''),
-          })}
-        />
+        <div className="mx-auto w-full max-w-screen-sm flex gap-2">
+          <TextareaAutosize
+            ref={titleRef}
+            type="text"
+            className="grow block min-w-0 text-3xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
+            value={workingDocument.title || ''}
+            placeholder="Untitled document"
+            onChange={event => updateDocument({
+              title: event.target.value.replace(/[\n\r]+/g, ''),
+            })}
+          />
+
+          <Dropdown items={documentMenu} placement="bottom-end">
+            <button type="button" className="btn btn-transparent p-2 aspect-square" onClick={event => event.stopPropagation()}>
+              <DocumentInfoIcon size="1.25em" ariaLabel="Document menu" />
+            </button>
+          </Dropdown>
+        </div>
       </div>
 
       <Plate

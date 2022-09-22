@@ -4,17 +4,14 @@ import { followCursor } from 'tippy.js'
 import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
-import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
-import Dropdown, { DropdownItem } from '~/components/Dropdown'
+import Dropdown from '~/components/Dropdown'
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
-import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
-import CopyIcon from '~/components/icons/CopyIcon'
-import DeleteIcon from '~/components/icons/DeleteIcon'
+import DocumentMenu from '~/components/DocumentMenu'
 
 const OverviewView = () => {
-  const { projectId, futureProject, futurePartialDocuments } = useContext()
+  const { futureProject, futurePartialDocuments } = useContext()
   const partialDocuments = futurePartialDocuments.orDefault([])
 
   const viewRef = useRef()
@@ -35,31 +32,7 @@ const OverviewView = () => {
       documentId: doc.id,
     },
     contextMenu: (
-      <>
-        <DropdownItem
-          icon={OpenInNewTabIcon}
-          as={DocumentLink}
-          documentId={doc.id}
-          target="_blank"
-        >
-          Open in new tab
-        </DropdownItem>
-
-        <DropdownItem
-          icon={CopyIcon}
-          onClick={() => alert('Not implemented yet')}
-        >
-          Copy link
-        </DropdownItem>
-
-        <DropdownItem
-          icon={DeleteIcon}
-          className="children:text-red-500 dark:children:text-red-500"
-          onClick={() => DocumentsAPI(projectId).destroy(doc)}
-        >
-          Delete
-        </DropdownItem>
-      </>
+      <DocumentMenu document={doc} />
     ),
   })
 
