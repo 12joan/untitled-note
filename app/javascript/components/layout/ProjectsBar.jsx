@@ -7,7 +7,7 @@ import abbreviate from '~/lib/abbreviate'
 import Tooltip from '~/components/Tooltip'
 import Placeholder from '~/components/Placeholder'
 
-const ProjectsBar = forwardRef(({ ...otherProps }, ref) => {
+const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref) => {
   const { projectId, futureProjects } = useContext()
 
   return (
@@ -18,6 +18,7 @@ const ProjectsBar = forwardRef(({ ...otherProps }, ref) => {
             nav
             projectId={project.id}
             className="btn btn-solid w-full aspect-square border flex items-center justify-center font-light p-1 dark:border-transparent relative nav-active:no-focus-ring group"
+            onClick={onButtonClick}
           >
             {abbreviate(project.name, 2)}
             <div className="absolute -inset-1 ring ring-slate-700 dark:ring-slate-300 rounded-xl hidden nav-active:block group-focus-ring" />

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import { OverviewLink, NewDocumentLink, DocumentLink } from '~/lib/routes'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -10,31 +10,33 @@ import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 
-const Sidebar = () => {
+const Sidebar = ({ onButtonClick = () => {} }) => {
   const { futurePinnedDocuments } = useContext()
 
   return (
-    <div className="w-48 space-y-5 pb-3">
-      <section className="-ml-3">
-        <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
-        <ButtonWithIcon as={NewDocumentLink} icon={NewDocumentIcon} label="New document" />
-        <ButtonWithIcon icon={SearchIcon} label="Search" />
-      </section>
+    <ContextProvider onButtonClick={onButtonClick}>
+      <div className="w-48 space-y-5 pb-3">
+        <section className="-ml-3">
+          <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
+          <ButtonWithIcon as={NewDocumentLink} icon={NewDocumentIcon} label="New document" />
+          <ButtonWithIcon icon={SearchIcon} label="Search" />
+        </section>
 
-      <FutureDocumentsSection heading="Pinned documents" futureDocuments={futurePinnedDocuments} />
+        <FutureDocumentsSection heading="Pinned documents" futureDocuments={futurePinnedDocuments} />
 
-      <SectionWithHeading heading="Recently viewed">
-        <Button label="Document 4" />
-        <Button label="Document 5" />
-        <Button label="Document 6" />
-      </SectionWithHeading>
+        <SectionWithHeading heading="Recently viewed">
+          <Button label="Document 4" />
+          <Button label="Document 5" />
+          <Button label="Document 6" />
+        </SectionWithHeading>
 
-      <SectionWithHeading heading="Tags">
-        <Button label="Tag 1" />
-        <Button label="Tag 2" />
-        <Button label="Tag 3" />
-      </SectionWithHeading>
-    </div>
+        <SectionWithHeading heading="Tags">
+          <Button label="Tag 1" />
+          <Button label="Tag 2" />
+          <Button label="Tag 3" />
+        </SectionWithHeading>
+      </div>
+    </ContextProvider>
   )
 }
 
@@ -97,13 +99,24 @@ const SectionWithHeading = ({ heading, children }) => {
   )
 }
 
-const ButtonWithIcon = ({ as: Component = 'button', icon: Icon, label, ...otherProps }) => {
+const ButtonWithIcon = ({
+  as: Component = 'button',
+  icon: Icon,
+  label,
+  onClick = () => {},
+  ...otherProps
+}) => {
+  const { onButtonClick } = useContext()
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
 
   return (
     <Component
       {...buttonProps}
       className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center"
+      onClick={event => {
+        onButtonClick()
+        onClick(event)
+      }}
       {...otherProps}
     >
       <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
@@ -115,7 +128,13 @@ const ButtonWithIcon = ({ as: Component = 'button', icon: Icon, label, ...otherP
   )
 }
 
-const Button = forwardRef(({ as: Component = 'button', label, ...otherProps }, ref) => {
+const Button = forwardRef(({
+  as: Component = 'button',
+  label,
+  onClick = () => {},
+  ...otherProps
+}, ref) => {
+  const { onButtonClick } = useContext()
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
 
   return (
@@ -124,6 +143,10 @@ const Button = forwardRef(({ as: Component = 'button', label, ...otherProps }, r
       {...buttonProps}
       className="btn btn-transparent w-full px-3 py-1 flex text-left"
       children={label}
+      onClick={event => {
+        onButtonClick()
+        onClick(event)
+      }}
       {...otherProps}
     />
   )

@@ -80,11 +80,11 @@ const ProjectView = ({ childView }) => {
             }}
           >
             <div className="shrink-0 p-3 w-[4.5rem] overflow-y-auto bg-slate-200/75 dark:bg-slate-900/25 border-r dark:border-transparent">
-              <ProjectsBar />
+              <ProjectsBar onButtonClick={() => setOffcanvasSidebarVisible(false)} />
             </div>
 
             <div className="p-3 pl-5 overflow-y-auto flex items-start gap-2">
-              <Sidebar />
+              <Sidebar onButtonClick={() => setOffcanvasSidebarVisible(false)} />
 
               <button
                 type="button"
