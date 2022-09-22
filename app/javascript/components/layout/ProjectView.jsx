@@ -130,6 +130,7 @@ const ProjectView = ({ childView }) => {
       >
         <div className="grow flex flex-col p-5 pt-1">
           <ChildView
+            key={childView.key}
             topBarHeight={topBarHeight}
             {...childView.props}
           />

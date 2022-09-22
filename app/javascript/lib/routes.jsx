@@ -14,15 +14,15 @@ const routesComponent = (
       <StreamProjectData projectId={projectId}>
         <Routes>
           <Route path="overview" element={(
-            <ProjectView childView={{ type: 'overview', props: {} }} />
+            <ProjectView childView={{ type: 'overview', key: 'overview', props: {} }} />
           )} />
 
           <Route path="editor/new" element={(
-            <ProjectView childView={{ type: 'newDocument', props: {} }} />
+            <ProjectView childView={{ type: 'newDocument', key: 'newDocument', props: {} }} />
           )} />
 
           <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
-            <ProjectView childView={{ type: 'editor', props: { documentId } }} />
+            <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId } }} />
           ))} />
 
           <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} replace />} />

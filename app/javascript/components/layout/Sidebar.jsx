@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useContext } from '~/lib/context'
-import { OverviewLink, NewDocumentLink } from '~/lib/routes'
+import { OverviewLink, NewDocumentLink, DocumentLink } from '~/lib/routes'
 
 import { InlinePlaceholder } from '~/components/placeholder'
 import OverviewIcon from '~/components/icons/OverviewIcon'
@@ -12,7 +12,7 @@ const Sidebar = () => {
   const { futurePinnedDocuments } = useContext()
 
   return (
-    <div className="w-full max-w-48 space-y-5 pb-3">
+    <div className="w-48 space-y-5 pb-3">
       <section className="-ml-3">
         <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
         <ButtonWithIcon as={NewDocumentLink} icon={NewDocumentIcon} label="New document" />
@@ -22,7 +22,13 @@ const Sidebar = () => {
       <FutureSectionWithHeading
         heading="Pinned documents"
         futureChildren={futurePinnedDocuments.map(pinnedDocuments => pinnedDocuments.map(doc => (
-          <Button key={doc.id} label={doc.safe_title} />
+          <Button
+            key={doc.id}
+            as={DocumentLink}
+            documentId={doc.id}
+            nav
+            label={doc.safe_title}
+          />
         )))}
       />
 
@@ -101,7 +107,7 @@ const Button = ({ as: Component = 'button', label, ...otherProps }) => {
   return (
     <Component
       {...buttonProps}
-      className="btn btn-transparent w-full px-3 py-1 flex"
+      className="btn btn-transparent w-full px-3 py-1 flex text-left"
       children={label}
       {...otherProps}
     />
