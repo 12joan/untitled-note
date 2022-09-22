@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useContext } from '~/lib/context'
-import { DocumentLink } from '~/lib/routes'
+import { DocumentLink, documentPath } from '~/lib/routes'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 
@@ -17,6 +17,17 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride })
 
   const updateDocument = updateDocumentOverride || (delta => api.update({ id: doc.id, ...delta }))
 
+  const copyLink = () => {
+    const path = documentPath(projectId, doc.id)
+    const url = `${window.location.origin}${path}`
+
+    if (window.location.protocol === 'http:') {
+      console.log(url)
+    } else {
+      navigator.clipboard.writeText(url)
+    }
+  }
+
   const isPinned = doc.pinned_at !== null
   const togglePinned = () => updateDocument({ pinned_at: isPinned ? null : new Date().toISOString() })
 
@@ -31,7 +42,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride })
         Open in new tab
       </DropdownItem>
 
-      <DropdownItem icon={CopyIcon} onClick={() => alert('Not implemented yet')}>
+      <DropdownItem icon={CopyIcon} onClick={copyLink}>
         Copy link
       </DropdownItem>
 
