@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom'
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
+import useValueChanged from '~/lib/useValueChanged'
+import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { projectPath } from '~/lib/routes'
 import { ContextProvider } from '~/lib/context'
 
@@ -25,6 +27,21 @@ const StreamProjectData = ({ projectId, children }) => {
     }, resolve),
     [projectId]
   )
+
+  useValueChanged(futurePartialDocuments, (futurePrevious, futureCurrent) => (
+    futurePrevious.bind(previous => futureCurrent.bind(current => {
+      // Optimisation: Assumes there won't be an addition and a deletion in the same update
+      if (current.length >= previous.length) {
+        return
+      }
+
+      const deletedDocumentIds = previous.filter(previousDocument => (
+        !current.find(currentDocument => currentDocument.id === previousDocument.id)
+      )).map(previousDocument => previousDocument.id)
+
+      deletedDocumentIds.forEach(deletedDocumentId => dispatchGlobalEvent('document:delete', { documentId: deletedDocumentId }))
+    }))
+  ))
 
   const futurePinnedDocuments = futurePartialDocuments.map(partialDocuments =>
     partialDocuments.filter(doc => doc.pinned_at !== null).sort((a, b) => new Date(a.pinned_at) - new Date(b.pinned_at))
