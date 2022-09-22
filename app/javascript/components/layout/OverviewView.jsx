@@ -1,12 +1,11 @@
 import React, { useRef } from 'react'
-import { followCursor } from 'tippy.js'
 
 import { useContext } from '~/lib/context'
 import { DocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
-import Dropdown from '~/components/Dropdown'
+import { ContextMenuDropdown } from '~/components/Dropdown'
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
 import DocumentMenu from '~/components/DocumentMenu'
 
@@ -190,15 +189,7 @@ const Item = ({ as: ItemComponent, buttonProps, contextMenu, children, ...otherP
       {contextMenu === undefined
         ? itemComponent
         : (
-          <Dropdown
-            plugins={[followCursor]}
-            followCursor="initial"
-            trigger="contextmenu"
-            placement="bottom-start"
-            offset={0}
-            items={contextMenu}
-            children={itemComponent}
-          />
+          <ContextMenuDropdown items={contextMenu} children={itemComponent} />
         )
       }
     </div>

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { followCursor } from 'tippy.js'
 
 import useEventListener from '~/lib/useEventListener'
 
@@ -55,8 +56,22 @@ const DropdownItem = ({ icon: Icon, children, as: Component = 'button', classNam
   )
 }
 
+const ContextMenuDropdown = ({ ...otherProps }) => {
+  return (
+    <Dropdown
+      plugins={[followCursor]}
+      followCursor="initial"
+      trigger="contextmenu"
+      placement="bottom-start"
+      offset={0}
+      {...otherProps}
+    />
+  )
+}
+
 export default Dropdown
 
 export {
-  DropdownItem
+  DropdownItem,
+  ContextMenuDropdown,
 }

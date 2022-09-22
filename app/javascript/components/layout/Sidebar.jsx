@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
 import { OverviewLink, NewDocumentLink, DocumentLink } from '~/lib/routes'
 
 import { InlinePlaceholder } from '~/components/placeholder'
+import { ContextMenuDropdown } from '~/components/dropdown'
+import DocumentMenu from '~/components/DocumentMenu'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
@@ -19,18 +21,7 @@ const Sidebar = () => {
         <ButtonWithIcon icon={SearchIcon} label="Search" />
       </section>
 
-      <FutureSectionWithHeading
-        heading="Pinned documents"
-        futureChildren={futurePinnedDocuments.map(pinnedDocuments => pinnedDocuments.map(doc => (
-          <Button
-            key={doc.id}
-            as={DocumentLink}
-            documentId={doc.id}
-            nav
-            label={doc.safe_title}
-          />
-        )))}
-      />
+      <FutureDocumentsSection heading="Pinned documents" futureDocuments={futurePinnedDocuments} />
 
       <SectionWithHeading heading="Recently viewed">
         <Button label="Document 4" />
@@ -44,6 +35,29 @@ const Sidebar = () => {
         <Button label="Tag 3" />
       </SectionWithHeading>
     </div>
+  )
+}
+
+const FutureDocumentsSection = ({ heading, futureDocuments }) => {
+  const buttonForDocument = doc => (
+    <div key={doc.id}>
+      <ContextMenuDropdown items={<DocumentMenu document={doc} />} appendTo={document.body}>
+        <Button
+          as={DocumentLink}
+          documentId={doc.id}
+          nav
+          label={doc.safe_title}
+          onContextMenu={event => event.preventDefault()}
+        />
+      </ContextMenuDropdown>
+    </div>
+  )
+
+  return (
+    <FutureSectionWithHeading
+      heading={heading}
+      futureChildren={futureDocuments.map(documents => documents.map(buttonForDocument))}
+    />
   )
 }
 
@@ -101,17 +115,18 @@ const ButtonWithIcon = ({ as: Component = 'button', icon: Icon, label, ...otherP
   )
 }
 
-const Button = ({ as: Component = 'button', label, ...otherProps }) => {
+const Button = forwardRef(({ as: Component = 'button', label, ...otherProps }, ref) => {
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
 
   return (
     <Component
+      ref={ref}
       {...buttonProps}
       className="btn btn-transparent w-full px-3 py-1 flex text-left"
       children={label}
       {...otherProps}
     />
   )
-}
+})
 
 export default Sidebar
