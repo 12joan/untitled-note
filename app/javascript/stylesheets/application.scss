@@ -54,6 +54,29 @@
   }
 
   .prose {
+    // Block spacings
+    & > :not(p, h1) {
+      margin-top: 1.5rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+
+    & > p {
+      margin-top: 0.75rem !important;
+      margin-bottom: 0 !important;
+    }
+
+    & > h1 {
+      margin-top: 1.5rem !important;
+      margin-bottom: 0 !important;
+    }
+
+    & > ul, & > ol {
+      * {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+    }
+
     // Prevent overflow when a text contains no spaces
     @apply overflow-wrap-break-word;
 
@@ -79,7 +102,7 @@
     }
 
     h1 {
-      @apply text-2xl font-medium;
+      @apply text-2xl font-medium mt-0;
     }
   }
 }
