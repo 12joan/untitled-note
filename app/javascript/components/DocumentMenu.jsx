@@ -19,7 +19,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, o
   const isPinned = doc.pinned_at !== null
   const togglePinned = () => updateDocument({ pinned_at: isPinned ? null : new Date().toISOString() })
 
-  const deleteDocument = () => { api.delete(doc.id); onDelete?.() }
+  const deleteDocument = () => { api.destroy(doc); onDelete?.() }
 
   return (
     <>
