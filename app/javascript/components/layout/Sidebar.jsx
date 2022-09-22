@@ -64,24 +64,15 @@ const FutureDocumentsSection = ({ heading, futureDocuments }) => {
 }
 
 const FutureSectionWithHeading = ({ heading, futureChildren }) => {
-  return (
-    <FutureWrapper
-      as={SectionWithHeading}
-      heading={heading}
-      futureChildren={futureChildren}
-      placeholderChildren={[
-        <InlinePlaceholder key={1} length="100%" />,
-      ]}
-      predicate={children => children.length > 0}
-    />
+  const children = futureChildren.orDefault(
+    <InlinePlaceholder length="100%" />
   )
-}
 
-const FutureWrapper = ({ as: Component, futureChildren, placeholderChildren, predicate = () => true, ...componentProps }) => {
-  const children = futureChildren.orDefault(placeholderChildren)
-
-  return predicate(children) && (
-    <Component {...componentProps} children={children} />
+  return (!Array.isArray(children) || children.length > 0) && (
+    <SectionWithHeading
+      heading={heading}
+      children={children}
+    />
   )
 }
 

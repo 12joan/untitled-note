@@ -10,8 +10,7 @@ import CaretRightIcon from '~/components/icons/CaretRightIcon'
 import DocumentMenu from '~/components/DocumentMenu'
 
 const OverviewView = () => {
-  const { futureProject, futurePartialDocuments } = useContext()
-  const partialDocuments = futurePartialDocuments.orDefault([])
+  const { futureProject, futurePartialDocuments, futurePinnedDocuments } = useContext()
 
   const viewRef = useRef()
   const { width: viewWidth } = useElementSize(viewRef)
@@ -22,6 +21,42 @@ const OverviewView = () => {
   const cardGap = 5 / 4 * remPixels
   const cardsPerRow = Math.max(1, Math.floor((viewWidth - viewPadding + cardGap) / (cardWidth + cardGap)))
 
+  return (
+    <div ref={viewRef} className="space-y-5">
+      <h1 className="text-3xl font-medium">
+        {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
+      </h1>
+
+      <FutureDocumentsSection
+        title="Pinned documents"
+        cardsPerRow={cardsPerRow}
+        futureDocuments={futurePinnedDocuments}
+      />
+
+      {/*<Section
+        title="Recently viewed"
+        cardsPerRow={cardsPerRow}
+        showAllButton={true}
+        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+      />
+
+      <Section
+        title="Tags"
+        cardsPerRow={cardsPerRow}
+        showAllButton={true}
+        items={['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8']}
+      />*/}
+
+      <FutureDocumentsSection
+        title="All documents"
+        cardsPerRow={cardsPerRow}
+        futureDocuments={futurePartialDocuments}
+      />
+    </div>
+  )
+}
+
+const FutureDocumentsSection = ({ futureDocuments, ...otherProps }) => {
   const itemForDocument = doc => ({
     key: doc.id,
     label: doc.safe_title,
@@ -36,37 +71,20 @@ const OverviewView = () => {
   })
 
   return (
-    <div ref={viewRef} className="space-y-5">
-      <h1 className="text-3xl font-medium">
-        {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
-      </h1>
+    <FutureSection
+      futureItems={futureDocuments.map(
+        documents => documents.map(itemForDocument)
+      )}
+      {...otherProps}
+    />
+  )
+}
 
-      {/*<Section
-        title="Pinned documents"
-        cardsPerRow={cardsPerRow}
-        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
-      />
+const FutureSection = ({ futureItems, ...otherProps }) => {
+  const items = futureItems.orDefault([])
 
-      <Section
-        title="Recently viewed"
-        cardsPerRow={cardsPerRow}
-        showAllButton={true}
-        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
-      />
-
-      <Section
-        title="Tags"
-        cardsPerRow={cardsPerRow}
-        showAllButton={true}
-        items={['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8']}
-      />*/}
-
-      <Section
-        title="All documents"
-        cardsPerRow={cardsPerRow}
-        items={partialDocuments.map(itemForDocument)}
-      />
-    </div>
+  return items.length > 0 && (
+    <Section items={items} {...otherProps} />
   )
 }
 
