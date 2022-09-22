@@ -51,7 +51,6 @@ module.exports = {
       addVariant('nav-active', ['&.nav-active', '.nav-active &'])
       addVariant('children', '& > *')
       addVariant('data-active', '&[data-active="true"]')
-      addVariant('selection', ['&::selection', '& *::selection'])
     }),
   ],
 }

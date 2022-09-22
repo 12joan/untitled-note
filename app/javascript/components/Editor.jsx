@@ -11,7 +11,7 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import { useGlobalEvent } from '~/lib/globalEvents'
 import { projectPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
@@ -24,6 +24,7 @@ import DocumentMenuIcon from '~/components/icons/DocumentMenuIcon'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
+  const tippyContainerRef = useRef()
   const navigate = useNavigate()
   const { projectId } = useContext()
 
@@ -87,21 +88,25 @@ const Editor = ({ workingDocument, updateDocument }) => {
         </div>
       </div>
 
-      <Plate
-        id="editor"
-        editor={initialEditor}
-        initialValue={initialValue}
-        normalizeInitialValue
-        editableProps={{
-          className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full pb-[50vh]',
-          placeholder: 'Write something...',
-        }}
-      >
-        <WithEditorState
-          workingDocument={workingDocument}
-          updateDocument={updateDocument}
-        />
-      </Plate>
+      <ContextProvider tippyContainerRef={tippyContainerRef}>
+        <Plate
+          id="editor"
+          editor={initialEditor}
+          initialValue={initialValue}
+          normalizeInitialValue
+          editableProps={{
+            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full pb-[50vh]',
+            placeholder: 'Write something...',
+          }}
+        >
+          <WithEditorState
+            workingDocument={workingDocument}
+            updateDocument={updateDocument}
+          />
+        </Plate>
+      </ContextProvider>
+
+      <div ref={tippyContainerRef} />
     </>
   )
 }

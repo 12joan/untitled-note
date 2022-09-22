@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelected } from 'slate-react'
 import {
   someNode,
@@ -12,6 +12,7 @@ import {
 } from '@udecode/plate-headless'
 
 import openModal from '~/lib/openModal'
+import { useContext } from '~/lib/context'
 
 import Tippy from '~/components/Tippy'
 import Tooltip from '~/components/Tooltip'
@@ -39,7 +40,7 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
   const [selectedLink, selectedLinkPath] = getAboveNode(editor, { match: { type: ELEMENT_LINK } }) || [undefined, undefined]
   const selected = useSelected() && selectedLink !== undefined
 
-  const tippyContainer = useRef()
+  const { tippyContainerRef } = useContext()
 
   const safeHref = useMemo(() => {
     const unsafeHref = nodeProps.href
@@ -76,55 +77,51 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
   const removeLink = () => unwrapLink(editor)
 
   return (
-    <>
-      <Tippy
-        placement="top"
-        visible={selected}
-        interactive
-        appendTo={tippyContainer.current}
-        render={attrs => selected && (
-          <div className="rounded-lg backdrop-blur shadow text-ui text-base" {...attrs}>
-            <Tooltip content="Open link">
-              <button
-                type="button"
-                className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
-                onClick={openLink}
-              >
-                <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
-              </button>
-            </Tooltip>
+    <Tippy
+      placement="top"
+      visible={selected}
+      interactive
+      appendTo={tippyContainerRef.current}
+      render={attrs => selected && (
+        <div className="rounded-lg backdrop-blur shadow text-ui text-base" {...attrs}>
+          <Tooltip content="Open link">
+            <button
+              type="button"
+              className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              onClick={openLink}
+            >
+              <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
+            </button>
+          </Tooltip>
 
-            <Tooltip content="Edit link">
-              <button
-                type="button"
-                className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
-                onClick={editLink}
-              >
-                <EditIcon size="1.25em" ariaLabel="Edit link" />
-              </button>
-            </Tooltip>
+          <Tooltip content="Edit link">
+            <button
+              type="button"
+              className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              onClick={editLink}
+            >
+              <EditIcon size="1.25em" ariaLabel="Edit link" />
+            </button>
+          </Tooltip>
 
-            <Tooltip content="Remove link">
-              <button
-                type="button"
-                className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
-                onClick={removeLink}
-              >
-                <DeleteIcon size="1.25em" ariaLabel="Remove link" />
-              </button>
-            </Tooltip>
-          </div>
-        )}
-      >
-        <a
-          {...linkProps}
-          className="cursor-pointer"
-          children={children}
-        />
-      </Tippy>
-
-      <span ref={tippyContainer} contentEditable={false} className="select-none selection:hidden children:inline-block" />
-    </>
+          <Tooltip content="Remove link">
+            <button
+              type="button"
+              className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              onClick={removeLink}
+            >
+              <DeleteIcon size="1.25em" ariaLabel="Remove link" />
+            </button>
+          </Tooltip>
+        </div>
+      )}
+    >
+      <a
+        {...linkProps}
+        className="cursor-pointer"
+        children={children}
+      />
+    </Tippy>
   )
 }
 
