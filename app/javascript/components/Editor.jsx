@@ -19,7 +19,7 @@ import plugins from '~/lib/editor/plugins'
 import Dropdown from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
-import DocumentInfoIcon from '~/components/icons/DocumentInfoIcon'
+import DocumentMenuIcon from '~/components/icons/DocumentMenuIcon'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
@@ -46,6 +46,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
   const documentMenu = (
     <DocumentMenu
       document={workingDocument}
+      updateDocument={updateDocument}
       onDelete={() => navigate(projectPath(projectId))}
     />
   )
@@ -65,11 +66,13 @@ const Editor = ({ workingDocument, updateDocument }) => {
             })}
           />
 
-          <Dropdown items={documentMenu} placement="bottom-end">
-            <button type="button" className="btn btn-transparent p-2 aspect-square" onClick={event => event.stopPropagation()}>
-              <DocumentInfoIcon size="1.25em" ariaLabel="Document menu" />
-            </button>
-          </Dropdown>
+          <div onClick={event => event.stopPropagation()}>
+            <Dropdown items={documentMenu} placement="bottom-end">
+              <button type="button" className="btn btn-transparent p-2 aspect-square">
+                <DocumentMenuIcon size="1.25em" ariaLabel="Document menu" />
+              </button>
+            </Dropdown>
+          </div>
         </div>
       </div>
 

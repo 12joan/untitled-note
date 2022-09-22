@@ -15,12 +15,19 @@ const StreamProjectData = ({ projectId, children }) => {
     DocumentsStream(projectId).index({
       query: {
         id: true,
+        remote_version: true,
         safe_title: true,
         preview: true,
-        remote_version: true,
+        pinned_at: true,
       },
+      sort_by: 'created_at',
+      sort_order: 'desc',
     }, resolve),
     [projectId]
+  )
+
+  const futurePinnedDocuments = futurePartialDocuments.map(partialDocuments =>
+    partialDocuments.filter(doc => doc.pinned_at !== null).sort((a, b) => new Date(a.pinned_at) - new Date(b.pinned_at))
   )
 
   if (futureProject.isResolved && futureProject.data === undefined) {
@@ -34,6 +41,7 @@ const StreamProjectData = ({ projectId, children }) => {
       futureProjects={futureProjects}
       futureProject={futureProject}
       futurePartialDocuments={futurePartialDocuments}
+      futurePinnedDocuments={futurePinnedDocuments}
       children={children}
     />
   )

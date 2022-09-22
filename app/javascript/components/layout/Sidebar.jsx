@@ -1,12 +1,16 @@
 import React from 'react'
 
+import { useContext } from '~/lib/context'
 import { OverviewLink, NewDocumentLink } from '~/lib/routes'
 
+import { InlinePlaceholder } from '~/components/placeholder'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 
 const Sidebar = () => {
+  const { futurePinnedDocuments } = useContext()
+
   return (
     <div className="w-full max-w-48 space-y-5 pb-3">
       <section className="-ml-3">
@@ -15,11 +19,12 @@ const Sidebar = () => {
         <ButtonWithIcon icon={SearchIcon} label="Search" />
       </section>
 
-      <SectionWithHeading heading="Pinned documents">
-        <Button label="Document 1" />
-        <Button label="Document 2" />
-        <Button label="Document 3" />
-      </SectionWithHeading>
+      <FutureSectionWithHeading
+        heading="Pinned documents"
+        futureChildren={futurePinnedDocuments.map(pinnedDocuments => pinnedDocuments.map(doc => (
+          <Button key={doc.id} label={doc.safe_title} />
+        )))}
+      />
 
       <SectionWithHeading heading="Recently viewed">
         <Button label="Document 4" />
@@ -33,6 +38,28 @@ const Sidebar = () => {
         <Button label="Tag 3" />
       </SectionWithHeading>
     </div>
+  )
+}
+
+const FutureSectionWithHeading = ({ heading, futureChildren }) => {
+  return (
+    <FutureWrapper
+      as={SectionWithHeading}
+      heading={heading}
+      futureChildren={futureChildren}
+      placeholderChildren={[
+        <InlinePlaceholder key={1} length="100%" />,
+      ]}
+      predicate={children => children.length > 0}
+    />
+  )
+}
+
+const FutureWrapper = ({ as: Component, futureChildren, placeholderChildren, predicate = () => true, ...componentProps }) => {
+  const children = futureChildren.orDefault(placeholderChildren)
+
+  return predicate(children) && (
+    <Component {...componentProps} children={children} />
   )
 }
 
