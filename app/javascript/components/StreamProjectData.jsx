@@ -55,7 +55,9 @@ const StreamProjectData = ({ projectId, children }) => {
   )), [futurePartialDocuments])
 
   const futureRecentlyViewedDocuments = useMemo(() => futurePartialDocuments.map(partialDocuments => (
-    recentlyViewedDocuments.map(documentId => partialDocuments.find(partialDocument => partialDocument.id === documentId))
+    recentlyViewedDocuments
+      .map(documentId => partialDocuments.find(partialDocument => partialDocument.id === documentId))
+      .filter(doc => doc !== undefined)
   )), [futurePartialDocuments, recentlyViewedDocuments])
 
   if (futureProject.isResolved && futureProject.data === undefined) {
