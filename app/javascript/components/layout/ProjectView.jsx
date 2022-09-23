@@ -44,15 +44,16 @@ const ProjectView = ({ childView }) => {
       ChildView: OverviewView,
       centreView: false,
     },
+    recentlyViewed: {
+      ChildView: RecentlyViewedView,
+      centreView: false,
+    },
     editor: {
       ChildView: EditorView,
       showFormattingToolbar: true,
     },
     newDocument: {
       ChildView: NewDocumentView,
-    },
-    recentlyViewed: {
-      ChildView: RecentlyViewedView,
     },
   }[childView.type]
 
