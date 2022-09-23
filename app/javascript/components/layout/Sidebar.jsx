@@ -1,7 +1,12 @@
 import React, { forwardRef } from 'react'
 
 import { useContext, ContextProvider } from '~/lib/context'
-import { OverviewLink, NewDocumentLink, DocumentLink } from '~/lib/routes'
+import {
+  OverviewLink,
+  NewDocumentLink,
+  DocumentLink,
+  RecentlyViewedDocumentLink,
+} from '~/lib/routes'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { ContextMenuDropdown } from '~/components/Dropdown'
@@ -11,7 +16,7 @@ import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 
 const Sidebar = ({ onButtonClick = () => {} }) => {
-  const { futurePinnedDocuments } = useContext()
+  const { futurePinnedDocuments, futureRecentlyViewedDocuments } = useContext()
 
   return (
     <ContextProvider onButtonClick={onButtonClick}>
@@ -22,13 +27,16 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
           <ButtonWithIcon icon={SearchIcon} label="Search" />
         </section>
 
-        <FutureDocumentsSection heading="Pinned documents" futureDocuments={futurePinnedDocuments} />
+        <FutureDocumentsSection
+          heading="Pinned documents"
+          futureDocuments={futurePinnedDocuments}
+        />
 
-        <SectionWithHeading heading="Recently viewed">
-          <Button label="Document 4" />
-          <Button label="Document 5" />
-          <Button label="Document 6" />
-        </SectionWithHeading>
+        <FutureDocumentsSection
+          as={RecentlyViewedDocumentLink}
+          heading="Recently viewed"
+          futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, 5))}
+        />
 
         <SectionWithHeading heading="Tags">
           <Button label="Tag 1" />
@@ -40,12 +48,12 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
   )
 }
 
-const FutureDocumentsSection = ({ heading, futureDocuments }) => {
+const FutureDocumentsSection = ({ as = DocumentLink, heading, futureDocuments }) => {
   const buttonForDocument = doc => (
     <div key={doc.id}>
       <ContextMenuDropdown items={<DocumentMenu document={doc} />} appendTo={document.body}>
         <Button
-          as={DocumentLink}
+          as={as}
           documentId={doc.id}
           nav
           label={doc.safe_title}

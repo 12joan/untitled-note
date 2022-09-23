@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
 import useSynchronisedRecord, { BEHAVIOUR_DELAYED_UPDATE, BEHAVIOUR_UNCONTROLLED } from '~/lib/synchroniseRecords'
+import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { ProjectLink } from '~/lib/routes'
 
@@ -32,7 +34,11 @@ const EditorView = ({ documentId }) => {
 
 const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
   const { projectId } = useContext()
+  const [searchParams] = useSearchParams()
+  const isFromRecentlyViewed = searchParams.has('recently_viewed')
   const api = useMemo(() => DocumentsAPI(projectId), [projectId])
+
+  useEffect(() => !isFromRecentlyViewed && documentWasViewed(documentId), [isFromRecentlyViewed, documentId])
 
   const fsrSynchronisedRecord = useSynchronisedRecord({
     key: `document-${documentId}`,

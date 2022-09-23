@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useMemo} from 'react'
 import { Navigate } from 'react-router-dom'
 
+import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments'
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
@@ -10,8 +11,14 @@ import { projectPath } from '~/lib/routes'
 import { ContextProvider } from '~/lib/context'
 
 const StreamProjectData = ({ projectId, children }) => {
+  const recentlyViewedDocuments = useRecentlyViewedDocuments()
+
   const futureProjects = useStream(resolve => ProjectsStream.index({}, resolve), [])
-  const futureProject = futureProjects.map(projects => projects.find(project => project.id == projectId))
+
+  const futureProject = useMemo(
+    () => futureProjects.map(projects => projects.find(project => project.id == projectId)),
+    [futureProjects, projectId]
+  )
 
   const futurePartialDocuments = useStream(resolve => 
     DocumentsStream(projectId).index({
@@ -43,9 +50,13 @@ const StreamProjectData = ({ projectId, children }) => {
     }))
   ))
 
-  const futurePinnedDocuments = futurePartialDocuments.map(partialDocuments =>
+  const futurePinnedDocuments = useMemo(() => futurePartialDocuments.map(partialDocuments => (
     partialDocuments.filter(doc => doc.pinned_at !== null).sort((a, b) => new Date(a.pinned_at) - new Date(b.pinned_at))
-  )
+  )), [futurePartialDocuments])
+
+  const futureRecentlyViewedDocuments = useMemo(() => futurePartialDocuments.map(partialDocuments => (
+    recentlyViewedDocuments.map(documentId => partialDocuments.find(partialDocument => partialDocument.id === documentId))
+  )), [futurePartialDocuments, recentlyViewedDocuments])
 
   if (futureProject.isResolved && futureProject.data === undefined) {
     const [firstProject] = futureProjects.data
@@ -59,6 +70,7 @@ const StreamProjectData = ({ projectId, children }) => {
       futureProject={futureProject}
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}
+      futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}
       children={children}
     />
   )

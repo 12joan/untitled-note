@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 
 import { useContext } from '~/lib/context'
-import { DocumentLink } from '~/lib/routes'
+import { DocumentLink, RecentlyViewedDocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -10,7 +10,12 @@ import CaretRightIcon from '~/components/icons/CaretRightIcon'
 import DocumentMenu from '~/components/DocumentMenu'
 
 const OverviewView = () => {
-  const { futureProject, futurePartialDocuments, futurePinnedDocuments } = useContext()
+  const {
+    futureProject,
+    futurePartialDocuments,
+    futurePinnedDocuments,
+    futureRecentlyViewedDocuments,
+  } = useContext()
 
   const viewRef = useRef()
   const { width: viewWidth } = useElementSize(viewRef)
@@ -33,14 +38,15 @@ const OverviewView = () => {
         futureDocuments={futurePinnedDocuments}
       />
 
-      {/*<Section
+      <FutureDocumentsSection
+        as={RecentlyViewedDocumentLink}
         title="Recently viewed"
         cardsPerRow={cardsPerRow}
         showAllButton={true}
-        items={['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5', 'Document 6', 'Document 7', 'Document 8']}
+        futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, Math.max(cardsPerRow, 5)))}
       />
 
-      <Section
+      {/*<Section
         title="Tags"
         cardsPerRow={cardsPerRow}
         showAllButton={true}
@@ -56,12 +62,12 @@ const OverviewView = () => {
   )
 }
 
-const FutureDocumentsSection = ({ futureDocuments, ...otherProps }) => {
+const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherProps }) => {
   const itemForDocument = doc => ({
     key: doc.id,
     label: doc.safe_title,
     preview: doc.preview,
-    as: DocumentLink,
+    as,
     buttonProps: {
       documentId: doc.id,
     },

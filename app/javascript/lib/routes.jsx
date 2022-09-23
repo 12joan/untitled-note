@@ -22,7 +22,7 @@ const routesComponent = (
           )} />
 
           <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
-            <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId } }} />
+            <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId: parseInt(documentId) } }} />
           ))} />
 
           <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} replace />} />
@@ -49,6 +49,7 @@ const ProjectLink = makeLinkComponent(projectPath)
 const OverviewLink = makeLinkComponent(overviewPath)
 const NewDocumentLink = makeLinkComponent(newDocumentPath)
 const DocumentLink = makeLinkComponent(documentPath)
+const RecentlyViewedDocumentLink = makeLinkComponent((...args) => `${documentPath(...args)}?recently_viewed`)
 
 export {
   routesComponent,
@@ -58,4 +59,5 @@ export {
   OverviewLink,
   NewDocumentLink,
   DocumentLink,
+  RecentlyViewedDocumentLink,
 }
