@@ -38,8 +38,8 @@ const routesComponent = (
   </Routes>
 )
 
-const projectPath = projectId => `/projects/${projectId}`
 const overviewPath = projectId => `/projects/${projectId}/overview`
+const projectPath = overviewPath
 const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recently_viewed`
@@ -59,8 +59,8 @@ const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId
   )
 })
 
-const ProjectLink = makeLinkComponent(projectPath)
 const OverviewLink = makeLinkComponent(overviewPath)
+const ProjectLink = makeLinkComponent(projectPath)
 const NewDocumentLink = makeLinkComponent(newDocumentPath)
 const DocumentLink = makeLinkComponent(documentPath)
 const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
