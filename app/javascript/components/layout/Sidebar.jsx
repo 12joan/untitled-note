@@ -6,6 +6,7 @@ import {
   NewDocumentLink,
   DocumentLink,
   RecentlyViewedDocumentLink,
+  RecentlyViewedLink,
 } from '~/lib/routes'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -35,6 +36,7 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
         <FutureDocumentsSection
           as={RecentlyViewedDocumentLink}
           heading="Recently viewed"
+          headingLink={RecentlyViewedLink}
           futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, 5))}
         />
 
@@ -48,7 +50,7 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
   )
 }
 
-const FutureDocumentsSection = ({ as = DocumentLink, heading, futureDocuments }) => {
+const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherProps }) => {
   const buttonForDocument = doc => (
     <div key={doc.id}>
       <ContextMenuDropdown items={<DocumentMenu document={doc} />} appendTo={document.body}>
@@ -65,30 +67,42 @@ const FutureDocumentsSection = ({ as = DocumentLink, heading, futureDocuments })
 
   return (
     <FutureSectionWithHeading
-      heading={heading}
       futureChildren={futureDocuments.map(documents => documents.map(buttonForDocument))}
+      {...otherProps}
     />
   )
 }
 
-const FutureSectionWithHeading = ({ heading, futureChildren }) => {
+const FutureSectionWithHeading = ({ futureChildren, ...otherProps }) => {
   const children = futureChildren.orDefault(
     <InlinePlaceholder length="100%" />
   )
 
   return (!Array.isArray(children) || children.length > 0) && (
     <SectionWithHeading
-      heading={heading}
       children={children}
+      {...otherProps}
     />
   )
 }
 
-const SectionWithHeading = ({ heading, children }) => {
+const SectionWithHeading = ({ heading, headingLink: HeadingLink, children }) => {
+  const { onButtonClick } = useContext()
+
+  const headingComponent = HeadingLink
+    ? (
+      <HeadingLink
+        className="btn btn-link-subtle"
+        onClick={onButtonClick}
+        children={heading}
+      />
+    )
+    : heading
+
   return (
     <section>
       <strong className="text-slate-500 text-xs uppercase tracking-wide select-none dark:text-slate-400">
-        {heading}
+        {headingComponent}
       </strong>
 
       <div className="-ml-3">

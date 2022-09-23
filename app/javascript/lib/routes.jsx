@@ -25,6 +25,10 @@ const routesComponent = (
             <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId: parseInt(documentId) } }} />
           ))} />
 
+          <Route path="recently_viewed" element={(
+            <ProjectView childView={{ type: 'recentlyViewed', key: 'recentlyViewed', props: {} }} />
+          )} />
+
           <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} replace />} />
         </Routes>
       </StreamProjectData>
@@ -38,6 +42,8 @@ const projectPath = projectId => `/projects/${projectId}`
 const overviewPath = projectId => `/projects/${projectId}/overview`
 const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
+const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recently_viewed`
+const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
 
 const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, ...otherProps }, ref) => {
   const { projectId: currentProject } = useContext()
@@ -49,15 +55,21 @@ const ProjectLink = makeLinkComponent(projectPath)
 const OverviewLink = makeLinkComponent(overviewPath)
 const NewDocumentLink = makeLinkComponent(newDocumentPath)
 const DocumentLink = makeLinkComponent(documentPath)
-const RecentlyViewedDocumentLink = makeLinkComponent((...args) => `${documentPath(...args)}?recently_viewed`)
+const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
+const RecentlyViewedLink = makeLinkComponent(recentlyViewedPath)
 
 export {
   routesComponent,
   projectPath,
+  overviewPath,
+  newDocumentPath,
   documentPath,
+  recentlyViewedDocumentPath,
+  recentlyViewedPath,
   ProjectLink,
   OverviewLink,
   NewDocumentLink,
   DocumentLink,
   RecentlyViewedDocumentLink,
+  RecentlyViewedLink,
 }

@@ -12,6 +12,7 @@ import Sidebar from '~/components/layout/Sidebar'
 import OverviewView from '~/components/layout/OverviewView'
 import EditorView from '~/components/layout/EditorView'
 import NewDocumentView from '~/components/layout/NewDocumentView'
+import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
 
 const ProjectView = ({ childView }) => {
   const projectsBarRef = useRef()
@@ -49,6 +50,9 @@ const ProjectView = ({ childView }) => {
     },
     newDocument: {
       ChildView: NewDocumentView,
+    },
+    recentlyViewed: {
+      ChildView: RecentlyViewedView,
     },
   }[childView.type]
 
