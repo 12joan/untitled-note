@@ -1,9 +1,10 @@
 import React, { useRef } from 'react'
 
 import useElementSize from '~/lib/useElementSize'
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import { RecentlyViewedDocumentLink } from '~/lib/routes'
 
+import BackButton from '~/components/BackButton'
 import FutureDocumentIndex from '~/components/FutureDocumentIndex'
 
 const RecentlyViewedView = () => {
@@ -13,14 +14,18 @@ const RecentlyViewedView = () => {
   const { futureRecentlyViewedDocuments } = useContext()
 
   return (
-    <div ref={viewRef} className="space-y-5">
-      <h1 className="text-3xl font-medium select-none">Recently viewed</h1>
+    <div ref={viewRef}>
+      <BackButton className="mb-3" />
 
-      <FutureDocumentIndex
-        viewWidth={viewWidth}
-        futureDocuments={futureRecentlyViewedDocuments}
-        linkComponent={RecentlyViewedDocumentLink}
-      />
+      <h1 className="text-3xl font-medium select-none mb-5">Recently viewed</h1>
+
+      <ContextProvider linkOriginator="recentlyViewed">
+        <FutureDocumentIndex
+          viewWidth={viewWidth}
+          futureDocuments={futureRecentlyViewedDocuments}
+          linkComponent={RecentlyViewedDocumentLink}
+        />
+      </ContextProvider>
     </div>
   )
 }

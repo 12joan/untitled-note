@@ -46,9 +46,17 @@ const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recent
 const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
 
 const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, ...otherProps }, ref) => {
-  const { projectId: currentProject } = useContext()
+  const { projectId: currentProject, linkOriginator } = useContext()
   const projectId = overrideProjectId ?? currentProject
-  return <Link ref={ref} to={pathFunc(projectId, documentId)} {...otherProps} />
+
+  return (
+    <Link
+      ref={ref}
+      to={pathFunc(projectId, documentId)}
+      state={{ linkOriginator }}
+      {...otherProps}
+    />
+  )
 })
 
 const ProjectLink = makeLinkComponent(projectPath)

@@ -17,6 +17,7 @@ import { projectPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
 
+import BackButton from '~/components/BackButton'
 import Dropdown from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
@@ -65,8 +66,12 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
   return (
     <>
+      <div className="narrow mb-3">
+        <BackButton />
+      </div>
+
       <div className="cursor-text" onClick={() => titleRef.current.focus()}>
-        <div className="mx-auto w-full max-w-screen-sm flex gap-2">
+        <div className="narrow flex gap-2">
           <TextareaAutosize
             ref={titleRef}
             type="text"
@@ -95,7 +100,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
           initialValue={initialValue}
           normalizeInitialValue
           editableProps={{
-            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:mx-auto children:max-w-screen-sm children:w-full pb-[50vh]',
+            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow pb-[50vh]',
             placeholder: 'Write something...',
           }}
         >
