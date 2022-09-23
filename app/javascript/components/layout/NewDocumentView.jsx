@@ -11,11 +11,11 @@ const NewDocumentView = () => {
   const { projectId } = useContext()
 
   const isMounted = useIsMounted()
-  const ifMounted = f => (...args) => isMounted() || f(...args)
+  const ifMounted = f => (...args) => isMounted() && f(...args)
 
   useEffect(() => {
     BlankDocumentAPI(projectId).create()
-      .then(unlessUnmounting(doc => navigate(documentPath(projectId, doc.id), { replace: true })))
+      .then(ifMounted(doc => navigate(documentPath(projectId, doc.id), { replace: true })))
       .catch(ifMounted(error => {
         // TODO: Display the error somewhere
         console.error(error)

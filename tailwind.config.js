@@ -4,7 +4,6 @@ const plugin = require('tailwindcss/plugin')
 const lineClamp = require('@tailwindcss/line-clamp')
 const typography = require('@tailwindcss/typography')
 
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './app/javascript/**/*.{js,ts,jsx,tsx}',
