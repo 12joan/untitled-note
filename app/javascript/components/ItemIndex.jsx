@@ -90,7 +90,7 @@ const CardItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
     >
       <strong className="block text-lg font-medium" children={label} />
 
-      <p className="text-sm line-clamp-4 text-slate-500 dark:text-slate-400">
+      <p className="text-sm line-clamp-2 text-slate-500 dark:text-slate-400 h-[40px]">
         {preview}
       </p>
     </Item>
