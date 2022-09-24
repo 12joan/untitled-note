@@ -29,10 +29,7 @@ const toggleLink = editor => {
   } else {
     openModal(LinkModal, {
       initialText: getSelectionText(editor),
-    }).then(
-      args => insertLink(editor, args),
-      () => {}
-    )
+    }, args => insertLink(editor, args))
   }
 }
 
@@ -68,10 +65,7 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
     openModal(LinkModal, {
       initialText: text === url ? '' : text,
       initialUrl: url,
-    }).then(
-      args => upsertLink(editor, args),
-      () => {}
-    )
+    }, args => upsertLink(editor, args))
   }
 
   const removeLink = () => unwrapLink(editor)
@@ -125,14 +119,14 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
   )
 }
 
-const LinkModal = ({ resolve, reject, initialText = '', initialUrl = '' }) => {
+const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) => {
   const [url, setUrl] = useState(initialUrl)
   const [text, setText] = useState(initialText)
 
   const handleSubmit = event => {
     event.preventDefault()
     const textOrUrl = text.trim() === '' ? url : text
-    resolve({ url, text: textOrUrl })
+    onConfirm({ url, text: textOrUrl })
   }
 
   const normalizeUrl = () => {
@@ -179,7 +173,7 @@ const LinkModal = ({ resolve, reject, initialText = '', initialUrl = '' }) => {
         <button
           type="button"
           className="px-6 py-2 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
-          onClick={() => reject()}
+          onClick={onClose}
         >
           Cancel
         </button>

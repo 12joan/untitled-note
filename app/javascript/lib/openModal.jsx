@@ -3,38 +3,33 @@ import { render, unmountComponentAtNode } from 'react-dom'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 
-const openModal = (Component, componentProps = {} ) => new Promise((resolve, reject) => {
+const openModal = (Component, componentProps, onConfirm) => {
   const container = document.body
 
   const root = document.createElement('div')
   container.appendChild(root)
 
-  const cleanUpModal = () => {
+  const close = () => {
     unmountComponentAtNode(root)
     container.removeChild(root)
   }
 
-  const handleResolve = data => {
-    cleanUpModal()
-    resolve(data)
-  }
-
-  const handleReject = error => {
-    cleanUpModal()
-    reject(error)
+  const confirmAndClose = data => {
+    close()
+    onConfirm(data)
   }
 
   render(
-    <Modal onClose={() => handleReject()}>
+    <Modal onClose={close}>
       <Component
-        resolve={handleResolve}
-        reject={handleReject}
+        onConfirm={confirmAndClose}
+        onClose={close}
         {...componentProps}
       />
     </Modal>,
     root
   )
-})
+}
 
 const Modal = ({ children, onClose }) => {
   return (

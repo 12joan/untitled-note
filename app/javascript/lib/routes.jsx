@@ -4,12 +4,15 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import forwardParams from '~/lib/forwardParams'
 import { useContext } from '~/lib/context'
 
+import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
 import Link from '~/components/Link'
 
 const routesComponent = (
   <Routes>
+    <Route path="/await_redirect" element={<AwaitRedirectComponent />} />
+
     <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
       <StreamProjectData projectId={projectId}>
         <Routes>
@@ -38,6 +41,7 @@ const routesComponent = (
   </Routes>
 )
 
+const awaitRedirectPath = '/await_redirect'
 const overviewPath = projectId => `/projects/${projectId}/overview`
 const projectPath = overviewPath
 const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
@@ -68,6 +72,7 @@ const RecentlyViewedLink = makeLinkComponent(recentlyViewedPath)
 
 export {
   routesComponent,
+  awaitRedirectPath,
   projectPath,
   overviewPath,
   newDocumentPath,
