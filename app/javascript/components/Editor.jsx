@@ -61,6 +61,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
     <DocumentMenu
       document={workingDocument}
       updateDocument={updateDocument}
+      incrementRemoteVersion={false}
     />
   )
 

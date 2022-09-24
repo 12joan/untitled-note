@@ -1,9 +1,10 @@
 import React from 'react'
 
-import FutureItemIndex from '~/components/FutureItemIndex'
 import { DocumentLink } from '~/lib/routes'
+import { makeDocumentDragData } from '~/lib/dragData'
 
 import DocumentMenu from '~/components/DocumentMenu'
+import FutureItemIndex from '~/components/FutureItemIndex'
 
 const FutureDocumentIndex = ({ futureDocuments, linkComponent = DocumentLink, ...otherProps }) => {
   const itemForDocument = doc => ({
@@ -17,6 +18,7 @@ const FutureDocumentIndex = ({ futureDocuments, linkComponent = DocumentLink, ..
     contextMenu: (
       <DocumentMenu document={doc} />
     ),
+    dragData: makeDocumentDragData(doc),
   })
 
   return (

@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 
+import { handleDragStartWithData } from '~/lib/dragData'
+
 import CaretRightIcon from '~/components/icons/CaretRightIcon'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
@@ -115,7 +117,7 @@ const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
   )
 }
 
-const Item = ({ as: ItemComponent, buttonProps, contextMenu, children, ...otherProps }) => {
+const Item = ({ as: ItemComponent, buttonProps, contextMenu, dragData, children, ...otherProps }) => {
   const itemComponent = (
     <ItemComponent
       {...buttonProps}
@@ -124,6 +126,7 @@ const Item = ({ as: ItemComponent, buttonProps, contextMenu, children, ...otherP
       onContextMenu={contextMenu !== undefined && (event => {
         event.preventDefault()
       })}
+      onDragStart={handleDragStartWithData(dragData)}
     />
   )
 

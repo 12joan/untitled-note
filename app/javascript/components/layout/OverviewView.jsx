@@ -6,6 +6,7 @@ import useElementSize from '~/lib/useElementSize'
 
 import { InlinePlaceholder } from '~/components/Placeholder'
 import FutureDocumentIndex from '~/components/FutureDocumentIndex'
+import PinnedDragTarget from '~/components/PinnedDragTarget'
 
 const OverviewView = () => {
   const viewRef = useRef()
@@ -24,11 +25,13 @@ const OverviewView = () => {
         {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
       </h1>
 
-      <FutureDocumentIndex
-        viewWidth={viewWidth}
-        title="Pinned documents"
-        futureDocuments={futurePinnedDocuments}
-      />
+      <PinnedDragTarget>
+        <FutureDocumentIndex
+          viewWidth={viewWidth}
+          title="Pinned documents"
+          futureDocuments={futurePinnedDocuments}
+        />
+      </PinnedDragTarget>
 
       <FutureDocumentIndex
         viewWidth={viewWidth}

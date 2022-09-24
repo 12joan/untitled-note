@@ -8,7 +8,10 @@ import {
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
 } from '~/lib/routes'
+import { makeDocumentDragData, handleDragStartWithData } from '~/lib/dragData'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 
+import PinnedDragTarget from '~/components/PinnedDragTarget'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
@@ -28,10 +31,12 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
           <ButtonWithIcon icon={SearchIcon} label="Search" />
         </section>
 
-        <FutureDocumentsSection
-          heading="Pinned documents"
-          futureDocuments={futurePinnedDocuments}
-        />
+        <PinnedDragTarget indicatorClassName="right-0">
+          <FutureDocumentsSection
+            heading="Pinned documents"
+            futureDocuments={futurePinnedDocuments}
+          />
+        </PinnedDragTarget>
 
         <FutureDocumentsSection
           as={RecentlyViewedDocumentLink}
@@ -60,6 +65,7 @@ const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherPr
           nav
           label={doc.safe_title}
           onContextMenu={event => event.preventDefault()}
+          onDragStart={handleDragStartWithData(makeDocumentDragData(doc))}
         />
       </ContextMenuDropdown>
     </div>

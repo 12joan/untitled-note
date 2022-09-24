@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useContext } from '~/lib/context'
 import { DocumentLink, documentPath } from '~/lib/routes'
+import { toggleDocumentPinned } from '~/lib/transformDocument'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 
@@ -11,7 +12,7 @@ import CopyIcon from '~/components/icons/CopyIcon'
 import PinIcon from '~/components/icons/PinIcon'
 import DeleteIcon from '~/components/icons/DeleteIcon'
 
-const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride }) => {
+const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, incrementRemoteVersion = true }) => {
   const { projectId } = useContext()
   const api = DocumentsAPI(projectId)
 
@@ -29,7 +30,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride })
   }
 
   const isPinned = doc.pinned_at !== null
-  const togglePinned = () => updateDocument({ pinned_at: isPinned ? null : new Date().toISOString() })
+  const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { incrementRemoteVersion }))
 
   const deleteDocument = () => {
     api.destroy(doc)
