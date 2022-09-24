@@ -2,10 +2,10 @@ import React, { useMemo } from 'react'
 
 import { handleDragStartWithData } from '~/lib/dragData'
 
-import CaretRightIcon from '~/components/icons/CaretRightIcon'
+import PopOutLink from '~/components/PopOutLink'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
-const ItemIndex = ({ viewWidth, title, ...otherProps }) => {
+const ItemIndex = ({ items, viewWidth, title, showAllLink, ...otherProps }) => {
   const cardsPerRow = useMemo(() => {
     const remPixels = parseFloat(getComputedStyle(document.body).fontSize)
     const viewPadding = 2 * 5 / 4 * remPixels
@@ -14,42 +14,37 @@ const ItemIndex = ({ viewWidth, title, ...otherProps }) => {
     return Math.max(1, Math.floor((viewWidth - viewPadding + cardGap) / (cardWidth + cardGap)))
   }, [viewWidth])
 
-  const Component = cardsPerRow > 1 ? CardIndex : ListIndex
+  const { Component, limit } = cardsPerRow > 1
+    ? { Component: CardIndex, limit: cardsPerRow }
+    : { Component: ListIndex, limit: 5 }
+
+  const titleComponent = title && (() => {
+    const heading = (
+      <h2 className="text-2xl font-medium select-none" children={title} />
+    )
+
+    return showAllLink
+      ? <PopOutLink as={showAllLink} label="Show all" children={heading} />
+      : heading
+  })()
 
   return (
     <Component
       cardsPerRow={cardsPerRow}
-      title={title && (
-        <h2 className="text-2xl font-medium select-none" children={title} />
-      )}
+      title={titleComponent}
+      items={showAllLink ? items.slice(0, limit) : items}
       {...otherProps}
     />
   )
 }
 
-const CardIndex = ({ title, items, showAllLink: ShowAllLink, cardsPerRow }) => {
-  const cappedItems = ShowAllLink ? items.slice(0, cardsPerRow) : items
-
-  const titleComponent = title && (ShowAllLink
-    ? (
-      <ShowAllLink className="btn btn-link-subtle flex items-center gap-0 hocus:gap-3 group transition-[gap]">
-        {title}
-
-        <div className="flex items-center gap-1 translate-y-0.5">
-          <span className="whitespace-nowrap overflow-hidden w-0 group-hocus:w-full transition-[width] font-medium">Show all</span>
-          <CaretRightIcon noAriaLabel />
-        </div>
-      </ShowAllLink>
-    )
-    : title
-  )
-
+const CardIndex = ({ title, items, cardsPerRow }) => {
   return (
     <section className="space-y-3">
-      {titleComponent}
+      {title}
 
       <div className="flex flex-wrap gap-5">
-        {cappedItems.map(item => (
+        {items.map(item => (
           <CardItem key={item.key} item={item} />
         ))}
       </div>
@@ -57,25 +52,13 @@ const CardIndex = ({ title, items, showAllLink: ShowAllLink, cardsPerRow }) => {
   )
 }
 
-const ListIndex = ({ title, items, showAllLink: ShowAllLink }) => {
-  const cappedItems = ShowAllLink ? items.slice(0, 5) : items
-
-  const titleComponent = title && (ShowAllLink
-    ? (
-      <div className="flex justify-between items-center gap-3">
-        {title}
-        <ShowAllLink className="btn btn-link">Show all</ShowAllLink>
-      </div>
-    )
-    : title
-  )
-
+const ListIndex = ({ title, items }) => {
   return (
     <section className="space-y-3">
-      {titleComponent}
+      {title}
 
       <div className="rounded-lg border dark:border-transparent divide-y">
-        {cappedItems.map(item => (
+        {items.map(item => (
           <ListItem key={item.key} item={item} />
         ))}
       </div>
