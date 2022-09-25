@@ -26,6 +26,17 @@
   button {
     @apply select-none;
   }
+
+  input[type="checkbox"] {
+    @apply w-5 h-5 shrink-0 appearance-none rounded border bg-page-bg-light dark:bg-page-bg-dark mt-[0.1875rem];
+
+    &:checked {
+      @apply bg-primary-500 dark:bg-primary-400 text-white border-transparent ring-offset-2;
+
+      // From Bootstrap
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+    }
+  }
 }
 
 @layer utilities {

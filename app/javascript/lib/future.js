@@ -90,6 +90,11 @@ const FutureServiceResult = {
   failure: error => FutureServiceResult.fromFuture(Future.resolved(ServiceResult.failure(error))),
 }
 
+// sequence :: ({ k: m a }, a -> m a) -> m { k: a }
+const sequence = (collection, pure) => Object.entries(collection).reduce(
+  (ms, [k, m]) => ms.bind(xs => m.map(m => ({ ...xs, [k]: m }))),
+  pure({})
+)
 
 export default Future
 
@@ -97,4 +102,5 @@ export {
   Future,
   ServiceResult,
   FutureServiceResult,
+  sequence,
 }
