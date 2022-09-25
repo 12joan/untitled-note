@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import openModal from '~/lib/openModal'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import { editProjectPath } from '~/lib/routes'
 import awaitRedirect from '~/lib/awaitRedirect'
+import useNormalizedInput from '~/lib/useNormalizedInput'
 
 import { ModalTitle } from '~/components/Modal'
 
@@ -26,14 +27,12 @@ const useNewProject = () => {
 }
 
 const NewProjectModal = ({ onConfirm, onClose }) => {
-  const [name, setName] = useState('')
+  const [name, nameProps] = useNormalizedInput('', name => name.trim())
 
   const handleSubmit = event => {
     event.preventDefault()
     onConfirm({ name })
   }
-
-  const normalizeName = () => setName(name.trim())
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
@@ -44,11 +43,8 @@ const NewProjectModal = ({ onConfirm, onClose }) => {
 
         <input
           type="text"
-          value={name}
+          {...nameProps}
           required
-          onChange={event => setName(event.target.value)}
-          onBlur={normalizeName}
-          onKeyDown={event => event.key === 'Enter' && normalizeName()}
           className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
           placeholder="My Project"
         />

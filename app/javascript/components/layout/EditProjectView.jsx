@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { useContext } from '~/lib/context'
 import { FutureServiceResult } from '~/lib/future'
+import useNormalizedInput from '~/lib/useNormalizedInput'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 
 import BackButton from '~/components/BackButton'
@@ -28,7 +29,7 @@ const EditProjectView = () => {
 
 const ProjectForm = ({ initialProject }) => {
   const [savingState, setSavingState] = useState(() => FutureServiceResult.success())
-  const [name, setName] = useState(initialProject.name)
+  const [name, nameProps] = useNormalizedInput(initialProject.name, name => name.trim())
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -57,9 +58,8 @@ const ProjectForm = ({ initialProject }) => {
 
           <input
             type="text"
-            value={name}
+            {...nameProps}
             required
-            onChange={event => setName(event.target.value)}
             className="block w-full border rounded-lg px-3 py-2 bg-page-bg-light dark:bg-page-bg-dark"
             placeholder="My Project"
           />

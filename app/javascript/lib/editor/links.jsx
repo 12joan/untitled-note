@@ -13,6 +13,7 @@ import {
 
 import openModal from '~/lib/openModal'
 import { useContext } from '~/lib/context'
+import useNormalizedInput from '~/lib/useNormalizedInput'
 
 import Tippy from '~/components/Tippy'
 import Tooltip from '~/components/Tooltip'
@@ -120,19 +121,17 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
 }
 
 const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) => {
-  const [url, setUrl] = useState(initialUrl)
   const [text, setText] = useState(initialText)
+
+  const [url, urlProps] = useNormalizedInput(initialUrl, url => (url.trim() !== '' && url.match(/^[^:]+\./))
+    ? `https://${url}`
+    : url
+  )
 
   const handleSubmit = event => {
     event.preventDefault()
     const textOrUrl = text.trim() === '' ? url : text
     onConfirm({ url, text: textOrUrl })
-  }
-
-  const normalizeUrl = () => {
-    if (url.trim() !== '' && url.match(/^[^:]+\./)) {
-      setUrl(`https://${url}`)
-    }
   }
 
   const action = initialUrl === '' ? 'Add link' : 'Edit link'
@@ -158,11 +157,8 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
 
         <input
           type="url"
-          value={url}
+          {...urlProps}
           required
-          onChange={event => setUrl(event.target.value)}
-          onBlur={normalizeUrl}
-          onKeyDown={event => event.key === 'Enter' && normalizeUrl()}
           pattern="(https?|mailto|tel|web\+):.*"
           className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
           placeholder="https://example.com/"
