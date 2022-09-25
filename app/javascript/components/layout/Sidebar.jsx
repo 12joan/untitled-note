@@ -18,6 +18,7 @@ import DocumentMenu from '~/components/DocumentMenu'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
+import SettingsIcon from '~/components/icons/SettingsIcon'
 
 const Sidebar = ({ onButtonClick = () => {} }) => {
   const { futurePinnedDocuments, futureRecentlyViewedDocuments } = useContext()

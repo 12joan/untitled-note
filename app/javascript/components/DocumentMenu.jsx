@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useContext } from '~/lib/context'
+import copyPath from '~/lib/copyPath'
 import { DocumentLink, documentPath } from '~/lib/routes'
 import { toggleDocumentPinned } from '~/lib/transformDocument'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
@@ -18,16 +19,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, i
 
   const updateDocument = updateDocumentOverride || (delta => api.update({ id: doc.id, ...delta }))
 
-  const copyLink = () => {
-    const path = documentPath(projectId, doc.id)
-    const url = `${window.location.origin}${path}`
-
-    if (window.location.protocol === 'http:') {
-      console.log(url)
-    } else {
-      navigator.clipboard.writeText(url)
-    }
-  }
+  const copyLink = () => copyPath(documentPath(projectId, doc.id))
 
   const isPinned = doc.pinned_at !== null
   const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { incrementRemoteVersion }))

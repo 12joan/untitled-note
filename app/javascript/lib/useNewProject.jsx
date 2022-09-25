@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 import openModal from '~/lib/openModal'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import { projectPath } from '~/lib/routes'
+import { editProjectPath } from '~/lib/routes'
 import awaitRedirect from '~/lib/awaitRedirect'
 
 import { ModalTitle } from '~/components/Modal'
@@ -17,7 +17,7 @@ const useNewProject = () => {
     {},
     projectArgs => awaitRedirect(
       navigate,
-      ProjectsAPI.create(projectArgs).then(({ id }) => projectPath(id)),
+      ProjectsAPI.create(projectArgs).then(({ id }) => editProjectPath(id)),
       currentPath
     )
   )

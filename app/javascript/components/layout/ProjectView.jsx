@@ -10,9 +10,10 @@ import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
 import OverviewView from '~/components/layout/OverviewView'
+import EditProjectView from '~/components/layout/EditProjectView'
+import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
 import EditorView from '~/components/layout/EditorView'
 import NewDocumentView from '~/components/layout/NewDocumentView'
-import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
 
 const ProjectView = ({ childView }) => {
   const projectsBarRef = useRef()
@@ -43,6 +44,9 @@ const ProjectView = ({ childView }) => {
     overview: {
       ChildView: OverviewView,
       centreView: false,
+    },
+    editProject: {
+      ChildView: EditProjectView,
     },
     recentlyViewed: {
       ChildView: RecentlyViewedView,

@@ -20,20 +20,17 @@ const StreamProjectData = ({ projectId, children }) => {
     [futureProjects, projectId]
   )
 
-  const futurePartialDocuments = useStream(resolve => 
-    DocumentsStream(projectId).index({
-      query: {
-        id: true,
-        remote_version: true,
-        safe_title: true,
-        preview: true,
-        pinned_at: true,
-      },
-      sort_by: 'created_at',
-      sort_order: 'desc',
-    }, resolve),
-    [projectId]
-  )
+  const futurePartialDocuments = useStream(resolve => DocumentsStream(projectId).index({
+    query: {
+      id: true,
+      remote_version: true,
+      safe_title: true,
+      preview: true,
+      pinned_at: true,
+    },
+    sort_by: 'created_at',
+    sort_order: 'desc',
+  }, resolve), [projectId])
 
   useValueChanged(futurePartialDocuments, (futurePrevious, futureCurrent) => (
     futurePrevious.bind(previous => futureCurrent.bind(current => {

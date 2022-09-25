@@ -5,7 +5,7 @@ const Future = {
 
     isPending: type === 'pending',
     isResolved: type === 'resolved',
-    unwrap: handlers => handlers[type](data),
+    unwrap: handlers => (handlers[type] ?? (() => undefined))(data),
     orDefault: defaultValue => type === 'resolved' ? data : defaultValue,
 
     bind: f => type === 'resolved' ? f(data) : Future.pending(),
@@ -23,7 +23,7 @@ const ServiceResult = {
 
     isSuccess: type === 'success',
     isFailure: type === 'failure',
-    unwrap: handlers => handlers[type](data),
+    unwrap: handlers => (handlers[type] ?? (() => undefined))(data),
     orDefault: defaultValue => type === 'success' ? data : defaultValue,
 
     bind: f => type === 'success' ? f(data) : ServiceResult.failure(),

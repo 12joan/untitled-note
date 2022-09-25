@@ -1,9 +1,10 @@
 import React, { useRef, useMemo } from 'react'
 
 import { useContext } from '~/lib/context'
-import { RecentlyViewedDocumentLink, RecentlyViewedLink } from '~/lib/routes'
+import { EditProjectLink, RecentlyViewedLink, RecentlyViewedDocumentLink } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
 
+import PopOutLink from '~/components/PopOutLink'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import FutureDocumentIndex from '~/components/FutureDocumentIndex'
 import PinnedDragTarget from '~/components/PinnedDragTarget'
@@ -21,9 +22,11 @@ const OverviewView = () => {
 
   return (
     <div ref={viewRef} className="space-y-5">
-      <h1 className="text-3xl font-medium">
-        {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
-      </h1>
+      <PopOutLink as={EditProjectLink} label="Edit details">
+        <h1 className="text-3xl font-medium">
+          {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
+        </h1>
+      </PopOutLink>
 
       <PinnedDragTarget>
         <FutureDocumentIndex
