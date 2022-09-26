@@ -17,13 +17,13 @@ const useNewProject = () => {
   const openNewProjectModal = () => openModal(
     NewProjectModal,
     {},
-    projectArgs => awaitRedirect(
+    projectArgs => awaitRedirect({
       navigate,
-      handleCreateProjectError(
+      promisePath: handleCreateProjectError(
         ProjectsAPI.create(projectArgs)
       ).then(({ id }) => editProjectPath(id)),
-      currentPath
-    )
+      fallbackPath: currentPath,
+    })
   )
 
   return openNewProjectModal

@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useElementSize from '~/lib/useElementSize'
+import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 import CloseIcon from '~/components/icons/CloseIcon'
@@ -13,7 +14,6 @@ import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
 import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
 import EditorView from '~/components/layout/EditorView'
-import NewDocumentView from '~/components/layout/NewDocumentView'
 
 const ProjectView = ({ childView }) => {
   const projectsBarRef = useRef()
@@ -41,6 +41,9 @@ const ProjectView = ({ childView }) => {
     centreView = isXl,
     showFormattingToolbar = false,
   } = {
+    awaitRedirect: {
+      ChildView: AwaitRedirectComponent,
+    },
     overview: {
       ChildView: OverviewView,
       centreView: false,
@@ -55,9 +58,6 @@ const ProjectView = ({ childView }) => {
     editor: {
       ChildView: EditorView,
       showFormattingToolbar: true,
-    },
-    newDocument: {
-      ChildView: NewDocumentView,
     },
   }[childView.type]
 

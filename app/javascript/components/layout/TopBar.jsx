@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
-import { NewDocumentLink } from '~/lib/routes'
+import useNewDocument from '~/lib/useNewDocument'
 
 import Tooltip from '~/components/Tooltip'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -19,8 +19,10 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
 
   const { isXs } = useBreakpoints()
 
+  const createNewDocument = useNewDocument()
+
   const navButtons = [
-    { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
+    { icon: NewDocumentIcon, label: 'New document', onClick: createNewDocument },
     { icon: SearchIcon, label: 'Search' },
     { icon: SettingsIcon, label: 'Settings' },
     { icon: AccountIcon, label: 'Account' },

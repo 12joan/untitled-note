@@ -3,13 +3,12 @@ import React, { forwardRef } from 'react'
 import { useContext, ContextProvider } from '~/lib/context'
 import {
   OverviewLink,
-  NewDocumentLink,
   DocumentLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
 } from '~/lib/routes'
 import { makeDocumentDragData, handleDragStartWithData } from '~/lib/dragData'
-import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import useNewDocument from '~/lib/useNewDocument'
 
 import PinnedDragTarget from '~/components/PinnedDragTarget'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -23,12 +22,14 @@ import SettingsIcon from '~/components/icons/SettingsIcon'
 const Sidebar = ({ onButtonClick = () => {} }) => {
   const { futurePinnedDocuments, futureRecentlyViewedDocuments } = useContext()
 
+  const createNewDocument = useNewDocument()
+
   return (
     <ContextProvider onButtonClick={onButtonClick}>
       <div className="w-48 space-y-5 pb-3">
         <section className="-ml-3">
           <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
-          <ButtonWithIcon as={NewDocumentLink} icon={NewDocumentIcon} label="New document" />
+          <ButtonWithIcon icon={NewDocumentIcon} label="New document" onClick={createNewDocument} />
           <ButtonWithIcon icon={SearchIcon} label="Search" />
         </section>
 

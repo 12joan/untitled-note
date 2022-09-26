@@ -98,13 +98,13 @@ const ProjectActions = ({ project, documentCount }) => {
   const handleDelete = () => openModal(
     ConfirmDeletionModal,
     { project, documentCount },
-    () => awaitRedirect(
+    () => awaitRedirect({
       navigate,
-      handleDeleteProjectError(
+      promisePath: handleDeleteProjectError(
         ProjectsAPI.destroy(project)
       ).then(() => '/'),
-      currentPath
-    )
+      fallbackPath: currentPath,
+    })
   )
 
   return (

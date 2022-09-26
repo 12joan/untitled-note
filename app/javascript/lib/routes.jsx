@@ -16,6 +16,10 @@ const routesComponent = (
     <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
       <StreamProjectData projectId={projectId}>
         <Routes>
+          <Route path="await_redirect" element={(
+            <ProjectView childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }} />
+          )} />
+
           <Route path="overview" element={(
             <ProjectView childView={{ type: 'overview', key: 'overview', props: {} }} />
           )} />
@@ -26,10 +30,6 @@ const routesComponent = (
 
           <Route path="recently_viewed" element={(
             <ProjectView childView={{ type: 'recentlyViewed', key: 'recentlyViewed', props: {} }} />
-          )} />
-
-          <Route path="editor/new" element={(
-            <ProjectView childView={{ type: 'newDocument', key: 'newDocument', props: {} }} />
           )} />
 
           <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
@@ -59,11 +59,10 @@ const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId
   )
 })
 
-const awaitRedirectPath = '/await_redirect'
+const awaitRedirectPath = projectId => projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect'
 const overviewPath = projectId => `/projects/${projectId}/overview`
 const projectPath = overviewPath
 const editProjectPath = projectId => `/projects/${projectId}/edit`
-const newDocumentPath = projectId => `/projects/${projectId}/editor/new`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recently_viewed`
 const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
@@ -71,7 +70,6 @@ const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
 const OverviewLink = makeLinkComponent(overviewPath)
 const ProjectLink = makeLinkComponent(projectPath)
 const EditProjectLink = makeLinkComponent(editProjectPath)
-const NewDocumentLink = makeLinkComponent(newDocumentPath)
 const DocumentLink = makeLinkComponent(documentPath)
 const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
 const RecentlyViewedLink = makeLinkComponent(recentlyViewedPath)
@@ -82,14 +80,12 @@ export {
   projectPath,
   overviewPath,
   editProjectPath,
-  newDocumentPath,
   documentPath,
   recentlyViewedDocumentPath,
   recentlyViewedPath,
   ProjectLink,
   OverviewLink,
   EditProjectLink,
-  NewDocumentLink,
   DocumentLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
