@@ -7,21 +7,25 @@ import '~/stylesheets/application.scss'
 
 import App from '~/components/layout/App'
 
-let wasInFocus = undefined
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
-setInterval(() => {
-  const inFocus = document.hasFocus()
+if (!isTouchDevice) {
+  let wasInFocus = undefined
 
-  if (inFocus !== wasInFocus) {
-    wasInFocus = inFocus
+  setInterval(() => {
+    const inFocus = document.hasFocus()
 
-    if (inFocus) {
-      document.body.classList.remove('inactive')
-    } else {
-      document.body.classList.add('inactive')
+    if (inFocus !== wasInFocus) {
+      wasInFocus = inFocus
+
+      if (inFocus) {
+        document.body.classList.remove('inactive')
+      } else {
+        document.body.classList.add('inactive')
+      }
     }
-  }
-}, 100)
+  }, 100)
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
