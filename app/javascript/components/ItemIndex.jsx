@@ -5,7 +5,7 @@ import { handleDragStartWithData } from '~/lib/dragData'
 import PopOutLink from '~/components/PopOutLink'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
-const ItemIndex = ({ items, viewWidth, title, showAllLink, ...otherProps }) => {
+const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, ...otherProps }) => {
   const cardsPerRow = useMemo(() => {
     const remPixels = parseFloat(getComputedStyle(document.body).fontSize)
     const viewPadding = 2 * 5 / 4 * remPixels
@@ -29,40 +29,34 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ...otherProps }) => {
   })()
 
   return (
-    <Component
-      cardsPerRow={cardsPerRow}
-      title={titleComponent}
-      items={showAllLink ? items.slice(0, limit) : items}
-      {...otherProps}
-    />
-  )
-}
-
-const CardIndex = ({ title, items, cardsPerRow }) => {
-  return (
     <section className="space-y-3">
-      {title}
+      {titleComponent}
 
-      <div className="flex flex-wrap gap-5">
-        {items.map(item => (
-          <CardItem key={item.key} item={item} />
-        ))}
-      </div>
+      {(items.length === 0 && ifEmpty)
+        ? ifEmpty
+        : <Component items={showAllLink ? items.slice(0, limit) : items} />
+      }
     </section>
   )
 }
 
-const ListIndex = ({ title, items }) => {
+const CardIndex = ({ items }) => {
   return (
-    <section className="space-y-3">
-      {title}
+    <div className="flex flex-wrap gap-5">
+      {items.map(item => (
+        <CardItem key={item.key} item={item} />
+      ))}
+    </div>
+  )
+}
 
-      <div className="rounded-lg border dark:border-transparent divide-y">
-        {items.map(item => (
-          <ListItem key={item.key} item={item} />
-        ))}
-      </div>
-    </section>
+const ListIndex = ({ items }) => {
+  return (
+    <div className="rounded-lg border dark:border-transparent divide-y">
+      {items.map(item => (
+        <ListItem key={item.key} item={item} />
+      ))}
+    </div>
   )
 }
 

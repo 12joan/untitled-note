@@ -8,6 +8,7 @@ import PopOutLink from '~/components/PopOutLink'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import FutureDocumentIndex from '~/components/FutureDocumentIndex'
 import PinnedDragTarget from '~/components/PinnedDragTarget'
+import NoDocumentsView from '~/components/NoDocumentsView'
 
 const OverviewView = () => {
   const viewRef = useRef()
@@ -56,6 +57,7 @@ const OverviewView = () => {
         title="All documents"
         futureDocuments={futurePartialDocuments}
         placeholders={4}
+        ifEmpty={<NoDocumentsView />}
       />
     </div>
   )

@@ -25,6 +25,11 @@ const RecentlyViewedView = () => {
           futureDocuments={futureRecentlyViewedDocuments}
           linkComponent={RecentlyViewedDocumentLink}
           placeholders={4}
+          ifEmpty={(
+            <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-5 select-none">
+              No recently viewed documents
+            </div>
+          )}
         />
       </ContextProvider>
     </div>
