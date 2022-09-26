@@ -8,6 +8,7 @@ import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import openModal from '~/lib/openModal'
 import awaitRedirect from '~/lib/awaitRedirect'
 import pluralize from '~/lib/pluralize'
+import { handleUpdateProjectError, handleDeleteProjectError } from '~/lib/handleErrors'
 
 import BackButton from '~/components/BackButton'
 import SpinnerIcon from '~/components/icons/SpinnerIcon'
@@ -41,26 +42,20 @@ const EditProjectView = () => {
 }
 
 const ProjectForm = ({ initialProject }) => {
-  const [savingState, setSavingState] = useState(() => FutureServiceResult.success())
+  const [isSaving, setIsSaving] = useState(false)
   const [name, nameProps] = useNormalizedInput(initialProject.name, name => name.trim())
 
   const handleSubmit = event => {
     event.preventDefault()
 
-    setSavingState(FutureServiceResult.pending())
+    setIsSaving(true)
 
-    FutureServiceResult.fromPromise(
+    handleUpdateProjectError(
       ProjectsAPI.update({
         id: initialProject.id,
         name,
-      }).catch(error => {
-        console.error(error)
-        throw error
-      }),
-      // If the update occurs near-instantaneously,
-      // the user may be unsure if it was successful
-      result => setTimeout(() => setSavingState(result), 100)
-    )
+      })
+    ).finally(() => setTimeout(() => setIsSaving(false), 100))
   }
 
   return (
@@ -77,20 +72,12 @@ const ProjectForm = ({ initialProject }) => {
         />
       </label>
 
-      {savingState.unwrap({
-        failure: error => (
-          <div className="text-red-500" aria-live="polite">
-            An error occurred while saving the project. Make sure you're connected to the internet and try again.
-          </div>
-        ),
-      })}
-
       <button
         type="submit"
         className="block px-3 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-page-bg-light dark:ring-offset-page-bg-dark"
-        disabled={savingState.isPending}
+        disabled={isSaving}
       >
-        {savingState.isPending
+        {isSaving
           ? (
             <span className="flex items-center gap-2">
               <SpinnerIcon size="1.25em" className="animate-spin" noAriaLabel />
@@ -113,7 +100,9 @@ const ProjectActions = ({ project, documentCount }) => {
     { project, documentCount },
     () => awaitRedirect(
       navigate,
-      ProjectsAPI.destroy(project).then(() => '/'),
+      handleDeleteProjectError(
+        ProjectsAPI.destroy(project)
+      ).then(() => '/'),
       currentPath
     )
   )

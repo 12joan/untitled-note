@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'dialog': '0 0.75rem 2rem rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
+        'dialog': '0 0.75rem 2rem rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
       },
       colors: {
         'primary': {

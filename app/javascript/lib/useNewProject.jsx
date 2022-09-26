@@ -6,6 +6,7 @@ import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import { editProjectPath } from '~/lib/routes'
 import awaitRedirect from '~/lib/awaitRedirect'
 import useNormalizedInput from '~/lib/useNormalizedInput'
+import { handleCreateProjectError } from '~/lib/handleErrors'
 
 import { ModalTitle } from '~/components/Modal'
 
@@ -18,7 +19,9 @@ const useNewProject = () => {
     {},
     projectArgs => awaitRedirect(
       navigate,
-      ProjectsAPI.create(projectArgs).then(({ id }) => editProjectPath(id)),
+      handleCreateProjectError(
+        ProjectsAPI.create(projectArgs)
+      ).then(({ id }) => editProjectPath(id)),
       currentPath
     )
   )

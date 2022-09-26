@@ -6,6 +6,7 @@ import { DocumentLink, documentPath } from '~/lib/routes'
 import { toggleDocumentPinned } from '~/lib/transformDocument'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
+import { handleUpdateDocumentError, handleDeleteDocumentError } from '~/lib/handleErrors'
 
 import { DropdownItem } from '~/components/Dropdown'
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
@@ -17,7 +18,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, i
   const { projectId } = useContext()
   const api = DocumentsAPI(projectId)
 
-  const updateDocument = updateDocumentOverride || (delta => api.update({ id: doc.id, ...delta }))
+  const updateDocument = updateDocumentOverride || (delta => handleUpdateDocumentError(api.update({ id: doc.id, ...delta })))
 
   const copyLink = () => copyPath(documentPath(projectId, doc.id))
 
@@ -25,7 +26,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, i
   const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { incrementRemoteVersion }))
 
   const deleteDocument = () => {
-    api.destroy(doc)
+    handleDeleteDocumentError(api.destroy(doc))
     dispatchGlobalEvent('document:delete', { documentId: doc.id })
   }
 

@@ -5,6 +5,7 @@ import { useContext } from '~/lib/context'
 import useIsMounted from '~/lib/useIsMounted'
 import BlankDocumentAPI from '~/lib/resources/BlankDocumentAPI'
 import { projectPath, documentPath } from '~/lib/routes'
+import { handleCreateDocumentError } from '~/lib/handleErrors'
 
 const NewDocumentView = () => {
   const navigate = useNavigate()
@@ -13,15 +14,12 @@ const NewDocumentView = () => {
   const isMounted = useIsMounted()
   const ifMounted = f => (...args) => isMounted() && f(...args)
 
-  useEffect(() => {
+  useEffect(() => handleCreateDocumentError(
     BlankDocumentAPI(projectId).create()
-      .then(ifMounted(doc => navigate(documentPath(projectId, doc.id), { replace: true })))
-      .catch(ifMounted(error => {
-        // TODO: Display the error somewhere
-        console.error(error)
-        navigate(projectPath(projectId), { replace: true })
-      }))
-  }, [])
+  ).then(
+    ifMounted(doc => navigate(documentPath(projectId, doc.id), { replace: true })),
+    ifMounted(() => navigate(projectPath(projectId), { replace: true }))
+  ), [])
 
   return (
     <p>Loading...</p>

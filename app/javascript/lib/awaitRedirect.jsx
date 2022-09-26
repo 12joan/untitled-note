@@ -16,10 +16,7 @@ const AwaitRedirectComponent = () => {
 
   useEffect(() => (promisePath ?? Promise.reject()).then(
     path => setRedirectPath(path),
-    error => {
-      console.error(error)
-      setRedirectPath(fallbackPath || '/')
-    }
+    error => setRedirectPath(fallbackPath || '/')
   ), [])
 
   return redirectPath

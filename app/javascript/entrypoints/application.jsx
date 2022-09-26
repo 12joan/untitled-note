@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import '~/channels'
 import '~/stylesheets/application.scss'
 
-import App from '~/components/App'
+import App from '~/components/layout/App'
 
 let wasInFocus = undefined
 
