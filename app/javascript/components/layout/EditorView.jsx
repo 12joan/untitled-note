@@ -7,6 +7,7 @@ import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { ProjectLink } from '~/lib/routes'
 
+import LoadingView from '~/components/LoadingView'
 import Editor from '~/components/Editor'
 
 const EditorView = ({ documentId }) => {
@@ -17,7 +18,7 @@ const EditorView = ({ documentId }) => {
   )
 
   const loadingView = (
-    <div>Loading...</div>
+    <LoadingView />
   )
 
   return futurePartialDocument.unwrap({

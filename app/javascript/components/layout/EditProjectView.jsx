@@ -11,6 +11,7 @@ import pluralize from '~/lib/pluralize'
 import { handleUpdateProjectError, handleDeleteProjectError } from '~/lib/handleErrors'
 
 import BackButton from '~/components/BackButton'
+import LoadingView from '~/components/LoadingView'
 import SpinnerIcon from '~/components/icons/SpinnerIcon'
 import { ModalTitle } from '~/components/Modal'
 
@@ -23,13 +24,13 @@ const EditProjectView = () => {
   }, Future.resolved)
 
   return (
-    <div className="narrow">
+    <div className="grow narrow flex flex-col">
       <BackButton className="mb-3" />
 
       <h1 className="text-3xl font-medium select-none mb-5">Edit project</h1>
 
       {futures.unwrap({
-        pending: () => <div>Loading...</div>,
+        pending: () => <LoadingView />,
         resolved: ({ project, documentCount }) => (
           <div className="space-y-10">
             <ProjectForm initialProject={project} />

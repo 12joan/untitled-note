@@ -62,7 +62,7 @@ const ProjectView = ({ childView }) => {
   }[childView.type]
 
   return (
-    <ContextProvider formattingToolbarRef={formattingBarRef}>
+    <ContextProvider formattingToolbarRef={formattingBarRef} topBarHeight={topBarHeight}>
       <nav
         ref={projectsBarRef}
         className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"

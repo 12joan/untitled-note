@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom'
 import useStateWhileMounted from '~/lib/useStateWhileMounted'
 import { awaitRedirectPath } from '~/lib/routes'
 
+import LoadingView from '~/components/LoadingView'
+
 let promisePath = null, fallbackPath = null
 
 const awaitRedirect = ({
@@ -27,7 +29,7 @@ const AwaitRedirectComponent = () => {
 
   return redirectPath
     ? <Navigate to={redirectPath} replace />
-    : 'Loading...'
+    : <LoadingView />
 }
 
 export default awaitRedirect
