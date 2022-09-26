@@ -55,6 +55,7 @@ const OverviewView = () => {
         viewWidth={viewWidth}
         title="All documents"
         futureDocuments={futurePartialDocuments}
+        placeholders={4}
       />
     </div>
   )

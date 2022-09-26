@@ -106,7 +106,7 @@ const Item = ({ as: ItemComponent, buttonProps, contextMenu, dragData, children,
       {...buttonProps}
       {...otherProps}
       children={children}
-      onContextMenu={contextMenu !== undefined && (event => {
+      onContextMenu={contextMenu && (event => {
         event.preventDefault()
       })}
       onDragStart={handleDragStartWithData(dragData)}

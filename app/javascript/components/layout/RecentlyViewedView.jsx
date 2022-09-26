@@ -24,6 +24,7 @@ const RecentlyViewedView = () => {
           viewWidth={viewWidth}
           futureDocuments={futureRecentlyViewedDocuments}
           linkComponent={RecentlyViewedDocumentLink}
+          placeholders={4}
         />
       </ContextProvider>
     </div>
