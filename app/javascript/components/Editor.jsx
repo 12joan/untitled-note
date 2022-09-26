@@ -51,9 +51,13 @@ const Editor = ({ workingDocument, updateDocument }) => {
       json: body => JSON.parse(body),
     }[bodyFormat](workingDocument.body)
 
+    const safeInitialValue = initialValue[0]?.type
+      ? initialValue
+      : emptyDocument
+
     return {
       initialEditor,
-      initialValue: initialValue.length === 0 ? emptyDocument : initialValue,
+      initialValue: safeInitialValue,
     }
   }, [])
 
