@@ -34,6 +34,7 @@
     "@vitejs/plugin-react": "^2.1.0",
     "autoprefixer": "^10.4.8",
     "concurrently": "^7.4.0",
+    "css-has-pseudo": "^4.0.1",
     "postcss": "^8.4.16",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^15.0.0",

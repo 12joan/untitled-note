@@ -4,7 +4,7 @@ import { useGlobalEvent } from '~/lib/globalEvents'
 import { useTimeout } from '~/lib/useTimer'
 import useElementSize from '~/lib/useElementSize'
 
-import CloseIcon from '~/components/icons/CloseIcon'
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
 const AUTO_CLOSE_DURATION = {
   none: null,
@@ -74,7 +74,7 @@ const Toast = ({ title, message, autoClose }) => {
         className="btn rounded-full p-2 apsect-square hover:bg-slate-200/75 dark:hover:bg-slate-700/75 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400"
         onClick={close}
       >
-        <CloseIcon size="1.25em" ariaLabel="Close" />
+        <LargeCloseIcon size="1.25em" ariaLabel="Close" />
       </button>
     </div>
   )

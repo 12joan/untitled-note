@@ -7,7 +7,7 @@ import useNewProject from '~/lib/useNewProject'
 
 import Tooltip from '~/components/Tooltip'
 import Placeholder from '~/components/Placeholder'
-import NewProjectIcon from '~/components/icons/NewProjectIcon'
+import LargePlusIcon from '~/components/icons/LargePlusIcon'
 
 const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref) => {
   const { projectId, futureProjects } = useContext()
@@ -51,7 +51,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
               className="w-12 btn aspect-square flex items-center justify-center p-1 hocus:bg-black/5 dark:hocus:bg-white/5 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
               onClick={openNewProjectModal}
             >
-              <NewProjectIcon size="2em" ariaLabel="New project" />
+              <LargePlusIcon size="2em" ariaLabel="New project" />
             </button>
           </Tooltip>
         </>

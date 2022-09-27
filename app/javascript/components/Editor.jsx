@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -18,16 +18,21 @@ import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
 
 import BackButton from '~/components/BackButton'
+import Tooltip from '~/components/Tooltip'
 import Dropdown from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
+import EditorTags from '~/components/EditorTags'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
+import TagsIcon from '~/components/icons/TagsIcon'
 import DocumentMenuIcon from '~/components/icons/DocumentMenuIcon'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
+  const tagsRef = useRef()
   const tippyContainerRef = useRef()
   const navigate = useNavigate()
   const { projectId } = useContext()
+  const [tagsVisible, setTagsVisible] = useState(false)
 
   useGlobalEvent('document:delete', ({ documentId }) => {
     if (documentId === workingDocument.id) {
@@ -88,6 +93,23 @@ const Editor = ({ workingDocument, updateDocument }) => {
             })}
           />
 
+          {!tagsVisible && (
+            <div onClick={event => event.stopPropagation()}>
+              <Tooltip content="Add tags" placement="bottom">
+                <button
+                  type="button"
+                  className="btn btn-transparent p-2 aspect-square"
+                  onClick={() => {
+                    setTagsVisible(true)
+                    tagsRef.current.focus()
+                  }}
+                >
+                  <TagsIcon size="1.25em" ariaLabel="Add tags" />
+                </button>
+              </Tooltip>
+            </div>
+          )}
+
           <div onClick={event => event.stopPropagation()}>
             <Dropdown items={documentMenu} placement="bottom-end">
               <button type="button" className="btn btn-transparent p-2 aspect-square">
@@ -97,6 +119,14 @@ const Editor = ({ workingDocument, updateDocument }) => {
           </div>
         </div>
       </div>
+
+      <EditorTags
+        ref={tagsRef}
+        workingDocument={workingDocument}
+        updateDocument={updateDocument}
+        visible={tagsVisible}
+        setVisible={setTagsVisible}
+      />
 
       <ContextProvider tippyContainerRef={tippyContainerRef}>
         <Plate

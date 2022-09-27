@@ -6,7 +6,7 @@ import useElementSize from '~/lib/useElementSize'
 import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
-import CloseIcon from '~/components/icons/CloseIcon'
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
@@ -100,7 +100,7 @@ const ProjectView = ({ childView }) => {
                 className="btn btn-transparent rounded-full p-2 aspect-square sticky top-0"
                 onClick={() => setOffcanvasSidebarVisible(false)}
               >
-                <CloseIcon size="1.25em" ariaLabel="Close" />
+                <LargeCloseIcon size="1.25em" ariaLabel="Close" />
               </button>
             </div>
           </ModalPanel>

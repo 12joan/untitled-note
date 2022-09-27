@@ -47,6 +47,8 @@ module.exports = {
       addVariant('hocus', ['&:hover', '&:focus-visible'])
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &'])
       addVariant('group-focus-visible', ['.group:focus-visible &'])
+      addVariant('stretch-focus-visible', '&:has(.stretch-target:focus-visible)')
+      addVariant('stretch-hover', '&:has(.stretch-target:hover)')
       addVariant('children', '& > *')
       ;['data-active', 'data-drag-over'].forEach(dataAttribute => {
         const selector = `[${dataAttribute}=true]`
