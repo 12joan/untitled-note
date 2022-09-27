@@ -5,6 +5,7 @@ import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments'
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
+import TagsStream from '~/lib/streams/TagsStream'
 import useValueChanged from '~/lib/useValueChanged'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { projectPath } from '~/lib/routes'
@@ -19,6 +20,8 @@ const StreamProjectData = ({ projectId, children }) => {
     () => futureProjects.map(projects => projects.find(project => project.id == projectId)),
     [futureProjects, projectId]
   )
+
+  const futureTags = useStream(resolve => TagsStream(projectId).index({}, resolve), [projectId])
 
   const futurePartialDocuments = useStream(resolve => DocumentsStream(projectId).index({
     query: {
@@ -67,6 +70,7 @@ const StreamProjectData = ({ projectId, children }) => {
       projectId={projectId}
       futureProjects={futureProjects}
       futureProject={futureProject}
+      futureTags={futureTags}
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}
       futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}

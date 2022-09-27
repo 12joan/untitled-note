@@ -6,10 +6,6 @@ import useStateWhileMounted from '~/lib/useStateWhileMounted'
 
 const UPLOAD_INTERVAL = 1500
 
-const BEHAVIOUR_INSTANT_UPDATE = 'instantUpdate'
-const BEHAVIOUR_DELAYED_UPDATE = 'delayedUpdate'
-const BEHAVIOUR_UNCONTROLLED = 'uncontrolled'
-
 const globalDataStore = {
   recordsWithMetadata: new Map(),
   subscribers: new Map(),
@@ -26,14 +22,14 @@ const globalDataStore = {
     return this.recordsWithMetadata.get(key).record
   },
 
-  setInitial({ key, record, getRemoteVersion, uploadRecord, uncontrolledAttributes }) {
+  setInitial({ key, record, getRemoteVersion, uploadRecord, attributeBehaviours }) {
     this.recordsWithMetadata.set(key, {
       record,
       localVersion: getRemoteVersion(record),
       getRemoteVersion,
       uploadRecord,
       uploadMutex: new Mutex(),
-      uncontrolledAttributes,
+      attributeBehaviours,
       onUpload: () => {},
       onUploadFailure: () => {},
     })
@@ -113,17 +109,26 @@ const globalDataStore = {
       const uploadingVersion = recordWithMetadata.localVersion
 
       return recordWithMetadata.uploadRecord(recordWithMetadata.record, uploadingVersion).then(
-        updatedRecord => {
+        remoteRecord => {
+          // Reload the local record
+          const { record: localRecord } = this.recordsWithMetadata.get(key)
+
           this.update(
             key,
-            recordWithMetadata.uncontrolledAttributes.reduce((acc, attribute) => ({
-              ...acc,
-              [attribute]: updatedRecord[attribute],
-            }), {}),
+            Object.keys(localRecord).reduce((delta, attribute) => {
+              const { merge = undefined } = recordWithMetadata.attributeBehaviours[attribute] || {}
+
+              return merge
+                ? {
+                  ...delta,
+                  [attribute]: merge(localRecord[attribute], remoteRecord[attribute]),
+                }
+                : delta
+            }, {}),
             { incrementLocalVersion: false }
           )
 
-          recordWithMetadata.onUpload(updatedRecord)
+          recordWithMetadata.onUpload(remoteRecord)
         },
 
         error => recordWithMetadata.onUploadFailure(error)
@@ -155,17 +160,12 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
   const [fsrRecord, setFsrRecord] = useStateWhileMounted(() => FutureServiceResult.pending())
   const [errorDuringUpload, setErrorDuringUpload] = useStateWhileMounted(false)
 
-  const uncontrolledAttributes = useMemo(() => Object.entries(attributeBehaviours)
-    .filter(([, behaviour]) => behaviour === BEHAVIOUR_UNCONTROLLED)
-    .map(([attribute]) => attribute)
-  , [attributeBehaviours])
-
   useEffect(() => {
     if (globalDataStore.has(key) && isUpToDate(getRemoteVersion(globalDataStore.get(key)))) {
       setFsrRecord(FutureServiceResult.success(globalDataStore.get(key)))
     } else {
       fetchRecord(key).then(
-        record => globalDataStore.setInitial({ key, record, getRemoteVersion, uploadRecord, uncontrolledAttributes }),
+        record => globalDataStore.setInitial({ key, record, getRemoteVersion, uploadRecord, attributeBehaviours }),
         error => setFsrRecord(FutureServiceResult.failure(error))
       )
     }
@@ -177,19 +177,6 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
   }, [key])
 
   const updateRecord = delta => {
-    let hasInstantUpdateKeys = false
-
-    Object.keys(delta).forEach(key => {
-      switch (attributeBehaviours[key] || BEHAVIOUR_INSTANT_UPDATE) {
-        case BEHAVIOUR_INSTANT_UPDATE:
-          hasInstantUpdateKeys = true
-          break
-
-          case BEHAVIOUR_UNCONTROLLED:
-            throw new Error(`Cannot update uncontrolled attribute: ${key}`)
-      }
-    })
-
     globalDataStore.update(key, delta, {
       onUpload: () => setErrorDuringUpload(false),
       onUploadFailure: error => {
@@ -198,7 +185,8 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
       },
     })
 
-    if (hasInstantUpdateKeys) {
+    // Check if any updated attribute does not use delayed update
+    if (Object.keys(delta).some(attribute => !attributeBehaviours[attribute]?.delayedUpdate)) {
       globalDataStore.uploadRecord(key, { waitForLock: true })
     }
   }
@@ -207,9 +195,3 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
 }
 
 export default useSynchronisedRecord
-
-export {
-  BEHAVIOUR_INSTANT_UPDATE,
-  BEHAVIOUR_DELAYED_UPDATE,
-  BEHAVIOUR_UNCONTROLLED,
-}

@@ -1,6 +1,6 @@
 import { streamAction } from '~/channels/dataChannel'
 
-const KeywordsStream = projectId => ({
+const TagsStream = projectId => ({
   index(params, callback) {
     return streamAction(
       'Keyword',
@@ -11,4 +11,4 @@ const KeywordsStream = projectId => ({
   },
 })
 
-export default KeywordsStream
+export default TagsStream

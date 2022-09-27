@@ -7,7 +7,16 @@ const tagClassName = 'bg-slate-50 dark:bg-slate-800 rounded-full flex items-cent
 const tagButtonClassName = 'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400 rounded-full flex items-center justify-center'
 
 const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVisible }, ref) => {
-  const [workingDocumentTags, setWorkingDocumentTags] = useState([]) // temporary
+  const tags = workingDocument.keywords
+
+  const hasTag = tagText => tags.some(tag => tag.text === tagText)
+  const addTag = tagText => updateDocument({ keywords: [...tags, { localId: Math.random(), text: tagText }] })
+
+  const removeTag = tag => {
+    const remainingTags = tags.filter(t => t.text !== tag.text)
+    updateDocument({ keywords: remainingTags })
+    return remainingTags
+  }
 
   const inputContainerRef = useRef()
   const inputRef = useRef()
@@ -24,10 +33,12 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
 
   const commitInput = () => {
     const trimmedInput = inputValue.trim()
+
     setInputValue('')
 
-    if (trimmedInput.length > 0) {
-      setWorkingDocumentTags([...workingDocumentTags, trimmedInput])
+    // Cannot add the same tag twice
+    if (trimmedInput.length > 0 && !hasTag(trimmedInput)) {
+      addTag(trimmedInput)
       return true
     }
 
@@ -38,7 +49,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     if (!inputContainerRef.current.contains(event.relatedTarget)) {
       const addedTag = commitInput()
       setInputVisible(false)
-      setVisible(addedTag || workingDocumentTags.length > 0)
+      setVisible(addedTag || tags.length > 0)
     }
   }
 
@@ -46,15 +57,15 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     switch (event.key) {
       case 'Tab':
       case 'Enter':
-        const addedTag = commitInput()
-        if (addedTag) {
+        if (inputValue.length > 0) {
           event.preventDefault()
         }
+        commitInput()
         break
 
       case 'Backspace':
         if (inputValue.length === 0) {
-          setWorkingDocumentTags(workingDocumentTags.slice(0, -1))
+          removeTag(tags[tags.length - 1])
         }
         break
     }
@@ -62,16 +73,23 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
 
   return (
     <div className="narrow mt-3 flex flex-wrap gap-2" style={{ display: visible ? undefined : 'none' }}>
-      {workingDocumentTags.map(tag => (
-        <div key={tag} className={`${tagClassName} stretch-focus-visible:focus-ring stretch-hover:bg-slate-200 dark:stretch-hover:bg-slate-700`}>
-          <button type="button" className="px-3 py-1 stretch-target no-focus-ring">{tag}</button>
+      {tags.map(tag => (
+        <div
+          key={tag.id ?? tag.localId}
+          className={`${tagClassName} stretch-focus-visible:focus-ring stretch-hover:bg-slate-200 dark:stretch-hover:bg-slate-700`}
+        >
+          <button
+            type="button"
+            className="px-3 py-1 stretch-target no-focus-ring"
+            children={tag.text}
+            onClick={() => alert(`You clicked tag with id ${tag.id ?? 'undefined'}`)}
+          />
 
           <button
             type="button"
             className={`${tagButtonClassName} w-6 h-6 -ml-2 mr-1`}
             onClick={() => {
-              const remainingTags = workingDocumentTags.filter(t => t !== tag)
-              setWorkingDocumentTags(remainingTags)
+              const remainingTags = removeTag(tag)
               setVisible(remainingTags.length > 0)
             }}
           >

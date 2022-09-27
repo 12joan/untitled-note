@@ -2,7 +2,7 @@ import React, { useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
-import useSynchronisedRecord, { BEHAVIOUR_DELAYED_UPDATE, BEHAVIOUR_UNCONTROLLED } from '~/lib/synchroniseRecords'
+import useSynchronisedRecord from '~/lib/synchroniseRecords'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { ProjectLink } from '~/lib/routes'
@@ -51,11 +51,17 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
       remote_version: uploadingVersion,
     }),
     attributeBehaviours: {
-      remote_version: BEHAVIOUR_UNCONTROLLED,
-      title: BEHAVIOUR_DELAYED_UPDATE,
-      body: BEHAVIOUR_DELAYED_UPDATE,
-      body_type: BEHAVIOUR_DELAYED_UPDATE,
-      plain_body: BEHAVIOUR_DELAYED_UPDATE,
+      remote_version: { merge: (local, remote) => remote },
+      keywords: {
+        merge: (local, remote) => local.map(localKeyword => localKeyword.id
+          ? localKeyword
+          : remote.find(remoteKeyword => remoteKeyword.text === localKeyword.text)
+        ),
+      },
+      title: { delayedUpdate: true },
+      body: { delayedUpdate: true },
+      body_type: { delayedUpdate: true },
+      plain_body: { delayedUpdate: true },
     },
   })
 

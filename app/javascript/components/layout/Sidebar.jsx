@@ -20,7 +20,7 @@ import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
 
 const Sidebar = ({ onButtonClick = () => {} }) => {
-  const { futurePinnedDocuments, futureRecentlyViewedDocuments } = useContext()
+  const { futurePinnedDocuments, futureRecentlyViewedDocuments, futureTags } = useContext()
 
   const createNewDocument = useNewDocument()
 
@@ -47,11 +47,10 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
           futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, 5))}
         />
 
-        <SectionWithHeading heading="Tags">
-          <Button label="Tag 1" />
-          <Button label="Tag 2" />
-          <Button label="Tag 3" />
-        </SectionWithHeading>
+        <FutureTagsSection
+          heading="Tags"
+          futureTags={futureTags}
+        />
       </div>
     </ContextProvider>
   )
@@ -76,6 +75,19 @@ const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherPr
   return (
     <FutureSectionWithHeading
       futureChildren={futureDocuments.map(documents => documents.map(buttonForDocument))}
+      {...otherProps}
+    />
+  )
+}
+
+const FutureTagsSection = ({ futureTags, ...otherProps }) => {
+  const buttonForTag = tag => (
+    <Button key={tag.id} label={tag.text} />
+  )
+
+  return (
+    <FutureSectionWithHeading
+      futureChildren={futureTags.map(tags => tags.map(buttonForTag))}
       {...otherProps}
     />
   )
