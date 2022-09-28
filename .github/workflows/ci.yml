@@ -1,4 +1,4 @@
-name: Deploy to staging
+name: Continuous Integration
 
 on: push
 
@@ -20,7 +20,7 @@ jobs:
 
   deploy_staging:
     needs: test
-    if: ${{ github.ref == 'refs/heads/feature/redesign' }} # TODO: Change back to ref/heads/main
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     steps:
