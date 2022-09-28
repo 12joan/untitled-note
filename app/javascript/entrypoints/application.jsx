@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import cssHasPseudo from 'css-has-pseudo/browser'
 
@@ -30,9 +30,8 @@ if (!isTouchDevice) {
   }, 100)
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <BrowserRouter children={<App />} />,
-    document.querySelector('#application'),
+document.addEventListener('DOMContentLoaded', () =>
+  createRoot(document.querySelector('#application')).render(
+    <BrowserRouter children={<App />} />
   )
-})
+)
