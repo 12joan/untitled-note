@@ -13,8 +13,7 @@
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
-    "@udecode/plate-core": "^17.0.3",
-    "@udecode/plate-headless": "^17.0.3",
+    "@udecode/plate-headless": "^18.1.0",
     "async-mutex": "^0.4.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -25,7 +24,7 @@
     "slate": "^0.82.1",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.82.2"
+    "slate-react": "^0.81.0"
   },
   "version": "0.1.0",
   "devDependencies": {

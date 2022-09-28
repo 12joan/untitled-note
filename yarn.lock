@@ -602,7 +602,7 @@
     "@udecode/plate-floating" "17.0.3"
     downshift "^6.1.7"
 
-"@udecode/plate-core@17.0.3", "@udecode/plate-core@^17.0.3":
+"@udecode/plate-core@17.0.3":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-17.0.3.tgz#13eb540dce9f2e92ec66f058d52890de5fb4544e"
   integrity sha512-D5UTsi7PWXhVwuIjIQa5TcrsPLrR2ip6QHbBYfsMQang+L2FtZNeh8u0KDeNwGuVzj3Gu01pqcUfObzYaXkyzw==
@@ -646,10 +646,10 @@
   dependencies:
     "@udecode/plate-core" "17.0.3"
 
-"@udecode/plate-headless@^17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-17.0.3.tgz#6ea93346054d903e274b25ec71efc8b060677c01"
-  integrity sha512-kHU+aICDbuEgiBj7VfTtZ5kJXNFywbb+slI75o2V1n/9TpdAXKLRLzlxsvJpvG1DTXimk5Nj/6OJpUds9xIAyQ==
+"@udecode/plate-headless@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.1.0.tgz#ddd68b88edaddbce7d352f684770f9588e354d87"
+  integrity sha512-332GEB0YHDmYXYR6NDkCbnAsPJ6zMi71tL/HSAPquBheh8an51ImkYke1ZW6JMN0IKhmjK0vEySC9B6JcFVMKw==
   dependencies:
     "@udecode/plate-alignment" "17.0.3"
     "@udecode/plate-autoformat" "17.0.3"
@@ -671,7 +671,7 @@
     "@udecode/plate-indent-list" "17.0.3"
     "@udecode/plate-kbd" "17.0.3"
     "@udecode/plate-line-height" "17.0.3"
-    "@udecode/plate-link" "17.0.3"
+    "@udecode/plate-link" "18.1.0"
     "@udecode/plate-list" "17.0.3"
     "@udecode/plate-media" "17.0.3"
     "@udecode/plate-mention" "17.0.3"
@@ -684,7 +684,7 @@
     "@udecode/plate-serializer-csv" "17.0.3"
     "@udecode/plate-serializer-docx" "17.0.3"
     "@udecode/plate-serializer-html" "17.0.3"
-    "@udecode/plate-serializer-md" "17.0.3"
+    "@udecode/plate-serializer-md" "18.1.0"
     "@udecode/plate-table" "17.0.3"
     "@udecode/plate-trailing-block" "17.0.3"
 
@@ -732,10 +732,10 @@
   dependencies:
     "@udecode/plate-core" "17.0.3"
 
-"@udecode/plate-link@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-17.0.3.tgz#ebb4a553df8114455f3fdbdd3660b56684cb71af"
-  integrity sha512-h4llrIp1KgIiu/M6ebkBNZh0P7jLIAXqxbzOTYDOfmETrupDXjGpLop849haMCXelPKHyM0Tf2Phk9Me9VZNIw==
+"@udecode/plate-link@18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-18.1.0.tgz#354a386a233c5b3d2e9e37a9f9d8a4584e0a3ebd"
+  integrity sha512-InpEH9ypGOaK7sHkZ5YHxbnBwVb+ObHWq4mQm/2d3wg0CNbRYzls0lPS2bk+jIgotuszs/s0EPK6P3/zKhyfgA==
   dependencies:
     "@udecode/plate-button" "17.0.3"
     "@udecode/plate-core" "17.0.3"
@@ -842,16 +842,16 @@
     "@udecode/plate-core" "17.0.3"
     html-entities "^2.3.3"
 
-"@udecode/plate-serializer-md@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-17.0.3.tgz#0a0c33cbb7dce22e7679166916620db87b44ddde"
-  integrity sha512-Ase5l6gb9pVun05CRBBaU3JxsyBbmRRVaEh2t3BFlmIj8S9OA/ekqVP03wOq7gnIrdpID1Bu74l2zwtS37iCqg==
+"@udecode/plate-serializer-md@18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-18.1.0.tgz#d0bb73ea473c5380055ffb13cb63b9ef3a1859c4"
+  integrity sha512-Pd1pWLc9io/GpZGXlJjH7U0OuwzKlSOMDQyb1UEMrb06LXMme+wU6U9ij/FT8Di1ft8Dbd+Ocbk2sHhjNRbnJA==
   dependencies:
     "@udecode/plate-block-quote" "17.0.3"
     "@udecode/plate-code-block" "17.0.3"
     "@udecode/plate-core" "17.0.3"
     "@udecode/plate-heading" "17.0.3"
-    "@udecode/plate-link" "17.0.3"
+    "@udecode/plate-link" "18.1.0"
     "@udecode/plate-list" "17.0.3"
     "@udecode/plate-paragraph" "17.0.3"
     remark-parse "^9.0.0"
@@ -881,9 +881,9 @@
     react-tracked "^1.7.9"
 
 "@viselect/vanilla@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@viselect/vanilla/-/vanilla-3.1.0.tgz#66ef6eaa383a053c24bd2f6d8db1691f5b32e6bb"
-  integrity sha512-B0cvgsHandCXXsqp3O09HKR6buJa6kGpzu/Y9gQOiKcE26mbfRlZIGKBcYEdOELmRa+QrzG6ydegjNET/htsGg==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@viselect/vanilla/-/vanilla-3.1.1.tgz#e63ef3529f819cc83e8c1aea6b3ab9936d550f76"
+  integrity sha512-aS1UF6WkV3TvO5vqg2uQk8WRI36b2SAtfozVrxtfVI1WTuaOG0uYxvdXTmIYwfki6fFF4qQpkiQcg8+NqpJA8Q==
 
 "@vitejs/plugin-react@^2.1.0":
   version "2.1.0"
@@ -1209,9 +1209,9 @@ dlv@^1.1.3:
   integrity sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==
 
 downshift@^6.1.7:
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-6.1.11.tgz#bb570448c26e67df9d15da6ed4e3b0af6a44ddd5"
-  integrity sha512-pBI5zYIv5o2zzjfcQZV8R2LDwOowopuRoNXrXfVMHP79l64JZQ3kCW4EDwaFk8abV6QnlZ9GwNnE3rDQ8d440Q==
+  version "6.1.12"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-6.1.12.tgz#f14476b41a6f6fd080c340bad1ddf449f7143f6f"
+  integrity sha512-7XB/iaSJVS4T8wGFT3WRXmSF1UlBHAA40DshZtkrIscIN+VC+Lh363skLxFTvJwtNgHxAMDGEHT4xsyQFWL+UA==
   dependencies:
     "@babel/runtime" "^7.14.8"
     compute-scroll-into-view "^1.0.17"
@@ -1562,9 +1562,9 @@ is-plain-object@^5.0.0:
   integrity sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==
 
 jotai@^1.7.2:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.8.3.tgz#06595dd66bcf64dd370386eee9c7b386c2ccb2e7"
-  integrity sha512-bNAs/DMD6BEB4xxVku33CI+ZIFyCWG82Ms6JnvYunEvGCnviTTDBl+m0HKgijoHmcNM3fxQ5MARdG+wwokNxog==
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.8.4.tgz#e188bff3cc790c758d25646f6f5daf9854c98eef"
+  integrity sha512-bkHDHNxm7bU4+bJL4z96fTlJYN34UDRTu3ghEajJrDepayON9YEaxPrXr7xhLnIRntoFC6eDYYhMNA/ilbj2RQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -2283,10 +2283,10 @@ slate-hyperscript@^0.77.0:
   dependencies:
     is-plain-object "^5.0.0"
 
-slate-react@^0.82.2:
-  version "0.82.2"
-  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.82.2.tgz#4344ef392e3e51e5cd7c3272d3e5d61483c41823"
-  integrity sha512-lNmSqqNOKQJG1i3Wx4MkggWr6dLhQ43n4exPf5NLmKVBHPBuQSRNaWhAAKm6HOEC36Q6xBfkVONIQWi3GSyIEQ==
+slate-react@^0.81.0:
+  version "0.81.0"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.81.0.tgz#248eb688ce01f23680ce2554625fd60676614962"
+  integrity sha512-bwryad4EvOmc7EFKb8aGg9DWNDh3KvToaggGieIgGTTbHJYHc9ADFC3A87Ittlpd5XUVopR0MpChQ3g3ODyvqw==
   dependencies:
     "@types/is-hotkey" "^0.1.1"
     "@types/lodash" "^4.14.149"
