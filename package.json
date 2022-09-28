@@ -11,7 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.2",
     "@popperjs/core": "^2.11.6",
-    "@rails/actioncable": "^6.1.7",
+    "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
     "@udecode/plate-core": "^17.0.3",
     "@udecode/plate-headless": "^17.0.3",
