@@ -19,7 +19,7 @@ const RecentlyViewedView = () => {
 
       <h1 className="text-3xl font-medium select-none mb-5">Recently viewed</h1>
 
-      <ContextProvider linkOriginator="recentlyViewed">
+      <ContextProvider linkOriginator="Recently viewed">
         <FutureDocumentIndex
           viewWidth={viewWidth}
           futureDocuments={futureRecentlyViewedDocuments}

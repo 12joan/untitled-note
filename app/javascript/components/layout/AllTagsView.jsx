@@ -18,7 +18,7 @@ const AllTagsView = () => {
 
       <h1 className="text-3xl font-medium select-none mb-5">All tags</h1>
 
-      <ContextProvider linkOriginator="allTags">
+      <ContextProvider linkOriginator="All tags">
         <FutureTagIndex
           viewWidth={viewWidth}
           futureTags={futureTags}

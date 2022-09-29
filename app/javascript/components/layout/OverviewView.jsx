@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import {
   EditProjectLink,
   RecentlyViewedLink,
@@ -40,36 +40,38 @@ const OverviewView = () => {
         </h1>
       </PopOutLink>
 
-      <PinnedDragTarget>
+      <ContextProvider linkOriginator="Overview">
+        <PinnedDragTarget>
+          <FutureDocumentIndex
+            viewWidth={viewWidth}
+            title="Pinned documents"
+            futureDocuments={futurePinnedDocuments}
+          />
+        </PinnedDragTarget>
+
         <FutureDocumentIndex
           viewWidth={viewWidth}
-          title="Pinned documents"
-          futureDocuments={futurePinnedDocuments}
+          title="Recently viewed"
+          showAllLink={RecentlyViewedLink}
+          futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS))}
+          linkComponent={RecentlyViewedDocumentLink}
         />
-      </PinnedDragTarget>
 
-      <FutureDocumentIndex
-        viewWidth={viewWidth}
-        title="Recently viewed"
-        showAllLink={RecentlyViewedLink}
-        futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS))}
-        linkComponent={RecentlyViewedDocumentLink}
-      />
+        <FutureTagIndex
+          viewWidth={viewWidth}
+          title="Tags"
+          showAllLink={TagsLink}
+          futureTags={futureTags.map(xs => xs.slice(0, TOP_N_TAGS))}
+        />
 
-      <FutureTagIndex
-        viewWidth={viewWidth}
-        title="Tags"
-        showAllLink={TagsLink}
-        futureTags={futureTags.map(xs => xs.slice(0, TOP_N_TAGS))}
-      />
-
-      <FutureDocumentIndex
-        viewWidth={viewWidth}
-        title="All documents"
-        futureDocuments={futurePartialDocuments}
-        placeholders={4}
-        ifEmpty={<NoDocumentsView />}
-      />
+        <FutureDocumentIndex
+          viewWidth={viewWidth}
+          title="All documents"
+          futureDocuments={futurePartialDocuments}
+          placeholders={4}
+          ifEmpty={<NoDocumentsView />}
+        />
+      </ContextProvider>
     </div>
   )
 }

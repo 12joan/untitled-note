@@ -1,40 +1,28 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 
-import {
-  OverviewLink,
-  RecentlyViewedLink,
-  TagsLink,
-} from '~/lib/routes'
+import { OverviewLink } from '~/lib/routes'
 
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon'
 
 const BackButton = ({ className: userClassName, ...otherProps }) => {
   const { state } = useLocation()
+  const { linkOriginator = undefined } = state || {}
 
-  const { label, as: Link } = {
-    DEFAULT: {
-      label: 'Overview',
-      as: OverviewLink,
-    },
-    recentlyViewed: {
-      label: 'Recently viewed',
-      as: RecentlyViewedLink,
-    },
-    allTags: {
-      label: 'All tags',
-      as: TagsLink,
-    },
-  }[state?.linkOriginator ?? 'DEFAULT']
+  const label = linkOriginator ?? 'Overview'
 
-  const className = `btn btn-link flex items-center gap-1 font-medium ${userClassName}`
-
-  return (
-    <Link className={className} {...otherProps}>
+  const linkProps = {
+    ...otherProps,
+    className: `btn btn-link flex items-center gap-1 font-medium ${userClassName}`,
+    children: <>
       <CaretLeftIcon noAriaLabel />
       {label}
-    </Link>
-  )
+    </>,
+  }
+
+  return linkOriginator
+    ? <button type="button" onClick={() => window.history.back()} {...linkProps} />
+    : <OverviewLink preventScrollReset={false} {...linkProps} />
 }
 
 export default BackButton
