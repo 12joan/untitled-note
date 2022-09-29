@@ -34,9 +34,9 @@ const openModal = (Component, componentProps, onConfirm) => {
 const Modal = ({ children, onClose }) => {
   return (
     <ModalRoot open={true} onClose={onClose}>
-      <div className="fixed inset-0 flex p-5 overflow-y-auto">
+      <div className="fixed inset-0 flex p-5 overflow-y-auto bg-black/25 dark:bg-black/50">
         <ModalPanel
-          className="m-auto bg-slate-100/75 backdrop-blur-xl shadow-dialog rounded-2xl p-5 w-full max-w-md dark:bg-slate-800/75"
+          className="m-auto bg-slate-100/90 backdrop-blur-xl shadow-dialog rounded-2xl p-5 w-full max-w-md dark:bg-slate-800/90"
           onClick={event => event.stopPropagation()}
           children={children}
         />
