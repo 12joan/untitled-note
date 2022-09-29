@@ -39,7 +39,11 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
   const isFromRecentlyViewed = searchParams.has('recently_viewed')
   const api = useMemo(() => DocumentsAPI(projectId), [projectId])
 
-  useEffect(() => !isFromRecentlyViewed && documentWasViewed(documentId), [isFromRecentlyViewed, documentId])
+  useEffect(() => {
+    if (!isFromRecentlyViewed) {
+      documentWasViewed(documentId)
+    }
+  }, [isFromRecentlyViewed, documentId])
 
   const fsrSynchronisedRecord = useSynchronisedRecord({
     key: `document-${documentId}`,
