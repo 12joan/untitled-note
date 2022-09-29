@@ -32,6 +32,10 @@ const routesComponent = (
             <ProjectView childView={{ type: 'recentlyViewed', key: 'recentlyViewed', props: {} }} />
           )} />
 
+          <Route path="tags/:tagId" element={forwardParams(({ tagId }) => (
+            <ProjectView childView={{ type: 'showTag', key: `tags/${tagId}`, props: { tagId: parseInt(tagId) } }} />
+          ))} />
+
           <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
             <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId: parseInt(documentId) } }} />
           ))} />
@@ -45,14 +49,14 @@ const routesComponent = (
   </Routes>
 )
 
-const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, ...otherProps }, ref) => {
+const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, tagId, ...otherProps }, ref) => {
   const { projectId: currentProject, linkOriginator } = useContext()
   const projectId = overrideProjectId ?? currentProject
 
   return (
     <Link
       ref={ref}
-      to={pathFunc(projectId, documentId)}
+      to={pathFunc(projectId, documentId ?? tagId)}
       state={{ linkOriginator }}
       {...otherProps}
     />
@@ -63,16 +67,18 @@ const awaitRedirectPath = projectId => projectId ? `/projects/${projectId}/await
 const overviewPath = projectId => `/projects/${projectId}/overview`
 const projectPath = overviewPath
 const editProjectPath = projectId => `/projects/${projectId}/edit`
+const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
+const tagPath = (projectId, tagId) => `/projects/${projectId}/tags/${tagId}`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recently_viewed`
-const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
 
 const OverviewLink = makeLinkComponent(overviewPath)
 const ProjectLink = makeLinkComponent(projectPath)
 const EditProjectLink = makeLinkComponent(editProjectPath)
+const RecentlyViewedLink = makeLinkComponent(recentlyViewedPath)
+const TagLink = makeLinkComponent(tagPath)
 const DocumentLink = makeLinkComponent(documentPath)
 const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
-const RecentlyViewedLink = makeLinkComponent(recentlyViewedPath)
 
 export {
   routesComponent,
@@ -80,13 +86,15 @@ export {
   projectPath,
   overviewPath,
   editProjectPath,
+  recentlyViewedPath,
+  tagPath,
   documentPath,
   recentlyViewedDocumentPath,
-  recentlyViewedPath,
   ProjectLink,
   OverviewLink,
   EditProjectLink,
+  RecentlyViewedLink,
+  TagLink,
   DocumentLink,
   RecentlyViewedDocumentLink,
-  RecentlyViewedLink,
 }

@@ -7,6 +7,7 @@ import useElementSize from '~/lib/useElementSize'
 import PopOutLink from '~/components/PopOutLink'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import FutureDocumentIndex from '~/components/FutureDocumentIndex'
+import FutureTagIndex from '~/components/FutureTagIndex'
 import PinnedDragTarget from '~/components/PinnedDragTarget'
 import NoDocumentsView from '~/components/NoDocumentsView'
 
@@ -19,6 +20,7 @@ const OverviewView = () => {
     futurePartialDocuments,
     futurePinnedDocuments,
     futureRecentlyViewedDocuments,
+    futureTags,
   } = useContext()
 
   return (
@@ -45,12 +47,11 @@ const OverviewView = () => {
         linkComponent={RecentlyViewedDocumentLink}
       />
 
-      {/*<Section
+      <FutureTagIndex
+        viewWidth={viewWidth}
         title="Tags"
-        cardsPerRow={cardsPerRow}
-        showAllButton={true}
-        items={['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8']}
-      />*/}
+        futureTags={futureTags}
+      />
 
       <FutureDocumentIndex
         viewWidth={viewWidth}

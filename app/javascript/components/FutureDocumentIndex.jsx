@@ -24,6 +24,7 @@ const FutureDocumentIndex = ({ futureDocuments, linkComponent = DocumentLink, ..
   return (
     <FutureItemIndex
       futureItems={futureDocuments.map(xs => xs.map(itemForDocument))}
+      cardPreviewHeight="40px" // 2 lines
       {...otherProps}
     />
   )

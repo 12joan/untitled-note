@@ -13,6 +13,7 @@ import Sidebar from '~/components/layout/Sidebar'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
 import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
+import TagDocumentsView from '~/components/layout/TagDocumentsView'
 import EditorView from '~/components/layout/EditorView'
 
 const ProjectView = ({ childView }) => {
@@ -53,6 +54,10 @@ const ProjectView = ({ childView }) => {
     },
     recentlyViewed: {
       ChildView: RecentlyViewedView,
+      centreView: false,
+    },
+    showTag: {
+      ChildView: TagDocumentsView,
       centreView: false,
     },
     editor: {

@@ -6,6 +6,7 @@ import {
   DocumentLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
+  TagLink,
 } from '~/lib/routes'
 import { makeDocumentDragData, handleDragStartWithData } from '~/lib/dragData'
 import useNewDocument from '~/lib/useNewDocument'
@@ -82,7 +83,13 @@ const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherPr
 
 const FutureTagsSection = ({ futureTags, ...otherProps }) => {
   const buttonForTag = tag => (
-    <Button key={tag.id} label={tag.text} />
+    <Button
+      key={tag.id}
+      as={TagLink}
+      tagId={tag.id}
+      nav
+      label={tag.text}
+    />
   )
 
   return (

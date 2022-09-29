@@ -34,23 +34,23 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, ...otherProp
 
       {(items.length === 0 && ifEmpty)
         ? ifEmpty
-        : <Component items={showAllLink ? items.slice(0, limit) : items} />
+        : <Component items={showAllLink ? items.slice(0, limit) : items} {...otherProps} />
       }
     </section>
   )
 }
 
-const CardIndex = ({ items }) => {
+const CardIndex = ({ items, cardPreviewHeight }) => {
   return (
     <div className="flex flex-wrap gap-5">
       {items.map(item => (
-        <CardItem key={item.key} item={item} />
+        <CardItem key={item.key} item={item} cardPreviewHeight={cardPreviewHeight} />
       ))}
     </div>
   )
 }
 
-const ListIndex = ({ items }) => {
+const ListIndex = ({ items, cardPreviewHeight }) => {
   return (
     <div className="rounded-lg border dark:border-transparent divide-y">
       {items.map(item => (
@@ -60,7 +60,7 @@ const ListIndex = ({ items }) => {
   )
 }
 
-const CardItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
+const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, ...otherProps }) => {
   return (
     <Item
       className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent overflow-wrap-break-word"
@@ -69,7 +69,7 @@ const CardItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
     >
       <strong className="block text-lg font-medium" children={label} />
 
-      <p className="text-sm line-clamp-2 text-slate-500 dark:text-slate-400 h-[40px]">
+      <p className="text-sm line-clamp-2 text-slate-500 dark:text-slate-400" style={{ height: cardPreviewHeight }}>
         {preview}
       </p>
     </Item>

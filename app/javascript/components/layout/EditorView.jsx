@@ -95,7 +95,7 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
         }
 
       return (
-        <div className="mx-auto w-full max-w-screen-sm space-y-3">
+        <div className="narrow space-y-3">
           <h1 className="text-3xl font-medium">{heading}</h1>
           <p className="text-lg font-light">{explanation}</p>
           <p><ProjectLink className="btn btn-link">Go back</ProjectLink></p>
