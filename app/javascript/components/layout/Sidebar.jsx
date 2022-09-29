@@ -6,10 +6,15 @@ import {
   DocumentLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
+  TagsLink,
   TagLink,
 } from '~/lib/routes'
 import { makeDocumentDragData, handleDragStartWithData } from '~/lib/dragData'
 import useNewDocument from '~/lib/useNewDocument'
+import {
+  TOP_N_RECENTLY_VIEWED_DOCUMENTS,
+  TOP_N_TAGS,
+} from '~/lib/config'
 
 import PinnedDragTarget from '~/components/PinnedDragTarget'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -45,12 +50,13 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
           as={RecentlyViewedDocumentLink}
           heading="Recently viewed"
           headingLink={RecentlyViewedLink}
-          futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, 5))}
+          futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS))}
         />
 
         <FutureTagsSection
           heading="Tags"
-          futureTags={futureTags}
+          headingLink={TagsLink}
+          futureTags={futureTags.map(xs => xs.slice(0, TOP_N_TAGS))}
         />
       </div>
     </ContextProvider>

@@ -14,6 +14,7 @@ import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
 import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
 import TagDocumentsView from '~/components/layout/TagDocumentsView'
+import AllTagsView from '~/components/layout/AllTagsView'
 import EditorView from '~/components/layout/EditorView'
 
 const ProjectView = ({ childView }) => {
@@ -58,6 +59,10 @@ const ProjectView = ({ childView }) => {
     },
     showTag: {
       ChildView: TagDocumentsView,
+      centreView: false,
+    },
+    allTags: {
+      ChildView: AllTagsView,
       centreView: false,
     },
     editor: {

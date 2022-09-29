@@ -1,7 +1,11 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { OverviewLink, RecentlyViewedLink } from '~/lib/routes'
+import {
+  OverviewLink,
+  RecentlyViewedLink,
+  TagsLink,
+} from '~/lib/routes'
 
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon'
 
@@ -16,6 +20,10 @@ const BackButton = ({ className: userClassName, ...otherProps }) => {
     recentlyViewed: {
       label: 'Recently viewed',
       as: RecentlyViewedLink,
+    },
+    allTags: {
+      label: 'All tags',
+      as: TagsLink,
     },
   }[state?.linkOriginator ?? 'DEFAULT']
 

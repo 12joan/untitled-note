@@ -1,8 +1,17 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef } from 'react'
 
 import { useContext } from '~/lib/context'
-import { EditProjectLink, RecentlyViewedLink, RecentlyViewedDocumentLink } from '~/lib/routes'
+import {
+  EditProjectLink,
+  RecentlyViewedLink,
+  RecentlyViewedDocumentLink,
+  TagsLink,
+} from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
+import {
+  TOP_N_RECENTLY_VIEWED_DOCUMENTS,
+  TOP_N_TAGS,
+} from '~/lib/config'
 
 import PopOutLink from '~/components/PopOutLink'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -43,14 +52,15 @@ const OverviewView = () => {
         viewWidth={viewWidth}
         title="Recently viewed"
         showAllLink={RecentlyViewedLink}
-        futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, 5))}
+        futureDocuments={futureRecentlyViewedDocuments.map(xs => xs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS))}
         linkComponent={RecentlyViewedDocumentLink}
       />
 
       <FutureTagIndex
         viewWidth={viewWidth}
         title="Tags"
-        futureTags={futureTags}
+        showAllLink={TagsLink}
+        futureTags={futureTags.map(xs => xs.slice(0, TOP_N_TAGS))}
       />
 
       <FutureDocumentIndex
