@@ -49,6 +49,10 @@ Rails.application.reloader.to_prepare do
         tag.documents.each { |document| broadcast_for document }
       },
 
+      DocumentsTag: ->(documents_tag) {
+        broadcast_for documents_tag.tag
+      },
+
       Project: ->(project) {
         broadcast "Project#index"
       },
