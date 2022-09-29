@@ -1,5 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
+import { TagLink } from '~/lib/routes'
+
 import CloseIcon from '~/components/icons/CloseIcon'
 import PlusIcon from '~/components/icons/PlusIcon'
 
@@ -71,6 +73,10 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     }
   }
 
+  const linkForTag = ({ tag: { id, text }, ...otherProps }) => id
+    ? <TagLink tagId={id} children={text} {...otherProps} />
+    : <span tabIndex="0" children={text} {...otherProps} />
+
   return (
     <div className="narrow mt-3 flex flex-wrap gap-2" style={{ display: visible ? undefined : 'none' }}>
       {tags.map(tag => (
@@ -78,12 +84,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
           key={tag.id ?? tag.localId}
           className={`${tagClassName} stretch-focus-visible:focus-ring stretch-hover:bg-slate-200 dark:stretch-hover:bg-slate-700`}
         >
-          <button
-            type="button"
-            className="px-3 py-1 stretch-target no-focus-ring"
-            children={tag.text}
-            onClick={() => alert(`You clicked tag with id ${tag.id ?? 'undefined'}`)}
-          />
+          {linkForTag({ tag, className: 'px-3 py-1 stretch-target no-focus-ring' })}
 
           <button
             type="button"
