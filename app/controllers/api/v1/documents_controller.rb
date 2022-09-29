@@ -40,8 +40,8 @@ module API
         params.require(:document).permit(:title, :body, :body_type, :plain_body, :blank, :remote_version, :pinned_at)
       end
 
-      def keywords_attributes
-        params.require(:document).permit(keywords_attributes: [:text]).fetch(:keywords_attributes, nil)
+      def tags_attributes
+        params.require(:document).permit(tags_attributes: [:text]).fetch(:tags_attributes, nil)
       end
 
       def save_document
@@ -49,8 +49,8 @@ module API
           @document.extract_definitive_mentions(document_params[:body])
         end
 
-        unless keywords_attributes.nil?
-          @document.keywords_attributes = keywords_attributes
+        unless tags_attributes.nil?
+          @document.tags_attributes = tags_attributes
         end
 
         if @document.save

@@ -12,8 +12,8 @@ FactoryBot.define do
     text { 'An alias' }
   end
 
-  factory :keyword do
+  factory :tag do
     project
-    sequence(:text) { |n| "Keyword #{n}" }
+    sequence(:text) { |n| "Tag #{n}" }
   end
 end

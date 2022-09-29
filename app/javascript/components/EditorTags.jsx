@@ -7,14 +7,14 @@ const tagClassName = 'bg-slate-50 dark:bg-slate-800 rounded-full flex items-cent
 const tagButtonClassName = 'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400 rounded-full flex items-center justify-center'
 
 const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVisible }, ref) => {
-  const tags = workingDocument.keywords
+  const tags = workingDocument.tags
 
   const hasTag = tagText => tags.some(tag => tag.text === tagText)
-  const addTag = tagText => updateDocument({ keywords: [...tags, { localId: Math.random(), text: tagText }] })
+  const addTag = tagText => updateDocument({ tags: [...tags, { localId: Math.random(), text: tagText }] })
 
   const removeTag = tag => {
     const remainingTags = tags.filter(t => t.text !== tag.text)
-    updateDocument({ keywords: remainingTags })
+    updateDocument({ tags: remainingTags })
     return remainingTags
   }
 

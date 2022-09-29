@@ -3,8 +3,8 @@ class DocumentsAPI < ApplicationAPI
     set_project
 
     documents =
-      if keyword_id = params[:keyword_id]
-        @project.keywords.find(keyword_id).documents
+      if tag_id = params[:tag_id]
+        @project.tags.find(tag_id).documents
       else
         @project.documents
       end

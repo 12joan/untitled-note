@@ -1,15 +1,15 @@
 class Document < ApplicationRecord
   belongs_to :project
   has_many :aliases, dependent: :destroy
-  has_many :documents_keywords, dependent: :destroy
-  has_many :keywords, through: :documents_keywords
-  accepts_nested_attributes_for :keywords
+  has_many :documents_tags, dependent: :destroy
+  has_many :tags, through: :documents_tags
+  accepts_nested_attributes_for :tags
   serialize :definitive_mentions, Array
 
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title safe_title preview body body_type keywords blank remote_version created_at updated_at pinned_at])
+  include Queryable.permit(*%i[id title safe_title preview body body_type tags blank remote_version created_at updated_at pinned_at])
   include Listenable
 
   # include Elasticsearch::Model
@@ -49,23 +49,23 @@ class Document < ApplicationRecord
       .flat_map { [_1, _1.pluralize] }.uniq
   end
 
-  def keywords_attributes=(keywords_attributes)
-    documents_keywords.each do |documents_keyword|
-      if keywords_attributes.none? { |keyword_attributes| keyword_attributes[:text] == documents_keyword.keyword.text }
-        documents_keyword.destroy
+  def tags_attributes=(tags_attributes)
+    documents_tags.each do |documents_tag|
+      if tags_attributes.none? { |tag_attributes| tag_attributes[:text] == documents_tag.tag.text }
+        documents_tag.destroy
       end
     end
 
-    keywords_attributes.uniq { _1[:text] }.each do |keyword_attributes|
-      keyword = Keyword.find_or_initialize_by(
+    tags_attributes.uniq { _1[:text] }.each do |tag_attributes|
+      tag = Tag.find_or_initialize_by(
         project: project,
-        text: keyword_attributes[:text]
+        text: tag_attributes[:text]
       )
 
-      if keyword.new_record?
-        keywords.build(text: keyword.text, project: project)
-      elsif keywords.find_by(text: keyword.text).nil?
-        keywords << keyword
+      if tag.new_record?
+        tags.build(text: tag.text, project: project)
+      elsif tags.find_by(text: tag.text).nil?
+        tags << tag
       end
     end
   end

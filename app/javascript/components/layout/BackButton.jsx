@@ -6,9 +6,9 @@ import { useContext } from '~/lib/context'
 import NavLink from '~/components/NavLink'
 
 const BackButton = props => {
-  const { keywordId, documentId, keyword } = useContext()
+  const { tagId, documentId, tag } = useContext()
 
-  const backButtonConfig = getBackButtonConfig({ keywordId, documentId, keyword })
+  const backButtonConfig = getBackButtonConfig({ tagId, documentId, tag })
     
   if (backButtonConfig === null) {
     return null
@@ -24,28 +24,28 @@ const BackButton = props => {
   )
 }
 
-const getBackButtonConfig = ({ keywordId, documentId, keyword }) => {
+const getBackButtonConfig = ({ tagId, documentId, tag }) => {
   const allDocumentsConfig = {
     label: 'All Documents',
-    params: { keywordId: undefined, documentId: undefined },
+    params: { tagId: undefined, documentId: undefined },
   }
 
-  const keywordConfig = {
-    label: keyword?.text,
-    params: { keywordId: keywordId, documentId: undefined },
+  const tagConfig = {
+    label: tag?.text,
+    params: { tagId: tagId, documentId: undefined },
   }
 
   if (documentId === undefined) {
-    if (keywordId === undefined) {
+    if (tagId === undefined) {
       return null
     } else {
       return allDocumentsConfig
     }
   } else {
-    if (keywordId === undefined) {
+    if (tagId === undefined) {
       return allDocumentsConfig
     } else {
-      return keywordConfig
+      return tagConfig
     }
   }
 }

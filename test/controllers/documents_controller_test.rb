@@ -8,12 +8,12 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create document' do
     assert_difference('Document.count') do
-      assert_difference('Keyword.count', 2) do
+      assert_difference('Tag.count', 2) do
         post api_v1_project_documents_url(@project), params: {
           document: {
             title: 'New title',
             body: '<div>Hello world</div>',
-            keywords_attributes: [
+            tags_attributes: [
               { text: 'Hello' },
               { text: 'World' },
             ],
@@ -27,16 +27,16 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update document' do
-    existing_keyword = create(:keyword, project: @project)
+    existing_tag = create(:tag, project: @project)
 
-    assert_difference('Keyword.count', 1) do
+    assert_difference('Tag.count', 1) do
       patch api_v1_project_document_url(@project, @document), params: {
         document: {
           title: 'New title',
           body: '<div>Hello world</div>',
-          keywords_attributes: [
+          tags_attributes: [
             { text: 'Hello' },
-            { text: existing_keyword.text },
+            { text: existing_tag.text },
           ],
         },
       }
@@ -46,21 +46,21 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'New title', Document.find(@document.id).title
   end
 
-  test 'can remove last keyword of document' do
-    assert_difference('Keyword.count', 1) do
+  test 'can remove last tag of document' do
+    assert_difference('Tag.count', 1) do
       patch api_v1_project_document_url(@project, @document), params: {
         document: {
-          keywords_attributes: [
+          tags_attributes: [
             { text: 'Hello' },
           ],
         },
       }
     end
 
-    assert_difference('Keyword.count', -1) do
+    assert_difference('Tag.count', -1) do
       patch api_v1_project_document_url(@project, @document), params: {
         document: {
-          keywords_attributes: [],
+          tags_attributes: [],
         },
       }
     end

@@ -32,7 +32,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
   const tippyContainerRef = useRef()
   const navigate = useNavigate()
   const { projectId } = useContext()
-  const [tagsVisible, setTagsVisible] = useState(workingDocument.keywords.length > 0)
+  const [tagsVisible, setTagsVisible] = useState(workingDocument.tags.length > 0)
 
   useGlobalEvent('document:delete', ({ documentId }) => {
     if (documentId === workingDocument.id) {

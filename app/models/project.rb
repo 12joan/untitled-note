@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
   has_many :documents, dependent: :destroy
-  has_many :keywords, dependent: :destroy
+  has_many :tags, dependent: :destroy
 
   validates :name, presence: true
 

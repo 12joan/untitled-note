@@ -11,90 +11,90 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal 'Untitled document', document.safe_title
   end
 
-  test 'accepts keywords when keyword does not exist' do
+  test 'accepts tags when tag does not exist' do
     project = create(:project)
 
-    document = assert_difference('Keyword.count', 2) do
-      Document.create!(project: project, keywords_attributes: [
+    document = assert_difference('Tag.count', 2) do
+      Document.create!(project: project, tags_attributes: [
         { text: 'Hello' },
         { text: 'World' },
       ])
     end
 
-    assert_equal ['Hello', 'World'].sort, document.keywords.pluck(:text).sort
+    assert_equal ['Hello', 'World'].sort, document.tags.pluck(:text).sort
   end
 
-  test 'accepts keywords when keyword already exists' do
+  test 'accepts tags when tag already exists' do
     project = create(:project)
 
-    keyword1 = create(:keyword, project: project)
-    keyword2 = create(:keyword, project: project)
+    tag1 = create(:tag, project: project)
+    tag2 = create(:tag, project: project)
 
-    document = assert_no_difference('Keyword.count') do
-      Document.create!(project: project, keywords_attributes: [
-        { text: keyword1.text },
-        { text: keyword2.text },
+    document = assert_no_difference('Tag.count') do
+      Document.create!(project: project, tags_attributes: [
+        { text: tag1.text },
+        { text: tag2.text },
       ])
     end
 
-    assert_equal [keyword1.id, keyword2.id].sort, document.keywords.pluck(:id).sort
+    assert_equal [tag1.id, tag2.id].sort, document.tags.pluck(:id).sort
   end
 
-  test 'cannot add the same keyword twice' do
+  test 'cannot add the same tag twice' do
     project = create(:project)
 
-    keyword = create(:keyword, project: project)
+    tag = create(:tag, project: project)
 
-    document = Document.create!(project: project, keywords_attributes: [
-      { text: keyword.text },
-      { text: keyword.text },
+    document = Document.create!(project: project, tags_attributes: [
+      { text: tag.text },
+      { text: tag.text },
     ])
 
-    assert_equal 1, document.keywords.count, 'should have 1 keyword'
+    assert_equal 1, document.tags.count, 'should have 1 tag'
 
-    document.update!(keywords_attributes: [
-      { text: keyword.text },
+    document.update!(tags_attributes: [
+      { text: tag.text },
     ])
 
-    assert_equal 1, document.keywords.count, 'should have 1 keyword'
+    assert_equal 1, document.tags.count, 'should have 1 tag'
   end
 
-  test 'existing keywords not in keywords_attributes are disassociated from document' do
+  test 'existing tags not in tags_attributes are disassociated from document' do
     project = create(:project)
 
-    keyword1 = create(:keyword, project: project)
-    keyword2 = create(:keyword, project: project)
+    tag1 = create(:tag, project: project)
+    tag2 = create(:tag, project: project)
 
-    document = Document.create!(project: project, keywords_attributes: [
-      { text: keyword1.text },
-      { text: keyword2.text },
+    document = Document.create!(project: project, tags_attributes: [
+      { text: tag1.text },
+      { text: tag2.text },
     ])
 
-    assert_equal 2, document.keywords.count, 'should have 2 keywords'
+    assert_equal 2, document.tags.count, 'should have 2 tags'
 
-    document.update(keywords_attributes: [
-      { text: keyword1.text },
+    document.update(tags_attributes: [
+      { text: tag1.text },
     ])
 
-    assert_equal 1, document.keywords.count, 'should have 1 keyword'
+    assert_equal 1, document.tags.count, 'should have 1 tag'
   end
 
-  test 'can remove the last keyword' do
+  test 'can remove the last tag' do
     project = create(:project)
 
-    keyword = create(:keyword, project: project)
+    tag = create(:tag, project: project)
 
-    document = Document.create!(project: project, keywords_attributes: [
-      { text: keyword.text },
+    document = Document.create!(project: project, tags_attributes: [
+      { text: tag.text },
     ])
 
-    assert_equal 1, document.keywords.count, 'should have 1 keyword'
+    assert_equal 1, document.tags.count, 'should have 1 tag'
 
-    document.update(keywords_attributes: [])
+    document.update(tags_attributes: [])
 
     document.reload
 
-    assert_empty document.keywords
+    assert_empty document.tags
   end
 
   test 'pinned scope contains all pinned documents' do

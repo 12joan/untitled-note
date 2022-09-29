@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_21_081651) do
+ActiveRecord::Schema.define(version: 2022_09_29_095018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,22 +66,13 @@ ActiveRecord::Schema.define(version: 2022_09_21_081651) do
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 
-  create_table "documents_keywords", force: :cascade do |t|
+  create_table "documents_tags", force: :cascade do |t|
     t.bigint "document_id", null: false
-    t.bigint "keyword_id", null: false
+    t.bigint "tag_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["document_id"], name: "index_documents_keywords_on_document_id"
-    t.index ["keyword_id"], name: "index_documents_keywords_on_keyword_id"
-  end
-
-  create_table "keywords", force: :cascade do |t|
-    t.string "text"
-    t.bigint "project_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["project_id"], name: "index_keywords_on_project_id"
-    t.index ["text", "project_id"], name: "index_keywords_on_text_and_project_id", unique: true
+    t.index ["document_id"], name: "index_documents_tags_on_document_id"
+    t.index ["tag_id"], name: "index_documents_tags_on_tag_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -90,11 +81,20 @@ ActiveRecord::Schema.define(version: 2022_09_21_081651) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "text"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_tags_on_project_id"
+    t.index ["text", "project_id"], name: "index_tags_on_text_and_project_id", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "aliases", "documents"
   add_foreign_key "documents", "projects"
-  add_foreign_key "documents_keywords", "documents"
-  add_foreign_key "documents_keywords", "keywords"
-  add_foreign_key "keywords", "projects"
+  add_foreign_key "documents_tags", "documents"
+  add_foreign_key "documents_tags", "tags"
+  add_foreign_key "tags", "projects"
 end

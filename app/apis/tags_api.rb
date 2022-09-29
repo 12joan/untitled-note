@@ -1,9 +1,9 @@
-class KeywordsAPI < ApplicationAPI
+class TagsAPI < ApplicationAPI
   def index
     set_project
 
-    @project.keywords.all.map do |keyword|
-      keyword.query(params[:query])
+    @project.tags.all.map do |tag|
+      tag.query(params[:query])
     end
   end
 

@@ -1,7 +1,7 @@
-class Keyword < ApplicationRecord
+class Tag < ApplicationRecord
   belongs_to :project
-  has_many :documents_keywords, dependent: :destroy
-  has_many :documents, through: :documents_keywords
+  has_many :documents_tags, dependent: :destroy
+  has_many :documents, through: :documents_tags
 
   validates :text, presence: true, uniqueness: { scope: :project }
 

@@ -8,7 +8,7 @@ class DataChannelTest < ActionCable::Channel::TestCase
       'query' => {
         'title' => true,
         'body_content' => true,
-        'keywords' => {
+        'tags' => {
           'id' => true,
           'text' => true,
         },

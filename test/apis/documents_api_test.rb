@@ -3,12 +3,12 @@ require 'test_helper'
 class DocumentsAPITest < APITestCase
   setup do
     @project = create(:project)
-    @keyword = create(:keyword, project: @project)
+    @tag = create(:tag, project: @project)
 
     @documents = [].tap do |documents|
       documents << create(:document, project: @project, updated_at: 3.days.ago, pinned_at: 1.hour.ago)
-      documents << create(:document, project: @project, updated_at: 1.days.ago, keywords: [@keyword])
-      documents << create(:document, project: @project, updated_at: 2.days.ago, keywords: [@keyword], pinned_at: 1.hour.ago)
+      documents << create(:document, project: @project, updated_at: 1.days.ago, tags: [@tag])
+      documents << create(:document, project: @project, updated_at: 2.days.ago, tags: [@tag], pinned_at: 1.hour.ago)
       documents << create(:document, project: @project, updated_at: 2.days.ago, blank: true)
     end
 
@@ -34,8 +34,8 @@ class DocumentsAPITest < APITestCase
       index_result
   end
 
-  test 'DocumentsAPI#index filters by keyword_id if present' do
-    @index_params.merge!(keyword_id: @keyword.id)
+  test 'DocumentsAPI#index filters by tag_id if present' do
+    @index_params.merge!(tag_id: @tag.id)
 
     assert_equal \
       [@documents.second, @documents.third].map(&:id),

@@ -10,11 +10,11 @@ Rails.application.reloader.to_prepare do
         },
       },
 
-      Keyword: {
-        api_controller: KeywordsAPI,
+      Tag: {
+        api_controller: TagsAPI,
 
         actions: {
-          index: ->(params) { "Keyword#index(project_id: #{params.fetch(:project_id)})" },
+          index: ->(params) { "Tag#index(project_id: #{params.fetch(:project_id)})" },
         },
       },
 
@@ -44,9 +44,9 @@ Rails.application.reloader.to_prepare do
         end
       },
 
-      Keyword: ->(keyword) {
-        broadcast "Keyword#index(project_id: #{keyword.project_id})"
-        keyword.documents.each { |document| broadcast_for document }
+      Tag: ->(tag) {
+        broadcast "Tag#index(project_id: #{tag.project_id})"
+        tag.documents.each { |document| broadcast_for document }
       },
 
       Project: ->(project) {

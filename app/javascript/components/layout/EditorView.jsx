@@ -52,10 +52,10 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     }),
     attributeBehaviours: {
       remote_version: { merge: (local, remote) => remote },
-      keywords: {
-        merge: (local, remote) => local.map(localKeyword => localKeyword.id
-          ? localKeyword
-          : remote.find(remoteKeyword => remoteKeyword.text === localKeyword.text)
+      tags: {
+        merge: (local, remote) => local.map(localTag => localTag.id
+          ? localTag
+          : remote.find(remoteTag => remoteTag.text === localTag.text)
         ),
       },
       title: { delayedUpdate: true },
