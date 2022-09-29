@@ -22,10 +22,12 @@ const awaitRedirect = ({
 const AwaitRedirectComponent = () => {
   const [redirectPath, setRedirectPath] = useStateWhileMounted(null)
 
-  useEffect(() => (promisePath ?? Promise.reject()).then(
-    path => setRedirectPath(path),
-    error => setRedirectPath(fallbackPath || '/')
-  ), [])
+  useEffect(() => {
+    (promisePath ?? Promise.reject()).then(
+      path => setRedirectPath(path),
+      error => setRedirectPath(fallbackPath || '/')
+    )
+  }, [])
 
   return redirectPath
     ? <Navigate to={redirectPath} replace />
