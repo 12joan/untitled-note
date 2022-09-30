@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 
 import useElementSize from '~/lib/useElementSize'
+import useTitle from '~/lib/useTitle'
 import { useContext, ContextProvider } from '~/lib/context'
 
 import BackButton from '~/components/BackButton'
@@ -9,6 +10,8 @@ import FutureTagIndex from '~/components/FutureTagIndex'
 const AllTagsView = () => {
   const viewRef = useRef()
   const { width: viewWidth } = useElementSize(viewRef)
+
+  useTitle('All tags')
 
   const { futureTags } = useContext()
 

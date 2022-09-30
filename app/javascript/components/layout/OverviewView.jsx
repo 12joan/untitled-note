@@ -8,6 +8,7 @@ import {
   TagsLink,
 } from '~/lib/routes'
 import useElementSize from '~/lib/useElementSize'
+import useTitle from '~/lib/useTitle'
 import {
   TOP_N_RECENTLY_VIEWED_DOCUMENTS,
   TOP_N_TAGS,
@@ -31,6 +32,8 @@ const OverviewView = () => {
     futureRecentlyViewedDocuments,
     futureTags,
   } = useContext()
+
+  useTitle(futureProject.map(project => project.name).orDefault(undefined))
 
   return (
     <div ref={viewRef} className="space-y-5">

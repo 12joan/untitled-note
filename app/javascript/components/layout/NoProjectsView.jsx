@@ -7,7 +7,7 @@ import SetBodyBackground from '~/components/SetBodyBackground'
 import NewProjectForm from '~/components/projects/NewProjectForm'
 
 const NoProjectsView = props => {
-  useTitle('Welcome', { layer: 1 })
+  useTitle('Welcome')
 
   return (
     <Router>

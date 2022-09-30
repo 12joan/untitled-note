@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 
 import useElementSize from '~/lib/useElementSize'
 import { useContext, ContextProvider } from '~/lib/context'
+import useTitle from '~/lib/useTitle'
 import { ProjectLink } from '~/lib/routes'
 import useStream from '~/lib/useStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
@@ -19,6 +20,8 @@ const TagDocumentsView = ({ tagId }) => {
   const futureTag = futureTags.map(tags => tags.find(tag => tag.id === tagId))
 
   const futureDocuments = useStream(resolve => DocumentsStream(projectId).index({ tag_id: tagId }, resolve), [tagId])
+
+  useTitle(futureTag.map(tag => tag?.text).orDefault(undefined))
 
   if (futureTag.map(tag => tag === undefined).orDefault(false)) {
     return (

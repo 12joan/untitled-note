@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
+import useTitle from '~/lib/useTitle'
 import { sequence, Future, FutureServiceResult } from '~/lib/future'
 import useNormalizedInput from '~/lib/useNormalizedInput'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
@@ -17,6 +18,8 @@ import { ModalTitle } from '~/components/Modal'
 
 const EditProjectView = () => {
   const { futureProject, futurePartialDocuments } = useContext()
+
+  useTitle(futureProject.map(project => `Edit ${project.name}`).orDefault(undefined))
 
   const futures = sequence({
     project: futureProject,

@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
+import useTitle from '~/lib/useTitle'
 import useSynchronisedRecord from '~/lib/synchroniseRecords'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
@@ -14,7 +15,10 @@ const EditorView = ({ documentId }) => {
   const { futurePartialDocuments } = useContext()
 
   const futurePartialDocument = futurePartialDocuments.map(
-    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || { remote_version: Math.infinity }
+    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || {
+      remote_version: Math.infinity,
+      safe_title: 'Untitled document',
+    }
   )
 
   const loadingView = (
@@ -38,6 +42,8 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
   const [searchParams] = useSearchParams()
   const isFromRecentlyViewed = searchParams.has('recently_viewed')
   const api = useMemo(() => DocumentsAPI(projectId), [projectId])
+
+  useTitle(partialDocument.safe_title)
 
   useEffect(() => {
     if (!isFromRecentlyViewed) {

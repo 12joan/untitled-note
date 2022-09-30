@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 
 import useElementSize from '~/lib/useElementSize'
+import useTitle from '~/lib/useTitle'
 import { useContext, ContextProvider } from '~/lib/context'
 import { RecentlyViewedDocumentLink } from '~/lib/routes'
 
@@ -10,6 +11,8 @@ import FutureDocumentIndex from '~/components/FutureDocumentIndex'
 const RecentlyViewedView = () => {
   const viewRef = useRef()
   const { width: viewWidth } = useElementSize(viewRef)
+
+  useTitle('Recently viewed')
 
   const { futureRecentlyViewedDocuments } = useContext()
 

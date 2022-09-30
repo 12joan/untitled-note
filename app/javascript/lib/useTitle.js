@@ -1,22 +1,25 @@
 import { useEffect } from 'react'
 
-const titleParts = []
+import { APP_NAME } from '~/lib/config'
+
+let stack = [{ id: undefined, title: APP_NAME }]
 
 const updateTitle = () => {
-  const parts = [...titleParts].filter(x => x !== undefined).reverse()
-  document.title = parts.join(' - ')
+  document.title = stack[stack.length - 1].title
 }
 
-const useTitle = (title, { layer = 0 } = {}) => {
-  useEffect(() => {
-    titleParts[layer] = title
+const useTitle = title => useEffect(() => {
+  if (title) {
+    const id = Math.random()
+
+    stack.push({ id, title })
     updateTitle()
 
     return () => {
-      titleParts[layer] = undefined
+      stack = stack.filter(item => item.id !== id)
       updateTitle()
     }
-  }, [title, layer])
-}
+  }
+}, [title])
 
 export default useTitle

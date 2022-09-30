@@ -1,14 +1,11 @@
 import React from 'react'
 
-import useTitle from '~/lib/useTitle'
 import { routesComponent } from '~/lib/routes'
 
 import ErrorBoundary from '~/components/ErrorBoundary'
 import ToastContainer from '~/components/layout/ToastContainer'
 
 const App = () => {
-  useTitle('Note App')
-
   const fallback = (
     <div className="p-5 space-y-3">
       <h1 className="text-3xl font-medium">An internal error has occurred</h1>
