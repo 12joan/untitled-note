@@ -63,7 +63,7 @@ const ListIndex = ({ items, cardPreviewHeight }) => {
 const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, ...otherProps }) => {
   return (
     <Item
-      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent overflow-wrap-break-word"
+      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent"
       {...itemProps}
       {...otherProps}
     >
@@ -83,9 +83,7 @@ const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => 
       {...itemProps}
       {...otherProps}
     >
-      <div className="overflow-wrap-break-word">
-        {label}
-      </div>
+      {label}
 
       <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
         {preview}

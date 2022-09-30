@@ -187,7 +187,7 @@ const Button = forwardRef(({
     <Component
       ref={ref}
       {...buttonProps}
-      className="btn btn-transparent w-full px-3 py-1 flex text-left"
+      className="btn btn-transparent w-full px-3 py-1 block text-left"
       children={label}
       onClick={event => {
         onButtonClick()

@@ -20,6 +20,10 @@
     @apply border-slate-200 dark:border-slate-700;
   }
 
+  body {
+    @apply overflow-wrap-break-word;
+  }
+
   input::placeholder, textarea::placeholder, [data-slate-placeholder] {
     @apply text-slate-400 dark:text-slate-500;
   }
@@ -92,9 +96,6 @@
         margin-bottom: 0 !important;
       }
     }
-
-    // Prevent overflow when a text contains no spaces
-    @apply overflow-wrap-break-word;
 
     // Prevent overflow in deeply nested lists
     & > ul, & > ol {

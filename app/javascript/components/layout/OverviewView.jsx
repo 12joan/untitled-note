@@ -38,7 +38,7 @@ const OverviewView = () => {
   return (
     <div ref={viewRef} className="space-y-5">
       <PopOutLink as={EditProjectLink} label="Edit details">
-        <h1 className="text-3xl font-medium">
+        <h1 className="text-3xl font-medium grow w-0">
           {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
         </h1>
       </PopOutLink>
