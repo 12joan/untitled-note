@@ -1,10 +1,12 @@
 module API
   module V1
-    class ProjectsController < ApplicationController
-      before_action :set_project, only: %i[ update destroy ]
+    class ProjectsController < APIController
+      before_action only: %i[ update destroy ] do
+        set_project { params[:id] }
+      end
 
       def create
-        @project = Project.new(project_params)
+        @project = Project.new(owner: current_user, **project_params)
 
         if @project.save
           render json: @project.query(:all)
@@ -27,12 +29,6 @@ module API
       end
 
       private
-
-      # Use callbacks to share common setup or constraints between actions.
-
-      def set_project
-        @project = Project.find(params[:id])
-      end
 
       # Only allow a list of trusted parameters through.
       def project_params

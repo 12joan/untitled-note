@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  belongs_to :owner, class_name: 'User'
   has_many :documents, dependent: :destroy
   has_many :tags, dependent: :destroy
 

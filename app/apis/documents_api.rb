@@ -40,10 +40,4 @@ class DocumentsAPI < ApplicationAPI
 
     @project.documents.find(params[:id]).query(params[:query])
   end
-
-  private
-
-  def set_project
-    @project = Project.find(params[:project_id])
-  end
 end

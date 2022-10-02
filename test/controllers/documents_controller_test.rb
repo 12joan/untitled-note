@@ -4,6 +4,7 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @document = create(:document)
     @project = @document.project
+    as_user(@project.owner)
   end
 
   test 'should create document' do

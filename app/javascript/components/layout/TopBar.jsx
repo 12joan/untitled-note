@@ -25,7 +25,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     { icon: NewDocumentIcon, label: 'New document', onClick: createNewDocument },
     { icon: SearchIcon, label: 'Search' },
     { icon: SettingsIcon, label: 'Settings' },
-    { icon: AccountIcon, label: 'Account' },
+    { icon: AccountIcon, label: 'Log out', as: 'a', href: '/auth/logout' }
   ]
 
   return (
@@ -58,8 +58,8 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
         ))
         : (
           <Dropdown
-            items={navButtons.map(({ as, label, icon }, index) => (
-              <DropdownItem key={index} as={as} children={label} icon={icon} />
+            items={navButtons.map(({ label, ...otherProps }) => (
+              <DropdownItem key={label} children={label} {...otherProps} />
             ))}
             placement="bottom-end"
             className="pointer-events-auto"

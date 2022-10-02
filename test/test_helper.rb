@@ -13,4 +13,8 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   include FactoryBot::Syntax::Methods
+
+  def as_user(user)
+    post stub_login_url, params: { user_id: user.id }
+  end
 end

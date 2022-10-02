@@ -2,8 +2,10 @@ require 'test_helper'
 
 class MentionablesAPITest < APITestCase
   setup do
-    @project = create(:project)
-    @other_project = create(:project)
+    @user = create(:user)
+
+    @project = create(:project, owner: @user)
+    @other_project = create(:project, owner: @user)
 
     @first_document = create_document_with_aliases({ project: @project, title: 'Title 1' }, ['Alias 1.1', 'Alias 1.2'])
     create_document_with_aliases({ project: @project, title: 'Title 2' }, [])
@@ -58,7 +60,7 @@ class MentionablesAPITest < APITestCase
   end
 
   def index_result
-    MentionablesAPI.new(@index_params).index
+    MentionablesAPI.new(user: @user, params: @index_params).index
   end
 
   def mentionables

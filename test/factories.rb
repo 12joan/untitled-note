@@ -1,5 +1,11 @@
 FactoryBot.define do
+  factory :user, aliases: [:owner] do
+    name { 'Jane Doe' }
+    auth0_id { '123456789' }
+  end
+
   factory :project do
+    owner
     name { 'My project' }
   end
 

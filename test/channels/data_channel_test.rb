@@ -3,6 +3,8 @@ require 'test_helper'
 class DataChannelTest < ActionCable::Channel::TestCase
   setup do
     @project = create(:project)
+    @user = @project.owner
+
     @params = {
       'project_id' => @project.id,
       'query' => {
@@ -14,6 +16,8 @@ class DataChannelTest < ActionCable::Channel::TestCase
         },
       },
     }
+
+    stub_connection user: @user
   end
 
   test 'transmits the API result on subscribe' do
@@ -58,7 +62,7 @@ class DataChannelTest < ActionCable::Channel::TestCase
     mock = Minitest::Mock.new
     mock.expect :index, return_value
 
-    stubbed_new = proc do |params|
+    stubbed_new = proc do |user:, params:|
       unless expected_params.nil?
         assert_equal expected_params, params
       end

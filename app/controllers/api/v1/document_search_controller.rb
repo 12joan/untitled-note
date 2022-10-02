@@ -1,6 +1,6 @@
 module API
   module V1
-    class DocumentSearchController < ApplicationController
+    class DocumentSearchController < APIController
       before_action :set_project
 
       def show
@@ -59,12 +59,6 @@ module API
         end
 
         render json: response_data
-      end
-
-      private
-
-      def set_project
-        @project = Project.find(params[:project_id])
       end
     end
   end

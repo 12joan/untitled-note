@@ -11,7 +11,8 @@ class DataChannel < ApplicationCable::Channel
 
   def transmit_action_data
     raise "Unpermitted action: #{action}" unless action_allowed?
-    transmit api_controller_for_model.new(action_params).send(action).to_json
+    api_controller = api_controller_for_model.new(user: connection.user, params: action_params)
+    transmit api_controller.send(action).to_json
   end
 
   def action_allowed?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_29_102208) do
+ActiveRecord::Schema.define(version: 2022_10_01_195543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 2022_09_29_102208) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "owner_id", default: 1, null: false
+    t.index ["owner_id"], name: "index_projects_on_owner_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -91,11 +93,19 @@ ActiveRecord::Schema.define(version: 2022_09_29_102208) do
     t.index ["text", "project_id"], name: "index_tags_on_text_and_project_id", unique: true
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "auth0_id"
+    t.string "name", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "aliases", "documents"
   add_foreign_key "documents", "projects"
   add_foreign_key "documents_tags", "documents"
   add_foreign_key "documents_tags", "tags"
+  add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "tags", "projects"
 end

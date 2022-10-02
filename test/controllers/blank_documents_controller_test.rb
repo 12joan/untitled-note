@@ -3,6 +3,7 @@ require 'test_helper'
 class BlankDocumentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = create(:project)
+    as_user(@project.owner)
   end
 
   test 'when no blank document exists should create a new blank document' do

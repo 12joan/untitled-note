@@ -3,6 +3,7 @@ require 'test_helper'
 class DocumentsAPITest < APITestCase
   setup do
     @project = create(:project)
+    @user = @project.owner
     @tag = create(:tag, project: @project)
 
     @documents = [].tap do |documents|
@@ -89,10 +90,10 @@ class DocumentsAPITest < APITestCase
   private
 
   def index_result
-    DocumentsAPI.new(@index_params).index
+    DocumentsAPI.new(user: @user, params: @index_params).index
   end
 
   def show_result
-    DocumentsAPI.new(@show_params).show
+    DocumentsAPI.new(user: @user, params: @show_params).show
   end
 end

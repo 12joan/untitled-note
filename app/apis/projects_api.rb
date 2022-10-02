@@ -1,6 +1,6 @@
 class ProjectsAPI < ApplicationAPI
   def index
-    Project.all.map do |project|
+    @user.projects.order(:created_at).map do |project|
       project.query(params[:query])
     end
   end

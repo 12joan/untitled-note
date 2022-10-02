@@ -40,6 +40,10 @@ gem 'kaminari', '>= 1.2.1'
 gem 'elasticsearch-model', '~> 7'
 gem 'elasticsearch-rails', '~> 7'
 
+# Auth0
+gem 'omniauth-auth0', '~> 3.0'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
 # Only permit requests that originate from an authorised reverse proxy
 gem 'rack_authorised_proxy'
 

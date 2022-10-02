@@ -14,6 +14,7 @@ services:
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
       RAILS_ENV: development
+    env_file: .env
     command: 'yarn dev'
     ports:
       - '3000:3000'

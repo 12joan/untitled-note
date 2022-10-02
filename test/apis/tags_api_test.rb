@@ -3,6 +3,7 @@ require 'test_helper'
 class TagsAPITest < APITestCase
   setup do
     @project = create(:project)
+    @user = @project.owner
 
     @tags = [].tap do |tags|
       tags << create(:tag, project: @project)
@@ -25,6 +26,6 @@ class TagsAPITest < APITestCase
   private
 
   def index_result
-    TagsAPI.new(@index_params).index
+    TagsAPI.new(user: @user, params: @index_params).index
   end
 end

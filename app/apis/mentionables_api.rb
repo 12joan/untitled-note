@@ -8,10 +8,4 @@ class MentionablesAPI < ApplicationAPI
       .map { |document| [document.id, document.mentionables] }
       .to_h
   end
-
-  private
-
-  def set_project
-    @project = Project.find(params[:project_id])
-  end
 end

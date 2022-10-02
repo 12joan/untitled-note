@@ -2,10 +2,12 @@ require 'test_helper'
 
 class ProjectAPITest < APITestCase
   setup do
+    @user = create(:user)
+
     @projects = [].tap do |projects|
-      projects << create(:project)
-      projects << create(:project)
-      projects << create(:project)
+      projects << create(:project, owner: @user)
+      projects << create(:project, owner: @user)
+      projects << create(:project, owner: @user)
     end
 
     @index_params = {
@@ -22,6 +24,6 @@ class ProjectAPITest < APITestCase
   private
 
   def index_result
-    ProjectsAPI.new(@index_params).index
+    ProjectsAPI.new(user: @user, params: @index_params).index
   end
 end

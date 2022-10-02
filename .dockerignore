@@ -1,0 +1,7 @@
+/node_modules
+/.git
+/tmp
+/log
+/public/assets
+/public/vite*
+/public/packs*

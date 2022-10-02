@@ -3,6 +3,7 @@ require 'test_helper'
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = create(:project)
+    as_user(@project.owner)
   end
 
   test 'should create project' do

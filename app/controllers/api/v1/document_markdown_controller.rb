@@ -1,6 +1,6 @@
 module API
   module V1
-    class DocumentMarkdownController < ApplicationController
+    class DocumentMarkdownController < APIController
       before_action :set_project
       before_action :set_document
 
@@ -26,12 +26,6 @@ module API
       end
 
       private
-
-      # Use callbacks to share common setup or constraints between actions.
-
-      def set_project
-        @project = Project.find(params[:project_id])
-      end
 
       def set_document
         @document = @project.documents.find(params[:document_id])

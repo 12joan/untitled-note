@@ -1,0 +1,9 @@
+<h1>Welcome</h1>
+
+<form method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <a href="/auth/auth0" onclick="event.preventDefault(); const form = this.parentElement; form.action = this.href; form.submit();">
+    Log in
+  </a>
+</form>

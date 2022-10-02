@@ -4,20 +4,30 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :projects do
         resources :documents, only: %i[ show create update destroy ] do
-          resource :markdown, only: %i[ show ], controller: 'document_markdown'
+          # resource :markdown, only: %i[ show ], controller: 'document_markdown'
         end
 
         resource :blank_document, only: %i[ create ]
 
-        resource :document_search, only: %i[ show ], controller: 'document_search'
+        # resource :document_search, only: %i[ show ], controller: 'document_search'
       end
     end
+  end
+
+  if Rails.env.test?
+    resource :stub_login, only: %i[ create ], controller: 'stub_login'
   end
 
   namespace :admin do
     resource :elasticsearch, only: %i[ show create ], controller: 'elasticsearch'
   end
 
-  root 'app#index'
+  get '/auth/auth0/callback', to: 'auth0#callback'
+  get '/auth/failure', to: 'auth0#failure'
+  get '/auth/logout', to: 'auth0#logout'
+
+  get '/welcome', to: 'welcome#index', as: :welcome
+
+  root 'app#index', as: :app
   get '*path', to: 'app#index'
 end
