@@ -63,10 +63,12 @@
 
   .overflow-wrap-break-word {
     overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .overflow-wrap-normal {
     overflow-wrap: normal;
+    word-break: normal;
   }
 
   .narrow {
