@@ -2,7 +2,13 @@ import createToast from '~/lib/createToast'
 
 const handleErrors = toastForError => promise => promise.catch(error => {
   console.log(error)
-  createToast(toastForError(error))
+
+  try {
+    createToast(toastForError(error))
+  } catch (error) {
+    console.error('Error while creating toast:', error)
+  }
+
   throw error
 })
 

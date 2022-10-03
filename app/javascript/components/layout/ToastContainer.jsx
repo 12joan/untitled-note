@@ -15,13 +15,13 @@ const AUTO_CLOSE_DURATION = {
 const ToastContainer = () => {
   const [toasts, setToasts] = useState([])
 
-  useGlobalEvent('toast', toast => setToasts(xs => [
+  useGlobalEvent('toast', toast => setToasts([
     {
       ...toast,
-      key: xs.length,
+      key: toasts.length,
     },
-    ...xs
-  ]))
+    ...toasts,
+  ]), [toasts])
 
   return (
     <div aria-live="polite" aria-atomic="true" className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">

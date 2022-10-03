@@ -20,7 +20,8 @@ const dispatchGlobalEvent = (eventName, ...args) => {
   const listeners = eventListeners.get(eventName)
 
   if (listeners) {
-    listeners.forEach(listener => listener(...args))
+    // The [...listeners] prevents infinite loops in case the set is modified by the listener
+    [...listeners].forEach(listener => listener(...args))
   }
 }
 
