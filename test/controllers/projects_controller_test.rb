@@ -26,4 +26,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test 'cannot update project belonging to other user' do
+    as_user(create(:user))
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      patch api_v1_project_url(@project), params: { project: { name: 'New name' } }
+    end
+  end
 end

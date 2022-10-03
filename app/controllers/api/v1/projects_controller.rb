@@ -6,7 +6,7 @@ module API
       end
 
       def create
-        @project = Project.new(owner: current_user, **project_params)
+        @project = current_user.projects.build(project_params)
 
         if @project.save
           render json: @project.query(:all)
