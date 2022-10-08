@@ -2,15 +2,15 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :projects do
-        resources :documents, only: %i[ show create update destroy ]
-        resource :blank_document, only: %i[ create ]
+      resources :projects, only: %i[create update destroy] do
+        resources :documents, only: %i[show create update destroy]
+        resource :blank_document, only: %i[create]
       end
     end
   end
 
   if Rails.env.test?
-    resource :stub_login, only: %i[ create ], controller: 'stub_login'
+    resource :stub_login, only: %i[create], controller: 'stub_login'
   end
 
   get '/auth/auth0/callback', to: 'auth0#callback'
