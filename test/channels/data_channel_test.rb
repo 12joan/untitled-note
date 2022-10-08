@@ -52,7 +52,7 @@ class DataChannelTest < ActionCable::Channel::TestCase
 
       # No way of triggering the stream_from callback in test environment
       # Compromise by asserting it has the right stream
-      assert_has_stream "Document#index(project_id: #{@project.id})"
+      assert_has_stream "Document#index(#{{ user_id: @user.id.to_s, project_id: @project.id.to_s }.sort.to_h.to_json})"
     end
   end
 

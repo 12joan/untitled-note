@@ -11,8 +11,8 @@ class DataStreamingConfig
     api_for_model(model).fetch(:actions).keys.to_set
   end
 
-  def broadcasting_for_action(model, action, params)
-    api_for_model(model).fetch(:actions).fetch(action).call(params)
+  def broadcasting_for_action(model, action, params, current_user)
+    api_for_model(model).fetch(:actions).fetch(action).call(params.merge(user_id: current_user.id))
   end
 
   def broadcastings_for_record(record)

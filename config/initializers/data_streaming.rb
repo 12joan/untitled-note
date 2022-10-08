@@ -1,3 +1,14 @@
+def make_broadcasting(action, allowed_params, params)
+  params_string = params
+    .slice(*allowed_params)
+    .sort
+    .to_h
+    .transform_values(&:to_s)
+    .to_json
+
+  "#{action}(#{params_string})"
+end
+
 Rails.application.reloader.to_prepare do
   Rails.application.config.data_streaming_config = DataStreamingConfig.new(
     apis: {
@@ -5,8 +16,8 @@ Rails.application.reloader.to_prepare do
         api_controller: DocumentsAPI,
 
         actions: {
-          index: ->(params) { "Document#index(project_id: #{params.fetch(:project_id)})" },
-          show: ->(params) { "Document#show(project_id: #{params.fetch(:project_id)}, id: #{params.fetch(:id)})" },
+          index: ->(params) { make_broadcasting('Document#index', %i[user_id project_id], params).tap { "listening on #{_1}" } },
+          show: ->(params) { make_broadcasting('Document#show', %i[user_id project_id id], params) },
         },
       },
 
@@ -14,7 +25,7 @@ Rails.application.reloader.to_prepare do
         api_controller: TagsAPI,
 
         actions: {
-          index: ->(params) { "Tag#index(project_id: #{params.fetch(:project_id)})" },
+          index: ->(params) { make_broadcasting('Tag#index', %i[user_id project_id], params) },
         },
       },
 
@@ -22,7 +33,7 @@ Rails.application.reloader.to_prepare do
         api_controller: ProjectsAPI,
 
         actions: {
-          index: ->(params) { "Project#index" },
+          index: ->(params) { make_broadcasting('Project#index', %i[user_id], params) },
         },
       },
 
@@ -30,7 +41,7 @@ Rails.application.reloader.to_prepare do
         api_controller: MentionablesAPI,
 
         actions: {
-          index: -> (params) { "Mentionable#index(project_id: #{params.fetch(:project_id)})" },
+          index: -> (params) { make_broadcasting('Mentionable#index', %i[user_id project_id], params) },
         },
       }
     },
@@ -38,14 +49,24 @@ Rails.application.reloader.to_prepare do
     listeners: {
       Document: ->(document) {
         unless document.blank
-          broadcast "Document#index(project_id: #{document.project_id})"
-          broadcast "Document#show(project_id: #{document.project_id}, id: #{document.id})"
-          broadcast "Mentionable#index(project_id: #{document.project_id})"
+          params = {
+            user_id: document.project.owner_id,
+            project_id: document.project_id,
+            id: document.id,
+          }
+
+          broadcast make_broadcasting('Document#index', %i[user_id project_id], params).tap { "broadcasting on #{_1}" }
+          broadcast make_broadcasting('Document#show', %i[user_id project_id id], params)
+          broadcast make_broadcasting('Mentionable#index', %i[user_id project_id], params)
         end
       },
 
       Tag: ->(tag) {
-        broadcast "Tag#index(project_id: #{tag.project_id})"
+        broadcast make_broadcasting('Tag#index', %i[user_id project_id], {
+          user_id: tag.project.owner_id,
+          project_id: tag.project_id,
+        })
+
         tag.documents.each { |document| broadcast_for document }
       },
 
@@ -54,7 +75,9 @@ Rails.application.reloader.to_prepare do
       },
 
       Project: ->(project) {
-        broadcast "Project#index"
+        broadcast make_broadcasting('Project#index', %i[user_id], {
+          user_id: project.owner_id,
+        })
       },
     },
   )
