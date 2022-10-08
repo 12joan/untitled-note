@@ -1,9 +1,7 @@
 class APIController < ApplicationController
-  private
+  include LoginSessions
 
-  def current_user
-    helpers.current_user
-  end
+  private
 
   def set_project
     project_id = block_given? ? yield : params.fetch(:project_id)

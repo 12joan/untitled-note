@@ -1,4 +1,6 @@
 class Auth0Controller < ApplicationController
+  include LoginSessions
+
   def callback
     auth_info = request.env['omniauth.auth']
     user_info = auth_info['extra']['raw_info']
@@ -9,16 +11,17 @@ class Auth0Controller < ApplicationController
     # Update user's name if changed
     user.update!(name: user_info['name']) if user.name != user_info['name']
 
-    session[:user_id] = user.id
+    create_login_session(user)
     redirect_to app_url
   end
 
   def failure
     redirect_to welcome_url
+    # TODO: Show error message
   end
 
   def logout
-    reset_session
+    destroy_login_session
     redirect_to logout_url
   end
 

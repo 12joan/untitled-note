@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_01_195543) do
+ActiveRecord::Schema.define(version: 2022_10_08_084134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,15 @@ ActiveRecord::Schema.define(version: 2022_10_01_195543) do
     t.index ["tag_id"], name: "index_documents_tags_on_tag_id"
   end
 
+  create_table "login_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token", null: false
+    t.string "user_agent", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_login_sessions_on_user_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -106,6 +115,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_195543) do
   add_foreign_key "documents", "projects"
   add_foreign_key "documents_tags", "documents"
   add_foreign_key "documents_tags", "tags"
+  add_foreign_key "login_sessions", "users"
   add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "tags", "projects"
 end
