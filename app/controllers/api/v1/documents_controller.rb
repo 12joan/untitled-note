@@ -39,10 +39,6 @@ module API
       end
 
       def save_document
-        unless document_params[:body].nil?
-          @document.extract_definitive_mentions(document_params[:body])
-        end
-
         unless tags_attributes.nil?
           @document.tags_attributes = tags_attributes
         end

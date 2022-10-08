@@ -65,20 +65,6 @@ class DocumentsAPITest < APITestCase
       index_result.map { _1.fetch(:id) }
   end
 
-  test 'DocumentsAPI#index paginates results if per_page is present' do
-    @index_params.merge!(per_page: 2)
-
-    assert_equal \
-      [@documents.first, @documents.second].map(&:id),
-      index_result.map { _1.fetch(:id) }
-
-    @index_params.merge!(page: 2, per_page: 2)
-
-    assert_equal \
-      [@documents.third].map(&:id),
-      index_result.map { _1.fetch(:id) }
-  end
-
   test 'DocumentsAPI#show respects query' do
     @show_params.merge!(query: { id: true, title: true })
 

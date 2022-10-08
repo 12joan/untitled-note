@@ -108,13 +108,6 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal [document3, document4, document6], Document.pinned
   end
 
-  test 'calling extract_definitive_mentions affects the result of definitive_mentions' do
-    document = create(:document)
-    assert_empty document.definitive_mentions
-    document.extract_definitive_mentions(body_with_definitive_mentions(%w(one two three)))
-    assert_equal %w(one two three), document.definitive_mentions
-  end
-
   test 'preview returns up to 100 characters of plain_body' do
     [
       ['a' * 200, 'a' * 100],
@@ -135,13 +128,5 @@ class DocumentTest < ActiveSupport::TestCase
       document = create(:document, plain_body: plain_body)
       assert_equal expected_preview, document.preview, "preview for #{plain_body.inspect}"
     end
-  end
-
-  private
-
-  def body_with_definitive_mentions(definitive_mentions)
-    definitive_mentions
-      .map { |text| "<p><x-definitive-mention>#{text}</x-definitive-mention></p>" }
-      .join
   end
 end

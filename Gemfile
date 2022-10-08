@@ -14,9 +14,9 @@ gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript
 gem 'vite_rails', '~> 3.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+# gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+# gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
@@ -29,16 +29,6 @@ gem 'redis', '~> 4.0'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'rexml', '~> 3.2'
-
-# Convert HTML to markdown
-gem 'reverse_markdown', '~> 2.0'
-
-# Pagination
-gem 'kaminari', '>= 1.2.1'
-
-# Elasticsearch integration
-gem 'elasticsearch-model', '~> 7'
-gem 'elasticsearch-rails', '~> 7'
 
 # Auth0
 gem 'omniauth-auth0', '~> 3.0'

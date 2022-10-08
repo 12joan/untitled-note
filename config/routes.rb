@@ -3,23 +3,14 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :projects do
-        resources :documents, only: %i[ show create update destroy ] do
-          # resource :markdown, only: %i[ show ], controller: 'document_markdown'
-        end
-
+        resources :documents, only: %i[ show create update destroy ]
         resource :blank_document, only: %i[ create ]
-
-        # resource :document_search, only: %i[ show ], controller: 'document_search'
       end
     end
   end
 
   if Rails.env.test?
     resource :stub_login, only: %i[ create ], controller: 'stub_login'
-  end
-
-  namespace :admin do
-    resource :elasticsearch, only: %i[ show create ], controller: 'elasticsearch'
   end
 
   get '/auth/auth0/callback', to: 'auth0#callback'
