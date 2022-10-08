@@ -30,6 +30,16 @@ module.exports = {
         'page-bg-light': colors.white,
         'page-bg-dark': colors.slate[900],
       },
+      animation: {
+        'grow': 'grow 1s ease-in-out infinite',
+      },
+      keyframes: {
+        'grow': {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.25)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
     },
     screens: {
       '4xs': '128px',

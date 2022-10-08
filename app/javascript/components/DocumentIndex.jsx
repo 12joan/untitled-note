@@ -4,9 +4,9 @@ import { DocumentLink } from '~/lib/routes'
 import { makeDocumentDragData } from '~/lib/dragData'
 
 import DocumentMenu from '~/components/DocumentMenu'
-import FutureItemIndex from '~/components/FutureItemIndex'
+import ItemIndex from '~/components/ItemIndex'
 
-const FutureDocumentIndex = ({ futureDocuments, linkComponent = DocumentLink, ...otherProps }) => {
+const DocumentIndex = ({ documents, linkComponent = DocumentLink, ...otherProps }) => {
   const itemForDocument = doc => ({
     key: doc.id,
     label: doc.safe_title,
@@ -22,12 +22,12 @@ const FutureDocumentIndex = ({ futureDocuments, linkComponent = DocumentLink, ..
   })
 
   return (
-    <FutureItemIndex
-      futureItems={futureDocuments.map(xs => xs.map(itemForDocument))}
+    <ItemIndex
+      items={documents.map(itemForDocument)}
       cardPreviewHeight="40px" // 2 lines
       {...otherProps}
     />
   )
 }
 
-export default FutureDocumentIndex
+export default DocumentIndex

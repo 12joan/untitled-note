@@ -22,7 +22,7 @@ const LoadingView = () => {
           {[0, 333, 667].map(delay => (
             <div
               key={delay}
-              className="w-4 h-4 bg-slate-300 dark:bg-slate-700 rounded-full animate-bounce"
+              className="w-4 h-4 bg-slate-300 dark:bg-slate-700 rounded-full animate-grow"
               style={{
                 animationDelay: `${delay}ms`,
                 animationDuration: '1000ms',

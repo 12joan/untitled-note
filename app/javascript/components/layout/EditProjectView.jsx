@@ -32,15 +32,12 @@ const EditProjectView = () => {
 
       <h1 className="text-3xl font-medium select-none mb-5">Edit project</h1>
 
-      {futures.unwrap({
-        pending: () => <LoadingView />,
-        resolved: ({ project, documentCount }) => (
-          <div className="space-y-10">
-            <ProjectForm initialProject={project} />
-            <ProjectActions project={project} documentCount={documentCount} />
-          </div>
-        ),
-      })}
+      {futures.map(({ project, documentCount }) => (
+        <div className="space-y-10">
+          <ProjectForm initialProject={project} />
+          <ProjectActions project={project} documentCount={documentCount} />
+        </div>
+      )).orDefault(<LoadingView />)}
     </div>
   )
 }

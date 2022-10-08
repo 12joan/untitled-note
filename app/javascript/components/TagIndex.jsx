@@ -3,9 +3,9 @@ import React from 'react'
 import pluralize from '~/lib/pluralize'
 import { TagLink } from '~/lib/routes'
 
-import FutureItemIndex from '~/components/FutureItemIndex'
+import ItemIndex from '~/components/ItemIndex'
 
-const FutureTagIndex = ({ futureTags, ...otherProps }) => {
+const TagIndex = ({ tags, ...otherProps }) => {
   const itemForTag = tag => ({
     key: tag.id,
     label: tag.text,
@@ -17,11 +17,11 @@ const FutureTagIndex = ({ futureTags, ...otherProps }) => {
   })
 
   return (
-    <FutureItemIndex
-      futureItems={futureTags.map(xs => xs.map(itemForTag))}
+    <ItemIndex
+      items={tags.map(itemForTag)}
       {...otherProps}
     />
   )
 }
 
-export default FutureTagIndex
+export default TagIndex

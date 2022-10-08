@@ -9,7 +9,8 @@ import DocumentsStream from '~/lib/streams/DocumentsStream'
 
 import BackButton from '~/components/BackButton'
 import { InlinePlaceholder } from '~/components/Placeholder'
-import FutureDocumentIndex from '~/components/FutureDocumentIndex'
+import DocumentIndex from '~/components/DocumentIndex'
+import LoadingView from '~/components/LoadingView'
 
 const TagDocumentsView = ({ tagId }) => {
   const viewRef = useRef()
@@ -34,7 +35,7 @@ const TagDocumentsView = ({ tagId }) => {
   }
 
   return (
-    <div ref={viewRef}>
+    <div ref={viewRef} className="grow flex flex-col">
       <BackButton className="mb-3" />
 
       <h1 className="text-3xl font-medium select-none mb-5">
@@ -42,11 +43,12 @@ const TagDocumentsView = ({ tagId }) => {
       </h1>
 
       <ContextProvider linkOriginator={futureTag.map(tag => tag.text).orDefault('Tag')}>
-        <FutureDocumentIndex
-          viewWidth={viewWidth}
-          futureDocuments={futureDocuments}
-          placeholders={4}
-        />
+        {futureDocuments.map(documents => (
+          <DocumentIndex
+            viewWidth={viewWidth}
+            documents={documents}
+          />
+        )).orDefault(<LoadingView />)}
       </ContextProvider>
     </div>
   )

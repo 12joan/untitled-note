@@ -14,6 +14,10 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, ...otherProp
     return Math.max(1, Math.floor((viewWidth - viewPadding + cardGap) / (cardWidth + cardGap)))
   }, [viewWidth])
 
+  if (items.length === 0 && !ifEmpty) {
+    return null
+  }
+
   const { Component, limit } = cardsPerRow > 1
     ? { Component: CardIndex, limit: cardsPerRow }
     : { Component: ListIndex, limit: 5 }
