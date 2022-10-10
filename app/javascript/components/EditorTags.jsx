@@ -1,18 +1,22 @@
-import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import React, { forwardRef, useMemo, useImperativeHandle, useRef, useState } from 'react'
+import { localeIncludes } from '@12joan/locale-includes'
 
+import { useContext } from '~/lib/context'
 import { TagLink } from '~/lib/routes'
 
 import CloseIcon from '~/components/icons/CloseIcon'
 import PlusIcon from '~/components/icons/PlusIcon'
+import Combobox from '~/components/Combobox'
 
 const tagClassName = 'bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center'
 const tagButtonClassName = 'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400 rounded-full flex items-center justify-center'
 
 const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVisible }, ref) => {
-  const tags = workingDocument.tags
-
-  const hasTag = tagText => tags.some(tag => tag.text === tagText)
-  const addTag = tagText => updateDocument({ tags: [...tags, { localId: Math.random(), text: tagText }] })
+  const { tags } = workingDocument
+  const tagTexts = useMemo(() => tags.map(tag => tag.text), [tags])
+  const hasTagWithText = tagText => tagTexts.includes(tagText)
+  const addTag = tag => updateDocument({ tags: [...tags, tag] })
+  const makeTagWithText = tagText => ({ localId: Math.random(), text: tagText })
 
   const removeTag = tag => {
     const remainingTags = tags.filter(t => t.text !== tag.text)
@@ -20,11 +24,41 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     return remainingTags
   }
 
+  const { futureTags: futureAllTags } = useContext()
+  const allTags = futureAllTags.orDefault([])
+
+  const unusedTags = useMemo(() => allTags.filter(
+    tag => !hasTagWithText(tag.text)
+  ), [futureAllTags, tagTexts])
+
   const inputContainerRef = useRef()
   const inputRef = useRef()
 
   const [inputVisible, setInputVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
+  const trimmedInputValue = inputValue.replace(/\s+/g, ' ').trim()
+
+  const filteredUnusedTags = useMemo(() => unusedTags.filter(
+    tag => localeIncludes(tag.text, trimmedInputValue, { usage: 'search', sensitivity: 'base' })
+  ), [unusedTags, trimmedInputValue])
+
+  const suggestions = useMemo(() => {
+    const suggestions = filteredUnusedTags.map(tag => ({
+      key: tag.text,
+      text: tag.text,
+      tag,
+    }))
+
+    if (!allTags.some(tag => tag.text.toLowerCase() === trimmedInputValue.toLowerCase())) {
+      suggestions.push({
+        key: 'new',
+        text: `Create "${trimmedInputValue}"`,
+        tag: makeTagWithText(trimmedInputValue),
+      })
+    }
+
+    return suggestions
+  }, [filteredUnusedTags, allTags, trimmedInputValue])
 
   const focusInput = () => {
     setInputVisible(true)
@@ -32,46 +66,6 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
   }
 
   useImperativeHandle(ref, () => ({ focus: focusInput }))
-
-  const commitInput = () => {
-    const trimmedInput = inputValue.trim()
-
-    setInputValue('')
-
-    // Cannot add the same tag twice
-    if (trimmedInput.length > 0 && !hasTag(trimmedInput)) {
-      addTag(trimmedInput)
-      return true
-    }
-
-    return false
-  }
-
-  const handleInputContainerBlur = event => {
-    if (!inputContainerRef.current.contains(event.relatedTarget)) {
-      const addedTag = commitInput()
-      setInputVisible(false)
-      setVisible(addedTag || tags.length > 0)
-    }
-  }
-
-  const handleInputKeyDown = event => {
-    switch (event.key) {
-      case 'Tab':
-      case 'Enter':
-        if (inputValue.length > 0) {
-          event.preventDefault()
-        }
-        commitInput()
-        break
-
-      case 'Backspace':
-        if (inputValue.length === 0) {
-          removeTag(tags[tags.length - 1])
-        }
-        break
-    }
-  }
 
   const linkForTag = ({ tag: { id, text }, ...otherProps }) => id
     ? <TagLink tagId={id} children={text} {...otherProps} />
@@ -110,22 +104,58 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
         <PlusIcon size="1.5em" ariaLabel="Add tag" />
       </button>
 
-      <div
-        ref={inputContainerRef}
-        onBlur={handleInputContainerBlur}
-        className="h-8 flex items-center"
-      >
-        <input
-          ref={inputRef}
-          type="text"
-          className="no-focus-ring bg-transparent"
-          style={{
-            display: inputVisible ? undefined : 'none',
+      <div className="h-8 flex items-center" style={{ display: inputVisible ? undefined : 'none' }}>
+        <Combobox
+          query={trimmedInputValue}
+          suggestions={suggestions}
+          keyForSuggestion={suggestion => suggestion.key}
+          onCommit={({ tag }) => {
+            addTag(tag)
+            setInputValue('')
           }}
-          value={inputValue}
-          onChange={event => setInputValue(event.target.value)}
-          onKeyDown={handleInputKeyDown}
-          placeholder="Type to add tag"
+          renderInput={({ handleKeyDown, handleFocus, handleBlur, accessibilityProps }) => (
+            <input
+              ref={inputRef}
+              type="text"
+              className="no-focus-ring bg-transparent"
+              value={inputValue}
+              onChange={event => setInputValue(event.target.value)}
+              onKeyDown={event => {
+                handleKeyDown(event)
+
+                if (event.key === 'Backspace' && inputValue.length === 0 && tags.length > 0) {
+                  removeTag(tags[tags.length - 1])
+                }
+
+                if (event.key === 'Escape') {
+                  setInputValue('')
+                }
+              }}
+              onFocus={handleFocus}
+              onBlur={event => {
+                handleBlur(event)
+
+                if (trimmedInputValue.length === 0) {
+                  setInputValue('')
+                  setInputVisible(false)
+                  setVisible(tags.length > 0)
+                }
+              }}
+              placeholder="Type to add tag"
+            />
+          )}
+          renderSuggestion={({ suggestion, active, handleMouseOver, handleMouseDown, handleClick, accessibilityProps }) => (
+            <div
+              data-active={active}
+              className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
+              onMouseOver={handleMouseOver}
+              onMouseDown={handleMouseDown}
+              onClick={handleClick}
+              {...accessibilityProps}
+            >
+              {suggestion.text}
+            </div>
+          )}
         />
       </div>
     </div>
