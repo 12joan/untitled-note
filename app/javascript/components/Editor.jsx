@@ -13,7 +13,7 @@ import {
 
 import { useContext, ContextProvider } from '~/lib/context'
 import { useGlobalEvent } from '~/lib/globalEvents'
-import { projectPath } from '~/lib/routes'
+import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
 
@@ -36,7 +36,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
   useGlobalEvent('document:delete', ({ documentId }) => {
     if (documentId === workingDocument.id) {
-      navigate(projectPath(projectId))
+      navigate(overviewPath(projectId))
     }
   })
 

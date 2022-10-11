@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useElementSize from '~/lib/useElementSize'
 import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import { projectWasOpened } from '~/lib/projectHistory'
+import { setLastView } from '~/lib/restoreProjectView'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
@@ -21,6 +23,9 @@ import EditorView from '~/components/layout/EditorView'
 const ProjectView = ({ childView }) => {
   const { project } = useContext()
   useEffect(() => projectWasOpened(project.id), [project.id])
+
+  const { pathname: viewPath } = useLocation()
+  useEffect(() => setLastView(project.id, viewPath), [project.id, viewPath])
 
   const projectsBarRef = useRef()
   const topBarRef = useRef()

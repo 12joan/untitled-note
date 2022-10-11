@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import useElementSize from '~/lib/useElementSize'
 import { useContext, ContextProvider } from '~/lib/context'
 import useTitle from '~/lib/useTitle'
-import { ProjectLink } from '~/lib/routes'
+import { OverviewLink } from '~/lib/routes'
 import useStream from '~/lib/useStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
 
@@ -29,7 +29,7 @@ const TagDocumentsView = ({ tagId }) => {
       <div className="space-y-3">
         <h1 className="text-3xl font-medium">Tag not found</h1>
         <p className="text-lg font-light">This tag does not exist. Tags are automatically deleted when no documents are tagged with them.</p>
-        <p><ProjectLink className="btn btn-link">Go back</ProjectLink></p>
+        <p><OverviewLink className="btn btn-link">Go back</OverviewLink></p>
       </div>
     )
   }

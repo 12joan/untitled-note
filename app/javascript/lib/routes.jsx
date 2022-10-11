@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 import forwardParams from '~/lib/forwardParams'
 import { useContext } from '~/lib/context'
+import { getLastView } from '~/lib/restoreProjectView'
 
 import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
@@ -70,7 +71,7 @@ const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId
 
 const awaitRedirectPath = projectId => projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect'
 const overviewPath = projectId => `/projects/${projectId}/overview`
-const projectPath = overviewPath
+const projectPath = projectId => getLastView(projectId) ?? overviewPath(projectId)
 const editProjectPath = projectId => `/projects/${projectId}/edit`
 const recentlyViewedPath = projectId => `/projects/${projectId}/recently_viewed`
 const tagPath = (projectId, tagId) => `/projects/${projectId}/tags/${tagId}`

@@ -6,7 +6,7 @@ import useTitle from '~/lib/useTitle'
 import useSynchronisedRecord from '~/lib/synchroniseRecords'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
-import { ProjectLink } from '~/lib/routes'
+import { OverviewLink } from '~/lib/routes'
 
 import LoadingView from '~/components/LoadingView'
 import Editor from '~/components/Editor'
@@ -108,7 +108,7 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
         <div className="narrow space-y-3">
           <h1 className="text-3xl font-medium">{heading}</h1>
           <p className="text-lg font-light">{explanation}</p>
-          <p><ProjectLink className="btn btn-link">Go back</ProjectLink></p>
+          <p><OverviewLink className="btn btn-link">Go back</OverviewLink></p>
         </div>
       )
     },

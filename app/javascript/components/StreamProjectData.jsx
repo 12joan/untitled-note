@@ -8,7 +8,6 @@ import DocumentsStream from '~/lib/streams/DocumentsStream'
 import TagsStream from '~/lib/streams/TagsStream'
 import useValueChanged from '~/lib/useValueChanged'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
-import { projectPath } from '~/lib/routes'
 
 const StreamProjectData = ({ projectId, children }) => {
   const { projects } = useContext()
