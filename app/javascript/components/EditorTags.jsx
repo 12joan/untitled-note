@@ -113,13 +113,16 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
             addTag(tag)
             setInputValue('')
           }}
-          renderInput={({ handleKeyDown, handleFocus, handleBlur, accessibilityProps }) => (
+          renderInput={({ handleChange, handleKeyDown, handleFocus, handleBlur, accessibilityProps }) => (
             <input
               ref={inputRef}
               type="text"
               className="no-focus-ring bg-transparent"
               value={inputValue}
-              onChange={event => setInputValue(event.target.value)}
+              onChange={event => {
+                handleChange(event)
+                setInputValue(event.target.value)
+              }}
               onKeyDown={event => {
                 handleKeyDown(event)
 
@@ -144,11 +147,11 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
               placeholder="Type to add tag"
             />
           )}
-          renderSuggestion={({ suggestion, active, handleMouseOver, handleMouseDown, handleClick, accessibilityProps }) => (
+          renderSuggestion={({ suggestion, active, handleMouseMove, handleMouseDown, handleClick, accessibilityProps }) => (
             <div
               data-active={active}
               className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
-              onMouseOver={handleMouseOver}
+              onMouseMove={handleMouseMove}
               onMouseDown={handleMouseDown}
               onClick={handleClick}
               {...accessibilityProps}

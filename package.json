@@ -9,6 +9,7 @@
     "dev:vite": "bin/vite serve"
   },
   "dependencies": {
+    "@floating-ui/react-dom": "^1.0.0",
     "@headlessui/react": "^1.7.3",
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.0.4",

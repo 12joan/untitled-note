@@ -1,9 +1,8 @@
 import React from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useLayoutEffect } from 'react'
+import { useFloating, offset, shift, size } from '@floating-ui/react-dom'
 
 import keyWithModifiers from '~/lib/keyWithModifiers'
-
-import Tippy from '~/components/Tippy'
 
 const positiveMod = (a, b) => ((a % b) + b) % b
 
@@ -34,33 +33,72 @@ const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput,
     if (showSuggestions && handler) {
       event.preventDefault()
       handler()
-    } else {
-      selectFirstSuggestion()
     }
   }
 
+  // Scroll active suggestion into view
+  useLayoutEffect(() => {
+    if (activeSuggestionKey) {
+      const activeSuggestionElement = document.getElementById(idForSuggestion(activeSuggestionKey))
+      activeSuggestionElement?.scrollIntoView({ block: 'nearest' })
+    }
+  }, [activeSuggestionKey])
+
+  const {
+    x: suggestionsX,
+    y: suggestionsY,
+    reference: inputRef,
+    floating: suggestionsRef,
+    strategy: suggestionsPosition,
+  } = useFloating({
+    placement: 'bottom-start',
+    middleware: [
+      offset(10),
+      shift(),
+      size({
+        apply: ({ availableHeight, elements }) => {
+          elements.floating.style.maxHeight = `${availableHeight}px`
+        },
+        padding: 10,
+      }),
+    ],
+  })
+
   return (
-    <Tippy
-      trigger="manual"
-      showOnCreate
-      hideOnClick={false}
-      placement="bottom-start"
-      interactive
-      render={attrs => showSuggestions && (
+    <>
+      <div
+        ref={inputRef}
+        children={renderInput({
+          handleChange: () => selectFirstSuggestion(),
+          handleKeyDown,
+          handleFocus: () => setInputFocused(true),
+          handleBlur: () => setInputFocused(false),
+          accessibilityProps: {
+            role: 'combobox',
+            'aria-expanded': showSuggestions,
+          },
+        })}
+      />
+
+      {showSuggestions && (
         <div
-          {...attrs}
-          className="bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg overflow-hidden w-48 max-w-full"
+          ref={suggestionsRef}
+          className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
+          style={{
+            position: suggestionsPosition,
+            top: suggestionsY ?? 0,
+            left: suggestionsX ?? 0,
+          }}
           role="listbox"
           aria-activedescendant={idForSuggestion(activeSuggestionKey)}
-        >
-          {suggestions.map((suggestion, index) => {
+          children={suggestions.map((suggestion, index) => {
             const key = keyForSuggestion(suggestion)
             const active = key === activeSuggestionKey
 
             return renderSuggestion({
               suggestion,
               active,
-              handleMouseOver: handleMouseOverSuggestion(index),
+              handleMouseMove: handleMouseOverSuggestion(index),
               handleMouseDown: event => event.preventDefault(),
               handleClick: handleClickSuggestion(index),
               accessibilityProps: {
@@ -72,18 +110,9 @@ const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput,
               },
             })
           })}
-        </div>
+        />
       )}
-      children={renderInput({
-        handleKeyDown,
-        handleFocus: () => setInputFocused(true),
-        handleBlur: () => setInputFocused(false),
-        accessibilityProps: {
-          role: 'combobox',
-          'aria-expanded': showSuggestions,
-        },
-      })}
-    />
+    </>
   )
 }
 
