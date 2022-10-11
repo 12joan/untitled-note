@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
+import { useContext } from '~/lib/context'
 import openModal from '~/lib/openModal'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import { editProjectPath } from '~/lib/routes'
@@ -13,6 +14,7 @@ import { ModalTitle } from '~/components/Modal'
 const useNewProject = () => {
   const navigate = useNavigate()
   const { pathname: currentPath } = useLocation()
+  const { invalidateProjectsCache } = useContext()
 
   const openNewProjectModal = () => openModal(
     NewProjectModal,
@@ -21,7 +23,10 @@ const useNewProject = () => {
       navigate,
       promisePath: handleCreateProjectError(
         ProjectsAPI.create(projectArgs)
-      ).then(({ id }) => editProjectPath(id)),
+      ).then(({ id }) => {
+        invalidateProjectsCache()
+        return editProjectPath(id)
+      }),
       fallbackPath: currentPath,
     })
   )

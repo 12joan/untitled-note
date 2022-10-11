@@ -1,25 +1,20 @@
 import React, { useMemo} from 'react'
 import { Navigate } from 'react-router-dom'
 
+import { useContext, ContextProvider } from '~/lib/context'
 import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments'
 import useStream from '~/lib/useStream'
-import ProjectsStream from '~/lib/streams/ProjectsStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
 import TagsStream from '~/lib/streams/TagsStream'
 import useValueChanged from '~/lib/useValueChanged'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { projectPath } from '~/lib/routes'
-import { ContextProvider } from '~/lib/context'
 
 const StreamProjectData = ({ projectId, children }) => {
+  const { projects } = useContext()
+  const project = useMemo(() => projects.find(project => project.id.toString() === projectId.toString()), [projects, projectId])
+
   const recentlyViewedDocuments = useRecentlyViewedDocuments()
-
-  const futureProjects = useStream(resolve => ProjectsStream.index({}, resolve), [])
-
-  const futureProject = useMemo(
-    () => futureProjects.map(projects => projects.find(project => project.id == projectId)),
-    [futureProjects, projectId]
-  )
 
   const futureTags = useStream(resolve => TagsStream(projectId).index({}, resolve), [projectId])
 
@@ -60,16 +55,15 @@ const StreamProjectData = ({ projectId, children }) => {
       .filter(doc => doc !== undefined)
   )), [futurePartialDocuments, recentlyViewedDocuments])
 
-  if (futureProject.isResolved && futureProject.data === undefined) {
-    const [firstProject] = futureProjects.data
-    return <Navigate to={projectPath(firstProject.id)} />
+  if (project === undefined) {
+    console.log({ projectId, projects })
+    return 'Project not found' // TODO
   }
 
   return (
     <ContextProvider
       projectId={projectId}
-      futureProjects={futureProjects}
-      futureProject={futureProject}
+      project={project}
       futureTags={futureTags}
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}

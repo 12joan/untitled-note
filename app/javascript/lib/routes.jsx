@@ -7,6 +7,7 @@ import { useContext } from '~/lib/context'
 import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
+import RestoreLastOpenProject from '~/components/RestoreLastOpenProject'
 import Link from '~/components/Link'
 
 const routesComponent = (
@@ -49,7 +50,7 @@ const routesComponent = (
       </StreamProjectData>
     ))} />
 
-    <Route path="*" element={<Navigate to="/projects/1/overview" replace />} />
+    <Route path="*" element={<RestoreLastOpenProject />} />
   </Routes>
 )
 

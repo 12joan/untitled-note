@@ -10,6 +10,7 @@ import openModal from '~/lib/openModal'
 import awaitRedirect from '~/lib/awaitRedirect'
 import pluralize from '~/lib/pluralize'
 import { handleUpdateProjectError, handleDeleteProjectError } from '~/lib/handleErrors'
+import { removeProjectFromHistory } from '~/lib/projectHistory'
 
 import BackButton from '~/components/BackButton'
 import LoadingView from '~/components/LoadingView'
@@ -17,14 +18,10 @@ import SpinnerIcon from '~/components/icons/SpinnerIcon'
 import { ModalTitle } from '~/components/Modal'
 
 const EditProjectView = () => {
-  const { futureProject, futurePartialDocuments } = useContext()
+  const { project, futurePartialDocuments } = useContext()
+  const futureDocumentCount = futurePartialDocuments.map(xs => xs.length)
 
-  useTitle(futureProject.map(project => `Edit ${project.name}`).orDefault(undefined))
-
-  const futures = sequence({
-    project: futureProject,
-    documentCount: futurePartialDocuments.map(xs => xs.length),
-  }, Future.resolved)
+  useTitle(`Edit ${project.name}`)
 
   return (
     <div className="grow narrow flex flex-col">
@@ -32,7 +29,7 @@ const EditProjectView = () => {
 
       <h1 className="text-3xl font-medium select-none mb-5">Edit project</h1>
 
-      {futures.map(({ project, documentCount }) => (
+      {futureDocumentCount.map(documentCount => (
         <div className="space-y-10">
           <ProjectForm initialProject={project} />
           <ProjectActions project={project} documentCount={documentCount} />
@@ -103,7 +100,10 @@ const ProjectActions = ({ project, documentCount }) => {
       navigate,
       promisePath: handleDeleteProjectError(
         ProjectsAPI.destroy(project)
-      ).then(() => '/'),
+      ).then(() => {
+        removeProjectFromHistory(project.id)
+        return '/'
+      }),
       fallbackPath: currentPath,
     })
   )

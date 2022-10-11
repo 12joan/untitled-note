@@ -1,6 +1,6 @@
 import makeLocalHistory from '~/lib/localHistory'
 
-const [documentWasViewed, useRecentlyViewedDocuments] = makeLocalHistory({
+const { touchItem: documentWasViewed, useItems: useRecentlyViewedDocuments } = makeLocalHistory({
   key: 'recentlyViewedDocuments',
 })
 

@@ -5,7 +5,6 @@ import useBreakpoints from '~/lib/useBreakpoints'
 import useNewDocument from '~/lib/useNewDocument'
 
 import Tooltip from '~/components/Tooltip'
-import { InlinePlaceholder } from '~/components/Placeholder'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
 import SidebarIcon from '~/components/icons/SidebarIcon'
 import MenuIcon from '~/components/icons/MenuIcon'
@@ -15,7 +14,7 @@ import SettingsIcon from '~/components/icons/SettingsIcon'
 import AccountIcon from '~/components/icons/AccountIcon'
 
 const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherProps }, ref) => {
-  const { futureProject } = useContext()
+  const { project } = useContext()
 
   const { isXs } = useBreakpoints()
 
@@ -45,7 +44,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
       )}
 
       <div className={`font-medium ${showSidebarButton ? '' : '-ml-3'} px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}>
-        {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
+        {project.name}
       </div>
 
       <div className="grow" />

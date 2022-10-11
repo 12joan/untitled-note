@@ -16,7 +16,6 @@ import {
 } from '~/lib/config'
 
 import PopOutLink from '~/components/PopOutLink'
-import { InlinePlaceholder } from '~/components/Placeholder'
 import DocumentIndex from '~/components/DocumentIndex'
 import TagIndex from '~/components/TagIndex'
 import PinnedDragTarget from '~/components/PinnedDragTarget'
@@ -28,14 +27,14 @@ const OverviewView = () => {
   const { width: viewWidth } = useElementSize(viewRef)
 
   const {
-    futureProject,
+    project,
     futurePartialDocuments,
     futurePinnedDocuments,
     futureRecentlyViewedDocuments,
     futureTags,
   } = useContext()
 
-  useTitle(futureProject.map(project => project.name).orDefault(undefined))
+  useTitle(project.name)
 
   const futures = sequence({
     documents: futurePartialDocuments,
@@ -48,7 +47,7 @@ const OverviewView = () => {
     <div ref={viewRef} className="grow flex flex-col gap-5">
       <PopOutLink as={EditProjectLink} label="Edit details">
         <h1 className="text-3xl font-medium">
-          {futureProject.map(project => project.name).orDefault(<InlinePlaceholder />)}
+          {project.name}
         </h1>
       </PopOutLink>
 
