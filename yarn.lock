@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@12joan/locale-includes@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@12joan/locale-includes/-/locale-includes-1.0.3.tgz#4a111c3c9cad01bab7c56a1b65884bd7051d1e69"
-  integrity sha512-piy4m1tGwqtbIU56weGsLoCxxymTsaZNOavwsW7ZhioqRFEA+lneeVho8ZtZkLpnlA9LanzQ3W5Fh5ehwhE5lg==
-
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
@@ -1595,6 +1590,11 @@ lilconfig@^2.0.5, lilconfig@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/lilconfig/-/lilconfig-2.0.6.tgz#32a384558bd58af3d4c6e077dd1ad1d397bc69d4"
   integrity sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==
+
+locale-includes@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/locale-includes/-/locale-includes-1.0.4.tgz#0b068ba80f916f7699bf24c3a49bfe1c1626a1c3"
+  integrity sha512-4XqNaTW4LzZ3/DKiwEuwDDIwT8GSLDY+f3Tpgzry4j/C+3IXvM+Bda8cYYh9Tcy4E8xO0v5Kf2ApNuyTL8+4rg==
 
 lodash.castarray@^4.4.0:
   version "4.4.0"

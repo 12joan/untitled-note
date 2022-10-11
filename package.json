@@ -9,13 +9,13 @@
     "dev:vite": "bin/vite serve"
   },
   "dependencies": {
-    "@12joan/locale-includes": "^1.0.3",
     "@headlessui/react": "^1.7.2",
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
     "@udecode/plate-headless": "^18.1.0",
     "async-mutex": "^0.4.0",
+    "locale-includes": "^1.0.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

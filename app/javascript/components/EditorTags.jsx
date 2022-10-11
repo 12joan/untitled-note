@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useRef, useState } from 'react'
-import { localeIncludes } from '@12joan/locale-includes'
+import { localeIncludes } from 'locale-includes'
 
 import { useContext } from '~/lib/context'
 import { TagLink } from '~/lib/routes'
