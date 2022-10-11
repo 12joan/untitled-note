@@ -22,7 +22,7 @@ class Auth0Controller < ApplicationController
 
   def logout
     destroy_login_session
-    redirect_to logout_url
+    redirect_to logout_url, allow_other_host: true
   end
 
   private

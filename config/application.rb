@@ -2,6 +2,7 @@ require_relative 'boot'
 
 require 'rails'
 
+require 'active_model/railtie'
 require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_view/railtie'
@@ -16,7 +17,7 @@ Bundler.require(*Rails.groups)
 module Note
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -27,5 +28,12 @@ module Note
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.middleware.insert_before 0, Rack::AuthorisedProxy
+
+    # Change the format of the cache entry.
+    config.active_support.cache_format_version = 7.0
+
+    # Rails transparently deserializes existing (Marshal-serialized) cookies on
+    # read and re-writes them in the JSON format.
+    Rails.application.config.action_dispatch.cookies_serializer = :hybrid
   end
 end

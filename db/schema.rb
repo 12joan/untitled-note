@@ -10,17 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_08_195100) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_10_08_195100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "documents", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "project_id", null: false
     t.boolean "blank", default: false, null: false
-    t.datetime "pinned_at"
+    t.datetime "pinned_at", precision: nil
     t.string "title"
     t.text "plain_body", default: "", null: false
     t.integer "remote_version", default: 1, null: false
@@ -32,8 +31,8 @@ ActiveRecord::Schema.define(version: 2022_10_08_195100) do
   create_table "documents_tags", force: :cascade do |t|
     t.bigint "document_id", null: false
     t.bigint "tag_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_documents_tags_on_document_id"
     t.index ["tag_id"], name: "index_documents_tags_on_tag_id"
   end
@@ -42,15 +41,15 @@ ActiveRecord::Schema.define(version: 2022_10_08_195100) do
     t.bigint "user_id", null: false
     t.string "token", null: false
     t.string "user_agent", default: "", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_login_sessions_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "owner_id", default: 1, null: false
     t.index ["owner_id"], name: "index_projects_on_owner_id"
   end
@@ -58,8 +57,8 @@ ActiveRecord::Schema.define(version: 2022_10_08_195100) do
   create_table "tags", force: :cascade do |t|
     t.string "text"
     t.bigint "project_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "documents_count", default: 0, null: false
     t.index ["project_id"], name: "index_tags_on_project_id"
     t.index ["text", "project_id"], name: "index_tags_on_text_and_project_id", unique: true
@@ -68,8 +67,8 @@ ActiveRecord::Schema.define(version: 2022_10_08_195100) do
   create_table "users", force: :cascade do |t|
     t.string "auth0_id"
     t.string "name", default: "", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "documents", "projects"
