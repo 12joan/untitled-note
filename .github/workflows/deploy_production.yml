@@ -9,8 +9,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true
+    # Caching is making builds slower:
+    # https://github.com/satackey/action-docker-layer-caching/issues/305
+    # - uses: satackey/action-docker-layer-caching@v0.0.11
+    #   continue-on-error: true
 
     - uses: zenato/docker-action@master
       with:
