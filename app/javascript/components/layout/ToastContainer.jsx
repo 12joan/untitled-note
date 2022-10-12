@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useElementSize } from 'usehooks-ts'
 
 import { useGlobalEvent } from '~/lib/globalEvents'
 import { useTimeout } from '~/lib/useTimer'
-import useElementSize from '~/lib/useElementSize'
 
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
@@ -33,12 +33,11 @@ const ToastContainer = () => {
 }
 
 const Toast = ({ title, message, autoClose }) => {
-  const ref = useRef()
   const [visible, setVisible] = useState(false)
   const [inDOM, setInDOM] = useState(true)
   const [isClosing, setIsClosing] = useState(false)
 
-  const { height: toastHeight } = useElementSize(ref)
+  const [ref, { height: toastHeight }] = useElementSize()
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 50)

@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import React from 'react'
+import { useElementSize } from 'usehooks-ts'
 
-import useElementSize from '~/lib/useElementSize'
 import useTitle from '~/lib/useTitle'
 import { useContext, ContextProvider } from '~/lib/context'
 
@@ -9,8 +9,7 @@ import TagIndex from '~/components/TagIndex'
 import LoadingView from '~/components/LoadingView'
 
 const AllTagsView = () => {
-  const viewRef = useRef()
-  const { width: viewWidth } = useElementSize(viewRef)
+  const [viewRef, { width: viewWidth }] = useElementSize()
 
   useTitle('All tags')
 

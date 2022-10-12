@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useElementSize } from 'usehooks-ts'
 import { useLocation } from 'react-router-dom'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
-import useElementSize from '~/lib/useElementSize'
 import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
+import multiplexRefs from '~/lib/multiplexRefs'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
@@ -27,19 +28,16 @@ const ProjectView = ({ childView }) => {
   const { pathname: viewPath } = useLocation()
   useEffect(() => setLastView(project.id, viewPath), [project.id, viewPath])
 
-  const projectsBarRef = useRef()
-  const topBarRef = useRef()
-  const sideBarRef = useRef()
-  const formattingBarRef = useRef()
-
-  const { width: projectsBarWidth } = useElementSize(projectsBarRef)
-  const { height: topBarHeight } = useElementSize(topBarRef)
-  const { width: sideBarWidth } = useElementSize(sideBarRef)
-  const { width: formattingBarWidth } = useElementSize(formattingBarRef)
+  const [projectsBarRef, { width: projectsBarWidth }] = useElementSize()
+  const [topBarRef, { height: topBarHeight }] = useElementSize()
+  const [sideBarRef, { width: sideBarWidth }] = useElementSize()
+  const [formattingBarSizeRef, { width: formattingBarWidth }] = useElementSize()
 
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
+
+  const formattingBarRef = useRef()
 
   useEffect(() => {
     if (isMd) {
@@ -82,21 +80,32 @@ const ProjectView = ({ childView }) => {
 
   return (
     <ContextProvider formattingToolbarRef={formattingBarRef} topBarHeight={topBarHeight}>
-      <nav
-        ref={projectsBarRef}
-        className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"
-        style={{
-          display: isMd ? undefined : 'none',
-        }}
-        children={<ProjectsBar />}
-      />
-
       <TopBar
         ref={topBarRef}
         style={{ left: projectsBarWidth }}
         showSidebarButton={!isMd}
         onSidebarButtonClick={() => setOffcanvasSidebarVisible(true)}
       />
+
+      {isMd && (
+        <>
+          <nav
+            ref={projectsBarRef}
+            className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"
+            children={<ProjectsBar />}
+          />
+
+          <nav
+            ref={sideBarRef}
+            className="fixed bottom-0 overflow-y-auto p-5 pt-1 pr-1"
+            style={{
+              top: topBarHeight,
+              left: projectsBarWidth,
+            }}
+            children={<Sidebar />}
+          />
+        </>
+      )}
 
       <ModalRoot open={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)}>
         <div className="fixed inset-0">
@@ -126,25 +135,13 @@ const ProjectView = ({ childView }) => {
         </div>
       </ModalRoot>
 
-      <nav
-        ref={sideBarRef}
-        className="fixed bottom-0 overflow-y-auto p-5 pt-1 pr-1"
-        style={{
-          top: topBarHeight,
-          left: projectsBarWidth,
-          display: isMd ? undefined : 'none',
-        }}
-        children={<Sidebar />}
-      />
-
-      <aside
-        ref={formattingBarRef}
-        className="fixed bottom-0 right-0 p-5 pt-1 pl-1 overflow-y-auto flex"
-        style={{
-          top: topBarHeight,
-          display: showFormattingToolbar ? undefined : 'none',
-        }}
-      />
+      {showFormattingToolbar && (
+          <aside
+          ref={multiplexRefs([formattingBarRef, formattingBarSizeRef])}
+          className="fixed bottom-0 right-0 p-5 pt-1 pl-1 overflow-y-auto flex"
+          style={{ top: topBarHeight }}
+        />
+      )}
 
       <main
         className="min-h-screen flex flex-col"

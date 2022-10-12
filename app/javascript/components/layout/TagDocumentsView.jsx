@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import React from 'react'
+import { useElementSize } from 'usehooks-ts'
 
-import useElementSize from '~/lib/useElementSize'
 import { useContext, ContextProvider } from '~/lib/context'
 import useTitle from '~/lib/useTitle'
 import { OverviewLink } from '~/lib/routes'
@@ -13,8 +13,7 @@ import DocumentIndex from '~/components/DocumentIndex'
 import LoadingView from '~/components/LoadingView'
 
 const TagDocumentsView = ({ tagId }) => {
-  const viewRef = useRef()
-  const { width: viewWidth } = useElementSize(viewRef)
+  const [viewRef, { width: viewWidth }] = useElementSize()
 
   const { projectId, futureTags } = useContext()
 
