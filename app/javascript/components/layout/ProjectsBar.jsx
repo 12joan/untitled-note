@@ -18,7 +18,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
         const isCurrentProject = project.id == projectId
 
         return (
-          <Tooltip key={project.id} content={project.name} placement="right">
+          <Tooltip key={project.id} content={project.name} placement="right" fixed>
             <ProjectLink
               projectId={project.id}
               data-active={isCurrentProject}
@@ -42,7 +42,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
         )
       })}
 
-      <Tooltip content="New project" placement="right">
+      <Tooltip content="New project" placement="right" fixed>
         <button
           type="button"
           className="w-12 btn aspect-square flex items-center justify-center p-1 hocus:bg-black/5 dark:hocus:bg-white/5 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"

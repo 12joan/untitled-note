@@ -99,7 +99,7 @@ const FormattingToolbar = ({ editor }) => {
   return (
     <div className="my-auto space-y-2">
       {formattingButtons.map(({ label, icon: Icon, active, onClick, disabled = false }, index) => (
-        <Tooltip key={index} content={label} placement="left">
+        <Tooltip key={index} content={label} placement="left" fixed>
           <button
             type="button"
             className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed data-active:text-primary-500 dark:data-active:text-primary-400"

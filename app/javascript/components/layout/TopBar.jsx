@@ -34,7 +34,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
       {...otherProps}
     >
       {showSidebarButton && (
-        <Tooltip content="Show sidebar">
+        <Tooltip content="Show sidebar" fixed>
           <NavButton
             icon={SidebarIcon}
             label="Show sidebar"
@@ -51,7 +51,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
 
       {isXs
         ? navButtons.map(({ label, ...otherProps }) => (
-          <Tooltip key={label} content={label}>
+          <Tooltip key={label} content={label} fixed>
             <NavButton label={label} {...otherProps} />
           </Tooltip>
         ))
