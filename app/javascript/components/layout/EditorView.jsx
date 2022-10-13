@@ -62,6 +62,7 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     }),
     attributeBehaviours: {
       remote_version: { merge: (local, remote) => remote },
+      blank: { merge: (local, remote) => remote },
       tags: {
         merge: (local, remote) => local.map(localTag => localTag.id
           ? localTag

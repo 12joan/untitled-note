@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from 'react'
+import React, { useRef, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -30,9 +30,22 @@ const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
   const tagsRef = useRef()
   const tippyContainerRef = useRef()
-  const navigate = useNavigate()
+
+  const focusEditor = () => setTimeout(() => document.querySelector('[data-slate-editor]').focus(), 0)
+
+  useEffect(() => {
+    if (workingDocument.blank) {
+      titleRef.current.focus()
+    } else {
+      focusEditor()
+    }
+  }, [])
+
   const { projectId } = useContext()
+
   const [tagsVisible, setTagsVisible] = useState(workingDocument.tags.length > 0)
+
+  const navigate = useNavigate()
 
   useGlobalEvent('document:delete', ({ documentId }) => {
     if (documentId === workingDocument.id) {
@@ -91,6 +104,11 @@ const Editor = ({ workingDocument, updateDocument }) => {
             onChange={event => updateDocument({
               title: event.target.value.replace(/[\n\r]+/g, ''),
             })}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                focusEditor()
+              }
+            }}
           />
 
           {!tagsVisible && (

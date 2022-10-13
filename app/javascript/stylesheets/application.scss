@@ -180,3 +180,8 @@
   // Remove opacity: 0.333 from placeholder
   opacity: 1 !important;
 }
+
+[data-slate-editor]:focus [data-slate-placeholder] {
+  // Hide placeholder when editor is focused
+  opacity: 0 !important;
+}
