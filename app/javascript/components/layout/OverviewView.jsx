@@ -52,13 +52,16 @@ const OverviewView = () => {
 
       {futures.map(({ documents, pinnedDocuments, recentlyViewedDocuments, tags }) => (
         <ContextProvider linkOriginator="Overview">
-          <PinnedDragTarget>
-            <DocumentIndex
-              viewWidth={viewWidth}
-              title="Pinned documents"
-              documents={pinnedDocuments}
-            />
-          </PinnedDragTarget>
+          <DocumentIndex
+            viewWidth={viewWidth}
+            title="Pinned documents"
+            documents={pinnedDocuments}
+            render={children => (
+              <PinnedDragTarget>
+                {children}
+              </PinnedDragTarget>
+            )}
+          />
 
           <DocumentIndex
             viewWidth={viewWidth}

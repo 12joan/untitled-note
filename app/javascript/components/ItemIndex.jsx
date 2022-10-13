@@ -5,7 +5,7 @@ import { handleDragStartWithData } from '~/lib/dragData'
 import PopOutLink from '~/components/PopOutLink'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
-const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, ...otherProps }) => {
+const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, render = x => x, ...otherProps }) => {
   const cardsPerRow = useMemo(() => {
     const remPixels = parseFloat(getComputedStyle(document.body).fontSize)
     const viewPadding = 2 * 5 / 4 * remPixels
@@ -32,7 +32,7 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, ...otherProp
       : heading
   })()
 
-  return (
+  return render(
     <section className="space-y-3">
       {titleComponent}
 
