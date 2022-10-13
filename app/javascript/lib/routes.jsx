@@ -5,7 +5,7 @@ import forwardParams from '~/lib/forwardParams'
 import { useContext } from '~/lib/context'
 import { getLastView } from '~/lib/restoreProjectView'
 
-import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
+import AwaitRedirect from '~/components/AwaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
 import RestoreLastOpenProject from '~/components/RestoreLastOpenProject'
@@ -13,7 +13,7 @@ import Link from '~/components/Link'
 
 const routesComponent = (
   <Routes>
-    <Route path="/await_redirect" element={<AwaitRedirectComponent />} />
+    <Route path="/await_redirect" element={<AwaitRedirect />} />
 
     <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
       <StreamProjectData projectId={projectId}>

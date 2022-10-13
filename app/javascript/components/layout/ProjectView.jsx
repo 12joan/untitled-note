@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
-import { AwaitRedirectComponent } from '~/lib/awaitRedirect'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import multiplexRefs from '~/lib/multiplexRefs'
@@ -14,6 +13,7 @@ import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
+import AwaitRedirect from '~/components/AwaitRedirect'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
 import RecentlyViewedView from '~/components/layout/RecentlyViewedView'
@@ -51,7 +51,7 @@ const ProjectView = ({ childView }) => {
     showFormattingToolbar = false,
   } = {
     awaitRedirect: {
-      ChildView: AwaitRedirectComponent,
+      ChildView: AwaitRedirect,
     },
     overview: {
       ChildView: OverviewView,

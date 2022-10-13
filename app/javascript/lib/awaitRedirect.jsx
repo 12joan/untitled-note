@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
 
-import useStateWhileMounted from '~/lib/useStateWhileMounted'
 import { awaitRedirectPath } from '~/lib/routes'
-
-import LoadingView from '~/components/LoadingView'
 
 let promisePath = null, fallbackPath = null
 
@@ -19,21 +15,15 @@ const awaitRedirect = ({
   navigate(awaitRedirectPath(projectId))
 }
 
-const AwaitRedirectComponent = () => {
-  const [redirectPath, setRedirectPath] = useStateWhileMounted(null)
-
+const useAwaitRedirect = callback => {
   useEffect(() => {
     (promisePath ?? Promise.reject()).then(
-      path => setRedirectPath(path),
-      error => setRedirectPath(fallbackPath || '/')
+      path => callback(path),
+      error => callback(fallbackPath || '/')
     )
   }, [])
-
-  return redirectPath
-    ? <Navigate to={redirectPath} replace />
-    : <LoadingView />
 }
 
 export default awaitRedirect
 
-export { AwaitRedirectComponent }
+export { useAwaitRedirect }
