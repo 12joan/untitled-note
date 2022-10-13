@@ -22,12 +22,6 @@ import AllTagsView from '~/components/layout/AllTagsView'
 import EditorView from '~/components/layout/EditorView'
 
 const ProjectView = ({ childView }) => {
-  const { project } = useContext()
-  useEffect(() => projectWasOpened(project.id), [project.id])
-
-  const { pathname: viewPath } = useLocation()
-  useEffect(() => setLastView(project.id, viewPath), [project.id, viewPath])
-
   const [projectsBarRef, { width: projectsBarWidth }] = useElementSize()
   const [topBarRef, { height: topBarHeight }] = useElementSize()
   const [sideBarRef, { width: sideBarWidth }] = useElementSize()
@@ -49,9 +43,11 @@ const ProjectView = ({ childView }) => {
     ChildView,
     centreView = isXl,
     showFormattingToolbar = false,
+    restoreAsLastView = true,
   } = {
     awaitRedirect: {
       ChildView: AwaitRedirect,
+      restoreAsLastView: false,
     },
     overview: {
       ChildView: OverviewView,
@@ -77,6 +73,17 @@ const ProjectView = ({ childView }) => {
       showFormattingToolbar: true,
     },
   }[childView.type]
+
+  const { project } = useContext()
+  useEffect(() => projectWasOpened(project.id), [project.id])
+
+  const { pathname: viewPath } = useLocation()
+
+  useEffect(() => {
+    if (restoreAsLastView) {
+      setLastView(project.id, viewPath)
+    }
+  }, [project.id, viewPath])
 
   return (
     <ContextProvider formattingToolbarRef={formattingBarRef} topBarHeight={topBarHeight}>

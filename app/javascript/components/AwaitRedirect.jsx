@@ -11,13 +11,6 @@ const AwaitRedirect = () => {
 
   useAwaitRedirect(setRedirectPath)
 
-  useEffect(() => {
-    (promisePath ?? Promise.reject()).then(
-      path => setRedirectPath(path),
-      error => setRedirectPath(fallbackPath || '/')
-    )
-  }, [])
-
   return redirectPath
     ? <Navigate to={redirectPath} replace />
     : <LoadingView />
