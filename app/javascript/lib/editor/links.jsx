@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import { useSelected } from 'slate-react'
 import {
   someNode,
@@ -121,6 +121,13 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
 }
 
 const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) => {
+  const textInputRef = useRef()
+  const urlInputRef = useRef()
+
+  useEffect(() => {
+    (initialText.trim().length > 0 ? urlInputRef : textInputRef).current.focus()
+  }, [])
+
   const [text, setText] = useState(initialText)
 
   const [url, urlProps] = useNormalizedInput(initialUrl, url => (url.trim() !== '' && url.match(/^[^:]+\./))
@@ -144,6 +151,7 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
         <div className="font-medium select-none">Text</div>
 
         <input
+          ref={textInputRef}
           type="text"
           value={text}
           onChange={event => setText(event.target.value)}
@@ -156,9 +164,11 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
         <div className="font-medium select-none">Link</div>
 
         <input
+          ref={urlInputRef}
           type="url"
           {...urlProps}
           required
+          data-test="hello"
           pattern="(https?|mailto|tel|web\+):.*"
           className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
           placeholder="https://example.com/"
