@@ -53,8 +53,8 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
 
   const fsrSynchronisedRecord = useSynchronisedRecord({
     key: `document-${documentId}`,
+    upstreamRemoteVersion: partialDocument.remote_version,
     getRemoteVersion: doc => doc.remote_version,
-    isUpToDate: version => partialDocument.remote_version <= version,
     fetchRecord: () => api.show(documentId),
     uploadRecord: (updatedDocument, uploadingVersion) => api.update({
       ...updatedDocument,

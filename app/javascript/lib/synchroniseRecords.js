@@ -156,12 +156,23 @@ window.addEventListener('beforeunload', event => {
   }
 })
 
-const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord, uploadRecord, attributeBehaviours = {} }) => {
+const useSynchronisedRecord = ({
+  key,
+  upstreamRemoteVersion,
+  getRemoteVersion,
+  fetchRecord,
+  uploadRecord,
+  attributeBehaviours = {},
+}) => {
+  const isUpToDate = doc => upstreamRemoteVersion <= getRemoteVersion(doc)
+
   const [fsrRecord, setFsrRecord] = useStateWhileMounted(() => FutureServiceResult.pending())
   const [errorDuringUpload, setErrorDuringUpload] = useStateWhileMounted(false)
 
   useEffect(() => {
-    if (globalDataStore.has(key) && isUpToDate(getRemoteVersion(globalDataStore.get(key)))) {
+    setFsrRecord(FutureServiceResult.pending())
+
+    if (globalDataStore.has(key) && isUpToDate(globalDataStore.get(key))) {
       setFsrRecord(FutureServiceResult.success(globalDataStore.get(key)))
     } else {
       fetchRecord(key).then(
@@ -171,10 +182,9 @@ const useSynchronisedRecord = ({ key, getRemoteVersion, isUpToDate, fetchRecord,
     }
 
     const subscription = record => setFsrRecord(FutureServiceResult.success(record))
-
     globalDataStore.subscribe(key, subscription)
     return () => globalDataStore.unsubscribe(key, subscription)
-  }, [key])
+  }, [key, upstreamRemoteVersion])
 
   const updateRecord = delta => {
     globalDataStore.update(key, delta, {
