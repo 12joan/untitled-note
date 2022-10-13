@@ -87,9 +87,29 @@ const globalDataStore = {
     this.subscribers.get(key).forEach(subscriber => subscriber(record))
   },
 
-  recordIsDirty(key) {
+  LOCAL_VERSION_NEWER: 'LOCAL_VERSION_NEWER',
+  REMOTE_VERSION_NEWER: 'REMOTE_VERSION_NEWER',
+  VERSIONS_EQUAL: 'VERSIONS_EQUAL',
+
+  compareRecordVerisons(key, remoteVersion) {
     const recordWithMetadata = this.recordsWithMetadata.get(key)
-    return recordWithMetadata.localVersion > recordWithMetadata.getRemoteVersion(recordWithMetadata.record)
+
+    if (recordWithMetadata.localVersion > remoteVersion) {
+      return this.LOCAL_VERSION_NEWER
+    } else if (recordWithMetadata.localVersion < remoteVersion) {
+      return this.REMOTE_VERSION_NEWER
+    } else {
+      return this.VERSIONS_EQUAL
+    }
+  },
+
+  shouldUploadRecord(key) {
+    const recordWithMetadata = this.recordsWithMetadata.get(key)
+    return this.compareRecordVerisons(key, recordWithMetadata.getRemoteVersion(recordWithMetadata.record)) === this.LOCAL_VERSION_NEWER
+  },
+
+  recordIsOutdated(key, remoteVersion) {
+    return this.compareRecordVerisons(key, remoteVersion) === this.REMOTE_VERSION_NEWER
   },
 
   async uploadRecord(key, { waitForLock }) {
@@ -138,7 +158,7 @@ const globalDataStore = {
 }
 
 const uploadDirtyRecords = ({ waitForLock = false } = {}) => {
-  const dirtyRecordKeys = globalDataStore.allRecordKeys().filter(key => globalDataStore.recordIsDirty(key))
+  const dirtyRecordKeys = globalDataStore.allRecordKeys().filter(key => globalDataStore.shouldUploadRecord(key))
 
   Promise.allSettled(dirtyRecordKeys.map(
     key => globalDataStore.uploadRecord(key, { waitForLock })
@@ -164,15 +184,13 @@ const useSynchronisedRecord = ({
   uploadRecord,
   attributeBehaviours = {},
 }) => {
-  const isUpToDate = doc => upstreamRemoteVersion <= getRemoteVersion(doc)
-
   const [fsrRecord, setFsrRecord] = useStateWhileMounted(() => FutureServiceResult.pending())
   const [errorDuringUpload, setErrorDuringUpload] = useStateWhileMounted(false)
 
   useEffect(() => {
     setFsrRecord(FutureServiceResult.pending())
 
-    if (globalDataStore.has(key) && isUpToDate(globalDataStore.get(key))) {
+    if (globalDataStore.has(key) && !globalDataStore.recordIsOutdated(key, upstreamRemoteVersion)) {
       setFsrRecord(FutureServiceResult.success(globalDataStore.get(key)))
     } else {
       fetchRecord(key).then(
