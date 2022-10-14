@@ -1,9 +1,42 @@
-<h1>Welcome</h1>
+<% content_for :head do %>
+  <%= vite_javascript_tag 'welcome.jsx' %>
 
-<form method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <style type="text/css">
+    .prevent-fouc {
+      display: none;
+    }
+  </style>
+<% end %>
 
-  <a href="/auth/auth0" onclick="event.preventDefault(); const form = this.parentElement; form.action = this.href; form.submit();">
-    Log in
-  </a>
-</form>
+<div id="application" class="prevent-fouc min-h-screen flex flex-col p-5">
+  <div class="m-auto narrow space-y-3">
+    <div class="border-l-4 p-3 space-y-2 bg-yellow-100 border-yellow-500 text-yellow-700 dark:bg-yellow-900 dark:border-yellow-400 dark:text-yellow-300" role="alert">
+      <p class="font-bold">Warning</p>
+
+      <p>This app is under construction and should be used for demonstrational purposes only at this time. Please do not use it to store:</p>
+
+      <ul class="list-disc list-inside">
+        <li>Personal information (e.g. your name, address or phone number)</li>
+        <li>Confidential information (e.g. your bank account details or passwords)</li>
+        <li>The sole copy of any important documents</li>
+      </ul>
+
+      <p>Be aware that this app may contain bugs and security vulnerabilities that could result in the loss or theft of your data. Access to this app may be revoked at any time.</p>
+    </div>
+
+    <h1 class="text-3xl font-medium">Untitled Note App</h1>
+
+    <p class="text-lg font-light">Click the button below to log in or sign up.</p>
+
+    <form method="post" action="/auth/auth0">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+      <button
+        type="submit"
+        class="px-3 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800 flex gap-2 items-center"
+      >
+        Get started
+      </button>
+    </form>
+  </div>
+</div>
