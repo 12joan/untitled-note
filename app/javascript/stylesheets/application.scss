@@ -76,19 +76,9 @@
   }
 
   .prose {
-    // Block spacings
-    & > :not(p, h1) {
-      margin-top: 1.5rem !important;
-      margin-bottom: 1.5rem !important;
-    }
-
-    & > p {
+    // Spacing for block elements
+    & > * {
       margin-top: 0.75rem !important;
-      margin-bottom: 0 !important;
-    }
-
-    & > h1 {
-      margin-top: 1.5rem !important;
       margin-bottom: 0 !important;
     }
 
@@ -97,10 +87,8 @@
         margin-top: 0 !important;
         margin-bottom: 0 !important;
       }
-    }
 
-    // Prevent overflow in deeply nested lists
-    & > ul, & > ol {
+      // Prevent overflow in deeply nested lists
       @apply overflow-x-auto;
       @apply overflow-wrap-normal;
     }
