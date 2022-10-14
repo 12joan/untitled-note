@@ -1,32 +1,32 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
 import useTitle from '~/lib/useTitle'
-
-import SetBodyBackground from '~/components/SetBodyBackground'
-import NewProjectForm from '~/components/projects/NewProjectForm'
+import useNewProject from '~/lib/useNewProject'
+import { LogoutLink } from '~/lib/routes'
 
 const NoProjectsView = props => {
-  useTitle('Welcome')
+  useTitle('Create a project')
+
+  const newProject = useNewProject()
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact>
-          <SetBodyBackground background="var(--bs-light)">
-            <div className="container h-100 d-flex flex-column" style={{ maxWidth: '768px' }}>
-              <div className="my-auto py-3">
-                <h1>Welcome to Note App</h1>
-                <p className="lead">To get started, create a new project. <a href="#">Learn more</a></p>
-                <NewProjectForm />
-              </div>
-            </div>
-          </SetBodyBackground>
-        </Route>
+    <div className="grow flex p-5">
+      <div className="m-auto narrow space-y-3">
+        <h1 className="text-3xl font-medium">Create a project</h1>
 
-        <Redirect to="/" />
-      </Switch>
-    </Router>
+        <p className="text-lg font-light">You don't have any projects yet. Create one to get started.</p>
+
+        <button
+          type="button"
+          className="px-3 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800 flex gap-2 items-center"
+          onClick={newProject}
+        >
+          New project
+        </button>
+
+        <p><LogoutLink className="btn btn-link font-medium">Log out</LogoutLink></p>
+      </div>
+    </div>
   )
 }
 

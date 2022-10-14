@@ -3,6 +3,7 @@ import React, { forwardRef } from 'react'
 import { useContext } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useNewDocument from '~/lib/useNewDocument'
+import { LogoutLink } from '~/lib/routes'
 
 import Tooltip from '~/components/Tooltip'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
@@ -24,7 +25,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     { icon: NewDocumentIcon, label: 'New document', onClick: createNewDocument },
     { icon: SearchIcon, label: 'Search' },
     { icon: SettingsIcon, label: 'Settings' },
-    { icon: AccountIcon, label: 'Log out', as: 'a', href: '/auth/logout' }
+    { icon: AccountIcon, label: 'Log out', as: LogoutLink },
   ]
 
   return (

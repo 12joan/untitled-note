@@ -69,6 +69,7 @@ const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId
   )
 })
 
+const logoutPath = '/auth/logout'
 const awaitRedirectPath = projectId => projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect'
 const overviewPath = projectId => `/projects/${projectId}/overview`
 const projectPath = projectId => getLastView(projectId) ?? overviewPath(projectId)
@@ -79,6 +80,7 @@ const tagsPath = projectId => `/projects/${projectId}/tags`
 const documentPath = (projectId, documentId) => `/projects/${projectId}/editor/${documentId}`
 const recentlyViewedDocumentPath = (...args) => `${documentPath(...args)}?recently_viewed`
 
+const LogoutLink = forwardRef(({ ...otherProps }, ref) => <a ref={ref} href={logoutPath} {...otherProps} />)
 const OverviewLink = makeLinkComponent(overviewPath)
 const ProjectLink = makeLinkComponent(projectPath)
 const EditProjectLink = makeLinkComponent(editProjectPath)
@@ -90,6 +92,7 @@ const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
 
 export {
   routesComponent,
+  logoutPath,
   awaitRedirectPath,
   projectPath,
   overviewPath,
@@ -99,8 +102,9 @@ export {
   tagsPath,
   documentPath,
   recentlyViewedDocumentPath,
-  ProjectLink,
+  LogoutLink,
   OverviewLink,
+  ProjectLink,
   EditProjectLink,
   RecentlyViewedLink,
   TagLink,

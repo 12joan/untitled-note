@@ -7,6 +7,7 @@ import { ContextProvider } from '~/lib/context'
 import { routesComponent } from '~/lib/routes'
 
 import ErrorBoundary from '~/components/ErrorBoundary'
+import NoProjectsView from '~/components/layout/NoProjectsView'
 import LoadingView from '~/components/LoadingView'
 import ToastContainer from '~/components/layout/ToastContainer'
 
@@ -25,15 +26,19 @@ const App = () => {
 
   return (
     <ErrorBoundary fallback={fallback}>
-      {futureProjects.map(projects => projects.length === 0
-        ? 'No projects found' // TODO
-        : (
-          <ContextProvider projects={projects} invalidateProjectsCache={invalidateProjectsCache}>
-            {routesComponent}
-            <ToastContainer />
-          </ContextProvider>
-        )
-      ).orDefault(<LoadingView />)}
+      {futureProjects.map(projects => (
+        <ContextProvider projects={projects} invalidateProjectsCache={invalidateProjectsCache}>
+          {projects.length === 0
+            ? <NoProjectsView />
+            : (
+              <>
+                {routesComponent}
+                <ToastContainer />
+              </>
+            )
+          }
+        </ContextProvider>
+      )).orDefault(<LoadingView />)}
     </ErrorBoundary>
   )
 }
