@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments'
+import { removeProjectFromHistory } from '~/lib/projectHistory'
 import useStream from '~/lib/useStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
 import TagsStream from '~/lib/streams/TagsStream'
@@ -11,7 +12,7 @@ import { dispatchGlobalEvent } from '~/lib/globalEvents'
 
 const StreamProjectData = ({ projectId, children }) => {
   const { projects } = useContext()
-  const project = useMemo(() => projects.find(project => project.id.toString() === projectId.toString()), [projects, projectId])
+  const project = useMemo(() => projects.find(project => project.id === projectId), [projects, projectId])
 
   const recentlyViewedDocuments = useRecentlyViewedDocuments()
 
@@ -55,8 +56,8 @@ const StreamProjectData = ({ projectId, children }) => {
   )), [futurePartialDocuments, recentlyViewedDocuments])
 
   if (project === undefined) {
-    console.log({ projectId, projects })
-    return 'Project not found' // TODO
+    removeProjectFromHistory(projectId)
+    return <Navigate to="/" replace />
   }
 
   return (
