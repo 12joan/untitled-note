@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useContext } from '~/lib/context'
 import openModal from '~/lib/openModal'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import { editProjectPath } from '~/lib/routes'
+import { projectPath } from '~/lib/routes'
 import awaitRedirect from '~/lib/awaitRedirect'
 import useNormalizedInput from '~/lib/useNormalizedInput'
 import { handleCreateProjectError } from '~/lib/handleErrors'
@@ -25,7 +25,7 @@ const useNewProject = () => {
         ProjectsAPI.create(projectArgs)
       ).then(({ id }) => {
         invalidateProjectsCache()
-        return editProjectPath(id)
+        return projectPath(id)
       }),
       fallbackPath: currentPath,
     })

@@ -6,7 +6,10 @@ class Auth0Controller < ApplicationController
     user_info = auth_info['extra']['raw_info']
 
     # Look up or create user by auth0_id
-    user = User.find_or_create_by!(auth0_id: user_info['sub'])
+    user = User.find_or_create_by!(auth0_id: user_info['sub']) do |user|
+      # Create an initial project if the user is newly created
+      user.projects.build(name: 'My Project')
+    end
 
     # Update user's name if changed
     user.update!(name: user_info['name']) if user.name != user_info['name']
