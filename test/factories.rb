@@ -17,4 +17,13 @@ FactoryBot.define do
     project
     sequence(:text) { |n| "Tag #{n}" }
   end
+
+  factory :s3_file do
+    project
+    role { 'project-icon' }
+    sequence(:s3_key) { |n| "uploads/#{n}.png" }
+    sequence(:filename) { |n| "#{n}.png" }
+    size { 1234 }
+    content_type { 'image/png' }
+  end
 end

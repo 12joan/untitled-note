@@ -1,17 +1,17 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-
   web:
     build: .
     environment:
-      DATABASE_URL: postgres://postgres@db
       RAILS_ENV: test
+      DATABASE_URL: postgres://postgres@db
     ports:
       - '3000:3000'
     depends_on:
       - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust

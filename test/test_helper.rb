@@ -17,4 +17,8 @@ class ActiveSupport::TestCase
   def as_user(user)
     post stub_login_url, params: { user_id: user.id }
   end
+
+  def stub_s3_bucket(return_value, &block)
+    Rails.application.config.stub(:s3_bucket, return_value, &block)
+  end
 end

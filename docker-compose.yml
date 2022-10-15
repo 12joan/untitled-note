@@ -1,19 +1,13 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
   web:
     build: .
     environment:
+      RAILS_ENV: development
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
-      RAILS_ENV: development
+      S3_BUCKET: untitled-note-app-development
     env_file: .env
     command: 'yarn dev'
     ports:
@@ -25,20 +19,17 @@ services:
     depends_on:
       - db
       - redis
-    # - elasticsearch
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   redis:
     image: redis
 
-# elasticsearch:
-#   image: elasticsearch:7.17.0
-#   environment:
-#     - discovery.type=single-node
-#   volumes:
-#     - elasticsearch:/usr/share/elasticsearch/data
-
-
 volumes:
   pgdata:
   node_modules:
-# elasticsearch:
