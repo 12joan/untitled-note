@@ -33,6 +33,9 @@ gem 'rexml', '~> 3.2'
 gem 'omniauth-auth0', '~> 3.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
+# Use S3 for file storage
+gem 'aws-sdk-s3', '~> 1'
+
 # Only permit requests that originate from an authorised reverse proxy
 gem 'rack_authorised_proxy'
 
