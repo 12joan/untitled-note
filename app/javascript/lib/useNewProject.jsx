@@ -35,7 +35,10 @@ const useNewProject = () => {
 }
 
 const NewProjectModal = ({ onConfirm, onClose }) => {
-  const [name, nameProps] = useNormalizedInput('', name => name.trim())
+  const [name, nameProps] = useNormalizedInput({
+    initial: '',
+    normalize: name => name.trim(),
+  })
 
   const handleSubmit = event => {
     event.preventDefault()

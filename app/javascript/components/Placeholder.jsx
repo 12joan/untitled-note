@@ -6,9 +6,9 @@ const Placeholder = ({ as: Component = 'div', className = '', ...otherProps }) =
   )
 }
 
-const InlinePlaceholder = ({ length = '12ch', ...otherProps }) => Placeholder({
+const InlinePlaceholder = ({ length = '12ch', className = '', ...otherProps }) => Placeholder({
   as: 'span',
-  className: `inline-block rounded-full h-4`,
+  className: `inline-block rounded-full h-4 ${className}`,
   style: { width: length },
   ...otherProps,
 })
