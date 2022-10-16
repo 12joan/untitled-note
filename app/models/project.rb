@@ -3,9 +3,14 @@ class Project < ApplicationRecord
   has_many :documents, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :s3_files, dependent: :destroy
+  belongs_to :image, class_name: 'S3File', optional: true
 
   validates :name, presence: true
 
-  include Queryable.permit(*%i[id name created_at updated_at])
+  include Queryable.permit(*%i[id name image_url created_at updated_at])
   include Listenable
+
+  def image_url
+    image&.url
+  end
 end
