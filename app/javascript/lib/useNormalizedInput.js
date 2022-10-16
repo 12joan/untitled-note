@@ -1,8 +1,13 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
-const useNormalizedInput = (initialValue, normalize) => {
-  const [value, setValue] = useState(initialValue)
-  const normalizeValue = () => setValue(normalize)
+const useNormalizedInput = ({ initial, normalize, validate = () => true }) => {
+  const [value, setValue] = useState(initial)
+  const isValid = useMemo(() => validate(value), [value])
+
+  const normalizeValue = () => {
+    const normalizedValue = normalize(value)
+    setValue(isValid ? normalizedValue : initial)
+  }
 
   const props = {
     value,
@@ -11,7 +16,7 @@ const useNormalizedInput = (initialValue, normalize) => {
     onKeyDown: event => event.key === 'Enter' && normalizeValue(),
   }
 
-  return [value, props]
+  return [value, props, isValid]
 }
 
 export default useNormalizedInput
