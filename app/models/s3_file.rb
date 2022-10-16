@@ -33,6 +33,10 @@ class S3File < ApplicationRecord
     )
   end
 
+  def url
+    s3_object.presigned_url(:get, expires_in: 1.hour)
+  end
+
   def uploaded?(update_cache: true)
     uploaded_cache? || check_uploaded(update_cache: update_cache)
   end

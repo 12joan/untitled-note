@@ -15,6 +15,14 @@ class S3FileTest < ActiveSupport::TestCase
     end
   end
 
+  test 'url calls S3 and returns presigned url' do
+    mock_s3_objects do |s3_object|
+      s3_object.expect(:presigned_url, 'some presigned url') { true }
+      assert_equal 'some presigned url', @s3_file.url
+      s3_object.verify
+    end
+  end
+
   test 'when uploaded_cache is false, uploaded? check with S3' do
     @s3_file.uploaded_cache = false
 
