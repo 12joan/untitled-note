@@ -16,6 +16,7 @@
     "@tippyjs/react": "^4.2.6",
     "@udecode/plate-headless": "^18.2.0",
     "async-mutex": "^0.4.0",
+    "browser-image-compression": "^2.0.0",
     "locale-includes": "^1.0.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

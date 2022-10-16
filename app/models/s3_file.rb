@@ -27,7 +27,7 @@ class S3File < ApplicationRecord
   def presigned_post
     s3_object.presigned_post(
       key: s3_key,
-      success_action_status: 201,
+      success_action_status: '201',
       content_type: content_type,
       content_length_range: 0..size,
     )
