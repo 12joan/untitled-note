@@ -1,5 +1,9 @@
 module UploadAllowed
   def self.allowed?(user:, file_params:)
+    if user.storage_used + file_params[:size] > user.storage_quota
+      return [false, 'Not enough storage space']
+    end
+
     case file_params.fetch(:role)
     when 'project-image'
       project_image_allowed?(user: user, file_params: file_params)
