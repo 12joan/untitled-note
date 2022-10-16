@@ -21,4 +21,16 @@ class ActiveSupport::TestCase
   def stub_s3_bucket(return_value, &block)
     Rails.application.config.stub(:s3_bucket, return_value, &block)
   end
+
+  def ignore_s3
+    s3_bucket = Class.new do
+      def object(_)
+        OpenStruct.new(delete: nil)
+      end
+    end.new
+
+    stub_s3_bucket(s3_bucket) do
+      yield
+    end
+  end
 end

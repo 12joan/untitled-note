@@ -173,3 +173,8 @@
   // Hide placeholder when editor is focused
   opacity: 0 !important;
 }
+
+[data-has-bg] {
+  @apply bg-cover bg-center bg-no-repeat;
+  background-image: var(--bg-url);
+}

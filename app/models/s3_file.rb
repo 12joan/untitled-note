@@ -1,6 +1,7 @@
 class S3File < ApplicationRecord
   belongs_to :project
   has_one :owner, through: :project, source: :owner
+  has_many :used_as_image_in_projects, class_name: 'Project', foreign_key: 'image_id', dependent: :nullify
 
   validates :role, presence: true
   validates :s3_key, presence: true
@@ -34,7 +35,8 @@ class S3File < ApplicationRecord
   end
 
   def url
-    s3_object.presigned_url(:get, expires_in: 1.hour)
+    # TODO: Cache this
+    s3_object.presigned_url(:get, expires_in: 1.hour.to_i)
   end
 
   def uploaded?(update_cache: true)

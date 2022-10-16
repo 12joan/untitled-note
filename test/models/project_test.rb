@@ -14,4 +14,16 @@ class ProjectTest < ActiveSupport::TestCase
       assert_equal 'http://example.com/image.png', project.image_url
     end
   end
+
+  test 'image becomes null when image is destroyed' do
+    project = create(:project)
+    image = create(:s3_file, project: project)
+    project.update!(image: image)
+
+    ignore_s3 do
+      image.destroy!
+    end
+
+    assert_nil project.reload.image
+  end
 end
