@@ -1,6 +1,6 @@
 if Rails.env.test?
   Rails.application.config.s3_bucket = Class.new do
-    def method_missing
+    def method_missing(*args)
       raise 'S3 is not configured for test environment'
     end
   end.new
