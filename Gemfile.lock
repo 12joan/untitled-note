@@ -134,6 +134,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.16.3)
+    minitest-stub_any_instance (1.0.3)
     msgpack (1.6.0)
     multi_xml (0.6.0)
     net-imap (0.3.1)
@@ -285,6 +286,7 @@ DEPENDENCIES
   capybara (>= 3.26)
   factory_bot_rails (~> 6.2)
   listen (~> 3.3)
+  minitest-stub_any_instance
   omniauth-auth0 (~> 3.0)
   omniauth-rails_csrf_protection (~> 1.0)
   pg (~> 1.1)
