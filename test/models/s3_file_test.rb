@@ -2,7 +2,15 @@ require 'test_helper'
 
 class S3FileTest < ActiveSupport::TestCase
   setup do
-    @s3_file = build(:s3_file)
+    @s3_file = create(:s3_file)
+  end
+
+  test 'presigned_post calls S3 and returns post object' do
+    mock_s3_objects do |s3_object|
+      s3_object.expect(:presigned_post, 'some post object') { true }
+      assert_equal 'some post object', @s3_file.presigned_post
+      s3_object.verify
+    end
   end
 
   test 'when uploaded_cache is false, uploaded? check with S3' do
@@ -22,6 +30,8 @@ class S3FileTest < ActiveSupport::TestCase
   end
 
   test 'not_uploaded only calls S3 for files with uploaded_cache false' do
+    @s3_file.delete
+
     s3_file1 = create(:s3_file, uploaded_cache: true)
     s3_file2 = create(:s3_file, uploaded_cache: false)
     s3_file3 = create(:s3_file, uploaded_cache: false)
@@ -38,8 +48,7 @@ class S3FileTest < ActiveSupport::TestCase
   end
 
   test 'when uploaded, on destroy, delete from S3' do
-    @s3_file.uploaded_cache = true
-    @s3_file.save!
+    @s3_file.update!(uploaded_cache: true)
 
     mock_s3_objects do |s3_object|
       s3_object.expect(:delete, nil)
@@ -49,8 +58,7 @@ class S3FileTest < ActiveSupport::TestCase
   end
 
   test 'when not uploaded, on destroy, do not delete from S3' do
-    @s3_file.uploaded_cache = false
-    @s3_file.save!
+    @s3_file.update!(uploaded_cache: false)
 
     mock_s3_objects do |s3_object|
       s3_object.expect(:exists?, false)
