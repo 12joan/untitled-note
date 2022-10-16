@@ -6,6 +6,7 @@ Rails.application.routes.draw do
         resources :documents, only: %i[show create update destroy]
         resource :blank_document, only: %i[create]
         resources :s3_files, only: %i[create destroy show]
+        resource :image, only: %i[update], controller: :project_images
       end
     end
   end
