@@ -18,7 +18,7 @@ class ProjectImagesControllerTest < ActionDispatch::IntegrationTest
   test 'when old image is present and new image is present' do
     @project.update!(image: @old_image)
 
-    stub_s3 do
+    ignore_s3 do
       put api_v1_project_image_url(@project), params: { image_id: @new_image.id }
     end
 
@@ -30,7 +30,7 @@ class ProjectImagesControllerTest < ActionDispatch::IntegrationTest
   test 'when old image is present and new image is absent' do
     @project.update!(image: @old_image)
 
-    stub_s3 do
+    ignore_s3 do
       put api_v1_project_image_url(@project)
     end
 
@@ -44,19 +44,5 @@ class ProjectImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_nil @project.reload.image
-  end
-
-  private
-
-  def stub_s3
-    s3_bucket = Class.new do
-      def object(_)
-        OpenStruct.new(delete: nil)
-      end
-    end.new
-
-    stub_s3_bucket(s3_bucket) do
-      yield
-    end
   end
 end

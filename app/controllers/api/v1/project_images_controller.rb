@@ -9,6 +9,8 @@ module API
           assign_new_image_if_present
           old_image&.destroy!
         end
+
+        render json: { ok: true }
       end
 
       private

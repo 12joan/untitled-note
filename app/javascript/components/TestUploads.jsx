@@ -5,6 +5,7 @@ import imageCompression from 'browser-image-compression'
 
 import { useContext } from '~/lib/context'
 import S3FilesAPI from '~/lib/resources/S3FilesAPI'
+import ProjectImageAPI from '~/lib/resources/ProjectImageAPI'
 
 const uploadProjectImage = async (project, originalFile) => {
   const compressedFile = await imageCompression(originalFile, {
@@ -31,17 +32,26 @@ const uploadProjectImage = async (project, originalFile) => {
       formData.append(key, value)
     })
 
-    const response = await fetch(url, {
+    const uploadResponse = await fetch(url, {
       method: 'POST',
       body: formData,
     })
 
-    if (response.ok) {
-      return s3File
-    } else {
-      console.error(response)
+    if (!uploadResponse.ok) {
+      console.error(uploadResponse)
       throw new Error('Upload failed')
     }
+
+    const setImageResponse = await ProjectImageAPI(project.id).update({
+      image_id: s3File.id,
+    })
+
+    if (!setImageResponse.ok) {
+      console.error(setImageResponse)
+      throw new Error('Failed to set project image')
+    }
+
+    return s3File
   } catch (error) {
     api.destroy(s3File).catch(destroyError => {
       console.error('Failed to destroy file after upload error')
@@ -52,6 +62,8 @@ const uploadProjectImage = async (project, originalFile) => {
   }
 }
 
+const removeProjectImage = project => ProjectImageAPI(project.id).update({ image_id: null })
+
 const TestUploads = () => {
   const { project } = useContext()
   const fileInputRef = useRef(null)
@@ -60,8 +72,8 @@ const TestUploads = () => {
     const originalFile = fileInputRef.current.files[0]
 
     uploadProjectImage(project, originalFile).then(
-      s3File => {
-        console.log(s3File)
+      () => {
+        console.log('Upload successful')
       },
       error => {
         // TODO: handle error
@@ -70,12 +82,28 @@ const TestUploads = () => {
     )
   }
 
+  const handleRemove = () => removeProjectImage(project).then(
+    () => {
+      console.log('Remove successful')
+    },
+    error => {
+      // TODO: handle error
+      console.error(error)
+    }
+  )
+
   return (
     <>
+      <p>Project image: {project.image_url ?? 'none'}</p>
+
       <input ref={fileInputRef} type="file" accept="image/*" />
 
       <button type="button" onClick={handleUpload} className="bg-slate-100 w-fit p-4">
         Upload
+      </button>
+
+      <button type="button" onClick={handleRemove} className="bg-slate-100 w-fit p-4">
+        Remove
       </button>
     </>
   )

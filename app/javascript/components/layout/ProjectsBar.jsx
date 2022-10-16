@@ -17,21 +17,29 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
       {projects.map(project => {
         const isCurrentProject = project.id == projectId
 
+        const hasImage = !!project.image_url
+
         return (
           <Tooltip key={project.id} content={project.name} placement="right" fixed>
             <ProjectLink
               projectId={project.id}
               data-active={isCurrentProject}
               className="w-12 btn btn-solid aspect-square flex items-center justify-center p-1 relative shadow"
+              style={{
+                '--bg-url': hasImage ? `url(${project.image_url})` : undefined
+              }}
+              data-has-bg={hasImage}
               onClick={onButtonClick}
               aria-label={project.name}
               aria-current={isCurrentProject ? 'page' : undefined}
             >
-              <span
-                aria-hidden="true"
-                className="font-bold text-xl text-slate-500 dark:text-slate-400"
-                children={abbreviate(project.name, 1)}
-              />
+              {!hasImage && (
+                <span
+                  aria-hidden="true"
+                  className="font-bold text-xl text-slate-500 dark:text-slate-400"
+                  children={abbreviate(project.name, 1)}
+                />
+              )}
 
               <div
                 aria-hidden="true"
