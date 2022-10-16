@@ -20,7 +20,10 @@ module API
 
           if s3_file.save
             render json: s3_file.query(:all).merge(
-              presigned_post: s3_file.presigned_post,
+              presigned_post: {
+                url: s3_file.presigned_post.url,
+                fields: s3_file.presigned_post.fields,
+              },
             ), status: :created
           else
             render json: { error: s3_file.errors.full_messages.join(', ') }, status: :unprocessable_entity
