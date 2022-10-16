@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :user, aliases: [:owner] do
     name { 'Jane Doe' }
     auth0_id { '123456789' }
+    storage_used { 100 * 50 }
   end
 
   factory :project do
@@ -23,7 +24,7 @@ FactoryBot.define do
     role { 'project-icon' }
     sequence(:s3_key) { |n| "uploads/#{n}.png" }
     sequence(:filename) { |n| "#{n}.png" }
-    size { 1234 }
+    size { 100 }
     content_type { 'image/png' }
   end
 end

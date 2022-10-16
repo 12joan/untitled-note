@@ -1,5 +1,6 @@
 class S3File < ApplicationRecord
   belongs_to :project
+  has_one :owner, through: :project, source: :owner
 
   validates :role, presence: true
   validates :s3_key, presence: true
@@ -9,8 +10,13 @@ class S3File < ApplicationRecord
 
   include Queryable.permit(*%i[id role s3_key filename size content_type created_at])
 
+  before_create do
+    owner.update_storage_used(size)
+  end
+
   after_destroy do
     s3_object.delete if uploaded?(update_cache: false)
+    owner.update_storage_used(-size)
   end
 
   def self.not_uploaded(&get_collection)

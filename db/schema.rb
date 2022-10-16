@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_15_122257) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_16_104741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_15_122257) do
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "storage_used", default: 0, null: false
+    t.integer "storage_quota", default: 10485760, null: false
   end
 
   add_foreign_key "documents", "projects"

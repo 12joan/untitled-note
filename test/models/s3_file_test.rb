@@ -2,7 +2,9 @@ require 'test_helper'
 
 class S3FileTest < ActiveSupport::TestCase
   setup do
-    @s3_file = create(:s3_file)
+    @owner = create(:user)
+    @project = create(:project, owner: @owner)
+    @s3_file = create(:s3_file, project: @project)
   end
 
   test 'presigned_post calls S3 and returns post object' do
@@ -65,6 +67,24 @@ class S3FileTest < ActiveSupport::TestCase
       @s3_file.destroy
       s3_object.verify
     end
+  end
+
+  test 'on create, increase owner storage_used' do
+    @owner.update!(storage_used: 256)
+    create(:s3_file, size: 100, project: @project)
+    assert_equal 356, @owner.reload.storage_used
+  end
+
+  test 'on destroy, decrease owner storage_used' do
+    @s3_file.update!(size: 100)
+    @owner.update!(storage_used: 256)
+
+    mock_s3_objects do |s3_object|
+      s3_object.expect(:exists?, false)
+      @s3_file.destroy
+    end
+
+    assert_equal 156, @owner.reload.storage_used
   end
 
   private
