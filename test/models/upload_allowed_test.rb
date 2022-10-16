@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UploadAllowedTest < ActiveSupport::TestCase
   setup do
-    @user = create(:user)
+    @user = create(:user, storage_quota: 1 * 1024 * 1024, storage_used: 0)
   end
 
   test 'not allowed without valid role' do
@@ -42,6 +42,29 @@ class UploadAllowedTest < ActiveSupport::TestCase
 
     refute allowed, 'should not be allowed'
     assert_equal 'File is not an image', error
+  end
+
+  test 'allowed if size is equal to remaining quota' do
+    @user.update!(storage_used: @user.storage_quota - 54)
+
+    allowed, error = UploadAllowed.allowed?(
+      user: @user,
+      file_params: project_image_params(size: 54),
+    )
+
+    assert allowed, 'should be allowed'
+  end
+
+  test 'not allowed if size is greater than remaining quota' do
+    @user.update!(storage_used: @user.storage_quota - 54)
+
+    allowed, error = UploadAllowed.allowed?(
+      user: @user,
+      file_params: project_image_params(size: 55),
+    )
+
+    refute allowed, 'should not be allowed'
+    assert_equal 'Not enough storage space', error
   end
 
   private
