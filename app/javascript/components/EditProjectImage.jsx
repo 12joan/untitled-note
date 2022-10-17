@@ -77,8 +77,18 @@ const EditProjectImage = () => {
   const isUploading = state === 'uploading'
   const isRemoving = state === 'removing'
 
+  const showFileSelector = () => {
+    const fileInput = fileInputRef.current
+    fileInput.value = null
+    fileInput.click()
+  }
+
   const handleFileSelected = event => {
     const originalFile = event.target.files[0]
+
+    if (!originalFile) {
+      return
+    }
 
     setState('uploading')
 
@@ -111,7 +121,7 @@ const EditProjectImage = () => {
         <button
           type="button"
           className="btn btn-rect btn-primary relative"
-          onClick={() => fileInputRef.current.click()}
+          onClick={showFileSelector}
           disabled={!isIdle}
         >
           <ReplaceWithSpinner isSpinner={isUploading} spinnerAriaLabel="Uploading image">
