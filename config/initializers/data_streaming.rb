@@ -53,12 +53,15 @@ Rails.application.reloader.to_prepare do
       },
 
       Tag: ->(tag) {
-        broadcast make_broadcasting('Tag#index', %i[user_id project_id], {
-          user_id: tag.project.owner_id,
-          project_id: tag.project_id,
-        })
+        # This is sometimes called after the tag's project has been destroyed
+        unless tag.project.nil?
+          broadcast make_broadcasting('Tag#index', %i[user_id project_id], {
+            user_id: tag.project.owner_id,
+            project_id: tag.project_id,
+          })
 
-        tag.documents.each { |document| broadcast_for document }
+          tag.documents.each { |document| broadcast_for document }
+        end
       },
 
       DocumentsTag: ->(documents_tag) {

@@ -26,4 +26,11 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert_nil project.reload.image
   end
+
+  test 'can delete project with tags' do
+    project = create(:project)
+    tags = create_list(:tag, 1, project: project)
+    create(:document, project: project, tags: tags)
+    project.destroy!
+  end
 end
