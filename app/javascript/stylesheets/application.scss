@@ -93,6 +93,10 @@
       @apply overflow-wrap-normal;
     }
 
+    ul, ol {
+      padding-left: calc(1.5rem + var(--list-style-offset, 0));
+    }
+
     blockquote * {
       // Remove font-weight: 500 for blockquotes
       @apply font-normal;

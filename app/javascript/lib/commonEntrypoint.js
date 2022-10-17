@@ -24,6 +24,19 @@ if (!isTouchDevice) {
   }, 100)
 }
 
+new MutationObserver(mutations => mutations.forEach(({ type, target }) => {
+  // childList refers to the addition or removal of nodes in the DOM tree;
+  // no relation to ul or ol specifically
+  if (type === 'childList') {
+    const lists = target.matches('ul, ol') ? [target] : target.querySelectorAll('ul, ol')
+
+    lists.forEach(list => {
+      const digits = Math.max(Math.floor(Math.log10(list.children.length)) + 1, 0)
+      list.style.setProperty('--list-style-offset', `${digits}ch`)
+    })
+  }
+})).observe(document.body, { childList: true, subtree: true })
+
 /* React 18 causes a lot of issues with useElementSize, so we're intentionally
  * using the old render API to trigger React 17 mode. The console.error
  * monkeypatch suppresses the message from React about this.
