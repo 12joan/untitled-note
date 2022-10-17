@@ -4,7 +4,7 @@ import { useContext } from '~/lib/context'
 import useNormalizedInput from '~/lib/useNormalizedInput'
 import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import { handleUpdateProjectError } from '~/lib/handleErrors'
+import { handleRenameProjectError } from '~/lib/handleErrors'
 
 const EditProjectName = () => {
   const { project } = useContext()
@@ -20,7 +20,7 @@ const EditProjectName = () => {
       return
     }
 
-    return handleUpdateProjectError(
+    return handleRenameProjectError(
       ProjectsAPI.update({
         id: project.id,
         name,

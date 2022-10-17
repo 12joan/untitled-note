@@ -178,7 +178,7 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
       <div className="flex justify-end space-x-2">
         <button
           type="button"
-          className="px-6 py-2 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+          className="btn btn-rect btn-modal-secondary"
           onClick={onClose}
         >
           Cancel
@@ -186,7 +186,7 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
 
         <button
           type="submit"
-          className="px-6 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800"
+          className="btn btn-rect btn-primary"
         >
           {action}
         </button>

@@ -18,7 +18,7 @@ const NoProjectsView = props => {
 
         <button
           type="button"
-          className="px-3 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800 flex gap-2 items-center"
+          className="btn btn-rect btn-primary"
           onClick={newProject}
         >
           New project

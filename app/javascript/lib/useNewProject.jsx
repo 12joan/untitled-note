@@ -62,18 +62,11 @@ const NewProjectModal = ({ onConfirm, onClose }) => {
       </label>
 
       <div className="flex justify-end space-x-2">
-        <button
-          type="button"
-          className="px-6 py-2 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
-          onClick={onClose}
-        >
+        <button type="button" className="btn btn-rect btn-modal-secondary" onClick={onClose}>
           Cancel
         </button>
 
-        <button
-          type="submit"
-          className="px-6 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800"
-        >
+        <button type="submit" className="btn btn-rect btn-primary">
           Create project
         </button>
       </div>

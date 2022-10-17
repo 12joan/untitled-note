@@ -46,7 +46,7 @@ const ProjectActions = () => {
 
         <button
           type="button"
-          className="shrink-0 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-red-500 dark:text-red-400"
+          className="shrink-0 btn btn-rect btn-secondary text-red-500 dark:text-red-400"
           onClick={handleDelete}
         >
           Delete project
@@ -87,7 +87,7 @@ const ConfirmDeletionModal = ({ onConfirm, onClose, project, futureDocumentCount
       <div className="flex justify-end space-x-2">
         <button
           type="button"
-          className="px-6 py-2 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+          className="btn btn-rect btn-modal-secondary"
           onClick={onClose}
         >
           Cancel
@@ -95,7 +95,7 @@ const ConfirmDeletionModal = ({ onConfirm, onClose, project, futureDocumentCount
 
         <button
           type="button"
-          className="px-6 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn btn-rect btn-danger"
           onClick={onConfirm}
           disabled={!areYouSure}
         >

@@ -24,7 +24,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
             <ProjectLink
               projectId={project.id}
               data-active={isCurrentProject}
-              className="w-12 btn btn-solid aspect-square flex items-center justify-center p-1 relative shadow"
+              className="w-12 btn btn-solid aspect-square flex items-center justify-center p-1 relative shadow bg-white dark:bg-slate-800"
               style={{
                 '--bg-url': hasImage ? `url(${project.image_url})` : undefined
               }}
@@ -53,7 +53,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
       <Tooltip content="New project" placement="right" fixed>
         <button
           type="button"
-          className="w-12 btn aspect-square flex items-center justify-center p-1 hocus:bg-black/5 dark:hocus:bg-white/5 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
+          className="w-12 btn btn-transparent aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
           onClick={openNewProjectModal}
         >
           <LargePlusIcon size="2em" ariaLabel="New project" />

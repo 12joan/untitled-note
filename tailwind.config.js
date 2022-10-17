@@ -60,6 +60,7 @@ module.exports = {
       addVariant('stretch-focus-visible', '&:has(.stretch-target:focus-visible)')
       addVariant('stretch-hover', '&:has(.stretch-target:hover)')
       addVariant('children', '& > *')
+      addVariant('descendants', '& *')
       ;['data-active', 'data-drag-over'].forEach(dataAttribute => {
         const selector = `[${dataAttribute}=true]`
         addVariant(dataAttribute, [`&${selector}`, `${selector} &`])

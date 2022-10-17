@@ -67,7 +67,7 @@ const ListIndex = ({ items, cardPreviewHeight }) => {
 const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, ...otherProps }) => {
   return (
     <Item
-      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent"
+      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent dark:bg-slate-800"
       {...itemProps}
       {...otherProps}
     >
