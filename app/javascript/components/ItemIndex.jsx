@@ -83,7 +83,7 @@ const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, .
 const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
     <Item
-      className="btn btn-solid w-full p-3 space-y-1 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg bg-white bg-slate-800 dark:bg-slate-800"
+      className="btn btn-solid w-full p-3 space-y-1 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg bg-white dark:bg-slate-800"
       {...itemProps}
       {...otherProps}
     >
