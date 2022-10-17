@@ -67,7 +67,7 @@ const ListIndex = ({ items, cardPreviewHeight }) => {
 const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, ...otherProps }) => {
   return (
     <Item
-      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border dark:border-transparent dark:bg-slate-800"
+      className="shrink-0 btn btn-solid w-64 space-y-1 p-5 border bg-white dark:bg-slate-800 dark:border-transparent"
       {...itemProps}
       {...otherProps}
     >
@@ -83,7 +83,7 @@ const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, .
 const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
   return (
     <Item
-      className="w-full p-3 space-y-1 dark:bg-slate-800 hocus:bg-slate-100 dark:hocus:bg-slate-700 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg"
+      className="btn btn-solid w-full p-3 space-y-1 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg bg-white bg-slate-800 dark:bg-slate-800"
       {...itemProps}
       {...otherProps}
     >
