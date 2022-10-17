@@ -5,6 +5,7 @@ import useTitle from '~/lib/useTitle'
 
 import BackButton from '~/components/BackButton'
 import EditProjectName from '~/components/EditProjectName'
+import EditProjectImage from '~/components/EditProjectImage'
 import ProjectActions from '~/components/ProjectActions'
 
 const EditProjectView = () => {
@@ -19,7 +20,9 @@ const EditProjectView = () => {
       <div className="space-y-10">
         <div className="space-y-5">
           <h1 className="text-3xl font-medium select-none">Edit project</h1>
+
           <EditProjectName />
+          <EditProjectImage />
         </div>
 
         <ProjectActions />

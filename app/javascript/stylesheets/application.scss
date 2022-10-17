@@ -127,26 +127,55 @@
 
 @layer components {
   .btn {
-    @apply rounded-lg cursor-pointer;
+    @apply rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
 
+    /* All buttons must be either solid, transparent or link.
+     * Solid buttons must an opaque background.
+     * Transparent buttons must have a non-opaque background.
+     * Link buttons are text only.
+     */
+
+    // Solid buttons
+    &.btn-solid, &.btn-rect {
+      @apply hover:brightness-95 dark:hover:brightness-110;
+    }
+
+    // Transparent buttons
     &.btn-transparent {
-      @apply hover:bg-slate-100/75 dark:hover:bg-slate-700/75;
+      @apply hover:backdrop-brightness-95 dark:hover:backdrop-brightness-150;
     }
 
-    &.btn-transparent-blur {
-      @apply transparent-blur hover:bg-slate-100/75 dark:hover:bg-slate-700/75;
-    }
-
-    &.btn-solid {
-      @apply bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700;
+    // Link buttons need a stronger hover effect
+    &.btn-link {
+      @apply hover:brightness-75 dark:hover:brightness-125;
     }
 
     &.btn-link {
-      @apply text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-500 window-inactive:text-slate-500 dark:window-inactive:text-slate-400;
+      @apply text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400;
     }
 
     &.btn-link-subtle {
       @apply hocus:text-primary-500 dark:hocus:text-primary-400;
+    }
+
+    &.btn-rect {
+      @apply px-3 py-2;
+    }
+
+    &.btn-secondary {
+      @apply bg-slate-100 dark:bg-slate-800;
+    }
+
+    &.btn-modal-secondary {
+      @apply bg-slate-300/50 dark:bg-slate-700/50;
+    }
+
+    &.btn-primary {
+      @apply bg-primary-500 dark:bg-primary-400 text-white ring-offset-2;
+    }
+
+    &.btn-danger {
+      @apply bg-red-500 text-white ring-offset-2;
     }
   }
 }

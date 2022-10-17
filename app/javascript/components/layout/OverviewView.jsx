@@ -22,9 +22,6 @@ import PinnedDragTarget from '~/components/PinnedDragTarget'
 import NoDocumentsView from '~/components/NoDocumentsView'
 import LoadingView from '~/components/LoadingView'
 
-// TODO: Delete me
-import TestUploads from '~/components/TestUploads'
-
 const OverviewView = () => {
   const [viewRef, { width: viewWidth }] = useElementSize()
 
@@ -52,8 +49,6 @@ const OverviewView = () => {
           {project.name}
         </h1>
       </PopOutLink>
-
-      <TestUploads />
 
       {futures.map(({ documents, pinnedDocuments, recentlyViewedDocuments, tags }) => (
         <ContextProvider linkOriginator="Overview">
