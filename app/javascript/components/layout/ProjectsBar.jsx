@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
-import { ProjectLink } from '~/lib/routes'
+import { ProjectLink, OverviewLink } from '~/lib/routes'
 import abbreviate from '~/lib/abbreviate'
 import useNewProject from '~/lib/useNewProject'
 
@@ -16,8 +16,8 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
     <div className="space-y-3 p-3 pl-0">
       {projects.map(project => {
         const isCurrentProject = project.id == projectId
-
         const hasImage = !!project.image_url
+        const LinkComponent = isCurrentProject ? OverviewLink : ProjectLink
 
         return (
           <div key={project.id} className="flex gap-2">
@@ -28,7 +28,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
             />
 
             <Tooltip content={project.name} placement="right" fixed>
-              <ProjectLink
+              <LinkComponent
                 projectId={project.id}
                 className="w-12 h-12 btn flex items-center justify-center p-1 shadow bg-white dark:bg-slate-800"
                 style={{
@@ -46,7 +46,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
                     children={abbreviate(project.name, 1)}
                   />
                 )}
-              </ProjectLink>
+              </LinkComponent>
             </Tooltip>
           </div>
         )
