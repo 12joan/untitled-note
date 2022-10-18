@@ -79,7 +79,7 @@ const NavButton = forwardRef(({ icon: Icon, label, as: Component = 'button', ...
     <Component
       ref={ref}
       {...buttonProps}
-      className="block btn transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
+      className="block btn btn-no-rounded transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
       {...otherProps}
     >
       <Icon size="1.25em" ariaLabel={label} />
