@@ -132,7 +132,7 @@ const ProjectView = ({ childView }) => {
 
               <button
                 type="button"
-                className="btn btn-transparent rounded-full p-2 aspect-square sticky top-0"
+                className="btn rounded-full p-2 aspect-square sticky top-0"
                 onClick={() => setOffcanvasSidebarVisible(false)}
               >
                 <LargeCloseIcon size="1.25em" ariaLabel="Close" />

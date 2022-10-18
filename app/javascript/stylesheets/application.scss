@@ -131,28 +131,26 @@
 
 @layer components {
   .btn {
-    @apply rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+    // Base style
 
-    /* All buttons must be either solid, transparent or link.
-     * Solid buttons must an opaque background.
-     * Transparent buttons must have a non-opaque background.
-     * Link buttons are text only.
-     */
+    @apply cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative;
 
-    // Solid buttons
-    &.btn-solid, &.btn-rect {
-      @apply hover:brightness-95 dark:hover:brightness-110;
+    &:not(.btn-no-rounded) {
+      @apply rounded-lg;
     }
 
-    // Transparent buttons
-    &.btn-transparent {
-      @apply hover:backdrop-brightness-95 dark:hover:backdrop-brightness-150;
+    // Hover effect
+
+    &:not(.btn-link, .btn-link-subtle):hover::after {
+      content: '';
+      @apply absolute inset-0 opacity-5 dark:opacity-10 bg-slate-900 dark:bg-slate-50;
     }
 
-    // Link buttons need a stronger hover effect
     &.btn-link {
       @apply hover:brightness-75 dark:hover:brightness-125;
     }
+
+    // Variants
 
     &.btn-link {
       @apply text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400;

@@ -158,7 +158,7 @@ const ButtonWithIcon = ({
   return (
     <Component
       {...buttonProps}
-      className="btn btn-transparent w-full px-3 py-2 flex gap-2 items-center"
+      className="btn w-full px-3 py-2 flex gap-2 items-center"
       onClick={event => {
         onButtonClick()
         onClick(event)
@@ -187,7 +187,7 @@ const Button = forwardRef(({
     <Component
       ref={ref}
       {...buttonProps}
-      className="btn btn-transparent w-full px-3 py-1 block text-left"
+      className="btn w-full px-3 py-1 block text-left"
       children={label}
       onClick={event => {
         onButtonClick()

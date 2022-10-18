@@ -116,7 +116,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
               <Tooltip content="Add tags" placement="bottom">
                 <button
                   type="button"
-                  className="btn btn-transparent p-2 aspect-square"
+                  className="btn p-2 aspect-square"
                   onClick={() => {
                     setTagsVisible(true)
                     tagsRef.current.focus()
@@ -130,7 +130,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
           <div onClick={event => event.stopPropagation()}>
             <Dropdown items={documentMenu} placement="bottom-end">
-              <button type="button" className="btn btn-transparent p-2 aspect-square">
+              <button type="button" className="btn p-2 aspect-square">
                 <DocumentMenuIcon size="1.25em" ariaLabel="Document menu" />
               </button>
             </Dropdown>

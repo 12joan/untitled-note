@@ -102,7 +102,7 @@ const FormattingToolbar = ({ editor }) => {
         <Tooltip key={index} content={label} placement="left" fixed>
           <button
             type="button"
-            className="block btn btn-transparent p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed data-active:text-primary-500 dark:data-active:text-primary-400"
+            className="block btn p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed data-active:text-primary-500 dark:data-active:text-primary-400"
             data-active={active}
             disabled={disabled}
             onClick={onClick}
