@@ -12,6 +12,7 @@ const Tooltip = ({ fixed = false, popperOptions = {}, ...otherProps }) => {
         ...(fixed ? { strategy: 'fixed' } : {}),
         ...popperOptions,
       }}
+      touch={false}
       {...otherProps}
     />
   )
