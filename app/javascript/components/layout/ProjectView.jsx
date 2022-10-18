@@ -7,6 +7,7 @@ import useBreakpoints from '~/lib/useBreakpoints'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import multiplexRefs from '~/lib/multiplexRefs'
+import cssAdd from '~/lib/cssAdd'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
@@ -89,7 +90,10 @@ const ProjectView = ({ childView }) => {
     <ContextProvider formattingToolbarRef={formattingBarRef} topBarHeight={topBarHeight}>
       <TopBar
         ref={topBarRef}
-        style={{ left: projectsBarWidth }}
+        style={{
+          left: projectsBarWidth || 'env(safe-area-inset-left)',
+          right: 'env(safe-area-inset-right)',
+        }}
         showSidebarButton={!isMd}
         onSidebarButtonClick={() => setOffcanvasSidebarVisible(true)}
       />
@@ -99,6 +103,9 @@ const ProjectView = ({ childView }) => {
           <nav
             ref={projectsBarRef}
             className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"
+            style={{
+              paddingLeft: 'env(safe-area-inset-left)',
+            }}
             children={<ProjectsBar />}
           />
 
@@ -107,7 +114,7 @@ const ProjectView = ({ childView }) => {
             className="fixed bottom-0 overflow-y-auto p-5 pt-1 pr-1"
             style={{
               top: topBarHeight,
-              left: projectsBarWidth,
+              left: projectsBarWidth || 'env(safe-area-inset-left)',
             }}
             children={<Sidebar />}
           />
@@ -123,7 +130,12 @@ const ProjectView = ({ childView }) => {
               opacity: offcanvasSidebarVisible ? 1 : 0,
             }}
           >
-            <div className="shrink-0 overflow-y-auto bg-slate-100/75 dark:bg-slate-900/25 border-r dark:border-transparent">
+            <div
+              className="shrink-0 overflow-y-auto bg-slate-100/75 dark:bg-slate-900/25 border-r dark:border-transparent"
+              style={{
+                paddingLeft: 'env(safe-area-inset-left)',
+              }}
+            >
               <ProjectsBar onButtonClick={() => setOffcanvasSidebarVisible(false)} />
             </div>
 
@@ -145,8 +157,11 @@ const ProjectView = ({ childView }) => {
       {showFormattingToolbar && (
           <aside
           ref={multiplexRefs([formattingBarRef, formattingBarSizeRef])}
-          className="fixed bottom-0 right-0 p-5 pt-1 pl-1 overflow-y-auto flex"
-          style={{ top: topBarHeight }}
+          className="fixed bottom-0 p-5 pt-1 pl-1 overflow-y-auto flex"
+          style={{
+            top: topBarHeight,
+            right: 'env(safe-area-inset-right)',
+          }}
         />
       )}
 
@@ -154,10 +169,10 @@ const ProjectView = ({ childView }) => {
         className="min-h-screen flex flex-col"
         style={{
           paddingTop: topBarHeight,
-          paddingLeft: projectsBarWidth + sideBarWidth,
-          paddingRight: centreView
+          paddingLeft: (projectsBarWidth + sideBarWidth) || 'env(safe-area-inset-left)',
+          paddingRight: cssAdd('env(safe-area-inset-right)', centreView
             ? Math.max(formattingBarWidth, projectsBarWidth + sideBarWidth)
-            : formattingBarWidth,
+            : formattingBarWidth),
         }}
       >
         <div className="grow flex flex-col p-5 pt-1">

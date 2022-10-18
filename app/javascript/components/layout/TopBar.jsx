@@ -31,7 +31,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
   return (
     <nav
       ref={ref}
-      className="fixed top-0 right-0 p-5 pointer-events-none flex items-center gap-2 z-10"
+      className="fixed top-0 p-5 pointer-events-none flex items-center gap-2 z-10"
       {...otherProps}
     >
       {showSidebarButton && (
