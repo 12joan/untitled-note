@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { useElementSize } from 'usehooks-ts'
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
+import { useElementSize } from 'usehooks-ts'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
-import multiplexRefs from '~/lib/multiplexRefs'
 import cssAdd from '~/lib/cssAdd'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
@@ -26,13 +26,19 @@ const ProjectView = ({ childView }) => {
   const [projectsBarRef, { width: projectsBarWidth }] = useElementSize()
   const [topBarRef, { height: topBarHeight }] = useElementSize()
   const [sideBarRef, { width: sideBarWidth }] = useElementSize()
-  const [formattingBarSizeRef, { width: formattingBarWidth }] = useElementSize()
+  const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
 
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
 
-  const formattingBarRef = useRef()
+  const formattingToolbarRef = useRef()
+
+  const useFormattingToolbar = useCallback(formattingToolbar => {
+    const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
+    useLayoutEffect(() => formattingToolbarSizeRef(formattingToolbarRef.current), [])
+    return portal
+  }, [])
 
   useEffect(() => {
     if (isMd) {
@@ -87,7 +93,7 @@ const ProjectView = ({ childView }) => {
   }, [project.id, viewPath])
 
   return (
-    <ContextProvider formattingToolbarRef={formattingBarRef} topBarHeight={topBarHeight}>
+    <ContextProvider useFormattingToolbar={useFormattingToolbar} topBarHeight={topBarHeight}>
       <TopBar
         ref={topBarRef}
         style={{
@@ -155,8 +161,8 @@ const ProjectView = ({ childView }) => {
       </ModalRoot>
 
       {showFormattingToolbar && (
-          <aside
-          ref={multiplexRefs([formattingBarRef, formattingBarSizeRef])}
+        <aside
+          ref={formattingToolbarRef}
           className="fixed bottom-0 p-5 pt-1 pl-1 overflow-y-auto flex"
           style={{
             top: topBarHeight,
@@ -171,8 +177,8 @@ const ProjectView = ({ childView }) => {
           paddingTop: topBarHeight,
           paddingLeft: (projectsBarWidth + sideBarWidth) || 'env(safe-area-inset-left)',
           paddingRight: cssAdd('env(safe-area-inset-right)', centreView
-            ? Math.max(formattingBarWidth, projectsBarWidth + sideBarWidth)
-            : formattingBarWidth),
+            ? Math.max(formattingToolbarWidth, projectsBarWidth + sideBarWidth)
+            : formattingToolbarWidth),
         }}
       >
         <div className="grow flex flex-col p-5 pt-1">

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import TextareaAutosize from 'react-textarea-autosize'
 import {
@@ -171,7 +170,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
 const WithEditorState = ({ workingDocument, updateDocument }) => {
   const editor = usePlateEditorState('editor')
-  const { formattingToolbarRef } = useContext()
+  const { useFormattingToolbar } = useContext()
 
   useEffectAfterFirst(() => {
     const plainBody = Array.from(getNodeTexts(editor))
@@ -187,10 +186,11 @@ const WithEditorState = ({ workingDocument, updateDocument }) => {
     })
   }, [editor.children])
 
-  return createPortal(
-    <FormattingToolbar editor={editor} />,
-    formattingToolbarRef.current,
+  const formattingToolbar = useFormattingToolbar(
+    <FormattingToolbar editor={editor} />
   )
+
+  return formattingToolbar
 }
 
 export default Editor
