@@ -33,4 +33,11 @@ class ProjectTest < ActiveSupport::TestCase
     create(:document, project: project, tags: tags)
     project.destroy!
   end
+
+  test 'new projects have list_index equal to their id' do
+    3.times do
+      project = create(:project)
+      assert_equal project.id, project.list_index
+    end
+  end
 end

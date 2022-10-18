@@ -10,6 +10,10 @@ class Project < ApplicationRecord
   include Queryable.permit(*%i[id name image_url created_at updated_at])
   include Listenable
 
+  after_create do
+    update!(list_index: id)
+  end
+
   def image_url
     image&.url
   end

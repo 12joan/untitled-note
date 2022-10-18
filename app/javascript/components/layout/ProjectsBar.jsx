@@ -2,10 +2,12 @@ import React, { forwardRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { useContext } from '~/lib/context'
+import useNewProject from '~/lib/useNewProject'
 import useOverrideable from '~/lib/useOverrideable'
+import ProjectOrderAPI from '~/lib/resources/ProjectOrderAPI'
+import { handleReorderProjectsError } from '~/lib/handleErrors'
 import { ProjectLink, OverviewLink } from '~/lib/routes'
 import abbreviate from '~/lib/abbreviate'
-import useNewProject from '~/lib/useNewProject'
 
 import Tooltip from '~/components/Tooltip'
 import LargePlusIcon from '~/components/icons/LargePlusIcon'
@@ -19,11 +21,16 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
   const handleDragEnd = ({ source, destination }) => {
     if (!destination) return
 
-    const newProjects = [...localProjects]
+    const newProjects = Array.from(localProjects)
     const [removed] = newProjects.splice(source.index, 1)
     newProjects.splice(destination.index, 0, removed)
-
     setLocalProjects(newProjects)
+
+    handleReorderProjectsError(
+      ProjectOrderAPI.update({
+        order: newProjects.map(({ id }) => id),
+      })
+    ).catch(() => setLocalProjects(localProjects))
   }
 
   return (

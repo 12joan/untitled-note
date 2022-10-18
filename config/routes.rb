@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         resources :s3_files, only: %i[create destroy show]
         resource :image, only: %i[update], controller: :project_images
       end
+
+      resource :project_order, only: %i[update], controller: :project_order
     end
   end
 
