@@ -32,7 +32,7 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
 
   return (
     <ContextProvider onButtonClick={onButtonClick}>
-      <div className="w-56 space-y-5 pb-3">
+      <div className="w-48 lg:w-56 space-y-5 pb-3">
         <section className="-ml-3">
           <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
           <ButtonWithIcon icon={NewDocumentIcon} label="New document" onClick={createNewDocument} />
