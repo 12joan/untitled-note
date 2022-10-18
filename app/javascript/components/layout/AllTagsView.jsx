@@ -19,7 +19,7 @@ const AllTagsView = () => {
     <div ref={viewRef} className="grow flex flex-col">
       <BackButton className="mb-3" />
 
-      <h1 className="text-3xl font-medium select-none mb-5">All tags</h1>
+      <h1 className="h1 select-none mb-5">All tags</h1>
 
       <ContextProvider linkOriginator="All tags">
         {futureTags.map(tags => (

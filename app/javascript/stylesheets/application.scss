@@ -124,7 +124,7 @@
     }
 
     h1 {
-      @apply text-2xl font-medium mt-0;
+      @apply h2 mt-0;
     }
   }
 }
@@ -179,6 +179,18 @@
     &.btn-danger {
       @apply bg-red-500 text-white ring-offset-2;
     }
+  }
+
+  .h1, .h2 {
+    @apply font-medium;
+  }
+
+  .h1 {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .h2 {
+    @apply text-xl sm:text-2xl;
   }
 }
 

@@ -24,7 +24,7 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, render = x =
 
   const titleComponent = title && (() => {
     const heading = (
-      <h2 className="text-2xl font-medium select-none" children={title} />
+      <h2 className="h2 select-none" children={title} />
     )
 
     return showAllLink

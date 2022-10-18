@@ -97,7 +97,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
           <TextareaAutosize
             ref={titleRef}
             type="text"
-            className="grow block min-w-0 text-3xl font-medium text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
+            className="grow block min-w-0 h1 text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
             value={workingDocument.title || ''}
             placeholder="Untitled document"
             onChange={event => updateDocument({

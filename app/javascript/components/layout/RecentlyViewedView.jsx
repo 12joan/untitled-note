@@ -20,7 +20,7 @@ const RecentlyViewedView = () => {
     <div ref={viewRef} className="grow flex flex-col">
       <BackButton className="mb-3" />
 
-      <h1 className="text-3xl font-medium select-none mb-5">Recently viewed</h1>
+      <h1 className="h1 select-none mb-5">Recently viewed</h1>
 
       <ContextProvider linkOriginator="Recently viewed">
         {futureRecentlyViewedDocuments.map(documents => (

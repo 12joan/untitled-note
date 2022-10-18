@@ -45,7 +45,7 @@ const OverviewView = () => {
   return (
     <div ref={viewRef} className="grow flex flex-col gap-5">
       <PopOutLink as={EditProjectLink} label="Edit details">
-        <h1 className="text-3xl font-medium">
+        <h1 className="h1">
           {project.name}
         </h1>
       </PopOutLink>

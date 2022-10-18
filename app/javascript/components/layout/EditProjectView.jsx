@@ -19,7 +19,7 @@ const EditProjectView = () => {
 
       <div className="space-y-10">
         <div className="space-y-5">
-          <h1 className="text-3xl font-medium select-none">Edit project</h1>
+          <h1 className="h1 select-none">Edit project</h1>
 
           <EditProjectName />
           <EditProjectImage />

@@ -36,7 +36,7 @@ const ProjectActions = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-medium select-none mb-3">Other actions</h2>
+      <h2 className="h2 select-none mb-3">Other actions</h2>
 
       <div className="border rounded-lg flex flex-col sm:flex-row gap-3 p-3 sm:items-center">
         <div className="space-y-1 grow select-none">

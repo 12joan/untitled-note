@@ -26,7 +26,7 @@ const TagDocumentsView = ({ tagId }) => {
   if (futureTag.map(tag => tag === undefined).orDefault(false)) {
     return (
       <div className="space-y-3">
-        <h1 className="text-3xl font-medium">Tag not found</h1>
+        <h1 className="h1">Tag not found</h1>
         <p className="text-lg font-light">This tag does not exist. Tags are automatically deleted when no documents are tagged with them.</p>
         <p><OverviewLink className="btn btn-link">Go back</OverviewLink></p>
       </div>
@@ -37,7 +37,7 @@ const TagDocumentsView = ({ tagId }) => {
     <div ref={viewRef} className="grow flex flex-col">
       <BackButton className="mb-3" />
 
-      <h1 className="text-3xl font-medium select-none mb-5">
+      <h1 className="h1 select-none mb-5">
         {futureTag.map(tag => `Tagged: ${tag.text}`).orDefault(<InlinePlaceholder />)}
       </h1>
 
