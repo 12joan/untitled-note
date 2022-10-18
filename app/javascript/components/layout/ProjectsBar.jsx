@@ -52,15 +52,17 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
         )
       })}
 
-      <Tooltip content="New project" placement="right" fixed>
-        <button
-          type="button"
-          className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
-          onClick={openNewProjectModal}
-        >
-          <LargePlusIcon size="2em" ariaLabel="New project" />
-        </button>
-      </Tooltip>
+      <div className="pl-3">
+        <Tooltip content="New project" placement="right" fixed>
+          <button
+            type="button"
+            className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
+            onClick={openNewProjectModal}
+          >
+            <LargePlusIcon size="2em" ariaLabel="New project" />
+          </button>
+        </Tooltip>
+      </div>
     </div>
   )
 })
