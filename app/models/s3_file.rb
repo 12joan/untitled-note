@@ -31,12 +31,17 @@ class S3File < ApplicationRecord
       success_action_status: '201',
       content_type: content_type,
       content_length_range: 0..size,
+      cache_control: 'max-age=31536000, private',
     )
   end
 
   def url
-    # TODO: Cache this
-    s3_object.presigned_url(:get, expires_in: 1.hour.to_i)
+    redis = Rails.application.config.redis
+    redis_key = "s3_file:#{id}:url"
+
+    redis.get(redis_key) || s3_object.presigned_url(:get, expires_in: 7.days.to_i).tap do |url|
+      redis.set(redis_key, url, ex: 6.days.to_i)
+    end
   end
 
   def uploaded?(update_cache: true)

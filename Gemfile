@@ -21,8 +21,9 @@ gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript
 gem 'vite_rails', '~> 3.0'
 
-# Use Redis for ActionCable
+# Use Redis for ActionCable and for caching
 gem 'redis', '~> 4.0'
+gem 'connection_pool', '~> 2.3'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
