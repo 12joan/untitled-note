@@ -26,7 +26,12 @@ import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
 
 const Sidebar = ({ onButtonClick = () => {} }) => {
-  const { futurePinnedDocuments, futureRecentlyViewedDocuments, futureTags } = useContext()
+  const {
+    futurePinnedDocuments,
+    futureRecentlyViewedDocuments,
+    futureTags,
+    showSearchModal,
+  } = useContext()
 
   const createNewDocument = useNewDocument()
 
@@ -36,7 +41,7 @@ const Sidebar = ({ onButtonClick = () => {} }) => {
         <section className="-ml-3">
           <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
           <ButtonWithIcon icon={NewDocumentIcon} label="New document" onClick={createNewDocument} />
-          <ButtonWithIcon icon={SearchIcon} label="Search" />
+          <ButtonWithIcon icon={SearchIcon} label="Search" onClick={showSearchModal} />
         </section>
 
         <PinnedDragTarget indicatorClassName="right-0">

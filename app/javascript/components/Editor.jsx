@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TextareaAutosize from 'react-textarea-autosize'
 import {
   Plate,
   createPlateEditor,
@@ -18,6 +17,7 @@ import plugins from '~/lib/editor/plugins'
 
 import BackButton from '~/components/BackButton'
 import Tooltip from '~/components/Tooltip'
+import TextareaAutosize from '~/components/TextareaAutosize'
 import Dropdown from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
 import EditorTags from '~/components/EditorTags'
@@ -96,8 +96,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
         <div className="narrow flex gap-2">
           <TextareaAutosize
             ref={titleRef}
-            type="text"
-            className="grow block min-w-0 h1 text-black dark:text-white overflow-wrap-break-word no-focus-ring resize-none bg-transparent"
+            className="min-w-0 grow h1 text-black dark:text-white"
             value={workingDocument.title || ''}
             placeholder="Untitled document"
             onChange={event => updateDocument({

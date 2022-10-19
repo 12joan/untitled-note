@@ -1,17 +1,16 @@
 import React from 'react'
 import { useMemo, useState, useLayoutEffect } from 'react'
-import { useFloating, offset, shift, size } from '@floating-ui/react-dom'
 
 import keyWithModifiers from '~/lib/keyWithModifiers'
 
 const positiveMod = (a, b) => ((a % b) + b) % b
 
-const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput, renderSuggestion }) => {
+const useCombobox = ({ query, suggestions, keyForSuggestion, onCommit, completeOnTab = false, hideOnBlur = false }) => {
   const idPrefix = useMemo(() => `combobox-${Math.random().toString(36).slice(2)}-`, [])
   const idForSuggestion = key => `${idPrefix}${key}`
 
   const [inputFocused, setInputFocused] = useState(false)
-  const showSuggestions = inputFocused && query.length > 0 && suggestions.length > 0
+  const showSuggestions = (!hideOnBlur || inputFocused) && query.length > 0 && suggestions.length > 0
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0)
   const activeSuggestion = suggestions[activeSuggestionIndex]
@@ -23,11 +22,16 @@ const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput,
   const handleClickSuggestion = index => () => onCommit(suggestions[index])
 
   const handleKeyDown = event => {
+    const step = delta => setActiveSuggestionIndex(positiveMod(activeSuggestionIndex + delta, suggestions.length))
+
     const handler = {
-      ArrowDown: () => setActiveSuggestionIndex(positiveMod(activeSuggestionIndex + 1, suggestions.length)),
-      ArrowUp: () => setActiveSuggestionIndex(positiveMod(activeSuggestionIndex - 1, suggestions.length)),
+      ArrowDown: () => step(1),
+      ArrowUp: () => step(-1),
       Enter: () => onCommit(activeSuggestion),
-      Tab: () => onCommit(activeSuggestion),
+      ...(completeOnTab
+        ? { Tab: () => onCommit(activeSuggestion) }
+        : { Tab: () => step(1), ShiftTab: () => step(-1) }
+      ),
     }[keyWithModifiers(event)]
 
     if (showSuggestions && handler) {
@@ -44,27 +48,44 @@ const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput,
     }
   }, [activeSuggestionKey])
 
-  const {
-    x: suggestionsX,
-    y: suggestionsY,
-    reference: inputRef,
-    floating: suggestionsRef,
-    strategy: suggestionsPosition,
-  } = useFloating({
-    placement: 'bottom-start',
-    middleware: [
-      offset(10),
-      shift(),
-      size({
-        apply: ({ availableHeight, elements }) => {
-          elements.floating.style.maxHeight = `${availableHeight}px`
-        },
-        padding: 10,
-      }),
-    ],
-  })
+  return {
+    inputProps: {
+      onChange: () => selectFirstSuggestion(),
+      onKeyDown: handleKeyDown,
+      onFocus: () => setInputFocused(true),
+      onBlur: () => setInputFocused(false),
+      role: 'combobox',
+      'aria-expanded': showSuggestions,
+    },
 
-  return (
+    showSuggestions,
+
+    suggestionContainerProps: {
+      role: 'listbox',
+      'aria-activedescendant': idForSuggestion(activeSuggestionKey),
+    },
+
+    mapSuggestions: renderSuggestion => suggestions.map((suggestion, index) => {
+      const key = keyForSuggestion(suggestion)
+      const active = key === activeSuggestionKey
+
+      return renderSuggestion({
+        suggestion,
+        active,
+        suggestionProps: {
+          key,
+          onMouseMove: handleMouseOverSuggestion(index),
+          onMouseDown: event => event.preventDefault(),
+          onClick: handleClickSuggestion(index),
+          id: idForSuggestion(key),
+          role: 'option',
+          tabIndex: -1,
+          'aria-selected': active,
+        },
+      })
+    }),
+  }
+  /*
     <>
       <div
         ref={inputRef}
@@ -114,6 +135,7 @@ const Combobox = ({ query, suggestions, keyForSuggestion, onCommit, renderInput,
       )}
     </>
   )
+  */
 }
 
-export default Combobox
+export default useCombobox

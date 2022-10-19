@@ -15,7 +15,7 @@ import SettingsIcon from '~/components/icons/SettingsIcon'
 import AccountIcon from '~/components/icons/AccountIcon'
 
 const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherProps }, ref) => {
-  const { project } = useContext()
+  const { project, showSearchModal } = useContext()
 
   const { isXs } = useBreakpoints()
 
@@ -23,7 +23,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
 
   const navButtons = [
     { icon: NewDocumentIcon, label: 'New document', onClick: createNewDocument },
-    { icon: SearchIcon, label: 'Search' },
+    { icon: SearchIcon, label: 'Search', onClick: showSearchModal },
     { icon: SettingsIcon, label: 'Settings' },
     { icon: AccountIcon, label: 'Log out', as: LogoutLink },
   ]

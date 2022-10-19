@@ -13,6 +13,7 @@ import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
 import OffcanavasSidebar from '~/components/layout/OffcanavasSidebar'
+import SearchModal from '~/components/layout/SearchModal'
 import AwaitRedirect from '~/components/AwaitRedirect'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
@@ -30,6 +31,7 @@ const ProjectView = ({ childView }) => {
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
+  const [searchModalVisible, setSearchModalVisible] = useState(false)
 
   const formattingToolbarRef = useRef()
 
@@ -92,7 +94,11 @@ const ProjectView = ({ childView }) => {
   }, [project.id, viewPath])
 
   return (
-    <ContextProvider useFormattingToolbar={useFormattingToolbar} topBarHeight={topBarHeight}>
+    <ContextProvider
+      useFormattingToolbar={useFormattingToolbar}
+      topBarHeight={topBarHeight}
+      showSearchModal={() => setSearchModalVisible(true)}
+    >
       <TopBar
         ref={topBarRef}
         style={{
@@ -126,8 +132,6 @@ const ProjectView = ({ childView }) => {
         </>
       )}
 
-      <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
-
       {showFormattingToolbar && (
         <aside
           ref={formattingToolbarRef}
@@ -157,6 +161,9 @@ const ProjectView = ({ childView }) => {
           />
         </div>
       </main>
+
+      <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
+      <SearchModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)} />
     </ContextProvider>
   )
 }

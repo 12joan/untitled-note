@@ -1,12 +1,13 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useRef, useState } from 'react'
 import { localeIncludes } from 'locale-includes'
+import { useFloating, offset, shift, size } from '@floating-ui/react-dom'
 
 import { useContext } from '~/lib/context'
 import { TagLink } from '~/lib/routes'
+import useCombobox from '~/lib/useCombobox'
 
 import CloseIcon from '~/components/icons/CloseIcon'
 import PlusIcon from '~/components/icons/PlusIcon'
-import Combobox from '~/components/Combobox'
 
 const tagClassName = 'bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center'
 const tagButtonClassName = 'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400 rounded-full flex items-center justify-center'
@@ -31,7 +32,6 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     tag => !hasTagWithText(tag.text)
   ), [futureAllTags, tagTexts])
 
-  const inputContainerRef = useRef()
   const inputRef = useRef()
 
   const [inputVisible, setInputVisible] = useState(false)
@@ -71,6 +71,38 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     ? <TagLink tagId={id} children={text} {...otherProps} />
     : <span tabIndex="0" children={text} {...otherProps} />
 
+  const {
+    x: suggestionsX,
+    y: suggestionsY,
+    reference: inputContainerRef,
+    floating: suggestionsRef,
+    strategy: suggestionsPosition,
+  } = useFloating({
+    placement: 'bottom-start',
+    middleware: [
+      offset(10),
+      shift(),
+      size({
+        apply: ({ availableHeight, elements }) => {
+          elements.floating.style.maxHeight = `${availableHeight}px`
+        },
+        padding: 10,
+      }),
+    ],
+  })
+
+  const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
+    query: inputValue,
+    suggestions,
+    keyForSuggestion: ({ key }) => key,
+    onCommit: ({ tag }) => {
+      addTag(tag)
+      setInputValue('')
+    },
+    completeOnTab: true,
+    hideOnBlur: true,
+  })
+
   return (
     <div className="narrow mt-3 flex flex-wrap gap-2" style={{ display: visible ? undefined : 'none' }}>
       {tags.map(tag => (
@@ -105,61 +137,62 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
       </button>
 
       <div className="h-8 flex items-center" style={{ display: inputVisible ? undefined : 'none' }}>
-        <Combobox
-          query={trimmedInputValue}
-          suggestions={suggestions}
-          keyForSuggestion={suggestion => suggestion.key}
-          onCommit={({ tag }) => {
-            addTag(tag)
-            setInputValue('')
-          }}
-          renderInput={({ handleChange, handleKeyDown, handleFocus, handleBlur, accessibilityProps }) => (
-            <input
-              ref={inputRef}
-              type="text"
-              className="no-focus-ring bg-transparent"
-              value={inputValue}
-              onChange={event => {
-                handleChange(event)
-                setInputValue(event.target.value)
-              }}
-              onKeyDown={event => {
-                handleKeyDown(event)
+        <div ref={inputContainerRef}>
+          <input
+            {...inputProps}
+            ref={inputRef}
+            type="text"
+            className="no-focus-ring bg-transparent"
+            value={inputValue}
+            onChange={event => {
+              inputProps.onChange(event)
+              setInputValue(event.target.value)
+            }}
+            onKeyDown={event => {
+              inputProps.onKeyDown(event)
 
-                if (event.key === 'Backspace' && inputValue.length === 0 && tags.length > 0) {
-                  removeTag(tags[tags.length - 1])
-                }
+              if (event.key === 'Backspace' && inputValue.length === 0 && tags.length > 0) {
+                removeTag(tags[tags.length - 1])
+              }
 
-                if (event.key === 'Escape') {
-                  setInputValue('')
-                }
-              }}
-              onFocus={handleFocus}
-              onBlur={event => {
-                handleBlur(event)
+              if (event.key === 'Escape') {
+                setInputValue('')
+              }
+            }}
+            onBlur={event => {
+              inputProps.onBlur(event)
 
-                if (trimmedInputValue.length === 0) {
-                  setInputValue('')
-                  setInputVisible(false)
-                  setVisible(tags.length > 0)
-                }
-              }}
-              placeholder="Type to add tag"
-            />
-          )}
-          renderSuggestion={({ suggestion, active, handleMouseMove, handleMouseDown, handleClick, accessibilityProps }) => (
-            <div
-              data-active={active}
-              className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
-              onMouseMove={handleMouseMove}
-              onMouseDown={handleMouseDown}
-              onClick={handleClick}
-              {...accessibilityProps}
-            >
-              {suggestion.text}
-            </div>
-          )}
-        />
+              if (trimmedInputValue.length === 0) {
+                setInputValue('')
+                setInputVisible(false)
+                setVisible(tags.length > 0)
+              }
+            }}
+            placeholder="Type to add tag"
+          />
+        </div>
+
+        {showSuggestions && (
+          <div
+            {...suggestionContainerProps}
+            ref={suggestionsRef}
+            className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
+            style={{
+              position: suggestionsPosition,
+              top: suggestionsY ?? 0,
+              left: suggestionsX ?? 0,
+            }}
+          >
+            {mapSuggestions(({ suggestion, active, suggestionProps }) => (
+              <div
+                {...suggestionProps}
+                data-active={active}
+                className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
+                children={suggestion.text}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

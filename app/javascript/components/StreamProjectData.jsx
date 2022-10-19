@@ -22,6 +22,7 @@ const StreamProjectData = ({ projectId, children }) => {
     query: {
       id: true,
       remote_version: true,
+      title: true,
       safe_title: true,
       preview: true,
       pinned_at: true,
