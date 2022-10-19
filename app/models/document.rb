@@ -54,8 +54,8 @@ class Document < ApplicationRecord
     end
   end
 
-  def upsert_to_typesense
-    Document.typesense_collection.documents.upsert(
+  def upsert_to_typesense(collection: self.class.typesense_collection)
+    collection.documents.upsert(
       id: id.to_s,
       project_id: project_id,
       title: title,
@@ -63,16 +63,16 @@ class Document < ApplicationRecord
     )
   end
 
-  def destroy_from_typesense
-    Document.typesense_collection.documents[id].delete
+  def destroy_from_typesense(collection: self.class.typesense_collection)
+    collection.documents[id].delete
   end
 
-  def self.reindex_typesense_collection
-    find_each(&:upsert_to_typesense)
+  def self.reindex_typesense_collection(collection: typesense_collection)
+    find_each { |document| document.upsert_to_typesense(collection: collection) }
   end
 
-  def self.search(project:, query:)
-    Document.typesense_collection.documents.search(
+  def self.search(project:, query:, collection: typesense_collection)
+    collection.documents.search(
       q: query,
       query_by: 'title,plain_body',
       filter_by: "project_id:#{project.id}",

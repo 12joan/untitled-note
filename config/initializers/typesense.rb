@@ -39,15 +39,19 @@ def define_collection(base_name, version:, &create)
   typesense.collections[collection_name]
 end
 
-Rails.application.config.typesense_collections = OpenStruct.new(
-  documents: define_collection('documents', version: '0.3') do |typesense, collection_name|
-    typesense.collections.create(
-      name: collection_name,
-      fields: [
-        { name: 'project_id', type: 'int32' },
-        { name: 'title', type: 'string', optional: true },
-        { name: 'plain_body', type: 'string' },
-      ],
-    )
-  end
-)
+Rails.configuration.after_initialize do
+  Rails.application.config.typesense_collections = OpenStruct.new(
+    documents: define_collection('documents', version: '0.5') do |typesense, collection_name|
+      typesense.collections.create(
+        name: collection_name,
+        fields: [
+          { name: 'project_id', type: 'int32' },
+          { name: 'title', type: 'string', optional: true },
+          { name: 'plain_body', type: 'string' },
+        ],
+      )
+
+      Document.reindex_typesense_collection(collection: typesense.collections[collection_name])
+    end
+  )
+end
