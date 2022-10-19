@@ -10,6 +10,9 @@ class Document < ApplicationRecord
   include Queryable.permit(*%i[id title safe_title preview body body_type tags blank remote_version created_at updated_at pinned_at])
   include Listenable
 
+  after_commit :upsert_to_typesense, on: %i[create update]
+  after_destroy :destroy_from_typesense
+
   def safe_title
     title.presence || 'Untitled document'
   end
@@ -49,5 +52,34 @@ class Document < ApplicationRecord
         tags << tag
       end
     end
+  end
+
+  def upsert_to_typesense
+    Document.typesense_collection.documents.upsert(
+      id: id.to_s,
+      project_id: project_id,
+      title: title,
+      plain_body: plain_body,
+    )
+  end
+
+  def destroy_from_typesense
+    Document.typesense_collection.documents[id].delete
+  end
+
+  def self.reindex_typesense_collection
+    find_each(&:upsert_to_typesense)
+  end
+
+  def self.search(project:, query:)
+    Document.typesense_collection.documents.search(
+      q: query,
+      query_by: 'title,plain_body',
+      filter_by: "project_id:#{project.id}",
+    ).fetch('hits')
+  end
+
+  def self.typesense_collection
+    Rails.application.config.typesense_collections.documents
   end
 end

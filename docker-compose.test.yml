@@ -6,6 +6,8 @@ services:
     environment:
       RAILS_ENV: test
       DATABASE_URL: postgres://postgres@db
+      TYPESENSE_URL: http://typesense:8108
+      TYPESENSE_API_KEY: trust
     ports:
       - '3000:3000'
     depends_on:
@@ -15,3 +17,7 @@ services:
     image: postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
+
+  typesense:
+    image: typesense/typesense:0.23.1
+    command: '--data-dir /data --api-key=trust'

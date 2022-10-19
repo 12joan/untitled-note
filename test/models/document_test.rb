@@ -129,4 +129,81 @@ class DocumentTest < ActiveSupport::TestCase
       assert_equal expected_preview, document.preview, "preview for #{plain_body.inspect}"
     end
   end
+
+  test 'search returns up to date documents matching query and project' do
+    my_project = create(:project)
+    other_project = create(:project)
+
+    # Simple cases
+    document1 = create(:document, project: my_project, title: 'Document 1', plain_body: 'one two three')
+    document2 = create(:document, project: my_project, title: 'Document 2 with three in title', plain_body: 'four five six')
+    document3 = create(:document, project: my_project, title: 'Document 3', plain_body: 'seven eight nine')
+
+    # Destroyed
+    document4 = create(:document, project: my_project, title: 'Document 4', plain_body: 'three')
+    document4.destroy!
+
+    # Updated to match
+    document5 = create(:document, project: my_project, title: 'Document 5', plain_body: 'two')
+    document5.update!(plain_body: 'three')
+
+    # Updated to not match
+    document6 = create(:document, project: my_project, title: 'Document 6', plain_body: 'three')
+    document6.update!(plain_body: 'four')
+
+    # In other project
+    document7 = create(:document, project: other_project, title: 'Document 7', plain_body: 'three')
+
+    matching_ids = search_ids(project: my_project, query: 'three')
+
+    assert_includes matching_ids, document1.id, 'should match document1'
+    assert_includes matching_ids, document2.id, 'should match document2'
+    refute_includes matching_ids, document3.id, 'should not match document3'
+    refute_includes matching_ids, document4.id, 'should not match destroyed document4'
+    assert_includes matching_ids, document5.id, 'should match updated document5'
+    refute_includes matching_ids, document6.id, 'should not match updated document6'
+    refute_includes matching_ids, document7.id, 'should not match document7 from other project'
+  end
+
+  test 'search ignores case' do
+    document = create(:document, plain_body: 'one two three')
+    matching_ids = search_ids(project: document.project, query: 'ONE')
+    assert_includes matching_ids, document.id, 'should match document'
+  end
+
+  test 'search ignores term order' do
+    document = create(:document, title: 'one two three', plain_body: '')
+    matching_ids = search_ids(project: document.project, query: 'three one')
+    assert_includes matching_ids, document.id, 'should match document'
+  end
+
+  test 'search ignores non-matching terms' do
+    document = create(:document, plain_body: 'one two three')
+    matching_ids = search_ids(project: document.project, query: 'one four')
+    assert_includes matching_ids, document.id, 'should match document'
+  end
+
+  test 'search uses prefix matching' do
+    document = create(:document, plain_body: 'one two three')
+    assert_includes search_ids(project: document.project, query: 'thr'), document.id, 'should match document'
+    refute_includes search_ids(project: document.project, query: 'ree'), document.id, 'should not match document'
+  end
+
+  test 'search uses fuzzy matching' do
+    document = create(:document, plain_body: 'one two three')
+    matching_ids = search_ids(project: document.project, query: 'trhee')
+    assert_includes matching_ids, document.id, 'should match document'
+  end
+
+  test 'search ignores simple plurals' do
+    document = create(:document, plain_body: 'one two three')
+    matching_ids = search_ids(project: document.project, query: 'threes')
+    assert_includes matching_ids, document.id, 'should match document'
+  end
+
+  private
+
+  def search_ids(project:, query:)
+    Document.search(project: project, query: query).map { |hit| hit.dig('document', 'id').to_i }
+  end
 end

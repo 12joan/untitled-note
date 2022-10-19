@@ -7,6 +7,8 @@ services:
       RAILS_ENV: development
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
+      TYPESENSE_URL: http://typesense:8108
+      TYPESENSE_API_KEY: trust
       S3_BUCKET: untitled-note-app-development
     env_file: .env
     command: 'yarn dev'
@@ -30,6 +32,13 @@ services:
   redis:
     image: redis
 
+  typesense:
+    image: typesense/typesense:0.23.1
+    command: '--data-dir /data --api-key=trust'
+    volumes:
+      - typesense:/data
+
 volumes:
   pgdata:
+  typesense:
   node_modules:
