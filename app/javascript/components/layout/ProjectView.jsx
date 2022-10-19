@@ -9,11 +9,10 @@ import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import cssAdd from '~/lib/cssAdd'
 
-import { ModalRoot, ModalPanel } from '~/components/Modal'
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
+import OffcanavasSidebar from '~/components/layout/OffcanavasSidebar'
 import AwaitRedirect from '~/components/AwaitRedirect'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
@@ -127,38 +126,7 @@ const ProjectView = ({ childView }) => {
         </>
       )}
 
-      <ModalRoot open={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)}>
-        <div className="fixed inset-0">
-          <ModalPanel
-            className="max-w-full absolute top-0 left-0 bottom-0 bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog transition-[transform,opacity] flex duration-300"
-            style={{
-              transform: offcanvasSidebarVisible ? 'translateX(0)' : 'translateX(-100%)',
-              opacity: offcanvasSidebarVisible ? 1 : 0,
-            }}
-          >
-            <div
-              className="shrink-0 overflow-y-auto bg-slate-100/75 dark:bg-slate-900/25 border-r dark:border-transparent"
-              style={{
-                paddingLeft: 'env(safe-area-inset-left)',
-              }}
-            >
-              <ProjectsBar onButtonClick={() => setOffcanvasSidebarVisible(false)} />
-            </div>
-
-            <div className="p-3 pl-5 overflow-y-auto flex items-start gap-2">
-              <Sidebar onButtonClick={() => setOffcanvasSidebarVisible(false)} />
-
-              <button
-                type="button"
-                className="btn rounded-full p-2 aspect-square sticky top-0"
-                onClick={() => setOffcanvasSidebarVisible(false)}
-              >
-                <LargeCloseIcon size="1.25em" ariaLabel="Close" />
-              </button>
-            </div>
-          </ModalPanel>
-        </div>
-      </ModalRoot>
+      <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
 
       {showFormattingToolbar && (
         <aside
