@@ -2,7 +2,13 @@ import React, { forwardRef } from 'react'
 
 import abbreviate from '~/lib/abbreviate'
 
-const ProjectIcon = forwardRef(({ as: Component = 'div', className = '', project, ...otherProps }, ref) => {
+const ProjectIcon = forwardRef(({
+  as: Component = 'div',
+  className = '',
+  style = {},
+  project,
+  ...otherProps
+}, ref) => {
   const hasImage = !!project.image_url
 
   return (
@@ -10,7 +16,8 @@ const ProjectIcon = forwardRef(({ as: Component = 'div', className = '', project
       ref={ref}
       className={`flex items-center justify-center p-1 bg-white dark:bg-slate-800 ${className}`}
       style={{
-        '--bg-url': hasImage ? `url(${project.image_url})` : undefined
+        '--bg-url': hasImage ? `url(${project.image_url})` : undefined,
+        ...style,
       }}
       data-has-bg={hasImage}
       aria-label={project.name}

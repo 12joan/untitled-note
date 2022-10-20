@@ -69,6 +69,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
                           projectId={project.id}
                           // HTML attributes
                           className="w-12 h-12 btn text-xl shadow"
+                          style={{ cursor: 'pointer' }}
                           onClick={onButtonClick}
                           aria-current={isCurrentProject ? 'page' : undefined}
                         />
