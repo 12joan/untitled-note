@@ -19,6 +19,7 @@ import {
 import useNewDocument from '~/lib/useNewDocument'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
+import SearchIcon from '~/components/icons/SearchIcon'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
 import RecentIcon from '~/components/icons/RecentIcon'
@@ -220,37 +221,41 @@ const SearchModal = ({ visible, onClose }) => {
 
   return visible && (
     <ModalRoot open={visible} onClose={onClose}>
-      <div className="fixed inset-0 flex p-5 overflow-y-auto">
-        <ModalPanel className="mt-[20vh] mb-auto narrow bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog rounded-xl">
-          <input
-            {...inputProps}
-            ref={inputRef}
-            type="text"
-            className="block w-full text-xl px-5 py-3 bg-transparent no-focus-ring"
-            placeholder={`Search ${currentProject.name}`}
-            value={searchQuery}
-            onChange={event => {
-              setSearchQuery(event.target.value)
-              inputProps.onChange(event)
-            }}
-            onKeyDown={event => {
-              inputProps.onKeyDown(event)
+      <div className="fixed inset-0 flex p-5">
+        <ModalPanel className="mt-[20vh] mb-auto narrow bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog-heavy rounded-xl">
+          <div className="flex px-5 py-3 gap-2 items-center">
+            <SearchIcon size="1.25em" className="text-slate-500 dark:text-slate-400" noAriaLabel />
 
-              if (event.key === 'Escape' && !isEmpty) {
-                event.preventDefault()
-                event.stopPropagation()
-                setSearchQuery('')
-              }
-            }}
-          />
+            <input
+              {...inputProps}
+              ref={inputRef}
+              type="text"
+              className="grow text-xl bg-transparent no-focus-ring"
+              placeholder={`Search ${currentProject.name}`}
+              value={searchQuery}
+              onChange={event => {
+                setSearchQuery(event.target.value)
+                inputProps.onChange(event)
+              }}
+              onKeyDown={event => {
+                inputProps.onKeyDown(event)
+
+                if (event.key === 'Escape' && !isEmpty) {
+                  event.preventDefault()
+                  event.stopPropagation()
+                  setSearchQuery('')
+                }
+              }}
+            />
+          </div>
 
           {showSuggestions && (
-            <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none">
+            <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto">
               {mapSuggestions(({ suggestion: { label, icon, description }, active, suggestionProps }) => (
                 <div
                   {...suggestionProps}
                   data-active={active}
-                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer flex gap-2"
+                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-2 flex gap-2"
                 >
                   <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
                     {icon}
