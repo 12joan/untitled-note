@@ -59,6 +59,7 @@ class Document < ApplicationRecord
       id: id.to_s,
       project_id: project_id,
       title: title,
+      safe_title: safe_title,
       plain_body: plain_body,
     )
   end
@@ -76,6 +77,8 @@ class Document < ApplicationRecord
       q: query,
       query_by: 'title,plain_body',
       filter_by: "project_id:#{project.id}",
+      highlight_start_tag: '<strong>',
+      highlight_end_tag: '</strong>',
     ).fetch('hits')
   end
 

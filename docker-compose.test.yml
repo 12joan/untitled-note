@@ -12,6 +12,7 @@ services:
       - '3000:3000'
     depends_on:
       - db
+      - typesense
 
   db:
     image: postgres

@@ -5,12 +5,23 @@ import keyWithModifiers from '~/lib/keyWithModifiers'
 
 const positiveMod = (a, b) => ((a % b) + b) % b
 
-const useCombobox = ({ query, suggestions, keyForSuggestion, onCommit, completeOnTab = false, hideOnBlur = false }) => {
+const useCombobox = ({
+  query,
+  suggestions,
+  keyForSuggestion,
+  onCommit,
+  completeOnTab = false,
+  hideOnBlur = false,
+  hideWhenNoSuggestions = true,
+}) => {
   const idPrefix = useMemo(() => `combobox-${Math.random().toString(36).slice(2)}-`, [])
   const idForSuggestion = key => `${idPrefix}${key}`
 
   const [inputFocused, setInputFocused] = useState(false)
-  const showSuggestions = (!hideOnBlur || inputFocused) && query.length > 0 && suggestions.length > 0
+
+  const showSuggestions = (!hideOnBlur || inputFocused)
+    && query.length > 0
+    && (!hideWhenNoSuggestions || suggestions.length > 0)
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0)
   const activeSuggestion = suggestions[activeSuggestionIndex]
@@ -85,57 +96,6 @@ const useCombobox = ({ query, suggestions, keyForSuggestion, onCommit, completeO
       })
     }),
   }
-  /*
-    <>
-      <div
-        ref={inputRef}
-        children={renderInput({
-          handleChange: () => selectFirstSuggestion(),
-          handleKeyDown,
-          handleFocus: () => setInputFocused(true),
-          handleBlur: () => setInputFocused(false),
-          accessibilityProps: {
-            role: 'combobox',
-            'aria-expanded': showSuggestions,
-          },
-        })}
-      />
-
-      {showSuggestions && (
-        <div
-          ref={suggestionsRef}
-          className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
-          style={{
-            position: suggestionsPosition,
-            top: suggestionsY ?? 0,
-            left: suggestionsX ?? 0,
-          }}
-          role="listbox"
-          aria-activedescendant={idForSuggestion(activeSuggestionKey)}
-          children={suggestions.map((suggestion, index) => {
-            const key = keyForSuggestion(suggestion)
-            const active = key === activeSuggestionKey
-
-            return renderSuggestion({
-              suggestion,
-              active,
-              handleMouseMove: handleMouseOverSuggestion(index),
-              handleMouseDown: event => event.preventDefault(),
-              handleClick: handleClickSuggestion(index),
-              accessibilityProps: {
-                id: idForSuggestion(key),
-                key,
-                role: 'option',
-                tabIndex: -1,
-                'aria-selected': active,
-              },
-            })
-          })}
-        />
-      )}
-    </>
-  )
-  */
 }
 
 export default useCombobox

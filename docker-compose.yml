@@ -21,6 +21,7 @@ services:
     depends_on:
       - db
       - redis
+      - typesense
 
   db:
     image: postgres

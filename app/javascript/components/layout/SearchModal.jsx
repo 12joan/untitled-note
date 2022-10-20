@@ -3,6 +3,9 @@ import { localeIncludes } from 'locale-includes'
 import { useNavigate } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
+import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
+import SearchAPI from '~/lib/resources/SearchAPI'
+import { FutureServiceResult } from '~/lib/future'
 import useCombobox from '~/lib/useCombobox'
 import {
   overviewPath,
@@ -17,15 +20,35 @@ import useNewDocument from '~/lib/useNewDocument'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 
+const makeDynamicSuggestion = (
+  item,
+  handleAction,
+  {
+    getKey,
+    getLabel,
+    getSnippet = () => undefined,
+    action,
+    ...rest
+  },
+) => ({
+  key: getKey(item),
+  label: getLabel(item),
+  snippet: getSnippet(item),
+  onCommit: () => handleAction(() => action(item)),
+  ...rest,
+})
+
+const makeListSource = ({ list, ...rest }) => (searchQuery, handleAction) => list.map(
+  item => makeDynamicSuggestion(item, handleAction, rest)
+)
+
 const filter = (haystack, needle) => localeIncludes(haystack, needle, { usage: 'search', sensitivity: 'base' })
 
-const makeListSource = ({
+const makeFilteredListSource = ({
   list,
   include = () => true,
   getFilterable,
-  getKey,
-  getLabel,
-  action,
+  ...rest
 }) => (searchQuery, handleAction) => list
   .filter(item => {
     if (!include(item)) {
@@ -35,14 +58,10 @@ const makeListSource = ({
     const filterable = getFilterable(item)
     return filterable && filter(filterable, searchQuery)
   })
-  .map(item => ({
-    key: getKey(item),
-    label: getLabel(item),
-    onCommit: () => handleAction(() => action(item)),
-  }))
+  .map(item => makeDynamicSuggestion(item, handleAction, rest))
 
-const makeSingletonSource = ({ name, action }) => (searchQuery, handleAction) => filter(name, searchQuery)
-  ? [{ key: name, label: name, onCommit: () => handleAction(() => action()) }]
+const makeSingletonSource = ({ name, action, ...rest }) => (searchQuery, handleAction) => filter(name, searchQuery)
+  ? [{ key: name, label: name, onCommit: () => handleAction(() => action()), ...rest }]
   : []
 
 const SearchModal = ({ visible, onClose }) => {
@@ -56,6 +75,11 @@ const SearchModal = ({ visible, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const trimmedSearchQuery = searchQuery.trim()
   const isEmpty = trimmedSearchQuery === ''
+
+  const searchAPI = SearchAPI(currentProject.id)
+  const [fsrSearchResults, setFsrSearchResults] = useState(() => FutureServiceResult.success([]))
+  const searchResults = useMemo(() => fsrSearchResults.orDefault([]), [fsrSearchResults])
+  const searchResultDocumentIds = useMemo(() => searchResults.map(({ document: { id } }) => parseInt(id)), [searchResults])
 
   const inputRef = useRef()
 
@@ -72,7 +96,18 @@ const SearchModal = ({ visible, onClose }) => {
     action()
   }
 
-  const searchResults = useMemo(() => 
+  useEffect(() => setFsrSearchResults(FutureServiceResult.pending()), [trimmedSearchQuery])
+
+  useWaitUntilSettled(trimmedSearchQuery, () => {
+    if (!isEmpty) {
+      FutureServiceResult.fromPromise(
+        searchAPI.search(trimmedSearchQuery),
+        setFsrSearchResults
+      )
+    }
+  })
+
+  const suggestions = useMemo(() => 
     [
       makeSingletonSource({ name: 'Overview', action: () => navigate(overviewPath(currentProject.id)) }),
       makeSingletonSource({ name: 'Edit project', action: () => navigate(editProjectPath(currentProject.id)) }),
@@ -80,7 +115,7 @@ const SearchModal = ({ visible, onClose }) => {
       makeSingletonSource({ name: 'All tags', action: () => navigate(tagsPath(currentProject.id)) }),
       makeSingletonSource({ name: 'New document', action: performNewDocument }),
 
-      makeListSource({
+      makeFilteredListSource({
         list: projects,
         include: ({ id }) => id !== currentProject.id,
         getFilterable: ({ name }) => name,
@@ -89,7 +124,7 @@ const SearchModal = ({ visible, onClose }) => {
         action: ({ id }) => navigate(projectPath(id)),
       }),
 
-      makeListSource({
+      makeFilteredListSource({
         list: tags,
         getFilterable: ({ text }) => text,
         getKey: ({ id }) => `tag-${id}`,
@@ -97,22 +132,44 @@ const SearchModal = ({ visible, onClose }) => {
         action: ({ id }) => navigate(tagPath(currentProject.id, id)),
       }),
 
-      makeListSource({
-        list: partialDocuments,
+      makeFilteredListSource({
+        list: partialDocuments.filter(({ id }) => !searchResultDocumentIds.includes(id)),
         getFilterable: ({ title }) => title,
         getKey: ({ id }) => `document-${id}`,
         getLabel: ({ title }) => title,
         action: ({ id }) => navigate(documentPath(currentProject.id, id)),
       }),
+
+      makeListSource({
+        list: searchResults,
+        getKey: ({ document: { id } }) => `document-${id}`,
+        getLabel: ({ document: { safe_title } }) => safe_title,
+        getSnippet: ({ highlights }) => {
+          const snippet = highlights
+            .filter(({ field }) => field === 'plain_body')
+            .map(({ snippet }) => snippet)
+            .join(' ')
+
+          return snippet.length > 0 ? snippet : undefined
+        },
+        action: ({ document: { id } }) => navigate(documentPath(currentProject.id, id)),
+      }),
     ].flatMap(source => source(trimmedSearchQuery, handleAction)),
-    [projects, currentProject, partialDocuments, trimmedSearchQuery]
+    [trimmedSearchQuery, projects, currentProject, tags, partialDocuments, searchResults]
   )
 
   const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
     query: searchQuery,
-    suggestions: searchResults,
+    suggestions,
     keyForSuggestion: ({ key }) => key,
     onCommit: ({ onCommit }) => onCommit(),
+    hideWhenNoSuggestions: false,
+  })
+
+  const hint = fsrSearchResults.unwrap({
+    pending: () => 'Searching...',
+    success: () => suggestions.length === 0 ? 'No results' : undefined,
+    failure: () => 'Something went wrong',
   })
 
   return visible && (
@@ -142,15 +199,26 @@ const SearchModal = ({ visible, onClose }) => {
           />
 
           {showSuggestions && (
-            <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10">
-              {mapSuggestions(({ suggestion: { label }, active, suggestionProps }) => (
+            <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none">
+              {mapSuggestions(({ suggestion: { label, snippet }, active, suggestionProps }) => (
                 <div
                   {...suggestionProps}
                   data-active={active}
                   className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
-                  children={label}
-                />
+                >
+                  <div>{label}</div>
+
+                  {snippet && (
+                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: snippet }} />
+                  )}
+                </div>
               ))}
+
+              {hint && (
+                <div className="p-2 text-slate-500 dark:text-slate-400" aria-live="polite">
+                  {hint}
+                </div>
+              )}
             </div>
           )}
         </ModalPanel>

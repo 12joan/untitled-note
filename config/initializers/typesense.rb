@@ -18,7 +18,7 @@ Rails.application.config.typesense = Typesense::Client.new(
 def define_collection(base_name, version:, &create)
   typesense = Rails.application.config.typesense
 
-  prefix = "#{base_name}:"
+  prefix = "#{Rails.env}:#{base_name}:"
   collection_name = "#{prefix}v#{version}"
 
   # Find all collections matching prefix (should be at most one)
@@ -41,12 +41,13 @@ end
 
 Rails.configuration.after_initialize do
   Rails.application.config.typesense_collections = OpenStruct.new(
-    documents: define_collection('documents', version: '0.5') do |typesense, collection_name|
+    documents: define_collection('documents', version: '0.6') do |typesense, collection_name|
       typesense.collections.create(
         name: collection_name,
         fields: [
           { name: 'project_id', type: 'int32' },
           { name: 'title', type: 'string', optional: true },
+          { name: 'safe_title', type: 'string', index: false, optional: true },
           { name: 'plain_body', type: 'string' },
         ],
       )

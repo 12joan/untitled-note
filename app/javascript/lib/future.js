@@ -63,6 +63,11 @@ const FutureServiceResult = {
       }),
     }),
 
+    orDefault: defaultValue => future.unwrap({
+      pending: () => defaultValue,
+      resolved: serviceResult => serviceResult.orDefault(defaultValue),
+    }),
+
     bind: f => future.unwrap({
       pending: FutureServiceResult.pending,
       resolved: serviceResult => serviceResult.unwrap({
