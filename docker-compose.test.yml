@@ -19,6 +19,12 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
 
+  # Typesense requires a data directory which must exist
   typesense:
     image: typesense/typesense:0.23.1
     command: '--data-dir /data --api-key=trust'
+    volumes:
+      - typesense:/data
+
+volumes:
+  typesense:

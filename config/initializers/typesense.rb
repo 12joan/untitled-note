@@ -42,19 +42,31 @@ def define_collection(base_name, version:, &create)
 end
 
 Rails.configuration.after_initialize do
-  Rails.application.config.typesense_collections = OpenStruct.new(
-    documents: define_collection('documents', version: '0.6') do |typesense, collection_name|
-      typesense.collections.create(
-        name: collection_name,
-        fields: [
-          { name: 'project_id', type: 'int32' },
-          { name: 'title', type: 'string', optional: true },
-          { name: 'safe_title', type: 'string', index: false, optional: true },
-          { name: 'plain_body', type: 'string' },
-        ],
-      )
-
-      Document.reindex_typesense_collection(collection: typesense.collections[collection_name])
+  db_available =
+    begin
+      ActiveRecord::Base.connection.execute('SELECT 1')
+      true
+    rescue ActiveRecord::NoDatabaseError
+      false
     end
-  )
+
+  if db_available
+    Rails.application.config.typesense_collections = OpenStruct.new(
+      documents: define_collection('documents', version: '0.6') do |typesense, collection_name|
+        typesense.collections.create(
+          name: collection_name,
+          fields: [
+            { name: 'project_id', type: 'int32' },
+            { name: 'title', type: 'string', optional: true },
+            { name: 'safe_title', type: 'string', index: false, optional: true },
+            { name: 'plain_body', type: 'string' },
+          ],
+        )
+
+        Document.reindex_typesense_collection(collection: typesense.collections[collection_name])
+      end
+    )
+  else
+    Rails.logger.warn('Typesense collections not defined because database is not available')
+  end
 end
