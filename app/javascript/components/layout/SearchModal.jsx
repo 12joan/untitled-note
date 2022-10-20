@@ -19,6 +19,14 @@ import {
 import useNewDocument from '~/lib/useNewDocument'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
+import OverviewIcon from '~/components/icons/OverviewIcon'
+import SettingsIcon from '~/components/icons/SettingsIcon'
+import RecentIcon from '~/components/icons/RecentIcon'
+import TagsIcon from '~/components/icons/TagsIcon'
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
+import ProjectIcon from '~/components/ProjectIcon'
+import TagIcon from '~/components/icons/TagIcon'
+import DocumentIcon from '~/components/icons/DocumentIcon'
 
 const makeDynamicSuggestion = (
   item,
@@ -26,14 +34,16 @@ const makeDynamicSuggestion = (
   {
     getKey,
     getLabel,
-    getSnippet = () => undefined,
+    getIcon = () => undefined,
+    getDescription = () => undefined,
     action,
     ...rest
   },
 ) => ({
   key: getKey(item),
   label: getLabel(item),
-  snippet: getSnippet(item),
+  icon: getIcon(item),
+  description: getDescription(item),
   onCommit: () => handleAction(() => action(item)),
   ...rest,
 })
@@ -109,11 +119,40 @@ const SearchModal = ({ visible, onClose }) => {
 
   const suggestions = useMemo(() => 
     [
-      makeSingletonSource({ name: 'Overview', action: () => navigate(overviewPath(currentProject.id)) }),
-      makeSingletonSource({ name: 'Edit project', action: () => navigate(editProjectPath(currentProject.id)) }),
-      makeSingletonSource({ name: 'Recently viewed', action: () => navigate(recentlyViewedPath(currentProject.id)) }),
-      makeSingletonSource({ name: 'All tags', action: () => navigate(tagsPath(currentProject.id)) }),
-      makeSingletonSource({ name: 'New document', action: performNewDocument }),
+      makeSingletonSource({
+        name: 'Overview',
+        icon: <OverviewIcon size="1.25em" noAriaLabel />,
+        description: 'Jump to overview',
+        action: () => navigate(overviewPath(currentProject.id)),
+      }),
+
+      makeSingletonSource({
+        name: 'Edit project',
+        icon: <SettingsIcon size="1.25em" noAriaLabel />,
+        description: 'Jump to edit project',
+        action: () => navigate(editProjectPath(currentProject.id)),
+      }),
+
+      makeSingletonSource({
+        name: 'Recently viewed',
+        icon: <RecentIcon size="1.25em" noAriaLabel />,
+        description: 'Jump to recently viewed',
+        action: () => navigate(recentlyViewedPath(currentProject.id)),
+      }),
+
+      makeSingletonSource({
+        name: 'All tags',
+        icon: <TagsIcon size="1.25em" noAriaLabel />,
+        description: 'Jump to all tags',
+        action: () => navigate(tagsPath(currentProject.id)),
+      }),
+
+      makeSingletonSource({
+        name: 'New document',
+        icon: <NewDocumentIcon size="1.25em" noAriaLabel />,
+        description: 'Create new document',
+        action: performNewDocument,
+      }),
 
       makeFilteredListSource({
         list: projects,
@@ -121,7 +160,9 @@ const SearchModal = ({ visible, onClose }) => {
         getFilterable: ({ name }) => name,
         getKey: ({ id }) => `project-${id}`,
         getLabel: ({ name }) => name,
+        getIcon: project => <ProjectIcon project={project} className="w-5 h-5 rounded text-xs shadow-sm" />,
         action: ({ id }) => navigate(projectPath(id)),
+        description: 'Switch to project',
       }),
 
       makeFilteredListSource({
@@ -129,7 +170,9 @@ const SearchModal = ({ visible, onClose }) => {
         getFilterable: ({ text }) => text,
         getKey: ({ id }) => `tag-${id}`,
         getLabel: ({ text }) => text,
+        icon: <TagIcon size="1.25em" noAriaLabel />,
         action: ({ id }) => navigate(tagPath(currentProject.id, id)),
+        description: 'Jump to tag',
       }),
 
       makeFilteredListSource({
@@ -137,6 +180,8 @@ const SearchModal = ({ visible, onClose }) => {
         getFilterable: ({ title }) => title,
         getKey: ({ id }) => `document-${id}`,
         getLabel: ({ title }) => title,
+        icon: <DocumentIcon size="1.25em" noAriaLabel />,
+        description: 'Open document',
         action: ({ id }) => navigate(documentPath(currentProject.id, id)),
       }),
 
@@ -144,13 +189,14 @@ const SearchModal = ({ visible, onClose }) => {
         list: searchResults,
         getKey: ({ document: { id } }) => `document-${id}`,
         getLabel: ({ document: { safe_title } }) => safe_title,
-        getSnippet: ({ highlights }) => {
+        icon: <DocumentIcon size="1.25em" noAriaLabel />,
+        getDescription: ({ highlights }) => {
           const snippet = highlights
             .filter(({ field }) => field === 'plain_body')
             .map(({ snippet }) => snippet)
             .join(' ')
 
-          return snippet.length > 0 ? snippet : undefined
+          return snippet.length > 0 ? { __html: snippet } : 'Open document'
         },
         action: ({ document: { id } }) => navigate(documentPath(currentProject.id, id)),
       }),
@@ -200,17 +246,30 @@ const SearchModal = ({ visible, onClose }) => {
 
           {showSuggestions && (
             <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none">
-              {mapSuggestions(({ suggestion: { label, snippet }, active, suggestionProps }) => (
+              {mapSuggestions(({ suggestion: { label, icon, description }, active, suggestionProps }) => (
                 <div
                   {...suggestionProps}
                   data-active={active}
-                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer"
+                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer flex gap-2"
                 >
-                  <div>{label}</div>
+                  <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
+                    {icon}
+                  </div>
 
-                  {snippet && (
-                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: snippet }} />
-                  )}
+                  <div className="grow">
+                    <div>{label}</div>
+
+                    {typeof description === 'string' && (
+                      <div
+                        className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
+                        children={description}
+                      />
+                    )}
+
+                    {typeof description === 'object' && (
+                      <div className="text-sm" dangerouslySetInnerHTML={description} />
+                    )}
+                  </div>
                 </div>
               ))}
 

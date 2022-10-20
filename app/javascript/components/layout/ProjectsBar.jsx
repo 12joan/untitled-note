@@ -7,9 +7,9 @@ import useOverrideable from '~/lib/useOverrideable'
 import ProjectOrderAPI from '~/lib/resources/ProjectOrderAPI'
 import { handleReorderProjectsError } from '~/lib/handleErrors'
 import { ProjectLink, OverviewLink } from '~/lib/routes'
-import abbreviate from '~/lib/abbreviate'
 
 import Tooltip from '~/components/Tooltip'
+import ProjectIcon from '~/components/ProjectIcon'
 import LargePlusIcon from '~/components/icons/LargePlusIcon'
 
 const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref) => {
@@ -44,7 +44,6 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
           >
             {localProjects.map((project, index) => {
               const isCurrentProject = project.id == projectId
-              const hasImage = !!project.image_url
               const LinkComponent = isCurrentProject ? OverviewLink : ProjectLink
 
               return (
@@ -62,26 +61,17 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
                       />
 
                       <Tooltip content={project.name} placement="right" fixed>
-                        <LinkComponent
+                        <ProjectIcon
+                          project={project}
                           {...provided.dragHandleProps}
+                          // Link props
+                          as={isCurrentProject ? OverviewLink : ProjectLink}
                           projectId={project.id}
-                          className="w-12 h-12 btn flex items-center justify-center p-1 shadow bg-white dark:bg-slate-800"
-                          style={{
-                            '--bg-url': hasImage ? `url(${project.image_url})` : undefined
-                          }}
-                          data-has-bg={hasImage}
+                          // HTML attributes
+                          className="w-12 h-12 btn text-xl shadow"
                           onClick={onButtonClick}
-                          aria-label={project.name}
                           aria-current={isCurrentProject ? 'page' : undefined}
-                        >
-                          {!hasImage && (
-                            <span
-                              aria-hidden="true"
-                              className="font-bold text-xl text-slate-500 dark:text-slate-400"
-                              children={abbreviate(project.name, 1)}
-                            />
-                          )}
-                        </LinkComponent>
+                        />
                       </Tooltip>
                     </div>
                   )}
