@@ -5,6 +5,7 @@ import { useElementSize } from 'usehooks-ts'
 
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
+import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import cssAdd from '~/lib/cssAdd'
@@ -32,6 +33,15 @@ const ProjectView = ({ childView }) => {
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
   const [searchModalVisible, setSearchModalVisible] = useState(false)
+
+  useGlobalKeyboardShortcut(
+    ['MetaK', 'MetaJ', 'MetaG'],
+    event => {
+      event.preventDefault()
+      setSearchModalVisible(visible => !visible)
+    },
+    []
+  )
 
   const formattingToolbarRef = useRef()
 

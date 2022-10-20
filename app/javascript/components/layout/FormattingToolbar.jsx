@@ -8,8 +8,8 @@ import {
   toggleList,
   indentListItems,
   unindentListItems,
-  useHotkeys,
   isRangeAcrossBlocks,
+  getSelectionText,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
@@ -21,6 +21,7 @@ import {
   ELEMENT_LI,
 } from '@udecode/plate-headless'
 
+import useKeyboardShortcut from '~/lib/useKeyboardShortcut'
 import { isLinkInSelection, toggleLink } from '~/lib/editor/links'
 
 import Tooltip from '~/components/Tooltip'
@@ -64,17 +65,23 @@ const FormattingToolbar = ({ editor }) => {
     }
   }
 
-  const linkInSelection = isLinkInSelection(editor)
+  // Meta+K toggles link only if there is a selection;
+  // otherwise it opens the search modal
+  useKeyboardShortcut(
+    () => document.querySelector('[data-slate-editor]'),
+    ['MetaShiftU', 'MetaK'],
+    (event, key) => {
+      const hasSelection = getSelectionText(editor).length > 0
 
-  useHotkeys(
-    'command+k, ctrl+k',
-    event => {
-      event.preventDefault()
-      toggleLink(editor)
+      if (key === 'MetaShiftU' || (key === 'MetaK' && hasSelection)) {
+        event.preventDefault()
+        toggleLink(editor)
+      }
     },
-    { enableOnContentEditable: true },
-    [linkInSelection, editor]
+    [editor]
   )
+
+  const linkInSelection = isLinkInSelection(editor)
 
   const formattingButtons = [
     { label: 'Bold', icon: BoldIcon, ...toggleMarkProps(MARK_BOLD) },
