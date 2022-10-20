@@ -255,7 +255,7 @@ const SearchModal = ({ visible, onClose }) => {
                 <div
                   {...suggestionProps}
                   data-active={active}
-                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-2 flex gap-2"
+                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-3 flex gap-2"
                 >
                   <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
                     {icon}
