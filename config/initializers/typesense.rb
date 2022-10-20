@@ -8,6 +8,8 @@ Rails.application.config.typesense = Typesense::Client.new(
   }],
   api_key: ENV.fetch('TYPESENSE_API_KEY'),
   connection_timeout_seconds: 2,
+  num_retries: 5,
+  retry_interval_seconds: 10,
 )
 
 # Each collection is tagged with a version number.
