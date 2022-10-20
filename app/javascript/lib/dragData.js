@@ -8,15 +8,19 @@ const makeDocumentDragData = doc => makeDragData('document', {
   remote_version: doc.remote_version,
 })
 
+let currentDragData = undefined
+
 const handleDragStartWithData = dragData => event => {
   if (dragData !== undefined) {
-    event.dataTransfer.setData('text/x-note-data', JSON.stringify(dragData))
+    currentDragData = dragData
+    event.dataTransfer.setData('text/x-note-drag', 'true')
   }
 }
 
 const getDragData = event => {
-  const data = event.dataTransfer.getData('text/x-note-data')
-  return data ? JSON.parse(data) : undefined
+  return event.dataTransfer.types.includes('text/x-note-drag')
+    ? currentDragData
+    : undefined
 }
 
 const useDragTarget = ({ acceptTypes, predicate = () => true, onDrop: handleDrop }) => {
