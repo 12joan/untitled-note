@@ -16,7 +16,7 @@ const routesComponent = (
     <Route path="/await_redirect" element={<AwaitRedirect />} />
 
     <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
-      <StreamProjectData key={projectId} projectId={parseInt(projectId)}>
+      <StreamProjectData projectId={parseInt(projectId)}>
         <Routes>
           <Route path="await_redirect" element={(
             <ProjectView childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }} />

@@ -92,16 +92,16 @@ const ProjectView = ({ childView }) => {
     },
   }[childView.type]
 
-  const { project } = useContext()
-  useEffect(() => projectWasOpened(project.id), [project.id])
+  const { projectId } = useContext()
+  useEffect(() => projectWasOpened(projectId), [projectId])
 
   const { pathname: viewPath } = useLocation()
 
   useEffect(() => {
     if (restoreAsLastView) {
-      setLastView(project.id, viewPath)
+      setLastView(projectId, viewPath)
     }
-  }, [project.id, viewPath])
+  }, [projectId, viewPath])
 
   return (
     <ContextProvider
@@ -165,7 +165,7 @@ const ProjectView = ({ childView }) => {
       >
         <div className="grow flex flex-col p-5 pt-1">
           <ChildView
-            key={childView.key}
+            key={`${projectId}/${childView.key}`}
             topBarHeight={topBarHeight}
             {...childView.props}
           />
