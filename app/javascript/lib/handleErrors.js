@@ -36,6 +36,18 @@ const handleRemoveProjectImageError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
+const handleArchiveProjectError = handleErrors(() => ({
+  title: 'Failed to archive project',
+  message: 'An error occurred while archiving the project. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}))
+
+const handleUnarchiveProjectError = handleErrors(() => ({
+  title: 'Failed to unarchive project',
+  message: 'An error occurred while unarchiving the project. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}))
+
 const handleDeleteProjectError = handleErrors(() => ({
   title: 'Failed to delete project',
   message: 'An error occurred while deleting the project. Make sure you are connected to the internet and try again.',
@@ -71,6 +83,8 @@ export {
   handleRenameProjectError,
   handleUploadProjectImageError,
   handleRemoveProjectImageError,
+  handleArchiveProjectError,
+  handleUnarchiveProjectError,
   handleDeleteProjectError,
   handleReorderProjectsError,
   handleCreateDocumentError,

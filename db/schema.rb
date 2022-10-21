@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_220232) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_21_083952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_220232) do
     t.bigint "owner_id", default: 1, null: false
     t.bigint "image_id"
     t.integer "list_index"
+    t.datetime "archived_at"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["owner_id"], name: "index_projects_on_owner_id"
   end

@@ -2,12 +2,19 @@ import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
+import useOverrideable from '~/lib/useOverrideable'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import openModal from '~/lib/openModal'
 import awaitRedirect from '~/lib/awaitRedirect'
 import pluralize from '~/lib/pluralize'
-import { handleDeleteProjectError } from '~/lib/handleErrors'
+import {
+  handleArchiveProjectError,
+  handleUnarchiveProjectError,
+  handleDeleteProjectError,
+} from '~/lib/handleErrors'
 import { removeProjectFromHistory } from '~/lib/projectHistory'
+
+import ReplaceWithSpinner from '~/components/ReplaceWithSpinner'
 
 import { ModalTitle } from '~/components/Modal'
 import { InlinePlaceholder } from '~/components/Placeholder'
@@ -15,9 +22,27 @@ import { InlinePlaceholder } from '~/components/Placeholder'
 const ProjectActions = () => {
   const { project, futurePartialDocuments } = useContext()
   const futureDocumentCount = futurePartialDocuments.map(xs => xs.length)
+  const [isArchived, overrideIsArchived] = useOverrideable(project.archived_at !== null)
 
   const navigate = useNavigate()
   const { pathname: currentPath } = useLocation()
+
+  const [isTogglingArchived, setIsTogglingArchived] = useState(false)
+
+  const toggleArchived = () => {
+    setIsTogglingArchived(true)
+
+    const handleErrors = isArchived
+      ? handleUnarchiveProjectError
+      : handleArchiveProjectError
+
+    handleErrors(
+      ProjectsAPI.update({
+        id: project.id,
+        archived_at: isArchived ? null : new Date().toISOString(),
+      }).then(() => overrideIsArchived(!isArchived))
+    ).finally(() => setIsTogglingArchived(false))
+  }
 
   const handleDelete = () => openModal(
     ConfirmDeletionModal,
@@ -38,20 +63,54 @@ const ProjectActions = () => {
     <div>
       <h2 className="h2 select-none mb-3">Other actions</h2>
 
-      <div className="border rounded-lg flex flex-col sm:flex-row gap-3 p-3 sm:items-center">
-        <div className="space-y-1 grow select-none">
-          <strong className="font-medium">Delete this project</strong>
-          <p className="text-slate-500 dark:text-slate-400">Deleting a project is permanent and cannot be undone.</p>
-        </div>
+      <div className="border rounded-lg divide-y">
+        <Action
+          name={isArchived ? 'Unarchive this project' : 'Archive this project'}
+          description="Archived projects appear in their own folder of the projects bar."
+          buttonLabel={isArchived ? 'Unarchive project' : 'Archive project'}
+          onClick={toggleArchived}
+          inProgress={isTogglingArchived}
+          spinnerAriaLabel={isArchived ? 'Unarchiving project' : 'Archiving project'}
+        />
 
-        <button
-          type="button"
-          className="shrink-0 btn btn-rect btn-secondary text-red-500 dark:text-red-400"
+        <Action
+          name="Delete this project"
+          description="Deleting a project is permanent and cannot be undone."
+          buttonLabel="Delete project"
+          buttonClassName="text-red-500 dark:text-red-400"
           onClick={handleDelete}
-        >
-          Delete project
-        </button>
+        />
       </div>
+    </div>
+  )
+}
+
+const Action = ({
+  name,
+  description,
+  buttonLabel,
+  buttonClassName = '',
+  onClick,
+  inProgress = false,
+  spinnerAriaLabel,
+}) => {
+  return (
+    <div className="flex flex-col sm:flex-row gap-3 p-3 sm:items-center">
+      <div className="space-y-1 grow select-none">
+        <strong className="font-medium">{name}</strong>
+        <p className="text-slate-500 dark:text-slate-400">{description}</p>
+      </div>
+
+      <button
+        type="button"
+        className={`shrink-0 relative btn btn-rect btn-secondary ${buttonClassName}`}
+        onClick={onClick}
+        disabled={inProgress}
+      >
+        <ReplaceWithSpinner isSpinner={inProgress} ariaLabel={spinnerAriaLabel}>
+          {buttonLabel}
+        </ReplaceWithSpinner>
+      </button>
     </div>
   )
 }

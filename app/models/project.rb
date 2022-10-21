@@ -7,7 +7,7 @@ class Project < ApplicationRecord
 
   validates :name, presence: true
 
-  include Queryable.permit(*%i[id name image_url created_at updated_at])
+  include Queryable.permit(*%i[id name image_url created_at updated_at archived_at])
   include Listenable
 
   after_create do

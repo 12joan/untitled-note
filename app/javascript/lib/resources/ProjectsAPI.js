@@ -21,6 +21,7 @@ const ProjectsAPI = new ResourcesAPI({
   transformRequestParams: project => ({
     project: {
       name: project.name,
+      archived_at: project.archived_at,
     },
   }),
 })

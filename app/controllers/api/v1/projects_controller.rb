@@ -32,7 +32,7 @@ module API
 
       # Only allow a list of trusted parameters through.
       def project_params
-        params.require(:project).permit(:name)
+        params.require(:project).permit(:name, :archived_at)
       end
     end
   end
