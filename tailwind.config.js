@@ -11,6 +11,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      zIndex: {
+        '5': '5',
+      },
+
       boxShadow: {
         'dialog': '0 0.75rem 2rem rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
         'dialog-heavy': '0 0.75rem 2rem rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
