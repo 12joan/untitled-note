@@ -30,7 +30,7 @@ const OffcanavasSidebar = ({ visible, onClose }) => {
 
             <button
               type="button"
-              className="btn rounded-full p-2 aspect-square sticky top-0"
+              className="btn btn-no-rounded rounded-full p-2 aspect-square sticky top-0"
               onClick={onClose}
             >
               <LargeCloseIcon size="1.25em" ariaLabel="Close" />
