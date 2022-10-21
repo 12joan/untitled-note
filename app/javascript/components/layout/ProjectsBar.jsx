@@ -117,10 +117,14 @@ const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick 
                   {...buttonProps}
                   className="btn w-12 h-12 border border-dashed p-1.5 grid gap-1 grid-cols-2 border-slate-400 dark:border-slate-500"
                 >
-                  <div className="aspect-square rounded shadow-sm bg-white dark:bg-slate-800" />
-                  <div className="aspect-square rounded shadow-sm bg-white dark:bg-slate-800" />
-                  <div className="aspect-square rounded shadow-sm bg-white dark:bg-slate-800" />
-                  <div className="aspect-square rounded shadow-sm bg-white dark:bg-slate-800" />
+                  {projects.slice(0, 4).map(project => (
+                    <ProjectIcon
+                      key={project.id}
+                      project={project}
+                      className="aspect-square rounded shadow-sm"
+                      showText={false}
+                    />
+                  ))}
                 </button>
               )}
             </Tooltip>

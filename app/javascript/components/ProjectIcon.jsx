@@ -7,6 +7,7 @@ const ProjectIcon = forwardRef(({
   className = '',
   style = {},
   project,
+  showText = true,
   ...otherProps
 }, ref) => {
   const hasImage = !!project.image_url
@@ -23,7 +24,7 @@ const ProjectIcon = forwardRef(({
       aria-label={project.name}
       {...otherProps}
     >
-      {!hasImage && (
+      {!hasImage && showText && (
         <span
           aria-hidden="true"
           className="font-bold text-slate-500 dark:text-slate-400"
