@@ -1,9 +1,8 @@
-// TODO: Handle drag inside folder
-
-import React, { useState, useId, forwardRef } from 'react'
+import React, { useMemo, useState, useId, forwardRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { useContext } from '~/lib/context'
+import groupList from '~/lib/groupList'
 import useNewProject from '~/lib/useNewProject'
 import useOverrideable from '~/lib/useOverrideable'
 import ProjectOrderAPI from '~/lib/resources/ProjectOrderAPI'
@@ -21,10 +20,21 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
 
   const [localProjects, setLocalProjects] = useOverrideable(projects)
 
+  const {
+    archivedProjects = [],
+    unarchivedProjects = [],
+  } = useMemo(
+    () => groupList(
+      localProjects,
+      project => project.archived_at ? 'archivedProjects' : 'unarchivedProjects'
+    ),
+    [localProjects]
+  )
+
   const handleDragEnd = ({ source, destination }) => {
     if (!destination) return
 
-    const newProjects = Array.from(localProjects)
+    const newProjects = [...unarchivedProjects, ...archivedProjects]
     const [removed] = newProjects.splice(source.index, 1)
     newProjects.splice(destination.index, 0, removed)
     setLocalProjects(newProjects)
@@ -45,16 +55,22 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
             {...provided.droppableProps}
             className="p-3"
           >
-            <ProjectList projects={localProjects} onButtonClick={onButtonClick} />
+            <ProjectList
+              projects={unarchivedProjects}
+              draggable
+              onButtonClick={onButtonClick}
+            />
 
             {provided.placeholder}
 
-            <ProjectFolder
-              name="Archived projects"
-              projects={localProjects}
-              initialExpanded={localProjects.some(({ id }) => id === projectId)}
-              onButtonClick={onButtonClick}
-            />
+            {archivedProjects.length > 0 && (
+              <ProjectFolder
+                name="Archived projects"
+                projects={archivedProjects}
+                initialExpanded={archivedProjects.some(({ id }) => id === projectId)}
+                onButtonClick={onButtonClick}
+              />
+            )}
 
             <Tooltip content="New project" placement="right" fixed>
               <button
@@ -73,7 +89,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
 })
 
 const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick }) => {
-  const [isExpanded, setIsExpanded] = useState(initialExpanded)
+  const [isExpanded, setIsExpanded] = useOverrideable(initialExpanded)
   const id = useId()
 
   const buttonProps = {
@@ -121,45 +137,55 @@ const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick 
   )
 }
 
-const ProjectList = ({ projects, onButtonClick }) => {
+const ProjectList = ({ projects, draggable = false, onButtonClick }) => {
   const { projectId } = useContext()
 
   return projects.map((project, index) => {
     const isCurrentProject = project.id == projectId
     const LinkComponent = isCurrentProject ? OverviewLink : ProjectLink
 
-    return (
+    const wrapper = renderFunc => draggable ? (
       <Draggable key={project.id} draggableId={project.id.toString()} index={index}>
-        {provided => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            className="flex gap-2 -ml-3 mb-3"
-          >
-            <div
-              aria-hidden="true"
-              className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
-              data-active={isCurrentProject}
-            />
-
-            <Tooltip content={project.name} placement="right" fixed>
-              <ProjectIcon
-                project={project}
-                {...provided.dragHandleProps}
-                // Link props
-                as={isCurrentProject ? OverviewLink : ProjectLink}
-                projectId={project.id}
-                // HTML attributes
-                className="w-12 h-12 btn text-xl shadow"
-                style={{ cursor: 'pointer' }}
-                onClick={onButtonClick}
-                aria-current={isCurrentProject ? 'page' : undefined}
-              />
-            </Tooltip>
-          </div>
-        )}
+        {provided => renderFunc({
+          containerProps: {
+            ref: provided.innerRef,
+            ...provided.draggableProps,
+          },
+          handleProps: provided.dragHandleProps,
+        })}
       </Draggable>
-    )
+    ) : renderFunc({
+      containerProps: { key: project.id },
+      handleProps: {},
+    })
+
+    return wrapper(({ containerProps, handleProps }) => (
+      <div
+        {...containerProps}
+        className="flex gap-2 -ml-3 mb-3"
+      >
+        <div
+          aria-hidden="true"
+          className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
+          data-active={isCurrentProject}
+        />
+
+        <Tooltip content={project.name} placement="right" fixed>
+          <ProjectIcon
+            project={project}
+            {...handleProps}
+            // Link props
+            as={isCurrentProject ? OverviewLink : ProjectLink}
+            projectId={project.id}
+            // HTML attributes
+            className="w-12 h-12 btn text-xl shadow"
+            style={{ cursor: 'pointer' }}
+            onClick={onButtonClick}
+            aria-current={isCurrentProject ? 'page' : undefined}
+          />
+        </Tooltip>
+      </div>
+    ))
   })
 }
 
