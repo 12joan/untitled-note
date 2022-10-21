@@ -92,7 +92,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
   })
 
   const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
-    query: inputValue,
+    query: trimmedInputValue,
     suggestions,
     keyForSuggestion: ({ key }) => key,
     onCommit: ({ tag }) => {
