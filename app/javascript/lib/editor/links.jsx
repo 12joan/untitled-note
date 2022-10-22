@@ -78,11 +78,11 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
       interactive
       appendTo={tippyContainerRef.current}
       render={attrs => selected && (
-        <div className="rounded-lg backdrop-blur shadow text-ui text-base" {...attrs}>
+        <div className="rounded-lg backdrop-blur shadow text-base" {...attrs}>
           <Tooltip content="Open link">
             <button
               type="button"
-              className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
               onClick={openLink}
             >
               <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
@@ -92,7 +92,7 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
           <Tooltip content="Edit link">
             <button
               type="button"
-              className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
               onClick={editLink}
             >
               <EditIcon size="1.25em" ariaLabel="Edit link" />
@@ -102,7 +102,7 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
           <Tooltip content="Remove link">
             <button
               type="button"
-              className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75"
+              className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
               onClick={removeLink}
             >
               <DeleteIcon size="1.25em" ariaLabel="Remove link" />
