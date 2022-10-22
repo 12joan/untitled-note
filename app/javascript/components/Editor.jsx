@@ -4,6 +4,7 @@ import {
   Plate,
   createPlateEditor,
   usePlateEditorState,
+  getNodeChildren,
   getNodeTexts,
   deserializeHtml,
   ELEMENT_PARAGRAPH,
@@ -172,11 +173,9 @@ const WithEditorState = ({ workingDocument, updateDocument }) => {
   const { useFormattingToolbar } = useContext()
 
   useEffectAfterFirst(() => {
-    const plainBody = Array.from(getNodeTexts(editor))
-      .map(([{ text }]) => text)
+    const plainBody = [...getNodeChildren(editor, [])]
+      .map(([node]) => [...getNodeTexts(node)].map(([textNode]) => textNode.text).join(''))
       .join(' ')
-      .replace(/\s+/g, ' ')
-      .trim()
 
     updateDocument({
       body: JSON.stringify(editor.children),
