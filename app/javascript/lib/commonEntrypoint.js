@@ -28,9 +28,9 @@ new MutationObserver(mutations => mutations.forEach(({ type, target }) => {
   // childList refers to the addition or removal of nodes in the DOM tree;
   // no relation to ul or ol specifically
   if (type === 'childList') {
-    const lists = target.matches('ul, ol') ? [target] : target.querySelectorAll('ul, ol')
+    const orderedLists = target.matches('ol') ? [target] : target.querySelectorAll('ol')
 
-    lists.forEach(list => {
+    orderedLists.forEach(list => {
       const digits = Math.max(Math.floor(Math.log10(list.children.length)) + 1, 0)
       list.style.setProperty('--list-style-offset', `${digits}ch`)
     })
