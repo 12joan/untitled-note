@@ -35,7 +35,7 @@ const useNewProject = () => {
 }
 
 const NewProjectModal = ({ onConfirm, onClose }) => {
-  const [name, nameProps] = useNormalizedInput({
+  const { value: name, props: nameProps } = useNormalizedInput({
     initial: '',
     normalize: name => name.trim(),
   })

@@ -15,10 +15,21 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update project' do
-    patch api_v1_project_url(@project), params: { project: { name: 'New name', archived_at: DateTime.now } }
+    patch api_v1_project_url(@project), params: {
+      project: {
+        name: 'New name',
+        emoji: '👍',
+        background_colour: 'light',
+        archived_at: DateTime.now,
+      }
+    }
+
     assert_response :success
+
     @project.reload
     assert_equal 'New name', @project.name
+    assert_equal '👍', @project.emoji
+    assert_equal 'light', @project.background_colour
     assert_predicate @project.archived_at, :present?
   end
 

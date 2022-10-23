@@ -12,10 +12,16 @@ const ProjectIcon = forwardRef(({
 }, ref) => {
   const hasImage = !!project.image_url
 
+  const bgClassName = {
+    auto: 'bg-white text-slate-500 dark:bg-slate-800 darl:text-slate-400',
+    light: 'bg-white text-slate-500',
+    dark: 'bg-slate-800 text-slate-400',
+  }[showText ? project.background_colour : 'auto']
+
   return (
     <Component
       ref={ref}
-      className={`flex items-center justify-center p-1 bg-white dark:bg-slate-800 ${className}`}
+      className={`flex items-center justify-center p-1 ${bgClassName} ${className}`}
       style={{
         '--bg-url': hasImage ? `url(${project.image_url})` : undefined,
         ...style,
@@ -27,8 +33,11 @@ const ProjectIcon = forwardRef(({
       {!hasImage && showText && (
         <span
           aria-hidden="true"
-          className="font-bold text-slate-500 dark:text-slate-400"
-          children={abbreviate(project.name, 1)}
+          className="font-bold"
+          children={project.emoji ?? abbreviate(project.name, 1)}
+          style={{
+            transform: project.emoji ? 'scale(1.25)' : undefined,
+          }}
         />
       )}
     </Component>

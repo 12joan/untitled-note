@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
 
 import { useContext } from '~/lib/context'
+import useIsMounted from '~/lib/useIsMounted'
 import useNormalizedInput from '~/lib/useNormalizedInput'
 import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
+import retry from '~/lib/retry'
 import { handleRenameProjectError } from '~/lib/handleErrors'
 
 const EditProjectName = () => {
   const { project } = useContext()
+  const isMounted = useIsMounted()
 
-  const [name, nameProps, nameIsValid] = useNormalizedInput({
+  const {
+    value: name,
+    props: nameProps,
+    isValid: nameIsValid,
+    resetValue: resetName,
+  } = useNormalizedInput({
     initial: project.name,
     normalize: name => name.trim(),
     validate: name => name.length > 0,
@@ -20,20 +28,23 @@ const EditProjectName = () => {
       return
     }
 
-    return handleRenameProjectError(
-      ProjectsAPI.update({
-        id: project.id,
-        name,
-      })
-    ).then(
-      () => ({ retry: false }),
-      () => ({ retry: true })
-    )
+    handleRenameProjectError(
+      retry(
+        () => ProjectsAPI.update({
+          id: project.id,
+          name,
+        }),
+        { shouldRetry: isMounted }
+      )
+    ).catch(error => {
+      console.error(error)
+      resetName()
+    })
   })
 
   return (
     <label className="block space-y-2">
-      <div className="font-medium select-none">Project name</div>
+      <h2 className="font-medium select-none">Project name</h2>
 
       <input
         type="text"

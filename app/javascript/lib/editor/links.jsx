@@ -130,7 +130,7 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
 
   const [text, setText] = useState(initialText)
 
-  const [url, urlProps] = useNormalizedInput({
+  const { value: url, props: urlProps } = useNormalizedInput({
     initial: initialUrl,
     normalize: url => (url.trim() !== '' && url.match(/^[^:]+\./)) ? `https://${url}` : url,
   })
