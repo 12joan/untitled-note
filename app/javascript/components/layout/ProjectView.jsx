@@ -3,11 +3,12 @@ import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
 import { useElementSize } from 'usehooks-ts'
 
+import multiplexRefs from '~/lib/multiplexRefs'
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
-import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
+import useApplicationKeyboardShortcuts from '~/lib/useApplicationKeyboardShortcuts'
 import cssAdd from '~/lib/cssAdd'
 
 import TopBar from '~/components/layout/TopBar'
@@ -24,26 +25,21 @@ import AllTagsView from '~/components/layout/AllTagsView'
 import EditorView from '~/components/layout/EditorView'
 
 const ProjectView = ({ childView }) => {
-  const [projectsBarRef, { width: projectsBarWidth }] = useElementSize()
-  const [topBarRef, { height: topBarHeight }] = useElementSize()
-  const [sideBarRef, { width: sideBarWidth }] = useElementSize()
+  const projectsBarRef = useRef()
+  const topBarRef = useRef()
+  const sideBarRef = useRef()
+  const mainRef = useRef()
+  const formattingToolbarRef = useRef()
+
+  const [projectsBarSizeRef, { width: projectsBarWidth }] = useElementSize()
+  const [topBarSizeRef, { height: topBarHeight }] = useElementSize()
+  const [sideBarSizeRef, { width: sideBarWidth }] = useElementSize()
   const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
 
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
   const [searchModalVisible, setSearchModalVisible] = useState(false)
-
-  useGlobalKeyboardShortcut(
-    ['MetaK', 'MetaJ', 'MetaG'],
-    event => {
-      event.preventDefault()
-      setSearchModalVisible(visible => !visible)
-    },
-    []
-  )
-
-  const formattingToolbarRef = useRef()
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
     const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
@@ -103,6 +99,17 @@ const ProjectView = ({ childView }) => {
     }
   }, [projectId, viewPath])
 
+  useApplicationKeyboardShortcuts({
+    sectionRefs: [
+      topBarRef,
+      projectsBarRef,
+      sideBarRef,
+      mainRef,
+      formattingToolbarRef,
+    ],
+    setSearchModalVisible,
+  })
+
   return (
     <ContextProvider
       useFormattingToolbar={useFormattingToolbar}
@@ -110,11 +117,13 @@ const ProjectView = ({ childView }) => {
       showSearchModal={() => setSearchModalVisible(true)}
     >
       <TopBar
-        ref={topBarRef}
+        ref={multiplexRefs([topBarRef, topBarSizeRef])}
         style={{
           left: projectsBarWidth || 'env(safe-area-inset-left)',
           right: 'env(safe-area-inset-right)',
         }}
+        tabIndex="0"
+        aria-label="Top bar"
         showSidebarButton={!isMd}
         onSidebarButtonClick={() => setOffcanvasSidebarVisible(true)}
       />
@@ -122,21 +131,25 @@ const ProjectView = ({ childView }) => {
       {isMd && (
         <>
           <nav
-            ref={projectsBarRef}
+            ref={multiplexRefs([projectsBarRef, projectsBarSizeRef])}
             className="fixed top-0 bottom-0 left-0 overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"
             style={{
               paddingLeft: 'env(safe-area-inset-left)',
             }}
+            tabIndex="0"
+            aria-label="Projects bar"
             children={<ProjectsBar />}
           />
 
           <nav
-            ref={sideBarRef}
+            ref={multiplexRefs([sideBarRef, sideBarSizeRef])}
             className="fixed bottom-0 overflow-y-auto p-5 pt-1 pr-1"
             style={{
               top: topBarHeight,
               left: projectsBarWidth || 'env(safe-area-inset-left)',
             }}
+            tabIndex="0"
+            aria-label="Sidebar"
             children={<Sidebar />}
           />
         </>
@@ -150,6 +163,8 @@ const ProjectView = ({ childView }) => {
             top: topBarHeight,
             right: 'env(safe-area-inset-right)',
           }}
+          tabIndex="0"
+          aria-label="Formatting toolbar"
         />
       )}
 
@@ -163,7 +178,7 @@ const ProjectView = ({ childView }) => {
             : formattingToolbarWidth),
         }}
       >
-        <div className="grow flex flex-col p-5 pt-1">
+        <div ref={mainRef} className="grow flex flex-col p-5 pt-1" tabIndex="0" aria-label="Main">
           <ChildView
             key={`${projectId}/${childView.key}`}
             topBarHeight={topBarHeight}

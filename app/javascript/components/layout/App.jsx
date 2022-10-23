@@ -1,5 +1,4 @@
-import React from 'react'
-import { useReducer } from 'react'
+import React, { useReducer } from 'react'
 
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'

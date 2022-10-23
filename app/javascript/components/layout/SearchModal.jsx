@@ -221,7 +221,7 @@ const SearchModal = ({ visible, onClose }) => {
 
   return visible && (
     <ModalRoot open={visible} onClose={onClose}>
-      <div className="fixed inset-0 flex p-5">
+      <div className="fixed inset-0 flex p-5" data-focus-trap="true">
         <ModalPanel className="mt-[20vh] mb-auto narrow bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog-heavy rounded-xl">
           <div className="flex px-5 py-3 gap-2 items-center">
             <SearchIcon size="1.25em" className="text-slate-500 dark:text-slate-400" noAriaLabel />

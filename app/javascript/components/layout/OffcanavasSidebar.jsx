@@ -8,7 +8,7 @@ import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 const OffcanavasSidebar = ({ visible, onClose }) => {
   return (
     <ModalRoot open={visible} onClose={onClose}>
-      <div className="fixed inset-0">
+      <div className="fixed inset-0" data-focus-trap={visible}>
         <ModalPanel
           className="max-w-full absolute top-0 left-0 bottom-0 bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog transition-[transform,opacity] flex duration-300"
           style={{
