@@ -122,7 +122,7 @@ const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick 
                       key={project.id}
                       project={project}
                       className="aspect-square rounded shadow-sm"
-                      showText={false}
+                      textScale={0.50}
                     />
                   ))}
                 </button>

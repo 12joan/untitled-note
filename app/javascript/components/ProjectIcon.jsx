@@ -7,7 +7,7 @@ const ProjectIcon = forwardRef(({
   className = '',
   style = {},
   project,
-  showText = true,
+  textScale = 1,
   ...otherProps
 }, ref) => {
   const hasImage = !!project.image_url
@@ -16,7 +16,7 @@ const ProjectIcon = forwardRef(({
     auto: 'bg-white text-slate-500 dark:bg-slate-800 darl:text-slate-400',
     light: 'bg-white text-slate-500',
     dark: 'bg-slate-800 text-slate-400',
-  }[showText ? project.background_colour : 'auto']
+  }[project.background_colour]
 
   return (
     <Component
@@ -30,13 +30,15 @@ const ProjectIcon = forwardRef(({
       aria-label={project.name}
       {...otherProps}
     >
-      {!hasImage && showText && (
+      {!hasImage && (
         <span
           aria-hidden="true"
-          className="font-bold"
+          className="font-bold absolute"
           children={project.emoji ?? abbreviate(project.name, 1)}
           style={{
-            transform: project.emoji ? 'scale(1.25)' : undefined,
+            transform: `scale(${
+              textScale * (project.emoji ? 1.25 : 1)
+            })`,
           }}
         />
       )}
