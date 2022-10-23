@@ -18,9 +18,9 @@ const handleCreateProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
-const handleRenameProjectError = handleErrors(() => ({
-  title: 'Failed to rename project',
-  message: 'An error occurred while renaming the project. Make sure you are connected to the internet and try again.',
+const handleUpdateProjectError = handleErrors(() => ({
+  title: 'Failed to update project details',
+  message: 'An error occurred while updating the project details. Make sure you are connected to the internet and try again.',
   autoClose: 'slow',
 }))
 
@@ -80,7 +80,7 @@ const handleDeleteDocumentError = handleErrors(() => ({
 
 export {
   handleCreateProjectError,
-  handleRenameProjectError,
+  handleUpdateProjectError,
   handleUploadProjectImageError,
   handleRemoveProjectImageError,
   handleArchiveProjectError,

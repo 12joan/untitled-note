@@ -9,7 +9,11 @@ import useOverrideable from '~/lib/useOverrideable'
 import { uploadProjectImage, removeProjectImage } from '~/lib/projectImageActions'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import retry from '~/lib/retry'
-import { handleUploadProjectImageError, handleRemoveProjectImageError } from '~/lib/handleErrors'
+import {
+  handleUploadProjectImageError,
+  handleRemoveProjectImageError,
+  handleUpdateProjectError,
+} from '~/lib/handleErrors'
 import multiplexRefs from '~/lib/multiplexRefs'
 import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
 
@@ -29,8 +33,7 @@ const EditProjectIcon = () => {
     setUpdatingProject(true)
     setLocalProject({ ...localProject, ...params })
 
-    // Chagne error handler
-    handleUploadProjectImageError(
+    handleUpdateProjectError(
       retry(
         () => ProjectsAPI.update({
           id: project.id,

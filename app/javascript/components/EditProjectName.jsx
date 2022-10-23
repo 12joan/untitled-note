@@ -6,7 +6,7 @@ import useNormalizedInput from '~/lib/useNormalizedInput'
 import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import retry from '~/lib/retry'
-import { handleRenameProjectError } from '~/lib/handleErrors'
+import { handleUpdateProjectError } from '~/lib/handleErrors'
 
 const EditProjectName = () => {
   const { project } = useContext()
@@ -28,7 +28,7 @@ const EditProjectName = () => {
       return
     }
 
-    handleRenameProjectError(
+    handleUpdateProjectError(
       retry(
         () => ProjectsAPI.update({
           id: project.id,
