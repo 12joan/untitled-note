@@ -55,11 +55,15 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
             {...provided.droppableProps}
             className="p-3"
           >
-            <ProjectList
-              projects={unarchivedProjects}
-              draggable
-              onButtonClick={onButtonClick}
-            />
+            {unarchivedProjects.map((project, index) => (
+              <ProjectListItem
+                key={project.id}
+                project={project}
+                index={index}
+                draggable
+                onButtonClick={onButtonClick}
+              />
+            ))}
 
             {provided.placeholder}
 
@@ -131,9 +135,14 @@ const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick 
           </div>
 
           <div id={id}>
-            {isExpanded && (
-              <ProjectList projects={projects} onButtonClick={onButtonClick} />
-            )}
+            {isExpanded && projects.map((project, index) => (
+              <ProjectListItem
+                key={project.id}
+                project={project}
+                index={index}
+                onButtonClick={onButtonClick}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -141,56 +150,57 @@ const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick 
   )
 }
 
-const ProjectList = ({ projects, draggable = false, onButtonClick }) => {
-  const { projectId } = useContext()
+const ProjectListItem = ({
+  project,
+  index,
+  draggable = false,
+  onButtonClick,
+}) => {
+  const { projectId: currentProjectId } = useContext()
+  const isCurrentProject = project.id == currentProjectId
 
-  return projects.map((project, index) => {
-    const isCurrentProject = project.id == projectId
-    const LinkComponent = isCurrentProject ? OverviewLink : ProjectLink
-
-    const wrapper = renderFunc => draggable ? (
-      <Draggable key={project.id} draggableId={project.id.toString()} index={index}>
-        {provided => renderFunc({
-          containerProps: {
-            ref: provided.innerRef,
+  const wrapper = renderFunc => draggable ? (
+    <Draggable draggableId={project.id.toString()} index={index}>
+      {provided => renderFunc({
+        containerProps: {
+          ref: provided.innerRef,
             ...provided.draggableProps,
-          },
+        },
           handleProps: provided.dragHandleProps,
-        })}
-      </Draggable>
-    ) : renderFunc({
-      containerProps: { key: project.id },
-      handleProps: {},
-    })
-
-    return wrapper(({ containerProps, handleProps }) => (
-      <div
-        {...containerProps}
-        className="flex gap-2 -ml-3 mb-3"
-      >
-        <div
-          aria-hidden="true"
-          className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
-          data-active={isCurrentProject}
-        />
-
-        <Tooltip content={project.name} placement="right" fixed>
-          <ProjectIcon
-            project={project}
-            {...handleProps}
-            // Link props
-            as={isCurrentProject ? OverviewLink : ProjectLink}
-            projectId={project.id}
-            // HTML attributes
-            className="w-12 h-12 btn text-xl shadow"
-            style={{ cursor: 'pointer' }}
-            onClick={onButtonClick}
-            aria-current={isCurrentProject ? 'page' : undefined}
-          />
-        </Tooltip>
-      </div>
-    ))
+      })}
+    </Draggable>
+  ) : renderFunc({
+    containerProps: {},
+    handleProps: {},
   })
+
+  return wrapper(({ containerProps, handleProps }) => (
+    <div
+      {...containerProps}
+      className="flex gap-2 -ml-3 mb-3"
+    >
+      <div
+        aria-hidden="true"
+        className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
+        data-active={isCurrentProject}
+      />
+
+      <Tooltip content={project.name} placement="right" fixed>
+        <ProjectIcon
+          project={project}
+          {...handleProps}
+          // Link props
+          as={isCurrentProject ? OverviewLink : ProjectLink}
+          projectId={project.id}
+          // HTML attributes
+          className="w-12 h-12 btn text-xl shadow"
+          style={{ cursor: 'pointer' }}
+          onClick={onButtonClick}
+          aria-current={isCurrentProject ? 'page' : undefined}
+        />
+      </Tooltip>
+    </div>
+  ))
 }
 
 export default ProjectsBar
