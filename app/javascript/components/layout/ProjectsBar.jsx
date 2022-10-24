@@ -174,33 +174,43 @@ const ProjectListItem = ({
     handleProps: {},
   })
 
-  return wrapper(({ containerProps, handleProps }) => (
-    <div
-      {...containerProps}
-      className="flex gap-2 -ml-3 mb-3"
-    >
-      <div
-        aria-hidden="true"
-        className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
-        data-active={isCurrentProject}
-      />
+  return wrapper(({ containerProps, handleProps }) => {
+    const isDragging = containerProps.style?.position === 'fixed'
 
-      <Tooltip content={project.name} placement="right" fixed>
-        <ProjectIcon
-          project={project}
-          {...handleProps}
-          // Link props
-          as={isCurrentProject ? OverviewLink : ProjectLink}
-          projectId={project.id}
-          // HTML attributes
-          className="w-12 h-12 btn text-xl shadow"
-          style={{ cursor: 'pointer' }}
-          onClick={onButtonClick}
-          aria-current={isCurrentProject ? 'page' : undefined}
-        />
+    return (
+      <Tooltip
+        content={project.name}
+        placement="right"
+        fixed
+        trigger="mouseenter focusin"
+        className={isDragging ? 'opacity-0' : ''}
+      >
+        <div
+          {...containerProps}
+          className="flex gap-2 -ml-3 mb-3"
+        >
+          <div
+            aria-hidden="true"
+            className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
+            data-active={isCurrentProject}
+          />
+
+          <ProjectIcon
+            project={project}
+            {...handleProps}
+            // Link props
+            as={isCurrentProject ? OverviewLink : ProjectLink}
+            projectId={project.id}
+            // HTML attributes
+            className="w-12 h-12 btn text-xl shadow"
+            style={{ cursor: 'pointer' }}
+            onClick={onButtonClick}
+            aria-current={isCurrentProject ? 'page' : undefined}
+          />
+        </div>
       </Tooltip>
-    </div>
-  ))
+    )
+  })
 }
 
 export default ProjectsBar
