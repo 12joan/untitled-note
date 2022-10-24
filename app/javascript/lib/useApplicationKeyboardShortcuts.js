@@ -46,7 +46,21 @@ const useApplicationKeyboardShortcuts = ({ sectionRefs, setSearchModalVisible })
     event.stopPropagation()
 
     const visibleSections = sectionRefs.filter(
-      ({ current: section }) => section && section.offsetParent !== null
+      ({ current: section }) => {
+        if (!section) {
+          return false
+        }
+
+        if (!document.body.contains(section)) {
+          return false
+        }
+
+        if (window.getComputedStyle(section).display === 'none') {
+          return false
+        }
+
+        return true
+      }
     ).map(({ current }) => current)
 
     let currentSectionIndex = visibleSections.findIndex(
