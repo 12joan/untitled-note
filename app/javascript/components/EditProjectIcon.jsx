@@ -234,6 +234,10 @@ const EmojiForm = ({ project, updateProject }) => {
               top: pickerY,
             }}
             onBlur={handleBlur}
+            onMouseDown={event => {
+              // Prevent blur when clicking inside picker (WebKit)
+              event.preventDefault()
+            }}
           >
             <EmojiPicker
               data={emojiData}
