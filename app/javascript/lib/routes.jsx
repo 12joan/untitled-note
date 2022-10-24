@@ -1,59 +1,97 @@
 import React, { forwardRef } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Navigate, useRoutes } from 'react-router-dom'
 
-import forwardParams from '~/lib/forwardParams'
 import { useContext } from '~/lib/context'
 import { getLastView } from '~/lib/restoreProjectView'
 
+import forwardParams from '~/lib/forwardParams'
 import AwaitRedirect from '~/components/AwaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
 import ProjectView from '~/components/layout/ProjectView'
 import RestoreLastOpenProject from '~/components/RestoreLastOpenProject'
 import Link from '~/components/Link'
 
-const routesComponent = (
-  <Routes>
-    <Route path="/await_redirect" element={<AwaitRedirect />} />
+// To keep the component tree consistent, we need to use forwardParams on all
+// routes, even if they don't have any params. Otherwise, React will remount
+// the ProjectView component when the view or project changes.
 
-    <Route path="/projects/:projectId/*" element={forwardParams(({ projectId }) => (
-      <StreamProjectData projectId={parseInt(projectId)}>
-        <Routes>
-          <Route path="await_redirect" element={(
-            <ProjectView childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }} />
-          )} />
+const ApplicationRoutes = () => {
+  const routesComponent = useRoutes([
+    {
+      path: '/await_redirect',
+      element: forwardParams(() => <AwaitRedirect />),
+    },
+    {
+      path: '/projects/:projectId/*',
+      element: forwardParams(({ projectId }) => (
+        <StreamProjectData projectId={parseInt(projectId)}>
+          <ProjectRoutes projectId={projectId} />
+        </StreamProjectData>
+      )),
+    },
+    {
+      path: '*',
+      element: forwardParams(() => <RestoreLastOpenProject />),
+    },
+  ])
 
-          <Route path="overview" element={(
-            <ProjectView childView={{ type: 'overview', key: 'overview', props: {} }} />
-          )} />
+  return routesComponent
+}
 
-          <Route path="edit" element={(
-            <ProjectView childView={{ type: 'editProject', key: 'editProject', props: {} }} />
-          )} />
+const ProjectRoutes = ({ projectId }) => {
+  const routesComponent = useRoutes([
+    {
+      path: 'await_redirect',
+      element: forwardParams(() => (
+        <ProjectView childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }} />
+      )),
+    },
+    {
+      path: 'overview',
+      element: forwardParams(() => (
+        <ProjectView childView={{ type: 'overview', key: 'overview', props: {} }} />
+      )),
+    },
+    {
+      path: 'edit',
+      element: forwardParams(() => (
+        <ProjectView childView={{ type: 'editProject', key: 'editProject', props: {} }} />
+      )),
+    },
+    {
+      path: 'recently_viewed',
+      element: forwardParams(() => (
+        <ProjectView childView={{ type: 'recentlyViewed', key: 'recentlyViewed', props: {} }} />
+      )),
+    },
+    {
+      path: 'tags/:tagId',
+      element: forwardParams(({ tagId }) => (
+        <ProjectView childView={{ type: 'showTag', key: `tags/${tagId}`, props: { tagId: parseInt(tagId) } }} />
+      )),
+    },
+    {
+      path: 'tags',
+      element: forwardParams(() => (
+        <ProjectView childView={{ type: 'allTags', key: 'allTags', props: {} }} />
+      )),
+    },
+    {
+      path: 'editor/:documentId',
+      element: forwardParams(({ documentId }) => (
+        <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId: parseInt(documentId) } }} />
+      )),
+    },
+    {
+      path: '*',
+      element: forwardParams(() => (
+        <Navigate to={`/projects/${projectId}/overview`} replace />
+      )),
+    },
+  ])
 
-          <Route path="recently_viewed" element={(
-            <ProjectView childView={{ type: 'recentlyViewed', key: 'recentlyViewed', props: {} }} />
-          )} />
-
-          <Route path="tags/:tagId" element={forwardParams(({ tagId }) => (
-            <ProjectView childView={{ type: 'showTag', key: `tags/${tagId}`, props: { tagId: parseInt(tagId) } }} />
-          ))} />
-
-          <Route path="tags" element={(
-            <ProjectView childView={{ type: 'allTags', key: 'allTags', props: {} }} />
-          )} />
-
-          <Route path="editor/:documentId" element={forwardParams(({ documentId }) => (
-            <ProjectView childView={{ type: 'editor', key: `editor/${documentId}`, props: { documentId: parseInt(documentId) } }} />
-          ))} />
-
-          <Route path="*" element={<Navigate to={`/projects/${projectId}/overview`} replace />} />
-        </Routes>
-      </StreamProjectData>
-    ))} />
-
-    <Route path="*" element={<RestoreLastOpenProject />} />
-  </Routes>
-)
+  return routesComponent
+}
 
 const makeLinkComponent = pathFunc => forwardRef(({ projectId: overrideProjectId, documentId, tagId, ...otherProps }, ref) => {
   const { projectId: currentProject, linkOriginator } = useContext()
@@ -91,7 +129,7 @@ const DocumentLink = makeLinkComponent(documentPath)
 const RecentlyViewedDocumentLink = makeLinkComponent(recentlyViewedDocumentPath)
 
 export {
-  routesComponent,
+  ApplicationRoutes,
   logoutPath,
   awaitRedirectPath,
   projectPath,

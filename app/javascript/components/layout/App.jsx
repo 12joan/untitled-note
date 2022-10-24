@@ -3,7 +3,7 @@ import React, { useReducer } from 'react'
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'
 import { ContextProvider } from '~/lib/context'
-import { routesComponent } from '~/lib/routes'
+import { ApplicationRoutes } from '~/lib/routes'
 
 import ErrorBoundary from '~/components/ErrorBoundary'
 import NoProjectsView from '~/components/layout/NoProjectsView'
@@ -31,7 +31,7 @@ const App = () => {
             ? <NoProjectsView />
             : (
               <>
-                {routesComponent}
+                <ApplicationRoutes />
                 <ToastContainer />
               </>
             )
