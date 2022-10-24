@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useId, forwardRef } from 'react'
+import React, { useRef, useMemo, useState, useId, forwardRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { useContext } from '~/lib/context'
@@ -92,7 +92,12 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
   )
 })
 
-const ProjectFolder = ({ name, projects, initialExpanded = false, onButtonClick }) => {
+const ProjectFolder = ({
+  name,
+  projects,
+  initialExpanded = false,
+  onButtonClick,
+}) => {
   const [isExpanded, setIsExpanded] = useOverrideable(initialExpanded)
   const id = useId()
 
@@ -159,6 +164,11 @@ const ProjectListItem = ({
   const { projectId: currentProjectId } = useContext()
   const isCurrentProject = project.id == currentProjectId
 
+  const [tippyTriggerTarget, setTippyTriggerTarget] = useState(null)
+
+  const tippyRef = useRef(null)
+  const hideTooltip = () => tippyRef.current?.hide()
+
   const wrapper = renderFunc => draggable ? (
     <Draggable draggableId={project.id.toString()} index={index}>
       {provided => renderFunc({
@@ -175,15 +185,13 @@ const ProjectListItem = ({
   })
 
   return wrapper(({ containerProps, handleProps }) => {
-    const isDragging = containerProps.style?.position === 'fixed'
-
     return (
       <Tooltip
+        ref={tippyRef}
         content={project.name}
         placement="right"
         fixed
-        trigger="mouseenter focusin"
-        className={isDragging ? 'opacity-0' : ''}
+        triggerTarget={tippyTriggerTarget}
       >
         <div
           {...containerProps}
@@ -196,6 +204,7 @@ const ProjectListItem = ({
           />
 
           <ProjectIcon
+            ref={setTippyTriggerTarget}
             project={project}
             {...handleProps}
             // Link props
@@ -204,7 +213,15 @@ const ProjectListItem = ({
             // HTML attributes
             className="w-12 h-12 btn text-xl shadow"
             style={{ cursor: 'pointer' }}
-            onClick={onButtonClick}
+            onClick={event => {
+              hideTooltip()
+              onButtonClick(event)
+            }}
+            onKeyDown={event => {
+              if (event.key === ' ') {
+                hideTooltip()
+              }
+            }}
             aria-current={isCurrentProject ? 'page' : undefined}
           />
         </div>
