@@ -22,7 +22,7 @@ import {
 } from '@udecode/plate-headless'
 
 import useKeyboardShortcut from '~/lib/useKeyboardShortcut'
-import { isLinkInSelection, toggleLink } from '~/lib/editor/links'
+import { isLinkInSelection, useToggleLink } from '~/lib/editor/links'
 
 import Tooltip from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
@@ -38,6 +38,8 @@ import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
 const FormattingToolbar = ({ editor }) => {
+  const [toggleLinkModalPortal, toggleLink] = useToggleLink(editor)
+
   const toggleElementProps = element => {
     const pluginType = getPluginType(editor, element)
 
@@ -75,7 +77,7 @@ const FormattingToolbar = ({ editor }) => {
 
       if (key === 'MetaShiftU' || (key === 'MetaK' && hasSelection)) {
         event.preventDefault()
-        toggleLink(editor)
+        toggleLink()
       }
     },
     [editor]
@@ -92,7 +94,7 @@ const FormattingToolbar = ({ editor }) => {
       active: linkInSelection,
       icon: LinkIcon,
       disabled: isRangeAcrossBlocks(editor, { at: editor.selection }),
-      onClick: () => toggleLink(editor),
+      onClick: toggleLink,
     },
     { label: 'Heading 1', icon: HeadingOneIcon, ...toggleElementProps(ELEMENT_H1) },
     { label: 'Quote', icon: QuoteIcon, ...toggleElementProps(ELEMENT_BLOCKQUOTE) },
@@ -105,6 +107,8 @@ const FormattingToolbar = ({ editor }) => {
 
   return (
     <div className="my-auto space-y-2">
+      {toggleLinkModalPortal}
+
       {formattingButtons.map(({ label, icon: Icon, active, onClick, disabled = false }, index) => (
         <Tooltip key={index} content={label} placement="left" fixed>
           <button

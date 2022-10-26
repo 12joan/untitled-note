@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
-import openModal from '~/lib/openModal'
+import useModal from '~/lib/useModal'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import { projectPath } from '~/lib/routes'
 import awaitRedirect from '~/lib/awaitRedirect'
@@ -16,10 +16,10 @@ const useNewProject = () => {
   const { pathname: currentPath } = useLocation()
   const { invalidateProjectsCache } = useContext()
 
-  const openNewProjectModal = () => openModal(
-    NewProjectModal,
-    {},
-    projectArgs => awaitRedirect({
+  const [modalPortal, openModal] = useModal(NewProjectModal)
+
+  const openNewProjectModal = () => openModal({
+    onConfirm: projectArgs => awaitRedirect({
       navigate,
       promisePath: handleCreateProjectError(
         ProjectsAPI.create(projectArgs)
@@ -28,10 +28,10 @@ const useNewProject = () => {
         return projectPath(id)
       }),
       fallbackPath: currentPath,
-    })
-  )
+    }),
+  })
 
-  return openNewProjectModal
+  return [modalPortal, openNewProjectModal]
 }
 
 const NewProjectModal = ({ onConfirm, onClose }) => {
@@ -42,6 +42,7 @@ const NewProjectModal = ({ onConfirm, onClose }) => {
 
   const handleSubmit = event => {
     event.preventDefault()
+    onClose()
     onConfirm({ name })
   }
 

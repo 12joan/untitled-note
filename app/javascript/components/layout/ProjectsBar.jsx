@@ -16,7 +16,8 @@ import LargePlusIcon from '~/components/icons/LargePlusIcon'
 
 const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref) => {
   const { projectId, projects } = useContext()
-  const openNewProjectModal = useNewProject()
+
+  const [newProjectModalPortal, openNewProjectModal] = useNewProject()
 
   const [localProjects, setLocalProjects] = useOverrideable(projects)
 
@@ -47,48 +48,52 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
   }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="projects" direction="vertical">
-        {provided => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="p-3"
-          >
-            {unarchivedProjects.map((project, index) => (
-              <ProjectListItem
-                key={project.id}
-                project={project}
-                index={index}
-                draggable
-                onButtonClick={onButtonClick}
-              />
-            ))}
+    <>
+      {newProjectModalPortal}
 
-            {provided.placeholder}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="projects" direction="vertical">
+          {provided => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="p-3"
+            >
+              {unarchivedProjects.map((project, index) => (
+                <ProjectListItem
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  draggable
+                  onButtonClick={onButtonClick}
+                />
+              ))}
 
-            {archivedProjects.length > 0 && (
-              <ProjectFolder
-                name="Archived projects"
-                projects={archivedProjects}
-                initialExpanded={archivedProjects.some(({ id }) => id === projectId)}
-                onButtonClick={onButtonClick}
-              />
-            )}
+              {provided.placeholder}
 
-            <Tooltip content="New project" placement="right" fixed>
-              <button
-                type="button"
-                className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
-                onClick={openNewProjectModal}
-              >
-                <LargePlusIcon size="2em" ariaLabel="New project" />
-              </button>
-            </Tooltip>
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+              {archivedProjects.length > 0 && (
+                <ProjectFolder
+                  name="Archived projects"
+                  projects={archivedProjects}
+                  initialExpanded={archivedProjects.some(({ id }) => id === projectId)}
+                  onButtonClick={onButtonClick}
+                />
+              )}
+
+              <Tooltip content="New project" placement="right" fixed>
+                <button
+                  type="button"
+                  className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
+                  onClick={openNewProjectModal}
+                >
+                  <LargePlusIcon size="2em" ariaLabel="New project" />
+                </button>
+              </Tooltip>
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
   )
 })
 

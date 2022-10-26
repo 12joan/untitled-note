@@ -25,6 +25,12 @@ import AllTagsView from '~/components/layout/AllTagsView'
 import EditorView from '~/components/layout/EditorView'
 
 const ProjectView = ({ childView }) => {
+  const { projectId } = useContext()
+
+  useEffect(() => projectWasOpened(projectId), [projectId])
+
+  const { pathname: viewPath } = useLocation()
+
   const projectsBarRef = useRef()
   const topBarRef = useRef()
   const sideBarRef = useRef()
@@ -39,7 +45,9 @@ const ProjectView = ({ childView }) => {
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
+
   const [searchModalVisible, setSearchModalVisible] = useState(false)
+  useEffect(() => setSearchModalVisible(false), [childView, projectId])
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
     const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
@@ -87,11 +95,6 @@ const ProjectView = ({ childView }) => {
       showFormattingToolbar: true,
     },
   }[childView.type]
-
-  const { projectId } = useContext()
-  useEffect(() => projectWasOpened(projectId), [projectId])
-
-  const { pathname: viewPath } = useLocation()
 
   useEffect(() => {
     if (restoreAsLastView) {

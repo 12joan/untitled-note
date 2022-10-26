@@ -11,7 +11,7 @@ import {
   ELEMENT_LINK,
 } from '@udecode/plate-headless'
 
-import openModal from '~/lib/openModal'
+import useModal from '~/lib/useModal'
 import { useContext } from '~/lib/context'
 import useNormalizedInput from '~/lib/useNormalizedInput'
 
@@ -24,14 +24,21 @@ import DeleteIcon from '~/components/icons/DeleteIcon'
 
 const isLinkInSelection = editor => someNode(editor, { match: { type: ELEMENT_LINK } })
 
-const toggleLink = editor => {
-  if (isLinkInSelection(editor)) {
-    unwrapLink(editor)
-  } else {
-    openModal(LinkModal, {
-      initialText: getSelectionText(editor),
-    }, args => insertLink(editor, args))
+const useToggleLink = editor => {
+  const [modalPortal, openModal] = useModal(LinkModal)
+
+  const toggleLink = () => {
+    if (isLinkInSelection(editor)) {
+      unwrapLink(editor)
+    } else {
+      openModal({
+        initialText: getSelectionText(editor),
+        onConfirm: args => insertLink(editor, args),
+      })
+    }
   }
+
+  return [modalPortal, toggleLink]
 }
 
 const LinkComponent = ({ editor, nodeProps, children }) => {
@@ -59,64 +66,70 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
 
   const openLink = () => Object.assign(document.createElement('a'), linkProps).click()
 
+  const [modalPortal, openModal] = useModal(LinkModal)
+
   const editLink = () => {
     const { url } = selectedLink
     const text = getEditorString(editor, selectedLinkPath)
 
-    openModal(LinkModal, {
+    openModal({
       initialText: text === url ? '' : text,
       initialUrl: url,
-    }, args => upsertLink(editor, args))
+      onConfirm: args => upsertLink(editor, args),
+    })
   }
 
   const removeLink = () => unwrapLink(editor)
 
   return (
-    <Tippy
-      placement="top"
-      visible={selected}
-      interactive
-      appendTo={tippyContainerRef.current}
-      render={attrs => selected && (
-        <div className="rounded-lg backdrop-blur shadow text-base" {...attrs}>
-          <Tooltip content="Open link">
-            <button
-              type="button"
-              className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-              onClick={openLink}
-            >
-              <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
-            </button>
-          </Tooltip>
+    <>
+      {modalPortal}
+      <Tippy
+        placement="top"
+        visible={selected}
+        interactive
+        appendTo={tippyContainerRef.current}
+        render={attrs => selected && (
+          <div className="rounded-lg backdrop-blur shadow text-base" {...attrs}>
+            <Tooltip content="Open link">
+              <button
+                type="button"
+                className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
+                onClick={openLink}
+              >
+                <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
+              </button>
+            </Tooltip>
 
-          <Tooltip content="Edit link">
-            <button
-              type="button"
-              className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-              onClick={editLink}
-            >
-              <EditIcon size="1.25em" ariaLabel="Edit link" />
-            </button>
-          </Tooltip>
+            <Tooltip content="Edit link">
+              <button
+                type="button"
+                className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
+                onClick={editLink}
+              >
+                <EditIcon size="1.25em" ariaLabel="Edit link" />
+              </button>
+            </Tooltip>
 
-          <Tooltip content="Remove link">
-            <button
-              type="button"
-              className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
-              onClick={removeLink}
-            >
-              <DeleteIcon size="1.25em" ariaLabel="Remove link" />
-            </button>
-          </Tooltip>
-        </div>
-      )}
-    >
-      <a
-        {...linkProps}
-        className="cursor-pointer"
-        children={children}
-      />
-    </Tippy>
+            <Tooltip content="Remove link">
+              <button
+                type="button"
+                className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
+                onClick={removeLink}
+              >
+                <DeleteIcon size="1.25em" ariaLabel="Remove link" />
+              </button>
+            </Tooltip>
+          </div>
+        )}
+      >
+        <a
+          {...linkProps}
+          className="cursor-pointer"
+          children={children}
+        />
+      </Tippy>
+    </>
   )
 }
 
@@ -138,6 +151,7 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
   const handleSubmit = event => {
     event.preventDefault()
     const textOrUrl = text.trim() === '' ? url : text
+    onClose()
     onConfirm({ url, text: textOrUrl })
   }
 
@@ -197,6 +211,6 @@ const LinkModal = ({ onConfirm, onClose, initialText = '', initialUrl = '' }) =>
 
 export {
   isLinkInSelection,
-  toggleLink,
+  useToggleLink,
   LinkComponent,
 }

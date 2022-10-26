@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useContext } from '~/lib/context'
 import useOverrideable from '~/lib/useOverrideable'
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import openModal from '~/lib/openModal'
+import useModal from '~/lib/useModal'
 import awaitRedirect from '~/lib/awaitRedirect'
 import pluralize from '~/lib/pluralize'
 import {
@@ -44,10 +44,12 @@ const ProjectActions = () => {
     ).finally(() => setIsTogglingArchived(false))
   }
 
-  const handleDelete = () => openModal(
-    ConfirmDeletionModal,
-    { project, futureDocumentCount },
-    () => awaitRedirect({
+  const [deleteModalPortal, openDeleteModal] = useModal(ConfirmDeletionModal)
+
+  const handleDelete = () => openDeleteModal({
+    project,
+    futureDocumentCount,
+    onConfirm: () => awaitRedirect({
       navigate,
       promisePath: handleDeleteProjectError(
         ProjectsAPI.destroy(project)
@@ -56,11 +58,13 @@ const ProjectActions = () => {
         return '/'
       }),
       fallbackPath: currentPath,
-    })
-  )
+    }),
+  })
 
   return (
     <div>
+      {deleteModalPortal}
+
       <h2 className="h2 select-none mb-3">Other actions</h2>
 
       <div className="border rounded-lg divide-y">
@@ -155,7 +159,10 @@ const ConfirmDeletionModal = ({ onConfirm, onClose, project, futureDocumentCount
         <button
           type="button"
           className="btn btn-rect btn-danger"
-          onClick={onConfirm}
+          onClick={() => {
+            onClose()
+            onConfirm()
+          }}
           disabled={!areYouSure}
         >
           Delete project
