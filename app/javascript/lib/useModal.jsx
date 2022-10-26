@@ -1,38 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-// import { render, unmountComponentAtNode } from 'react-dom'
 
 import useLazy from '~/lib/useLazy'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
-
-// const openModal = (Component, componentProps, onConfirm) => {
-//   const container = document.body
-// 
-//   const root = document.createElement('div')
-//   container.appendChild(root)
-// 
-//   const close = () => {
-//     unmountComponentAtNode(root)
-//     container.removeChild(root)
-//   }
-// 
-//   const confirmAndClose = data => {
-//     close()
-//     onConfirm(data)
-//   }
-// 
-//   render(
-//     <Modal onClose={close}>
-//       <Component
-//         onConfirm={confirmAndClose}
-//         onClose={close}
-//         {...componentProps}
-//       />
-//     </Modal>,
-//     root
-//   )
-// }
 
 const useModal = ModalComponent => {
   const container = useLazy(() => {
