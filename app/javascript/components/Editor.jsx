@@ -152,7 +152,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
           initialValue={initialValue}
           normalizeInitialValue
           editableProps={{
-            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow pb-[50vh]',
+            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
             placeholder: 'Write something...',
           }}
         >

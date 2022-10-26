@@ -42,6 +42,12 @@ const ProjectView = ({ childView }) => {
   const [sideBarSizeRef, { width: sideBarWidth }] = useElementSize()
   const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
 
+  useEffect(() => {
+    const html = document.documentElement
+    html.style.setProperty('scroll-padding-top', `${topBarHeight}px`)
+    return () => html.style.removeProperty('scroll-padding-top')
+  }, [topBarHeight])
+
   const { isMd, isXl } = useBreakpoints()
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
