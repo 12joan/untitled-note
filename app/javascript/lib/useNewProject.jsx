@@ -16,7 +16,7 @@ const useNewProject = () => {
   const { pathname: currentPath } = useLocation()
   const { invalidateProjectsCache } = useContext()
 
-  const [modalPortal, openModal] = useModal(NewProjectModal)
+  const [modal, openModal] = useModal(NewProjectModal)
 
   const openNewProjectModal = () => openModal({
     onConfirm: projectArgs => awaitRedirect({
@@ -31,7 +31,7 @@ const useNewProject = () => {
     }),
   })
 
-  return [modalPortal, openNewProjectModal]
+  return [modal, openNewProjectModal]
 }
 
 const NewProjectModal = ({ onConfirm, onClose }) => {

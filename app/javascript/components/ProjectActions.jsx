@@ -44,7 +44,7 @@ const ProjectActions = () => {
     ).finally(() => setIsTogglingArchived(false))
   }
 
-  const [deleteModalPortal, openDeleteModal] = useModal(ConfirmDeletionModal)
+  const [deleteModal, openDeleteModal] = useModal(ConfirmDeletionModal)
 
   const handleDelete = () => openDeleteModal({
     project,
@@ -63,7 +63,7 @@ const ProjectActions = () => {
 
   return (
     <div>
-      {deleteModalPortal}
+      {deleteModal}
 
       <h2 className="h2 select-none mb-3">Other actions</h2>
 

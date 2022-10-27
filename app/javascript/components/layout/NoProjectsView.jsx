@@ -7,11 +7,11 @@ import { LogoutLink } from '~/lib/routes'
 const NoProjectsView = props => {
   useTitle('Create a project')
 
-  const [newProjectModalPortal, openNewProjectModal] = useNewProject()
+  const [newProjectModal, openNewProjectModal] = useNewProject()
 
   return (
     <div className="grow flex p-5">
-      {newProjectModalPortal}
+      {newProjectModal}
 
       <div className="m-auto narrow space-y-3">
         <h1 className="h1">Create a project</h1>

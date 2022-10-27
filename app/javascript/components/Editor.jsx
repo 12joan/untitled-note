@@ -15,6 +15,7 @@ import { useGlobalEvent } from '~/lib/globalEvents'
 import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
+import { useLinkModalProvider } from '~/lib/editor/links'
 
 import BackButton from '~/components/BackButton'
 import Tooltip from '~/components/Tooltip'
@@ -87,6 +88,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
     />
   )
 
+  const withLinkModalProvider = useLinkModalProvider()
+
   return (
     <>
       <div className="narrow mb-3">
@@ -145,23 +148,25 @@ const Editor = ({ workingDocument, updateDocument }) => {
         setVisible={setTagsVisible}
       />
 
-      <ContextProvider tippyContainerRef={tippyContainerRef}>
-        <Plate
-          id="editor"
-          editor={initialEditor}
-          initialValue={initialValue}
-          normalizeInitialValue
-          editableProps={{
-            className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
-            placeholder: 'Write something...',
-          }}
-        >
-          <WithEditorState
-            workingDocument={workingDocument}
-            updateDocument={updateDocument}
-          />
-        </Plate>
-      </ContextProvider>
+      {withLinkModalProvider(
+        <ContextProvider tippyContainerRef={tippyContainerRef}>
+          <Plate
+            id="editor"
+            editor={initialEditor}
+            initialValue={initialValue}
+            normalizeInitialValue
+            editableProps={{
+              className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
+              placeholder: 'Write something...',
+            }}
+          >
+            <WithEditorState
+              workingDocument={workingDocument}
+              updateDocument={updateDocument}
+            />
+          </Plate>
+        </ContextProvider>
+      )}
 
       <div ref={tippyContainerRef} />
     </>

@@ -1,36 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { createPortal } from 'react-dom'
-
-import useLazy from '~/lib/useLazy'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 
 const useModal = ModalComponent => {
-  const container = useLazy(() => {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
-    return container
-  })
-
-  useEffect(() => () => {
-    document.body.removeChild(container)
-  }, [])
-
   const [componentProps, setComponentProps] = useState(null)
   const openModal = (componentProps = {}) => setComponentProps(componentProps)
   const closeModal = () => setComponentProps(null)
   const open = componentProps !== null
 
-  const portal = createPortal(
+  const modal = (
     <Modal open={open} onClose={closeModal}>
       {open && (
         <ModalComponent {...componentProps} onClose={closeModal} />
       )}
-    </Modal>,
-    container
+    </Modal>
   )
 
-  return [portal, openModal]
+  return [modal, openModal]
 }
 
 const Modal = ({ open, children, onClose }) => {

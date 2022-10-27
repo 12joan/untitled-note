@@ -38,7 +38,7 @@ import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
 const FormattingToolbar = ({ editor }) => {
-  const [toggleLinkModalPortal, toggleLink] = useToggleLink(editor)
+  const toggleLink = useToggleLink(editor)
 
   const toggleElementProps = element => {
     const pluginType = getPluginType(editor, element)
@@ -107,8 +107,6 @@ const FormattingToolbar = ({ editor }) => {
 
   return (
     <div className="my-auto space-y-2">
-      {toggleLinkModalPortal}
-
       {formattingButtons.map(({ label, icon: Icon, active, onClick, disabled = false }, index) => (
         <Tooltip key={index} content={label} placement="left" fixed>
           <button

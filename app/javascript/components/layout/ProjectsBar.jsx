@@ -18,7 +18,7 @@ import LargePlusIcon from '~/components/icons/LargePlusIcon'
 const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref) => {
   const { projectId, projects } = useContext()
 
-  const [newProjectModalPortal, openNewProjectModal] = useNewProject()
+  const [newProjectModal, openNewProjectModal] = useNewProject()
 
   const [localProjects, setLocalProjects] = useOverrideable(projects)
 
@@ -50,7 +50,7 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
 
   return (
     <>
-      {newProjectModalPortal}
+      {newProjectModal}
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="projects" direction="vertical">

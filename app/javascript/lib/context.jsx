@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { createContext, useContext as reactUseContext } from 'react'
 
-const Context = React.createContext({})
+const Context = createContext({})
 
-const useContext = () => React.useContext(Context)
+const useContext = () => reactUseContext(Context)
 
 const ContextProvider = props => {
   const { children, context, ...otherProps } = props
