@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useState, useId, forwardRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { useElementSize } from 'usehooks-ts'
 
 import { useContext } from '~/lib/context'
 import groupList from '~/lib/groupList'
@@ -106,16 +107,19 @@ const ProjectFolder = ({
   const [isExpanded, setIsExpanded] = useOverrideable(initialExpanded)
   const id = useId()
 
+  const [collapsableRef, { height: collapsableHeight }] = useElementSize()
+
   const buttonProps = {
     type: 'button',
     onClick: () => setIsExpanded(!isExpanded),
     'aria-controls': id,
     'aria-expanded': isExpanded,
+    'aria-label': `${isExpanded ? 'Collapse' : 'Expand'} ${name}`,
   }
 
   return (
     <div className="mb-3">
-      <div className={`-m-1 rounded-xl p-1 ${isExpanded ? 'bg-slate-200 dark:bg-black/75' : ''}`}>
+      <div className={`-m-1 rounded-xl p-1 transition-colors ${isExpanded ? 'bg-slate-200 dark:bg-black/75' : ''}`}>
         <div className="-mb-3">
           <div className="mb-3">
             <Tooltip content="Archived projects" placement="right" fixed>
@@ -124,7 +128,7 @@ const ProjectFolder = ({
                   {...buttonProps}
                   className="btn w-12 h-12 flex justify-center items-center text-slate-400 dark:text-slate-500"
                 >
-                  <ChevronUpIcon size="2em" ariaLabel="Collapse folder" />
+                  <ChevronUpIcon size="2em" noAriaLabel />
                 </button>
               ) : (
                 <button
@@ -137,6 +141,7 @@ const ProjectFolder = ({
                       project={project}
                       className="aspect-square rounded shadow-sm"
                       textScale={0.50}
+                      aria-hidden="true"
                     />
                   ))}
                 </button>
@@ -144,15 +149,26 @@ const ProjectFolder = ({
             </Tooltip>
           </div>
 
-          <div id={id}>
-            {isExpanded && projects.map((project, index) => (
-              <ProjectListItem
-                key={project.id}
-                project={project}
-                index={index}
-                onButtonClick={onButtonClick}
-              />
-            ))}
+          <div
+            id={id}
+            className="transition-[max-height]"
+            style={{
+              maxHeight: isExpanded ? collapsableHeight : 0,
+              overflow: isExpanded ? undefined : 'hidden',
+            }}
+            aria-hidden={!isExpanded}
+          >
+            <div ref={collapsableRef}>
+              {true && projects.map((project, index) => (
+                <ProjectListItem
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  onButtonClick={onButtonClick}
+                  tabIndex={isExpanded ? 0 : -1}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -165,6 +181,7 @@ const ProjectListItem = ({
   index,
   draggable = false,
   onButtonClick,
+  tabIndex = 0,
 }) => {
   const { projectId: currentProjectId } = useContext()
   const isCurrentProject = project.id == currentProjectId
@@ -228,6 +245,7 @@ const ProjectListItem = ({
               }
             }}
             aria-current={isCurrentProject ? 'page' : undefined}
+            tabIndex={tabIndex}
           />
         </div>
       </Tooltip>
