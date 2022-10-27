@@ -42,13 +42,16 @@ const ProjectView = ({ childView }) => {
   const [sideBarSizeRef, { width: sideBarWidth }] = useElementSize()
   const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
 
+  const { isMd, isXl } = useBreakpoints()
+  const sidebarAlwaysVisible = isMd
+  const centreViewByDefault = isXl
+
   useEffect(() => {
     const html = document.documentElement
-    html.style.setProperty('scroll-padding-top', `${topBarHeight}px`)
-    return () => html.style.removeProperty('scroll-padding-top')
-  }, [topBarHeight])
-
-  const { isMd, isXl } = useBreakpoints()
+    const baseScrollPadding = '1.25rem'
+    html.style.setProperty('scroll-padding-top', sidebarAlwaysVisible ? baseScrollPadding : `${topBarHeight}px`)
+    html.style.setProperty('scroll-padding-bottom', baseScrollPadding)
+  }, [topBarHeight, sidebarAlwaysVisible])
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
 
@@ -62,14 +65,14 @@ const ProjectView = ({ childView }) => {
   }, [])
 
   useEffect(() => {
-    if (isMd) {
+    if (sidebarAlwaysVisible) {
       setOffcanvasSidebarVisible(false)
     }
-  }, [isMd])
+  }, [sidebarAlwaysVisible])
 
   const {
     ChildView,
-    centreView = isXl,
+    centreView = centreViewByDefault,
     showFormattingToolbar = false,
     restoreAsLastView = true,
   } = {
@@ -133,11 +136,11 @@ const ProjectView = ({ childView }) => {
         }}
         tabIndex="0"
         aria-label="Top bar"
-        showSidebarButton={!isMd}
+        showSidebarButton={!sidebarAlwaysVisible}
         onSidebarButtonClick={() => setOffcanvasSidebarVisible(true)}
       />
 
-      {isMd && (
+      {sidebarAlwaysVisible && (
         <>
           <nav
             ref={multiplexRefs([projectsBarRef, projectsBarSizeRef])}
