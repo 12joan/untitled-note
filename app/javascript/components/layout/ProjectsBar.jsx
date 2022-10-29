@@ -119,7 +119,7 @@ const ProjectFolder = ({
 
   return (
     <div className="mb-3">
-      <div className={`-m-1 rounded-xl p-1 transition-colors ${isExpanded ? 'bg-slate-200 dark:bg-black/75' : ''}`}>
+      <div className={`-m-1 rounded-xl p-1 ${isExpanded ? 'bg-slate-200 dark:bg-black/75' : ''}`}>
         <div className="-mb-3">
           <div className="mb-3">
             <Tooltip content="Archived projects" placement="right" fixed>
@@ -151,10 +151,11 @@ const ProjectFolder = ({
 
           <div
             id={id}
-            className="transition-[max-height]"
+            className="transition-[max-height,opacity]"
             style={{
-              maxHeight: isExpanded ? collapsableHeight : 0,
               overflow: isExpanded ? undefined : 'hidden',
+              maxHeight: isExpanded ? collapsableHeight : 0,
+              opacity: isExpanded ? 1 : 0,
             }}
             aria-hidden={!isExpanded}
           >
