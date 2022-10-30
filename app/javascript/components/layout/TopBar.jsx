@@ -21,10 +21,13 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
 
   const createNewDocument = useNewDocument()
 
-  const navButtons = [
+  const mainActions = [
     { icon: NewDocumentIcon, label: 'New document', onClick: createNewDocument },
     { icon: SearchIcon, label: 'Search', onClick: showSearchModal },
     { icon: SettingsIcon, label: 'Settings' },
+  ]
+
+  const accountActions = [
     { icon: AccountIcon, label: 'Log out', as: LogoutLink },
   ]
 
@@ -51,26 +54,50 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
       <div className="grow" />
 
       {isXs
-        ? navButtons.map(({ label, ...otherProps }) => (
-          <Tooltip key={label} content={label} fixed>
-            <NavButton label={label} {...otherProps} />
-          </Tooltip>
-        ))
-        : (
-          <Dropdown
-            items={navButtons.map(({ label, ...otherProps }) => (
-              <DropdownItem key={label} children={label} {...otherProps} />
+        ? (
+          <>
+            {mainActions.map(({ label, ...otherProps }) => (
+              <Tooltip key={label} content={label} fixed>
+                <NavButton label={label} {...otherProps} />
+              </Tooltip>
             ))}
-            placement="bottom-end"
-            className="pointer-events-auto"
-          >
-            <NavButton icon={MenuIcon} label="Menu" />
-          </Dropdown>
+
+            <NavDropdown
+              icon={AccountIcon}
+              label="Account"
+              actions={accountActions}
+              trigger="mouseenter focus"
+              hideOnClick={false}
+              interactiveBorder={10}
+            />
+          </>
+        )
+        : (
+          <NavDropdown
+            icon={MenuIcon}
+            label="Menu"
+            actions={[...mainActions, ...accountActions]}
+          />
         )
       }
     </nav>
   )
 })
+
+const NavDropdown = ({ icon, label, actions, ...otherProps }) => {
+  return (
+    <Dropdown
+      items={actions.map(({ label, ...otherProps }) => (
+        <DropdownItem key={label} children={label} {...otherProps} />
+      ))}
+      placement="bottom-end"
+      className="pointer-events-auto"
+      {...otherProps}
+    >
+      <NavButton icon={icon} label={label} />
+    </Dropdown>
+  )
+}
 
 const NavButton = forwardRef(({ icon: Icon, label, as: Component = 'button', ...otherProps }, ref) => {
   const buttonProps = Component === 'button' ? { type: 'button' } : {}
