@@ -6,7 +6,7 @@ import { projectPath } from '~/lib/routes'
 import useNewDocument from '~/lib/useNewDocument'
 
 const useApplicationKeyboardShortcuts = ({ sectionRefs, setSearchModalVisible }) => {
-  const { projects } = useContext()
+  const { projects, projectId } = useContext()
   const navigate = useNavigate()
   const createNewDocument = useNewDocument()
 
@@ -31,7 +31,7 @@ const useApplicationKeyboardShortcuts = ({ sectionRefs, setSearchModalVisible })
     event.preventDefault()
     event.stopPropagation()
     createNewDocument()
-  }, [])
+  }, [projectId])
 
   // Search
   useGlobalKeyboardShortcut(['MetaK', 'MetaJ', 'MetaG'], event => {
