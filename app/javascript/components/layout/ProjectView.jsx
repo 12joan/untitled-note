@@ -16,6 +16,7 @@ import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
 import OffcanavasSidebar from '~/components/layout/OffcanavasSidebar'
 import SearchModal from '~/components/layout/SearchModal'
+import FileStorageModal from '~/components/layout/FileStorageModal'
 import AwaitRedirect from '~/components/AwaitRedirect'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
@@ -54,9 +55,13 @@ const ProjectView = ({ childView }) => {
   }, [topBarHeight, sidebarAlwaysVisible])
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
-
   const [searchModalVisible, setSearchModalVisible] = useState(false)
-  useEffect(() => setSearchModalVisible(false), [childView, projectId])
+  const [fileStorageModalVisible, setFileStorageModalVisible] = useState(false)
+
+  useEffect(() => {
+    setSearchModalVisible(false)
+    setFileStorageModalVisible(false)
+  }, [childView, projectId])
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
     const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
@@ -127,6 +132,7 @@ const ProjectView = ({ childView }) => {
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
       showSearchModal={() => setSearchModalVisible(true)}
+      showFileStorageModal={() => setFileStorageModalVisible(true)}
     >
       <TopBar
         ref={multiplexRefs([topBarRef, topBarSizeRef])}
@@ -201,6 +207,7 @@ const ProjectView = ({ childView }) => {
 
       <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
       <SearchModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)} />
+      <FileStorageModal visible={fileStorageModalVisible} onClose={() => setFileStorageModalVisible(false)} />
     </ContextProvider>
   )
 }

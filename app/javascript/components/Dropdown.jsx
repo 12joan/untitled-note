@@ -12,7 +12,7 @@ const Dropdown = ({ items, className: userClassName = '', ...otherProps }) => {
   const isVisible = () => getTippy().state.isVisible
   const close = () => getTippy().hide()
 
-  const className = `rounded-lg backdrop-blur shadow-lg w-48 max-w-full ${userClassName}`
+  const className = `rounded-lg backdrop-blur-lg shadow-lg w-48 max-w-full ${userClassName}`
 
   useEventListener(window, 'keydown', event => {
     if (event.key === 'Escape' && isVisible()) {

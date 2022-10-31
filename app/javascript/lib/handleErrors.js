@@ -24,9 +24,9 @@ const handleUpdateProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
-const handleUploadProjectImageError = handleErrors(() => ({
+const handleUploadProjectImageError = handleErrors(({ customErrorMessage }) => ({
   title: 'Failed to upload project image',
-  message: 'An error occurred while uploading the project image. Make sure you are connected to the internet and try again.',
+  message: customErrorMessage ?? 'An error occurred while uploading the project image. Make sure you are connected to the internet and try again.',
   autoClose: 'slow',
 }))
 
@@ -78,6 +78,12 @@ const handleDeleteDocumentError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
+const handleDeleteFileError = handleErrors(() => ({
+  title: 'Failed to delete file',
+  message: 'An error occurred while deleting the file. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}))
+
 export {
   handleCreateProjectError,
   handleUpdateProjectError,
@@ -90,4 +96,5 @@ export {
   handleCreateDocumentError,
   handleUpdateDocumentError,
   handleDeleteDocumentError,
+  handleDeleteFileError,
 }

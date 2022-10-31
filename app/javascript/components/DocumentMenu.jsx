@@ -44,7 +44,7 @@ const DocumentMenu = ({ document: doc, updateDocument: updateDocumentOverride, i
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
 
-      <DropdownItem icon={DeleteIcon} className="children:text-red-500 dark:children:text-red-500" onClick={deleteDocument}>
+      <DropdownItem icon={DeleteIcon} className="children:text-red-500 dark:children:text-red-400" onClick={deleteDocument}>
         Delete document
       </DropdownItem>
     </>

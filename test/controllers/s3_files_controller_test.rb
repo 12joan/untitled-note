@@ -12,13 +12,15 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
       post = Struct.new(:url, :fields).new('some url', 'some fields')
 
       S3File.stub_any_instance(:presigned_post, post) do
-        assert_difference('S3File.count') do
-          post api_v1_project_s3_files_url(@project), params: {
-            role: 'project-image',
-            filename: 'image.png',
-            size: 150 * 1024,
-            content_type: 'image/png',
-          }
+        S3File.stub_any_instance(:url, 'some url') do
+          assert_difference('S3File.count') do
+            post api_v1_project_s3_files_url(@project), params: {
+              role: 'project-image',
+              filename: 'image.png',
+              size: 150 * 1024,
+              content_type: 'image/png',
+            }
+          end
         end
       end
     end
@@ -48,7 +50,10 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    get api_v1_project_s3_file_url(@project, @s3_file)
+    S3File.stub_any_instance(:url, 'some url') do
+      get api_v1_project_s3_file_url(@project, @s3_file)
+    end
+
     assert_response :success
     assert_equal @s3_file.id, JSON.parse(response.body)['id'], 'should return file id'
   end

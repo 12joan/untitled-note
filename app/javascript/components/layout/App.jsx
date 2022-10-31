@@ -2,6 +2,7 @@ import React, { useReducer } from 'react'
 
 import useStream from '~/lib/useStream'
 import ProjectsStream from '~/lib/streams/ProjectsStream'
+import FileStorageStream from '~/lib/streams/FileStorageStream'
 import { ContextProvider } from '~/lib/context'
 import { ApplicationRoutes } from '~/lib/routes'
 
@@ -13,6 +14,10 @@ import ToastContainer from '~/components/layout/ToastContainer'
 const App = () => {
   const [projectsCacheKey, invalidateProjectsCache] = useReducer(x => x + 1, 0)
   const futureProjects = useStream(resolve => ProjectsStream.index({}, resolve), [projectsCacheKey])
+
+  const futureQuotaUsage = useStream(resolve => FileStorageStream.quotaUsage(resolve), [])
+  const futureFiles = useStream(resolve => FileStorageStream.files(resolve), [])
+  const futureRemainingQuota = futureQuotaUsage.map(({ quota, used }) => quota - used)
 
   const fallback = (
     <div className="p-5 space-y-3">
@@ -26,7 +31,13 @@ const App = () => {
   return (
     <ErrorBoundary fallback={fallback}>
       {futureProjects.map(projects => (
-        <ContextProvider projects={projects} invalidateProjectsCache={invalidateProjectsCache}>
+        <ContextProvider
+          projects={projects}
+          invalidateProjectsCache={invalidateProjectsCache}
+          futureQuotaUsage={futureQuotaUsage}
+          futureFiles={futureFiles}
+          futureRemainingQuota={futureRemainingQuota}
+        >
           {projects.length === 0
             ? <NoProjectsView />
             : (

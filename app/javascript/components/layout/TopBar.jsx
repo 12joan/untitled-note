@@ -13,9 +13,11 @@ import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'
 import AccountIcon from '~/components/icons/AccountIcon'
+import StorageIcon from '~/components/icons/StorageIcon'
+import LogoutIcon from '~/components/icons/LogoutIcon'
 
 const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherProps }, ref) => {
-  const { project, showSearchModal } = useContext()
+  const { project, showSearchModal, showFileStorageModal } = useContext()
 
   const { isXs } = useBreakpoints()
 
@@ -28,7 +30,9 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
   ]
 
   const accountActions = [
-    { icon: AccountIcon, label: 'Log out', as: LogoutLink },
+    { icon: AccountIcon, label: 'Account info', onClick: () => { alert('Not implemented yet') } },
+    { icon: StorageIcon, label: 'File storage', onClick: showFileStorageModal },
+    { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
   ]
 
   return (
@@ -66,8 +70,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
               icon={AccountIcon}
               label="Account"
               actions={accountActions}
-              trigger="mouseenter focus"
-              hideOnClick={false}
+              trigger="mouseenter click"
               interactiveBorder={10}
             />
           </>

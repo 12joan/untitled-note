@@ -3,9 +3,18 @@ import imageCompression from 'browser-image-compression'
 import S3FilesAPI from '~/lib/resources/S3FilesAPI'
 import ProjectImageAPI from '~/lib/resources/ProjectImageAPI'
 
-const uploadProjectImage = async (project, originalFile) => {
+const uploadProjectImage = async ({ project, file: originalFile, availableSpace }) => {
+  const maxSize = Math.min(availableSpace, 300 * 1024)
+
+  // 3000 bytes is roughly the smallest imageCompression can make an image
+  if (originalFile.size > maxSize && maxSize < 3000) {
+    return Promise.reject({
+      customErrorMessage: 'You do not have enough storage space to upload this image.',
+    })
+  }
+
   const compressedFile = await imageCompression(originalFile, {
-    maxSizeMB: 300 / 1024,
+    maxSizeMB: maxSize / 1048576,
     maxWidthOrHeight: 512,
     useWebWorker: true,
   })

@@ -9,7 +9,8 @@ class S3File < ApplicationRecord
   validates :size, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :content_type, presence: true
 
-  include Queryable.permit(*%i[id role s3_key filename size content_type created_at])
+  include Queryable.permit(*%i[id project_id role s3_key filename size content_type url created_at])
+  include Listenable
 
   before_create do
     owner.update_storage_used(size)

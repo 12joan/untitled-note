@@ -36,6 +36,15 @@ Rails.application.reloader.to_prepare do
           index: ->(params) { make_broadcasting('Project#index', %i[user_id], params) },
         },
       },
+
+      FileStorage: {
+        api_controller: FileStorageAPI,
+
+        actions: {
+          quota_usage: ->(params) { make_broadcasting('FileStorage#quota_usage', %i[user_id], params) },
+          files: ->(params) { make_broadcasting('FileStorage#files', %i[user_id], params) },
+        },
+      },
     },
 
     listeners: {
@@ -72,6 +81,16 @@ Rails.application.reloader.to_prepare do
         broadcast make_broadcasting('Project#index', %i[user_id], {
           user_id: project.owner_id,
         })
+      },
+
+      S3File: ->(s3_file) {
+        %w(quota_usage files).each do |action|
+          broadcast make_broadcasting("FileStorage##{action}", %i[user_id], {
+            user_id: s3_file.owner.id,
+          })
+        end
+
+        broadcast_for s3_file.project if s3_file.role == 'project-image'
       },
     },
   )

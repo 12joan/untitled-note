@@ -16,6 +16,7 @@ import {
 } from '~/lib/handleErrors'
 import multiplexRefs from '~/lib/multiplexRefs'
 import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
+import filesize from '~/lib/filesize'
 
 import ReplaceWithSpinner from '~/components/ReplaceWithSpinner'
 
@@ -80,7 +81,7 @@ const EditProjectIcon = () => {
 const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
   const fileInputRef = useRef(null)
 
-  const { project } = useContext()
+  const { project, futureRemainingQuota, showFileStorageModal } = useContext()
 
   const isUploading = state === 'uploading'
   const isRemoving = state === 'removing'
@@ -102,7 +103,11 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
     setState('uploading')
 
     handleUploadProjectImageError(
-      uploadProjectImage(project, originalFile).then(() => overrideHasImage(true))
+      uploadProjectImage({
+        project,
+        file: originalFile,
+        availableSpace: futureRemainingQuota.orDefault(Math.infinity),
+      }).then(() => overrideHasImage(true))
     ).finally(() => setState('idle'))
   }
 
@@ -126,7 +131,7 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
 
       <h3 className="font-medium select-none mb-2">Image</h3>
 
-      <div className="space-x-2">
+      <div className="space-x-2 mb-2">
         <button
           type="button"
           className="btn btn-rect btn-secondary relative"
@@ -151,6 +156,15 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
           </button>
         )}
       </div>
+
+      {futureRemainingQuota.map(remainingQuota => (
+        <button
+          type="button"
+          className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
+          onClick={showFileStorageModal}
+          children={`${filesize(remainingQuota)} available`}
+        />
+      )).orDefault(null)}
     </div>
   )
 }

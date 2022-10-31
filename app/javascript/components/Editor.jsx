@@ -25,7 +25,7 @@ import DocumentMenu from '~/components/DocumentMenu'
 import EditorTags from '~/components/EditorTags'
 import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import TagsIcon from '~/components/icons/TagsIcon'
-import DocumentMenuIcon from '~/components/icons/DocumentMenuIcon'
+import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
@@ -133,7 +133,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
           <div onClick={event => event.stopPropagation()}>
             <Dropdown items={documentMenu} placement="bottom-end">
               <button type="button" className="btn p-2 aspect-square">
-                <DocumentMenuIcon size="1.25em" ariaLabel="Document menu" />
+                <OverflowMenuIcon size="1.25em" ariaLabel="Document menu" />
               </button>
             </Dropdown>
           </div>

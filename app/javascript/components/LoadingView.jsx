@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useContext } from '~/lib/context'
 import { useTimeout } from '~/lib/useTimer'
 
-const LoadingView = () => {
+const LoadingView = ({ style = {}, ...otherProps }) => {
   const { topBarHeight = 0 } = useContext()
   const [showLoading, setShowLoading] = useState(false)
 
@@ -15,7 +15,9 @@ const LoadingView = () => {
       style={{
         paddingBottom: topBarHeight,
         opacity: showLoading ? 1 : 0,
+        ...style,
       }}
+      {...otherProps}
     >
       {showLoading && (
         <div className="flex gap-2" aria-live="polite" aria-label="Loading">

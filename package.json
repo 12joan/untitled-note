@@ -20,6 +20,7 @@
     "async-mutex": "^0.4.0",
     "browser-image-compression": "^2.0.0",
     "emoji-mart": "^5.2.2",
+    "human-readable": "^0.2.1",
     "locale-includes": "^1.0.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
