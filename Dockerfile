@@ -9,7 +9,7 @@ COPY Gemfile.lock /app/
 RUN bundle install
 
 COPY package.json yarn.lock /app/
-RUN yarn install --check-files
+RUN yarn install --check-files --network-timeout 300000
 
 COPY . /app/
 
