@@ -3,7 +3,8 @@ version: '3'
 services:
   web:
     build: .
-    environment:
+    command: 'yarn dev'
+    environment: &common-env
       RAILS_ENV: development
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
@@ -11,7 +12,6 @@ services:
       TYPESENSE_API_KEY: trust
       S3_BUCKET: untitled-note-app-development
     env_file: .env
-    command: 'yarn dev'
     ports:
       - '3000:3000'
       - '3035:3035'
@@ -22,6 +22,17 @@ services:
       - db
       - redis
       - typesense
+
+  clockwork:
+    build: .
+    entrypoint: ''
+    command: 'clockwork config/clockwork.rb'
+    environment: *common-env
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - db
 
   db:
     image: postgres
