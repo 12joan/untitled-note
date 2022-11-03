@@ -175,6 +175,7 @@ const ProjectView = ({ childView }) => {
 
       {showFormattingToolbar && (
         <aside
+          key={projectId}
           ref={formattingToolbarRef}
           className="fixed bottom-0 p-5 pt-1 pl-1 overflow-y-auto flex"
           style={{
