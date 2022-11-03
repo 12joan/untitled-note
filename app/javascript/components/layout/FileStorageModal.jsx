@@ -99,7 +99,7 @@ const FileStorageModal = ({ visible, onClose }) => {
                     </div>
 
                     <Dropdown items={fileMenu(file)} placement="bottom-end">
-                      <button type="button" className="btn p-2 aspect-square">
+                      <button type="button" className="shrink-0 btn p-2 aspect-square">
                         <OverflowMenuIcon size="1.25em" ariaLabel="File actions" />
                       </button>
                     </Dropdown>
