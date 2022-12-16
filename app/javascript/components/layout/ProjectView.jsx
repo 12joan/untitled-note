@@ -61,7 +61,7 @@ const ProjectView = ({ childView }) => {
   useEffect(() => {
     setSearchModalVisible(false)
     setFileStorageModalVisible(false)
-  }, [childView, projectId])
+  }, [childView.key, projectId])
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
     const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
