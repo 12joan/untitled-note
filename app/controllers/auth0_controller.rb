@@ -28,6 +28,33 @@ class Auth0Controller < ApplicationController
     redirect_to logout_url, allow_other_host: true
   end
 
+  def reset_password
+    uri = URI::HTTPS.build(
+      host: ENV.fetch('AUTH0_DOMAIN'),
+      path: '/dbconnections/change_password',
+    )
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request['content-type'] = 'application/json'
+
+    request.body = {
+      client_id: ENV.fetch('AUTH0_CLIENT_ID'),
+      email: current_user.email,
+      connection: 'Username-Password-Authentication',
+    }.to_json
+
+    response = http.request(request)
+
+    if response.code == '200'
+      render json: {}
+    else
+      render json: { error: response.body }, status: :internal_server_error
+    end
+  end
+
   private
 
   def logout_url

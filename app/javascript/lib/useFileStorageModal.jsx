@@ -7,11 +7,10 @@ import S3FilesAPI from '~/lib/resources/S3FilesAPI'
 import { handleDeleteFileError } from '~/lib/handleErrors'
 import filesize from '~/lib/filesize'
 
-import { ModalRoot, ModalPanel, ModalTitle } from '~/components/Modal'
+import { ModalTitleWithCloseButton } from '~/components/Modal'
 import Meter from '~/components/Meter'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
 import LoadingView from '~/components/LoadingView'
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 import DownloadIcon from '~/components/icons/DownloadIcon'
 import DeleteIcon from '~/components/icons/DeleteIcon'
@@ -57,17 +56,9 @@ const FileStorageModal = ({ onClose }) => {
 
   return (
     <>
-      <div className="flex items-start justify-between gap-2">
-        <ModalTitle>File storage</ModalTitle>
-
-        <button
-          type="button"
-          className="btn btn-no-rounded rounded-full p-2 aspect-square"
-          onClick={onClose}
-        >
-          <LargeCloseIcon size="1.25em" ariaLabel="Close" />
-        </button>
-      </div>
+      <ModalTitleWithCloseButton onClose={onClose}>
+        File storage
+      </ModalTitleWithCloseButton>
 
       {futureData.map(({ quotaUsage, files }) => (
         <>

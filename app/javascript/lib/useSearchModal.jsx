@@ -19,7 +19,6 @@ import {
 } from '~/lib/routes'
 import useNewDocument from '~/lib/useNewDocument'
 
-import { ModalRoot, ModalPanel } from '~/components/Modal'
 import SearchIcon from '~/components/icons/SearchIcon'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import SettingsIcon from '~/components/icons/SettingsIcon'

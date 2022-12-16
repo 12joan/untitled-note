@@ -10,6 +10,7 @@ import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import useApplicationKeyboardShortcuts from '~/lib/useApplicationKeyboardShortcuts'
 import useSearchModal from '~/lib/useSearchModal'
+import useAccountModal from '~/lib/useAccountModal'
 import useFileStorageModal from '~/lib/useFileStorageModal'
 import cssAdd from '~/lib/cssAdd'
 
@@ -59,10 +60,12 @@ const ProjectView = ({ childView }) => {
   const hideOffcanvasSidebar = () => setOffcanvasSidebarVisible(false)
 
   const [searchModal, showSearchModal, hideSearchModal, toggleSearchModal] = useSearchModal()
+  const [accountModal, showAccountModal, hideAccountModal] = useAccountModal()
   const [fileStorageModal, showFileStorageModal, hideFileStorageModal] = useFileStorageModal()
 
   useEffect(() => {
     hideSearchModal()
+    hideAccountModal()
     hideFileStorageModal()
   }, [childView.key, projectId])
 
@@ -135,6 +138,7 @@ const ProjectView = ({ childView }) => {
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
       showSearchModal={showSearchModal}
+      showAccountModal={showAccountModal}
       showFileStorageModal={showFileStorageModal}
     >
       <TopBar
@@ -212,6 +216,7 @@ const ProjectView = ({ childView }) => {
       <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
 
       {searchModal}
+      {accountModal}
       {fileStorageModal}
     </ContextProvider>
   )
