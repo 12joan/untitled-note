@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useMemo } from 'react'
 import { localeIncludes } from 'locale-includes'
 import { useNavigate } from 'react-router-dom'
 
+import useModal from '~/lib/useModal'
 import { useContext } from '~/lib/context'
 import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
 import SearchAPI from '~/lib/resources/SearchAPI'
@@ -28,6 +29,21 @@ import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import ProjectIcon from '~/components/ProjectIcon'
 import TagIcon from '~/components/icons/TagIcon'
 import DocumentIcon from '~/components/icons/DocumentIcon'
+
+const useSearchModal = () => useModal(SearchModal, {
+  customBackdropClassNames: {
+    overflow: null,
+    bg: null,
+  },
+  customPanelClassNames: {
+    margin: 'mt-[20vh] mb-auto',
+    width: 'narrow',
+    shadow: 'shadow-dialog-heavy',
+    rounded: 'rounded-xl',
+    padding: null,
+    bg: 'bg-slate-50/75 dark:bg-slate-700/75',
+  },
+})
 
 const makeDynamicSuggestion = (
   item,
@@ -75,7 +91,7 @@ const makeSingletonSource = ({ name, action, ...rest }) => (searchQuery, handleA
   ? [{ key: name, label: name, onCommit: () => handleAction(() => action()), ...rest }]
   : []
 
-const SearchModal = ({ visible, onClose }) => {
+const SearchModal = ({ onClose }) => {
   const navigate = useNavigate()
   const performNewDocument = useNewDocument()
 
@@ -95,12 +111,10 @@ const SearchModal = ({ visible, onClose }) => {
   const inputRef = useRef()
 
   useEffect(() => {
-    if (visible) {
-      const input = inputRef.current
-      input.focus()
-      input.setSelectionRange(0, input.value.length)
-    }
-  }, [visible])
+    const input = inputRef.current
+    input.focus()
+    input.setSelectionRange(0, input.value.length)
+  }, [])
 
   const handleAction = action => {
     onClose()
@@ -219,76 +233,72 @@ const SearchModal = ({ visible, onClose }) => {
     failure: () => 'Something went wrong',
   })
 
-  return visible && (
-    <ModalRoot open={visible} onClose={onClose}>
-      <div className="fixed inset-0 flex p-5" data-focus-trap="true">
-        <ModalPanel className="mt-[20vh] mb-auto narrow bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog-heavy rounded-xl">
-          <div className="flex px-5 py-3 gap-2 items-center">
-            <SearchIcon size="1.25em" className="text-slate-500 dark:text-slate-400" noAriaLabel />
+  return (
+    <>
+      <div className="flex px-5 py-3 gap-2 items-center">
+        <SearchIcon size="1.25em" className="text-slate-500 dark:text-slate-400" noAriaLabel />
 
-            <input
-              {...inputProps}
-              ref={inputRef}
-              type="text"
-              className="grow text-xl bg-transparent no-focus-ring"
-              placeholder={`Search ${currentProject.name}`}
-              value={searchQuery}
-              onChange={event => {
-                setSearchQuery(event.target.value)
-                inputProps.onChange(event)
-              }}
-              onKeyDown={event => {
-                inputProps.onKeyDown(event)
+        <input
+          {...inputProps}
+          ref={inputRef}
+          type="text"
+          className="grow text-xl bg-transparent no-focus-ring"
+          placeholder={`Search ${currentProject.name}`}
+          value={searchQuery}
+          onChange={event => {
+            setSearchQuery(event.target.value)
+            inputProps.onChange(event)
+          }}
+          onKeyDown={event => {
+            inputProps.onKeyDown(event)
 
-                if (event.key === 'Escape' && !isEmpty) {
-                  event.preventDefault()
-                  event.stopPropagation()
-                  setSearchQuery('')
-                }
-              }}
-            />
-          </div>
+            if (event.key === 'Escape' && !isEmpty) {
+              event.preventDefault()
+              event.stopPropagation()
+              setSearchQuery('')
+            }
+          }}
+        />
+      </div>
 
-          {showSuggestions && (
-            <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto">
-              {mapSuggestions(({ suggestion: { label, icon, description }, active, suggestionProps }) => (
-                <div
-                  {...suggestionProps}
-                  data-active={active}
-                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-3 flex gap-2"
-                >
-                  <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
-                    {icon}
-                  </div>
+      {showSuggestions && (
+        <div {...suggestionContainerProps} className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto">
+          {mapSuggestions(({ suggestion: { label, icon, description }, active, suggestionProps }) => (
+            <div
+              {...suggestionProps}
+              data-active={active}
+              className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-3 flex gap-2"
+            >
+              <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
+                {icon}
+              </div>
 
-                  <div className="grow">
-                    <div>{label}</div>
+              <div className="grow">
+                <div>{label}</div>
 
-                    {typeof description === 'string' && (
-                      <div
-                        className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
-                        children={description}
-                      />
-                    )}
+                {typeof description === 'string' && (
+                  <div
+                    className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
+                    children={description}
+                  />
+                )}
 
-                    {typeof description === 'object' && (
-                      <div className="text-sm" dangerouslySetInnerHTML={description} />
-                    )}
-                  </div>
-                </div>
-              ))}
+                {typeof description === 'object' && (
+                  <div className="text-sm" dangerouslySetInnerHTML={description} />
+                )}
+              </div>
+            </div>
+          ))}
 
-              {hint && (
-                <div className="p-2 text-slate-500 dark:text-slate-400" aria-live="polite">
-                  {hint}
-                </div>
-              )}
+          {hint && (
+            <div className="p-2 text-slate-500 dark:text-slate-400" aria-live="polite">
+              {hint}
             </div>
           )}
-        </ModalPanel>
-      </div>
-    </ModalRoot>
+        </div>
+      )}
+    </>
   )
 }
 
-export default SearchModal
+export default useSearchModal

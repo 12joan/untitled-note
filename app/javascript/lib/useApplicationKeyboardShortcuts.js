@@ -5,7 +5,7 @@ import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
 import { projectPath } from '~/lib/routes'
 import useNewDocument from '~/lib/useNewDocument'
 
-const useApplicationKeyboardShortcuts = ({ sectionRefs, setSearchModalVisible }) => {
+const useApplicationKeyboardShortcuts = ({ sectionRefs, toggleSearchModal }) => {
   const { projects, projectId } = useContext()
   const navigate = useNavigate()
   const createNewDocument = useNewDocument()
@@ -37,7 +37,7 @@ const useApplicationKeyboardShortcuts = ({ sectionRefs, setSearchModalVisible })
   useGlobalKeyboardShortcut(['MetaK', 'MetaJ', 'MetaG'], event => {
     event.preventDefault()
     event.stopPropagation()
-    setSearchModalVisible(visible => !visible)
+    toggleSearchModal()
   }, [])
 
   // Move focus between sections

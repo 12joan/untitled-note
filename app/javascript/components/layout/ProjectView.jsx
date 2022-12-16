@@ -9,14 +9,14 @@ import useBreakpoints from '~/lib/useBreakpoints'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
 import useApplicationKeyboardShortcuts from '~/lib/useApplicationKeyboardShortcuts'
+import useSearchModal from '~/lib/useSearchModal'
+import useFileStorageModal from '~/lib/useFileStorageModal'
 import cssAdd from '~/lib/cssAdd'
 
 import TopBar from '~/components/layout/TopBar'
 import ProjectsBar from '~/components/layout/ProjectsBar'
 import Sidebar from '~/components/layout/Sidebar'
 import OffcanavasSidebar from '~/components/layout/OffcanavasSidebar'
-import SearchModal from '~/components/layout/SearchModal'
-import FileStorageModal from '~/components/layout/FileStorageModal'
 import AwaitRedirect from '~/components/AwaitRedirect'
 import OverviewView from '~/components/layout/OverviewView'
 import EditProjectView from '~/components/layout/EditProjectView'
@@ -55,12 +55,15 @@ const ProjectView = ({ childView }) => {
   }, [topBarHeight, sidebarAlwaysVisible])
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
-  const [searchModalVisible, setSearchModalVisible] = useState(false)
-  const [fileStorageModalVisible, setFileStorageModalVisible] = useState(false)
+  const showOffcanvasSidebar = () => setOffcanvasSidebarVisible(true)
+  const hideOffcanvasSidebar = () => setOffcanvasSidebarVisible(false)
+
+  const [searchModal, showSearchModal, hideSearchModal, toggleSearchModal] = useSearchModal()
+  const [fileStorageModal, showFileStorageModal, hideFileStorageModal] = useFileStorageModal()
 
   useEffect(() => {
-    setSearchModalVisible(false)
-    setFileStorageModalVisible(false)
+    hideSearchModal()
+    hideFileStorageModal()
   }, [childView.key, projectId])
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
@@ -124,15 +127,15 @@ const ProjectView = ({ childView }) => {
       mainRef,
       formattingToolbarRef,
     ],
-    setSearchModalVisible,
+    toggleSearchModal,
   })
 
   return (
     <ContextProvider
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
-      showSearchModal={() => setSearchModalVisible(true)}
-      showFileStorageModal={() => setFileStorageModalVisible(true)}
+      showSearchModal={showSearchModal}
+      showFileStorageModal={showFileStorageModal}
     >
       <TopBar
         ref={multiplexRefs([topBarRef, topBarSizeRef])}
@@ -207,8 +210,9 @@ const ProjectView = ({ childView }) => {
       </main>
 
       <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
-      <SearchModal visible={searchModalVisible} onClose={() => setSearchModalVisible(false)} />
-      <FileStorageModal visible={fileStorageModalVisible} onClose={() => setFileStorageModalVisible(false)} />
+
+      {searchModal}
+      {fileStorageModal}
     </ContextProvider>
   )
 }
