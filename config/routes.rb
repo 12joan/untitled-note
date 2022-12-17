@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :projects, only: %i[create update destroy] do
         resources :documents, only: %i[show create update destroy]
+        resources :tags, only: %i[update]
         resource :blank_document, only: %i[create]
         resources :s3_files, only: %i[create destroy show]
         resource :image, only: %i[update], controller: :project_images

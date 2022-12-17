@@ -78,6 +78,19 @@ const handleDeleteDocumentError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
+const handleRenameTagError = handleErrors(error => error.response?.status === 422
+  ? {
+    title: 'Tag name already exists',
+    message: 'A tag with this name already exists. Please choose a different name.',
+    autoClose: 'slow',
+  }
+  : {
+    title: 'Failed to rename tag',
+    message: 'An error occurred while renaming the tag. Make sure you are connected to the internet and try again.',
+    autoClose: 'slow',
+  }
+)
+
 const handleDeleteFileError = handleErrors(() => ({
   title: 'Failed to delete file',
   message: 'An error occurred while deleting the file. Make sure you are connected to the internet and try again.',
@@ -102,6 +115,7 @@ export {
   handleCreateDocumentError,
   handleUpdateDocumentError,
   handleDeleteDocumentError,
+  handleRenameTagError,
   handleDeleteFileError,
   handleResetPasswordError,
 }

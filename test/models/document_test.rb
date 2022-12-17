@@ -130,6 +130,19 @@ class DocumentTest < ActiveSupport::TestCase
     end
   end
 
+  test 'increment_remote_version increments remote_version without saving' do
+    document = create(:document, remote_version: 1)
+    document.increment_remote_version
+    assert_equal 2, document.remote_version
+    assert_equal 1, document.reload.remote_version
+  end
+
+  test 'increment_remote_version! increments remote_version and saves' do
+    document = create(:document, remote_version: 1)
+    document.increment_remote_version!
+    assert_equal 2, document.reload.remote_version
+  end
+
   test 'search returns up to date documents matching query and project' do
     my_project = create(:project)
     other_project = create(:project)

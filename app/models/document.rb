@@ -33,6 +33,15 @@ class Document < ApplicationRecord
     (preview.presence || plain_body.slice(0, 100)).strip
   end
 
+  def increment_remote_version
+    self.remote_version += 1
+  end
+
+  def increment_remote_version!
+    increment_remote_version
+    save!
+  end
+
   def tags_attributes=(tags_attributes)
     documents_tags.each do |documents_tag|
       if tags_attributes.none? { |tag_attributes| tag_attributes[:text] == documents_tag.tag.text }
