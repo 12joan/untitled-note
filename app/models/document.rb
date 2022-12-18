@@ -4,6 +4,7 @@ class Document < ApplicationRecord
   has_many :tags, through: :documents_tags
   accepts_nested_attributes_for :tags
 
+  scope :blank, -> { where(blank: true) }
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 

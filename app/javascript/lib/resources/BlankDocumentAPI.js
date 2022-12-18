@@ -7,8 +7,6 @@ const BlankDocumentAPI = (projectId) => new ResourcesAPI({
       method: 'POST',
     },
   },
-
-  transformRequestParams: () => {},
 })
 
 export default BlankDocumentAPI

@@ -11,11 +11,11 @@ const useNewDocument = () => {
   const { pathname: currentPath } = useLocation()
   const { projectId } = useContext()
 
-  const createNewDocument = () => awaitRedirect({
+  const createNewDocument = ({ tag } = {}) => awaitRedirect({
     projectId,
     navigate,
     promisePath: handleCreateDocumentError(
-      BlankDocumentAPI(projectId).create()
+      BlankDocumentAPI(projectId).create({ tag_id: tag?.id })
     ).then(({ id }) => documentPath(projectId, id)),
     fallbackPath: currentPath,
   })

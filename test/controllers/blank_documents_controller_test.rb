@@ -6,32 +6,30 @@ class BlankDocumentsControllerTest < ActionDispatch::IntegrationTest
     as_user(@project.owner)
   end
 
-  test 'when no blank document exists should create a new blank document' do
-    Document.where(blank: true).destroy_all
-
+  test 'creates a blank document when no tag is provided' do
     assert_difference('Document.count', 1) do
       post api_v1_project_blank_document_url(@project)
     end
 
     assert_response :success
 
-    document = Document.find(JSON.parse(response.body).fetch('id'))
-
+    document = response_document
     assert_predicate document, :blank?
+    assert_empty document.tags
   end
 
-  test 'when a blank document exists should return it' do
-    create(:document, project: @project, blank: true, title: 'Existing document')
-
-    assert_no_difference('Document.count') do
-      post api_v1_project_blank_document_url(@project)
-    end
+  test 'when a tag is provided, creates a blank document with that tag' do
+    tag = create(:tag, project: @project)
+    post api_v1_project_blank_document_url(@project), params: { tag_id: tag.id }
 
     assert_response :success
 
-    document = Document.find(JSON.parse(response.body).fetch('id'))
-
+    document = response_document
     assert_predicate document, :blank?
-    assert_equal 'Existing document', document.title
+    assert_equal [tag], document.tags
   end
+
+  private
+
+  def response_document = Document.find(JSON.parse(response.body).fetch('id'))
 end

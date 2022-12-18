@@ -6,6 +6,7 @@ import useTitle from '~/lib/useTitle'
 import { OverviewLink } from '~/lib/routes'
 import useStream from '~/lib/useStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
+import useNewDocument from '~/lib/useNewDocument'
 import useRenameTag from '~/lib/useRenameTag'
 
 import BackButton from '~/components/BackButton'
@@ -37,11 +38,12 @@ const TagDocumentsView = ({ tagId }) => {
     )
   }
 
+  const createNewDocument = useNewDocument()
   const [renameTagModal, openRenameTagModal] = useRenameTag()
 
   const tagMenu = tag => (
     <>
-      <DropdownItem icon={NewDocumentIcon} onClick={() => alert('Not implemented yet')}>
+      <DropdownItem icon={NewDocumentIcon} onClick={() => createNewDocument({ tag })}>
         New document
       </DropdownItem>
 

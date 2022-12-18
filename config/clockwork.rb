@@ -5,11 +5,19 @@ module Clockwork
   handler do |job|
     ActiveRecord::Base.connection_pool.with_connection do
       case job
-      when 'clean_up_s3_files'
-        CleanUpS3Files.perform
+      when 'nightly'
+        isolate_errors { CleanUpS3Files.perform }
+        isolate_errors { CleanUpBlankDocuments.perform }
       end
     end
   end
 
-  every(1.day, 'clean_up_s3_files', at: '00:00')
+  every(1.day, 'nightly', at: '00:00')
+
+  def self.isolate_errors
+    yield
+  rescue => e
+    puts e.message
+    puts e.backtrace
+  end
 end
