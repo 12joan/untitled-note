@@ -353,15 +353,15 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@emoji-mart/data@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.0.8.tgz#07f9603878b9a813ba16a6ebbabd8515f3d1b91d"
-  integrity sha512-AMpqLrR80dHfj8ZA6xaf8/t9reBy88vz07fBdwKVVoUX6X2Wi+R2p2uhIZFqNZe8zRd6kga3hKheqK+deElEZw==
+"@emoji-mart/data@^1.0.8", "@emoji-mart/data@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.1.0.tgz#a87906c6ac91951667a175572b2071a05a0a8590"
+  integrity sha512-gwwGC0v5+BQM5On8hy0Uw7qT+xBHVLFuamHj8wHLo4JkuYM+XlGbQuQZj/X7JJLQuBiHs4d3Xh2O+h6YlbtCCA==
 
-"@emoji-mart/react@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@emoji-mart/react/-/react-1.0.1.tgz#46b6a2e92faf16fa9b7f9471f137fa2e3d1e8ac3"
-  integrity sha512-ALhLD96BOL5w+a4NI5NpmfqfF1aVjjj2qJE0dLst/OhjBfVmpteWNgn/h8LZy9ulU6AnbeS+13KnPFzDjCvRRw==
+"@emoji-mart/react@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@emoji-mart/react/-/react-1.1.0.tgz#afeaac086c951a0b6d782ff461955be1c9904706"
+  integrity sha512-6MnXNSfR69hmgH/mZIux4NGAjmS90f+rtJu8Soq1rCb27JWmYCQLAP7BqOVPUN4BL+c4ONUK+PPPihQho0eIxg==
 
 "@esbuild/android-arm@0.15.10":
   version "0.15.10"
@@ -421,10 +421,10 @@
   dependencies:
     "@floating-ui/dom" "^1.0.5"
 
-"@headlessui/react@^1.7.5":
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.5.tgz#c8864b0731d95dbb34aa6b3a60d0ee9ae6f8a7ca"
-  integrity sha512-UZSxOfA0CYKO7QDT5OGlFvesvlR1SKkawwSjwQJwt7XQItpzRKdE3ZUQxHcg4LEz3C0Wler2s9psdb872ynwrQ==
+"@headlessui/react@^1.7.7":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.7.tgz#d6f8708d8943ae8ebb1a6929108234e4515ac7e8"
+  integrity sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==
   dependencies:
     client-only "^0.0.1"
 
@@ -514,10 +514,10 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4.tgz#70a3ca56809f7aaabb80af2f9c01ae51e1a8ed41"
   integrity sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==
 
-"@remix-run/router@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.4.tgz#cbfbec6735711e7c2fc93b9b40adf70ef5a39990"
-  integrity sha512-gTL8H5USTAKOyVA4xczzDJnC3HMssdFa3tRlwBicXynx9XfiXwneHnYQogwSKpdCkjXISrEKSTtX62rLpNEVQg==
+"@remix-run/router@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.1.0.tgz#b48db8148c8a888e50580a8152b6f68161c49406"
+  integrity sha512-rGl+jH/7x1KBCQScz9p54p0dtPLNeKGb3e0wD2H5/oZj41bwQUnXdzbj2TbUAFhvD7cp9EyEQA4dEgpUFa1O7Q==
 
 "@tailwindcss/line-clamp@^0.4.2":
   version "0.4.2"
@@ -698,10 +698,10 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
-"@udecode/plate-emoji@18.13.0":
-  version "18.13.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.13.0.tgz#28b56e3b2a84328b033c0253259206fe79e1a201"
-  integrity sha512-YWWmTCat1hj2h+AhkHrm75ipIZ6gtREXn9EfbWEVdA2GSOpoeCAh0llG1QRzY17Pr8QyzG6WQuhYg6fnixA9IA==
+"@udecode/plate-emoji@18.13.2":
+  version "18.13.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.13.2.tgz#17e84036d65c739684ddfb1e1e0993175ceb533c"
+  integrity sha512-BAGeqUHg2+yCtB9pSyIWJHNg14nQBnoWWRzYuAwW/XtyTY7PNWiaJS9v9ghQmq5L9+I8KP7JNXRJgX1K611eXw==
   dependencies:
     "@emoji-mart/data" "^1.0.8"
     "@udecode/plate-combobox" "18.13.0"
@@ -736,10 +736,10 @@
   dependencies:
     "@udecode/plate-core" "18.13.0"
 
-"@udecode/plate-headless@^18.13.1":
-  version "18.13.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.13.1.tgz#cda30ee6c080f97ed1ef826d0182500566c7890a"
-  integrity sha512-Fq6+NmXzR7qiB2HKAXC2SnjuFdKKoVMFKsvqW1Dd4CN0AHALnM3KJJ7JBvt6Jp6pD3VesMHKHeLcctjhIcab2w==
+"@udecode/plate-headless@^18.13.2":
+  version "18.13.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.13.2.tgz#9e8c7083bb8a30a9dc205034cb1dcf3edf265bdb"
+  integrity sha512-ZRdWseMxvihvbDgyhuxDFNOl6AS5uZQW4D3qD60F3/unx+c6iOk8FUmBBTzGsUI6ZbfQZYro9ck6Zbf2sikhgw==
   dependencies:
     "@udecode/plate-alignment" "18.13.0"
     "@udecode/plate-autoformat" "18.13.0"
@@ -752,7 +752,7 @@
     "@udecode/plate-combobox" "18.13.0"
     "@udecode/plate-comments" "18.13.0"
     "@udecode/plate-core" "18.13.0"
-    "@udecode/plate-emoji" "18.13.0"
+    "@udecode/plate-emoji" "18.13.2"
     "@udecode/plate-find-replace" "18.13.0"
     "@udecode/plate-floating" "18.13.0"
     "@udecode/plate-font" "18.13.0"
@@ -1257,10 +1257,10 @@ css-has-pseudo@^3.0.4:
   dependencies:
     postcss-selector-parser "^6.0.9"
 
-css-has-pseudo@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/css-has-pseudo/-/css-has-pseudo-4.0.1.tgz#3807a54d073c3c8c98ab1282148b428d8ae41b72"
-  integrity sha512-L3s0E0B+DhaFhUVpBAJri+Z7xVijUJQJUIDluB7LcsdNk8MIUS1a2EhrMhmMSGnFULcecQOjIenuvCYgKZBwew==
+css-has-pseudo@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/css-has-pseudo/-/css-has-pseudo-4.0.2.tgz#c1e00df714685497d5bc00168872b72720dc87e4"
+  integrity sha512-bhAVH1oI51Jc99i7gPXCURWOQbeaoWp37Z/ZL7kkd/gkZjxE2VZLc85B8BhaxHGEtXGIEmQMAPQc2cqSqcgAeA==
   dependencies:
     "@csstools/selector-specificity" "^2.0.1"
     postcss-selector-parser "^6.0.10"
@@ -1348,10 +1348,10 @@ electron-to-chromium@^1.4.251:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.265.tgz#45630ae190228f945ff79c060b99574b1347e5a7"
   integrity sha512-38KaYBNs0oCzWCpr6j7fY/W9vF0vSp4tKFIshQTgdZMhUpkxgotkQgjJP6iGMdmlsgMs3i0/Hkko4UXLTrkYVQ==
 
-emoji-mart@^5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-5.3.3.tgz#f079700be84d5b13653378cf7bba45fb0217452b"
-  integrity sha512-rr3wXUimYFQ5Mf50P/5UOsRibr5JSJE3Nj4zw0aDglb3GSHzn/wGKBoXoSkjtWaji8UcmXcYn3cdilD2Eix6iQ==
+emoji-mart@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-5.4.0.tgz#441f3b89452d44516a70d88afe085a82806d757e"
+  integrity sha512-xrRrUmMqZG64oRxmUZcf8zSMUGQtIUYUL3aZD5iMkqAve+I9wMNh3OVOXL7NW9fEm48L2LI3BUPpj/DUIAJrVg==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -2014,10 +2014,10 @@ postcss-import@^14.1.0:
     read-cache "^1.0.0"
     resolve "^1.1.7"
 
-postcss-import@^15.0.1:
-  version "15.0.1"
-  resolved "https://registry.yarnpkg.com/postcss-import/-/postcss-import-15.0.1.tgz#5887da24440ef259324d65e08343437a43ff92b1"
-  integrity sha512-UGlvk8EgT7Gm/Ndf9xZHnzr8xm8P54N8CBWLtcY5alP+YxlEge/Rv78etQyevZs3qWTE9If13+Bo6zATBrPOpA==
+postcss-import@^15.1.0:
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/postcss-import/-/postcss-import-15.1.0.tgz#41c64ed8cc0e23735a9698b3249ffdbf704adc70"
+  integrity sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==
   dependencies:
     postcss-value-parser "^4.0.0"
     read-cache "^1.0.0"
@@ -2187,10 +2187,10 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.2.0:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8.4.18, postcss@^8.4.19:
-  version "8.4.19"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.19.tgz#61178e2add236b17351897c8bcc0b4c8ecab56fc"
-  integrity sha512-h+pbPsyhlYj6N2ozBmHhHrs9DzGmbaarbLvWipMRO7RLS+v4onj26MPFXA5OBYFxyqYhUJK456SwDcY9H2/zsA==
+postcss@^8.4.18, postcss@^8.4.20:
+  version "8.4.20"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.20.tgz#64c52f509644cecad8567e949f4081d98349dc56"
+  integrity sha512-6Q04AXR1212bXr5fh03u8aAwbLxAQNGQ/Q1LNa0VfOI06ZAlhPHtQvE4OIdpj4kLThXilalPnmDSOD65DcHt+g==
   dependencies:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
@@ -2291,19 +2291,19 @@ react-refresh@^0.14.0:
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
 react-router-dom@6:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.4.tgz#4271ec66333c440d1754477e4e6a3a5acb5487f8"
-  integrity sha512-0Axverhw5d+4SBhLqLpzPhNkmv7gahUwlUVIOrRLGJ4/uwt30JVajVJXqv2Qr/LCwyvHhQc7YyK1Do8a9Jj7qA==
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.5.0.tgz#3970bdcaa7c710a6e0b478a833ba0b4b8ae61a6f"
+  integrity sha512-/XzRc5fq80gW1ctiIGilyKFZC/j4kfe75uivMsTChFbkvrK4ZrF3P3cGIc1f/SSkQ4JiJozPrf+AwUHHWVehVg==
   dependencies:
-    "@remix-run/router" "1.0.4"
-    react-router "6.4.4"
+    "@remix-run/router" "1.1.0"
+    react-router "6.5.0"
 
-react-router@6.4.4:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.4.tgz#8e7794f55ccc7050cb03937c87ff3720ce9f8b60"
-  integrity sha512-SA6tSrUCRfuLWeYsTJDuriRqfFIsrSvuH7SqAJHegx9ZgxadE119rU8oOX/rG5FYEthpdEaEljdjDlnBxvfr+Q==
+react-router@6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.5.0.tgz#b53f15543a60750c925609d2e38037ac5aed6dd3"
+  integrity sha512-fqqUSU0NC0tSX0sZbyuxzuAzvGqbjiZItBQnyicWlOUmzhAU8YuLgRbaCL2hf3sJdtRy4LP/WBrWtARkMvdGPQ==
   dependencies:
-    "@remix-run/router" "1.0.4"
+    "@remix-run/router" "1.1.0"
 
 react-textarea-autosize@^8.3.3, react-textarea-autosize@^8.4.0:
   version "8.4.0"
@@ -2420,10 +2420,10 @@ safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-sass@^1.56.2:
-  version "1.56.2"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.2.tgz#9433b345ab3872996c82a53a58c014fd244fd095"
-  integrity sha512-ciEJhnyCRwzlBCB+h5cCPM6ie/6f8HrhZMQOf5vlU60Y1bI1rx5Zb0vlDZvaycHsg/MqFfF1Eq2eokAa32iw8w==
+sass@^1.57.0:
+  version "1.57.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.57.0.tgz#64c4144ed4e1c0ccb96dc18aef2c424cdbc0c12b"
+  integrity sha512-IZNEJDTK1cF5B1cGA593TPAV/1S0ysUDxq9XHjX/+SMy0QfUny+nfUsq5ZP7wWSl4eEf7wDJcEZ8ABYFmh3m/w==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
