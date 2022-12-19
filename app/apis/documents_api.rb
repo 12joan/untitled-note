@@ -23,7 +23,6 @@ class DocumentsAPI < ApplicationAPI
       allowed_values: %w(asc desc),
     )
 
-    documents = documents.not_blank
     documents = documents.order(sort_by => sort_direction)
 
     documents.map do |document|

@@ -6,17 +6,14 @@ import useTitle from '~/lib/useTitle'
 import { OverviewLink } from '~/lib/routes'
 import useStream from '~/lib/useStream'
 import DocumentsStream from '~/lib/streams/DocumentsStream'
-import useNewDocument from '~/lib/useNewDocument'
-import useRenameTag from '~/lib/useRenameTag'
 
 import BackButton from '~/components/BackButton'
 import { InlinePlaceholder } from '~/components/Placeholder'
-import Dropdown, { DropdownItem } from '~/components/Dropdown'
+import Dropdown from '~/components/Dropdown'
+import TagMenu from '~/components/TagMenu'
 import DocumentIndex from '~/components/DocumentIndex'
 import LoadingView from '~/components/LoadingView'
 import CaretDownIcon from '~/components/icons/CaretDownIcon'
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
-import EditIcon from '~/components/icons/EditIcon'
 
 const TagDocumentsView = ({ tagId }) => {
   const [viewRef, { width: viewWidth }] = useElementSize()
@@ -24,12 +21,13 @@ const TagDocumentsView = ({ tagId }) => {
   const { projectId, futureTags } = useContext()
 
   const futureTag = futureTags.map(tags => tags.find(tag => tag.id === tagId))
-  const futureDocuments = useStream(resolve => DocumentsStream(projectId).index({ tag_id: tagId }, resolve), [tagId])
+
+  const futureDocuments = useStream(
+    resolve => DocumentsStream(projectId).index({ tag_id: tagId }, resolve),
+    [tagId]
+  ).map(documents => documents.filter(doc => !doc.blank))
 
   useTitle(futureTag.map(tag => tag?.text).orDefault(undefined))
-
-  const createNewDocument = useNewDocument()
-  const [renameTagModal, openRenameTagModal] = useRenameTag()
 
   if (futureTag.map(tag => tag === undefined).orDefault(false)) {
     return (
@@ -41,25 +39,13 @@ const TagDocumentsView = ({ tagId }) => {
     )
   }
 
-  const tagMenu = tag => (
-    <>
-      <DropdownItem icon={NewDocumentIcon} onClick={() => createNewDocument({ tag })}>
-        New document
-      </DropdownItem>
-
-      <DropdownItem icon={EditIcon} onClick={() => openRenameTagModal(tag)}>
-        Rename tag
-      </DropdownItem>
-    </>
-  )
-
   return (
     <div ref={viewRef} className="grow flex flex-col">
       <BackButton className="mb-3" />
 
       <div className="mb-5">
         {futureTag.map(tag => (
-          <Dropdown items={tagMenu(tag)} placement="bottom-start">
+          <Dropdown items={<TagMenu tag={tag} />} placement="bottom-start">
             <button type="button" className="btn btn-link-subtle text-left flex items-center">
               <h1 className="h1">Tag: {tag.text}</h1>
 
@@ -81,8 +67,6 @@ const TagDocumentsView = ({ tagId }) => {
           />
         )).orDefault(<LoadingView />)}
       </ContextProvider>
-
-      {renameTagModal}
     </div>
   )
 }

@@ -12,7 +12,7 @@ const Dropdown = ({ items, className: userClassName = '', ...otherProps }) => {
   const isVisible = () => getTippy().state.isVisible
   const close = () => getTippy().hide()
 
-  const className = `rounded-lg backdrop-blur-lg shadow-lg w-48 max-w-full ${userClassName}`
+  const className = `rounded-lg backdrop-blur-lg shadow-lg w-auto max-w-full ${userClassName}`
 
   useEventListener(window, 'keydown', event => {
     if (event.key === 'Escape' && isVisible()) {
@@ -54,7 +54,7 @@ const DropdownItem = ({
   return (
     <Component
       {...buttonProps}
-      className={`block w-full text-left p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
+      className={`block w-full text-left p-3 pr-5 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
       onClick={event => {
         closeDropdown()
         onClick(event)

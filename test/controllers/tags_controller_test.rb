@@ -24,4 +24,14 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'Renamed Tag', @tag.reload.text
   end
+
+  test 'returns 422 when tag is invalid' do
+    patch api_v1_project_tag_url(@project, @tag), params: {
+      tag: {
+        text: ''
+      },
+    }
+
+    assert_response :unprocessable_entity
+  end
 end

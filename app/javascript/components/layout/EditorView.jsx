@@ -12,13 +12,10 @@ import LoadingView from '~/components/LoadingView'
 import Editor from '~/components/Editor'
 
 const EditorView = ({ documentId }) => {
-  const { futurePartialDocuments } = useContext()
+  const { futurePartialDocumentsIncludingBlank } = useContext()
 
-  const futurePartialDocument = futurePartialDocuments.map(
-    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || {
-      remote_version: Math.infinity,
-      safe_title: 'Untitled document',
-    }
+  const futurePartialDocument = futurePartialDocumentsIncludingBlank.map(
+    partialDocuments => partialDocuments.find(doc => doc.id == documentId)
   )
 
   const loadingView = (

@@ -20,6 +20,7 @@ import PinnedDragTarget from '~/components/PinnedDragTarget'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 import DocumentMenu from '~/components/DocumentMenu'
+import TagMenu from '~/components/TagMenu'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
@@ -94,13 +95,17 @@ const FutureDocumentsSection = ({ as = DocumentLink, futureDocuments, ...otherPr
 
 const FutureTagsSection = ({ futureTags, ...otherProps }) => {
   const buttonForTag = tag => (
-    <Button
-      key={tag.id}
-      as={TagLink}
-      tagId={tag.id}
-      nav
-      label={tag.text}
-    />
+    <div key={tag.id}>
+      <ContextMenuDropdown items={<TagMenu tag={tag} />} appendTo={document.body}>
+        <Button
+          as={TagLink}
+          tagId={tag.id}
+          nav
+          label={tag.text}
+          onContextMenu={event => event.preventDefault()}
+        />
+      </ContextMenuDropdown>
+    </div>
   )
 
   return (

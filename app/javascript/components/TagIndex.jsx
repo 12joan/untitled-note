@@ -3,6 +3,7 @@ import React from 'react'
 import pluralize from '~/lib/pluralize'
 import { TagLink } from '~/lib/routes'
 
+import TagMenu from '~/components/TagMenu'
 import ItemIndex from '~/components/ItemIndex'
 
 const TagIndex = ({ tags, ...otherProps }) => {
@@ -14,6 +15,9 @@ const TagIndex = ({ tags, ...otherProps }) => {
     buttonProps: {
       tagId: tag.id,
     },
+    contextMenu: (
+      <TagMenu tag={tag} />
+    ),
   })
 
   return (

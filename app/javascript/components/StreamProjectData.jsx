@@ -18,7 +18,7 @@ const StreamProjectData = ({ projectId, children }) => {
 
   const futureTags = useStream(resolve => TagsStream(projectId).index({}, resolve), [projectId])
 
-  const futurePartialDocuments = useStream(resolve => DocumentsStream(projectId).index({
+  const futurePartialDocumentsIncludingBlank = useStream(resolve => DocumentsStream(projectId).index({
     query: {
       id: true,
       remote_version: true,
@@ -26,12 +26,17 @@ const StreamProjectData = ({ projectId, children }) => {
       safe_title: true,
       preview: true,
       pinned_at: true,
+      blank: true,
     },
     sort_by: 'created_at',
     sort_order: 'desc',
   }, resolve), [projectId])
 
-  useValueChanged(futurePartialDocuments, (futurePrevious, futureCurrent) => (
+  const futurePartialDocuments = useMemo(() => futurePartialDocumentsIncludingBlank.map(
+    documents => documents.filter(doc => !doc.blank)
+  ), [futurePartialDocumentsIncludingBlank])
+
+  useValueChanged(futurePartialDocumentsIncludingBlank, (futurePrevious, futureCurrent) => (
     futurePrevious.bind(previous => futureCurrent.bind(current => {
       // Optimisation: Assumes there won't be an addition and a deletion in the same update
       if (current.length >= previous.length) {
@@ -66,6 +71,7 @@ const StreamProjectData = ({ projectId, children }) => {
       projectId={projectId}
       project={project}
       futureTags={futureTags}
+      futurePartialDocumentsIncludingBlank={futurePartialDocumentsIncludingBlank}
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}
       futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}

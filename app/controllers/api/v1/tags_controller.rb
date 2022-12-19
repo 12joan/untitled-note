@@ -5,13 +5,14 @@ module API
       before_action :set_tag, only: %i[ update ]
 
       def update
-        if @tag.update(tag_params)
+        Tag.transaction do
+          @tag.update!(tag_params)
           @tag.documents.each(&:increment_remote_version!)
-
-          render json: @tag.query(:all)
-        else
-          render json: @tag.errors, status: :unprocessable_entity
         end
+
+        render json: @tag.query(:all)
+      rescue ActiveRecord::RecordInvalid => e
+        render json: e.record.errors, status: :unprocessable_entity
       end
 
       private
