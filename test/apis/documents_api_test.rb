@@ -31,7 +31,7 @@ class DocumentsAPITest < APITestCase
 
   test 'DocumentsAPI#index respects query' do
     assert_equal \
-      [@documents.first, @documents.second, @documents.third].map { ({ id: _1.id }) },
+      [@documents.first, @documents.second, @documents.third, @documents.fourth].map { ({ id: _1.id }) },
       index_result
   end
 
@@ -47,12 +47,12 @@ class DocumentsAPITest < APITestCase
     @index_params.merge!(sort_by: 'updated_at', sort_direction: 'desc')
 
     assert_equal \
-      [@documents.second, @documents.third, @documents.first].map(&:id),
+      [@documents.second, @documents.fourth, @documents.third, @documents.first].map(&:id),
       index_result.map { _1.fetch(:id) }
   end
 
-  test 'DocumentsAPI#index excludes blank documents' do
-    refute_includes \
+  test 'DocumentsAPI#index does not exclude blank documents' do
+    assert_includes \
       index_result.map { _1.fetch(:id) },
       @documents.fourth.id
   end
