@@ -15,7 +15,10 @@ const EditorView = ({ documentId }) => {
   const { futurePartialDocumentsIncludingBlank } = useContext()
 
   const futurePartialDocument = futurePartialDocumentsIncludingBlank.map(
-    partialDocuments => partialDocuments.find(doc => doc.id == documentId)
+    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || {
+      remote_version: Math.infinity,
+      safe_title: 'Untitled document',
+    }
   )
 
   const loadingView = (
