@@ -44,8 +44,8 @@ const ProjectView = ({ childView }) => {
   const [sideBarSizeRef, { width: sideBarWidth }] = useElementSize()
   const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
 
-  const { isMd, isXl } = useBreakpoints()
-  const sidebarAlwaysVisible = isMd
+  const { isLg, isXl } = useBreakpoints()
+  const sidebarAlwaysVisible = isLg
   const centreViewByDefault = isXl
 
   useEffect(() => {
