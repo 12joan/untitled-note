@@ -37,10 +37,10 @@ const useSearchModal = () => useModal(SearchModal, {
   customPanelClassNames: {
     margin: 'mt-[20vh] mb-auto',
     width: 'narrow',
-    shadow: 'shadow-dialog-heavy',
-    rounded: 'rounded-xl',
+    shadow: 'before:shadow-dialog-heavy',
+    rounded: 'before:rounded-xl',
     padding: null,
-    bg: 'bg-slate-50/75 dark:bg-slate-700/75',
+    bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
   },
 })
 

@@ -34,11 +34,12 @@ const Modal = ({ open, children, onClose, customBackdropClassNames, customPanelC
   const panelClassName = groupedClassNames({
     margin: 'm-auto',
     width: 'max-w-md w-full',
-    blur: 'backdrop-blur-lg',
-    shadow: 'shadow-dialog',
-    rounded: 'rounded-2xl',
+    before: 'relative before:absolute before:inset-0 before:-z-10',
+    blur: 'before:backdrop-blur-lg', // Workaround for Chromium Issue 993644
+    shadow: 'before:shadow-dialog',
+    rounded: 'before:rounded-2xl',
     padding: 'p-5',
-    bg: 'bg-slate-100/90 dark:bg-slate-800/90',
+    bg: 'before:bg-slate-100/90 before:dark:bg-slate-800/90',
     ringOffset: 'ring-offset-slate-100 dark:ring-offset-slate-800',
   }, customPanelClassNames)
 
