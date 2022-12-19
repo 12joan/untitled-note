@@ -28,6 +28,9 @@ const TagDocumentsView = ({ tagId }) => {
 
   useTitle(futureTag.map(tag => tag?.text).orDefault(undefined))
 
+  const createNewDocument = useNewDocument()
+  const [renameTagModal, openRenameTagModal] = useRenameTag()
+
   if (futureTag.map(tag => tag === undefined).orDefault(false)) {
     return (
       <div className="space-y-3">
@@ -37,9 +40,6 @@ const TagDocumentsView = ({ tagId }) => {
       </div>
     )
   }
-
-  const createNewDocument = useNewDocument()
-  const [renameTagModal, openRenameTagModal] = useRenameTag()
 
   const tagMenu = tag => (
     <>
