@@ -17,6 +17,7 @@ import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import plugins from '~/lib/editor/plugins'
 import { useLinkModalProvider } from '~/lib/editor/links'
+import getPlainBody from '~/lib/editor/getPlainBody'
 
 import BackButton from '~/components/BackButton'
 import Tooltip from '~/components/Tooltip'
@@ -218,14 +219,10 @@ const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElem
   }, [])
 
   useEffectAfterFirst(() => {
-    const plainBody = [...getNodeChildren(editor, [])]
-      .map(([node]) => [...getNodeTexts(node)].map(([textNode]) => textNode.text).join(''))
-      .join(' ')
-
     updateDocument({
       body: JSON.stringify(editor.children),
       body_type: 'json/slate',
-      plain_body: plainBody,
+      plain_body: getPlainBody(editor),
     })
   }, [editor.children])
 
