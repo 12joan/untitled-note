@@ -7,6 +7,7 @@ import {
   getNodeChildren,
   getNodeTexts,
   deserializeHtml,
+  select,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
@@ -27,19 +28,17 @@ import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import TagsIcon from '~/components/icons/TagsIcon'
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 
+const selectionRestorationForDocument = {}
+const scrollRestorationForDocument = {}
+
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
   const tagsRef = useRef()
   const tippyContainerRef = useRef()
-
-  const focusEditor = () => setTimeout(() => document.querySelector('[data-slate-editor]').focus(), 0)
+  const editorElementRef = useRef()
 
   useEffect(() => {
-    if (workingDocument.blank) {
-      titleRef.current.focus()
-    } else {
-      focusEditor()
-    }
+    editorElementRef.current = document.querySelector('[data-slate-editor]')
   }, [])
 
   const { projectId } = useContext()
@@ -108,7 +107,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
             })}
             onKeyDown={event => {
               if (event.key === 'Enter') {
-                focusEditor()
+                event.preventDefault()
+                editorElementRef.current.focus()
               }
             }}
           />
@@ -163,6 +163,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
             <WithEditorState
               workingDocument={workingDocument}
               updateDocument={updateDocument}
+              titleRef={titleRef}
+              editorElementRef={editorElementRef}
             />
           </Plate>
         </ContextProvider>
@@ -173,9 +175,47 @@ const Editor = ({ workingDocument, updateDocument }) => {
   )
 }
 
-const WithEditorState = ({ workingDocument, updateDocument }) => {
+const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElementRef }) => {
   const editor = usePlateEditorState('editor')
   const { useFormattingToolbar } = useContext()
+
+  useEffect(() => {
+    setTimeout(() => {
+      const selection = selectionRestorationForDocument[workingDocument.id]
+      const scroll = scrollRestorationForDocument[workingDocument.id]
+
+      if (workingDocument.blank) {
+        titleRef.current.focus()
+      } else {
+        editorElementRef.current.focus({ preventScroll: true })
+
+        // Handle case where the old selection is no longer valid (e.g. the
+        // document has been changed in the meantime).
+        if (selection) {
+          select(editor, selection)
+        }
+      }
+
+      if (scroll) {
+        window.scrollTo(0, scroll)
+      }
+    }, 0)
+  }, [])
+
+  useEffectAfterFirst(() => {
+    selectionRestorationForDocument[workingDocument.id] = editor.selection
+  }, [editor.selection])
+
+  useEffect(() => {
+    const updateScroll = () => {
+      scrollRestorationForDocument[workingDocument.id] = window.scrollY
+    }
+
+    setTimeout(updateScroll, 0)
+
+    window.addEventListener('scroll', updateScroll)
+    return () => window.removeEventListener('scroll', updateScroll)
+  }, [])
 
   useEffectAfterFirst(() => {
     const plainBody = [...getNodeChildren(editor, [])]
