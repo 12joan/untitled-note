@@ -1,15 +1,15 @@
 import { createPlugins } from '@udecode/plate-headless'
 
-import { typographyPlugins, components } from '~/lib/editor/typography'
-import behaviourPlugins from '~/lib/editor/behaviour'
-import autoformatPlugins from '~/lib/editor/autoformat'
+import { useTypographyPlugins, components } from '~/lib/editor/typography'
+import useBehaviourPlugins from '~/lib/editor/behaviour'
+import useAutoformatPlugins from '~/lib/editor/autoformat'
 
-const plugins = createPlugins([
-  ...typographyPlugins,
-  ...behaviourPlugins,
-  ...autoformatPlugins,
+const usePlugins = options => createPlugins([
+  ...useTypographyPlugins(options),
+  ...useBehaviourPlugins(options),
+  ...useAutoformatPlugins(options),
 ], {
   components,
 })
 
-export default plugins
+export default usePlugins

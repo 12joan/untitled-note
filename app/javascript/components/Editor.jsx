@@ -4,10 +4,7 @@ import {
   Plate,
   createPlateEditor,
   usePlateEditorState,
-  getNodeChildren,
-  getNodeTexts,
   deserializeHtml,
-  select,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
@@ -15,9 +12,17 @@ import { useContext, ContextProvider } from '~/lib/context'
 import { useGlobalEvent } from '~/lib/globalEvents'
 import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
-import plugins from '~/lib/editor/plugins'
+import usePlugins from '~/lib/editor/plugins'
 import { useLinkModalProvider } from '~/lib/editor/links'
 import getPlainBody from '~/lib/editor/getPlainBody'
+import { useFind } from '~/lib/editor/find'
+import {
+  useSaveSelection,
+  useSaveScroll,
+  restoreSelection,
+  restoreScroll,
+  setSelection,
+} from '~/lib/editor/selectionAndScrollManagement'
 
 import BackButton from '~/components/BackButton'
 import Tooltip from '~/components/Tooltip'
@@ -29,20 +34,18 @@ import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import TagsIcon from '~/components/icons/TagsIcon'
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 
-const selectionRestorationForDocument = {}
-const scrollRestorationForDocument = {}
-
 const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
   const tagsRef = useRef()
   const tippyContainerRef = useRef()
   const editorElementRef = useRef()
+  const editorRef = useRef()
 
   useEffect(() => {
     editorElementRef.current = document.querySelector('[data-slate-editor]')
   }, [])
 
-  const { projectId } = useContext()
+  const { projectId, topBarHeight } = useContext()
 
   const [tagsVisible, setTagsVisible] = useState(workingDocument.tags.length > 0)
 
@@ -54,29 +57,37 @@ const Editor = ({ workingDocument, updateDocument }) => {
     }
   })
 
-  const { initialEditor, initialValue } = useMemo(() => {
-    const initialEditor = createPlateEditor({ id: 'editor', plugins })
+  const { findDialog, findOptions, openFind } = useFind({
+    editorRef,
+    restoreSelection: () => restoreSelection(workingDocument.id, editorRef.current),
+    setSelection: selection => setSelection(editorRef.current, selection),
+  })
 
+  const plugins = usePlugins({ findOptions })
+
+  const initialValue = useMemo(() => {
     const bodyFormat = workingDocument.body_type.split('/')[0]
-
     const emptyDocument = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]
 
-    const initialValue = {
-      empty: () => emptyDocument,
-      html: body => deserializeHtml(initialEditor, {
-        element: body,
-        stripWhitespace: false,
-      }),
-      json: body => JSON.parse(body),
-    }[bodyFormat](workingDocument.body)
+    switch (bodyFormat) {
+      case 'empty':
+        return emptyDocument
 
-    const safeInitialValue = initialValue[0]?.type
-      ? initialValue
-      : emptyDocument
+      case 'html':
+        const tempEditor = createPlateEditor({ plugins })
 
-    return {
-      initialEditor,
-      initialValue: safeInitialValue,
+        const initialValue = deserializeHtml(tempEditor, {
+          element: workingDocument.body,
+          stripWhitespace: true,
+        })
+
+        return initialValue[0]?.type ? initialValue : emptyDocument
+
+      case 'json':
+        return JSON.parse(workingDocument.body)
+
+      default:
+        throw new Error(`Unknown body format: ${bodyFormat}`)
     }
   }, [])
 
@@ -85,6 +96,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
       document={workingDocument}
       updateDocument={updateDocument}
       incrementRemoteVersion={false}
+      openFindInDocument={openFind}
     />
   )
 
@@ -92,6 +104,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
 
   return (
     <>
+      {findDialog}
+
       <div className="narrow mb-3">
         <BackButton />
       </div>
@@ -153,7 +167,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
         <ContextProvider tippyContainerRef={tippyContainerRef}>
           <Plate
             id="editor"
-            editor={initialEditor}
+            plugins={plugins}
             initialValue={initialValue}
             normalizeInitialValue
             editableProps={{
@@ -166,6 +180,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
               updateDocument={updateDocument}
               titleRef={titleRef}
               editorElementRef={editorElementRef}
+              editorRef={editorRef}
             />
           </Plate>
         </ContextProvider>
@@ -176,47 +191,28 @@ const Editor = ({ workingDocument, updateDocument }) => {
   )
 }
 
-const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElementRef }) => {
+const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElementRef, editorRef }) => {
   const editor = usePlateEditorState('editor')
   const { useFormattingToolbar } = useContext()
 
   useEffect(() => {
-    setTimeout(() => {
-      const selection = selectionRestorationForDocument[workingDocument.id]
-      const scroll = scrollRestorationForDocument[workingDocument.id]
+    editorRef.current = editor
+  }, [editor])
 
+  useEffect(() => {
+    setTimeout(() => {
       if (workingDocument.blank) {
         titleRef.current.focus()
       } else {
-        editorElementRef.current.focus({ preventScroll: true })
-
-        // Handle case where the old selection is no longer valid (e.g. the
-        // document has been changed in the meantime).
-        if (selection) {
-          select(editor, selection)
-        }
+        restoreSelection(workingDocument.id, editor)
       }
 
-      if (scroll) {
-        window.scrollTo(0, scroll)
-      }
+      restoreScroll(workingDocument.id)
     }, 0)
   }, [])
 
-  useEffectAfterFirst(() => {
-    selectionRestorationForDocument[workingDocument.id] = editor.selection
-  }, [editor.selection])
-
-  useEffect(() => {
-    const updateScroll = () => {
-      scrollRestorationForDocument[workingDocument.id] = window.scrollY
-    }
-
-    setTimeout(updateScroll, 0)
-
-    window.addEventListener('scroll', updateScroll)
-    return () => window.removeEventListener('scroll', updateScroll)
-  }, [])
+  useSaveSelection(workingDocument.id, editor)
+  useSaveScroll(workingDocument.id)
 
   useEffectAfterFirst(() => {
     updateDocument({

@@ -31,7 +31,7 @@ const markRule = (type, match, otherProps = {}) => ({
   ...otherProps,
 })
 
-const autoformatPlugins = [
+const useAutoformatPlugins = () => [
   createAutoformatPlugin({
     options: {
       rules: [
@@ -54,4 +54,4 @@ const autoformatPlugins = [
   }),
 ]
 
-export default autoformatPlugins
+export default useAutoformatPlugins
