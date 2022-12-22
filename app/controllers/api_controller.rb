@@ -7,4 +7,9 @@ class APIController < ApplicationController
     project_id = block_given? ? yield : params.fetch(:project_id)
     @project = current_user.projects.find(project_id)
   end
+
+  def set_document
+    document_id = block_given? ? yield : params.fetch(:document_id)
+    @document = @project.documents.find(document_id)
+  end
 end

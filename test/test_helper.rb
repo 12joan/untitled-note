@@ -33,4 +33,52 @@ class ActiveSupport::TestCase
       yield
     end
   end
+
+  module SlateJSONHelper
+    class SlateJSONBuilder
+      def initialize(type: nil, text: nil, **attributes)
+        @type = type
+        @text = text
+        @attributes = attributes
+        @children = []
+      end
+
+      def to_h
+        {}.tap do |h|
+          h.merge!(@attributes)
+          h[:type] = @type unless @type.nil?
+          h[:text] = @text unless @text.nil?
+          h[:children] = children_to_h unless @children.empty?
+        end
+      end
+
+      def children_to_h
+        @children.map(&:to_h)
+      end
+
+      def text(text, **attributes)
+        add_child(text: text, **attributes)
+      end
+
+      %i[p a h1 blockquote code_block ul ol li lic].each do |type|
+        define_method(type) do |**attributes, &block|
+          add_child(type: type, **attributes, &block)
+        end
+      end
+
+      private
+
+      def add_child(**args, &block)
+        child = self.class.new(**args)
+        child.instance_eval &block if block_given?
+        @children << child
+      end
+    end
+
+    def create_document_body(&block)
+      builder = SlateJSONBuilder.new
+      builder.instance_eval &block
+      builder.children_to_h.to_json
+    end
+  end
 end

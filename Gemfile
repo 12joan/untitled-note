@@ -74,6 +74,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2'
 
   gem 'minitest-stub_any_instance'
+  gem 'minitest-stub-const'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

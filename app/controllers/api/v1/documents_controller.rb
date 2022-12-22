@@ -2,7 +2,10 @@ module API
   module V1
     class DocumentsController < APIController
       before_action :set_project
-      before_action :set_document, only: %i[ show update destroy ]
+
+      before_action only: %i[ show update destroy ] do
+        set_document { params.fetch(:id) }
+      end
 
       def show
         render json: @document.query(:all)
@@ -24,10 +27,6 @@ module API
       end
 
       private
-
-      def set_document
-        @document = @project.documents.find(params[:id])
-      end
 
       # Only allow a list of trusted parameters through.
       def document_params
