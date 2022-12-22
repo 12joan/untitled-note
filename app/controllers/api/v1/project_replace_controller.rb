@@ -4,13 +4,11 @@ module API
       before_action :set_project
 
       def create
-        # TODO: Optimise using plain_body
-        @project.documents.each do |document|
-          ReplaceInDocument.perform(
-            document: document,
-            find: params.fetch(:find),
-            replace: params.fetch(:replace),
-          )
+        find = params.fetch(:find)
+        replace = params.fetch(:replace)
+
+        @project.documents.where('plain_body ~* ?', find).find_each do |document|
+          ReplaceInDocument.perform(document: document, find: find, replace: replace)
         end
 
         head :ok

@@ -10,6 +10,7 @@ class DocumentReplaceControllerTest < ActionDispatch::IntegrationTest
       :document,
       project: @project,
       body: create_document_body { p { text 'Document containing foo' } },
+      plain_body: 'Document containing foo',
       body_type: 'json/slate',
     )
 
