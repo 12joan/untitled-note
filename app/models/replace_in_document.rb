@@ -1,5 +1,7 @@
 class ReplaceInDocument
   def self.perform(document:, find:, replace:)
+    raise ArgumentError, 'find cannot be blank' if find.blank?
+
     return unless document.body_type.starts_with?('json/')
 
     document_root = JSON.parse(document.body)

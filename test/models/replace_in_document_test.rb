@@ -49,6 +49,14 @@ class ReplaceInDocumentTest < ActiveSupport::TestCase
     assert_equal '<p>Text</p>', document.reload.body
   end
 
+  test 'refuses to process if find is blank' do
+    document = create_document
+
+    assert_raises(ArgumentError) do
+      ReplaceInDocument.perform(document: document, find: '', replace: 'REPLACED')
+    end
+  end
+
   private
 
   def replaces?(text)
