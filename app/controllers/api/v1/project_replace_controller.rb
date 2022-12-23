@@ -7,11 +7,22 @@ module API
         find = params.fetch(:find)
         replace = params.fetch(:replace)
 
+        occurrences = 0
+        document_count = 0
+
         @project.documents.where('plain_body ~* ?', find).find_each do |document|
-          ReplaceInDocument.perform(document: document, find: find, replace: replace)
+          count = ReplaceInDocument.perform(document: document, find: find, replace: replace)
+
+          if count > 0
+            occurrences += count
+            document_count += 1
+          end
         end
 
-        head :ok
+        render json: {
+          occurrences: occurrences,
+          documents: document_count,
+        }
       end
     end
   end

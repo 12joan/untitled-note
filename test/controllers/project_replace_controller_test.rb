@@ -32,8 +32,8 @@ class ProjectReplaceControllerTest < ActionDispatch::IntegrationTest
   test 'calls ReplaceInDocument.perform for each document containing term' do
     mock = Minitest::Mock.new
 
-    @documents_containing_foo.each do |document|
-      mock.expect :perform, nil, document: document, find: 'foo', replace: 'bar'
+    @documents_containing_foo.each_with_index do |document, index|
+      mock.expect :perform, index + 1, document: document, find: 'foo', replace: 'bar'
     end
 
     Object.stub_const :ReplaceInDocument, mock do
@@ -45,5 +45,9 @@ class ProjectReplaceControllerTest < ActionDispatch::IntegrationTest
 
     assert_mock mock
     assert_response :ok
+
+    parsed_response = JSON.parse(response.body)
+    assert_equal 1 + 2 + 3, parsed_response['occurrences']
+    assert_equal 3, parsed_response['documents']
   end
 end

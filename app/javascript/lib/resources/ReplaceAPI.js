@@ -9,7 +9,7 @@ const ReplaceAPI = projectId => ({
     {
       body: JSON.stringify({ find, replace }),
     },
-  ),
+  ).then(response => response.json()),
 
   replaceInDocument: ({ documentId, find, replace }) => fetchAPIEndpoint(
     {
@@ -19,7 +19,7 @@ const ReplaceAPI = projectId => ({
     {
       body: JSON.stringify({ document: documentId, find, replace }),
     },
-  ),
+  ).then(response => response.json()),
 })
 
 export default ReplaceAPI

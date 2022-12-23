@@ -5,13 +5,15 @@ module API
       before_action :set_document
 
       def create
-        ReplaceInDocument.perform(
+        count = ReplaceInDocument.perform(
           document: @document,
           find: params.fetch(:find),
           replace: params.fetch(:replace),
         )
 
-        head :ok
+        render json: {
+          occurrences: count,
+        }
       end
     end
   end

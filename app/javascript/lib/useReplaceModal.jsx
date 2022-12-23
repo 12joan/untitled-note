@@ -4,6 +4,8 @@ import useModal from '~/lib/useModal'
 import { useContext } from '~/lib/context'
 import ReplaceAPI from '~/lib/resources/ReplaceAPI'
 import { handleReplaceError } from '~/lib/handleErrors'
+import createToast from '~/lib/createToast'
+import pluralize from '~/lib/pluralize'
 
 import { ModalTitle } from '~/components/Modal'
 import Tooltip from '~/components/Tooltip'
@@ -37,7 +39,13 @@ const ReplaceModal = ({ documentId, onClose }) => {
      * most likely refresh before this anyway, closing the modal.
      */
     handleReplaceError(replacePromise).then(
-      () => setTimeout(() => {
+      ({ occurrences, documents = 1 }) => setTimeout(() => {
+        createToast({
+          title: occurrences > 0 ? 'Replace successful' : 'No matches found',
+          message: `Replaced ${pluralize(occurrences, 'occurrence')} in ${pluralize(documents, 'document')}`,
+          autoClose: 'fast',
+        })
+
         setIsReplacing(false)
         onClose()
       }, 250),

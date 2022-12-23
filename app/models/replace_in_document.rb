@@ -2,7 +2,7 @@ class ReplaceInDocument
   def self.perform(document:, find:, replace:)
     raise ArgumentError, 'find cannot be blank' if find.blank?
 
-    return unless document.body_type.starts_with?('json/')
+    return 0 unless document.body_type.starts_with?('json/')
 
     document_root = JSON.parse(document.body)
 
@@ -27,6 +27,8 @@ class ReplaceInDocument
       document.increment_remote_version
       document.save!
     end
+
+    replace_count
   end
 
   private

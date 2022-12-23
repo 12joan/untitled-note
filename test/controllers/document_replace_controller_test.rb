@@ -19,7 +19,7 @@ class DocumentReplaceControllerTest < ActionDispatch::IntegrationTest
 
   test 'calls ReplaceInDocument.perform' do
     mock = Minitest::Mock.new
-    mock.expect :perform, nil, document: @document, find: 'foo', replace: 'bar'
+    mock.expect :perform, 13, document: @document, find: 'foo', replace: 'bar'
 
     Object.stub_const :ReplaceInDocument, mock do
       post api_v1_project_document_replace_url(@project, @document), params: {
@@ -30,5 +30,8 @@ class DocumentReplaceControllerTest < ActionDispatch::IntegrationTest
 
     assert_mock mock
     assert_response :ok
+
+    parsed_response = JSON.parse(response.body)
+    assert_equal 13, parsed_response['occurrences']
   end
 end

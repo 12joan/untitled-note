@@ -43,6 +43,11 @@ class ReplaceInDocumentTest < ActiveSupport::TestCase
     assert_includes document.reload.body, '"REPLACEDREPLACED"'
   end
 
+  test 'returns number of occurrences replaced' do
+    count = ReplaceInDocument.perform(document: create_document, find: 'NEEDLE2', replace: 'REPLACED')
+    assert_equal 4, count
+  end
+
   test 'does not attempt to replace inside HTML documents' do
     document = create(:document, body: '<p>Text</p>', body_type: 'html/trix')
     ReplaceInDocument.perform(document: document, find: 'Text', replace: 'REPLACED')
