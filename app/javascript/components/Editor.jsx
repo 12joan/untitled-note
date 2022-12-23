@@ -96,7 +96,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
       document={workingDocument}
       updateDocument={updateDocument}
       incrementRemoteVersion={false}
-      openFindInDocument={openFind}
+      openFind={openFind}
+      showReplace
     />
   )
 

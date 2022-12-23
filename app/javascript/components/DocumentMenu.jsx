@@ -7,19 +7,22 @@ import { toggleDocumentPinned } from '~/lib/transformDocument'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { handleUpdateDocumentError, handleDeleteDocumentError } from '~/lib/handleErrors'
+import useReplaceModal from '~/lib/useReplaceModal'
 
 import { DropdownItem } from '~/components/Dropdown'
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
 import CopyIcon from '~/components/icons/CopyIcon'
 import PinIcon from '~/components/icons/PinIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
+import ReplaceIcon from '~/components/icons/ReplaceIcon'
 import DeleteIcon from '~/components/icons/DeleteIcon'
 
 const DocumentMenu = ({
   document: doc,
   updateDocument: updateDocumentOverride,
   incrementRemoteVersion = true,
-  openFindInDocument = undefined,
+  openFind = undefined,
+  showReplace = false,
 }) => {
   const { projectId } = useContext()
   const api = DocumentsAPI(projectId)
@@ -30,6 +33,8 @@ const DocumentMenu = ({
 
   const isPinned = doc.pinned_at !== null
   const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { incrementRemoteVersion }))
+
+  const [replaceModal, openReplaceModal] = useReplaceModal()
 
   const deleteDocument = () => {
     handleDeleteDocumentError(api.destroy(doc))
@@ -50,15 +55,23 @@ const DocumentMenu = ({
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
 
-      {openFindInDocument && (
-        <DropdownItem icon={SearchIcon} onClick={openFindInDocument}>
+      {openFind && (
+        <DropdownItem icon={SearchIcon} onClick={openFind}>
           Find in document
+        </DropdownItem>
+      )}
+
+      {showReplace && (
+        <DropdownItem icon={ReplaceIcon} onClick={() => openReplaceModal({ documentId: doc.id })}>
+          Replace in document
         </DropdownItem>
       )}
 
       <DropdownItem icon={DeleteIcon} className="children:text-red-500 dark:children:text-red-400" onClick={deleteDocument}>
         Delete document
       </DropdownItem>
+
+      {replaceModal}
     </>
   )
 }

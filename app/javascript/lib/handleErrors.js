@@ -103,6 +103,12 @@ const handleResetPasswordError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
+const handleReplaceError = handleErrors(() => ({
+  title: 'Failed to replace text',
+  message: 'An error occurred while replacing text. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}))
+
 export {
   handleCreateProjectError,
   handleUpdateProjectError,
@@ -118,4 +124,5 @@ export {
   handleRenameTagError,
   handleDeleteFileError,
   handleResetPasswordError,
+  handleReplaceError,
 }
