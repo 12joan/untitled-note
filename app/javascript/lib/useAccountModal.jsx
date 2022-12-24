@@ -1,55 +1,92 @@
 import React, { useState } from 'react'
 
 import useModal from '~/lib/useModal'
-import { handleResetPasswordError } from '~/lib/handleErrors'
-import ResetPasswordAPI from '~/lib/resources/ResetPasswordAPI'
+import useBreakpoints from '~/lib/useBreakpoints'
 
-import { ModalTitleWithCloseButton } from '~/components/Modal'
-import ReplaceWithSpinner from '~/components/ReplaceWithSpinner'
+import * as SectionComponents from '~/components/accountModalSections'
+import { ModalTitle } from '~/components/Modal'
+import WithCloseButton from '~/components/WithCloseButton'
+import AccountIcon from '~/components/icons/AccountIcon'
+import StorageIcon from '~/components/icons/StorageIcon'
+
+const sections = {
+  emailAndPassword: { title: 'Email and password', icon: AccountIcon, component: SectionComponents.EmailAndPassword },
+  fileStorage: { title: 'File storage', icon: StorageIcon, component: SectionComponents.FileStorage },
+}
+
+const sectionKeys = Object.keys(sections)
+
+const idForSectionKey = key => `account-modal-${key}-section`
 
 const useAccountModal = () => useModal(AccountModal, {
   customPanelClassNames: {
-    spacing: 'space-y-3',
+    margin: 'm-auto sm:mt-[20vh]',
+    width: 'max-w-screen-md w-full',
+    height: 'max-sm:h-full sm:min-h-[500px]',
+    padding: null,
+    display: 'flex flex-col',
   },
 })
 
 const AccountModal = ({ onClose }) => {
-  const [sendingResetPasswordEmail, setSendingResetPasswordEmail] = useState(false)
+  const [activeSectionKey, setActiveSectionKey] = useState(sectionKeys[0])
 
-  const handleResetPassword = () => {
-    setSendingResetPasswordEmail(true)
+  const {
+    title: activeSectionTitle,
+    component: ActiveSectionComponent,
+  } = sections[activeSectionKey]
 
-    handleResetPasswordError(ResetPasswordAPI.resetPassword())
-      .finally(() => setSendingResetPasswordEmail(false))
-  }
+  const { isSm: horizontalLayout } = useBreakpoints()
+
+  const withCloseButton = children => (
+    <WithCloseButton
+      customClassNames={{ items: horizontalLayout ? 'items-center' : 'items-start' }}
+      onClose={onClose}
+      children={children}
+    />
+  )
 
   return (
-    <>
-      <ModalTitleWithCloseButton onClose={onClose}>
-        Account info
-      </ModalTitleWithCloseButton>
+    <div className="grow flex flex-col sm:flex-row">
+      <div className="shrink-0 bg-slate-200/75 dark:bg-slate-900/25 max-sm:border-b sm:border-r dark:border-transparent max-sm:rounded-t-2xl sm:rounded-l-2xl p-5 sm:px-2">
+        {(horizontalLayout ? x => x : withCloseButton)(
+          <div className="grow space-y-2" role="tablist">
+            {Object.entries(sections).map(([key, { title, icon: Icon }]) => (
+              <button
+                key={key}
+                className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
+                data-active={key === activeSectionKey}
+                onClick={() => setActiveSectionKey(key)}
+                role="tab"
+                aria-selected={key === activeSectionKey}
+                aria-controls={idForSectionKey(key)}
+              >
+                <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
+                  <Icon size="1.25em" noAriaLabel />
+                </span>
 
-      <div className="space-y-2">
-        <h3 className="text-lg font-medium select-none">
-          Reset password
-        </h3>
-
-        <div className="text-sm text-slate-500 dark:text-slate-400">
-          Click the button below to reset your password. You will receive an email with a link to reset your password.
-        </div>
-
-        <button
-          type="button"
-          className="btn btn-rect btn-modal-secondary"
-          disabled={sendingResetPasswordEmail}
-          onClick={handleResetPassword}
-        >
-          <ReplaceWithSpinner isSpinner={sendingResetPasswordEmail} spinnerAriaLabe="Sending reset password email">
-            Send reset password email
-          </ReplaceWithSpinner>
-        </button>
+                {title}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    </>
+
+      <div
+        className="grow p-5 space-y-3 overflow-y-auto"
+        role="tabpanel"
+        id={idForSectionKey(activeSectionKey)}
+        aria-label={activeSectionTitle}
+      >
+        {(horizontalLayout ? withCloseButton : x => x)(
+          <ModalTitle>{activeSectionTitle}</ModalTitle>
+        )}
+
+        <div className="space-y-3">
+          <ActiveSectionComponent />
+        </div>
+      </div>
+    </div>
   )
 }
 

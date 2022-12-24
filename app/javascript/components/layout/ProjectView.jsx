@@ -11,7 +11,6 @@ import { setLastView } from '~/lib/restoreProjectView'
 import useApplicationKeyboardShortcuts from '~/lib/useApplicationKeyboardShortcuts'
 import useSearchModal from '~/lib/useSearchModal'
 import useAccountModal from '~/lib/useAccountModal'
-import useFileStorageModal from '~/lib/useFileStorageModal'
 import cssAdd from '~/lib/cssAdd'
 
 import TopBar from '~/components/layout/TopBar'
@@ -61,12 +60,10 @@ const ProjectView = ({ childView }) => {
 
   const [searchModal, showSearchModal, hideSearchModal, toggleSearchModal] = useSearchModal()
   const [accountModal, showAccountModal, hideAccountModal] = useAccountModal()
-  const [fileStorageModal, showFileStorageModal, hideFileStorageModal] = useFileStorageModal()
 
   useEffect(() => {
     hideSearchModal()
     hideAccountModal()
-    hideFileStorageModal()
   }, [childView.key, projectId])
 
   const useFormattingToolbar = useCallback(formattingToolbar => {
@@ -139,7 +136,6 @@ const ProjectView = ({ childView }) => {
       topBarHeight={topBarHeight}
       showSearchModal={showSearchModal}
       showAccountModal={showAccountModal}
-      showFileStorageModal={showFileStorageModal}
     >
       <TopBar
         ref={multiplexRefs([topBarRef, topBarSizeRef])}
@@ -217,7 +213,6 @@ const ProjectView = ({ childView }) => {
 
       {searchModal}
       {accountModal}
-      {fileStorageModal}
     </ContextProvider>
   )
 }
