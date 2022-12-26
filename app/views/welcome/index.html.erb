@@ -1,11 +1,5 @@
 <% content_for :head do %>
-  <%= vite_javascript_tag 'welcome.jsx' %>
-
-  <style type="text/css">
-    .prevent-fouc {
-      display: none;
-    }
-  </style>
+  <%= prevent_fouc_tags %>
 <% end %>
 
 <div id="application" class="prevent-fouc min-h-screen flex flex-col p-5">
@@ -28,15 +22,10 @@
 
     <p class="text-lg font-light">Click the button below to log in or sign up.</p>
 
-    <form method="post" action="/auth/auth0">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-
-      <button
-        type="submit"
-        class="btn btn-rect btn-primary"
-      >
+    <%= form_tag @login_path, method: :post do %>
+      <button type="submit" class="btn btn-rect btn-primary">
         Get started
       </button>
-    </form>
+    <% end %>
   </div>
 </div>

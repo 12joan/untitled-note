@@ -15,7 +15,7 @@ class Auth0Controller < ApplicationController
     user.update!(name: user_info['name']) if user.name != user_info['name']
 
     create_login_session(user)
-    redirect_to app_url
+    redirect_to request.env['omniauth.origin'] || app_path
   end
 
   def failure

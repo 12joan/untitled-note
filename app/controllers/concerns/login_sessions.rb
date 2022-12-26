@@ -3,6 +3,10 @@ module LoginSessions
 
   private 
 
+  def login_path(redirect_path = '/')
+    '/auth/auth0?' + { origin: redirect_path }.to_query
+  end
+
   def create_login_session(user)
     login_session = LoginSession.create!(
       user: user,
