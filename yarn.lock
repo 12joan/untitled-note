@@ -514,10 +514,10 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4.tgz#70a3ca56809f7aaabb80af2f9c01ae51e1a8ed41"
   integrity sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==
 
-"@remix-run/router@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.1.0.tgz#b48db8148c8a888e50580a8152b6f68161c49406"
-  integrity sha512-rGl+jH/7x1KBCQScz9p54p0dtPLNeKGb3e0wD2H5/oZj41bwQUnXdzbj2TbUAFhvD7cp9EyEQA4dEgpUFa1O7Q==
+"@remix-run/router@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.2.1.tgz#812edd4104a15a493dda1ccac0b352270d7a188c"
+  integrity sha512-XiY0IsyHR+DXYS5vBxpoBe/8veTeoRpMHP+vDosLZxL5bnpetzI0igkxkLZS235ldLzyfkxF+2divEwWHP3vMQ==
 
 "@tailwindcss/line-clamp@^0.4.2":
   version "0.4.2"
@@ -698,10 +698,10 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
-"@udecode/plate-emoji@18.13.2":
-  version "18.13.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.13.2.tgz#17e84036d65c739684ddfb1e1e0993175ceb533c"
-  integrity sha512-BAGeqUHg2+yCtB9pSyIWJHNg14nQBnoWWRzYuAwW/XtyTY7PNWiaJS9v9ghQmq5L9+I8KP7JNXRJgX1K611eXw==
+"@udecode/plate-emoji@18.14.0":
+  version "18.14.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.14.0.tgz#d965d228e4ac145bb79b8b2d1cfb95a85fdd06c7"
+  integrity sha512-upB/e5Tui7NcrnmZXE9apt3FOYPaYWHx8pTjjeM7/dHthV5fSEMvtNy42FhtjB7tCDuoUfVC432uV65lB2WczA==
   dependencies:
     "@emoji-mart/data" "^1.0.8"
     "@udecode/plate-combobox" "18.13.0"
@@ -736,10 +736,10 @@
   dependencies:
     "@udecode/plate-core" "18.13.0"
 
-"@udecode/plate-headless@^18.13.2":
-  version "18.13.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.13.2.tgz#9e8c7083bb8a30a9dc205034cb1dcf3edf265bdb"
-  integrity sha512-ZRdWseMxvihvbDgyhuxDFNOl6AS5uZQW4D3qD60F3/unx+c6iOk8FUmBBTzGsUI6ZbfQZYro9ck6Zbf2sikhgw==
+"@udecode/plate-headless@^18.14.0":
+  version "18.14.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.14.0.tgz#9d62bb1d1ecc5de0acbc243f70644750323fe4dd"
+  integrity sha512-/dyryxuJa7BhK9IgwQdElO8DYdEHc+mx1008LveTg+ddxUYaUzHYBy7EyJoADp3iGIjOeSagDu/x9ryh5Am6WQ==
   dependencies:
     "@udecode/plate-alignment" "18.13.0"
     "@udecode/plate-autoformat" "18.13.0"
@@ -752,7 +752,7 @@
     "@udecode/plate-combobox" "18.13.0"
     "@udecode/plate-comments" "18.13.0"
     "@udecode/plate-core" "18.13.0"
-    "@udecode/plate-emoji" "18.13.2"
+    "@udecode/plate-emoji" "18.14.0"
     "@udecode/plate-find-replace" "18.13.0"
     "@udecode/plate-floating" "18.13.0"
     "@udecode/plate-font" "18.13.0"
@@ -2291,19 +2291,19 @@ react-refresh@^0.14.0:
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
 react-router-dom@6:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.5.0.tgz#3970bdcaa7c710a6e0b478a833ba0b4b8ae61a6f"
-  integrity sha512-/XzRc5fq80gW1ctiIGilyKFZC/j4kfe75uivMsTChFbkvrK4ZrF3P3cGIc1f/SSkQ4JiJozPrf+AwUHHWVehVg==
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.6.1.tgz#1b96ec0b2cefa7319f1251383ea5b41295ee260d"
+  integrity sha512-u+8BKUtelStKbZD5UcY0NY90WOzktrkJJhyhNg7L0APn9t1qJNLowzrM9CHdpB6+rcPt6qQrlkIXsTvhuXP68g==
   dependencies:
-    "@remix-run/router" "1.1.0"
-    react-router "6.5.0"
+    "@remix-run/router" "1.2.1"
+    react-router "6.6.1"
 
-react-router@6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.5.0.tgz#b53f15543a60750c925609d2e38037ac5aed6dd3"
-  integrity sha512-fqqUSU0NC0tSX0sZbyuxzuAzvGqbjiZItBQnyicWlOUmzhAU8YuLgRbaCL2hf3sJdtRy4LP/WBrWtARkMvdGPQ==
+react-router@6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.6.1.tgz#17de6cf285f2d1c9721a3afca999c984e5558854"
+  integrity sha512-YkvlYRusnI/IN0kDtosUCgxqHeulN5je+ew8W+iA1VvFhf86kA+JEI/X/8NqYcr11hCDDp906S+SGMpBheNeYQ==
   dependencies:
-    "@remix-run/router" "1.1.0"
+    "@remix-run/router" "1.2.1"
 
 react-textarea-autosize@^8.3.3, react-textarea-autosize@^8.4.0:
   version "8.4.0"
@@ -2420,10 +2420,10 @@ safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-sass@^1.57.0:
-  version "1.57.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.57.0.tgz#64c4144ed4e1c0ccb96dc18aef2c424cdbc0c12b"
-  integrity sha512-IZNEJDTK1cF5B1cGA593TPAV/1S0ysUDxq9XHjX/+SMy0QfUny+nfUsq5ZP7wWSl4eEf7wDJcEZ8ABYFmh3m/w==
+sass@^1.57.1:
+  version "1.57.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.57.1.tgz#dfafd46eb3ab94817145e8825208ecf7281119b5"
+  integrity sha512-O2+LwLS79op7GI0xZ8fqzF7X2m/m8WFfI02dHOdsK5R2ECeS5F62zrwg/relM1rjSLy7Vd/DiMNIvPrQGsA0jw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
