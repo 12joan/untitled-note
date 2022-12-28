@@ -12,6 +12,7 @@ import {
 } from '@udecode/plate-headless'
 
 import { useFindPlugins } from '~/lib/editor/find'
+import { createImperativeEventsPlugin } from '~/lib/editor/imperativeEvents'
 
 const useBehaviourPlugins = ({ findOptions }) => {
   const mainPlugins = useMemo(() => [
@@ -63,6 +64,7 @@ const useBehaviourPlugins = ({ findOptions }) => {
         ],
       },
     }),
+    createImperativeEventsPlugin(),
   ], [])
 
   const findPlugins = useFindPlugins(findOptions)

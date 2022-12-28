@@ -1,5 +1,5 @@
 const mergeGroupedClassNames = (base, custom) => {
-  if (custom === undefined || custom === null) {
+  if (!custom) {
     return base
   } else if (typeof custom === 'function') {
     return custom(base)

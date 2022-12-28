@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
-import { localeIncludes } from 'locale-includes'
 import { useNavigate } from 'react-router-dom'
 
 import useModal from '~/lib/useModal'
@@ -18,6 +17,7 @@ import {
   documentPath,
 } from '~/lib/routes'
 import useNewDocument from '~/lib/useNewDocument'
+import includes from '~/lib/includes'
 
 import SearchIcon from '~/components/icons/SearchIcon'
 import OverviewIcon from '~/components/icons/OverviewIcon'
@@ -68,8 +68,6 @@ const makeListSource = ({ list, ...rest }) => (searchQuery, handleAction) => lis
   item => makeDynamicSuggestion(item, handleAction, rest)
 )
 
-const filter = (haystack, needle) => localeIncludes(haystack, needle, { usage: 'search', sensitivity: 'base' })
-
 const makeFilteredListSource = ({
   list,
   include = () => true,
@@ -82,11 +80,11 @@ const makeFilteredListSource = ({
     }
 
     const filterable = getFilterable(item)
-    return filterable && filter(filterable, searchQuery)
+    return filterable && includes(filterable, searchQuery)
   })
   .map(item => makeDynamicSuggestion(item, handleAction, rest))
 
-const makeSingletonSource = ({ name, action, ...rest }) => (searchQuery, handleAction) => filter(name, searchQuery)
+const makeSingletonSource = ({ name, action, ...rest }) => (searchQuery, handleAction) => includes(name, searchQuery)
   ? [{ key: name, label: name, onCommit: () => handleAction(() => action()), ...rest }]
   : []
 

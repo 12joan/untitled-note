@@ -13,6 +13,7 @@ const useCombobox = ({
   completeOnTab = false,
   hideOnBlur = false,
   hideWhenNoSuggestions = true,
+  hideWhenEmptyQuery = true,
 }) => {
   const idPrefix = useMemo(() => `combobox-${Math.random().toString(36).slice(2)}-`, [])
   const idForSuggestion = key => `${idPrefix}${key}`
@@ -20,7 +21,7 @@ const useCombobox = ({
   const [inputFocused, setInputFocused] = useState(false)
 
   const showSuggestions = (!hideOnBlur || inputFocused)
-    && query.length > 0
+    && (!hideWhenEmptyQuery || query.length > 0)
     && (!hideWhenNoSuggestions || suggestions.length > 0)
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0)

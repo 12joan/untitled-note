@@ -1,7 +1,9 @@
 const rawGetPlainBody = node => {
-  const { text, children } = node
+  const { type, text, children } = node
 
-  if (children !== undefined) {
+  if (type === 'mention') {
+    return node.fallbackText
+  } else if (children !== undefined) {
     return children.map(rawGetPlainBody).join('') + ' '
   } else if (text !== undefined) {
     return text

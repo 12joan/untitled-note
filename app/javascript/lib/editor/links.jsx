@@ -143,7 +143,7 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
     >
       <a
         {...linkProps}
-        className="cursor-pointer"
+        className="btn btn-link"
         children={children}
       />
     </Tippy>

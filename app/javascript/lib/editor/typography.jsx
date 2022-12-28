@@ -9,6 +9,7 @@ import {
   createBlockquotePlugin,
   createCodeBlockPlugin,
   createListPlugin,
+  createMentionPlugin,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
   MARK_ITALIC,
@@ -20,9 +21,12 @@ import {
   ELEMENT_UL,
   ELEMENT_OL,
   ELEMENT_LI,
+  ELEMENT_MENTION,
+  ELEMENT_MENTION_INPUT,
 } from '@udecode/plate-headless'
 
 import { LinkComponent } from '~/lib/editor/links'
+import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions'
 import { MARK_FIND_RESULT, MARK_FIND_RESULT_CURRENT } from '~/lib/editor/find'
 
 const useTypographyPlugins = () => useMemo(() => [
@@ -47,6 +51,11 @@ const useTypographyPlugins = () => useMemo(() => [
     },
   }),
   createListPlugin(),
+  createMentionPlugin({
+    options: {
+      createMentionNode: x => x,
+    },
+  }),
 ], [])
 
 const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
@@ -71,6 +80,8 @@ const components = {
   [ELEMENT_UL]: makeElementComponent('ul'),
   [ELEMENT_OL]: makeElementComponent('ol'),
   [ELEMENT_LI]: makeElementComponent('li'),
+  [ELEMENT_MENTION]: MentionComponent,
+  [ELEMENT_MENTION_INPUT]: MentionInputComponent,
 }
 
 export { useTypographyPlugins, components }

@@ -63,16 +63,17 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     attributeBehaviours: {
       remote_version: { merge: (local, remote) => remote },
       blank: { merge: (local, remote) => remote },
+      title: { delayedUpdate: true },
+      safe_title: { merge: (local, remote) => remote },
+      body: { delayedUpdate: true },
+      body_type: { delayedUpdate: true },
+      plain_body: { delayedUpdate: true },
       tags: {
         merge: (local, remote) => local.map(localTag => localTag.id
           ? localTag
           : remote.find(remoteTag => remoteTag.text === localTag.text)
         ),
       },
-      title: { delayedUpdate: true },
-      body: { delayedUpdate: true },
-      body_type: { delayedUpdate: true },
-      plain_body: { delayedUpdate: true },
     },
   })
 

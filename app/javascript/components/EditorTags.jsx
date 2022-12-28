@@ -1,10 +1,10 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useRef, useState } from 'react'
-import { localeIncludes } from 'locale-includes'
-import { useFloating, offset, shift, size } from '@floating-ui/react-dom'
 
 import { useContext } from '~/lib/context'
 import { TagLink } from '~/lib/routes'
 import useCombobox from '~/lib/useCombobox'
+import useComboboxFloating from '~/lib/useComboboxFloating'
+import includes from '~/lib/includes'
 
 import CloseIcon from '~/components/icons/CloseIcon'
 import PlusIcon from '~/components/icons/PlusIcon'
@@ -39,7 +39,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
   const trimmedInputValue = inputValue.replace(/\s+/g, ' ').trim()
 
   const filteredUnusedTags = useMemo(() => unusedTags.filter(
-    tag => localeIncludes(tag.text, trimmedInputValue, { usage: 'search', sensitivity: 'base' })
+    tag => includes(tag.text, trimmedInputValue)
   ), [unusedTags, trimmedInputValue])
 
   const suggestions = useMemo(() => {
@@ -71,25 +71,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
     ? <TagLink tagId={id} children={text} {...otherProps} />
     : <span tabIndex="0" children={text} {...otherProps} />
 
-  const {
-    x: suggestionsX,
-    y: suggestionsY,
-    reference: inputContainerRef,
-    floating: suggestionsRef,
-    strategy: suggestionsPosition,
-  } = useFloating({
-    placement: 'bottom-start',
-    middleware: [
-      offset(10),
-      shift(),
-      size({
-        apply: ({ availableHeight, elements }) => {
-          elements.floating.style.maxHeight = `${availableHeight}px`
-        },
-        padding: 10,
-      }),
-    ],
-  })
+  const comboboxFloating = useComboboxFloating()
 
   const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
     query: trimmedInputValue,
@@ -137,7 +119,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
       </button>
 
       <div className="h-8 flex items-center" style={{ display: inputVisible ? undefined : 'none' }}>
-        <div ref={inputContainerRef}>
+        <div {...comboboxFloating.inputProps}>
           <input
             {...inputProps}
             ref={inputRef}
@@ -174,14 +156,8 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
 
         {showSuggestions && (
           <div
-            {...suggestionContainerProps}
-            ref={suggestionsRef}
+            {...comboboxFloating.suggestionsProps}
             className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
-            style={{
-              position: suggestionsPosition,
-              top: suggestionsY ?? 0,
-              left: suggestionsX ?? 0,
-            }}
           >
             {mapSuggestions(({ suggestion, active, suggestionProps }) => (
               <div

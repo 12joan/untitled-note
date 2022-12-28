@@ -14,6 +14,7 @@ import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import usePlugins from '~/lib/editor/plugins'
 import { useLinkModalProvider } from '~/lib/editor/links'
+import filterDescendants from '~/lib/editor/filterDescendants'
 import getPlainBody from '~/lib/editor/getPlainBody'
 import { useFind } from '~/lib/editor/find'
 import {
@@ -38,6 +39,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
   const titleRef = useRef()
   const tagsRef = useRef()
   const tippyContainerRef = useRef()
+  const mentionSuggestionsContainerRef = useRef()
   const editorElementRef = useRef()
   const editorRef = useRef()
 
@@ -165,7 +167,11 @@ const Editor = ({ workingDocument, updateDocument }) => {
       />
 
       {withLinkModalProvider(
-        <ContextProvider tippyContainerRef={tippyContainerRef}>
+        <ContextProvider
+          tippyContainerRef={tippyContainerRef}
+          mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
+          linkOriginator={workingDocument.safe_title}
+        >
           <Plate
             id="editor"
             plugins={plugins}
@@ -188,6 +194,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
       )}
 
       <div ref={tippyContainerRef} />
+      <div ref={mentionSuggestionsContainerRef} />
     </>
   )
 }
@@ -216,10 +223,12 @@ const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElem
   useSaveScroll(workingDocument.id)
 
   useEffectAfterFirst(() => {
+    const filteredEditor = filterDescendants(editor, ({ type }) => type !== 'mention_input')
+
     updateDocument({
-      body: JSON.stringify(editor.children),
+      body: JSON.stringify(filteredEditor.children),
       body_type: 'json/slate',
-      plain_body: getPlainBody(editor),
+      plain_body: getPlainBody(filteredEditor),
     })
   }, [editor.children])
 
