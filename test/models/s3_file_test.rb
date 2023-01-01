@@ -23,6 +23,34 @@ class S3FileTest < ActiveSupport::TestCase
     end
   end
 
+  test 'presigned url prevents inline display when content type is unsafe' do
+    @s3_file.content_type = 'text/html'
+
+    mock_s3_objects do |s3_object|
+      s3_object.expect(:presigned_url, 'some presigned url') do |response_content_type:, response_content_disposition:, **_|
+        response_content_type == 'application/octet-stream' && response_content_disposition.start_with?('attachment')
+      end
+
+      @s3_file.url
+
+      s3_object.verify
+    end
+  end
+
+  test 'presigned url allows inline display when content type is safe' do
+    @s3_file.content_type = 'image/png'
+
+    mock_s3_objects do |s3_object|
+      s3_object.expect(:presigned_url, 'some presigned url') do |response_content_type:, response_content_disposition:, **_|
+        response_content_type == 'image/png' && response_content_disposition.start_with?('inline')
+      end
+
+      @s3_file.url
+
+      s3_object.verify
+    end
+  end
+
   test 'when uploaded_cache is false, uploaded? check with S3' do
     @s3_file.uploaded_cache = false
 

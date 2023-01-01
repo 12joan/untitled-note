@@ -1,4 +1,5 @@
 import createToast from '~/lib/createToast'
+import filesize from '~/lib/filesize'
 
 const handleErrors = toastForError => promise => promise.catch(error => {
   console.log(error)
@@ -21,12 +22,6 @@ const handleCreateProjectError = handleErrors(() => ({
 const handleUpdateProjectError = handleErrors(() => ({
   title: 'Failed to update project details',
   message: 'An error occurred while updating the project details. Make sure you are connected to the internet and try again.',
-  autoClose: 'slow',
-}))
-
-const handleUploadProjectImageError = handleErrors(({ customErrorMessage }) => ({
-  title: 'Failed to upload project image',
-  message: customErrorMessage ?? 'An error occurred while uploading the project image. Make sure you are connected to the internet and try again.',
   autoClose: 'slow',
 }))
 
@@ -109,10 +104,32 @@ const handleReplaceError = handleErrors(() => ({
   autoClose: 'slow',
 }))
 
+const handleUploadAttachmentError = handleErrors(() => ({
+  title: 'Failed to upload attachment',
+  message: 'An error occurred while uploading the attachment. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}))
+
+const handleUploadFileError = handleErrors(({ reason = undefined, data = {} }) => ({
+  notEnoughSpace: {
+    title: 'Not enough space to complete upload',
+    message: `${filesize(data.requiredSpace)} is required to complete the upload. You have ${filesize(data.availableSpace)} remaining.`,
+    autoClose: 'slow',
+    button: {
+      label: 'View storage usage',
+      onClick: data.showFileStorage,
+    },
+  },
+  [undefined]: {
+    title: 'Failed to complete upload',
+    message: 'An error occurred while completing the upload. Make sure you are connected to the internet and try again.',
+    autoClose: 'slow',
+  },
+}[reason]))
+
 export {
   handleCreateProjectError,
   handleUpdateProjectError,
-  handleUploadProjectImageError,
   handleRemoveProjectImageError,
   handleArchiveProjectError,
   handleUnarchiveProjectError,
@@ -125,4 +142,6 @@ export {
   handleDeleteFileError,
   handleResetPasswordError,
   handleReplaceError,
+  handleUploadAttachmentError,
+  handleUploadFileError,
 }

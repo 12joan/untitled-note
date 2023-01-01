@@ -16,7 +16,7 @@ const EditorView = ({ documentId }) => {
 
   const futurePartialDocument = futurePartialDocumentsIncludingBlank.map(
     partialDocuments => partialDocuments.find(doc => doc.id == documentId) || {
-      remote_version: Math.infinity,
+      remote_version: Infinity,
       safe_title: 'Untitled document',
     }
   )

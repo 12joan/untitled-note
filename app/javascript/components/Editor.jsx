@@ -14,8 +14,8 @@ import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import usePlugins from '~/lib/editor/plugins'
 import { useLinkModalProvider } from '~/lib/editor/links'
-import filterDescendants from '~/lib/editor/filterDescendants'
-import getPlainBody from '~/lib/editor/getPlainBody'
+import editorDataForUpload from '~/lib/editor/editorDataForUpload'
+import { useEditorEvent } from '~/lib/editor/imperativeEvents'
 import { useFind } from '~/lib/editor/find'
 import {
   useSaveSelection,
@@ -223,13 +223,7 @@ const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElem
   useSaveScroll(workingDocument.id)
 
   useEffectAfterFirst(() => {
-    const filteredEditor = filterDescendants(editor, ({ type }) => type !== 'mention_input')
-
-    updateDocument({
-      body: JSON.stringify(filteredEditor.children),
-      body_type: 'json/slate',
-      plain_body: getPlainBody(filteredEditor),
-    })
+    updateDocument(editorDataForUpload(editor))
   }, [editor.children])
 
   const formattingToolbar = useFormattingToolbar(

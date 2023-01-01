@@ -5,6 +5,7 @@ import { sequence, Future } from '~/lib/future'
 import S3FilesAPI from '~/lib/resources/S3FilesAPI'
 import { handleDeleteFileError } from '~/lib/handleErrors'
 import filesize from '~/lib/filesize'
+import { dispatchGlobalEvent } from '~/lib/globalEvents'
 
 import Meter from '~/components/Meter'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
@@ -21,17 +22,17 @@ const FileStorageSection = () => {
     files: futureFiles,
   }, Future.resolved)
 
-  const downloadFile = ({ url }) => window.open(url, '_blank')
-
   const deleteFile = file => handleDeleteFileError(
     S3FilesAPI(file.project_id).destroy(file),
-  )
+  ).then(() => dispatchGlobalEvent('s3File:delete', { s3FileId: file.id }))
 
   const fileMenu = file => (
     <>
       <DropdownItem
         icon={DownloadIcon}
-        onClick={() => downloadFile(file)}
+        as="a"
+        href={file.url}
+        target="_blank"
       >
         Download file
       </DropdownItem>

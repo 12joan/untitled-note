@@ -28,8 +28,8 @@ const useAccountModal = () => useModal(AccountModal, {
   },
 })
 
-const AccountModal = ({ onClose }) => {
-  const [activeSectionKey, setActiveSectionKey] = useState(sectionKeys[0])
+const AccountModal = ({ initialSection = sectionKeys[0], onClose }) => {
+  const [activeSectionKey, setActiveSectionKey] = useState(initialSection)
 
   const {
     title: activeSectionTitle,

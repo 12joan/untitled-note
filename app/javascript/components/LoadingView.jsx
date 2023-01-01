@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import { useContext } from '~/lib/context'
 import { useTimeout } from '~/lib/useTimer'
 
-const LoadingView = ({ style = {}, ...otherProps }) => {
+const LoadingView = ({ style = {}, showImmediately = false, ...otherProps }) => {
   const { topBarHeight = 0 } = useContext()
-  const [showLoading, setShowLoading] = useState(false)
+  const [showLoading, setShowLoading] = useState(showImmediately)
 
-  useTimeout(() => setShowLoading(true), 500)
+  useTimeout(() => !showImmediately && setShowLoading(true), 500)
 
   return (
     <div

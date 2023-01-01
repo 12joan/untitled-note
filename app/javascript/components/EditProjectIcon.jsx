@@ -10,7 +10,7 @@ import { uploadProjectImage, removeProjectImage } from '~/lib/projectImageAction
 import ProjectsAPI from '~/lib/resources/ProjectsAPI'
 import retry from '~/lib/retry'
 import {
-  handleUploadProjectImageError,
+  handleUploadFileError,
   handleRemoveProjectImageError,
   handleUpdateProjectError,
 } from '~/lib/handleErrors'
@@ -81,7 +81,9 @@ const EditProjectIcon = () => {
 const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
   const fileInputRef = useRef(null)
 
-  const { project, futureRemainingQuota, showFileStorageModal } = useContext()
+  const { projectId, futureRemainingQuota, showAccountModal } = useContext()
+
+  const showFileStorage = () => showAccountModal({ initialSection: 'fileStorage' })
 
   const isUploading = state === 'uploading'
   const isRemoving = state === 'removing'
@@ -102,11 +104,12 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
 
     setState('uploading')
 
-    handleUploadProjectImageError(
+    handleUploadFileError(
       uploadProjectImage({
-        project,
+        projectId,
         file: originalFile,
-        availableSpace: futureRemainingQuota.orDefault(Math.infinity),
+        availableSpace: futureRemainingQuota.orDefault(Infinity),
+        showFileStorage,
       }).then(() => overrideHasImage(true))
     ).finally(() => setState('idle'))
   }
@@ -115,7 +118,7 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
     setState('removing')
 
     handleRemoveProjectImageError(
-      removeProjectImage(project).then(() => overrideHasImage(false))
+      removeProjectImage(projectId).then(() => overrideHasImage(false))
     ).finally(() => setState('idle'))
   }
 
@@ -161,7 +164,7 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
         <button
           type="button"
           className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
-          onClick={showFileStorageModal}
+          onClick={showFileStorage}
           children={`${filesize(remainingQuota)} available`}
         />
       )).orDefault(null)}

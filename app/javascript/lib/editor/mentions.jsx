@@ -1,7 +1,6 @@
 import React, { useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import {
-  getPluginOptions,
   getMentionOnSelectItem,
   findMentionInput,
   removeMentionInput,

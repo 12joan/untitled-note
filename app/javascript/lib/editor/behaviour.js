@@ -3,6 +3,7 @@ import {
   createSoftBreakPlugin,
   createResetNodePlugin,
   createExitBreakPlugin,
+  createTrailingBlockPlugin,
   isSelectionAtBlockStart,
   ELEMENT_PARAGRAPH,
   ELEMENT_H1,
@@ -64,6 +65,7 @@ const useBehaviourPlugins = ({ findOptions }) => {
         ],
       },
     }),
+    createTrailingBlockPlugin(),
     createImperativeEventsPlugin(),
   ], [])
 

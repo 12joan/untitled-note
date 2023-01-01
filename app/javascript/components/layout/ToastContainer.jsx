@@ -32,7 +32,7 @@ const ToastContainer = () => {
   )
 }
 
-const Toast = ({ title, message, autoClose }) => {
+const Toast = ({ title, message, autoClose, button = null }) => {
   const [visible, setVisible] = useState(false)
   const [inDOM, setInDOM] = useState(true)
   const [isClosing, setIsClosing] = useState(false)
@@ -65,7 +65,21 @@ const Toast = ({ title, message, autoClose }) => {
     >
       <div className="shrink-1 w-96 space-y-1 select-none">
         <strong className="font-medium">{title}</strong>
+
         <p className="text-sm">{message}</p>
+
+        {button && (
+          <button
+            type="button"
+            className="btn btn-link font-medium"
+            onClick={() => {
+              button.onClick()
+              close()
+            }}
+          >
+            {button.label}
+          </button>
+        )}
       </div>
 
       <button

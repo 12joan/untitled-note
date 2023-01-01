@@ -44,6 +44,15 @@ class UploadAllowedTest < ActiveSupport::TestCase
     assert_equal 'File is not an image', error
   end
 
+  test 'attachment is allowed' do
+    allowed, error = UploadAllowed.allowed?(
+      user: @user,
+      file_params: attachment_params,
+    )
+
+    assert allowed, 'should be allowed'
+  end
+
   test 'allowed if size is equal to remaining quota' do
     @user.update!(storage_used: @user.storage_quota - 54)
 
@@ -79,6 +88,12 @@ class UploadAllowedTest < ActiveSupport::TestCase
   def project_image_params(overrides = {})
     file_params(
       role: 'project-image',
+    ).merge(overrides)
+  end
+
+  def attachment_params(overrides = {})
+    file_params(
+      role: 'attachment',
     ).merge(overrides)
   end
 end

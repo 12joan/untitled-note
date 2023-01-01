@@ -14,6 +14,8 @@ const resolveGroupedClassNames = groupedClassNames => Object.values(groupedClass
   .replace(/\s+/g, ' ')
   .trim()
 
-const groupedClassNames = (base, custom) => resolveGroupedClassNames(mergeGroupedClassNames(base, custom))
+const groupedClassNames = (base, ...overrides) => resolveGroupedClassNames(
+  overrides.reduce(mergeGroupedClassNames, base)
+)
 
 export default groupedClassNames

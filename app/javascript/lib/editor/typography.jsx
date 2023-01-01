@@ -27,36 +27,49 @@ import {
 
 import { LinkComponent } from '~/lib/editor/links'
 import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions'
+import {
+  ELEMENT_ATTACHMENT,
+  ELEMENT_UPLOADING_ATTACHMENT,
+  useAttachmentPlugins,
+  AttachmentComponent,
+  UploadingAttachmentComponent,
+} from '~/lib/editor/attachments'
 import { MARK_FIND_RESULT, MARK_FIND_RESULT_CURRENT } from '~/lib/editor/find'
 
-const useTypographyPlugins = () => useMemo(() => [
-  createParagraphPlugin(),
-  createBoldPlugin(),
-  createItalicPlugin(),
-  createStrikethroughPlugin(),
-  createLinkPlugin(),
-  createHeadingPlugin({ options: { levels: 1 } }),
-  createBlockquotePlugin(),
-  createCodeBlockPlugin({
-    deserializeHtml: {
-      rules: [
-        {
-          validNodeName: 'PRE',
-        },
-      ],
-      getNode: el => ({
-        type: ELEMENT_CODE_BLOCK,
-        children: [{ text: el.textContent }],
-      }),
-    },
-  }),
-  createListPlugin(),
-  createMentionPlugin({
-    options: {
-      createMentionNode: x => x,
-    },
-  }),
-], [])
+const useTypographyPlugins = () => {
+  const mainPlugins = useMemo(() => [
+    createParagraphPlugin(),
+    createBoldPlugin(),
+    createItalicPlugin(),
+    createStrikethroughPlugin(),
+    createLinkPlugin(),
+    createHeadingPlugin({ options: { levels: 1 } }),
+    createBlockquotePlugin(),
+    createCodeBlockPlugin({
+      deserializeHtml: {
+        rules: [
+          {
+            validNodeName: 'PRE',
+          },
+        ],
+        getNode: el => ({
+          type: ELEMENT_CODE_BLOCK,
+          children: [{ text: el.textContent }],
+        }),
+      },
+    }),
+    createListPlugin(),
+    createMentionPlugin({
+      options: {
+        createMentionNode: x => x,
+      },
+    }),
+  ], [])
+
+  const attachmentPlugins = useAttachmentPlugins()
+
+  return [...mainPlugins, ...attachmentPlugins]
+}
 
 const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
   <Component
@@ -82,6 +95,8 @@ const components = {
   [ELEMENT_LI]: makeElementComponent('li'),
   [ELEMENT_MENTION]: MentionComponent,
   [ELEMENT_MENTION_INPUT]: MentionInputComponent,
+  [ELEMENT_ATTACHMENT]: AttachmentComponent,
+  [ELEMENT_UPLOADING_ATTACHMENT]: UploadingAttachmentComponent,
 }
 
 export { useTypographyPlugins, components }

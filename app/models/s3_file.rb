@@ -12,6 +12,28 @@ class S3File < ApplicationRecord
   include Queryable.permit(*%i[id project_id role s3_key filename size content_type url created_at])
   include Listenable
 
+  INLINE_CONTENT_TYPES = %w[
+    application/pdf
+    image/apng
+    image/gif
+    image/jpeg
+    image/png
+    image/webp
+    video/mpeg
+    video/mp4
+    video/ogg
+    video/quicktime
+    video/webm
+    audio/mpeg
+    audio/ogg
+    audio/aac
+    audio/flac
+    audio/mp4
+    audio/wave
+    audio/wav
+    audio/webm
+  ].freeze
+
   before_create do
     owner.update_storage_used(size)
   end
@@ -40,7 +62,7 @@ class S3File < ApplicationRecord
     redis = Rails.application.config.redis
     redis_key = "s3_file:#{id}:url"
 
-    redis.get(redis_key) || s3_object.presigned_url(:get, expires_in: 7.days.to_i).tap do |url|
+    redis.get(redis_key) || generate_url.tap do |url|
       redis.set(redis_key, url, ex: 6.days.to_i)
     end
   end
@@ -50,6 +72,17 @@ class S3File < ApplicationRecord
   end
 
   private
+
+  def generate_url
+    inline_safe = INLINE_CONTENT_TYPES.include?(content_type)
+
+    s3_object.presigned_url(
+      :get,
+      expires_in: 7.days.to_i,
+      response_content_type: inline_safe ? content_type : 'application/octet-stream',
+      response_content_disposition: "#{inline_safe ? 'inline' : 'attachment'}; filename=\"#{filename}\"",
+    )
+  end
 
   def check_uploaded(update_cache:)
     s3_object.exists?.tap do |exists|
