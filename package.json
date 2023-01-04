@@ -9,14 +9,14 @@
     "dev:vite": "bin/vite serve"
   },
   "dependencies": {
-    "@emoji-mart/data": "^1.1.0",
+    "@emoji-mart/data": "^1.1.1",
     "@emoji-mart/react": "^1.1.0",
-    "@floating-ui/react-dom": "^1.0.1",
+    "@floating-ui/react-dom": "^1.1.0",
     "@headlessui/react": "^1.7.7",
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
-    "@udecode/plate-headless": "^18.14.0",
+    "@udecode/plate-headless": "^18.14.2",
     "axios": "^1.2.2",
     "browser-image-compression": "^2.0.0",
     "emoji-mart": "^5.4.0",

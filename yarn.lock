@@ -353,10 +353,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@emoji-mart/data@^1.0.8", "@emoji-mart/data@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.1.0.tgz#a87906c6ac91951667a175572b2071a05a0a8590"
-  integrity sha512-gwwGC0v5+BQM5On8hy0Uw7qT+xBHVLFuamHj8wHLo4JkuYM+XlGbQuQZj/X7JJLQuBiHs4d3Xh2O+h6YlbtCCA==
+"@emoji-mart/data@^1.0.8", "@emoji-mart/data@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.1.1.tgz#8b49cdfa85be8f1893abfca4cd0fa78e34e49672"
+  integrity sha512-yn1LiT9QA0GHN+Xkv0ZkZYS0+SyopNItMEi7z/f9Se8yA5TMjlcq0jisseqeO0MdG/x8P5Pgqluzi6rOr5HUkw==
 
 "@emoji-mart/react@^1.1.0":
   version "1.1.0"
@@ -378,10 +378,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.7.3.tgz#d274116678ffae87f6b60e90f88cc4083eefab86"
   integrity sha512-buc8BXHmG9l82+OQXOFU3Kr2XQx9ys01U/Q9HMIrZ300iLc8HLMgh7dcCqgYzAzf4BkoQvDcXf5Y+CuEZ5JBYg==
 
-"@floating-ui/core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.0.2.tgz#d06a66d3ad8214186eda2432ac8b8d81868a571f"
-  integrity sha512-Skfy0YS3NJ5nV9us0uuPN0HDk1Q4edljaOhRBJGDWs9EBa7ZVMYBHRFlhLvvmwEoaIM9BlH6QJFn9/uZg0bACg==
+"@floating-ui/core@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.0.5.tgz#ada3cca622fe7b52d7b9ead97ddbed5b98925c66"
+  integrity sha512-iDdOsaCHZH/0FM0yNBYt+cJxJF9S5jrYWNtDZOiDFMiZ7uxMJ/71h8eTwoVifEAruv9p9rlMPYCGIgMjOz95FQ==
 
 "@floating-ui/dom@^0.5.3":
   version "0.5.4"
@@ -390,12 +390,12 @@
   dependencies:
     "@floating-ui/core" "^0.7.3"
 
-"@floating-ui/dom@^1.0.5":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.6.tgz#e42393ec381a4fe96673fbcee137a95e86c93ebc"
-  integrity sha512-kt/tg1oip9OAH1xjCTcx1OpcUpu9rjDw3GKJ/rEhUqhO7QyJWfrHU0DpLTNsH67+JyFL5Kv9X1utsXwKFVtyEQ==
+"@floating-ui/dom@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.1.0.tgz#29fea1344fdef15b6ba270a733d20b7134fee5c2"
+  integrity sha512-TSogMPVxbRe77QCj1dt8NmRiJasPvuc+eT5jnJ6YpLqgOD2zXc5UA3S1qwybN+GVCDNdKfpKy1oj8RpzLJvh6A==
   dependencies:
-    "@floating-ui/core" "^1.0.2"
+    "@floating-ui/core" "^1.0.5"
 
 "@floating-ui/react-dom-interactions@^0.6.6":
   version "0.6.6"
@@ -414,12 +414,12 @@
     "@floating-ui/dom" "^0.5.3"
     use-isomorphic-layout-effect "^1.1.1"
 
-"@floating-ui/react-dom@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.0.1.tgz#ee3524eab740b9380a00f4c2629a758093414325"
-  integrity sha512-UW0t1Gi8ikbDRr8cQPVcqIDMBwUEENe5V4wlHWdrJ5egFnRQFBV9JirauTBFI6S8sM1qFUC1i+qa3g87E6CLTw==
+"@floating-ui/react-dom@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.1.0.tgz#cd212b9e98303ba76e59806e425217f40e33926d"
+  integrity sha512-xyP9dMqZouuQ7h10DvbEbxZItuUleKHXe7XQFvbpttjXZrfyQMaZVTnWsE/t3hrHakZy18HxEBZRzGNXQHd0GA==
   dependencies:
-    "@floating-ui/dom" "^1.0.5"
+    "@floating-ui/dom" "^1.1.0"
 
 "@headlessui/react@^1.7.7":
   version "1.7.7"
@@ -698,10 +698,10 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
-"@udecode/plate-emoji@18.14.0":
-  version "18.14.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.14.0.tgz#d965d228e4ac145bb79b8b2d1cfb95a85fdd06c7"
-  integrity sha512-upB/e5Tui7NcrnmZXE9apt3FOYPaYWHx8pTjjeM7/dHthV5fSEMvtNy42FhtjB7tCDuoUfVC432uV65lB2WczA==
+"@udecode/plate-emoji@18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-emoji/-/plate-emoji-18.14.2.tgz#cfff407e8b9337cd39248ab2dfc831e58258133a"
+  integrity sha512-fU0Thx09VKMoR3/Qf6iWrgWIrJQJGD+eLNeiVZYiJtjeQKlDZEz9se5j56JD4rBNSpW168czEpfm2ZkR2gIKIg==
   dependencies:
     "@emoji-mart/data" "^1.0.8"
     "@udecode/plate-combobox" "18.13.0"
@@ -736,10 +736,10 @@
   dependencies:
     "@udecode/plate-core" "18.13.0"
 
-"@udecode/plate-headless@^18.14.0":
-  version "18.14.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.14.0.tgz#9d62bb1d1ecc5de0acbc243f70644750323fe4dd"
-  integrity sha512-/dyryxuJa7BhK9IgwQdElO8DYdEHc+mx1008LveTg+ddxUYaUzHYBy7EyJoADp3iGIjOeSagDu/x9ryh5Am6WQ==
+"@udecode/plate-headless@^18.14.2":
+  version "18.14.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.14.2.tgz#18dd525be7e4a6ff69e563d16c15a8bca5a2b0a6"
+  integrity sha512-UdMQoYEX6vM+AP3z0GzraImQdv/ROUEez+uOyXW5lnHMZBLTd77Wpeyupd8fuGljYZ0PSrMPYNRrBlf3R/5T5w==
   dependencies:
     "@udecode/plate-alignment" "18.13.0"
     "@udecode/plate-autoformat" "18.13.0"
@@ -752,7 +752,7 @@
     "@udecode/plate-combobox" "18.13.0"
     "@udecode/plate-comments" "18.13.0"
     "@udecode/plate-core" "18.13.0"
-    "@udecode/plate-emoji" "18.14.0"
+    "@udecode/plate-emoji" "18.14.2"
     "@udecode/plate-find-replace" "18.13.0"
     "@udecode/plate-floating" "18.13.0"
     "@udecode/plate-font" "18.13.0"
