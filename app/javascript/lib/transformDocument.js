@@ -1,6 +1,6 @@
-const transformDocument = (doc, delta, { incrementRemoteVersion = true } = {}) => ({
+const transformDocument = (doc, delta, { invalidateEditor = true } = {}) => ({
   id: doc.id,
-  ...(incrementRemoteVersion ? { remote_version: doc.remote_version + 1 } : {}),
+  ...(invalidateEditor ? { updated_by: Math.random().toString(36).substring(2) } : {}),
   ...delta,
 })
 

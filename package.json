@@ -17,7 +17,6 @@
     "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
     "@udecode/plate-headless": "^18.14.0",
-    "async-mutex": "^0.4.0",
     "axios": "^1.2.2",
     "browser-image-compression": "^2.0.0",
     "emoji-mart": "^5.4.0",

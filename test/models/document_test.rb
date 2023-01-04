@@ -130,17 +130,17 @@ class DocumentTest < ActiveSupport::TestCase
     end
   end
 
-  test 'increment_remote_version increments remote_version without saving' do
-    document = create(:document, remote_version: 1)
-    document.increment_remote_version
-    assert_equal 2, document.remote_version
-    assert_equal 1, document.reload.remote_version
+  test 'was_updated_on_server sets updated_by without saving' do
+    document = create(:document, updated_by: 'someclient')
+    document.was_updated_on_server
+    assert_equal 'server', document.updated_by
+    assert_equal 'someclient', document.reload.updated_by
   end
 
-  test 'increment_remote_version! increments remote_version and saves' do
-    document = create(:document, remote_version: 1)
-    document.increment_remote_version!
-    assert_equal 2, document.reload.remote_version
+  test 'was_updated_on_server! sets updated_by and saves' do
+    document = create(:document, updated_by: 'someclient')
+    document.was_updated_on_server!
+    assert_equal 'server', document.reload.updated_by
   end
 
   test 'search returns up to date documents matching query and project' do

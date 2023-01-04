@@ -5,24 +5,23 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     @tag = create(:tag, text: 'My Tag')
     @project = @tag.project
 
-    @document = create(:document, project: @project, tags_attributes: [{
+    @document = create(:document, project: @project, updated_by: 'someclient', tags_attributes: [{
       text: @tag.text,
     }])
 
     as_user(@project.owner)
   end
 
-  test 'should update tag and increment document versions' do
-    assert_difference(-> { @document.reload.remote_version }) do
-      patch api_v1_project_tag_url(@project, @tag), params: {
-        tag: {
-          text: 'Renamed Tag'
-        },
-      }
-    end
+  test 'should update tag and set updated_by' do
+    patch api_v1_project_tag_url(@project, @tag), params: {
+      tag: {
+        text: 'Renamed Tag'
+      },
+    }
 
     assert_response :success
     assert_equal 'Renamed Tag', @tag.reload.text
+    assert_equal 'server', @document.reload.updated_by
   end
 
   test 'returns 422 when tag is invalid' do

@@ -20,7 +20,7 @@ import DeleteIcon from '~/components/icons/DeleteIcon'
 const DocumentMenu = ({
   document: doc,
   updateDocument: updateDocumentOverride,
-  incrementRemoteVersion = true,
+  invalidateEditor = true,
   openFind = undefined,
   showReplace = false,
 }) => {
@@ -32,7 +32,7 @@ const DocumentMenu = ({
   const copyLink = () => copyPath(documentPath(projectId, doc.id))
 
   const isPinned = doc.pinned_at !== null
-  const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { incrementRemoteVersion }))
+  const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { invalidateEditor }))
 
   const [replaceModal, openReplaceModal] = useReplaceModal()
 

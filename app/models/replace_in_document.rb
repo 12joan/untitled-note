@@ -24,7 +24,7 @@ class ReplaceInDocument
 
     if replace_count > 0
       document.body = JSON.generate(new_document_root)
-      document.increment_remote_version
+      document.was_updated_on_server
       document.save!
     end
 

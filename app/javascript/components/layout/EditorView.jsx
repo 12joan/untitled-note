@@ -1,9 +1,11 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useRef, useMemo, useEffect, useReducer } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
+import useStateWhileMounted from '~/lib/useStateWhileMounted'
+import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
+import { FutureServiceResult } from '~/lib/future'
 import useTitle from '~/lib/useTitle'
-import useSynchronisedRecord from '~/lib/synchroniseRecords'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { OverviewLink } from '~/lib/routes'
@@ -12,38 +14,24 @@ import LoadingView from '~/components/LoadingView'
 import Editor from '~/components/Editor'
 
 const EditorView = ({ documentId }) => {
-  const { futurePartialDocumentsIncludingBlank } = useContext()
-
-  const futurePartialDocument = futurePartialDocumentsIncludingBlank.map(
-    partialDocuments => partialDocuments.find(doc => doc.id == documentId) || {
-      remote_version: Infinity,
-      safe_title: 'Untitled document',
-    }
-  )
-
-  const loadingView = (
-    <LoadingView />
-  )
-
-  return futurePartialDocument.unwrap({
-    pending: () => loadingView,
-    resolved: partialDocument => (
-      <WithParitalDocument
-        documentId={documentId}
-        partialDocument={partialDocument}
-        loadingView={loadingView}
-      />
-    ),
-  })
-}
-
-const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
-  const { projectId } = useContext()
+  const { projectId, futurePartialDocuments } = useContext()
   const [searchParams] = useSearchParams()
   const isFromRecentlyViewed = searchParams.has('recently_viewed')
-  const api = useMemo(() => DocumentsAPI(projectId), [projectId])
 
-  useTitle(partialDocument.safe_title)
+  const { current: clientId } = useRef(Math.random().toString(36).slice(2))
+
+  const futurePartialDocument = useMemo(() => futurePartialDocuments
+    .map(partialDocuments => partialDocuments.find(
+      partialDocument => partialDocument.id === documentId
+    )),
+    [futurePartialDocuments, documentId]
+  )
+
+  const safeTitle = futurePartialDocument.map(partialDocument => partialDocument?.safe_title).orDefault(undefined)
+  const updatedBy = futurePartialDocument.map(partialDocument => partialDocument?.updated_by).orDefault(undefined)
+  const updatedAt = futurePartialDocument.map(partialDocument => partialDocument?.updated_at).orDefault(undefined)
+
+  useTitle(safeTitle || 'Loading…')
 
   useEffect(() => {
     if (!isFromRecentlyViewed) {
@@ -51,41 +39,31 @@ const WithParitalDocument = ({ documentId, partialDocument, loadingView }) => {
     }
   }, [isFromRecentlyViewed, documentId])
 
-  const fsrSynchronisedRecord = useSynchronisedRecord({
-    key: `document-${documentId}`,
-    upstreamRemoteVersion: partialDocument.remote_version,
-    getRemoteVersion: doc => doc.remote_version,
-    fetchRecord: () => api.show(documentId),
-    uploadRecord: (updatedDocument, uploadingVersion) => api.update({
-      ...updatedDocument,
-      remote_version: uploadingVersion,
-    }),
-    attributeBehaviours: {
-      remote_version: { merge: (local, remote) => remote },
-      blank: { merge: (local, remote) => remote },
-      title: { delayedUpdate: true },
-      safe_title: { merge: (local, remote) => remote },
-      body: { delayedUpdate: true },
-      body_type: { delayedUpdate: true },
-      plain_body: { delayedUpdate: true },
-      tags: {
-        merge: (local, remote) => local.map(localTag => localTag.id
-          ? localTag
-          : remote.find(remoteTag => remoteTag.text === localTag.text)
-        ),
-      },
-    },
-  })
+  const [fsrInitialDocument, setFsrInitialDocument] = useStateWhileMounted(() => FutureServiceResult.pending())
+  const [refetchKey, refetch] = useReducer(refetchKey => refetchKey + 1, 0)
 
-  return fsrSynchronisedRecord.unwrap({
-    pending: () => loadingView,
-    success: ([workingDocument, updateDocument, errorDuringUpload]) => (
-      // TODO: Handle errorDuringUpload
+  useEffectAfterFirst(() => {
+    if (updatedBy && updatedBy !== clientId) {
+      refetch()
+    }
+  }, [updatedAt], updatedAt !== undefined)
 
+  useEffect(() => {
+    setFsrInitialDocument(FutureServiceResult.pending())
+
+    FutureServiceResult.fromPromise(
+      DocumentsAPI(projectId).show(documentId),
+      setFsrInitialDocument
+    )
+  }, [projectId, documentId, refetchKey])
+
+  return fsrInitialDocument.unwrap({
+    pending: () => <LoadingView />,
+    success: initialDocument => (
       <div className="grow flex flex-col">
         <Editor
-          workingDocument={workingDocument}
-          updateDocument={updateDocument}
+          clientId={clientId}
+          initialDocument={initialDocument}
         />
       </div>
     ),

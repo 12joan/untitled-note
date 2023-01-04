@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react'
 
-const useEffectAfterFirst = (callback, dependencies = []) => {
+const useEffectAfterFirst = (callback, dependencies = [], shouldExecute = true) => {
   const isFirst = useRef(true)
 
   useEffect(() => {
-    if (isFirst.current) {
-      isFirst.current = false
-    } else {
-      return callback()
+    if (shouldExecute) {
+      if (isFirst.current) {
+        isFirst.current = false
+      } else {
+        return callback()
+      }
     }
   }, dependencies)
 }

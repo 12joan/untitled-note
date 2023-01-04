@@ -9,6 +9,10 @@ import {
 } from '@udecode/plate-headless'
 
 import { useContext, ContextProvider } from '~/lib/context'
+import useStateWhileMounted from '~/lib/useStateWhileMounted'
+import useEnqueuedPromises from '~/lib/useEnqueuedPromises'
+import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import useDebounce from '~/lib/useDebounce'
 import { useGlobalEvent } from '~/lib/globalEvents'
 import { overviewPath } from '~/lib/routes'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
@@ -35,7 +39,65 @@ import FormattingToolbar from '~/components/layout/FormattingToolbar'
 import TagsIcon from '~/components/icons/TagsIcon'
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 
-const Editor = ({ workingDocument, updateDocument }) => {
+const Editor = ({ clientId, initialDocument }) => {
+  const { projectId, topBarHeight } = useContext()
+
+  const [workingDocument, setWorkingDocument] = useStateWhileMounted(initialDocument)
+
+  const extractServerDrivenData = remoteDocument => setWorkingDocument(localDocument => ({
+    ...localDocument,
+    safe_title: remoteDocument.safe_title,
+    tags: localDocument.tags.map(localTag => {
+      if (localTag.id) {
+        return localTag
+      }
+
+      const remoteTag = remoteDocument.tags.find(remoteTag => remoteTag.text === localTag.text)
+
+      return remoteTag || localTag
+    }),
+  }))
+
+  const [enqueueUpdatePromise, updateIsDirty] = useEnqueuedPromises()
+
+  const updateDocument = delta => setWorkingDocument(previousDocument => {
+    const updatedDocument = { ...previousDocument, ...delta, updated_by: clientId }
+
+    enqueueUpdatePromise(() => DocumentsAPI(projectId)
+      .update(updatedDocument)
+      .then(extractServerDrivenData)
+    )
+
+    return updatedDocument
+  })
+
+  const [workingTitle, setWorkingTitle] = useState(initialDocument.title)
+  const [debouncedUpdateTitle, titleIsDirty] = useDebounce(title => updateDocument({ title }), 750)
+
+  const setTitle = title => {
+    const normalizedTitle = title.replace(/[\n\r]+/g, '')
+    setWorkingTitle(normalizedTitle)
+    debouncedUpdateTitle(normalizedTitle)
+  }
+
+  const [debouncedUpdateBody, bodyIsDirty] = useDebounce(editor => {
+    updateDocument(editorDataForUpload(editor))
+  }, 750)
+
+  const isDirty = updateIsDirty || titleIsDirty || bodyIsDirty
+
+  useEffect(() => {
+    if (isDirty) {
+      const beforeUnloadHandler = event => {
+        event.preventDefault()
+        event.returnValue = ''
+      }
+
+      window.addEventListener('beforeunload', beforeUnloadHandler)
+      return () => window.removeEventListener('beforeunload', beforeUnloadHandler)
+    }
+  }, [isDirty])
+
   const titleRef = useRef()
   const tagsRef = useRef()
   const tippyContainerRef = useRef()
@@ -47,28 +109,26 @@ const Editor = ({ workingDocument, updateDocument }) => {
     editorElementRef.current = document.querySelector('[data-slate-editor]')
   }, [])
 
-  const { projectId, topBarHeight } = useContext()
-
-  const [tagsVisible, setTagsVisible] = useState(workingDocument.tags.length > 0)
+  const [tagsVisible, setTagsVisible] = useState(initialDocument.tags.length > 0)
 
   const navigate = useNavigate()
 
   useGlobalEvent('document:delete', ({ documentId }) => {
-    if (documentId === workingDocument.id) {
+    if (documentId === initialDocument.id) {
       navigate(overviewPath(projectId))
     }
   })
 
   const { findDialog, findOptions, openFind } = useFind({
     editorRef,
-    restoreSelection: () => restoreSelection(workingDocument.id, editorRef.current),
+    restoreSelection: () => restoreSelection(initialDocument.id, editorRef.current),
     setSelection: selection => setSelection(editorRef.current, selection),
   })
 
   const plugins = usePlugins({ findOptions })
 
   const initialValue = useMemo(() => {
-    const bodyFormat = workingDocument.body_type.split('/')[0]
+    const bodyFormat = initialDocument.body_type.split('/')[0]
     const emptyDocument = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]
 
     switch (bodyFormat) {
@@ -79,14 +139,14 @@ const Editor = ({ workingDocument, updateDocument }) => {
         const tempEditor = createPlateEditor({ plugins })
 
         const initialValue = deserializeHtml(tempEditor, {
-          element: workingDocument.body,
+          element: initialDocument.body,
           stripWhitespace: true,
         })
 
         return initialValue[0]?.type ? initialValue : emptyDocument
 
       case 'json':
-        return JSON.parse(workingDocument.body)
+        return JSON.parse(initialDocument.body)
 
       default:
         throw new Error(`Unknown body format: ${bodyFormat}`)
@@ -97,7 +157,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
     <DocumentMenu
       document={workingDocument}
       updateDocument={updateDocument}
-      incrementRemoteVersion={false}
+      invalidateEditor={false}
       openFind={openFind}
       showReplace
     />
@@ -118,11 +178,9 @@ const Editor = ({ workingDocument, updateDocument }) => {
           <TextareaAutosize
             ref={titleRef}
             className="min-w-0 grow h1 text-black dark:text-white"
-            value={workingDocument.title || ''}
+            defaultValue={initialDocument.title || ''}
             placeholder="Untitled document"
-            onChange={event => updateDocument({
-              title: event.target.value.replace(/[\n\r]+/g, ''),
-            })}
+            onChange={event => setTitle(event.target.value)}
             onKeyDown={event => {
               if (event.key === 'Enter') {
                 event.preventDefault()
@@ -183,8 +241,8 @@ const Editor = ({ workingDocument, updateDocument }) => {
             }}
           >
             <WithEditorState
-              workingDocument={workingDocument}
-              updateDocument={updateDocument}
+              initialDocument={initialDocument}
+              debouncedUpdateBody={debouncedUpdateBody}
               titleRef={titleRef}
               editorElementRef={editorElementRef}
               editorRef={editorRef}
@@ -199,7 +257,7 @@ const Editor = ({ workingDocument, updateDocument }) => {
   )
 }
 
-const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElementRef, editorRef }) => {
+const WithEditorState = ({ initialDocument, debouncedUpdateBody, titleRef, editorElementRef, editorRef }) => {
   const editor = usePlateEditorState('editor')
   const { useFormattingToolbar } = useContext()
 
@@ -209,21 +267,21 @@ const WithEditorState = ({ workingDocument, updateDocument, titleRef, editorElem
 
   useEffect(() => {
     setTimeout(() => {
-      if (workingDocument.blank) {
+      if (initialDocument.blank) {
         titleRef.current.focus()
       } else {
-        restoreSelection(workingDocument.id, editor)
+        restoreSelection(initialDocument.id, editor)
       }
 
-      restoreScroll(workingDocument.id)
+      restoreScroll(initialDocument.id)
     }, 0)
   }, [])
 
-  useSaveSelection(workingDocument.id, editor)
-  useSaveScroll(workingDocument.id)
+  useSaveSelection(initialDocument.id, editor)
+  useSaveScroll(initialDocument.id)
 
   useEffectAfterFirst(() => {
-    updateDocument(editorDataForUpload(editor))
+    debouncedUpdateBody(editor)
   }, [editor.children])
 
   const formattingToolbar = useFormattingToolbar(

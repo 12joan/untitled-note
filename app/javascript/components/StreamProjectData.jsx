@@ -21,12 +21,13 @@ const StreamProjectData = ({ projectId, children }) => {
   const futurePartialDocumentsIncludingBlank = useStream(resolve => DocumentsStream(projectId).index({
     query: {
       id: true,
-      remote_version: true,
       title: true,
       safe_title: true,
       preview: true,
-      pinned_at: true,
       blank: true,
+      updated_by: true,
+      updated_at: true,
+      pinned_at: true,
     },
     sort_by: 'created_at',
     sort_order: 'desc',

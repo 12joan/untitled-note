@@ -33,7 +33,7 @@ const DocumentsAPI = projectId => new ResourcesAPI({
         text: tag.text,
       })),
       blank: false,
-      remote_version: doc.remote_version,
+      updated_by: doc.updated_by,
       pinned_at: doc.pinned_at,
     },
   }),

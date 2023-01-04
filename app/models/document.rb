@@ -8,7 +8,7 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title safe_title preview body body_type tags blank remote_version created_at updated_at pinned_at])
+  include Queryable.permit(*%i[id title safe_title preview body body_type tags blank updated_by created_at updated_at pinned_at])
   include Listenable
 
   after_commit :upsert_to_typesense, on: %i[create update]
@@ -34,12 +34,12 @@ class Document < ApplicationRecord
     (preview.presence || plain_body.slice(0, 100)).strip
   end
 
-  def increment_remote_version
-    self.remote_version += 1
+  def was_updated_on_server
+    self.updated_by = 'server'
   end
 
-  def increment_remote_version!
-    increment_remote_version
+  def was_updated_on_server!
+    was_updated_on_server
     save!
   end
 

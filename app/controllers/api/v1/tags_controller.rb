@@ -7,7 +7,7 @@ module API
       def update
         Tag.transaction do
           @tag.update!(tag_params)
-          @tag.documents.each(&:increment_remote_version!)
+          @tag.documents.each(&:was_updated_on_server!)
         end
 
         render json: @tag.query(:all)
