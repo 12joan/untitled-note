@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
+import { useConnected } from '~/channels/connectionStatus'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useNewDocument from '~/lib/useNewDocument'
 import { LogoutLink } from '~/lib/routes'
@@ -8,6 +9,7 @@ import { LogoutLink } from '~/lib/routes'
 import Tooltip from '~/components/Tooltip'
 import Dropdown, { DropdownItem } from '~/components/Dropdown'
 import SidebarIcon from '~/components/icons/SidebarIcon'
+import OfflineIcon from '~/components/icons/OfflineIcon'
 import MenuIcon from '~/components/icons/MenuIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
@@ -37,6 +39,8 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
   ]
 
+  const isOnline = useConnected()
+
   return (
     <nav
       ref={ref}
@@ -53,9 +57,19 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
         </Tooltip>
       )}
 
-      <div className={`font-medium ${showSidebarButton ? '' : '-ml-3'} px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}>
-        {project.name}
-      </div>
+      {isOnline
+        ? (
+          <div className={`font-medium ${showSidebarButton ? '' : '-ml-3'} px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}>
+            {project.name}
+          </div>
+        )
+        : (
+          <div className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white" aria-live="assertive">
+            <OfflineIcon size="1.25em" noAriaLabel />
+            Connection lost
+          </div>
+        )
+      }
 
       <div className="grow" />
 

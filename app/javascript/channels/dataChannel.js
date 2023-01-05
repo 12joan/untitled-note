@@ -1,4 +1,5 @@
 import consumer from './consumer'
+import { handleSubscriptionStatusChanged } from './connectionStatus'
 
 const streamAction = (model, action, params, callback) => consumer.subscriptions.create(
   {
@@ -12,8 +13,13 @@ const streamAction = (model, action, params, callback) => consumer.subscriptions
   },
 
   {
-    connected() {},
-    disconnected() {},
+    connected() {
+      handleSubscriptionStatusChanged(true)
+    },
+
+    disconnected() {
+      handleSubscriptionStatusChanged(false)
+    },
 
     received(data) {
       callback(JSON.parse(data))
