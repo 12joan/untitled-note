@@ -414,10 +414,10 @@
     "@floating-ui/dom" "^0.5.3"
     use-isomorphic-layout-effect "^1.1.1"
 
-"@floating-ui/react-dom@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.1.0.tgz#cd212b9e98303ba76e59806e425217f40e33926d"
-  integrity sha512-xyP9dMqZouuQ7h10DvbEbxZItuUleKHXe7XQFvbpttjXZrfyQMaZVTnWsE/t3hrHakZy18HxEBZRzGNXQHd0GA==
+"@floating-ui/react-dom@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-1.1.2.tgz#214d395adf0ed5277e824505f7ee0f5a367ec239"
+  integrity sha512-dtz6NGI9nfWll0TPcL5fZzhUoaWo7UpMSmhHYdABQoBA9V/BUVye4SiRa/affb4IocVZefN6HaX+ihrb3kj/dg==
   dependencies:
     "@floating-ui/dom" "^1.1.0"
 
