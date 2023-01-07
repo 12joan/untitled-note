@@ -41,15 +41,16 @@ const getMatchesInNode = (node, query) => {
 
 const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
   const [query, settledQuery, setQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 250 })
   const [currentMatch, setCurrentMatch] = useState(undefined)
   const inputRef = useRef()
 
   const matches = useMemo(() => {
     const editor = editorRef.current
-    if (!isOpen || !editor) return []
+    if (!isOpen || !isFocused || !editor) return []
     return getMatchesInNode(editor, settledQuery).map((match, index) => ({ ...match, index }))
-  }, [isOpen, settledQuery])
+  }, [isOpen, isFocused, settledQuery])
 
   // Slate struggles to render a large number of decorations, so we only
   // display up to 100 matches either side of currentMatch.
@@ -109,7 +110,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
   // Workaround for decorators being one render behind
   const forceRender = useReducer(x => x + 1, 0)[1]
-  useEffect(() => forceRender(), [settledQuery, currentMatch, isOpen])
+  useEffect(() => forceRender(), [settledQuery, currentMatch, isOpen, isFocused])
 
   return {
     findOptions: {
@@ -125,6 +126,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
         totalMatches={matches.length}
         changeMatch={delta => setCurrentMatch((currentMatch + delta + matches.length) % matches.length)}
         showMatches={settledQuery.length > 0 && (matches.length === 0 || currentMatch !== undefined)}
+        setFocused={setIsFocused}
         onClose={close}
       />
     ),
@@ -154,7 +156,18 @@ const useFindPlugins = findOptions => useMemo(() => {
   ].map(plugin => plugin({ options: findOptions }))
 }, [findOptions])
 
-const FindDialog = ({ query, setQuery, inputRef, currentMatch, totalMatches, changeMatch, showMatches, onClose }) => {
+const FindDialog = ({
+  query,
+  setQuery,
+  inputRef,
+  currentMatch,
+  totalMatches,
+  changeMatch,
+  showMatches,
+  setFocused,
+  onClose,
+}) => {
+  const containerRef = useRef()
   const { topBarHeight } = useContext()
 
   const handleKeyDown = event => {
@@ -167,8 +180,16 @@ const FindDialog = ({ query, setQuery, inputRef, currentMatch, totalMatches, cha
     }
   }
 
+  const handleFocus = () => setFocused(true)
+
+  const handleBlur = () => setTimeout(() => {
+    if (!containerRef.current?.contains(document.activeElement)) {
+      setFocused(false)
+    }
+  }, 0)
+
   return (
-    <div className="sticky z-[7] h-0" style={{ top: topBarHeight }}>
+    <div ref={containerRef} className="sticky z-[7] h-0" style={{ top: topBarHeight }} onFocus={handleFocus} onBlur={handleBlur}>
       <div className="narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-lg rounded-lg flex gap-1 items-center pr-2 children:shrink-0">
         <input
           ref={inputRef}
