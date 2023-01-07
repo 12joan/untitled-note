@@ -162,13 +162,25 @@ const createAttachmentPlugin = createPluginFactory({
     onDrop: editor => event => {
       event.preventDefault()
 
+      // Extract non-directory files from the dropped items
       const files = Array.from(event.dataTransfer.items)
         .filter(item => (item.getAsEntry || item.webkitGetAsEntry).call(item)?.isFile)
         .map(item => item.getAsFile())
 
       if (files.length > 0) {
         // Timeout to allow the selection to update
+        // TODO: Improve positioning
         setTimeout(() => insertAttachments(editor, editor.selection.anchor.path[0] + 1, files), 0)
+      }
+    },
+
+    onPaste: editor => event => {
+      // Probably not possible to paste a directory, so no need to check for that
+      const files = Array.from(event.clipboardData.files)
+
+      if (files.length > 0) {
+        // TODO: Improve positioning
+        insertAttachments(editor, editor.selection.anchor.path[0] + 1, files)
       }
     },
   },
