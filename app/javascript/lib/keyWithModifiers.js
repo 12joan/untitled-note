@@ -1,5 +1,5 @@
 const keyWithModifiers = event => {
-  const meta = event.ctrlKey || event.metaKey
+  const meta = Boolean(event.ctrlKey ^ event.metaKey)
   const shift = event.shiftKey
   const alt = event.altKey
   const [c, ...cs] = event.key
