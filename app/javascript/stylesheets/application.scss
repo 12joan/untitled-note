@@ -113,7 +113,7 @@
     blockquote {
       @apply border-l-0 relative;
 
-      &::before {
+      &::after {
         @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
         content: '';
         background-color: var(--tw-prose-quote-borders);
@@ -122,6 +122,13 @@
 
     h1 {
       @apply h2 mt-0;
+    }
+
+    .drag-cursor-above::before{
+      @apply absolute left-0 right-0 h-1 rounded-full bg-primary-500 dark:bg-primary-400;
+      content: '';
+      // Half the spacing between block elements plus half the height of the cursor
+      transform: translateY(-0.5rem);
     }
   }
 }

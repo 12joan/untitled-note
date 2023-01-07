@@ -23,6 +23,7 @@ import friendlyMime from '~/lib/friendlyMime'
 import filesize from '~/lib/filesize'
 import { useGlobalEvent, dispatchGlobalEvent } from '~/lib/globalEvents'
 import retry from '~/lib/retry'
+import findDragPath from '~/lib/editor/findDragPath'
 import { handleUploadFileError } from '~/lib/handleErrors'
 
 import LoadingView from '~/components/LoadingView'
@@ -54,6 +55,16 @@ const removeAllUploadInProgressNodes = (editor, id) => removeNodes(editor, {
   at: [],
   match: matchUploadInProgressNode(id),
 })
+
+const setDragCursorPosition = position => {
+  Array.from(document.querySelectorAll('[data-slate-editor] > *')).forEach((element, index) => {
+    if (index === position) {
+      element.classList.add('drag-cursor-above')
+    } else {
+      element.classList.remove('drag-cursor-above')
+    }
+  })
+}
 
 const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
   new Promise((resolve, reject) => {
@@ -156,11 +167,19 @@ const createAttachmentPlugin = createPluginFactory({
       if (event.dataTransfer.types.includes('Files')) {
         event.preventDefault()
         event.dataTransfer.dropEffect = 'copy'
+
+        const path = findDragPath(editor, event)
+        setDragCursorPosition(path[0])
       }
+    },
+
+    onDragLeave: editor => event => {
+      setDragCursorPosition(null)
     },
 
     onDrop: editor => event => {
       event.preventDefault()
+      setDragCursorPosition(null)
 
       // Extract non-directory files from the dropped items
       const files = Array.from(event.dataTransfer.items)
@@ -168,9 +187,8 @@ const createAttachmentPlugin = createPluginFactory({
         .map(item => item.getAsFile())
 
       if (files.length > 0) {
-        // Timeout to allow the selection to update
-        // TODO: Improve positioning
-        setTimeout(() => insertAttachments(editor, editor.selection.anchor.path[0] + 1, files), 0)
+        const path = findDragPath(editor, event)
+        insertAttachments(editor, path[0], files)
       }
     },
 
@@ -179,7 +197,8 @@ const createAttachmentPlugin = createPluginFactory({
       const files = Array.from(event.clipboardData.files)
 
       if (files.length > 0) {
-        // TODO: Improve positioning
+        // TODO: Do not add 1 if the path refers to an empty paragraph or if
+        // the cursor is at the start of the block
         insertAttachments(editor, editor.selection.anchor.path[0] + 1, files)
       }
     },
