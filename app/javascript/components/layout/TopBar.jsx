@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 
 import { useContext } from '~/lib/context'
-import { useConnected } from '~/channels/connectionStatus'
+import { useDisconnected } from '~/channels/connectionStatus'
 import useBreakpoints from '~/lib/useBreakpoints'
 import useNewDocument from '~/lib/useNewDocument'
 import { LogoutLink } from '~/lib/routes'
@@ -39,7 +39,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
     { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
   ]
 
-  const isOnline = useConnected()
+  const isDisconnected = useDisconnected()
 
   return (
     <nav
@@ -57,16 +57,16 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
         </Tooltip>
       )}
 
-      {isOnline
+      {isDisconnected
         ? (
-          <div className={`font-medium ${showSidebarButton ? '' : '-ml-3'} px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}>
-            {project.name}
-          </div>
-        )
-        : (
           <div className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white" aria-live="assertive">
             <OfflineIcon size="1.25em" noAriaLabel />
             Connection lost
+          </div>
+        )
+        : (
+          <div className={`font-medium ${showSidebarButton ? '' : '-ml-3'} px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}>
+            {project.name}
           </div>
         )
       }
