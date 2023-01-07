@@ -5,7 +5,6 @@ import { useContext } from '~/lib/context'
 import useStateWhileMounted from '~/lib/useStateWhileMounted'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import { FutureServiceResult } from '~/lib/future'
-import useTitle from '~/lib/useTitle'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { OverviewLink } from '~/lib/routes'
@@ -27,11 +26,8 @@ const EditorView = ({ documentId }) => {
     [futurePartialDocuments, documentId]
   )
 
-  const safeTitle = futurePartialDocument.map(partialDocument => partialDocument?.safe_title).orDefault(undefined)
   const updatedBy = futurePartialDocument.map(partialDocument => partialDocument?.updated_by).orDefault(undefined)
   const updatedAt = futurePartialDocument.map(partialDocument => partialDocument?.updated_at).orDefault(undefined)
-
-  useTitle(safeTitle || 'Loading…')
 
   useEffect(() => {
     if (!isFromRecentlyViewed) {

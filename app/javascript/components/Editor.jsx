@@ -9,6 +9,7 @@ import {
 } from '@udecode/plate-headless'
 
 import { useContext, ContextProvider } from '~/lib/context'
+import useTitle from '~/lib/useTitle'
 import useStateWhileMounted from '~/lib/useStateWhileMounted'
 import useEnqueuedPromises from '~/lib/useEnqueuedPromises'
 import DocumentsAPI from '~/lib/resources/DocumentsAPI'
@@ -43,6 +44,8 @@ const Editor = ({ clientId, initialDocument }) => {
   const { projectId, topBarHeight } = useContext()
 
   const [workingDocument, setWorkingDocument] = useStateWhileMounted(initialDocument)
+
+  useTitle(workingDocument.safe_title)
 
   const extractServerDrivenData = remoteDocument => setWorkingDocument(localDocument => ({
     ...localDocument,
