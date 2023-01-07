@@ -162,18 +162,14 @@ const createAttachmentPlugin = createPluginFactory({
     onDrop: editor => event => {
       event.preventDefault()
 
-      // Timeout to allow the selection to update
-      setTimeout(() => {
-        const blockIndex = editor.selection.anchor.path[0] + 1
+      const files = Array.from(event.dataTransfer.items)
+        .filter(item => (item.getAsEntry || item.webkitGetAsEntry).call(item)?.isFile)
+        .map(item => item.getAsFile())
 
-        const files = Array.from(event.dataTransfer.items)
-          .filter(item => (item.getAsEntry || item.webkitGetAsEntry).call(item)?.isFile)
-          .map(item => item.getAsFile())
-
-        if (files.length > 0) {
-          insertAttachments(editor, blockIndex, files)
-        }
-      }, 0)
+      if (files.length > 0) {
+        // Timeout to allow the selection to update
+        setTimeout(() => insertAttachments(editor, editor.selection.anchor.path[0] + 1, files), 0)
+      }
     },
   },
 })
