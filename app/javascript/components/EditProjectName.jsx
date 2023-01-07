@@ -20,7 +20,7 @@ const EditProjectName = () => {
   } = useNormalizedInput({
     initial: project.name,
     normalize: name => name.trim(),
-    validate: name => name.length > 0,
+    validate: name => name.trim().length > 0,
   })
 
   useWaitUntilSettled(name, () =>  {
