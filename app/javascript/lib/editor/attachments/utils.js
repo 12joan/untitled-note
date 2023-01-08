@@ -35,6 +35,7 @@ const nodeAtPathIsEmptyParagraph = (editor, path) => {
 }
 
 export {
+  matchUploadInProgressNode,
   uploadInProgressNodeExists,
   findAllUploadInProgressNodes,
   removeAllUploadInProgressNodes,

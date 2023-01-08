@@ -10,6 +10,7 @@ import filesize from '~/lib/filesize'
 import groupedClassNames from '~/lib/groupedClassNames'
 import commonClassNames from '../commonClassNames'
 import store from '../store'
+import { matchUploadInProgressNode } from '../utils'
 
 import Meter from '~/components/Meter'
 
