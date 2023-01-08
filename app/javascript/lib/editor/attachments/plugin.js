@@ -72,9 +72,13 @@ const createAttachmentPlugin = createPluginFactory({
       const files = Array.from(event.clipboardData.files)
 
       if (files.length > 0) {
-        // TODO: Do not add 1 if the path refers to an empty paragraph or if
-        // the cursor is at the start of the block
-        insertAttachments(editor, editor.selection.anchor.path[0] + 1, files)
+        // Insert before the current block if the cursor is at the start of
+        // the block, otherwise insert after the current block
+        const blockIndex = editor.selection.anchor.path[0] + (
+          editor.selection.anchor.offset === 0 ? 0 : 1
+        )
+
+        insertAttachments(editor, blockIndex, files)
       }
     },
   },
