@@ -2,6 +2,9 @@ import {
   someNode,
   getNodeEntries,
   removeNodes,
+  getNode,
+  getEditorString,
+  ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
 import { ELEMENT_UPLOADING_ATTACHMENT } from './constants'
@@ -26,8 +29,14 @@ const removeAllUploadInProgressNodes = (editor, id) => removeNodes(editor, {
   match: matchUploadInProgressNode(id),
 })
 
+const nodeAtPathIsEmptyParagraph = (editor, path) => {
+  const node = getNode(editor, path)
+  return node.type === ELEMENT_PARAGRAPH && getEditorString(editor, path).trim() === ''
+}
+
 export {
   uploadInProgressNodeExists,
   findAllUploadInProgressNodes,
   removeAllUploadInProgressNodes,
+  nodeAtPathIsEmptyParagraph,
 }

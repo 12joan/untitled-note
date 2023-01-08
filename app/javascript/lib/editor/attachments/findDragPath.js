@@ -11,9 +11,10 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Editor, Path } from 'slate'
+import { Path } from 'slate'
 import { ReactEditor } from 'slate-react'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-headless'
+
+import { nodeAtPathIsEmptyParagraph } from './utils'
 
 const findDragPath = (editor, event) => {
   if ('nativeEvent' in event) {
@@ -52,12 +53,9 @@ const findDragPath = (editor, event) => {
     suppressThrow: false,
   })
 
-  const [node, path] = Editor.node(editor, range.anchor.path.splice(0, 1))
+  const path = range.anchor.path.splice(0, 1)
 
-  const isEmptyParagraph = node.type === ELEMENT_PARAGRAPH
-    && Editor.string(editor, path).trim().length === 0
-
-  if (!isEmptyParagraph) {
+  if (!nodeAtPathIsEmptyParagraph(editor, path)) {
     const domNode = document.querySelectorAll('[data-slate-editor] > *')[path[0]]
     const rect = domNode.getBoundingClientRect()
     const isNext = y - rect.top > rect.top + rect.height - y

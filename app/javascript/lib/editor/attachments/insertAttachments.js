@@ -15,6 +15,7 @@ import store from './store'
 import {
   findAllUploadInProgressNodes,
   removeAllUploadInProgressNodes,
+  nodeAtPathIsEmptyParagraph,
 } from './utils'
 
 const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
@@ -33,6 +34,12 @@ const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
         },
       })
       return
+    }
+
+    if (nodeAtPathIsEmptyParagraph(editor, [blockIndex])) {
+      removeNodes(editor, {
+        at: [blockIndex],
+      })
     }
 
     files.forEach((file, index) => {
