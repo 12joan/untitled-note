@@ -31,7 +31,10 @@ const removeAllUploadInProgressNodes = (editor, id) => removeNodes(editor, {
 
 const nodeAtPathIsEmptyParagraph = (editor, path) => {
   const node = getNode(editor, path)
-  return node.type === ELEMENT_PARAGRAPH && getEditorString(editor, path).trim() === ''
+
+  return node
+    && node.type === ELEMENT_PARAGRAPH
+    && getEditorString(editor, path).trim() === ''
 }
 
 export {
