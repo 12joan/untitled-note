@@ -8,6 +8,7 @@ import uploadsInProgressStore from './uploadsInProgressStore'
 import { uploadInProgressNodeExists } from './utils'
 import findDragPath from './findDragPath'
 import insertAttachments from './insertAttachments'
+import withAttachments from './withAttachments'
 
 import DragCursor from './components/DragCursor'
 
@@ -24,6 +25,8 @@ const createAttachmentPlugin = createPluginFactory({
       isVoid: true,
     },
   ],
+  renderAfterEditable: DragCursor,
+  withOverrides: withAttachments,
   handlers: {
     onChange: editor => event => {
       uploadsInProgressStore.forEach(([id, { abortController }]) => {
@@ -77,7 +80,6 @@ const createAttachmentPlugin = createPluginFactory({
       }
     },
   },
-  renderAfterEditable: DragCursor,
 })
 
 export { createAttachmentPlugin }
