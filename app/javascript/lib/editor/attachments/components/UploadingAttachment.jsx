@@ -9,7 +9,7 @@ import { useGlobalEvent } from '~/lib/globalEvents'
 import filesize from '~/lib/filesize'
 import groupedClassNames from '~/lib/groupedClassNames'
 import commonClassNames from '../commonClassNames'
-import store from '../store'
+import uploadsInProgressStore from '../uploadsInProgressStore'
 import { matchUploadInProgressNode } from '../utils'
 
 import Meter from '~/components/Meter'
@@ -19,7 +19,7 @@ const UploadingAttachment = ({ editor, attributes, children, element }) => {
 
   // Remove the node if no upload is in progress
   useLayoutEffect(() => {
-    if (!store.uploadIsInProgress(id)) {
+    if (!uploadsInProgressStore.isInProgress(id)) {
       withoutSavingHistory(editor, () => {
         removeNodes(editor, {
           at: [],

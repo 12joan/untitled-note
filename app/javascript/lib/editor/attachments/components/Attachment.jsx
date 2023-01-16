@@ -53,7 +53,7 @@ const Attachment = ({ attributes, children, element }) => {
   }
 
   return (
-    <div {...attributes} contentEditable={false}>
+    <div {...attributes} contentEditable={false} className="not-prose">
       {fsrFetchedData.unwrap({
         pending: () => (
           <PendingAttachment {...commonProps} />

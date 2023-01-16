@@ -11,7 +11,7 @@ import uploadFile from '~/lib/uploadFile'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { handleUploadFileError } from '~/lib/handleErrors'
 import { ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT } from './constants'
-import store from './store'
+import uploadsInProgressStore from './uploadsInProgressStore'
 import {
   findAllUploadInProgressNodes,
   removeAllUploadInProgressNodes,
@@ -58,7 +58,7 @@ const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
 
       const abortController = new AbortController()
 
-      store.registerUploadInProgress(tempId, { abortController })
+      uploadsInProgressStore.register(tempId, { abortController })
 
       uploadFile({
         projectId,
@@ -94,7 +94,7 @@ const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
           }
         })
         .finally(() => {
-          store.removeUploadInProgress(tempId)
+          uploadsInProgressStore.remove(tempId)
         })
         .then(resolve, reject)
     })

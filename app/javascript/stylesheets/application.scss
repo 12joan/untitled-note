@@ -123,13 +123,6 @@
     h1 {
       @apply h2 mt-0;
     }
-
-    .drag-cursor-above::before{
-      @apply absolute left-0 right-0 h-1 rounded-full bg-primary-500 dark:bg-primary-400;
-      content: '';
-      // Half the spacing between block elements plus half the height of the cursor
-      transform: translateY(-0.5rem);
-    }
   }
 }
 

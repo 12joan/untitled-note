@@ -2,21 +2,16 @@ import {
   createPluginFactory,
 } from '@udecode/plate-headless'
 
+import { setGlobalStore } from '~/lib/globalStores'
 import { ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT } from './constants'
-import store from './store'
+import uploadsInProgressStore from './uploadsInProgressStore'
 import { uploadInProgressNodeExists } from './utils'
 import findDragPath from './findDragPath'
 import insertAttachments from './insertAttachments'
 
-const setDragCursorPosition = position => {
-  Array.from(document.querySelectorAll('[data-slate-editor] > *')).forEach((element, index) => {
-    if (index === position) {
-      element.classList.add('drag-cursor-above')
-    } else {
-      element.classList.remove('drag-cursor-above')
-    }
-  })
-}
+import DragCursor from './components/DragCursor'
+
+const setDragCursorPosition = position => setGlobalStore('dragCursorPosition', position)
 
 const createAttachmentPlugin = createPluginFactory({
   key: ELEMENT_ATTACHMENT,
@@ -31,7 +26,7 @@ const createAttachmentPlugin = createPluginFactory({
   ],
   handlers: {
     onChange: editor => event => {
-      store.forEachUploadInProgress(([id, { abortController }]) => {
+      uploadsInProgressStore.forEach(([id, { abortController }]) => {
         if (!uploadInProgressNodeExists(editor, id)) {
           abortController.abort()
         }
@@ -82,6 +77,7 @@ const createAttachmentPlugin = createPluginFactory({
       }
     },
   },
+  renderAfterEditable: DragCursor,
 })
 
 export { createAttachmentPlugin }
