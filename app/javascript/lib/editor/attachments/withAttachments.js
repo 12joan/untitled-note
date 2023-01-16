@@ -6,7 +6,7 @@ import {
 } from '@udecode/plate-headless'
 
 import { nodeAtPathIsEmptyParagraph } from './utils'
-import { ELEMENT_ATTACHMENT } from './constants'
+import { ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT } from './constants'
 
 /* If all of the following are true:
  * - the unit is 'character' or 'word'
@@ -28,7 +28,7 @@ const withAttachments = editor => {
         const adjacentBlockPath = [path[0] + deltaPath]
         const adjacentBlock = getNode(editor, adjacentBlockPath)
 
-        if (adjacentBlock.type === ELEMENT_ATTACHMENT) {
+        if ([ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT].includes(adjacentBlock.type)) {
           removeNodes(editor, { at: path })
 
           // If the node we removed was above the attachment, then the
