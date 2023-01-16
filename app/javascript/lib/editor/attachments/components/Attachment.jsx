@@ -53,19 +53,21 @@ const Attachment = ({ attributes, children, element }) => {
   }
 
   return (
-    <div {...attributes} contentEditable={false} className="not-prose">
-      {fsrFetchedData.unwrap({
-        pending: () => (
-          <PendingAttachment {...commonProps} />
-        ),
-        failure: () => (
-          <DeletedAttachment {...commonProps} />
-        ),
-        success: s3File => (/^image\/(?!svg\+xml$)/.test(s3File.content_type)
-          ? <ImageAttachment {...commonProps} s3File={s3File} />
-          : <GenericAttachment {...commonProps} s3File={s3File} />
-        ),
-      })}
+    <div {...attributes} className="not-prose">
+      <div contentEditable={false}>
+        {fsrFetchedData.unwrap({
+          pending: () => (
+            <PendingAttachment {...commonProps} />
+          ),
+          failure: () => (
+            <DeletedAttachment {...commonProps} />
+          ),
+          success: s3File => (/^image\/(?!svg\+xml$)/.test(s3File.content_type)
+            ? <ImageAttachment {...commonProps} s3File={s3File} />
+            : <GenericAttachment {...commonProps} s3File={s3File} />
+          ),
+        })}
+      </div>
 
       {children}
     </div>

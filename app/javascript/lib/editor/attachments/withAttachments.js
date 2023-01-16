@@ -1,10 +1,12 @@
 import {
+  isCollapsed,
+  getNode,
   removeNodes,
   select,
 } from '@udecode/plate-headless'
-import { Editor, Range } from 'slate'
 
 import { nodeAtPathIsEmptyParagraph } from './utils'
+import { ELEMENT_ATTACHMENT } from './constants'
 
 /* If all of the following are true:
  * - the unit is 'character' or 'word'
@@ -22,11 +24,11 @@ const withAttachments = editor => {
       const { selection } = editor
       const path = selection?.anchor?.path?.slice(0, 1)
 
-      if (selection && Range.isCollapsed(selection) && nodeAtPathIsEmptyParagraph(editor, path)) {
+      if (selection && isCollapsed(selection) && nodeAtPathIsEmptyParagraph(editor, path)) {
         const adjacentBlockPath = [path[0] + deltaPath]
-        const adjacentBlock = Editor.node(editor, adjacentBlockPath)
+        const adjacentBlock = getNode(editor, adjacentBlockPath)
 
-        if (adjacentBlock[0].type === 'attachment') {
+        if (adjacentBlock.type === ELEMENT_ATTACHMENT) {
           removeNodes(editor, { at: path })
 
           // If the node we removed was above the attachment, then the

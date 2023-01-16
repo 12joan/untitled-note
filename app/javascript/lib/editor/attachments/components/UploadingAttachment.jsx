@@ -50,8 +50,8 @@ const UploadingAttachment = ({ editor, attributes, children, element }) => {
   })
 
   return (
-    <div {...attributes} contentEditable={false}>
-      <div className={className}>
+    <div {...attributes}>
+      <div contentEditable={false} className={className}>
         <div>
           Uploading <span className="font-medium">{filename}</span>
         </div>
