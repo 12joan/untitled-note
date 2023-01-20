@@ -168,6 +168,27 @@ const Editor = ({ clientId, initialDocument }) => {
 
   const withLinkModalProvider = useLinkModalProvider()
 
+  const plateComponent = useMemo(() => (
+    <Plate
+      id="editor"
+      plugins={plugins}
+      initialValue={initialValue}
+      normalizeInitialValue
+      editableProps={{
+        className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
+        placeholder: 'Write something...',
+      }}
+    >
+      <WithEditorState
+        initialDocument={initialDocument}
+        debouncedUpdateBody={debouncedUpdateBody}
+        titleRef={titleRef}
+        editorElementRef={editorElementRef}
+        editorRef={editorRef}
+      />
+    </Plate>
+  ), [plugins])
+
   return (
     <>
       {findDialog}
@@ -232,26 +253,8 @@ const Editor = ({ clientId, initialDocument }) => {
           tippyContainerRef={tippyContainerRef}
           mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
           linkOriginator={workingDocument.safe_title}
-        >
-          <Plate
-            id="editor"
-            plugins={plugins}
-            initialValue={initialValue}
-            normalizeInitialValue
-            editableProps={{
-              className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
-              placeholder: 'Write something...',
-            }}
-          >
-            <WithEditorState
-              initialDocument={initialDocument}
-              debouncedUpdateBody={debouncedUpdateBody}
-              titleRef={titleRef}
-              editorElementRef={editorElementRef}
-              editorRef={editorRef}
-            />
-          </Plate>
-        </ContextProvider>
+          children={plateComponent}
+        />
       )}
 
       <div ref={tippyContainerRef} />
