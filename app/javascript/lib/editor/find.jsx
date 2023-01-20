@@ -112,11 +112,13 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   const forceRender = useReducer(x => x + 1, 0)[1]
   useEffect(() => forceRender(), [settledQuery, currentMatch, isOpen, isFocused])
 
+  const findOptions = useMemo(() => ({
+    matches: isOpen ? limitedMatches : [],
+    currentMatch,
+  }), [isOpen, limitedMatches, currentMatch])
+
   return {
-    findOptions: {
-      matches: isOpen ? limitedMatches : [],
-      currentMatch,
-    },
+    findOptions,
     findDialog: isOpen && (
       <FindDialog
         query={query}

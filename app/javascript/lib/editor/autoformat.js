@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   createAutoformatPlugin,
   getParentNode,
@@ -31,7 +32,7 @@ const markRule = (type, match, otherProps = {}) => ({
   ...otherProps,
 })
 
-const useAutoformatPlugins = () => [
+const useAutoformatPlugins = () => useMemo(() => [
   createAutoformatPlugin({
     options: {
       rules: [
@@ -52,6 +53,6 @@ const useAutoformatPlugins = () => [
       enabledUndoOnDelete: true,
     },
   }),
-]
+], [])
 
 export default useAutoformatPlugins

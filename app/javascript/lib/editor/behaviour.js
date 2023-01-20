@@ -71,7 +71,10 @@ const useBehaviourPlugins = ({ findOptions }) => {
 
   const findPlugins = useFindPlugins(findOptions)
 
-  return [...mainPlugins, ...findPlugins]
+  return useMemo(() => [
+    ...mainPlugins,
+    ...findPlugins,
+  ], [mainPlugins, findPlugins])
 }
 
 export default useBehaviourPlugins

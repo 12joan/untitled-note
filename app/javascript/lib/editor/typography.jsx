@@ -68,7 +68,10 @@ const useTypographyPlugins = () => {
 
   const attachmentPlugins = useAttachmentPlugins()
 
-  return [...mainPlugins, ...attachmentPlugins]
+  return useMemo(() => [
+    ...mainPlugins,
+    ...attachmentPlugins
+  ], [mainPlugins, attachmentPlugins])
 }
 
 const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
