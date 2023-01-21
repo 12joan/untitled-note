@@ -29,6 +29,7 @@ class S3File < ApplicationRecord
     audio/aac
     audio/flac
     audio/mp4
+    audio/x-wav
     audio/wave
     audio/wav
     audio/webm
