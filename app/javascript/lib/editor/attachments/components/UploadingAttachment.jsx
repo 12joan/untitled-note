@@ -1,43 +1,25 @@
-import React, { useLayoutEffect, useState } from 'react'
-import {
-  removeNodes,
-  withoutSavingHistory,
-} from '@udecode/plate-headless'
+import React, { useState } from 'react'
 import { useSelected, useFocused } from 'slate-react'
 
 import { useGlobalEvent } from '~/lib/globalEvents'
 import filesize from '~/lib/filesize'
 import groupedClassNames from '~/lib/groupedClassNames'
 import commonClassNames from '../commonClassNames'
-import uploadsInProgressStore from '../uploadsInProgressStore'
-import { matchUploadInProgressNode } from '../utils'
 
 import Meter from '~/components/Meter'
 
 const UploadingAttachment = ({ editor, attributes, children, element }) => {
-  const { id, filename } = element
-
-  // Remove the node if no upload is in progress
-  useLayoutEffect(() => {
-    if (!uploadsInProgressStore.isInProgress(id)) {
-      withoutSavingHistory(editor, () => {
-        removeNodes(editor, {
-          at: [],
-          match: matchUploadInProgressNode(id),
-        })
-      })
-    }
-  }, [])
+  const { s3FileId, filename } = element
 
   const [uploadedBytes, setUploadedBytes] = useState(0)
   const [totalBytes, setTotalBytes] = useState(Infinity)
 
-  useGlobalEvent('s3File:uploadProgress', ({ id: eventId, progressEvent }) => {
-    if (eventId === id) {
+  useGlobalEvent('s3File:uploadProgress', ({ s3FileId: updatedS3FileId, progressEvent }) => {
+    if (updatedS3FileId === s3FileId) {
       setUploadedBytes(progressEvent.loaded)
       setTotalBytes(progressEvent.total)
     }
-  }, [id])
+  }, [s3FileId])
 
   const selected = useSelected()
   const focused = useFocused()

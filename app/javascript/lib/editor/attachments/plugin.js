@@ -3,9 +3,9 @@ import {
 } from '@udecode/plate-headless'
 
 import { setGlobalStore } from '~/lib/globalStores'
-import { ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT } from './constants'
+import { ELEMENT_ATTACHMENT } from './constants'
 import uploadsInProgressStore from './uploadsInProgressStore'
-import { uploadInProgressNodeExists } from './utils'
+import { attachmentNodeExists } from './utils'
 import findDragPath from './findDragPath'
 import insertAttachments from './insertAttachments'
 import withAttachments from './withAttachments'
@@ -18,19 +18,12 @@ const createAttachmentPlugin = createPluginFactory({
   key: ELEMENT_ATTACHMENT,
   isElement: true,
   isVoid: true,
-  plugins: [
-    {
-      key: ELEMENT_UPLOADING_ATTACHMENT,
-      isElement: true,
-      isVoid: true,
-    },
-  ],
   renderAfterEditable: DragCursor,
   withOverrides: withAttachments,
   handlers: {
     onChange: editor => event => {
-      uploadsInProgressStore.forEach(([id, { abortController }]) => {
-        if (!uploadInProgressNodeExists(editor, id)) {
+      uploadsInProgressStore.forEach(([s3FileId, { abortController }]) => {
+        if (!attachmentNodeExists(editor, s3FileId)) {
           abortController.abort()
         }
       })

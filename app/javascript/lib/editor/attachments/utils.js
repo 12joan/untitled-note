@@ -7,26 +7,21 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
 
-import { ELEMENT_UPLOADING_ATTACHMENT } from './constants'
+import { ELEMENT_ATTACHMENT } from './constants'
 
-const matchUploadInProgressNode = id => node => (
-  node.type === ELEMENT_UPLOADING_ATTACHMENT &&
-  node.id === id
+const matchAttachmentNode = id => node => (
+  node.type === ELEMENT_ATTACHMENT &&
+  node.s3FileId === id
 )
 
-const uploadInProgressNodeExists = (editor, id) => someNode(editor, {
+const attachmentNodeExists = (editor, id) => someNode(editor, {
   at: [],
-  match: matchUploadInProgressNode(id),
+  match: matchAttachmentNode(id),
 })
 
-const findAllUploadInProgressNodes = (editor, id) => getNodeEntries(editor, {
+const removeAllAttachmentNodes = (editor, id) => removeNodes(editor, {
   at: [],
-  match: matchUploadInProgressNode(id),
-})
-
-const removeAllUploadInProgressNodes = (editor, id) => removeNodes(editor, {
-  at: [],
-  match: matchUploadInProgressNode(id),
+  match: matchAttachmentNode(id),
 })
 
 const nodeAtPathIsEmptyParagraph = (editor, path) => {
@@ -38,9 +33,8 @@ const nodeAtPathIsEmptyParagraph = (editor, path) => {
 }
 
 export {
-  matchUploadInProgressNode,
-  uploadInProgressNodeExists,
-  findAllUploadInProgressNodes,
-  removeAllUploadInProgressNodes,
+  matchAttachmentNode,
+  attachmentNodeExists,
+  removeAllAttachmentNodes,
   nodeAtPathIsEmptyParagraph,
 }

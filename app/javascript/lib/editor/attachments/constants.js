@@ -1,7 +1,5 @@
 const ELEMENT_ATTACHMENT = 'attachment'
-const ELEMENT_UPLOADING_ATTACHMENT = 'uploadingAttachment'
 
 export {
   ELEMENT_ATTACHMENT,
-  ELEMENT_UPLOADING_ATTACHMENT,
 }

@@ -2,10 +2,10 @@ import React, { useMemo } from 'react'
 
 import { useContext } from '~/lib/context'
 import { createAttachmentPlugin } from './plugin'
-import { ELEMENT_ATTACHMENT, ELEMENT_UPLOADING_ATTACHMENT } from './constants'
+import uploadsInProgressStore from './uploadsInProgressStore'
+import { ELEMENT_ATTACHMENT } from './constants'
 
 import Attachment from './components/Attachment'
-import UploadingAttachment from './components/UploadingAttachment'
 
 const useAttachmentPlugins = () => {
   const { projectId, futureRemainingQuota, showAccountModal } = useContext()
@@ -21,10 +21,11 @@ const useAttachmentPlugins = () => {
   ], [projectId, futureRemainingQuota])
 }
 
+const getAttachmentIsUploading = ({ s3FileId }) => uploadsInProgressStore.isInProgress(s3FileId)
+
 export {
   ELEMENT_ATTACHMENT,
-  ELEMENT_UPLOADING_ATTACHMENT,
   useAttachmentPlugins,
+  getAttachmentIsUploading,
   Attachment,
-  UploadingAttachment,
 }

@@ -8,6 +8,7 @@ const uploadFile = async ({
   role,
   withinTransaction = () => {},
   abortSignal = null,
+  onUploadStart = () => {},
   onUploadProgress = () => {},
 }) => {
   const api = S3FilesAPI(projectId)
@@ -18,6 +19,8 @@ const uploadFile = async ({
     size: file.size,
     content_type: file.type || 'application/octet-stream',
   })
+
+  onUploadStart(s3File)
 
   try {
     const { url, fields } = presigned_post

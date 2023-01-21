@@ -29,10 +29,8 @@ import { LinkComponent } from '~/lib/editor/links'
 import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions'
 import {
   ELEMENT_ATTACHMENT,
-  ELEMENT_UPLOADING_ATTACHMENT,
   useAttachmentPlugins,
   Attachment,
-  UploadingAttachment,
 } from '~/lib/editor/attachments'
 import { MARK_FIND_RESULT, MARK_FIND_RESULT_CURRENT } from '~/lib/editor/find'
 
@@ -99,7 +97,6 @@ const components = {
   [ELEMENT_MENTION]: MentionComponent,
   [ELEMENT_MENTION_INPUT]: MentionInputComponent,
   [ELEMENT_ATTACHMENT]: Attachment,
-  [ELEMENT_UPLOADING_ATTACHMENT]: UploadingAttachment,
 }
 
 export { useTypographyPlugins, components }

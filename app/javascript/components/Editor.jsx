@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react'
+import React, { useRef, useEffect, useMemo, useState, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Plate,
@@ -286,9 +286,13 @@ const WithEditorState = ({ initialDocument, debouncedUpdateBody, titleRef, edito
   useSaveSelection(initialDocument.id, editor)
   useSaveScroll(initialDocument.id)
 
+  const [forceUpdateBodyKey, forceUpdateBody] = useReducer(x => x + 1, 0)
+
+  useGlobalEvent('s3File:uploadComplete', () => forceUpdateBody())
+
   useEffectAfterFirst(() => {
     debouncedUpdateBody(editor)
-  }, [editor.children])
+  }, [editor.children, forceUpdateBodyKey])
 
   const formattingToolbar = useFormattingToolbar(
     <FormattingToolbar editor={editor} />
