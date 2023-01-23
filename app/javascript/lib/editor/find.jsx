@@ -1,9 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
-import {
-  getNodeTexts,
-  getNode,
-  toDOMRange,
-} from '@udecode/plate-headless'
+import { toDOMRange } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
 import useStateWhenSettled from '~/lib/useStateWhenSettled'
@@ -14,35 +10,47 @@ import ChevronRightIcon from '~/components/icons/ChevronRightIcon'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
 const ENABLE_FIND_FEATURE = navigator.userAgent.includes('enable-find-feature') && ('highlights' in CSS)
+const HIGHLIGHT_LIMIT = 3000
+
+const forEachTextNode = ({ children }, callback, parentPath = []) => {
+  children.forEach((child, index) => {
+    const path = [...parentPath, index]
+
+    if (child.text !== undefined) {
+      callback(child, path)
+    } else if (child.children?.length) {
+      forEachTextNode(child, callback, path)
+    }
+  })
+}
 
 const getMatchesInNode = (node, query) => {
   if (query === '') return []
 
-  const textNodesWithPaths = [...getNodeTexts(node)]
+  const matches = []
+  const queryLength = query.length
+  const lowerCaseQuery = query.toLowerCase()
 
-  return textNodesWithPaths.flatMap(([textNode, path]) => {
-    const [firstPart, ...otherParts] = textNode.text.toLowerCase().split(query.toLowerCase())
-    const initialOffset = firstPart.length
+  forEachTextNode(node, (textNode, path) => {
+    const text = textNode.text.toLowerCase()
+    let offset = 0
 
-    return otherParts.reduce(({ matches, offset }, part) => ({
-      matches: [
-        ...matches,
-        {
-          anchor: { path, offset },
-          focus: { path, offset: offset + query.length },
-        },
-      ],
-      offset: offset + part.length + query.length,
-    }), { matches: [], offset: initialOffset }).matches
+    while (true) {
+      const index = text.indexOf(lowerCaseQuery, offset)
+
+      if (index === -1) break
+
+      matches.push({
+        anchor: { path, offset: index },
+        focus: { path, offset: index + queryLength },
+      })
+
+      offset = index + queryLength
+    }
   })
-}
 
-const makeDOMRangeStatic = ({ startContainer, startOffset, endContainer, endOffset }) => new StaticRange({
-  startContainer,
-  startOffset,
-  endContainer,
-  endOffset,
-})
+  return matches
+}
 
 const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   if (!ENABLE_FIND_FEATURE) return {}
@@ -111,7 +119,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   }, [matches])
 
   const matchDOMRanges = useMemo(() => matches.map(
-    slateRange => makeDOMRangeStatic(toDOMRange(editorRef.current, slateRange))
+    slateRange => (toDOMRange(editorRef.current, slateRange))
   ), [matches])
 
   // Highlight matches and scroll to the current match
@@ -126,11 +134,19 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
           matchDOMRanges.slice(0, currentMatch).concat(matchDOMRanges.slice(currentMatch + 1)),
         ]
 
-      CSS.highlights.set('find-result', new Highlight(...otherMatchRanges))
+      // Only highlight up to HIHGLIGHT_LIMIT matches either side of the current match
+      const limitedOtherMatchRangesStart = Math.max(0, currentMatch - HIGHLIGHT_LIMIT)
+      const limitedOtherMatchRangesEnd = Math.min(matches.length, currentMatch + HIGHLIGHT_LIMIT)
+      const limitedOtherMatchRanges = otherMatchRanges.slice(limitedOtherMatchRangesStart, limitedOtherMatchRangesEnd)
+
+      // Passing too many arguments to the Highlight constructor causes an error
+      const otherMatchesHighlight = new Highlight()
+      limitedOtherMatchRanges.forEach(range => otherMatchesHighlight.add(range))
+      CSS.highlights.set('find-result', otherMatchesHighlight)
 
       if (currentMatchRange) {
         CSS.highlights.set('find-result-current', new Highlight(currentMatchRange))
-        currentMatchRange.startContainer.parentNode.scrollIntoView({ block: 'center' })
+        currentMatchRange?.startContainer?.parentNode?.scrollIntoView({ block: 'center' })
       } else {
         CSS.highlights.delete('find-result-current')
       }
