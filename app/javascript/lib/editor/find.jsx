@@ -169,11 +169,13 @@ const FindDialog = ({
   const containerRef = useRef()
   const { topBarHeight } = useContext()
 
-  const handleKeyDown = event => {
+  const handleInputKeyDown = event => {
     if (event.key === 'Enter' && totalMatches > 0) {
       changeMatch(1)
     }
+  }
 
+  const handleContainerKeyDown = event => {
     if (event.key === 'Escape') {
       onClose()
     }
@@ -188,7 +190,14 @@ const FindDialog = ({
   }, 0)
 
   return (
-    <div ref={containerRef} className="sticky z-[7] h-0" style={{ top: topBarHeight }} onFocus={handleFocus} onBlur={handleBlur}>
+    <div
+      ref={containerRef}
+      className="sticky z-[7] h-0"
+      style={{ top: topBarHeight }}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleContainerKeyDown}
+    >
       <div className="narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-lg rounded-lg flex gap-1 items-center pr-2 children:shrink-0">
         <input
           ref={inputRef}
@@ -197,7 +206,7 @@ const FindDialog = ({
           className="grow w-0 bg-transparent p-3 no-focus-ring"
           value={query}
           onChange={event => setQuery(event.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleInputKeyDown}
         />
 
         {showMatches && (totalMatches > 0
