@@ -218,3 +218,11 @@
   @apply bg-cover bg-center bg-no-repeat;
   background-image: var(--bg-url);
 }
+
+::highlight(find-result) {
+  @apply bg-yellow-100/80 dark:bg-yellow-300/50;
+}
+
+::highlight(find-result-current) {
+  @apply bg-yellow-300 text-black;
+}

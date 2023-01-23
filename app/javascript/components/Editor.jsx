@@ -122,13 +122,13 @@ const Editor = ({ clientId, initialDocument }) => {
     }
   })
 
-  const { findDialog, findOptions, openFind } = useFind({
+  const { findDialog, openFind } = useFind({
     editorRef,
     restoreSelection: () => restoreSelection(initialDocument.id, editorRef.current),
     setSelection: selection => setSelection(editorRef.current, selection),
   })
 
-  const plugins = usePlugins({ findOptions })
+  const plugins = usePlugins()
 
   const initialValue = useMemo(() => {
     const bodyFormat = initialDocument.body_type.split('/')[0]

@@ -1,9 +1,8 @@
-import React, { useRef, useState, useEffect, useReducer, useMemo } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import {
-  createPluginFactory,
   getNodeTexts,
   getNode,
-  toDOMNode,
+  toDOMRange,
 } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
@@ -14,8 +13,7 @@ import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon'
 import ChevronRightIcon from '~/components/icons/ChevronRightIcon'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
-const MARK_FIND_RESULT = 'find_result'
-const MARK_FIND_RESULT_CURRENT = 'find_result_current'
+const ENABLE_FIND_FEATURE = navigator.userAgent.includes('enable-find-feature') && ('highlights' in CSS)
 
 const getMatchesInNode = (node, query) => {
   if (query === '') return []
@@ -39,27 +37,31 @@ const getMatchesInNode = (node, query) => {
   })
 }
 
+const makeDOMRangeStatic = ({ startContainer, startOffset, endContainer, endOffset }) => new StaticRange({
+  startContainer,
+  startOffset,
+  endContainer,
+  endOffset,
+})
+
 const useFind = ({ editorRef, restoreSelection, setSelection }) => {
+  if (!ENABLE_FIND_FEATURE) return {}
+
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const [query, settledQuery, setQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 250 })
+  const [query, settledQuery, setQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 200 })
   const [currentMatch, setCurrentMatch] = useState(undefined)
   const inputRef = useRef()
 
   const matches = useMemo(() => {
     const editor = editorRef.current
     if (!isOpen || !isFocused || !editor) return []
-    return getMatchesInNode(editor, settledQuery).map((match, index) => ({ ...match, index }))
+    return getMatchesInNode(editor, settledQuery)
   }, [isOpen, isFocused, settledQuery])
 
-  // Slate struggles to render a large number of decorations, so we only
-  // display up to 100 matches either side of currentMatch.
-  const limitedMatches = useMemo(() => {
-    if (currentMatch === undefined) return matches.slice(0, 100)
-    const start = Math.max(0, currentMatch - 100)
-    const end = Math.min(matches.length, currentMatch + 100)
-    return matches.slice(start, end)
-  }, [matches, currentMatch])
+  const matchDOMRanges = useMemo(() => matches.map(
+    slateRange => makeDOMRangeStatic(toDOMRange(editorRef.current, slateRange))
+  ), [matches])
 
   const open = () => {
     setIsOpen(true)
@@ -80,7 +82,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
   useGlobalKeyboardShortcut('MetaF', event => {
     if (event.target === inputRef.current) {
-      // Close and open the browser find feature
+      // Close and open the browser find feature (if available)
       close()
     } else {
       event.preventDefault()
@@ -98,27 +100,28 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
   useEffect(() => {
     const editor = editorRef.current
-    const match = matches[currentMatch]
 
-    if (match === undefined || !editor) return
+    if (ENABLE_FIND_FEATURE && editor) {
+      const [currentMatchRange, otherMatchRanges] = currentMatch === undefined
+        ? [undefined, matchDOMRanges]
+        : [
+          matchDOMRanges[currentMatch],
+          matchDOMRanges.slice(0, currentMatch).concat(matchDOMRanges.slice(currentMatch + 1)),
+        ]
 
-    const node = getNode(editor, match.anchor.path)
-    const domNode = toDOMNode(editor, node)
+      CSS.highlights.set('find-result', new Highlight(...otherMatchRanges))
 
-    domNode.scrollIntoView({ block: 'center' })
-  }, [currentMatch, matches])
+      if (currentMatchRange) {
+        CSS.highlights.set('find-result-current', new Highlight(currentMatchRange))
 
-  // Workaround for decorators being one render behind
-  const forceRender = useReducer(x => x + 1, 0)[1]
-  useEffect(() => forceRender(), [settledQuery, currentMatch, isOpen, isFocused])
-
-  const findOptions = useMemo(() => ({
-    matches: isOpen ? limitedMatches : [],
-    currentMatch,
-  }), [isOpen, limitedMatches, currentMatch])
+        currentMatchRange.startContainer.parentNode.scrollIntoView({ block: 'center' })
+      } else {
+        CSS.highlights.delete('find-result-current')
+      }
+    }
+  }, [matchDOMRanges, currentMatch])
 
   return {
-    findOptions,
     findDialog: isOpen && (
       <FindDialog
         query={query}
@@ -135,28 +138,6 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     openFind: open,
   }
 }
-
-const useFindPlugins = findOptions => useMemo(() => {
-  const makePlugin = ({ key, predicate }) => createPluginFactory({
-    key,
-    isLeaf: true,
-    decorate: (editor, { key, type }) => ([node]) => {
-      const { matches, currentMatch } = editor.pluginsByKey[key].options
-
-      return node === editor
-        ? matches.map(match => ({
-          ...match,
-          [type]: predicate({ match, currentMatch }),
-        }))
-        : []
-    },
-  })
-
-  return [
-    makePlugin({ key: MARK_FIND_RESULT, predicate: ({ match, currentMatch }) => match.index !== currentMatch }),
-    makePlugin({ key: MARK_FIND_RESULT_CURRENT, predicate: ({ match, currentMatch }) => match.index === currentMatch }),
-  ].map(plugin => plugin({ options: findOptions }))
-}, [findOptions])
 
 const FindDialog = ({
   query,
@@ -231,8 +212,5 @@ const FindDialog = ({
 }
 
 export {
-  MARK_FIND_RESULT,
-  MARK_FIND_RESULT_CURRENT,
   useFind,
-  useFindPlugins,
 }

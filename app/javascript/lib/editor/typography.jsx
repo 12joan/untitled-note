@@ -32,7 +32,6 @@ import {
   useAttachmentPlugins,
   Attachment,
 } from '~/lib/editor/attachments'
-import { MARK_FIND_RESULT, MARK_FIND_RESULT_CURRENT } from '~/lib/editor/find'
 
 const useTypographyPlugins = () => {
   const mainPlugins = useMemo(() => [
@@ -85,8 +84,6 @@ const components = {
   [MARK_BOLD]: makeElementComponent('strong'),
   [MARK_ITALIC]: makeElementComponent('em'),
   [MARK_STRIKETHROUGH]: makeElementComponent('del'),
-  [MARK_FIND_RESULT]: makeElementComponent('mark', { className: 'bg-yellow-100/80 dark:bg-white/80 text-black not-prose' }),
-  [MARK_FIND_RESULT_CURRENT]: makeElementComponent('mark', { className: 'bg-yellow-300 text-black not-prose' }),
   [ELEMENT_LINK]: LinkComponent,
   [ELEMENT_H1]: makeElementComponent('h1'),
   [ELEMENT_BLOCKQUOTE]: makeElementComponent('blockquote'),
