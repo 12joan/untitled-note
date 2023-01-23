@@ -49,40 +49,37 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const [query, settledQuery, setQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 200 })
+  const [query, settledQuery, rawSetQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 200 })
+  const [matches, setMatches] = useState([])
   const [currentMatch, setCurrentMatch] = useState(undefined)
   const inputRef = useRef()
 
-  const matches = useMemo(() => {
-    const editor = editorRef.current
-    if (!isOpen || !isFocused || !editor) return []
-    return getMatchesInNode(editor, settledQuery)
-  }, [isOpen, isFocused, settledQuery])
-
-  const matchDOMRanges = useMemo(() => matches.map(
-    slateRange => makeDOMRangeStatic(toDOMRange(editorRef.current, slateRange))
-  ), [matches])
-
+  // When the find dialog is opened, focus the input
   const open = () => {
     setIsOpen(true)
     setTimeout(() => inputRef.current.select(), 0)
   }
 
+  // When the find dialog is closed, reset the query and matches
   const close = () => {
     setIsOpen(false)
-    setQuery('')
+    setQueryWithoutWaiting('')
+    setMatches([])
     setCurrentMatch(undefined)
 
-    if (matches.length > 0 && currentMatch !== undefined) {
-      setSelection(matches[currentMatch])
+    // If the current match exists, select it; otherwise, restore the selection
+    const currentMatchRange = currentMatch !== undefined && matches[currentMatch]
+    if (currentMatchRange) {
+      setSelection(currentMatchRange)
     } else {
       restoreSelection()
     }
   }
 
+  // When the user presses Meta+F, open the find dialog. If the find dialog was
+  // already open, close it and let the browser handle the keyboad shortcut.
   useGlobalKeyboardShortcut('MetaF', event => {
     if (event.target === inputRef.current) {
-      // Close and open the browser find feature (if available)
       close()
     } else {
       event.preventDefault()
@@ -90,19 +87,39 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     }
   })
 
+  // When the query changes, reset the current match
+  const setQuery = query => {
+    setCurrentMatch(undefined)
+    rawSetQuery(query)
+  }
+
+  // Recompute matches when the query changes or the input gains focus, but only
+  // if the find dialog is open and the input is focused
   useEffect(() => {
-    if (matches.length === 0) {
-      setCurrentMatch(undefined)
-    } else {
+    const editor = editorRef.current
+
+    if (editor && isOpen && isFocused) {
+      setMatches(getMatchesInNode(editor, settledQuery))
+    }
+  }, [isOpen, isFocused, settledQuery])
+
+  // If the current match needs to be set, set it to the first match
+  useEffect(() => {
+    if (matches.length > 0 && (currentMatch === undefined || currentMatch >= matches.length)) {
       setCurrentMatch(0)
     }
-  }, [settledQuery])
+  }, [matches])
 
+  const matchDOMRanges = useMemo(() => matches.map(
+    slateRange => makeDOMRangeStatic(toDOMRange(editorRef.current, slateRange))
+  ), [matches])
+
+  // Highlight matches and scroll to the current match
   useEffect(() => {
     const editor = editorRef.current
 
     if (ENABLE_FIND_FEATURE && editor) {
-      const [currentMatchRange, otherMatchRanges] = currentMatch === undefined
+      const [currentMatchRange, otherMatchRanges] = !isFocused || currentMatch === undefined
         ? [undefined, matchDOMRanges]
         : [
           matchDOMRanges[currentMatch],
@@ -113,13 +130,12 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
       if (currentMatchRange) {
         CSS.highlights.set('find-result-current', new Highlight(currentMatchRange))
-
         currentMatchRange.startContainer.parentNode.scrollIntoView({ block: 'center' })
       } else {
         CSS.highlights.delete('find-result-current')
       }
     }
-  }, [matchDOMRanges, currentMatch])
+  }, [matchDOMRanges, currentMatch, isFocused])
 
   return {
     findDialog: isOpen && (
