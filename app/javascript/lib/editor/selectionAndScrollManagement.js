@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { toDOMNode, select } from '@udecode/plate-headless'
+import { toDOMNode, focusEditor } from '@udecode/plate-headless'
 
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import normalizeRange from '~/lib/editor/normalizeRange'
@@ -27,13 +27,11 @@ const useSaveScroll = documentId => useEffect(() => {
 const getEditorDOMNode = editor => toDOMNode(editor, editor)
 
 const setSelection = (editor, selection) => {
-  getEditorDOMNode(editor).focus({ preventScroll: true })
-
   // Returns null if the selection is not valid
   const normalizedSelection = selection && normalizeRange(editor, selection)
 
   if (normalizedSelection) {
-    select(editor, normalizedSelection)
+    focusEditor(editor, normalizedSelection)
   }
 }
 
