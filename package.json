@@ -16,7 +16,7 @@
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.0.4",
     "@tippyjs/react": "^4.2.6",
-    "@udecode/plate-headless": "^19.0.7",
+    "@udecode/plate-headless": "^19.1.0",
     "axios": "^1.2.3",
     "browser-image-compression": "^2.0.0",
     "emoji-mart": "^5.5.1",
