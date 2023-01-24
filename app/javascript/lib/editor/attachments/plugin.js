@@ -63,6 +63,11 @@ const createAttachmentPlugin = createPluginFactory({
       const files = Array.from(event.clipboardData.files)
 
       if (files.length > 0) {
+        // The default paste handler sometimes causes an error as a result of
+        // insertAttachments removing an empty paragraph at the end of the
+        // document
+        event.preventDefault()
+
         // Insert before the current block if the cursor is at the start of
         // the block, otherwise insert after the current block
         const blockIndex = editor.selection.anchor.path[0] + (
