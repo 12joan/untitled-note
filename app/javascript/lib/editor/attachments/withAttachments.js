@@ -28,7 +28,7 @@ const withAttachments = editor => {
         const adjacentBlockPath = [path[0] + deltaPath]
         const adjacentBlock = getNode(editor, adjacentBlockPath)
 
-        if (adjacentBlock.type === ELEMENT_ATTACHMENT) {
+        if (adjacentBlock?.type === ELEMENT_ATTACHMENT) {
           removeNodes(editor, { at: path })
 
           // If the node we removed was above the attachment, then the
