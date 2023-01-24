@@ -6,7 +6,7 @@ import cssAdd from '~/lib/cssAdd'
 const DragCursor = () => {
   const position = useGlobalStore('dragCursorPosition', null, false)
 
-  const { left, right, y } = useMemo(() => {
+  const { left, right, top } = useMemo(() => {
     if (position === null) {
       return {}
     }
@@ -27,7 +27,10 @@ const DragCursor = () => {
     return {
       left,
       right: window.innerWidth - right,
-      y: isBelowLast ? bottom : top,
+      top: (isBelowLast
+        ? cssAdd(bottom, '0.375rem')
+        : cssAdd(top, '-0.375rem')
+      ),
     }
   }, [position])
 
@@ -37,7 +40,7 @@ const DragCursor = () => {
       style={{
         left,
         right,
-        top: cssAdd(y, '-0.375rem'),
+        top,
       }}
     />
   )
