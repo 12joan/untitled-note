@@ -2,6 +2,7 @@ import {
   getPluginOptions,
   insertNodes,
   removeNodes,
+  withoutNormalizing,
 } from '@udecode/plate-headless'
 
 import uploadFile from '~/lib/uploadFile'
@@ -32,11 +33,7 @@ const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
       return
     }
 
-    if (nodeAtPathIsEmptyParagraph(editor, [blockIndex])) {
-      removeNodes(editor, {
-        at: [blockIndex],
-      })
-    }
+    let shouldRemoveTargetBlock = nodeAtPathIsEmptyParagraph(editor, [blockIndex])
 
     const addedIndices = []
 
@@ -63,8 +60,21 @@ const insertAttachments = (editor, blockIndex, files) => handleUploadFileError(
         const relativeIndex = addedIndices.filter(i => i < index).length
         addedIndices.push(index)
 
-        insertNodes(editor, attachmentNode, {
-          at: [blockIndex + relativeIndex],
+        withoutNormalizing(editor, () => {
+          // Performing the remove here to prevent issues with the editor being
+          // in an invalid state. This may result in unwanted behaviour if
+          // blockIndex no longer contains the empty paragraph.
+          if (shouldRemoveTargetBlock) {
+            removeNodes(editor, {
+              at: [blockIndex],
+            })
+
+            shouldRemoveTargetBlock = false
+          }
+
+          insertNodes(editor, attachmentNode, {
+            at: [blockIndex + relativeIndex],
+          })
         })
       }
 
