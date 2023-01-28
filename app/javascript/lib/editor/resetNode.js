@@ -1,10 +1,17 @@
 import {
   isSelectionAtBlockStart,
+  isSelectionAtCodeBlockStart,
+  unwrapCodeBlock,
   ELEMENT_PARAGRAPH,
   ELEMENT_H1,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
 } from '@udecode/plate-headless'
+
+const commonRule = {
+  defaultType: ELEMENT_PARAGRAPH,
+  hotkey: 'backspace',
+}
 
 const resetNodeOptions = {
   options: {
@@ -12,10 +19,15 @@ const resetNodeOptions = {
     disableFirstBlockReset: true,
     rules: [
       {
-        types: [ELEMENT_H1, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK],
-        defaultType: ELEMENT_PARAGRAPH,
-        hotkey: 'backspace',
+        ...commonRule,
+        types: [ELEMENT_H1, ELEMENT_BLOCKQUOTE],
         predicate: isSelectionAtBlockStart,
+      },
+      {
+        ...commonRule,
+        types: [ELEMENT_CODE_BLOCK],
+        predicate: isSelectionAtCodeBlockStart,
+        onReset: unwrapCodeBlock,
       },
     ],
   },

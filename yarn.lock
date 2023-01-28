@@ -619,13 +619,13 @@
   dependencies:
     "@udecode/plate-core" "19.2.0"
 
-"@udecode/plate-basic-elements@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-elements/-/plate-basic-elements-19.2.0.tgz#fdbb9c4b6bae9c0d27a28ec3eeafbdc996c9c4e6"
-  integrity sha512-s8M6oqDDosrOa1Wlk4iB+USe2peIhEE5sfi8sIjzBkisRHUWmEMdhbn1tPfE4A3nxCMB5R7yY4ctosIc/1HpxQ==
+"@udecode/plate-basic-elements@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-elements/-/plate-basic-elements-19.3.0.tgz#dd25076154255f1f48f176ede5e5ff1dec497749"
+  integrity sha512-c05BDeiUVsfUao1/fg8kXeqc6TC5LyBRzAwTZxrWdJg6w2L52GoFKbxDsR3sdCCAJGetQ4vuyvt60Dq/sL1gbg==
   dependencies:
     "@udecode/plate-block-quote" "19.2.0"
-    "@udecode/plate-code-block" "19.2.0"
+    "@udecode/plate-code-block" "19.3.0"
     "@udecode/plate-core" "19.2.0"
     "@udecode/plate-heading" "19.2.0"
     "@udecode/plate-paragraph" "19.2.0"
@@ -658,10 +658,10 @@
   dependencies:
     "@udecode/plate-core" "19.2.0"
 
-"@udecode/plate-code-block@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.2.0.tgz#e27af9e00233eeddbc27634f6227bd7dc355e7bd"
-  integrity sha512-zzsn8PxpObxSBAhzaZVCFpqUPfNLXNGQWlR1xemAk4fnK/v8m5IrXdRrgjPtp8a8xDqT4t7t15i0Ho9o0+ZoMg==
+"@udecode/plate-code-block@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-19.3.0.tgz#c3e367db402255ea1fc9e142e1807cacf04a3739"
+  integrity sha512-iCDE5rW2NJDBn3sqWsMUztKbfwPQZaTFFqqwb4mk4TwPTvDNFZcqEmivB2XpW11QDxdaRsV++Cva0O+5EBTqFQ==
   dependencies:
     "@udecode/plate-core" "19.2.0"
     prismjs "^1.25.0"
@@ -736,19 +736,19 @@
   dependencies:
     "@udecode/plate-core" "19.2.0"
 
-"@udecode/plate-headless@^19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.2.0.tgz#eaf02d0ab84f1b51a00d8b76ba188fa9c6dddaa1"
-  integrity sha512-Cd4Z2sPu5dZxwxuggRaH5rIJNoGGJbH73F0Js4S3AY1J7YC1+5kVJ5v1Bnf5dxK7Be05nAZngGXFdpQD2C9E4Q==
+"@udecode/plate-headless@^19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-19.3.0.tgz#3d6b26f4d5328aa9d5f43e9f3ae4b19647642faa"
+  integrity sha512-yHaXBfbBtrtDLKjNvwULmiz2uLHFGeqdkAIULAtcXux8ssvpfQNEKvuC4i+Y5A9bcOux6/z4AoB53xOnFWf/mw==
   dependencies:
     "@udecode/plate-alignment" "19.2.0"
     "@udecode/plate-autoformat" "19.2.0"
-    "@udecode/plate-basic-elements" "19.2.0"
+    "@udecode/plate-basic-elements" "19.3.0"
     "@udecode/plate-basic-marks" "19.2.0"
     "@udecode/plate-block-quote" "19.2.0"
     "@udecode/plate-break" "19.2.0"
     "@udecode/plate-button" "19.2.0"
-    "@udecode/plate-code-block" "19.2.0"
+    "@udecode/plate-code-block" "19.3.0"
     "@udecode/plate-combobox" "19.2.0"
     "@udecode/plate-comments" "19.2.0"
     "@udecode/plate-core" "19.2.0"
@@ -766,17 +766,17 @@
     "@udecode/plate-link" "19.2.0"
     "@udecode/plate-list" "19.2.0"
     "@udecode/plate-media" "19.2.0"
-    "@udecode/plate-mention" "19.2.0"
+    "@udecode/plate-mention" "19.3.0"
     "@udecode/plate-node-id" "19.2.0"
     "@udecode/plate-normalizers" "19.2.0"
     "@udecode/plate-paragraph" "19.2.0"
     "@udecode/plate-reset-node" "19.2.0"
     "@udecode/plate-select" "19.2.0"
-    "@udecode/plate-serializer-csv" "19.2.0"
-    "@udecode/plate-serializer-docx" "19.2.0"
+    "@udecode/plate-serializer-csv" "19.3.0"
+    "@udecode/plate-serializer-docx" "19.3.0"
     "@udecode/plate-serializer-html" "19.2.0"
-    "@udecode/plate-serializer-md" "19.2.0"
-    "@udecode/plate-table" "19.2.0"
+    "@udecode/plate-serializer-md" "19.3.0"
+    "@udecode/plate-table" "19.3.0"
     "@udecode/plate-trailing-block" "19.2.0"
 
 "@udecode/plate-highlight@19.2.0":
@@ -851,10 +851,10 @@
     react-textarea-autosize "^8.3.3"
     scriptjs "2.5.9"
 
-"@udecode/plate-mention@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-19.2.0.tgz#2b6b07a33bc498091522be9da16d7a31d33faff5"
-  integrity sha512-7jVHYDQKWQh2N5q3mvSNQvFKYgqm6OfJLYvkUi0erc3/SP15hSprUun44LA1XcsQ9cPqBmATbpuhPTNmd3nNtw==
+"@udecode/plate-mention@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-19.3.0.tgz#d55c1b179dc6c39ade74a806d0e8925787b4078f"
+  integrity sha512-qIAlev2tfkYApaCVBrudIQO4YoNLaWCiuZU44vzrrV+neWm8u8XSRdV8218D+Ysgl1Np43Cdyf/NJb0E1cpK5w==
   dependencies:
     "@udecode/plate-combobox" "19.2.0"
     "@udecode/plate-core" "19.2.0"
@@ -894,19 +894,19 @@
   dependencies:
     "@udecode/plate-core" "19.2.0"
 
-"@udecode/plate-serializer-csv@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-19.2.0.tgz#6af705723a5f63cf744f10a7b2695ef080873280"
-  integrity sha512-t9xbHBGRKAvpNNsMfO08m9UbrmwqqEUOXC1msirlGR45sjxqyfRUP1zAkIde12igwD7ez/vbONwT7tmc5QwbAw==
+"@udecode/plate-serializer-csv@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-19.3.0.tgz#ac145c0903263de9da4e64e0526de603db8d8138"
+  integrity sha512-/HvspB8Mwx4OvVgNATkfOefHWqzO3MI1u5TGx0cFAb33Qkmf7CKiTmZMhlzQlMqsi+YTmFEdgffBxJ9we6k8Gg==
   dependencies:
     "@udecode/plate-core" "19.2.0"
-    "@udecode/plate-table" "19.2.0"
+    "@udecode/plate-table" "19.3.0"
     papaparse "^5.3.2"
 
-"@udecode/plate-serializer-docx@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-19.2.0.tgz#e573f040e1884d62e15c8898aa3611d2adb364d3"
-  integrity sha512-eFlBxQ+foTPTMVkaWMociZXDt9QQXyjtcF+3vZDoVVFRy2hzpKP47EvpocjPtup7spNrkp7fLV5j5cy/3/9UBQ==
+"@udecode/plate-serializer-docx@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-19.3.0.tgz#7ae8afff75f0d0a013f69f43449d267ef3f77fc1"
+  integrity sha512-31KMdo8XWPbFt1NEsDRLXEi7bC9xldH3lXECHXKjLX2LElPg/LaSxnr9EjwwjCX6Xly0MrFPqRZQitlkfn7pKw==
   dependencies:
     "@udecode/plate-core" "19.2.0"
     "@udecode/plate-heading" "19.2.0"
@@ -914,7 +914,7 @@
     "@udecode/plate-indent-list" "19.2.0"
     "@udecode/plate-media" "19.2.0"
     "@udecode/plate-paragraph" "19.2.0"
-    "@udecode/plate-table" "19.2.0"
+    "@udecode/plate-table" "19.3.0"
     validator "^13.7.0"
 
 "@udecode/plate-serializer-html@19.2.0":
@@ -925,13 +925,13 @@
     "@udecode/plate-core" "19.2.0"
     html-entities "^2.3.3"
 
-"@udecode/plate-serializer-md@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.2.0.tgz#3ed20d7a5fcf74ae3cc8423535038ca8e9f87b07"
-  integrity sha512-2Pb7Ph61MT0oexJcOWXTuYrNbSwxXRUZdXWYgG7Smmo7mu1ry7mXsudNF63bn8hovb+YC3QGGa+7xkqRNw86pA==
+"@udecode/plate-serializer-md@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-19.3.0.tgz#f60a417c9ab4b7662d7729c112c041404f5680ab"
+  integrity sha512-ha65S+X88Ty57ZamxnhYXRMeiIAjNou8cv3kENbPFHqAxRcG07oEvscKiJm8mBSLW5SuWxQNQkPmAk1n2w7skg==
   dependencies:
     "@udecode/plate-block-quote" "19.2.0"
-    "@udecode/plate-code-block" "19.2.0"
+    "@udecode/plate-code-block" "19.3.0"
     "@udecode/plate-core" "19.2.0"
     "@udecode/plate-heading" "19.2.0"
     "@udecode/plate-link" "19.2.0"
@@ -941,10 +941,10 @@
     remark-slate "^1.8.6"
     unified "^9.2.1"
 
-"@udecode/plate-table@19.2.0":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-19.2.0.tgz#14b5ff510e6ce1abddd73662ad300bcccf37594e"
-  integrity sha512-BD1gLI/MADTV0kw+0KqAz4VumM51KQFX3Wo3J+UHDq5eu3vxmq54D1ClcAo9Ea8p/kxd2IzhJmtjAkWPWFFEjA==
+"@udecode/plate-table@19.3.0":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-19.3.0.tgz#9f0a5e766fe1690769100f289c86e0d597931d28"
+  integrity sha512-S65nILTETuGMCS0V6mg5nbH10bAGNBx6VjEg6XV+kdChUEy+LSAjJXS+f0NreZq/+Q/qDmR3t9MRK6DXFggbIQ==
   dependencies:
     "@udecode/plate-core" "19.2.0"
 

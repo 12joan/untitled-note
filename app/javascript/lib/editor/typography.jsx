@@ -49,10 +49,6 @@ const useTypographyPlugins = () => {
             validNodeName: 'PRE',
           },
         ],
-        getNode: el => ({
-          type: ELEMENT_CODE_BLOCK,
-          children: [{ text: el.textContent }],
-        }),
       },
     }),
     createListPlugin(),

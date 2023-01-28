@@ -6,6 +6,7 @@ import {
   isMarkActive,
   toggleMark,
   toggleList,
+  toggleCodeBlock,
   indentListItems,
   unindentListItems,
   isRangeAcrossBlocks,
@@ -67,6 +68,15 @@ const FormattingToolbar = ({ editor }) => {
     }
   }
 
+  const toggleCodeBlockProps = () => {
+    const pluginType = getPluginType(editor, ELEMENT_CODE_BLOCK)
+
+    return {
+      active: someNode(editor, { match: { type: pluginType } }),
+      onClick: () => toggleCodeBlock(editor),
+    }
+  }
+
   // Meta+K toggles link only if there is a selection;
   // otherwise it opens the search modal
   useKeyboardShortcut(
@@ -98,7 +108,7 @@ const FormattingToolbar = ({ editor }) => {
     },
     { label: 'Heading 1', icon: HeadingOneIcon, ...toggleElementProps(ELEMENT_H1) },
     { label: 'Quote', icon: QuoteIcon, ...toggleElementProps(ELEMENT_BLOCKQUOTE) },
-    { label: 'Code block', icon: CodeBlockIcon, ...toggleElementProps(ELEMENT_CODE_BLOCK) },
+    { label: 'Code block', icon: CodeBlockIcon, ...toggleCodeBlockProps() },
     { label: 'Bulleted list', icon: BulletedListIcon, ...toggleListProps(ELEMENT_UL) },
     { label: 'Numbered list', icon: NumberedListIcon, ...toggleListProps(ELEMENT_OL) },
     { label: 'Indent', icon: IndentIcon, onClick: () => indentListItems(editor) },

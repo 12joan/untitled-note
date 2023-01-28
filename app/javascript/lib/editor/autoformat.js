@@ -1,5 +1,7 @@
 import {
+  getAboveNode,
   toggleList,
+  toggleCodeBlock,
   unwrapList,
   ELEMENT_H1,
   ELEMENT_BLOCKQUOTE,
@@ -12,11 +14,14 @@ import {
   MARK_STRIKETHROUGH,
 } from '@udecode/plate-headless'
 
+const isSelectionInCodeBlock = editor => !!getAboveNode(editor, { match: { type: ELEMENT_CODE_BLOCK } })
+
 const blockRule = (type, match, otherProps = {}) => ({
   mode: 'block',
   type,
   match,
-  preFormat: editor => unwrapList(editor),
+  preFormat: unwrapList,
+  query: editor => !isSelectionInCodeBlock(editor),
   ...otherProps,
 })
 
@@ -24,6 +29,7 @@ const markRule = (type, match, otherProps = {}) => ({
   mode: 'mark',
   type,
   match,
+  query: editor => !isSelectionInCodeBlock(editor),
   ...otherProps,
 })
 
@@ -32,7 +38,9 @@ const autoformatOptions = {
     rules: [
       blockRule(ELEMENT_H1, '# '),
       blockRule(ELEMENT_BLOCKQUOTE, '> '),
-      blockRule(ELEMENT_CODE_BLOCK, '```'),
+      blockRule(ELEMENT_CODE_BLOCK, '```', {
+        format: toggleCodeBlock,
+      }),
       blockRule(ELEMENT_LI, ['* ', '- '], {
         format: editor => toggleList(editor, { type: ELEMENT_UL }),
       }),
