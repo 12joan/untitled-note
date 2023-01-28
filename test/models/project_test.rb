@@ -7,7 +7,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'image_url is present when image is present' do
     project = create(:project)
-    image = create(:s3_file, project: project)
+    image = create(:s3_file, owner: project.owner, original_project: project)
     project.update!(image: image)
 
     S3File.stub_any_instance(:url, 'http://example.com/image.png') do
@@ -17,7 +17,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'image becomes null when image is destroyed' do
     project = create(:project)
-    image = create(:s3_file, project: project)
+    image = create(:s3_file, owner: project.owner, original_project: project)
     project.update!(image: image)
 
     ignore_s3 do

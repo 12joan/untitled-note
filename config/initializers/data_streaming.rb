@@ -90,7 +90,7 @@ Rails.application.reloader.to_prepare do
           })
         end
 
-        broadcast_for s3_file.project if s3_file.role == 'project-image'
+        broadcast_for s3_file.original_project if s3_file.role == 'project-image'
       },
     },
   )

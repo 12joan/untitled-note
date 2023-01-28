@@ -4,7 +4,7 @@ class FileStorageAPITest < APITestCase
   setup do
     @user = create(:user, storage_quota: 200, storage_used: 0)
     @project = create(:project, owner: @user)
-    create_list(:s3_file, 3, project: @project, size: 50)
+    create_list(:s3_file, 3, owner: @user, original_project: @project, size: 50)
   end
 
   test 'FileStorage#quota_usage returns used and total quota' do

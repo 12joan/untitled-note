@@ -5,7 +5,7 @@ FactoryBot.define do
     storage_used { 100 * 50 }
   end
 
-  factory :project do
+  factory :project, aliases: [:original_project] do
     owner
     name { 'My project' }
   end
@@ -20,7 +20,8 @@ FactoryBot.define do
   end
 
   factory :s3_file do
-    project
+    owner
+    original_project
     role { 'project-icon' }
     sequence(:s3_key) { |n| "uploads/#{n}.png" }
     sequence(:filename) { |n| "#{n}.png" }

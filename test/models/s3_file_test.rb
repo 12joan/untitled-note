@@ -4,7 +4,7 @@ class S3FileTest < ActiveSupport::TestCase
   setup do
     @owner = create(:user)
     @project = create(:project, owner: @owner)
-    @s3_file = create(:s3_file, project: @project)
+    @s3_file = create(:s3_file, owner: @owner, original_project: @project)
   end
 
   test 'presigned_post calls S3 and returns post object' do
@@ -107,7 +107,7 @@ class S3FileTest < ActiveSupport::TestCase
 
   test 'on create, increase owner storage_used' do
     @owner.update!(storage_used: 256)
-    create(:s3_file, size: 100, project: @project)
+    create(:s3_file, size: 100, owner: @owner, original_project: @project)
     assert_equal 356, @owner.reload.storage_used
   end
 

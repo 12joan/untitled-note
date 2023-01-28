@@ -1,6 +1,6 @@
 class S3File < ApplicationRecord
-  belongs_to :project
-  has_one :owner, through: :project, source: :owner
+  belongs_to :owner, class_name: 'User', inverse_of: :s3_files
+  belongs_to :original_project, class_name: 'Project', inverse_of: :s3_files
   has_many :used_as_image_in_projects, class_name: 'Project', foreign_key: 'image_id', dependent: :nullify
 
   validates :role, presence: true
@@ -9,7 +9,7 @@ class S3File < ApplicationRecord
   validates :size, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :content_type, presence: true
 
-  include Queryable.permit(*%i[id project_id role s3_key filename size content_type url created_at])
+  include Queryable.permit(*%i[id owner_id original_project_id role s3_key filename size content_type url created_at])
   include Listenable
 
   INLINE_CONTENT_TYPES = %w[

@@ -3,9 +3,10 @@ require 'test_helper'
 class ProjectImagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = create(:project, image: nil)
-    @old_image = create(:s3_file, project: @project)
-    @new_image = create(:s3_file, project: @project)
-    as_user(@project.owner)
+    @owner = @project.owner
+    @old_image = create(:s3_file, owner: @owner, original_project: @project)
+    @new_image = create(:s3_file, owner: @owner, original_project: @project)
+    as_user(@owner)
   end
 
   test 'when old image is absent and new image is present' do

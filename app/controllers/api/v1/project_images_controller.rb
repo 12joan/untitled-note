@@ -17,7 +17,7 @@ module API
 
       def assign_new_image_if_present
         image_id = params[:image_id]
-        new_image = image_id.present? ? @project.s3_files.find(image_id) : nil
+        new_image = image_id.present? ? current_user.s3_files.find(image_id) : nil
         @project.update!(image: new_image)
       end
     end

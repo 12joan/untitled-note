@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelected, useFocused } from 'slate-react'
 
-import { useContext } from '~/lib/context'
 import { FutureServiceResult } from '~/lib/future'
 import retry from '~/lib/retry'
 import S3FilesAPI from '~/lib/resources/S3FilesAPI'
@@ -35,12 +34,11 @@ const Attachment = props => {
 const UploadedAttachment = ({ attributes, children, element }) => {
   const { s3FileId } = element
 
-  const { projectId } = useContext()
   const [fsrFetchedData, setFsrFetchedData] = useState(FutureServiceResult.pending())
 
   useEffect(() => {
     FutureServiceResult.fromPromise(
-      retry(() => S3FilesAPI(projectId).show(s3FileId), {
+      retry(() => S3FilesAPI.show(s3FileId), {
         maxRetries: Infinity,
         shouldRetry: error => error.response?.status !== 404,
       }),

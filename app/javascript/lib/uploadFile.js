@@ -11,9 +11,8 @@ const uploadFile = async ({
   onUploadStart = () => {},
   onUploadProgress = () => {},
 }) => {
-  const api = S3FilesAPI(projectId)
-
-  const { presigned_post, ...s3File } = await api.create({
+  const { presigned_post, ...s3File } = await S3FilesAPI.create({
+    project_id: projectId,
     role,
     filename: file.name,
     size: file.size,
@@ -45,7 +44,7 @@ const uploadFile = async ({
 
     return s3File
   } catch (error) {
-    api.destroy(s3File).catch(destroyError => {
+    S3FilesAPI.destroy(s3File).catch(destroyError => {
       console.error('Failed to destroy file after upload error')
       console.error(destroyError)
     })

@@ -2,8 +2,8 @@ class Project < ApplicationRecord
   belongs_to :owner, class_name: 'User', inverse_of: :projects
   has_many :documents, dependent: :destroy
   has_many :tags, dependent: :destroy
-  has_many :s3_files, dependent: :destroy
   belongs_to :image, class_name: 'S3File', optional: true
+  has_many :s3_files
 
   validates :name, presence: true
   validates :background_colour, inclusion: { in: %w[auto light dark] }

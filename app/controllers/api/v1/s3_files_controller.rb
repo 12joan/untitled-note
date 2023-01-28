@@ -1,7 +1,6 @@
 module API
   module V1
     class S3FilesController < APIController
-      before_action :set_project
       before_action :set_s3_file, only: %i[show destroy]
 
       def show
@@ -10,12 +9,14 @@ module API
 
       def create
         file_params = params.permit(:role, :filename, :size, :content_type)
+        project = current_user.projects.find(params.require(:project_id))
 
         allowed, error = UploadAllowed.allowed?(user: current_user, file_params: file_params)
 
         if allowed
-          s3_file = @project.s3_files.build(file_params.merge(
+          s3_file = current_user.s3_files.build(file_params.merge(
             s3_key: "uploads/#{current_user.id}/#{SecureRandom.uuid}",
+            original_project: project,
           ))
 
           if s3_file.save
@@ -41,7 +42,7 @@ module API
       private
 
       def set_s3_file
-        @s3_file = @project.s3_files.find(params[:id])
+        @s3_file = current_user.s3_files.find(params[:id])
       end
     end
   end

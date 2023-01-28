@@ -23,7 +23,7 @@ const FileStorageSection = () => {
   }, Future.resolved)
 
   const deleteFile = file => handleDeleteFileError(
-    S3FilesAPI(file.project_id).destroy(file),
+    S3FilesAPI.destroy(file),
   ).then(() => dispatchGlobalEvent('s3File:delete', { s3FileId: file.id }))
 
   const fileMenu = file => (

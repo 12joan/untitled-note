@@ -2,9 +2,10 @@ require 'test_helper'
 
 class S3FilesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @s3_file = create(:s3_file)
-    @project = @s3_file.project
-    as_user(@project.owner)
+    @owner = create(:user)
+    @project = create(:project, owner: @owner)
+    @s3_file = create(:s3_file, owner: @owner, original_project: @project)
+    as_user(@owner)
   end
 
   test 'create returns post object when upload is allowed' do
@@ -14,11 +15,12 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
       S3File.stub_any_instance(:presigned_post, post) do
         S3File.stub_any_instance(:url, 'some url') do
           assert_difference('S3File.count') do
-            post api_v1_project_s3_files_url(@project), params: {
+            post api_v1_s3_files_url, params: {
               role: 'project-image',
               filename: 'image.png',
               size: 150 * 1024,
               content_type: 'image/png',
+              project_id: @project.id,
             }
           end
         end
@@ -36,11 +38,12 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
   test 'create returns error when upload is not allowed' do
     stub_allowed(false, 'Some error') do
       assert_no_difference('S3File.count') do
-        post api_v1_project_s3_files_url(@project), params: {
+        post api_v1_s3_files_url, params: {
           role: 'project-image',
           filename: 'image.png',
           size: 150 * 1024,
           content_type: 'image/png',
+          project_id: @project.id,
         }
       end
     end
@@ -51,7 +54,7 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
 
   test 'show' do
     S3File.stub_any_instance(:url, 'some url') do
-      get api_v1_project_s3_file_url(@project, @s3_file)
+      get api_v1_s3_file_url(@s3_file)
     end
 
     assert_response :success

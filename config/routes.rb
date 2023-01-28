@@ -9,13 +9,13 @@ Rails.application.routes.draw do
 
         resources :tags, only: %i[update]
         resource :blank_document, only: %i[create]
-        resources :s3_files, only: %i[create destroy show]
         resource :image, only: %i[update], controller: :project_images
         resource :search, only: %i[show], controller: :search
         resource :replace, only: %i[create], controller: :project_replace
       end
 
       resource :project_order, only: %i[update], controller: :project_order
+      resources :s3_files, only: %i[create destroy show]
     end
   end
 
