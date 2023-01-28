@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useElementSize } from 'usehooks-ts'
 
+import useElementSize from '~/lib/useElementSize'
 import { useGlobalEvent } from '~/lib/globalEvents'
 import { useTimeout } from '~/lib/useTimer'
 

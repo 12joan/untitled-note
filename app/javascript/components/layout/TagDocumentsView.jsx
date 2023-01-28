@@ -1,6 +1,6 @@
 import React from 'react'
-import { useElementSize } from 'usehooks-ts'
 
+import useElementSize from '~/lib/useElementSize'
 import { useContext, ContextProvider } from '~/lib/context'
 import useTitle from '~/lib/useTitle'
 import { OverviewLink } from '~/lib/routes'

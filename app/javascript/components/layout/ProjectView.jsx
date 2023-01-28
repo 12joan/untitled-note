@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
-import { useElementSize } from 'usehooks-ts'
 
+import useElementSize from '~/lib/useElementSize'
 import multiplexRefs from '~/lib/multiplexRefs'
 import { useContext, ContextProvider } from '~/lib/context'
 import useBreakpoints from '~/lib/useBreakpoints'
@@ -66,11 +66,9 @@ const ProjectView = ({ childView }) => {
     hideAccountModal()
   }, [childView.key, projectId])
 
-  const useFormattingToolbar = useCallback(formattingToolbar => {
-    const portal = createPortal(formattingToolbar, formattingToolbarRef.current)
-    useLayoutEffect(() => formattingToolbarSizeRef(formattingToolbarRef.current), [])
-    return portal
-  }, [])
+  const useFormattingToolbar = useCallback(formattingToolbar => (
+    createPortal(formattingToolbar, formattingToolbarRef.current)
+  ), [])
 
   useEffect(() => {
     if (sidebarAlwaysVisible) {
@@ -179,7 +177,7 @@ const ProjectView = ({ childView }) => {
       {showFormattingToolbar && (
         <aside
           key={projectId}
-          ref={formattingToolbarRef}
+          ref={multiplexRefs([formattingToolbarRef, formattingToolbarSizeRef])}
           className="fixed bottom-0 p-5 pt-1 pl-1 overflow-y-auto flex"
           style={{
             top: topBarHeight,

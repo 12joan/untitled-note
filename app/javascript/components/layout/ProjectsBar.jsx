@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useState, useId, forwardRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { useElementSize } from 'usehooks-ts'
 
+import useElementSize from '~/lib/useElementSize'
 import { useContext } from '~/lib/context'
 import groupList from '~/lib/groupList'
 import useNewProject from '~/lib/useNewProject'

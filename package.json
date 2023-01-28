@@ -33,8 +33,7 @@
     "slate": "^0.88.1",
     "slate-history": "^0.86.0",
     "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.88.2",
-    "usehooks-ts": "^2.9.1"
+    "slate-react": "^0.88.2"
   },
   "version": "0.1.0",
   "devDependencies": {
