@@ -41,7 +41,7 @@ const ProjectView = ({ childView }) => {
   const [projectsBarSizeRef, { width: projectsBarWidth }] = useElementSize()
   const [topBarSizeRef, { height: topBarHeight }] = useElementSize()
   const [sideBarSizeRef, { width: sideBarWidth }] = useElementSize()
-  const [formattingToolbarSizeRef, { width: formattingToolbarWidth }] = useElementSize()
+  const [formattingToolbarSizeRef, { width: formattingToolbarWidth }, forceResizeFormattingToolbar] = useElementSize()
 
   const { isLg, isXl } = useBreakpoints()
   const sidebarAlwaysVisible = isLg
@@ -66,9 +66,13 @@ const ProjectView = ({ childView }) => {
     hideAccountModal()
   }, [childView.key, projectId])
 
-  const useFormattingToolbar = useCallback(formattingToolbar => (
-    createPortal(formattingToolbar, formattingToolbarRef.current)
-  ), [])
+  const useFormattingToolbar = useCallback(formattingToolbar => {
+    useLayoutEffect(() => {
+      forceResizeFormattingToolbar()
+    }, [])
+
+    return createPortal(formattingToolbar, formattingToolbarRef.current)
+  }, [])
 
   useEffect(() => {
     if (sidebarAlwaysVisible) {

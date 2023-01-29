@@ -17,7 +17,7 @@ const useElementSize = () => {
     return () => resizeObserver.disconnect()
   }, [element])
 
-  return [setElement, size]
+  return [setElement, size, forceRender]
 }
 
 export default useElementSize
