@@ -61,11 +61,9 @@ const useToggleLink = editor => {
   return toggleLink
 }
 
-const LinkComponent = ({ editor, nodeProps, children }) => {
+const LinkComponent = ({ editor, nodeProps, attributes, children }) => {
   const [selectedLink, selectedLinkPath] = getAboveNode(editor, { match: { type: ELEMENT_LINK } }) || [undefined, undefined]
   const selected = useSelected() && selectedLink !== undefined
-
-  const { tippyContainerRef } = useContext()
 
   const safeHref = useMemo(() => {
     const unsafeHref = nodeProps.href
@@ -102,51 +100,53 @@ const LinkComponent = ({ editor, nodeProps, children }) => {
   const removeLink = () => unwrapLink(editor)
 
   return (
-    <Tippy
-      placement="top"
-      visible={selected}
-      interactive
-      appendTo={tippyContainerRef.current}
-      render={attrs => selected && (
-        <div className="rounded-lg backdrop-blur shadow text-base" {...attrs}>
-          <Tooltip content="Open link">
-            <button
-              type="button"
-              className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-              onClick={openLink}
-            >
-              <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
-            </button>
-          </Tooltip>
+    <span {...attributes}>
+      <Tippy
+        placement="top"
+        visible={selected}
+        appendTo={document.body}
+        interactive
+        render={attrs => selected && (
+          <div className="rounded-lg backdrop-blur shadow text-base slate-popover" {...attrs} contentEditable={false}>
+            <Tooltip content="Open link">
+              <button
+                type="button"
+                className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
+                onClick={openLink}
+              >
+                <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
+              </button>
+            </Tooltip>
 
-          <Tooltip content="Edit link">
-            <button
-              type="button"
-              className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-              onClick={editLink}
-            >
-              <EditIcon size="1.25em" ariaLabel="Edit link" />
-            </button>
-          </Tooltip>
+            <Tooltip content="Edit link">
+              <button
+                type="button"
+                className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
+                onClick={editLink}
+              >
+                <EditIcon size="1.25em" ariaLabel="Edit link" />
+              </button>
+            </Tooltip>
 
-          <Tooltip content="Remove link">
-            <button
-              type="button"
-              className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
-              onClick={removeLink}
-            >
-              <DeleteIcon size="1.25em" ariaLabel="Remove link" />
-            </button>
-          </Tooltip>
-        </div>
-      )}
-    >
-      <a
-        {...linkProps}
-        className="btn btn-link"
-        children={children}
-      />
-    </Tippy>
+            <Tooltip content="Remove link">
+              <button
+                type="button"
+                className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
+                onClick={removeLink}
+              >
+                <DeleteIcon size="1.25em" ariaLabel="Remove link" />
+              </button>
+            </Tooltip>
+          </div>
+        )}
+      >
+        <a
+          {...linkProps}
+          className="btn btn-link"
+          children={children}
+        />
+      </Tippy>
+    </span>
   )
 }
 

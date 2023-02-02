@@ -67,9 +67,10 @@ const useTypographyPlugins = () => {
   ], [mainPlugins, attachmentPlugins])
 }
 
-const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {} }) => (
+const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {}, attributes }) => (
   <Component
     {...nodeProps}
+    {...attributes}
     {...props}
     children={children}
   />

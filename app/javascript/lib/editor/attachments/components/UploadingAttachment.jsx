@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useSelected, useFocused } from 'slate-react'
 
 import { useGlobalEvent } from '~/lib/globalEvents'
 import filesize from '~/lib/filesize'
 import groupedClassNames from '~/lib/groupedClassNames'
+
 import commonClassNames from '../commonClassNames'
+import { useSelected } from '../utils'
 
 import Meter from '~/components/Meter'
 
@@ -21,14 +22,12 @@ const UploadingAttachment = ({ editor, attributes, children, element }) => {
     }
   }, [s3FileId])
 
-  const selected = useSelected()
-  const focused = useFocused()
-  const selectedAndFocused = selected && focused
+  const isSelected = useSelected()
 
   const className = groupedClassNames(commonClassNames, {
     display: null,
     spacing: 'space-y-2',
-    focusRing: selectedAndFocused && 'focus-ring',
+    focusRing: isSelected && 'focus-ring',
   })
 
   return (

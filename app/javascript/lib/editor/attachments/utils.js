@@ -6,6 +6,10 @@ import {
   getEditorString,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate-headless'
+import {
+  useSelected as useSlateSelected,
+  useFocused as useSlateFocused,
+} from 'slate-react'
 
 import { ELEMENT_ATTACHMENT } from './constants'
 
@@ -32,9 +36,12 @@ const nodeAtPathIsEmptyParagraph = (editor, path) => {
     && getEditorString(editor, path).trim() === ''
 }
 
+const useSelected = () => useSlateSelected() & useSlateFocused()
+
 export {
   matchAttachmentNode,
   attachmentNodeExists,
   removeAllAttachmentNodes,
   nodeAtPathIsEmptyParagraph,
+  useSelected,
 }

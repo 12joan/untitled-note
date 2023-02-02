@@ -8,10 +8,7 @@ import commonClassNames from '../commonClassNames'
 import Tooltip from '~/components/Tooltip'
 import DownloadIcon from '~/components/icons/DownloadIcon'
 
-const GenericAttachment = ({ s3File, selectedClassNames, useOnEnter }) => {
-  const buttonRef = useRef()
-  useOnEnter(() => buttonRef.current.click())
-
+const GenericAttachment = ({ s3File, selectedClassNames }) => {
   const className = groupedClassNames(commonClassNames, selectedClassNames)
 
   const {
@@ -32,15 +29,13 @@ const GenericAttachment = ({ s3File, selectedClassNames, useOnEnter }) => {
       </div>
 
       <Tooltip content="Download file">
-        <a
-          ref={buttonRef}
-          href={url}
-          target="_blank"
+        <button
+          type="button"
           className="block btn p-3 aspect-square text-slate-500 dark:text-slate-400 hocus:text-ui"
-          onClick={event => event.stopPropagation()}
+          onClick={() => window.open(url, '_blank')}
         >
           <DownloadIcon size="1.25em" ariaLabel="Download file" />
-        </a>
+        </button>
       </Tooltip>
     </div>
   )

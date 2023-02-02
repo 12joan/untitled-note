@@ -103,7 +103,6 @@ const Editor = ({ clientId, initialDocument }) => {
 
   const titleRef = useRef()
   const tagsRef = useRef()
-  const tippyContainerRef = useRef()
   const mentionSuggestionsContainerRef = useRef()
   const editorElementRef = useRef()
   const editorRef = useRef()
@@ -250,14 +249,12 @@ const Editor = ({ clientId, initialDocument }) => {
 
       {withLinkModalProvider(
         <ContextProvider
-          tippyContainerRef={tippyContainerRef}
           mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
           linkOriginator={workingDocument.safe_title}
           children={plateComponent}
         />
       )}
 
-      <div ref={tippyContainerRef} />
       <div ref={mentionSuggestionsContainerRef} />
     </>
   )

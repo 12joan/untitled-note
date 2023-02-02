@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useSelected, useFocused } from 'slate-react'
 
 import { FutureServiceResult } from '~/lib/future'
 import retry from '~/lib/retry'
@@ -8,6 +7,7 @@ import { useGlobalEvent } from '~/lib/globalEvents'
 import { useEditorEvent } from '~/lib/editor/imperativeEvents'
 
 import uploadsInProgressStore from '../uploadsInProgressStore'
+import { useSelected } from '../utils'
 
 import UploadingAttachment from './UploadingAttachment'
 import PendingAttachment from './PendingAttachment'
@@ -52,21 +52,12 @@ const UploadedAttachment = ({ attributes, children, element }) => {
     }
   })
 
-  const selected = useSelected()
-  const focused = useFocused()
-  const selectedAndFocused = selected && focused
-
-  const useOnEnter = handler => useEditorEvent.onKeyDown(event => {
-    if (selectedAndFocused && event.key === 'Enter') {
-      handler()
-    }
-  }, [selectedAndFocused])
+  const isSelected = useSelected()
 
   const commonProps = {
     selectedClassNames: {
-      focusRing: selectedAndFocused && 'focus-ring',
+      focusRing: isSelected && 'focus-ring',
     },
-    useOnEnter,
   }
 
   return (
