@@ -1,0 +1,18 @@
+const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
+
+const setZoomFactor = (focusedWindow, valueOrFunction) => {
+  const { zoomFactor } = focusedWindow.webContents
+
+  const newZoomFactor = typeof valueOrFunction === 'function'
+    ? valueOrFunction(zoomFactor)
+    : valueOrFunction
+
+  const clampedZoomFactor = clamp(0.3, 5, newZoomFactor)
+  focusedWindow.webContents.zoomFactor = clampedZoomFactor
+
+  return clampedZoomFactor
+}
+
+module.exports = {
+  setZoomFactor,
+}
