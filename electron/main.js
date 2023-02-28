@@ -19,6 +19,8 @@ const linkIsExternal = url => !INTERNAL_URL_HOSTS.some(host => new URL(url).host
 
 const tabsSupported = isMac
 
+let isQuitting = false
+
 const userAgent = [
   'Electron',
   tabsSupported ? 'TabsSupported' : 'TabsNotSupported',
@@ -86,6 +88,14 @@ const createWindow = async ({
   browserWindow.on('new-window-for-tab', (event) => {
     createWindow({ parentWindow: browserWindow })
   })
+
+  // Hide last window instead of closing (macOS)
+  browserWindow.on('close', (event) => {
+    if (!isQuitting && isMac && BrowserWindow.getAllWindows().length === 1) {
+      event.preventDefault()
+      browserWindow.hide()
+    }
+  })
 }
 
 app.whenReady().then(() => {
@@ -93,17 +103,25 @@ app.whenReady().then(() => {
 
   Menu.setApplicationMenu(createMenu())
 
-  // Ensure window is open on activate (macOS)
+  // Show hidden windows on activate (macOS)
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+    if (isMac) {
+      BrowserWindow.getAllWindows().forEach((window) => {
+        if (!window.isVisible()) {
+          window.show()
+        }
+      })
     }
   })
 
   // Quit when all windows are closed (except on macOS)
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    if (!isMac) {
       app.quit()
     }
+  })
+
+  app.on('before-quit', () => {
+    isQuitting = true
   })
 })
