@@ -4,7 +4,7 @@
   "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "ELECTRON_ENABLE_LOGGING=1 electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },

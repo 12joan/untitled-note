@@ -5,8 +5,9 @@ const {
   Menu,
   shell,
 } = require('electron')
-const createMenu = require('./menu')
 const path = require('path')
+const createMenu = require('./menu')
+const { isMac } = require('./helpers')
 
 const INTERNAL_URL_HOSTS = [
   'localhost:3000',
@@ -16,17 +17,33 @@ const INTERNAL_URL_HOSTS = [
 const linkIsNavigable = url => new URL(url).protocol !== 'file:'
 const linkIsExternal = url => !INTERNAL_URL_HOSTS.some(host => new URL(url).host === host)
 
-const createWindow = async (url = 'http://localhost:3000/') => {
+const tabsSupported = isMac
+
+const userAgent = [
+  'Electron',
+  tabsSupported ? 'TabsSupported' : 'TabsNotSupported',
+].join(' ')
+
+const createWindow = async ({
+  url = 'http://localhost:3000/',
+  parentWindow = null,
+} = {}) => {
   const browserWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 320,
     minHeight: 360,
     show: false,
+    tabbingIdentifier: 'untitled-note',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   })
+
+  // Create new tab if parent window is set
+  if (tabsSupported) {
+    parentWindow?.addTabbedWindow(browserWindow)
+  }
 
   const { webContents } = browserWindow
 
@@ -39,9 +56,7 @@ const createWindow = async (url = 'http://localhost:3000/') => {
 
   await browserWindow.loadFile('loading.html')
 
-  await browserWindow.loadURL(url, {
-    userAgent: 'Electron',
-  }).catch(showErrorPage)
+  await browserWindow.loadURL(url, { userAgent }).catch(showErrorPage)
 
   // Open external links in the default browser
   webContents.on('will-navigate', (event, url) => {
@@ -60,10 +75,15 @@ const createWindow = async (url = 'http://localhost:3000/') => {
     } else if (linkIsExternal(url)) {
       shell.openExternal(url)
     } else {
-      createWindow(url)
+      createWindow({ url, parentWindow: browserWindow })
     }
 
     return { action: 'deny' }
+  })
+
+  // Handle new tab button
+  browserWindow.on('new-window-for-tab', (event) => {
+    createWindow({ parentWindow: browserWindow })
   })
 }
 

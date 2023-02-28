@@ -1,5 +1,8 @@
 const { Menu } = require('electron')
-const { setZoomFactor } = require('./helpers')
+const {
+  isMac,
+  setZoomFactor,
+} = require('./helpers')
 
 const withFocusedWindow = handler => (item, focusedWindow) => {
   if (focusedWindow) {
@@ -8,8 +11,6 @@ const withFocusedWindow = handler => (item, focusedWindow) => {
 }
 
 module.exports = options => {
-  const isMac = process.platform === 'darwin'
-
   const appMenu = {
     label: 'Untitled Note App',
     submenu: [

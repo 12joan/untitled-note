@@ -1,5 +1,7 @@
 const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
 
+const isMac = process.platform === 'darwin'
+
 const setZoomFactor = (focusedWindow, valueOrFunction) => {
   const { zoomFactor } = focusedWindow.webContents
 
@@ -14,5 +16,6 @@ const setZoomFactor = (focusedWindow, valueOrFunction) => {
 }
 
 module.exports = {
+  isMac,
   setZoomFactor,
 }

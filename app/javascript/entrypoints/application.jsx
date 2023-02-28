@@ -4,9 +4,11 @@ import { BrowserRouter, useNavigate } from 'react-router-dom'
 
 import '~/channels'
 import '~/lib/commonEntrypoint'
-import { IS_ELECTRON } from '~/lib/environment'
+import { IS_ELECTRON, TABS_SUPPORTED } from '~/lib/environment'
 
 import App from '~/components/layout/App'
+
+console.log({ IS_ELECTRON, TABS_SUPPORTED })
 
 const ElectronNavigation = () => {
   const navigate = useNavigate()
