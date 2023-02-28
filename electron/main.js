@@ -1,6 +1,7 @@
 const {
   app,
   BrowserWindow,
+  dialog,
   Menu,
   shell,
 } = require('electron')
@@ -8,10 +9,11 @@ const createMenu = require('./menu')
 const path = require('path')
 
 const INTERNAL_URL_HOSTS = [
-  'localhost',
-  // 'untitlednote.eu.auth0.com',
+  'localhost:3000',
+  'untitlednote.eu.auth0.com',
 ]
 
+const linkIsNavigable = url => new URL(url).protocol !== 'file:'
 const linkIsExternal = url => !INTERNAL_URL_HOSTS.some(host => new URL(url).host === host)
 
 const createWindow = async () => {
@@ -21,88 +23,66 @@ const createWindow = async () => {
     minWidth: 320,
     minHeight: 360,
     show: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
   })
+
+  const { webContents } = browserWindow
 
   // Show error page if the app fails to load
   const showErrorPage = () => browserWindow.loadFile('error.html')
-  browserWindow.webContents.on('did-fail-load', showErrorPage)
+  webContents.on('did-fail-load', showErrorPage)
 
   // Prevent flash of white screen
   browserWindow.once('ready-to-show', () => browserWindow.show())
 
   await browserWindow.loadFile('loading.html')
 
-  await browserWindow.loadURL('http://localhost:3000/').catch(showErrorPage)
+  await browserWindow.loadURL('http://localhost:3000/#electron', {
+    userAgent: 'Electron',
+  }).catch(showErrorPage)
 
   // Open external links in the default browser
-  browserWindow.webContents.on('will-navigate', (event, url) => {
-    if (linkIsExternal(url)) {
+  webContents.on('will-navigate', (event, url) => {
+    if (!linkIsNavigable(url)) {
+      console.warn('Blocked navigation to', url)
+      event.preventDefault()
+    } else if (linkIsExternal(url)) {
       event.preventDefault()
       shell.openExternal(url)
     }
   })
 
-  browserWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (linkIsExternal(url)) {
+  webContents.setWindowOpenHandler(({ url }) => {
+    if (!linkIsNavigable(url)) {
+      console.warn('Blocked navigation to', url)
+      return { action: 'deny' }
+    } else if (linkIsExternal(url)) {
       shell.openExternal(url)
       return { action: 'deny' }
     }
 
     return { action: 'allow' }
   })
-
-  return browserWindow
 }
 
-// Register untitlednote:// protocol
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient(
-      'untitlednote',
-      process.execPath,
-      [path.resolve(process.argv[1])]
-    )
-  }
-} else {
-  app.setAsDefaultProtocolClient('untitlednote')
-}
+app.whenReady().then(() => {
+  createWindow()
 
-const gotTheLock = app.requestSingleInstanceLock()
+  Menu.setApplicationMenu(createMenu())
 
-let mainWindow
-
-const setMainWindow = win => {
-  mainWindow = win
-}
-
-if (!gotTheLock) {
-  app.quit()
-} else {
-  app.whenReady().then(() => {
-    createWindow().then(setMainWindow)
-
-    Menu.setApplicationMenu(createMenu())
-
-    // Ensure window is open on activate (macOS)
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow().then(setMainWindow)
-      }
-    })
-
-    // Quit when all windows are closed (except on macOS)
-    app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') {
-        app.quit()
-      }
-    })
-
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
-      dialog.showErrorBox('Welcome Back', `You arrived from: ${commandLine.pop().slice(0, -1)}`)
-    })
-
-    app.on('open-url', (event, url) => {
-      dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`)
-    })
+  // Ensure window is open on activate (macOS)
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
   })
-}
+
+  // Quit when all windows are closed (except on macOS)
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+})

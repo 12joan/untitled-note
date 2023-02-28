@@ -1,6 +1,12 @@
 const { Menu } = require('electron')
 const { setZoomFactor } = require('./helpers')
 
+const withFocusedWindow = handler => (item, focusedWindow) => {
+  if (focusedWindow) {
+    handler(focusedWindow, item)
+  }
+}
+
 module.exports = options => {
   const isMac = process.platform === 'darwin'
 
@@ -80,20 +86,12 @@ module.exports = options => {
       {
         label: 'Back',
         accelerator: 'CmdOrCtrl+[',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.webContents.goBack()
-          }
-        },
+        click: withFocusedWindow(focusedWindow => focusedWindow.webContents.send('navigate', -1)),
       },
       {
         label: 'Forward',
         accelerator: 'CmdOrCtrl+]',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.webContents.goForward()
-          }
-        },
+        click: withFocusedWindow(focusedWindow => focusedWindow.webContents.send('navigate', 1)),
       },
       {
         label: 'Reload',
@@ -106,50 +104,38 @@ module.exports = options => {
       },
       { type: 'separator' },
       {
-        label: 'Toggle Full Screen',
+        label: 'Toggle Full Scream',
         accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
-          }
-        },
+        click: withFocusedWindow(focusedWindow => focusedWindow.setFullScreen(
+          !focusedWindow.isFullScreen()
+        )),
       },
       {
         label: 'Zoom In',
         accelerator: 'CmdOrCtrl+=',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            setZoomFactor(focusedWindow, zoomFactor => zoomFactor + 0.1)
-          }
-        },
+        click: withFocusedWindow(focusedWindow => setZoomFactor(
+          focusedWindow,
+          zoomFactor => zoomFactor + 0.1
+        )),
       },
       {
         label: 'Zoom Out',
         accelerator: 'CmdOrCtrl+-',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            setZoomFactor(focusedWindow, zoomFactor => zoomFactor - 0.1)
-          }
-        },
+        click: withFocusedWindow(focusedWindow => setZoomFactor(
+          focusedWindow,
+          zoomFactor => zoomFactor - 0.1
+        )),
       },
       {
         label: 'Reset Zoom',
         accelerator: 'CmdOrCtrl+0',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            setZoomFactor(focusedWindow, 1)
-          }
-        },
+        click: withFocusedWindow(focusedWindow => setZoomFactor(focusedWindow, 1)),
       },
       { type: 'separator' },
       {
         label: 'Toggle Developer Tools',
         accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.toggleDevTools()
-          }
-        },
+        click: withFocusedWindow(focusedWindow => focusedWindow.toggleDevTools()),
       },
     ],
   }
