@@ -4,12 +4,12 @@ import { toDOMRange } from '@udecode/plate-headless'
 import { useContext } from '~/lib/context'
 import useStateWhenSettled from '~/lib/useStateWhenSettled'
 import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
+import { FIND_SUPPORTED } from '~/lib/environment'
 
 import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon'
 import ChevronRightIcon from '~/components/icons/ChevronRightIcon'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
-const ENABLE_FIND_FEATURE = navigator.userAgent.includes('enable-find-feature') && ('highlights' in CSS)
 const HIGHLIGHT_LIMIT = 3000
 
 const forEachTextNode = ({ children }, callback, parentPath = []) => {
@@ -53,7 +53,7 @@ const getMatchesInNode = (node, query) => {
 }
 
 const useFind = ({ editorRef, restoreSelection, setSelection }) => {
-  if (!ENABLE_FIND_FEATURE) return {}
+  if (!FIND_SUPPORTED) return {}
 
   const [isOpen, setIsOpen] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -126,7 +126,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   useEffect(() => {
     const editor = editorRef.current
 
-    if (ENABLE_FIND_FEATURE && editor) {
+    if (FIND_SUPPORTED && editor) {
       const [currentMatchRange, otherMatchRanges] = !isFocused || currentMatch === undefined
         ? [undefined, matchDOMRanges]
         : [

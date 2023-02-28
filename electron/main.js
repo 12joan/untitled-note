@@ -22,6 +22,7 @@ const tabsSupported = isMac
 const userAgent = [
   'Electron',
   tabsSupported ? 'TabsSupported' : 'TabsNotSupported',
+  'FindSupported',
 ].join(' ')
 
 const createWindow = async ({
