@@ -16,7 +16,7 @@ const INTERNAL_URL_HOSTS = [
 const linkIsNavigable = url => new URL(url).protocol !== 'file:'
 const linkIsExternal = url => !INTERNAL_URL_HOSTS.some(host => new URL(url).host === host)
 
-const createWindow = async () => {
+const createWindow = async (url = 'http://localhost:3000/') => {
   const browserWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -39,7 +39,7 @@ const createWindow = async () => {
 
   await browserWindow.loadFile('loading.html')
 
-  await browserWindow.loadURL('http://localhost:3000/#electron', {
+  await browserWindow.loadURL(url, {
     userAgent: 'Electron',
   }).catch(showErrorPage)
 
@@ -57,13 +57,13 @@ const createWindow = async () => {
   webContents.setWindowOpenHandler(({ url }) => {
     if (!linkIsNavigable(url)) {
       console.warn('Blocked navigation to', url)
-      return { action: 'deny' }
     } else if (linkIsExternal(url)) {
       shell.openExternal(url)
-      return { action: 'deny' }
+    } else {
+      createWindow(url)
     }
 
-    return { action: 'allow' }
+    return { action: 'deny' }
   })
 }
 
