@@ -8,8 +8,6 @@ import { IS_ELECTRON, TABS_SUPPORTED } from '~/lib/environment'
 
 import App from '~/components/layout/App'
 
-console.log({ IS_ELECTRON, TABS_SUPPORTED })
-
 const ElectronNavigation = () => {
   const navigate = useNavigate()
 

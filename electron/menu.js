@@ -3,6 +3,7 @@ const {
   isMac,
   setZoomFactor,
 } = require('./helpers')
+const { ENV } = require('./env')
 
 const withFocusedWindow = handler => (item, focusedWindow) => {
   if (focusedWindow) {
@@ -133,12 +134,12 @@ module.exports = options => {
         click: withFocusedWindow(focusedWindow => setZoomFactor(focusedWindow, 1)),
       },
       { type: 'separator' },
-      {
+      ENV.devTools && {
         label: 'Toggle Developer Tools',
         accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
         click: withFocusedWindow(focusedWindow => focusedWindow.toggleDevTools()),
       },
-    ],
+    ].filter(Boolean),
   }
 
   const windowMenu = {
@@ -170,10 +171,10 @@ module.exports = options => {
   }
 
   return Menu.buildFromTemplate([
-    ...(isMac ? [appMenu] : []),
+    isMac && appMenu,
     editMenu,
     viewMenu,
     windowMenu,
     helpMenu,
-  ])
+  ].filter(Boolean))
 }

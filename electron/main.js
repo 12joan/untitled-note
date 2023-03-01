@@ -7,10 +7,11 @@ const {
 } = require('electron')
 const path = require('path')
 const createMenu = require('./menu')
-const { isMac } = require('./helpers')
+const { isDevelopment, isMac } = require('./helpers')
+const { ENV } = require('./env')
 
 const INTERNAL_URL_HOSTS = [
-  'localhost:3000',
+  ENV.app.host,
   'untitlednote.eu.auth0.com',
 ]
 
@@ -28,7 +29,7 @@ const userAgent = [
 ].join(' ')
 
 const createWindow = async ({
-  url = 'http://localhost:3000/',
+  url = `${ENV.app.protocol}://${ENV.app.host}`,
   parentWindow = null,
 } = {}) => {
   const browserWindow = new BrowserWindow({
