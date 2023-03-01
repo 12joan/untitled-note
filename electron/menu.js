@@ -1,4 +1,4 @@
-const { Menu } = require('electron')
+const { Menu, shell } = require('electron')
 const {
   isMac,
   setZoomFactor,
@@ -163,10 +163,8 @@ module.exports = options => {
     role: 'help',
     submenu: [
       {
-        label: 'Learn More',
-        click: () => {
-          // TODO: open help page
-        },
+        label: 'Visit Website',
+        click: () => shell.openExternal('https://untitlednote.xyz/'),
       },
     ],
   }
