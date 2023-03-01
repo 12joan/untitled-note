@@ -6,22 +6,11 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <style type="text/css">
-      @media (prefers-color-scheme: dark) {
-        body {
-          /* Prevent flash of unstyled dark mode */
-          background-color: rgb(15, 23, 42);
-        }
-      }
-    </style>
-
-    <script type="text/javascript">
-      // Fix error in Draft.js
-      const global = globalThis
-    </script>
+    <%= vite_stylesheet_tag 'fouc' %>
 
     <%= vite_client_tag %>
     <%= vite_react_refresh_tag %>
+
     <%= yield :head %>
   </head>
 
