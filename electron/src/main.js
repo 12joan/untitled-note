@@ -4,6 +4,7 @@ const {
   dialog,
   ipcMain,
   Menu,
+  nativeTheme,
   shell,
 } = require('electron')
 const path = require('path')
@@ -29,6 +30,10 @@ const userAgent = [
   'FindSupported',
 ].join(' ')
 
+const getBackgroundColor = () => nativeTheme.shouldUseDarkColors
+  ? '#0f172b'
+  : '#ffffff'
+
 const createWindow = async ({
   url = `${ENV.app.protocol}://${ENV.app.host}`,
   parentWindow = null,
@@ -43,6 +48,7 @@ const createWindow = async ({
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
+    backgroundColor: getBackgroundColor(),
   })
 
   const { webContents } = browserWindow
@@ -74,6 +80,11 @@ const createWindow = async ({
   browserWindow.once('ready-to-show', () => browserWindow.show())
 
   await loadApp()
+
+  // Ensure background color matches theme to prevent flicker
+  nativeTheme.on('updated', () => {
+    browserWindow.setBackgroundColor(getBackgroundColor())
+  })
 
   // Open external links in the default browser
   webContents.on('will-navigate', (event, url) => {
