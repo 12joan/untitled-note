@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <title>Loading</title>
-    <link rel="stylesheet" href="../stylesheets/application.scss">
+    <link rel="stylesheet" href="~/stylesheets/application.scss">
+    <script type="module" src="./loading.jsx"></script>
   </head>
   <body class="min-h-screen text-ui bg-page-bg-light ring-offset-page-bg-light dark:bg-page-bg-dark dark:ring-offset-page-bg-dark">
-    <h1>Loading</h1>
+    <div id="loading" class="min-h-screen flex flex-col"></div>
   </body>
 </html>
