@@ -47,3 +47,4 @@ node_modules
 # Electron
 /electron/dist
 /electron/yarn-error.log
+/electron/out

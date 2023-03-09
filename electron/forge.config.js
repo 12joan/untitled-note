@@ -1,7 +1,12 @@
 const { execSync } = require('child_process')
 
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    name: 'Untitled Note App',
+    executableName: 'UntitledNoteApp',
+    appBundleId: 'xyz.untitlednote.app',
+    icon: 'icons/app-icon',
+  },
   rebuildConfig: {},
   makers: [
     {
@@ -14,7 +19,11 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: 'icons/app-icon.png',
+        },
+      },
     },
     {
       name: '@electron-forge/maker-rpm',

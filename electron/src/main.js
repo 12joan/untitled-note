@@ -49,6 +49,7 @@ const createWindow = async ({
       preload: path.join(__dirname, 'preload.js'),
     },
     backgroundColor: getBackgroundColor(),
+    icon: path.resolve(__dirname, '../icons/app-icon.png'),
   })
 
   const { webContents } = browserWindow
