@@ -2,6 +2,7 @@ const {
   app,
   BrowserWindow,
   dialog,
+  ipcMain,
   Menu,
   shell,
 } = require('electron')
@@ -44,23 +45,35 @@ const createWindow = async ({
     },
   })
 
+  const { webContents } = browserWindow
+
   // Create new tab if parent window is set
   if (tabsSupported) {
     parentWindow?.addTabbedWindow(browserWindow)
   }
 
-  const { webContents } = browserWindow
+  const showErrorPage = () => browserWindow.loadFile(
+    path.join(__dirname, '../dist/error.html')
+  )
+
+  const loadApp = async () => {
+    await browserWindow.loadFile(
+      path.join(__dirname, '../dist/loading.html')
+    )
+
+    await browserWindow.loadURL(url, { userAgent }).catch(showErrorPage)
+  }
 
   // Show error page if the app fails to load
-  const showErrorPage = () => browserWindow.loadFile('error.html')
   webContents.on('did-fail-load', showErrorPage)
+
+  // Reload app via IPC
+  ipcMain.on('reload-app', loadApp)
 
   // Prevent flash of white screen
   browserWindow.once('ready-to-show', () => browserWindow.show())
 
-  await browserWindow.loadFile('loading.html')
-
-  await browserWindow.loadURL(url, { userAgent }).catch(showErrorPage)
+  await loadApp()
 
   // Open external links in the default browser
   webContents.on('will-navigate', (event, url) => {

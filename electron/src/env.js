@@ -6,27 +6,20 @@ const development = {
   devTools: true,
 }
 
-const productionStaging = {
+const production = {
   app: {
+    host: 'untitlednote.xyz',
     protocol: 'https',
   },
   devTools: false,
 }
 
-const production = {
-  ...productionStaging,
-  app: {
-    ...productionStaging.app,
-    host: 'untitlednote.xyz',
-  },
-}
-
 const staging = {
-  ...productionStaging,
   app: {
-    ...productionStaging.app,
     host: 'staging.untitlednote.xyz',
+    protocol: 'https',
   },
+  devTools: true,
 }
 
 const environments = {

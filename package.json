@@ -7,7 +7,8 @@
     "dev": "concurrently \"yarn rails\" \"yarn dev:vite\"",
     "rails": "bundle exec rails server -b 0.0.0.0 -p 3000",
     "dev:vite": "bin/vite serve",
-    "electron": "cd electron && yarn"
+    "electron": "cd electron && yarn",
+    "build-electron": "vite build -c vite.electron.config.js"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",

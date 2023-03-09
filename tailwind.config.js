@@ -6,7 +6,7 @@ const typography = require('@tailwindcss/typography')
 
 module.exports = {
   content: [
-    './client/**/*.{js,ts,jsx,tsx}',
+    './client/**/*.{js,ts,jsx,tsx,html}',
     './app/views/**/*.html.erb',
   ],
   theme: {

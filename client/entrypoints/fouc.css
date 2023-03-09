@@ -1,6 +1,0 @@
-@media (prefers-color-scheme: dark) {
-  body {
-    /* Prevent flash of unstyled dark mode */
-    background-color: rgb(15, 23, 42);
-  }
-}

@@ -1,3 +1,5 @@
+const { execSync } = require('child_process')
+
 module.exports = {
   packagerConfig: {},
   rebuildConfig: {},
@@ -19,4 +21,9 @@ module.exports = {
       config: {},
     },
   ],
-};
+  hooks: {
+    generateAssets: () => {
+      execSync('yarn run build')
+    },
+  },
+}
