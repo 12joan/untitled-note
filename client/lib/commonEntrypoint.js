@@ -1,7 +1,5 @@
 import cssHasPseudo from 'css-has-pseudo/browser'
 
-import '~/stylesheets/application.scss'
-
 cssHasPseudo(document, { hover: true })
 
 const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0

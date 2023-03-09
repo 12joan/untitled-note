@@ -8,6 +8,7 @@ import DocumentsAPI from '~/lib/resources/DocumentsAPI'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { handleUpdateDocumentError, handleDeleteDocumentError } from '~/lib/handleErrors'
 import useReplaceModal from '~/lib/useReplaceModal'
+import { TAB_OR_WINDOW } from '~/lib/environment'
 
 import { DropdownItem } from '~/components/Dropdown'
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
@@ -44,7 +45,7 @@ const DocumentMenu = ({
   return (
     <>
       <DropdownItem icon={OpenInNewTabIcon} as={DocumentLink} documentId={doc.id} target="_blank">
-        Open in new tab
+        Open in new {TAB_OR_WINDOW}
       </DropdownItem>
 
       <DropdownItem icon={CopyIcon} onClick={copyLink}>

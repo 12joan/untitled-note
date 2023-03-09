@@ -1,5 +1,6 @@
 <% content_for :head do %>
   <%= prevent_fouc_tags %>
+  <%= vite_javascript_tag 'unauthenticated' %>
 <% end %>
 
 <div id="application" class="prevent-fouc min-h-screen flex flex-col p-5">
@@ -12,11 +13,5 @@
       If you are not redirected,
       <button type="submit" class="btn btn-link">click here to log in</button>.
     </p>
-
-    <script type="text/javascript">
-      setTimeout(() => {
-        document.querySelector('form').submit()
-      }, 1500)
-    </script>
   <% end %>
 </div>

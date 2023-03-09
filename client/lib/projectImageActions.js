@@ -1,28 +1,29 @@
-import imageCompression from 'browser-image-compression'
+import Compressor from 'compressorjs'
 
 import uploadFile from '~/lib/uploadFile'
 import ProjectImageAPI from '~/lib/resources/ProjectImageAPI'
 
 const uploadProjectImage = async ({ projectId, file: originalFile, availableSpace, showFileStorage }) => {
-  const maxSize = Math.min(availableSpace, 300 * 1024)
+  const compressedFile = await new Promise((resolve, reject) => {
+    new Compressor(originalFile, {
+      mimeType: 'image/jpeg',
+      maxWidth: 512,
+      maxHeight: 512,
+      success: resolve,
+      error: reject,
+    })
+  })
 
-  // 3000 bytes is roughly the smallest imageCompression can make an image
-  if (originalFile.size > maxSize && maxSize < 3000) {
+  if (compressedFile.size > availableSpace) {
     return Promise.reject({
       reason: 'notEnoughSpace',
       data: {
-        requiredSpace: 3000,
+        requiredSpace: compressedFile.size,
         availableSpace,
         showFileStorage,
       },
     })
   }
-
-  const compressedFile = await imageCompression(originalFile, {
-    maxSizeMB: maxSize / 1048576,
-    maxWidthOrHeight: 512,
-    useWebWorker: true,
-  })
 
   return uploadFile({
     projectId,
