@@ -131,7 +131,13 @@ const createWindow = async ({
   browserWindow.on('close', (event) => {
     if (!isQuitting && isMac && BrowserWindow.getAllWindows().length === 1) {
       event.preventDefault()
-      browserWindow.hide()
+
+      if (browserWindow.isFullScreen()) {
+        browserWindow.once('leave-full-screen', () => browserWindow.hide())
+        browserWindow.setFullScreen(false)
+      } else {
+        browserWindow.hide()
+      }
     }
   })
 }
