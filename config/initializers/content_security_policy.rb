@@ -7,7 +7,7 @@
 Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
-    policy.connect_src :self
+    policy.connect_src :self, 'https://*.osbert.me'
     policy.font_src    :self
     policy.img_src     :self, 'https://*.osbert.me', :blob
     policy.object_src  :none
