@@ -1,6 +1,6 @@
 {
   "name": "note-electron",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "main": "src/main.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "electron": "^22.2.0"
   },
   "dependencies": {
+    "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0"
   }
 }

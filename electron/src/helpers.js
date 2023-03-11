@@ -1,6 +1,5 @@
 const { app } = require('electron')
 
-const isDevelopment = !!app.isPackaged
 const isMac = process.platform === 'darwin'
 
 const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
@@ -19,7 +18,6 @@ const setZoomFactor = (focusedWindow, valueOrFunction) => {
 }
 
 module.exports = {
-  isDevelopment,
   isMac,
   setZoomFactor,
 }

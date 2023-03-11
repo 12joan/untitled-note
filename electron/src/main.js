@@ -7,9 +7,10 @@ const {
   nativeTheme,
   shell,
 } = require('electron')
+const contextMenu = require('electron-context-menu')
 const path = require('path')
 const createMenu = require('./menu')
-const { isDevelopment, isMac } = require('./helpers')
+const { isMac } = require('./helpers')
 const { ENV } = require('./env')
 
 const INTERNAL_URL_HOSTS = [
@@ -34,6 +35,14 @@ const getBackgroundColor = () => nativeTheme.shouldUseDarkColors
   ? '#0f172b'
   : '#ffffff'
 
+contextMenu({
+  showSearchWithGoogle: false,
+  showSelectAll: false,
+  showSaveImage: true,
+  showSaveImageAs: true,
+  showInspectElement: ENV.devTools,
+})
+
 const createWindow = async ({
   url = `${ENV.app.protocol}://${ENV.app.host}`,
   parentWindow = null,
@@ -47,6 +56,9 @@ const createWindow = async ({
     tabbingIdentifier: 'untitled-note',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      devTools: ENV.devTools,
+      scrollBounce: true,
+      spellcheck: true,
     },
     backgroundColor: getBackgroundColor(),
     icon: path.resolve(__dirname, '../icons/app-icon.png'),
