@@ -6,6 +6,7 @@
   "scripts": {
     "build": "cd .. && yarn build-electron",
     "start": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env development",
+    "start-staging": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env staging",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },

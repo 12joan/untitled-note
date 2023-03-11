@@ -6,10 +6,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <link rel="stylesheet" href="/stylesheets/application.scss">
-
     <%= vite_client_tag %>
     <%= vite_react_refresh_tag %>
+
+    <%= vite_stylesheet_tag 'application.scss' %>
 
     <%= yield :head %>
   </head>
