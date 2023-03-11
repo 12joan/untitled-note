@@ -9,6 +9,7 @@ import useOverrideable from '~/lib/useOverrideable'
 import ProjectOrderAPI from '~/lib/resources/ProjectOrderAPI'
 import { handleReorderProjectsError } from '~/lib/handleErrors'
 import { ProjectLink, OverviewLink } from '~/lib/routes'
+import useCSPNonce from '~/lib/useCSPNonce'
 
 import Tooltip from '~/components/Tooltip'
 import ProjectIcon from '~/components/ProjectIcon'
@@ -48,11 +49,13 @@ const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }, ref
     ).catch(() => setLocalProjects(localProjects))
   }
 
+  const nonce = useCSPNonce()
+
   return (
     <>
       {newProjectModal}
 
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext onDragEnd={handleDragEnd} nonce={nonce}>
         <Droppable droppableId="projects" direction="vertical">
           {provided => (
             <div
