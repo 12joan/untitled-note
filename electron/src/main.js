@@ -6,11 +6,11 @@ const {
   Menu,
   nativeTheme,
   shell,
+  autoUpdater,
 } = require('electron')
 const updateElectronApp = require('update-electron-app')
 const contextMenu = require('electron-context-menu')
 const path = require('path')
-const credentials = require('../credentials')
 const createMenu = require('./menu')
 const { isMac } = require('./helpers')
 const { ENV } = require('./env')
@@ -21,7 +21,7 @@ const INTERNAL_URL_HOSTS = [
 ]
 
 updateElectronApp({
-  repo: credentials.updateElectronApp.repo,
+  repo: '12joan/untitled-note-app-releases',
 })
 
 const linkIsNavigable = url => new URL(url).protocol !== 'file:'
@@ -174,6 +174,10 @@ app.whenReady().then(() => {
   })
 
   app.on('before-quit', () => {
+    isQuitting = true
+  })
+
+  autoUpdater.on('before-quit-for-update', () => {
     isQuitting = true
   })
 })

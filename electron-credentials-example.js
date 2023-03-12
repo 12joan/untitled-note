@@ -4,10 +4,6 @@ module.exports = {
   },
   publishers: {
     github: {
-      repository: {
-        owner: 'GITHUB-OWNER',
-        name: 'GITHUB-REPOSITORY',
-      },
       authToken: 'GITHUB-AUTH-TOKEN',
     },
   },

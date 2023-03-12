@@ -48,4 +48,4 @@ node_modules
 /electron/dist
 /electron/yarn-error.log
 /electron/out
-/electron/credentials.js
+/electron-credentials.js

@@ -1,5 +1,5 @@
 const { execSync } = require('child_process')
-const credentials = require('./credentials.js')
+const credentials = require('../electron-credentials')
 
 module.exports = {
   packagerConfig: {
@@ -45,7 +45,10 @@ module.exports = {
     {
       name: '@electron-forge/publisher-github',
       config: {
-        repository: credentials.publishers.github.repository,
+        repository: {
+          owner: '12joan',
+          name: 'untitled-note-app-releases',
+        },
         authToken: credentials.publishers.github.authToken,
         prerelease: true,
       },
