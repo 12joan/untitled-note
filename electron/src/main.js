@@ -102,7 +102,9 @@ const createWindow = async ({
 
   // Ensure background color matches theme to prevent flicker
   nativeTheme.on('updated', () => {
-    browserWindow.setBackgroundColor(getBackgroundColor())
+    if (!browserWindow.isDestroyed()) {
+      browserWindow.setBackgroundColor(getBackgroundColor())
+    }
   })
 
   // Open external links in the default browser
