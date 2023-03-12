@@ -7,8 +7,10 @@ const {
   nativeTheme,
   shell,
 } = require('electron')
+const updateElectronApp = require('update-electron-app')
 const contextMenu = require('electron-context-menu')
 const path = require('path')
+const credentials = require('../credentials')
 const createMenu = require('./menu')
 const { isMac } = require('./helpers')
 const { ENV } = require('./env')
@@ -17,6 +19,10 @@ const INTERNAL_URL_HOSTS = [
   ENV.app.host,
   'untitlednote.eu.auth0.com',
 ]
+
+updateElectronApp({
+  repo: credentials.updateElectronApp.repo,
+})
 
 const linkIsNavigable = url => new URL(url).protocol !== 'file:'
 const linkIsExternal = url => !INTERNAL_URL_HOSTS.some(host => new URL(url).host === host)

@@ -1,6 +1,6 @@
 {
   "name": "note-electron",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "main": "src/main.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "start": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env development",
     "start-staging": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env staging",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish-app": "electron-forge publish"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.5",
@@ -16,10 +17,12 @@
     "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
+    "@electron-forge/publisher-github": "^6.0.5",
     "electron": "^22.2.0"
   },
   "dependencies": {
     "electron-context-menu": "^3.6.1",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^2.0.1"
   }
 }
