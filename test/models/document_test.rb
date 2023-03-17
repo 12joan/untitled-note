@@ -214,6 +214,20 @@ class DocumentTest < ActiveSupport::TestCase
     assert_includes matching_ids, document.id, 'should match document'
   end
 
+  test 'destroy works when document is not indexed in typesense' do
+    document = nil
+
+    assert_difference 'Document.count' do
+      document = create(:document)
+    end
+
+    document.destroy_from_typesense
+
+    assert_difference 'Document.count', -1 do
+      document.destroy
+    end
+  end
+
   private
 
   def search_ids(project:, query:)

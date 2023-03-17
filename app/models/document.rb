@@ -75,7 +75,7 @@ class Document < ApplicationRecord
   end
 
   def destroy_from_typesense(collection: self.class.typesense_collection)
-    collection.documents[id].delete
+    collection.documents.delete(filter_by: "id:#{id}")
   end
 
   def self.reindex_typesense_collection(collection: typesense_collection)
