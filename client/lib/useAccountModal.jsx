@@ -22,7 +22,7 @@ const useAccountModal = () => useModal(AccountModal, {
   customPanelClassNames: {
     margin: 'm-auto sm:mt-[20vh]',
     width: 'max-w-screen-md w-full',
-    height: 'max-sm:h-full sm:min-h-[500px]',
+    height: 'max-sm:min-h-full sm:min-h-[500px]',
     padding: null,
     display: 'flex flex-col',
   },
