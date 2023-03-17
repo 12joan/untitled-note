@@ -1,7 +1,7 @@
 import { useState, useReducer, useMemo, useEffect } from 'react'
 
-const useElementSize = () => {
-  const [element, setElement] = useState(null)
+const useElementSize = (initialElement = null) => {
+  const [element, setElement] = useState(initialElement)
 
   const width = element?.offsetWidth ?? 0
   const height = element?.offsetHeight ?? 0
@@ -17,7 +17,9 @@ const useElementSize = () => {
     return () => resizeObserver.disconnect()
   }, [element])
 
-  return [setElement, size, forceRender]
+  return initialElement
+    ? [size, forceRender]
+    : [setElement, size, forceRender]
 }
 
 export default useElementSize

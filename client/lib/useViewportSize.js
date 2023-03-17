@@ -1,17 +1,10 @@
 import { useState } from 'react'
-import useEventListener from '~/lib/useEventListener'
+
+import useElementSize from '~/lib/useElementSize'
 
 const useViewportSize = () => {
-  const getViewport = () => ({
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
-  })
-
-  const [viewport, setViewport] = useState(getViewport())
-
-  useEventListener(window, 'resize', () => setViewport(getViewport()))
-
-  return viewport
+  const [size] = useElementSize(document.body)
+  return size
 }
 
 export default useViewportSize
