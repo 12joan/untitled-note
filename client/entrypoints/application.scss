@@ -102,9 +102,11 @@
       padding-left: calc(1.5rem + var(--list-style-offset, 1ch));
     }
 
-    blockquote * {
+    blockquote {
       // Remove font-weight: 500 for blockquotes
-      @apply font-normal;
+      &:not(strong *) {
+        @apply font-normal;
+      }
 
       // Remove quotation marks for blockquotes
       &::before, &::after {
@@ -125,6 +127,11 @@
 
     h1 {
       @apply h2 mt-0;
+    }
+
+    // Remove text color on strong
+    strong {
+      @apply text-inherit;
     }
   }
 }

@@ -13,7 +13,7 @@ const usePlugins = options => {
     ...behaviourPlugins,
   ], {
     components,
-  }), [ typographyPlugins, behaviourPlugins])
+  }), [typographyPlugins, behaviourPlugins])
 }
 
 export default usePlugins
