@@ -42,6 +42,11 @@
       background-image: url('~/images/checkbox-tick.svg');
     }
   }
+
+  // Fix box-shadow for inputs on iOS
+  input[type="text"] {
+    @apply appearance-none;
+  }
 }
 
 @layer utilities {
