@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react'
+import React, { useRef, useState, useReducer, useEffect, useMemo } from 'react'
 import { toDOMRange } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
@@ -60,6 +60,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   const [query, settledQuery, rawSetQuery, setQueryWithoutWaiting] = useStateWhenSettled('', { debounceTime: 200 })
   const [matches, setMatches] = useState([])
   const [currentMatch, setCurrentMatch] = useState(undefined)
+  const [scrollToCurrentMatchKey, scrollToCurrentMatch] = useReducer(x => x + 1, 0)
   const inputRef = useRef()
 
   // When the find dialog is opened, focus the input
@@ -122,7 +123,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     slateRange => (toDOMRange(editorRef.current, slateRange))
   ), [matches])
 
-  // Highlight matches and scroll to the current match
+  // Highlight matches
   useEffect(() => {
     const editor = editorRef.current
 
@@ -146,12 +147,28 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
 
       if (currentMatchRange) {
         CSS.highlights.set('find-result-current', new Highlight(currentMatchRange))
-        currentMatchRange?.startContainer?.parentNode?.scrollIntoView({ block: 'center' })
       } else {
         CSS.highlights.delete('find-result-current')
       }
     }
   }, [matchDOMRanges, currentMatch, isFocused])
+
+  // Scroll to the current match
+  useEffect(() => {
+    const currentMatchRange = currentMatch !== undefined && matchDOMRanges[currentMatch]
+
+    if (currentMatchRange) {
+      currentMatchRange.startContainer?.parentNode?.scrollIntoView({ block: 'center' })
+    }
+  }, [currentMatch, scrollToCurrentMatchKey])
+
+  const changeMatch = delta => {
+    if (matches.length === 1) {
+      scrollToCurrentMatch()
+    } else {
+      setCurrentMatch((currentMatch + delta + matches.length) % matches.length)
+    }
+  }
 
   return {
     findDialog: isOpen && (
@@ -161,7 +178,7 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
         inputRef={inputRef}
         currentMatch={currentMatch + 1}
         totalMatches={matches.length}
-        changeMatch={delta => setCurrentMatch((currentMatch + delta + matches.length) % matches.length)}
+        changeMatch={changeMatch}
         showMatches={settledQuery.length > 0 && (matches.length === 0 || currentMatch !== undefined)}
         setFocused={setIsFocused}
         onClose={close}
