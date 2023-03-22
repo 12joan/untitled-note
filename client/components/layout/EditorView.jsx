@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useEffect, useReducer } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { useContext } from '~/lib/context'
+import { useContext, ContextProvider } from '~/lib/context'
 import useStateWhileMounted from '~/lib/useStateWhileMounted'
 import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
 import { FutureServiceResult } from '~/lib/future'
@@ -57,10 +57,12 @@ const EditorView = ({ documentId }) => {
     pending: () => <LoadingView />,
     success: initialDocument => (
       <div className="grow flex flex-col">
-        <Editor
-          clientId={clientId}
-          initialDocument={initialDocument}
-        />
+        <ContextProvider documentId={documentId}>
+          <Editor
+            clientId={clientId}
+            initialDocument={initialDocument}
+          />
+        </ContextProvider>
       </div>
     ),
     failure: error => {

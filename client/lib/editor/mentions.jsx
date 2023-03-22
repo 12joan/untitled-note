@@ -22,7 +22,7 @@ import DocumentIcon from '~/components/icons/DocumentIcon'
 import DeleteIcon from '~/components/icons/DeleteIcon'
 
 const MentionComponent = ({ attributes, children, element }) => {
-  const { futurePartialDocuments } = useContext()
+  const { futurePartialDocuments, documentId: currentDocumentId } = useContext()
   const linkRef = useRef()
 
   const futureDocument = futurePartialDocuments.map(
@@ -56,6 +56,11 @@ const MentionComponent = ({ attributes, children, element }) => {
             className={className}
             documentId={element.documentId}
             children={doc?.safe_title ?? `[Deleted document: ${element.fallbackText}]`}
+            onClick={event => {
+              if (element.documentId === currentDocumentId) {
+                event.preventDefault()
+              }
+            }}
           />
         )).orDefault(<InlinePlaceholder />)}
 
