@@ -48,7 +48,7 @@ const AccountModal = ({ initialSection = sectionKeys[0], onClose }) => {
 
   return (
     <div className="grow flex flex-col sm:flex-row">
-      <div className="shrink-0 bg-slate-200/75 dark:bg-slate-900/25 max-sm:border-b sm:border-r dark:border-transparent max-sm:rounded-t-2xl sm:rounded-l-2xl p-5 sm:px-2">
+      <div className="shrink-0 bg-black/5 max-sm:border-b sm:border-r dark:border-transparent max-sm:rounded-t-2xl sm:rounded-l-2xl p-5 sm:px-2">
         {(horizontalLayout ? x => x : withCloseButton)(
           <div className="grow space-y-2" role="tablist">
             {Object.entries(sections).map(([key, { title, icon: Icon }]) => (
