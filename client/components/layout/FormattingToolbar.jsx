@@ -14,6 +14,7 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  MARK_CODE,
   ELEMENT_H1,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -29,6 +30,7 @@ import Tooltip from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
 import ItalicIcon from '~/components/icons/formatting/ItalicIcon'
 import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon'
+import CodeIcon from '~/components/icons/formatting/CodeIcon'
 import LinkIcon from '~/components/icons/formatting/LinkIcon'
 import HeadingOneIcon from '~/components/icons/formatting/HeadingOneIcon'
 import QuoteIcon from '~/components/icons/formatting/QuoteIcon'
@@ -99,6 +101,7 @@ const FormattingToolbar = ({ editor }) => {
     { label: 'Bold', icon: BoldIcon, ...toggleMarkProps(MARK_BOLD) },
     { label: 'Italic', icon: ItalicIcon, ...toggleMarkProps(MARK_ITALIC) },
     { label: 'Strikethrough', icon: StrikethroughIcon, ...toggleMarkProps(MARK_STRIKETHROUGH) },
+    { label: 'Inline code', icon: CodeIcon, ...toggleMarkProps(MARK_CODE) },
     {
       label: linkInSelection ? 'Remove link' : 'Add link',
       active: linkInSelection,

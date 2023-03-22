@@ -12,6 +12,7 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  MARK_CODE,
 } from '@udecode/plate-headless'
 
 const isSelectionInCodeBlock = editor => !!getAboveNode(editor, { match: { type: ELEMENT_CODE_BLOCK } })
@@ -51,6 +52,7 @@ const autoformatOptions = {
       markRule(MARK_BOLD, '**'),
       markRule(MARK_ITALIC, ['*', '_']),
       markRule(MARK_STRIKETHROUGH, '~'),
+      markRule(MARK_CODE, '`'),
     ],
     enabledUndoOnDelete: true,
   },

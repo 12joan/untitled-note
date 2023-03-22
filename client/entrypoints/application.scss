@@ -112,10 +112,8 @@
       &::before, &::after {
         content: '';
       }
-    }
 
-    // Round the left border of blockquotes
-    blockquote {
+      // Round the left border of blockquotes
       @apply border-l-0 relative;
 
       &::after {
@@ -132,6 +130,26 @@
     // Remove text color on strong
     strong {
       @apply text-inherit;
+    }
+
+    code {
+      // Remove backticks
+      &::before, &::after {
+        content: none;
+      }
+
+      // Remove font weight
+      &:not(strong *) {
+        @apply font-normal;
+      }
+
+      @apply bg-slate-100 dark:bg-black/50 px-1 py-[0.125rem] rounded;
+    }
+
+    pre {
+      code {
+        background: transparent !important;
+      }
     }
   }
 }
