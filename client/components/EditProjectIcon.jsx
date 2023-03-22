@@ -134,7 +134,7 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
 
       <h3 className="font-medium select-none mb-2">Image</h3>
 
-      <div className="space-x-2 mb-2">
+      <div className="flex flex-wrap gap-2 mb-2">
         <button
           type="button"
           className="btn btn-rect btn-secondary relative"
@@ -218,28 +218,30 @@ const EmojiForm = ({ project, updateProject }) => {
       <h3 className="font-medium select-none">Emoji</h3>
 
       <div>
-        <button
-          ref={multiplexRefs([buttonRef, floatingReferenceRef])}
-          type="button"
-          className="btn btn-rect btn-secondary"
-          onClick={event => {
-            // Prevent the picker from registering a click outside
-            event.stopPropagation()
-            setPickerVisible(true)
-          }}
-        >
-          {hasEmoji ? `${emoji} Change emoji` : 'Choose emoji'}
-        </button>
-
-        {hasEmoji && (
+        <div className="flex flex-wrap gap-2">
           <button
+            ref={multiplexRefs([buttonRef, floatingReferenceRef])}
             type="button"
-            className="ml-2 btn btn-rect btn-secondary text-red-500 dark:text-red-400"
-            onClick={() => setEmoji(null)}
+            className="btn btn-rect btn-secondary"
+            onClick={event => {
+              // Prevent the picker from registering a click outside
+              event.stopPropagation()
+              setPickerVisible(true)
+            }}
           >
-            Remove emoji
+            {hasEmoji ? `${emoji} Change emoji` : 'Choose emoji'}
           </button>
-        )}
+
+          {hasEmoji && (
+            <button
+              type="button"
+              className="btn btn-rect btn-secondary text-red-500 dark:text-red-400"
+              onClick={() => setEmoji(null)}
+            >
+              Remove emoji
+            </button>
+          )}
+        </div>
 
         {pickerVisible && (
           <div
@@ -279,7 +281,7 @@ const BackgroundColourForm = ({ project, updateProject, hasImage }) => {
     <div className="space-y-2">
       <h3 className="font-medium select-none">Background colour</h3>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap gap-2 items-center">
         {[['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']].map(([value, label]) => (
           <label key={value} className="flex items-center space-x-2">
             <input
