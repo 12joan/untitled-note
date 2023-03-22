@@ -1,6 +1,6 @@
 {
   "name": "note-electron",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "main": "src/main.js",
   "scripts": {

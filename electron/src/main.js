@@ -35,7 +35,10 @@ const userAgent = [
   'Electron',
   tabsSupported ? 'TabsSupported' : 'TabsNotSupported',
   'FindSupported',
-].join(' ')
+  // Required by Slate
+  'Chrome',
+  isMac && 'Mac OS X',
+].filter(Boolean).join(' ')
 
 const getBackgroundColor = () => nativeTheme.shouldUseDarkColors
   ? '#0f172b'
