@@ -34,7 +34,19 @@ const useCombobox = ({
   const handleClickSuggestion = index => () => onCommit(suggestions[index])
 
   const handleKeyDown = event => {
-    const step = delta => setActiveSuggestionIndex(positiveMod(activeSuggestionIndex + delta, suggestions.length))
+    const step = delta => {
+      const newIndex = positiveMod(activeSuggestionIndex + delta, suggestions.length)
+      setActiveSuggestionIndex(newIndex)
+
+      // Scroll new suggestion into view
+      const newSuggestion = suggestions[newIndex]
+      const newSuggestionKey = newSuggestion && keyForSuggestion(newSuggestion)
+
+      if (newSuggestionKey) {
+        const newSuggestionElement = document.getElementById(idForSuggestion(newSuggestionKey))
+        newSuggestionElement?.scrollIntoView({ block: 'nearest' })
+      }
+    }
 
     const handler = {
       ArrowDown: () => step(1),
@@ -51,14 +63,6 @@ const useCombobox = ({
       handler()
     }
   }
-
-  // Scroll active suggestion into view
-  useLayoutEffect(() => {
-    if (activeSuggestionKey) {
-      const activeSuggestionElement = document.getElementById(idForSuggestion(activeSuggestionKey))
-      activeSuggestionElement?.scrollIntoView({ block: 'nearest' })
-    }
-  }, [activeSuggestionKey])
 
   return {
     inputProps: {

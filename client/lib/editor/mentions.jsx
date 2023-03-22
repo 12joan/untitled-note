@@ -35,7 +35,6 @@ const MentionComponent = ({ attributes, children, element }) => {
 
   useEditorEvent.onKeyDown(event => {
     if (selectedAndFocused && event.key === 'Enter') {
-      console.log('enter')
       event.preventDefault()
       event.stopPropagation()
       linkRef.current.click()
@@ -112,7 +111,7 @@ const MentionInputComponent = ({ editor, attributes, children, element }) => {
   useEditorEvent.onChange(onChange, [onChange])
   useEditorEvent.onKeyDown(onKeyDown, [onKeyDown])
 
-  const comboboxFloating = useComboboxFloating()
+  const comboboxFloating = useComboboxFloating({ allowOverflow: true })
 
   const suggestionsContainer = showSuggestions && (
     <div
