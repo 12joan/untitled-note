@@ -30,17 +30,19 @@ import TagIcon from '~/components/icons/TagIcon'
 import DocumentIcon from '~/components/icons/DocumentIcon'
 
 const useSearchModal = () => useModal(SearchModal, {
-  customBackdropClassNames: {
-    overflow: null,
-    bg: null,
-  },
-  customPanelClassNames: {
-    margin: 'mt-[20vh] mb-auto',
-    width: 'narrow',
-    shadow: 'before:shadow-dialog-heavy',
-    rounded: 'before:rounded-xl',
-    padding: null,
-    bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
+  wrapperProps: {
+    customBackdropClassNames: {
+      overflow: null,
+      bg: null,
+    },
+    customPanelClassNames: {
+      margin: 'mt-[20vh] mb-auto',
+      width: 'narrow',
+      shadow: 'before:shadow-dialog-heavy',
+      rounded: 'before:rounded-xl',
+      padding: null,
+      bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
+    },
   },
 })
 

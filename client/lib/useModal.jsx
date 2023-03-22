@@ -4,12 +4,27 @@ import groupedClassNames from '~/lib/groupedClassNames'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
 
-const useModal = (ModalComponent, wrapperProps = {}) => {
+const useModal = (ModalComponent, {
+  onClose,
+  wrapperProps = {},
+} = {}) => {
   const [componentProps, setComponentProps] = useState(null)
   const open = componentProps !== null
   const openModal = (componentProps = {}) => setComponentProps(componentProps)
-  const closeModal = () => setComponentProps(null)
-  const toggleModal = () => setComponentProps(oldProps => oldProps === null ? {} : null)
+
+  const closeModal = () => {
+    setComponentProps(null)
+    onClose?.()
+  }
+
+  const toggleModal = () => setComponentProps(oldProps => {
+    if (oldProps) {
+      onClose?.()
+      return null
+    } else {
+      return {}
+    }
+  })
 
   const modal = (
     <Modal open={open} onClose={closeModal} {...wrapperProps}>

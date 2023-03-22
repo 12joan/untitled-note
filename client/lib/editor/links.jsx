@@ -14,6 +14,7 @@ import {
 import useModal from '~/lib/useModal'
 import { useContext } from '~/lib/context'
 import useNormalizedInput from '~/lib/useNormalizedInput'
+import { restoreSelection } from '~/lib/editor/selectionAndScrollManagement'
 
 import Tippy from '~/components/Tippy'
 import Tooltip from '~/components/Tooltip'
@@ -27,8 +28,8 @@ const isLinkInSelection = editor => someNode(editor, { match: { type: ELEMENT_LI
 const LinkModalContext = createContext(null)
 const useOpenLinkModal = () => reactUseContext(LinkModalContext)
 
-const useLinkModalProvider = () => {
-  const [modal, openModal] = useModal(LinkModal)
+const useLinkModalProvider = ({ onClose }) => {
+  const [modal, openModal] = useModal(LinkModal, { onClose })
 
   const withLinkModalProvider = children => (
     <>

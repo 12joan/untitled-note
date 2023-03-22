@@ -121,9 +121,11 @@ const Editor = ({ clientId, initialDocument }) => {
     }
   })
 
+  const restoreSelectionForEditor = () => restoreSelection(initialDocument.id, editorRef.current)
+
   const { findDialog, openFind } = useFind({
     editorRef,
-    restoreSelection: () => restoreSelection(initialDocument.id, editorRef.current),
+    restoreSelection: restoreSelectionForEditor,
     setSelection: selection => setSelection(editorRef.current, selection),
   })
 
@@ -165,7 +167,9 @@ const Editor = ({ clientId, initialDocument }) => {
     />
   )
 
-  const withLinkModalProvider = useLinkModalProvider()
+  const withLinkModalProvider = useLinkModalProvider({
+    onClose: restoreSelectionForEditor,
+  })
 
   const plateComponent = useMemo(() => (
     <Plate
@@ -184,6 +188,7 @@ const Editor = ({ clientId, initialDocument }) => {
         titleRef={titleRef}
         editorElementRef={editorElementRef}
         editorRef={editorRef}
+        restoreSelectionForEditor={restoreSelectionForEditor}
       />
     </Plate>
   ), [plugins])
@@ -260,7 +265,14 @@ const Editor = ({ clientId, initialDocument }) => {
   )
 }
 
-const WithEditorState = ({ initialDocument, debouncedUpdateBody, titleRef, editorElementRef, editorRef }) => {
+const WithEditorState = ({
+  initialDocument,
+  debouncedUpdateBody,
+  titleRef,
+  editorElementRef,
+  editorRef,
+  restoreSelectionForEditor,
+}) => {
   const editor = usePlateEditorState('editor')
   const { useFormattingToolbar } = useContext()
 
@@ -273,7 +285,7 @@ const WithEditorState = ({ initialDocument, debouncedUpdateBody, titleRef, edito
       if (initialDocument.blank) {
         titleRef.current.focus()
       } else {
-        restoreSelection(initialDocument.id, editor)
+        restoreSelectionForEditor()
       }
 
       restoreScroll(initialDocument.id)

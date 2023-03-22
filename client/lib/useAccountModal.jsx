@@ -19,12 +19,14 @@ const sectionKeys = Object.keys(sections)
 const idForSectionKey = key => `account-modal-${key}-section`
 
 const useAccountModal = () => useModal(AccountModal, {
-  customPanelClassNames: {
-    margin: 'm-auto sm:mt-[20vh]',
-    width: 'max-w-screen-md w-full',
-    height: 'max-sm:min-h-full sm:min-h-[500px]',
-    padding: null,
-    display: 'flex flex-col',
+  wrapperProps: {
+    customPanelClassNames: {
+      margin: 'm-auto sm:mt-[20vh]',
+      width: 'max-w-screen-md w-full',
+      height: 'max-sm:min-h-full sm:min-h-[500px]',
+      padding: null,
+      display: 'flex flex-col',
+    },
   },
 })
 
