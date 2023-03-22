@@ -1,4 +1,0 @@
-[submodule "vendor/@udecode/plate"]
-	path = vendor/@udecode/plate
-	url = https://github.com/12joan/plate.git
-	branch = plugin/tabbable-voids
