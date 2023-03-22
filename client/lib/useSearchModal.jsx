@@ -217,7 +217,7 @@ const SearchModal = ({ onClose }) => {
   )
 
   const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
-    query: searchQuery,
+    query: trimmedSearchQuery,
     suggestions,
     keyForSuggestion: ({ key }) => key,
     onCommit: ({ onCommit }) => onCommit(),
