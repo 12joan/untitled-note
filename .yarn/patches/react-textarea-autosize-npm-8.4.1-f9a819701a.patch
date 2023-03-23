@@ -1,0 +1,152 @@
+diff --git a/dist/declarations/src/index.d.ts b/dist/declarations/src/index.d.ts
+index 0dff3aef0d129523eab831e48e7742c8029f0606..f796e13715365dd1b89d6eb28771bb527fa25e04 100644
+--- a/dist/declarations/src/index.d.ts
++++ b/dist/declarations/src/index.d.ts
+@@ -11,6 +11,7 @@ export interface TextareaAutosizeProps extends Omit<TextareaProps, 'style'> {
+     minRows?: number;
+     onHeightChange?: (height: number, meta: TextareaHeightChangeMeta) => void;
+     cacheMeasurements?: boolean;
++    ignorePlaceholder?: boolean;
+     style?: Style;
+ }
+ declare const _default: React.ForwardRefExoticComponent<TextareaAutosizeProps & React.RefAttributes<HTMLTextAreaElement>>;
+diff --git a/dist/react-textarea-autosize.browser.esm.js b/dist/react-textarea-autosize.browser.esm.js
+index 0e3e97e6a09dbdda3dde5e62ca8453cd181f9a38..ee258e863e1cff210f867d20b4ae9dfc59245f23 100644
+--- a/dist/react-textarea-autosize.browser.esm.js
++++ b/dist/react-textarea-autosize.browser.esm.js
+@@ -143,9 +143,12 @@ var useFontsLoadedListener = function useFontsLoadedListener(listener) {
+   useListener(document.fonts, 'loadingdone', listener);
+ };
+ 
+-var _excluded = ["cacheMeasurements", "maxRows", "minRows", "onChange", "onHeightChange"];
++var _excluded = ["cacheMeasurements", "ignorePlaceholder", "maxRows", "minRows", "onChange", "onHeightChange"];
+ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+-  var cacheMeasurements = _ref.cacheMeasurements,
++  var _ref$cacheMeasurement = _ref.cacheMeasurements,
++    cacheMeasurements = _ref$cacheMeasurement === void 0 ? false : _ref$cacheMeasurement,
++    _ref$ignorePlaceholde = _ref.ignorePlaceholder,
++    ignorePlaceholder = _ref$ignorePlaceholde === void 0 ? false : _ref$ignorePlaceholde,
+     maxRows = _ref.maxRows,
+     minRows = _ref.minRows,
+     _ref$onChange = _ref.onChange,
+@@ -173,7 +176,7 @@ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+       return;
+     }
+     measurementsCacheRef.current = nodeSizingData;
+-    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || node.placeholder || 'x', minRows, maxRows),
++    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || !ignorePlaceholder && node.placeholder || 'x', minRows, maxRows),
+       height = _calculateNodeHeight[0],
+       rowHeight = _calculateNodeHeight[1];
+     if (heightRef.current !== height) {
+diff --git a/dist/react-textarea-autosize.cjs.dev.js b/dist/react-textarea-autosize.cjs.dev.js
+index 751b31c2752ffa1ed5a64fc3ad4e7512d34225b6..b5aeb1c5c3b426d8ddbc0f5c4955ef2af021980c 100644
+--- a/dist/react-textarea-autosize.cjs.dev.js
++++ b/dist/react-textarea-autosize.cjs.dev.js
+@@ -152,9 +152,12 @@ var useFontsLoadedListener = function useFontsLoadedListener(listener) {
+   useListener(document.fonts, 'loadingdone', listener);
+ };
+ 
+-var _excluded = ["cacheMeasurements", "maxRows", "minRows", "onChange", "onHeightChange"];
++var _excluded = ["cacheMeasurements", "ignorePlaceholder", "maxRows", "minRows", "onChange", "onHeightChange"];
+ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+-  var cacheMeasurements = _ref.cacheMeasurements,
++  var _ref$cacheMeasurement = _ref.cacheMeasurements,
++    cacheMeasurements = _ref$cacheMeasurement === void 0 ? false : _ref$cacheMeasurement,
++    _ref$ignorePlaceholde = _ref.ignorePlaceholder,
++    ignorePlaceholder = _ref$ignorePlaceholde === void 0 ? false : _ref$ignorePlaceholde,
+     maxRows = _ref.maxRows,
+     minRows = _ref.minRows,
+     _ref$onChange = _ref.onChange,
+@@ -182,7 +185,7 @@ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+       return;
+     }
+     measurementsCacheRef.current = nodeSizingData;
+-    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || node.placeholder || 'x', minRows, maxRows),
++    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || !ignorePlaceholder && node.placeholder || 'x', minRows, maxRows),
+       height = _calculateNodeHeight[0],
+       rowHeight = _calculateNodeHeight[1];
+     if (heightRef.current !== height) {
+diff --git a/dist/react-textarea-autosize.cjs.prod.js b/dist/react-textarea-autosize.cjs.prod.js
+index 873860ef7ff4c082e467aa9e424c578c65836365..1a07ffe4709c12b66e8bfe42fc5b894edc8d10a7 100644
+--- a/dist/react-textarea-autosize.cjs.prod.js
++++ b/dist/react-textarea-autosize.cjs.prod.js
+@@ -152,9 +152,12 @@ var useFontsLoadedListener = function useFontsLoadedListener(listener) {
+   useListener(document.fonts, 'loadingdone', listener);
+ };
+ 
+-var _excluded = ["cacheMeasurements", "maxRows", "minRows", "onChange", "onHeightChange"];
++var _excluded = ["cacheMeasurements", "ignorePlaceholder", "maxRows", "minRows", "onChange", "onHeightChange"];
+ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+-  var cacheMeasurements = _ref.cacheMeasurements,
++  var _ref$cacheMeasurement = _ref.cacheMeasurements,
++    cacheMeasurements = _ref$cacheMeasurement === void 0 ? false : _ref$cacheMeasurement,
++    _ref$ignorePlaceholde = _ref.ignorePlaceholder,
++    ignorePlaceholder = _ref$ignorePlaceholde === void 0 ? false : _ref$ignorePlaceholde,
+     maxRows = _ref.maxRows,
+     minRows = _ref.minRows,
+     _ref$onChange = _ref.onChange,
+@@ -174,7 +177,7 @@ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+       return;
+     }
+     measurementsCacheRef.current = nodeSizingData;
+-    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || node.placeholder || 'x', minRows, maxRows),
++    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || !ignorePlaceholder && node.placeholder || 'x', minRows, maxRows),
+       height = _calculateNodeHeight[0],
+       rowHeight = _calculateNodeHeight[1];
+     if (heightRef.current !== height) {
+diff --git a/dist/react-textarea-autosize.esm.js b/dist/react-textarea-autosize.esm.js
+index 2d473d531529788f5c50d81ea02bef4c2c584935..af05e895b282777e05268e3654faab0530c770c1 100644
+--- a/dist/react-textarea-autosize.esm.js
++++ b/dist/react-textarea-autosize.esm.js
+@@ -143,9 +143,12 @@ var useFontsLoadedListener = function useFontsLoadedListener(listener) {
+   useListener(document.fonts, 'loadingdone', listener);
+ };
+ 
+-var _excluded = ["cacheMeasurements", "maxRows", "minRows", "onChange", "onHeightChange"];
++var _excluded = ["cacheMeasurements", "ignorePlaceholder", "maxRows", "minRows", "onChange", "onHeightChange"];
+ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+-  var cacheMeasurements = _ref.cacheMeasurements,
++  var _ref$cacheMeasurement = _ref.cacheMeasurements,
++    cacheMeasurements = _ref$cacheMeasurement === void 0 ? false : _ref$cacheMeasurement,
++    _ref$ignorePlaceholde = _ref.ignorePlaceholder,
++    ignorePlaceholder = _ref$ignorePlaceholde === void 0 ? false : _ref$ignorePlaceholde,
+     maxRows = _ref.maxRows,
+     minRows = _ref.minRows,
+     _ref$onChange = _ref.onChange,
+@@ -173,7 +176,7 @@ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+       return;
+     }
+     measurementsCacheRef.current = nodeSizingData;
+-    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || node.placeholder || 'x', minRows, maxRows),
++    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || !ignorePlaceholder && node.placeholder || 'x', minRows, maxRows),
+       height = _calculateNodeHeight[0],
+       rowHeight = _calculateNodeHeight[1];
+     if (heightRef.current !== height) {
+diff --git a/dist/react-textarea-autosize.worker.esm.js b/dist/react-textarea-autosize.worker.esm.js
+index 912d1f807eca368e28d7a6dbc040da45ed190778..0254fb606e5d7e59996d7e00a1e4b4a537c3a677 100644
+--- a/dist/react-textarea-autosize.worker.esm.js
++++ b/dist/react-textarea-autosize.worker.esm.js
+@@ -116,9 +116,12 @@ var getSizingData = function getSizingData(node) {
+   };
+ };
+ 
+-var _excluded = ["cacheMeasurements", "maxRows", "minRows", "onChange", "onHeightChange"];
++var _excluded = ["cacheMeasurements", "ignorePlaceholder", "maxRows", "minRows", "onChange", "onHeightChange"];
+ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+-  var cacheMeasurements = _ref.cacheMeasurements,
++  var _ref$cacheMeasurement = _ref.cacheMeasurements,
++    cacheMeasurements = _ref$cacheMeasurement === void 0 ? false : _ref$cacheMeasurement,
++    _ref$ignorePlaceholde = _ref.ignorePlaceholder,
++    ignorePlaceholder = _ref$ignorePlaceholde === void 0 ? false : _ref$ignorePlaceholde,
+     maxRows = _ref.maxRows,
+     minRows = _ref.minRows,
+     _ref$onChange = _ref.onChange,
+@@ -146,7 +149,7 @@ var TextareaAutosize = function TextareaAutosize(_ref, userRef) {
+       return;
+     }
+     measurementsCacheRef.current = nodeSizingData;
+-    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || node.placeholder || 'x', minRows, maxRows),
++    var _calculateNodeHeight = calculateNodeHeight(nodeSizingData, node.value || !ignorePlaceholder && node.placeholder || 'x', minRows, maxRows),
+       height = _calculateNodeHeight[0],
+       rowHeight = _calculateNodeHeight[1];
+     if (heightRef.current !== height) {

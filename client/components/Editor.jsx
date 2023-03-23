@@ -205,9 +205,10 @@ const Editor = ({ clientId, initialDocument }) => {
         <div className="narrow flex gap-2">
           <TextareaAutosize
             ref={titleRef}
-            className="min-w-0 grow h1 text-black dark:text-white"
+            className="min-w-0 grow h1 text-black dark:text-white placeholder:truncate"
             defaultValue={initialDocument.title || ''}
             placeholder="Untitled document"
+            ignorePlaceholder
             onChange={event => setTitle(event.target.value)}
             onKeyDown={event => {
               if (event.key === 'Enter') {
