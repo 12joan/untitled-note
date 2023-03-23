@@ -8,10 +8,11 @@ COPY Gemfile /app/
 COPY Gemfile.lock /app/
 RUN bundle install
 
-COPY package.json yarn.lock /app/
-RUN yarn install --check-files --network-timeout 300000
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+RUN yarn install --immutable
 
-COPY . /app/
+COPY . .
 
 RUN yarn build
 
@@ -22,5 +23,4 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 EXPOSE 3035
 
-# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
 CMD ["yarn", "start"]
