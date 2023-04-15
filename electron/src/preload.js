@@ -1,6 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
   reloadApp: () => ipcRenderer.send('reload-app'),
-  onNavigate: callback => ipcRenderer.on('navigate', callback),
-})
+  onNavigate: (callback) => ipcRenderer.on('navigate', callback),
+});

@@ -1,23 +1,22 @@
-const { app } = require('electron')
+const isMac = process.platform === 'darwin';
 
-const isMac = process.platform === 'darwin'
-
-const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
+const clamp = (min, max, value) => Math.min(Math.max(min, value), max);
 
 const setZoomFactor = (focusedWindow, valueOrFunction) => {
-  const { zoomFactor } = focusedWindow.webContents
+  const { zoomFactor } = focusedWindow.webContents;
 
-  const newZoomFactor = typeof valueOrFunction === 'function'
-    ? valueOrFunction(zoomFactor)
-    : valueOrFunction
+  const newZoomFactor =
+    typeof valueOrFunction === 'function'
+      ? valueOrFunction(zoomFactor)
+      : valueOrFunction;
 
-  const clampedZoomFactor = clamp(0.3, 5, newZoomFactor)
-  focusedWindow.webContents.zoomFactor = clampedZoomFactor
+  const clampedZoomFactor = clamp(0.3, 5, newZoomFactor);
+  focusedWindow.webContents.zoomFactor = clampedZoomFactor;
 
-  return clampedZoomFactor
-}
+  return clampedZoomFactor;
+};
 
 module.exports = {
   isMac,
   setZoomFactor,
-}
+};

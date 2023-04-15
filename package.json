@@ -9,7 +9,7 @@
     "dev:vite": "bin/vite serve",
     "electron": "cd electron && yarn",
     "build-electron": "vite build -c vite.electron.config.js",
-    "lint": "eslint client" 
+    "lint": "eslint client electron/src" 
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
