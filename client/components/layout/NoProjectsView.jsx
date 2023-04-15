@@ -13,7 +13,7 @@ const NoProjectsView = props => {
     <div className="grow flex p-5">
       {newProjectModal}
 
-      <div className="m-auto narrow space-y-3">
+      <div className="m-auto lg:narrow space-y-3">
         <h1 className="h1">Create a project</h1>
 
         <p className="text-lg font-light">You don't have any projects yet. Create one to get started.</p>

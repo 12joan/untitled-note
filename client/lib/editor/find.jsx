@@ -231,7 +231,7 @@ const FindDialog = ({
       onBlur={handleBlur}
       onKeyDown={handleContainerKeyDown}
     >
-      <div className="narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-lg rounded-lg flex gap-1 items-center pr-2 children:shrink-0">
+      <div className="lg:narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-lg rounded-lg flex gap-1 items-center pr-2 children:shrink-0">
         <input
           ref={inputRef}
           type="text"

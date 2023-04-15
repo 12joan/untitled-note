@@ -83,7 +83,7 @@ const EditorView = ({ documentId }) => {
         }
 
       return (
-        <div className="narrow space-y-3">
+        <div className="lg:narrow space-y-3">
           <h1 className="h1">{heading}</h1>
           <p className="text-lg font-light">{explanation}</p>
           <p><OverviewLink className="btn btn-link">Go back</OverviewLink></p>

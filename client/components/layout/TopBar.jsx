@@ -17,7 +17,7 @@ import SettingsIcon from '~/components/icons/SettingsIcon'
 import AccountIcon from '~/components/icons/AccountIcon'
 import LogoutIcon from '~/components/icons/LogoutIcon'
 
-const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherProps }, ref) => {
+const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick }, ref) => {
   const {
     project,
     showSearchModal,
@@ -42,11 +42,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
   const isDisconnected = useDisconnected()
 
   return (
-    <nav
-      ref={ref}
-      className="fixed top-0 p-5 pointer-events-none flex items-center gap-2 z-10"
-      {...otherProps}
-    >
+    <>
       {showSidebarButton && (
         <Tooltip content="Show sidebar" fixed>
           <NavButton
@@ -99,7 +95,7 @@ const TopBar = forwardRef(({ showSidebarButton, onSidebarButtonClick, ...otherPr
           />
         )
       }
-    </nav>
+    </>
   )
 })
 

@@ -86,7 +86,7 @@ const EditorTags = forwardRef(({ workingDocument, updateDocument, visible, setVi
   })
 
   return (
-    <div className="narrow mt-3 flex flex-wrap gap-2" style={{ display: visible ? undefined : 'none' }}>
+    <div className="lg:narrow mt-3 flex flex-wrap gap-2" style={{ display: visible ? undefined : 'none' }}>
       {tags.map(tag => (
         <div
           key={tag.id ?? tag.localId}

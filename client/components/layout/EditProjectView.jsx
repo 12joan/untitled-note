@@ -14,7 +14,7 @@ const EditProjectView = () => {
   useTitle(`Edit ${project.name}`)
 
   return (
-    <div className="grow narrow flex flex-col">
+    <div className="grow lg:narrow flex flex-col">
       <BackButton className="mb-3" />
 
       <div className="space-y-10">

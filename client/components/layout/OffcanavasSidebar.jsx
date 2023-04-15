@@ -43,9 +43,7 @@ const OffcanavasSidebar = ({ visible, onClose }) => {
         >
           <div
             className="shrink-0 overflow-y-auto bg-slate-100/75 dark:bg-slate-900/25 border-r dark:border-transparent"
-            style={{
-              paddingLeft: 'env(safe-area-inset-left)',
-            }}
+            style={{ paddingLeft: 'env(safe-area-inset-left)' }}
           >
             <ProjectsBar onButtonClick={onClose} />
           </div>

@@ -178,7 +178,7 @@ const Editor = ({ clientId, initialDocument }) => {
       initialValue={initialValue}
       normalizeInitialValue
       editableProps={{
-        className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:narrow',
+        className: 'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:lg:narrow',
         placeholder: 'Write something...',
       }}
     >
@@ -197,12 +197,12 @@ const Editor = ({ clientId, initialDocument }) => {
     <>
       {findDialog}
 
-      <div className="narrow mb-3">
+      <div className="lg:narrow mb-3">
         <BackButton />
       </div>
 
       <div className="cursor-text" onClick={() => titleRef.current.focus()}>
-        <div className="narrow flex gap-2">
+        <div className="lg:narrow flex gap-2">
           <TextareaAutosize
             ref={titleRef}
             className="min-w-0 grow h1 text-black dark:text-white placeholder:truncate"
