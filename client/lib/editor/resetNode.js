@@ -1,17 +1,17 @@
 import {
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_H1,
+  ELEMENT_PARAGRAPH,
   isSelectionAtBlockStart,
   isSelectionAtCodeBlockStart,
   unwrapCodeBlock,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_H1,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-} from '@udecode/plate-headless'
+} from '@udecode/plate-headless';
 
 const commonRule = {
   defaultType: ELEMENT_PARAGRAPH,
   hotkey: 'backspace',
-}
+};
 
 const resetNodeOptions = {
   options: {
@@ -31,6 +31,6 @@ const resetNodeOptions = {
       },
     ],
   },
-}
+};
 
-export default resetNodeOptions
+export default resetNodeOptions;

@@ -1,21 +1,20 @@
-import { useState, useRef } from 'react'
-
-import useIsMounted from '~/lib/useIsMounted'
+import { useRef, useState } from 'react';
+import useIsMounted from '~/lib/useIsMounted';
 
 const useStateWhileMounted = (...args) => {
-  const [state, setState] = useState(...args)
-  const stateRef = useRef(state)
-  const isMounted = useIsMounted()
+  const [state, setState] = useState(...args);
+  const stateRef = useRef(state);
+  const isMounted = useIsMounted();
 
-  const setStateWhileMounted = argument => {
+  const setStateWhileMounted = (argument) => {
     if (isMounted()) {
-      setState(argument)
+      setState(argument);
     } else if (typeof argument === 'function') {
-      argument(stateRef.current)
+      argument(stateRef.current);
     }
-  }
+  };
 
-  return [state, setStateWhileMounted]
-}
+  return [state, setStateWhileMounted];
+};
 
-export default useStateWhileMounted
+export default useStateWhileMounted;

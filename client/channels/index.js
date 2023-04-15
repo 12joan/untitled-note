@@ -1,1 +1,1 @@
-import './dataChannel'
+import './dataChannel';

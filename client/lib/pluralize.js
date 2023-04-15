@@ -1,9 +1,7 @@
 const pluralize = (count, singular, plural = undefined) => {
-  const noun = count === 1
-    ? singular
-    : plural ?? `${singular}s`
+  const noun = count === 1 ? singular : plural ?? `${singular}s`;
 
-  return `${count} ${noun}`
-}
+  return `${count} ${noun}`;
+};
 
-export default pluralize
+export default pluralize;

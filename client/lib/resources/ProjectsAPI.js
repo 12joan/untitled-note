@@ -1,4 +1,4 @@
-import ResourcesAPI from '~/lib/ResourcesAPI'
+import ResourcesAPI from '~/lib/ResourcesAPI';
 
 const ProjectsAPI = new ResourcesAPI({
   apiEndpoints: {
@@ -8,17 +8,17 @@ const ProjectsAPI = new ResourcesAPI({
     },
 
     update: {
-      url: id => `/api/v1/projects/${id}`,
+      url: (id) => `/api/v1/projects/${id}`,
       method: 'PUT',
     },
 
     destroy: {
-      url: id => `/api/v1/projects/${id}`,
+      url: (id) => `/api/v1/projects/${id}`,
       method: 'DELETE',
     },
   },
 
-  transformRequestParams: project => ({
+  transformRequestParams: (project) => ({
     project: {
       name: project.name,
       emoji: project.emoji,
@@ -26,6 +26,6 @@ const ProjectsAPI = new ResourcesAPI({
       archived_at: project.archived_at,
     },
   }),
-})
+});
 
-export default ProjectsAPI
+export default ProjectsAPI;

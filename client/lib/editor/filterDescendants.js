@@ -1,17 +1,17 @@
 const filterDescendants = (node, filter) => {
   if (!filter(node)) {
-    return null
+    return null;
   }
 
-  const filteredNode = { ...node }
+  const filteredNode = { ...node };
 
   if (filteredNode.children) {
     filteredNode.children = filteredNode.children
-      .map(child => filterDescendants(child, filter))
-      .filter(child => child !== null)
+      .map((child) => filterDescendants(child, filter))
+      .filter((child) => child !== null);
   }
 
-  return filteredNode
-}
+  return filteredNode;
+};
 
-export default filterDescendants
+export default filterDescendants;

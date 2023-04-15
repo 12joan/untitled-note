@@ -1,11 +1,12 @@
-const copyPath = path => {
-  const url = `${window.location.origin}${path}`
+const copyPath = (path) => {
+  const url = `${window.location.origin}${path}`;
 
   if (window.location.protocol === 'http:') {
-    console.log(url)
+    // eslint-disable-next-line no-console
+    console.log(url);
   } else {
-    navigator.clipboard.writeText(url)
+    navigator.clipboard.writeText(url);
   }
-}
+};
 
-export default copyPath
+export default copyPath;

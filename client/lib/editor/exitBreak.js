@@ -1,4 +1,4 @@
-import { KEYS_HEADING } from '@udecode/plate-headless'
+import { KEYS_HEADING } from '@udecode/plate-headless';
 
 const exitBreakOptions = {
   options: {
@@ -20,6 +20,6 @@ const exitBreakOptions = {
       },
     ],
   },
-}
+};
 
-export default exitBreakOptions
+export default exitBreakOptions;

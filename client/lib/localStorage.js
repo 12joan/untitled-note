@@ -1,49 +1,50 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 
-const subscribers = new Map()
+const subscribers = new Map();
 
-const notifyForKey = key => subscribers.get(key)?.forEach(callback => callback())
+const notifyForKey = (key) =>
+  subscribers.get(key)?.forEach((callback) => callback());
 
 const setLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value))
-  notifyForKey(key)
-}
+  localStorage.setItem(key, JSON.stringify(value));
+  notifyForKey(key);
+};
 
-window.addEventListener('storage', event => {
-  const { key } = event
+window.addEventListener('storage', (event) => {
+  const { key } = event;
 
   // If the key is null, all keys are affected
   if (key) {
-    notifyForKey(event.key)
+    notifyForKey(event.key);
   } else {
-    subscribers.keys().forEach(notifyForKey)
+    subscribers.keys().forEach(notifyForKey);
   }
-})
+});
 
-const getLocalStorage = key => {
-  const value = localStorage.getItem(key)
-  return value ? JSON.parse(value) : null
-}
+const getLocalStorage = (key) => {
+  const value = localStorage.getItem(key);
+  return value ? JSON.parse(value) : null;
+};
 
 const useLocalStorage = (key, defaultValue) => {
-  const getValue = () => getLocalStorage(key) ?? defaultValue
-  const [value, setValue] = useState(getValue)
+  const getValue = () => getLocalStorage(key) ?? defaultValue;
+  const [value, setValue] = useState(getValue);
 
   useEffect(() => {
     if (!subscribers.has(key)) {
-      subscribers.set(key, new Set())
+      subscribers.set(key, new Set());
     }
 
-    const handleChange = () => setValue(getValue())
+    const handleChange = () => setValue(getValue());
 
-    const callbacks = subscribers.get(key)
+    const callbacks = subscribers.get(key);
 
-    callbacks.add(handleChange)
+    callbacks.add(handleChange);
 
-    return () => callbacks.delete(handleChange)
-  }, [key])
+    return () => callbacks.delete(handleChange);
+  }, [key]);
 
-  return value
-}
+  return value;
+};
 
-export { setLocalStorage, getLocalStorage, useLocalStorage }
+export { setLocalStorage, getLocalStorage, useLocalStorage };

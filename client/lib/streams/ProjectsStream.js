@@ -1,4 +1,4 @@
-import { streamAction } from '~/channels/dataChannel'
+import { streamAction } from '~/channels/dataChannel';
 
 const ProjectsStream = {
   index(params, callback) {
@@ -6,9 +6,9 @@ const ProjectsStream = {
       'Project',
       'index',
       { query: 'all', ...params },
-      callback,
-    )
+      callback
+    );
   },
-}
+};
 
-export default ProjectsStream
+export default ProjectsStream;

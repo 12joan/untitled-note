@@ -1,10 +1,10 @@
-import ResourcesAPI from '~/lib/ResourcesAPI'
+import ResourcesAPI from '~/lib/ResourcesAPI';
 
 const S3FilesAPI = new ResourcesAPI({
   apiEndpoints: {
     show: {
-      url: id => `/api/v1/s3_files/${id}`,
-      method: 'GET'
+      url: (id) => `/api/v1/s3_files/${id}`,
+      method: 'GET',
     },
 
     create: {
@@ -13,10 +13,10 @@ const S3FilesAPI = new ResourcesAPI({
     },
 
     destroy: {
-      url: id => `/api/v1/s3_files/${id}`,
+      url: (id) => `/api/v1/s3_files/${id}`,
       method: 'DELETE',
     },
   },
-})
+});
 
-export default S3FilesAPI
+export default S3FilesAPI;

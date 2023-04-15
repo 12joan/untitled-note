@@ -1,14 +1,14 @@
-import { streamAction } from '~/channels/dataChannel'
+import { streamAction } from '~/channels/dataChannel';
 
-const TagsStream = projectId => ({
+const TagsStream = (projectId) => ({
   index(params, callback) {
     return streamAction(
       'Tag',
       'index',
       { query: 'all', ...params, project_id: projectId },
-      callback,
-    )
+      callback
+    );
   },
-})
+});
 
-export default TagsStream
+export default TagsStream;

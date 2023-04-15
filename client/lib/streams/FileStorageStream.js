@@ -1,23 +1,13 @@
-import { streamAction } from '~/channels/dataChannel'
+import { streamAction } from '~/channels/dataChannel';
 
-const FileStorageStream = ({
+const FileStorageStream = {
   quotaUsage(callback) {
-    return streamAction(
-      'FileStorage',
-      'quota_usage',
-      {},
-      callback
-    )
+    return streamAction('FileStorage', 'quota_usage', {}, callback);
   },
 
   files(callback) {
-    return streamAction(
-      'FileStorage',
-      'files',
-      {},
-      callback
-    )
+    return streamAction('FileStorage', 'files', {}, callback);
   },
-})
+};
 
-export default FileStorageStream
+export default FileStorageStream;

@@ -1,5 +1,5 @@
-import { dispatchGlobalEvent } from '~/lib/globalEvents'
+import { dispatchGlobalEvent } from '~/lib/globalEvents';
 
-const createToast = toast => dispatchGlobalEvent('toast', toast)
+const createToast = (toast) => dispatchGlobalEvent('toast', toast);
 
-export default createToast
+export default createToast;

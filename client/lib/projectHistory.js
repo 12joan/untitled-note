@@ -1,4 +1,4 @@
-import makeLocalHistory from '~/lib/localHistory'
+import makeLocalHistory from '~/lib/localHistory';
 
 const {
   touchItem: projectWasOpened,
@@ -6,8 +6,8 @@ const {
   getItems: getProjectHistory,
 } = makeLocalHistory({
   key: 'projectHistory',
-})
+});
 
-const getLastOpenedProject = () => getProjectHistory()[0]
+const getLastOpenedProject = () => getProjectHistory()[0];
 
-export { projectWasOpened, removeProjectFromHistory, getLastOpenedProject }
+export { projectWasOpened, removeProjectFromHistory, getLastOpenedProject };

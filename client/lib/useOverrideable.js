@@ -1,15 +1,14 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import useEffectAfterFirst from '~/lib/useEffectAfterFirst';
 
-import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
-
-const useOverrideable = upstream => {
-  const [value, setValue] = useState(upstream)
+const useOverrideable = (upstream) => {
+  const [value, setValue] = useState(upstream);
 
   useEffectAfterFirst(() => {
-    setValue(upstream)
-  }, [upstream])
+    setValue(upstream);
+  }, [upstream]);
 
-  return [value, setValue]
-}
+  return [value, setValue];
+};
 
-export default useOverrideable
+export default useOverrideable;

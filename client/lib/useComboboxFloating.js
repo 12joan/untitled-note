@@ -1,8 +1,6 @@
-import { useFloating, offset, shift, size } from '@floating-ui/react-dom'
+import { offset, shift, size, useFloating } from '@floating-ui/react-dom';
 
-const useComboboxFloating = ({
-  allowOverflow = false,
-} = {}) => {
+const useComboboxFloating = ({ allowOverflow = false } = {}) => {
   const {
     x: suggestionsX,
     y: suggestionsY,
@@ -17,13 +15,13 @@ const useComboboxFloating = ({
       size({
         apply: ({ availableHeight, elements }) => {
           if (!allowOverflow) {
-            elements.floating.style.maxHeight = `${availableHeight}px`
+            elements.floating.style.maxHeight = `${availableHeight}px`;
           }
         },
         padding: 10,
       }),
     ],
-  })
+  });
 
   const suggestionsProps = {
     ref: suggestionsRef,
@@ -32,11 +30,11 @@ const useComboboxFloating = ({
       top: suggestionsY ?? 0,
       left: suggestionsX ?? 0,
     },
-  }
+  };
 
-  const inputProps = { ref: inputRef }
+  const inputProps = { ref: inputRef };
 
-  return { suggestionsProps, inputProps }
-}
+  return { suggestionsProps, inputProps };
+};
 
-export default useComboboxFloating
+export default useComboboxFloating;

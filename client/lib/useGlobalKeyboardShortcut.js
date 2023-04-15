@@ -1,10 +1,7 @@
-import { useEffect } from 'react'
-
-import keyWithModifiers from '~/lib/keyWithModifiers'
-import useKeyboardShortcut from '~/lib/useKeyboardShortcut'
+import useKeyboardShortcut from '~/lib/useKeyboardShortcut';
 
 const useGlobalKeyboardShortcut = (...args) => {
-  useKeyboardShortcut(() => document, ...args)
-}
+  useKeyboardShortcut(() => document, ...args);
+};
 
-export default useGlobalKeyboardShortcut
+export default useGlobalKeyboardShortcut;

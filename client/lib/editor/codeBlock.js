@@ -6,6 +6,6 @@ const codeBlockOptions = {
       },
     ],
   },
-}
+};
 
-export default codeBlockOptions
+export default codeBlockOptions;

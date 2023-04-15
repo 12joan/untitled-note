@@ -1,6 +1,7 @@
-import { setLocalStorage, getLocalStorage } from '~/lib/localStorage'
+import { getLocalStorage, setLocalStorage } from '~/lib/localStorage';
 
-const setLastView = (projectId, view) => setLocalStorage(`lastView:${projectId}`, view)
-const getLastView = projectId => getLocalStorage(`lastView:${projectId}`)
+const setLastView = (projectId, view) =>
+  setLocalStorage(`lastView:${projectId}`, view);
+const getLastView = (projectId) => getLocalStorage(`lastView:${projectId}`);
 
-export { setLastView, getLastView }
+export { setLastView, getLastView };

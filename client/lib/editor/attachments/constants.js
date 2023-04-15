@@ -1,5 +1,3 @@
-const ELEMENT_ATTACHMENT = 'attachment'
+const ELEMENT_ATTACHMENT = 'attachment';
 
-export {
-  ELEMENT_ATTACHMENT,
-}
+export { ELEMENT_ATTACHMENT };

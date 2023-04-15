@@ -1,17 +1,21 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 
-const useEffectAfterFirst = (callback, dependencies = [], shouldExecute = true) => {
-  const isFirst = useRef(true)
+const useEffectAfterFirst = (
+  callback,
+  dependencies = [],
+  shouldExecute = true
+) => {
+  const isFirst = useRef(true);
 
   useEffect(() => {
     if (shouldExecute) {
       if (isFirst.current) {
-        isFirst.current = false
+        isFirst.current = false;
       } else {
-        return callback()
+        return callback();
       }
     }
-  }, dependencies)
-}
+  }, dependencies);
+};
 
-export default useEffectAfterFirst
+export default useEffectAfterFirst;

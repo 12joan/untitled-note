@@ -1,19 +1,26 @@
-import { useRef } from 'react'
+import { useRef } from 'react';
+import { useTimeout } from '~/lib/useTimer';
 
-import { useTimeout } from '~/lib/useTimer'
+const useWaitUntilSettled = (
+  value,
+  handleChange,
+  { debounceTime = 500 } = {}
+) => {
+  const afterFirst = useRef(false);
+  const initialValue = useRef(value);
 
-const useWaitUntilSettled = (value, handleChange, { debounceTime = 500 } = {}) => {
-  const afterFirst = useRef(false)
-  const initialValue = useRef(value)
+  useTimeout(
+    () => {
+      if (!afterFirst.current) {
+        afterFirst.current = true;
+        if (value === initialValue.current) return;
+      }
 
-  useTimeout(() => {
-    if (!afterFirst.current) {
-      afterFirst.current = true
-      if (value === initialValue.current) return
-    }
+      handleChange(value);
+    },
+    debounceTime,
+    [value]
+  );
+};
 
-    handleChange(value)
-  }, debounceTime, [value])
-}
-
-export default useWaitUntilSettled
+export default useWaitUntilSettled;

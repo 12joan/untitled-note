@@ -6,6 +6,6 @@ const commonClassNames = {
   reset: 'not-prose text-ui',
   select: 'select-none',
   display: 'flex gap-2 items-center',
-}
+};
 
-export default commonClassNames
+export default commonClassNames;

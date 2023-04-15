@@ -1,7 +1,7 @@
-import useViewportSize from '~/lib/useViewportSize'
+import useViewportSize from '~/lib/useViewportSize';
 
 const useBreakpoints = () => {
-  const { width } = useViewportSize()
+  const { width } = useViewportSize();
 
   return {
     is4xs: width >= 128,
@@ -13,7 +13,7 @@ const useBreakpoints = () => {
     isLg: width >= 1024,
     isXl: width >= 1280,
     is2xl: width >= 1536,
-  }
-}
+  };
+};
 
-export default useBreakpoints
+export default useBreakpoints;

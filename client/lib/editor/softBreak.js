@@ -1,6 +1,4 @@
-import {
-  ELEMENT_BLOCKQUOTE,
-} from '@udecode/plate-headless'
+import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-headless';
 
 const softBreakOptions = {
   options: {
@@ -16,6 +14,6 @@ const softBreakOptions = {
       },
     ],
   },
-}
+};
 
-export default softBreakOptions
+export default softBreakOptions;

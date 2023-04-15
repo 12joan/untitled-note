@@ -1,59 +1,61 @@
 import {
   createPluginFactory,
-  isText,
   ELEMENT_PARAGRAPH,
+  isText,
   KEY_DESERIALIZE_HTML,
-} from '@udecode/plate-headless'
+} from '@udecode/plate-headless';
 
-const splitFragmentIntoParagraphs = fragment => {
-  const newFragment = fragment.flatMap(node => {
-    const nodeIsText = isText(node)
+const splitFragmentIntoParagraphs = (fragment) => {
+  const newFragment = fragment.flatMap((node) => {
+    const nodeIsText = isText(node);
 
-    // Only split text and paragraph nodes 
+    // Only split text and paragraph nodes
     if (!nodeIsText && node.type !== ELEMENT_PARAGRAPH) {
-      return node
+      return node;
     }
 
-    const paragraphs = []
+    const paragraphs = [];
 
     const newParagraph = () => {
-      paragraphs.push({ type: ELEMENT_PARAGRAPH, children: [] })
-    }
+      paragraphs.push({ type: ELEMENT_PARAGRAPH, children: [] });
+    };
 
-    const appendToLastParagraph = child => {
-      paragraphs[paragraphs.length - 1].children.push(child)
-    }
+    const appendToLastParagraph = (child) => {
+      paragraphs[paragraphs.length - 1].children.push(child);
+    };
 
     // Always return at least one paragraph
-    newParagraph()
+    newParagraph();
 
-    const children = nodeIsText ? [node] : node.children
+    const children = nodeIsText ? [node] : node.children;
 
-    children.forEach(child => {
+    children.forEach((child) => {
       // Only split text nodes
       if (!isText(child)) {
-        appendToLastParagraph(child)
-        return
+        appendToLastParagraph(child);
+        return;
       }
 
-      const { text, ...textNodeProps } = child
+      const { text, ...textNodeProps } = child;
 
       // For every pair of newlines, create a new paragraph
-      const [firstParagraph, ...restParagraphs] = text.split('\n\n').map(text => text.replace(/^\n/, ''))
+      const [firstParagraph, ...restParagraphs] = text
+        .split('\n\n')
+        .map((text) => text.replace(/^\n/, ''));
 
-      appendToLastParagraph({ text: firstParagraph, ...textNodeProps })
+      appendToLastParagraph({ text: firstParagraph, ...textNodeProps });
 
-      restParagraphs.forEach(text => {
-        newParagraph()
-        appendToLastParagraph({ text, ...textNodeProps })
-      })
-    })
+      restParagraphs.forEach((text) => {
+        newParagraph();
+        appendToLastParagraph({ text, ...textNodeProps });
+      });
+    });
 
-    return paragraphs
-  })
+    return paragraphs;
+  });
 
-  return newFragment
-}
+  return newFragment;
+};
 
 const createSplitInsertedDataIntoParagraphsPlugin = createPluginFactory({
   key: 'splitInsertedDataIntoParagraphs',
@@ -69,8 +71,6 @@ const createSplitInsertedDataIntoParagraphsPlugin = createPluginFactory({
       },
     },
   },
-})
+});
 
-export {
-  createSplitInsertedDataIntoParagraphsPlugin,
-}
+export { createSplitInsertedDataIntoParagraphsPlugin };
