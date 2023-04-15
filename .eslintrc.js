@@ -1,13 +1,25 @@
 module.exports = {
-  extends: ['airbnb', 'plugin:prettier/recommended', 'prettier'],
+  extends: [
+    'airbnb',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript',
+    'prettier',
+  ],
   parserOptions: {
-    ecmaVersion: 'latest',
+    parser: '@typescript-eslint/parser',
   },
   env: {
     browser: true,
     es6: true,
   },
-  plugins: ['react', 'react-hooks', 'simple-import-sort', 'import', 'prettier'],
+  plugins: [
+    'react',
+    'react-hooks',
+    'simple-import-sort',
+    'import',
+    'prettier',
+  ],
   settings: {
     react: { version: 'detect' },
   },
@@ -47,6 +59,8 @@ module.exports = {
         ],
       },
     ],
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
   },
   overrides: [],
 };
