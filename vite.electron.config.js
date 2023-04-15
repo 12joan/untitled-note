@@ -1,13 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
-const root = './client/electron-pages'
+const root = './client/electron-pages';
 
 export default defineConfig({
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   root,
   base: './',
   build: {
@@ -25,4 +23,4 @@ export default defineConfig({
       '~': resolve(__dirname, './client'),
     },
   },
-})
+});

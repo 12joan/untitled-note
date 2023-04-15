@@ -1,5 +1,5 @@
-const { execSync } = require('child_process')
-const credentials = require('../electron-credentials')
+const { execSync } = require('child_process');
+const credentials = require('../electron-credentials');
 
 module.exports = {
   packagerConfig: {
@@ -38,7 +38,7 @@ module.exports = {
   ],
   hooks: {
     generateAssets: () => {
-      execSync('yarn run build')
+      execSync('yarn run build');
     },
   },
   publishers: [
@@ -54,4 +54,4 @@ module.exports = {
       },
     },
   ],
-}
+};

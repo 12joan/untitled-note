@@ -10,4 +10,4 @@ module.exports = {
   updateElectronApp: {
     repo: 'GITHUB-OWNER/GITHUB-REPOSITORY',
   },
-}
+};
