@@ -12,7 +12,7 @@ import { ProjectLink, OverviewLink } from '~/lib/routes'
 import useCSPNonce from '~/lib/useCSPNonce'
 
 import Tooltip from '~/components/Tooltip'
-import ProjectIcon from '~/components/ProjectIcon'
+import { ProjectIcon } from '~/components/ProjectIcon'
 import ChevronUpIcon from '~/components/icons/ChevronUpIcon'
 import LargePlusIcon from '~/components/icons/LargePlusIcon'
 

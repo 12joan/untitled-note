@@ -25,7 +25,7 @@ import SettingsIcon from '~/components/icons/SettingsIcon'
 import RecentIcon from '~/components/icons/RecentIcon'
 import TagsIcon from '~/components/icons/TagsIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
-import ProjectIcon from '~/components/ProjectIcon'
+import { ProjectIcon } from '~/components/ProjectIcon'
 import TagIcon from '~/components/icons/TagIcon'
 import DocumentIcon from '~/components/icons/DocumentIcon'
 

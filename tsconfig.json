@@ -4,6 +4,9 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "paths": {
+      "~/*": ["./client/*"]
+    },
 
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
