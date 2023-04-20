@@ -43,6 +43,7 @@ yarn-debug.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+tsconfig.tsbuildinfo
 
 # Vite Ruby
 /public/vite*

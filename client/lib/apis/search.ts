@@ -1,0 +1,33 @@
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import { DocumentSearchResult } from '~/lib/types';
+
+type RawDocumentSearchResult = Omit<DocumentSearchResult, 'document'> & {
+  document: Omit<DocumentSearchResult['document'], 'id'> & {
+    id: string;
+  };
+};
+
+export interface FetchSearchResultsOptions {
+  projectId: number;
+  query: string;
+}
+
+export const fetchSearchResults = async ({
+  projectId,
+  query,
+}: FetchSearchResultsOptions): Promise<DocumentSearchResult[]> => {
+  const response = await fetchAPIEndpoint({
+    path: `/api/projects/${projectId}/search`,
+    query: { q: query },
+  });
+
+  const rawSearchResults: RawDocumentSearchResult[] = await response.json();
+
+  return rawSearchResults.map((rawSearchResult) => ({
+    ...rawSearchResult,
+    document: {
+      ...rawSearchResult.document,
+      id: parseInt(rawSearchResult.document.id, 10),
+    },
+  }));
+};
