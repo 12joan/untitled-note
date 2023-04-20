@@ -5,7 +5,6 @@ import { handleCreateProjectError } from '~/lib/handleErrors';
 import { createProject } from '~/lib/apis/project';
 import { projectPath } from '~/lib/routes';
 import { useInputModal } from '~/lib/useInputModal';
-import { Project } from '~/lib/types';
 
 export const useNewProject = () => {
   const navigate = useNavigate();

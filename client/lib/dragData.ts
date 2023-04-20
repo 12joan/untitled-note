@@ -11,7 +11,7 @@ type DocumentDragData = BaseDragData & {
   data: PartialDocument;
 };
 
-type DragData = DocumentDragData;
+export type DragData = DocumentDragData;
 
 const makeDragData = <T extends DragData>(
   type: T['type'],

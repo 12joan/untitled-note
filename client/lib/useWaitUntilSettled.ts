@@ -1,10 +1,14 @@
 import { useRef } from 'react';
 import { useTimeout } from '~/lib/useTimer';
 
-const useWaitUntilSettled = (
-  value,
-  handleChange,
-  { debounceTime = 500 } = {}
+export const useWaitUntilSettled = <T>(
+  value: T,
+  handleChange: (value: T) => void,
+  {
+    debounceTime = 500,
+  }: {
+    debounceTime?: number;
+  } = {}
 ) => {
   const afterFirst = useRef(false);
   const initialValue = useRef(value);
@@ -22,5 +26,3 @@ const useWaitUntilSettled = (
     [value]
   );
 };
-
-export default useWaitUntilSettled;

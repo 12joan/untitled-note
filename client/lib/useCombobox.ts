@@ -1,5 +1,5 @@
 import { useMemo, useState, InputHTMLAttributes, HTMLProps, ReactNode, KeyboardEvent } from 'react';
-import keyWithModifiers from '~/lib/keyWithModifiers';
+import { keyWithModifiers } from '~/lib/keyWithModifiers';
 
 const positiveMod = (a: number, b: number) => ((a % b) + b) % b;
 

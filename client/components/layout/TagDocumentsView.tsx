@@ -13,7 +13,7 @@ import BackButton from '~/components/BackButton'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { Dropdown } from '~/components/Dropdown'
 import TagMenu from '~/components/TagMenu'
-import DocumentIndex from '~/components/DocumentIndex'
+import { DocumentIndex } from '~/components/DocumentIndex'
 import LoadingView from '~/components/LoadingView'
 import CaretDownIcon from '~/components/icons/CaretDownIcon'
 

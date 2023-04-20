@@ -2,19 +2,23 @@ import { streamAction } from '~/channels/dataChannel';
 import { PartialDocument, Document } from '~/lib/types';
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
 
-export interface CreateBlankDocumentOptions {
-  projectId: number;
-  tagId?: number;
-}
-
-export const createBlankDocument = ({
-  projectId,
-  tagId,
-}: CreateBlankDocumentOptions) => (
+export const createBlankDocument = (
+  projectId: number,
+  { tagId }: { tagId?: number } = {}
+) => (
   fetchAPIEndpoint({
     method: 'POST',
     path: `/api/v1/projects/${projectId}/blank_document`,
     data: { tag_id: tagId },
+  }).then((response) => response.json()) as Promise<Document>
+);
+
+export const fetchDocument = (
+  projectId: number,
+  documentId: number
+) => (
+  fetchAPIEndpoint({
+    path: `/api/v1/projects/${projectId}/documents/${documentId}`,
   }).then((response) => response.json()) as Promise<Document>
 );
 

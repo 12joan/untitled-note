@@ -5,7 +5,7 @@ import { useContext } from '~/lib/context'
 import { getLastView } from '~/lib/restoreProjectView'
 
 import { forwardParams } from '~/lib/forwardParams'
-import AwaitRedirect from '~/components/AwaitRedirect'
+import { AwaitRedirect } from '~/components/AwaitRedirect'
 import StreamProjectData from '~/components/StreamProjectData'
 import { ProjectView } from '~/components/layout/ProjectView'
 import { RestoreLastOpenProject } from '~/components/RestoreLastOpenProject'

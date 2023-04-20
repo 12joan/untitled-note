@@ -1,15 +1,16 @@
 import React from 'react'
 
 import { useContext } from '~/lib/context'
-import useTitle from '~/lib/useTitle'
+import { useTitle } from '~/lib/useTitle'
+import { Project } from '~/lib/types'
 
 import BackButton from '~/components/BackButton'
-import EditProjectName from '~/components/EditProjectName'
-import EditProjectIcon from '~/components/EditProjectIcon'
-import ProjectActions from '~/components/ProjectActions'
+import { EditProjectName } from '~/components/EditProjectName'
+import { EditProjectIcon } from '~/components/EditProjectIcon'
+import { ProjectActions } from '~/components/ProjectActions'
 
 export const EditProjectView = () => {
-  const { project } = useContext()
+  const { project } = useContext() as { project: Project }
 
   useTitle(`Edit ${project.name}`)
 

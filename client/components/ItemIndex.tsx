@@ -1,11 +1,38 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, ComponentType, ReactNode, MouseEvent } from 'react'
 
-import { handleDragStartWithData } from '~/lib/dragData'
+import { DragData, handleDragStartWithData } from '~/lib/dragData'
 
 import PopOutLink from '~/components/PopOutLink'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
-const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, render = x => x, ...otherProps }) => {
+export type Item = {
+  key: any;
+  as: ComponentType<any>;
+  label: string;
+  preview: string;
+  buttonProps: Record<string, any>;
+  contextMenu?: ReactNode;
+  dragData?: DragData;
+};
+
+export interface ItemIndexProps extends Omit<IndexProps, 'items'> {
+  items: Item[];
+  viewWidth: number;
+  title?: string
+  showAllLink?: ComponentType<any>;
+  ifEmpty?: ReactNode;
+  render?: (children: JSX.Element) => JSX.Element;
+}
+
+export const ItemIndex = ({
+  items,
+  viewWidth,
+  title,
+  showAllLink,
+  ifEmpty,
+  render = x => x,
+  ...otherProps
+}: ItemIndexProps) => {
   const cardsPerRow = useMemo(() => {
     const remPixels = parseFloat(getComputedStyle(document.body).fontSize)
     const viewPadding = 2 * 5 / 4 * remPixels
@@ -44,7 +71,12 @@ const ItemIndex = ({ items, viewWidth, title, showAllLink, ifEmpty, render = x =
   )
 }
 
-const CardIndex = ({ items, cardPreviewHeight }) => {
+interface IndexProps {
+  items: Item[];
+  cardPreviewHeight?: string | number;
+}
+
+const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => {
   return (
     <div className="flex flex-wrap gap-5">
       {items.map(item => (
@@ -54,7 +86,7 @@ const CardIndex = ({ items, cardPreviewHeight }) => {
   )
 }
 
-const ListIndex = ({ items, cardPreviewHeight }) => {
+const ListIndex = ({ items }: IndexProps) => {
   return (
     <div className="rounded-lg border dark:border-transparent divide-y">
       {items.map(item => (
@@ -64,48 +96,64 @@ const ListIndex = ({ items, cardPreviewHeight }) => {
   )
 }
 
-const CardItem = ({ item: { label, preview, ...itemProps }, cardPreviewHeight, ...otherProps }) => {
+interface ItemProps extends Record<string, any> {
+  item: Item;
+  cardPreviewHeight?: string | number;
+}
+
+const CardItem = ({ item, cardPreviewHeight, ...otherProps }: ItemProps) => {
   return (
     <Item
+      item={item}
       className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-slate-800 dark:border-transparent"
-      {...itemProps}
       {...otherProps}
     >
-      <strong className="block text-lg font-medium" children={label} />
+      <strong className="block text-lg font-medium" children={item.label} />
 
       <p className="text-sm line-clamp-2 text-slate-500 dark:text-slate-400" style={{ height: cardPreviewHeight }}>
-        {preview}
+        {item.preview}
       </p>
     </Item>
   )
 }
 
-const ListItem = ({ item: { label, preview, ...itemProps }, ...otherProps }) => {
+const ListItem = ({ item, ...otherProps }: ItemProps) => {
   return (
     <Item
+      item={item}
       className="btn btn-no-rounded w-full p-3 space-y-1 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg bg-white dark:bg-slate-800"
-      {...itemProps}
       {...otherProps}
     >
-      {label}
+      {item.label}
 
       <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-        {preview}
+        {item.preview}
       </p>
     </Item>
   )
 }
 
-const Item = ({ as: ItemComponent, buttonProps, contextMenu, dragData, children, ...otherProps }) => {
+const Item = ({
+  item: {
+    as: ItemComponent,
+    buttonProps,
+    contextMenu,
+    dragData,
+    ...restItem
+  },
+  children,
+  ...otherProps
+}: ItemProps) => {
   const itemComponent = (
     <ItemComponent
       {...buttonProps}
+      {...restItem}
       {...otherProps}
       children={children}
-      onContextMenu={contextMenu && (event => {
+      onContextMenu={contextMenu && ((event: MouseEvent) => {
         event.preventDefault()
       })}
-      onDragStart={handleDragStartWithData(dragData)}
+      onDragStart={dragData && handleDragStartWithData(dragData)}
     />
   )
 
@@ -120,5 +168,3 @@ const Item = ({ as: ItemComponent, buttonProps, contextMenu, dragData, children,
     </div>
   )
 }
-
-export default ItemIndex

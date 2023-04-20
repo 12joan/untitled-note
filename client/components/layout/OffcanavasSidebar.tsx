@@ -3,11 +3,16 @@ import React, { useState, useLayoutEffect } from 'react'
 import { useTimeout } from '~/lib/useTimer'
 
 import { ModalRoot, ModalPanel } from '~/components/Modal'
-import ProjectsBar from '~/components/layout/ProjectsBar'
-import Sidebar from '~/components/layout/Sidebar'
+import { ProjectsBar } from '~/components/layout/ProjectsBar'
+import { Sidebar } from '~/components/layout/Sidebar'
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
 
-export const OffcanavasSidebar = ({ visible, onClose }) => {
+export interface OffcanvasSidebarProps {
+  visible: boolean
+  onClose: () => void
+}
+
+export const OffcanavasSidebar = ({ visible, onClose }: OffcanvasSidebarProps) => {
   const [display, setDisplay] = useState(visible)
   const [transitionVisible, setTransitionVisible] = useState(visible)
 

@@ -7,15 +7,10 @@ type RawDocumentSearchResult = Omit<DocumentSearchResult, 'document'> & {
   };
 };
 
-export interface FetchSearchResultsOptions {
-  projectId: number;
-  query: string;
-}
-
-export const fetchSearchResults = async ({
-  projectId,
-  query,
-}: FetchSearchResultsOptions): Promise<DocumentSearchResult[]> => {
+export const fetchSearchResults = async (
+  projectId: number,
+  query: string
+): Promise<DocumentSearchResult[]> => {
   const response = await fetchAPIEndpoint({
     path: `/api/projects/${projectId}/search`,
     query: { q: query },

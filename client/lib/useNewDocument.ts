@@ -18,7 +18,7 @@ export const useNewDocument = () => {
       projectId,
       navigate,
       promisePath: handleCreateDocumentError(
-        createBlankDocument({ projectId, tagId: tag?.id })
+        createBlankDocument(projectId, { tagId: tag?.id })
       ).then(({ id }) => documentPath({ projectId, documentId: id })),
       fallbackPath: currentPath,
     })

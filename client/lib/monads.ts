@@ -64,18 +64,20 @@ export const bindFuture = <T, R>(
   resolved: (data) => f(data),
 });
 
-export const sequenceFutures = <T>(
-  futures: Record<string, Future<T>>
-): Future<Record<string, T>> => Object.entries(futures).reduce(
-  (futureRecord, [key, future]) => (
-    bindFuture(futureRecord, (record) => (
-      mapFuture(future, (data) => ({
-        ...record,
-        [key]: data,
-      }))
-    ))
-  ),
-  resolvedFuture({})
+export const sequenceFutures = <T extends { [key: string]: any }>(
+  futures: { [K in keyof T]: Future<T[K]> }
+): Future<T> => (
+  Object.entries(futures).reduce(
+    (futureRecord, [key, future]) => (
+      bindFuture(futureRecord, (record) => (
+        mapFuture(future, (data) => ({
+          ...record,
+          [key]: data,
+        }))
+      ))
+    ),
+    resolvedFuture({} as T)
+  )
 );
 
 export type SuccessServiceResult<T> = {

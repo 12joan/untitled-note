@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { useContext } from '~/lib/context'
-import useIsMounted from '~/lib/useIsMounted'
-import useNormalizedInput from '~/lib/useNormalizedInput'
-import useWaitUntilSettled from '~/lib/useWaitUntilSettled'
-import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import retry from '~/lib/retry'
+import { useIsMounted } from '~/lib/useIsMounted'
+import { useNormalizedInput } from '~/lib/useNormalizedInput'
+import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled'
+import { updateProject } from '~/lib/apis/project'
+import { retry } from '~/lib/retry'
 import { handleUpdateProjectError } from '~/lib/handleErrors'
+import { Project } from '~/lib/types'
 
-const EditProjectName = () => {
-  const { project } = useContext()
+export const EditProjectName = () => {
+  const { project } = useContext() as { project: Project }
+
   const isMounted = useIsMounted()
 
   const {
@@ -30,10 +32,7 @@ const EditProjectName = () => {
 
     handleUpdateProjectError(
       retry(
-        () => ProjectsAPI.update({
-          id: project.id,
-          name,
-        }),
+        () => updateProject(project.id, { name }),
         { shouldRetry: isMounted }
       )
     ).catch(error => {
@@ -55,6 +54,4 @@ const EditProjectName = () => {
       />
     </label>
   )
-}
-
-export default EditProjectName
+};

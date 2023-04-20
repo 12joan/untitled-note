@@ -200,10 +200,7 @@ const SearchModal = ({
   useWaitUntilSettled(trimmedSearchQuery, () => {
     if (!isEmpty) {
       promiseToFutureServiceResult(
-        fetchSearchResults({
-          projectId: currentProject.id,
-          query: trimmedSearchQuery,
-        }),
+        fetchSearchResults(currentProject.id, trimmedSearchQuery),
         setFsrSearchResults
       )
     }

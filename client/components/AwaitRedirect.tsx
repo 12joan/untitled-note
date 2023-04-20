@@ -6,7 +6,7 @@ import { useAwaitRedirect } from '~/lib/awaitRedirect'
 
 import LoadingView from '~/components/LoadingView'
 
-const AwaitRedirect = () => {
+export const AwaitRedirect = () => {
   const [redirectPath, setRedirectPath] = useStateWhileMounted(null)
 
   useAwaitRedirect(setRedirectPath)
@@ -15,5 +15,3 @@ const AwaitRedirect = () => {
     ? <Navigate to={redirectPath} replace />
     : <LoadingView />
 }
-
-export default AwaitRedirect

@@ -1,9 +1,19 @@
-const retry = (
-  func,
-  { maxRetries = 5, interval = 1000, shouldRetry = () => true } = {}
-) =>
+export interface RetryOptions {
+  maxRetries?: number;
+  interval?: number;
+  shouldRetry?: (error: any) => boolean;
+}
+
+export const retry = <T>(
+  func: () => Promise<T>,
+  {
+    maxRetries = 5,
+    interval = 1000,
+    shouldRetry = () => true,
+  }: RetryOptions = {}
+): Promise<T> => (
   new Promise((resolve, reject) => {
-    const attempt = (retriesLeft) =>
+    const attempt = (retriesLeft: number) =>
       func()
         .then(resolve)
         .catch((error) => {
@@ -19,6 +29,5 @@ const retry = (
         });
 
     attempt(maxRetries);
-  });
-
-export default retry;
+  })
+);

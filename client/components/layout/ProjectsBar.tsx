@@ -21,7 +21,7 @@ export interface ProjectsBarProps extends Record<string, any> {
   onButtonClick?: (event: React.MouseEvent) => void
 }
 
-const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }: ProjectsBarProps, ref) => {
+export const ProjectsBar = forwardRef(({ onButtonClick = () => {}, ...otherProps }: ProjectsBarProps, ref) => {
   const { projectId, projects } = useContext() as {
     projectId: number
     projects: Project[]
@@ -291,5 +291,3 @@ const ProjectListItem = ({
     )
   })
 }
-
-export default ProjectsBar

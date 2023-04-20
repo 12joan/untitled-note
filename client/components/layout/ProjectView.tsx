@@ -2,29 +2,29 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, CSSProperties
 import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
 
-import useViewportSize from '~/lib/useViewportSize'
-import useElementSize from '~/lib/useElementSize'
-import useElementBounds from '~/lib/useElementBounds'
-import multiplexRefs from '~/lib/multiplexRefs'
+import { useViewportSize } from '~/lib/useViewportSize'
+import { useElementSize } from '~/lib/useElementSize'
+import { useElementBounds } from '~/lib/useElementBounds'
+import { multiplexRefs } from '~/lib/multiplexRefs'
 import { useContext, ContextProvider } from '~/lib/context'
-import useBreakpoints from '~/lib/useBreakpoints'
+import { useBreakpoints } from '~/lib/useBreakpoints'
 import { projectWasOpened } from '~/lib/projectHistory'
 import { setLastView } from '~/lib/restoreProjectView'
-import useApplicationKeyboardShortcuts from '~/lib/useApplicationKeyboardShortcuts'
+import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts'
 import { useSearchModal } from '~/lib/useSearchModal'
 import { useAccountModal } from '~/lib/useAccountModal'
 
 import { TopBar } from '~/components/layout/TopBar'
-import ProjectsBar from '~/components/layout/ProjectsBar'
+import { ProjectsBar } from '~/components/layout/ProjectsBar'
 import { Sidebar } from '~/components/layout/Sidebar'
 import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar'
-import AwaitRedirect from '~/components/AwaitRedirect'
-import OverviewView from '~/components/layout/OverviewView'
+import { AwaitRedirect } from '~/components/AwaitRedirect'
+import { OverviewView } from '~/components/layout/OverviewView'
 import { EditProjectView } from '~/components/layout/EditProjectView'
 import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView'
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView'
-import AllTagsView from '~/components/layout/AllTagsView'
-import EditorView from '~/components/layout/EditorView'
+import { AllTagsView } from '~/components/layout/AllTagsView'
+import { EditorView } from '~/components/layout/EditorView'
 
 export interface ProjectViewProps {
   childView: {
@@ -49,8 +49,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   const formattingToolbarRef = useRef<HTMLDivElement>(null)
 
   const { width: viewportWidth } = useViewportSize()
-  const [mainBoundsRef, mainBounds] = useElementBounds()
-  const [topBarSizeRef, { height: topBarHeight }] = useElementSize()
+  const [mainBounds, mainBoundsRef] = useElementBounds()
+  const [{ height: topBarHeight }, topBarSizeRef] = useElementSize()
 
   const { isLg } = useBreakpoints()
   const sidebarAlwaysVisible = isLg
@@ -64,7 +64,12 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
 
-  const [searchModal, showSearchModal, hideSearchModal, toggleSearchModal] = useSearchModal()
+  const {
+    modal: searchModal,
+    open: showSearchModal,
+    close: hideSearchModal,
+    toggle: toggleSearchModal,
+  } = useSearchModal()
 
   const {
     modal: accountModal,

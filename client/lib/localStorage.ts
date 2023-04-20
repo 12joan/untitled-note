@@ -24,14 +24,14 @@ window.addEventListener('storage', (event) => {
   }
 });
 
-export const getLocalStorage = (key: string) => {
+export const getLocalStorage = <T>(key: string): T | null => {
   const value = localStorage.getItem(key);
   return value ? JSON.parse(value) : null;
 };
 
 export const useLocalStorage = <T>(key: string, defaultValue: T) => {
-  const getValue = () => getLocalStorage(key) ?? defaultValue;
-  const [value, setValue] = useState(getValue);
+  const getValue = () => getLocalStorage<T>(key) ?? defaultValue;
+  const [value, setValue] = useState<T>(getValue);
 
   useEffect(() => {
     if (!subscribers.has(key)) {

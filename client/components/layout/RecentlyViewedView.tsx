@@ -8,7 +8,7 @@ import { Future, unwrapFuture } from '~/lib/monads'
 import { PartialDocument } from '~/lib/types'
 
 import BackButton from '~/components/BackButton'
-import DocumentIndex from '~/components/DocumentIndex'
+import { DocumentIndex } from '~/components/DocumentIndex'
 import LoadingView from '~/components/LoadingView'
 
 export const RecentlyViewedView = () => {

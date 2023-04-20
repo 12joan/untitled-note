@@ -1,28 +1,39 @@
+import { RefObject, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { projectPath } from '~/lib/routes';
-import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut';
-import useNewDocument from '~/lib/useNewDocument';
+import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
+import { useNewDocument } from '~/lib/useNewDocument';
+import { Project } from '~/lib/types';
 
-const useApplicationKeyboardShortcuts = ({
+export interface UseApplicationKeyboardShortcutsOptions {
+  sectionRefs: RefObject<HTMLElement | null>[];
+  toggleSearchModal: () => void;
+}
+
+export const useApplicationKeyboardShortcuts = ({
   sectionRefs,
   toggleSearchModal,
-}) => {
-  const { projects, projectId } = useContext();
+}: UseApplicationKeyboardShortcutsOptions) => {
+  const { projects, projectId } = useContext() as {
+    projects: Project[];
+    projectId: string;
+  };
+
   const navigate = useNavigate();
   const createNewDocument = useNewDocument();
 
   // Switch project
   useGlobalKeyboardShortcut(
     [1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((n) => [`Meta${n}`, `MetaShift${n}`]),
-    (event) => {
+    (event: KeyboardEvent) => {
       const index = Number(event.key) - 1;
       const project = projects.filter((project) => !project.archived_at)[index];
 
       if (project) {
         event.preventDefault();
         event.stopPropagation();
-        navigate(projectPath(project.id));
+        navigate(projectPath({ projectId: project.id }));
       }
     },
     [projects]
@@ -31,7 +42,7 @@ const useApplicationKeyboardShortcuts = ({
   // New document
   useGlobalKeyboardShortcut(
     'MetaShiftN',
-    (event) => {
+    (event: KeyboardEvent) => {
       event.preventDefault();
       event.stopPropagation();
       createNewDocument();
@@ -42,7 +53,7 @@ const useApplicationKeyboardShortcuts = ({
   // Search
   useGlobalKeyboardShortcut(
     ['MetaK', 'MetaJ', 'MetaG'],
-    (event) => {
+    (event: KeyboardEvent) => {
       event.preventDefault();
       event.stopPropagation();
       toggleSearchModal();
@@ -53,7 +64,7 @@ const useApplicationKeyboardShortcuts = ({
   // Move focus between sections
   useGlobalKeyboardShortcut(
     'AltF6',
-    (event) => {
+    (event: KeyboardEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -76,26 +87,27 @@ const useApplicationKeyboardShortcuts = ({
         .map(({ current }) => current);
 
       let currentSectionIndex = visibleSections.findIndex((section) =>
-        section.contains(document.activeElement)
+        section?.contains(document.activeElement)
       );
 
       if (currentSectionIndex === -1) {
-        const focusTrap = document.activeElement.closest(
+        const focusTrap = document.activeElement?.closest(
           '[data-focus-trap="true"]'
         );
 
         if (focusTrap) {
           return;
         }
+
         currentSectionIndex = 0;
       }
 
-      const newSectionIndex =
-        (currentSectionIndex + 1) % visibleSections.length;
-      visibleSections[newSectionIndex].focus();
+      const newSectionIndex = (
+        currentSectionIndex + 1
+      ) % visibleSections.length;
+
+      visibleSections[newSectionIndex]?.focus();
     },
     [sectionRefs]
   );
 };
-
-export default useApplicationKeyboardShortcuts;

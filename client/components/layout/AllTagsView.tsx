@@ -8,7 +8,7 @@ import BackButton from '~/components/BackButton'
 import TagIndex from '~/components/TagIndex'
 import LoadingView from '~/components/LoadingView'
 
-const AllTagsView = () => {
+export const AllTagsView = () => {
   const [viewRef, { width: viewWidth }] = useElementSize()
 
   useTitle('All tags')
@@ -37,5 +37,3 @@ const AllTagsView = () => {
     </div>
   )
 }
-
-export default AllTagsView

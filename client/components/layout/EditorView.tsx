@@ -2,32 +2,57 @@ import React, { useRef, useMemo, useEffect, useReducer } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { useContext, ContextProvider } from '~/lib/context'
-import useStateWhileMounted from '~/lib/useStateWhileMounted'
-import useEffectAfterFirst from '~/lib/useEffectAfterFirst'
-import { FutureServiceResult } from '~/lib/future'
+import { useStateWhileMounted } from '~/lib/useStateWhileMounted'
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst'
+import {
+  Future,
+  FutureServiceResult,
+  mapFuture,
+  unwrapFuture,
+  pendingFutureServiceResult,
+  unwrapFutureServiceResult,
+  promiseToFutureServiceResult,
+} from '~/lib/monads'
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments'
-import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import { fetchDocument } from '~/lib/apis/document'
 import { OverviewLink } from '~/lib/routes'
+import { PartialDocument, Document } from '~/lib/types'
 
 import LoadingView from '~/components/LoadingView'
 import Editor from '~/components/Editor'
 
-const EditorView = ({ documentId }) => {
-  const { projectId, futurePartialDocuments } = useContext()
+export interface EditorViewProps {
+  documentId: number;
+}
+
+export const EditorView = ({ documentId }: EditorViewProps) => {
+  const { projectId, futurePartialDocuments } = useContext() as {
+    projectId: number
+    futurePartialDocuments: Future<PartialDocument[]>
+  }
+
   const [searchParams] = useSearchParams()
   const isFromRecentlyViewed = searchParams.has('recently_viewed')
 
   const { current: clientId } = useRef(Math.random().toString(36).slice(2))
 
-  const futurePartialDocument = useMemo(() => futurePartialDocuments
-    .map(partialDocuments => partialDocuments.find(
+  const futurePartialDocument = useMemo(() => mapFuture(
+    futurePartialDocuments,
+    (partialDocuments) => partialDocuments.find(
       partialDocument => partialDocument.id === documentId
-    )),
-    [futurePartialDocuments, documentId]
-  )
+    )
+  ), [futurePartialDocuments, documentId])
 
-  const updatedBy = futurePartialDocument.map(partialDocument => partialDocument?.updated_by).orDefault(undefined)
-  const updatedAt = futurePartialDocument.map(partialDocument => partialDocument?.updated_at).orDefault(undefined)
+  const { updatedBy, updatedAt } = unwrapFuture(futurePartialDocument, {
+    pending: {
+      updatedBy: undefined,
+      updatedAt: undefined,
+    },
+    resolved: doc => ({
+      updatedBy: doc?.updated_by,
+      updatedAt: doc?.updated_at,
+    }),
+  })
 
   useEffect(() => {
     if (!isFromRecentlyViewed) {
@@ -35,7 +60,10 @@ const EditorView = ({ documentId }) => {
     }
   }, [isFromRecentlyViewed, documentId])
 
-  const [fsrInitialDocument, setFsrInitialDocument] = useStateWhileMounted(() => FutureServiceResult.pending())
+  const [fsrInitialDocument, setFsrInitialDocument] = useStateWhileMounted<
+    FutureServiceResult<Document, any>
+  >(() => pendingFutureServiceResult())
+
   const [refetchKey, refetch] = useReducer(refetchKey => refetchKey + 1, 0)
 
   useEffectAfterFirst(() => {
@@ -45,17 +73,17 @@ const EditorView = ({ documentId }) => {
   }, [updatedAt], updatedAt !== undefined)
 
   useEffect(() => {
-    setFsrInitialDocument(FutureServiceResult.pending())
+    setFsrInitialDocument(pendingFutureServiceResult())
 
-    FutureServiceResult.fromPromise(
-      DocumentsAPI(projectId).show(documentId),
+    promiseToFutureServiceResult(
+      fetchDocument(projectId, documentId),
       setFsrInitialDocument
     )
   }, [projectId, documentId, refetchKey])
 
-  return fsrInitialDocument.unwrap({
-    pending: () => <LoadingView />,
-    success: initialDocument => (
+  return unwrapFutureServiceResult(fsrInitialDocument, {
+    pending: <LoadingView />,
+    success: (initialDocument) => (
       <div className="grow flex flex-col">
         <ContextProvider documentId={documentId}>
           <Editor
@@ -65,7 +93,7 @@ const EditorView = ({ documentId }) => {
         </ContextProvider>
       </div>
     ),
-    failure: error => {
+    failure: (error) => {
       const doesNotExist = error?.response?.status === 404
 
       if (!doesNotExist) {
@@ -86,11 +114,9 @@ const EditorView = ({ documentId }) => {
         <div className="lg:narrow space-y-3">
           <h1 className="h1">{heading}</h1>
           <p className="text-lg font-light">{explanation}</p>
-          <p><OverviewLink className="btn btn-link">Go back</OverviewLink></p>
+          <p><OverviewLink to={{}} className="btn btn-link">Go back</OverviewLink></p>
         </div>
       )
     },
   })
 }
-
-export default EditorView

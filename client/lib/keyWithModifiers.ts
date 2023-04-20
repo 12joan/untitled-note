@@ -1,5 +1,7 @@
-const keyWithModifiers = (event) => {
-  const meta = Boolean(event.ctrlKey ^ event.metaKey);
+import { KeyboardEvent } from 'react';
+
+export const keyWithModifiers = (event: KeyboardEvent) => {
+  const meta = Boolean(event.ctrlKey !== event.metaKey);
   const shift = event.shiftKey;
   const alt = event.altKey;
   const [c, ...cs] = event.key;
@@ -8,5 +10,3 @@ const keyWithModifiers = (event) => {
     alt ? 'Alt' : ''
   }${capitalisedKey}`;
 };
-
-export default keyWithModifiers;
