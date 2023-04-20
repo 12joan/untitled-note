@@ -1,6 +1,17 @@
 import React from 'react'
 
-const Meter = ({ max, value, className = '', ...otherProps }) => {
+export interface MeterProps extends Record<string, any> {
+  max: number
+  value: number
+  className?: string
+}
+
+export const Meter = ({
+  max,
+  value,
+  className = '',
+  ...otherProps
+}: MeterProps) => {
   return (
     <div
       className={`w-full rounded-full bg-slate-900/10 dark:bg-slate-50/10 relative overflow-hidden ${className}`}
@@ -15,5 +26,3 @@ const Meter = ({ max, value, className = '', ...otherProps }) => {
     </div>
   )
 }
-
-export default Meter

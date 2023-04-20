@@ -58,6 +58,21 @@ export type Tag = {
   updated_at: string;
 };
 
+export type File = {
+  id: number;
+  role: 'project-image' | 'attachment';
+  filename: string;
+  size: number;
+  content_type: string;
+  url: string;
+  created_at: string;
+};
+
+export type StorageQuotaUsage = {
+  quota: number;
+  used: number;
+};
+
 export type Toast = {
   title: string;
   message: string;

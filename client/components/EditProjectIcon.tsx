@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, ChangeEvent, FocusEvent } from 'react'
 import { useFloating, offset, shift } from '@floating-ui/react-dom'
 import emojiData from '@emoji-mart/data'
 import EmojiPicker from '@emoji-mart/react'
@@ -7,45 +7,54 @@ import { useContext } from '~/lib/context'
 import { useIsMounted } from '~/lib/useIsMounted'
 import { useOverrideable } from '~/lib/useOverrideable'
 import { uploadProjectImage, removeProjectImage } from '~/lib/projectImageActions'
-import ProjectsAPI from '~/lib/resources/ProjectsAPI'
-import retry from '~/lib/retry'
+import {
+  updateProject as updateProjectAPI,
+} from '~/lib/apis/project'
+import { retry } from '~/lib/retry'
 import {
   handleUploadFileError,
   handleRemoveProjectImageError,
   handleUpdateProjectError,
 } from '~/lib/handleErrors'
-import multiplexRefs from '~/lib/multiplexRefs'
-import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
-import filesize from '~/lib/filesize'
+import { mergeRefs } from '~/lib/refUtils'
+import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut'
+import { filesize } from '~/lib/filesize'
+import { Project } from '~/lib/types'
+import {
+  Future,
+  orDefaultFuture,
+  unwrapFuture,
+} from '~/lib/monads'
+import { AccountModalOpenProps } from '~/lib/useAccountModal'
 
-import ReplaceWithSpinner from '~/components/ReplaceWithSpinner'
+import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner'
 
-const EditProjectIcon = () => {
-  const { project } = useContext()
+export const EditProjectIcon = () => {
+  const { project } = useContext() as { project: Project }
   const isMounted = useIsMounted()
 
   const [localProject, setLocalProject] = useOverrideable(project)
   const [hasImage, overrideHasImage] = useOverrideable(!!localProject.image_url)
 
-  const [imageFormState, setImageFormState] = useState('idle')
-  const [updatingProject, setUpdatingProject] = useState(false)
+  const [imageFormState, setImageFormState] = useState<
+    'idle' | 'uploading' | 'removing'
+  >('idle')
 
-  const updateProject = params => {
-    setUpdatingProject(true)
-    setLocalProject({ ...localProject, ...params })
+  const updateProject = (params: Partial<Project>) => {
+    setLocalProject({
+      ...localProject,
+      ...params,
+    })
 
     handleUpdateProjectError(
       retry(
-        () => ProjectsAPI.update({
-          id: project.id,
-          ...params,
-        }),
+        () => updateProjectAPI(project.id, params),
         { shouldRetry: isMounted }
       )
     ).catch(error => {
       console.error(error)
       setLocalProject(project)
-    }).finally(() => setUpdatingProject(false))
+    })
   }
 
   return (
@@ -72,18 +81,39 @@ const EditProjectIcon = () => {
           updateProject={updateProject}
           hasImage={hasImage}
         />
-
       </div>
     </div>
   )
 }
 
-const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
-  const fileInputRef = useRef(null)
+export interface ImageFormProps {
+  hasImage: boolean
+  overrideHasImage: (hasImage: boolean) => void
+  state: 'idle' | 'uploading' | 'removing'
+  setState: (state: 'idle' | 'uploading' | 'removing') => void
+}
 
-  const { projectId, futureRemainingQuota, showAccountModal } = useContext()
+const ImageForm = ({
+  hasImage,
+  overrideHasImage,
+  state,
+  setState,
+}: ImageFormProps) => {
+  const {
+    projectId,
+    futureRemainingQuota,
+    showAccountModal,
+  } = useContext() as {
+    projectId: number
+    futureRemainingQuota: Future<number>
+    showAccountModal: (props: AccountModalOpenProps) => void
+  }
 
-  const showFileStorage = () => showAccountModal({ initialSection: 'fileStorage' })
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const showFileStorage = () => showAccountModal({
+    initialSection: 'fileStorage',
+  })
 
   const isUploading = state === 'uploading'
   const isRemoving = state === 'removing'
@@ -91,12 +121,11 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
 
   const showFileSelector = () => {
     const fileInput = fileInputRef.current
-    fileInput.value = null
-    fileInput.click()
+    fileInput?.click()
   }
 
-  const handleFileSelected = event => {
-    const originalFile = event.target.files[0]
+  const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
+    const originalFile = event.target.files?.[0]
 
     if (!originalFile) {
       return
@@ -108,7 +137,7 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
       uploadProjectImage({
         projectId,
         file: originalFile,
-        availableSpace: futureRemainingQuota.orDefault(Infinity),
+        availableSpace: orDefaultFuture(futureRemainingQuota, Infinity),
         showFileStorage,
       }).then(() => overrideHasImage(true))
     ).finally(() => setState('idle'))
@@ -160,24 +189,35 @@ const ImageForm = ({ hasImage, overrideHasImage, state, setState }) => {
         )}
       </div>
 
-      {futureRemainingQuota.map(remainingQuota => (
-        <button
-          type="button"
-          className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
-          onClick={showFileStorage}
-          children={`${filesize(remainingQuota)} available`}
-        />
-      )).orDefault(null)}
+      {unwrapFuture(futureRemainingQuota, {
+        pending: null,
+        resolved: (remainingQuota) => (
+          <button
+            type="button"
+            className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
+            onClick={showFileStorage}
+            children={`${filesize(remainingQuota)} available`}
+          />
+        ),
+      })}
     </div>
   )
 }
 
-const EmojiForm = ({ project, updateProject }) => {
-  const buttonRef = useRef()
+export interface EmojiFormProps {
+  project: Project
+  updateProject: (params: Partial<Project>) => void
+}
+
+const EmojiForm = ({
+  project,
+  updateProject,
+}: EmojiFormProps) => {
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const { emoji } = project
   const hasEmoji = !!emoji
-  const setEmoji = emoji => updateProject({ emoji })
+  const setEmoji = (emoji: Project['emoji']) => updateProject({ emoji })
 
   const [pickerVisible, setPickerVisible] = useState(false)
 
@@ -185,7 +225,7 @@ const EmojiForm = ({ project, updateProject }) => {
     setPickerVisible(false)
 
     if (focusButton) {
-      buttonRef.current.focus()
+      buttonRef.current?.focus()
     }
   }
 
@@ -196,7 +236,7 @@ const EmojiForm = ({ project, updateProject }) => {
     }
   }, [pickerVisible])
 
-  const handleBlur = event => {
+  const handleBlur = (event: FocusEvent) => {
     if (pickerVisible && !event.currentTarget.contains(event.relatedTarget)) {
       closePicker(event.relatedTarget === null)
     }
@@ -220,7 +260,7 @@ const EmojiForm = ({ project, updateProject }) => {
       <div>
         <div className="flex flex-wrap gap-2">
           <button
-            ref={multiplexRefs([buttonRef, floatingReferenceRef])}
+            ref={mergeRefs([buttonRef, floatingReferenceRef])}
             type="button"
             className="btn btn-rect btn-secondary"
             onClick={event => {
@@ -248,9 +288,9 @@ const EmojiForm = ({ project, updateProject }) => {
             ref={pickerRef}
             className="z-20 pb-5"
             style={{
-              position: 'absolute',
-              left: pickerX,
-              top: pickerY,
+              position: pickerPosition,
+              left: pickerX ?? 0,
+              top: pickerY ?? 0,
             }}
             onBlur={handleBlur}
             onMouseDown={event => {
@@ -261,7 +301,7 @@ const EmojiForm = ({ project, updateProject }) => {
             <EmojiPicker
               data={emojiData}
               autoFocus
-              onEmojiSelect={({ native: emoji }) => {
+              onEmojiSelect={({ native: emoji }: { native: string }) => {
                 closePicker()
                 setEmoji(emoji)
               }}
@@ -273,9 +313,22 @@ const EmojiForm = ({ project, updateProject }) => {
   )
 }
 
-const BackgroundColourForm = ({ project, updateProject, hasImage }) => {
+export interface BackgroundColourFormProps {
+  project: Project
+  updateProject: (params: Partial<Project>) => void
+  hasImage: boolean
+}
+
+const BackgroundColourForm = ({
+  project,
+  updateProject,
+  hasImage,
+}: BackgroundColourFormProps) => {
   const { background_colour: backgroundColour } = project
-  const setBackgroundColor = colour => updateProject({ background_colour: colour })
+
+  const setBackgroundColor = (
+    colour: Project['background_colour']
+  ) => updateProject({ background_colour: colour })
 
   return (
     <div className="space-y-2">
@@ -305,5 +358,3 @@ const BackgroundColourForm = ({ project, updateProject, hasImage }) => {
     </div>
   )
 }
-
-export default EditProjectIcon

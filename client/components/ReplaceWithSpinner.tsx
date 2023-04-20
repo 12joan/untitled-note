@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import SpinnerIcon from '~/components/icons/SpinnerIcon'
 
-const ReplaceWithSpinner = ({ isSpinner = false, spinnerAriaLabel, children }) => {
+export interface ReplaceWithSpinnerProps {
+  isSpinner?: boolean
+  spinnerAriaLabel: string
+  children: ReactNode
+}
+
+export const ReplaceWithSpinner = ({
+  isSpinner = false,
+  spinnerAriaLabel,
+  children,
+}: ReplaceWithSpinnerProps) => {
   return (
     <>
       <div style={{ opacity: isSpinner ? 0 : undefined }}>
@@ -17,5 +27,3 @@ const ReplaceWithSpinner = ({ isSpinner = false, spinnerAriaLabel, children }) =
     </>
   )
 }
-
-export default ReplaceWithSpinner

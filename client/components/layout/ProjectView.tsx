@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { useViewportSize } from '~/lib/useViewportSize'
 import { useElementSize } from '~/lib/useElementSize'
 import { useElementBounds } from '~/lib/useElementBounds'
-import { multiplexRefs } from '~/lib/multiplexRefs'
+import { mergeRefs } from '~/lib/refUtils'
 import { useContext, ContextProvider } from '~/lib/context'
 import { useBreakpoints } from '~/lib/useBreakpoints'
 import { projectWasOpened } from '~/lib/projectHistory'
@@ -195,7 +195,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
         <div className="grow flex flex-col">
           <nav
-            ref={multiplexRefs([topBarRef, topBarSizeRef])}
+            ref={mergeRefs([topBarRef, topBarSizeRef])}
             className="p-5 flex items-center gap-2"
             tabIndex={0}
             aria-label="Top bar"

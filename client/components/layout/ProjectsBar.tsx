@@ -216,7 +216,7 @@ const ProjectListItem = ({
 
   const [tippyTriggerTarget, setTippyTriggerTarget] = useState(null)
 
-  const tippyRef = useRef<TippyInstance>()
+  const tippyRef = useRef<TippyInstance>(null)
   const hideTooltip = () => tippyRef.current?.hide()
 
   const withDraggable = (

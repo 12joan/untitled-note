@@ -1,46 +1,39 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, ForwardedRef, ComponentType } from 'react'
 import UpstreamHeadedTippy, {
-  Instance,
-  TippyProps,
+  TippyProps as UpstreamTippyProps,
 } from '@tippyjs/react'
+import { Instance } from 'tippy.js'
 import UpstreamTippy from '@tippyjs/react/headless'
 import 'tippy.js/dist/tippy.css'
 
 import { useContext } from '~/lib/context'
+import { mapRef } from '~/lib/refUtils'
 
+export type TippyProps = Omit<UpstreamTippyProps, 'ref'>;
 export type TippyInstance = Instance;
-export { TippyProps };
 
-const useTippyProps = () => {
+const makeTippyComponent = (
+  TippyComponent: ComponentType<UpstreamTippyProps>
+) => forwardRef((
+  props: TippyProps,
+  forwardedRef: ForwardedRef<TippyInstance>
+) => {
+  const ref = forwardedRef && mapRef(forwardedRef, (element: Element) => (
+    element && ((element as any)._tippy as TippyInstance)
+  ))
+
   const { inModal = false } = useContext() as {
     inModal: boolean
   }
 
-  return {
-    zIndex: inModal ? 40 : 20,
-  };
-};
-
-export const HeadedTippy = forwardRef((props: TippyProps, ref) => {
-  const tippyProps = useTippyProps();
-
   return (
-    <UpstreamHeadedTippy
+    <TippyComponent
       ref={ref}
-      {...tippyProps}
+      zIndex={inModal ? 40 : 20}
       {...props}
     />
   );
 });
 
-export const Tippy = forwardRef((props: TippyProps, ref) => {
-  const tippyProps = useTippyProps();
-
-  return (
-    <UpstreamTippy
-      ref={ref}
-      {...tippyProps}
-      {...props}
-    />
-  );
-});
+export const HeadedTippy = makeTippyComponent(UpstreamHeadedTippy);
+export const Tippy = makeTippyComponent(UpstreamTippy);

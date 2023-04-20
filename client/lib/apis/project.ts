@@ -31,3 +31,10 @@ export const updateProjectOrder = (order: Project['id'][]) => (
     data: { order },
   })
 );
+
+export const deleteProject = (projectId: number) => (
+  fetchAPIEndpoint({
+    method: 'DELETE',
+    path: `/api/v1/projects/${projectId}`,
+  })
+);
