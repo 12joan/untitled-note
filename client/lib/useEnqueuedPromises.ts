@@ -1,13 +1,16 @@
 import { useRef } from 'react';
-import retry from '~/lib/retry';
-import useStateWhileMounted from '~/lib/useStateWhileMounted';
+import { retry } from '~/lib/retry';
+import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
-const useEnqueuedPromises = () => {
-  const inflightPromise = useRef(null);
-  const enqueuedPromiseProvider = useRef(null);
+export const useEnqueuedPromises = () => {
+  type TPromise = Promise<void>;
+  type TPromiseFn = () => TPromise;
+
+  const inflightPromise = useRef<TPromise | null>(null);
+  const enqueuedPromiseProvider = useRef<TPromiseFn | null>(null);
   const [isDirty, setIsDirty] = useStateWhileMounted(false);
 
-  const initiatePromise = (promiseProvider) => {
+  const initiatePromise = (promiseProvider: TPromiseFn) => {
     setIsDirty(true);
 
     inflightPromise.current = retry(promiseProvider, {
@@ -32,7 +35,7 @@ const useEnqueuedPromises = () => {
       });
   };
 
-  const enqueuePromise = (promiseProvider) => {
+  const enqueuePromise = (promiseProvider: TPromiseFn) => {
     if (inflightPromise.current === null) {
       initiatePromise(promiseProvider);
     } else {
@@ -40,7 +43,5 @@ const useEnqueuedPromises = () => {
     }
   };
 
-  return [enqueuePromise, isDirty];
+  return [enqueuePromise, isDirty] as const;
 };
-
-export default useEnqueuedPromises;

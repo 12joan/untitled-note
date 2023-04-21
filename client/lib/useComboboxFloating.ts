@@ -1,6 +1,6 @@
 import { offset, shift, size, useFloating } from '@floating-ui/react-dom';
 
-const useComboboxFloating = ({ allowOverflow = false } = {}) => {
+export const useComboboxFloating = ({ allowOverflow = false } = {}) => {
   const {
     x: suggestionsX,
     y: suggestionsY,
@@ -36,5 +36,3 @@ const useComboboxFloating = ({ allowOverflow = false } = {}) => {
 
   return { suggestionsProps, inputProps };
 };
-
-export default useComboboxFloating;

@@ -37,7 +37,7 @@ import { overviewPath } from '~/lib/routes';
 import { Document, LocalDocument } from '~/lib/types';
 import { useDebounce } from '~/lib/useDebounce';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
-import useEnqueuedPromises from '~/lib/useEnqueuedPromises';
+import { useEnqueuedPromises } from '~/lib/useEnqueuedPromises';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
