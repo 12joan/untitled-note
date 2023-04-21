@@ -1,30 +1,37 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo, CSSProperties, ComponentType, ReactNode } from 'react'
-import { createPortal } from 'react-dom'
-import { useLocation } from 'react-router-dom'
-
-import { useViewportSize } from '~/lib/useViewportSize'
-import { useElementSize } from '~/lib/useElementSize'
-import { useElementBounds } from '~/lib/useElementBounds'
-import { mergeRefs } from '~/lib/refUtils'
-import { useContext, ContextProvider } from '~/lib/context'
-import { useBreakpoints } from '~/lib/useBreakpoints'
-import { projectWasOpened } from '~/lib/projectHistory'
-import { setLastView } from '~/lib/restoreProjectView'
-import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts'
-import { useSearchModal } from '~/lib/useSearchModal'
-import { useAccountModal } from '~/lib/useAccountModal'
-
-import { TopBar } from '~/components/layout/TopBar'
-import { ProjectsBar } from '~/components/layout/ProjectsBar'
-import { Sidebar } from '~/components/layout/Sidebar'
-import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar'
-import { AwaitRedirect } from '~/components/AwaitRedirect'
-import { OverviewView } from '~/components/layout/OverviewView'
-import { EditProjectView } from '~/components/layout/EditProjectView'
-import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView'
-import { TagDocumentsView } from '~/components/layout/TagDocumentsView'
-import { AllTagsView } from '~/components/layout/AllTagsView'
-import { EditorView } from '~/components/layout/EditorView'
+import React, {
+  ComponentType,
+  CSSProperties,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
+import { ContextProvider, useContext } from '~/lib/context';
+import { projectWasOpened } from '~/lib/projectHistory';
+import { mergeRefs } from '~/lib/refUtils';
+import { setLastView } from '~/lib/restoreProjectView';
+import { useAccountModal } from '~/lib/useAccountModal';
+import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts';
+import { useBreakpoints } from '~/lib/useBreakpoints';
+import { useElementBounds } from '~/lib/useElementBounds';
+import { useElementSize } from '~/lib/useElementSize';
+import { useSearchModal } from '~/lib/useSearchModal';
+import { useViewportSize } from '~/lib/useViewportSize';
+import { AwaitRedirect } from '~/components/AwaitRedirect';
+import { AllTagsView } from '~/components/layout/AllTagsView';
+import { EditorView } from '~/components/layout/EditorView';
+import { EditProjectView } from '~/components/layout/EditProjectView';
+import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar';
+import { OverviewView } from '~/components/layout/OverviewView';
+import { ProjectsBar } from '~/components/layout/ProjectsBar';
+import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
+import { Sidebar } from '~/components/layout/Sidebar';
+import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
+import { TopBar } from '~/components/layout/TopBar';
 
 export interface ProjectViewProps {
   childView: {
@@ -35,41 +42,44 @@ export interface ProjectViewProps {
 }
 
 export const ProjectView = ({ childView }: ProjectViewProps) => {
-  const { projectId } = useContext() as { projectId: number }
+  const { projectId } = useContext() as { projectId: number };
 
-  useEffect(() => projectWasOpened(projectId), [projectId])
+  useEffect(() => projectWasOpened(projectId), [projectId]);
 
-  const { pathname: viewPath } = useLocation()
+  const { pathname: viewPath } = useLocation();
 
-  const projectsBarRef = useRef<HTMLDivElement>(null)
-  const topBarRef = useRef<HTMLDivElement>(null)
-  const sideBarRef = useRef<HTMLDivElement>(null)
-  const mainRef = useRef<HTMLDivElement>(null)
-  const formattingToolbarContainerRef = useRef<HTMLDivElement>(null)
-  const formattingToolbarRef = useRef<HTMLDivElement>(null)
+  const projectsBarRef = useRef<HTMLDivElement>(null);
+  const topBarRef = useRef<HTMLDivElement>(null);
+  const sideBarRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const formattingToolbarContainerRef = useRef<HTMLDivElement>(null);
+  const formattingToolbarRef = useRef<HTMLDivElement>(null);
 
-  const { width: viewportWidth } = useViewportSize()
-  const [mainBounds, mainBoundsRef] = useElementBounds()
-  const [{ height: topBarHeight }, topBarSizeRef] = useElementSize()
+  const { width: viewportWidth } = useViewportSize();
+  const [mainBounds, mainBoundsRef] = useElementBounds();
+  const [{ height: topBarHeight }, topBarSizeRef] = useElementSize();
 
-  const { isLg } = useBreakpoints()
-  const sidebarAlwaysVisible = isLg
+  const { isLg } = useBreakpoints();
+  const sidebarAlwaysVisible = isLg;
 
   useEffect(() => {
-    const html = document.documentElement
-    const baseScrollPadding = '1.25rem'
-    html.style.setProperty('scroll-padding-top', `max(${baseScrollPadding}, ${topBarHeight}px)`)
-    html.style.setProperty('scroll-padding-bottom', baseScrollPadding)
-  }, [topBarHeight])
+    const html = document.documentElement;
+    const baseScrollPadding = '1.25rem';
+    html.style.setProperty(
+      'scroll-padding-top',
+      `max(${baseScrollPadding}, ${topBarHeight}px)`
+    );
+    html.style.setProperty('scroll-padding-bottom', baseScrollPadding);
+  }, [topBarHeight]);
 
-  const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false)
+  const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false);
 
   const {
     modal: searchModal,
     open: showSearchModal,
     close: hideSearchModal,
     toggle: toggleSearchModal,
-  } = useSearchModal()
+  } = useSearchModal();
 
   const {
     modal: accountModal,
@@ -78,46 +88,52 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   } = useAccountModal();
 
   useEffect(() => {
-    hideSearchModal()
-    hideAccountModal()
-  }, [childView.key, projectId])
+    hideSearchModal();
+    hideAccountModal();
+  }, [childView.key, projectId]);
 
-  const useFormattingToolbar = useCallback((formattingToolbar: ReactNode) => createPortal(
-    <aside
-      ref={formattingToolbarRef}
-      className="pointer-events-auto pr-5 pb-5 pt-1 pl-1 overflow-y-auto flex"
-      tabIndex={0}
-      aria-label="Formatting toolbar"
-      children={formattingToolbar}
-    />,
-    formattingToolbarContainerRef.current!
-  ), [])
+  const useFormattingToolbar = useCallback(
+    (formattingToolbar: ReactNode) =>
+      createPortal(
+        <aside
+          ref={formattingToolbarRef}
+          className="pointer-events-auto pr-5 pb-5 pt-1 pl-1 overflow-y-auto flex"
+          tabIndex={0}
+          aria-label="Formatting toolbar"
+          children={formattingToolbar}
+        />,
+        formattingToolbarContainerRef.current!
+      ),
+    []
+  );
 
   useEffect(() => {
     if (sidebarAlwaysVisible) {
-      setOffcanvasSidebarVisible(false)
+      setOffcanvasSidebarVisible(false);
     }
-  }, [sidebarAlwaysVisible])
+  }, [sidebarAlwaysVisible]);
 
-  const ChildView = ({
-    awaitRedirect: AwaitRedirect,
-    overview: OverviewView,
-    editProject: EditProjectView,
-    recentlyViewed: RecentlyViewedView,
-    showTag: TagDocumentsView,
-    allTags: AllTagsView,
-    editor: EditorView,
-  } as Record<string, ComponentType<any>>)[childView.type]
+  const ChildView = (
+    {
+      awaitRedirect: AwaitRedirect,
+      overview: OverviewView,
+      editProject: EditProjectView,
+      recentlyViewed: RecentlyViewedView,
+      showTag: TagDocumentsView,
+      allTags: AllTagsView,
+      editor: EditorView,
+    } as Record<string, ComponentType<any>>
+  )[childView.type];
 
   if (!ChildView) {
-    throw new Error(`Unknown child view type: ${childView.type}`)
+    throw new Error(`Unknown child view type: ${childView.type}`);
   }
 
   useEffect(() => {
     if (childView.type !== 'awaitRedirect') {
-      setLastView(projectId, viewPath)
+      setLastView(projectId, viewPath);
     }
-  }, [projectId, viewPath])
+  }, [projectId, viewPath]);
 
   useApplicationKeyboardShortcuts({
     sectionRefs: [
@@ -128,15 +144,15 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       formattingToolbarRef,
     ],
     toggleSearchModal,
-  })
+  });
 
   const narrowLeftMargin = useMemo(() => {
-    const contentWidth = 640 // from .narrow
-    const centerPosition = (viewportWidth - contentWidth) / 2
-    const centerMargin = Math.max(0, centerPosition - mainBounds.left)
-    const maxMargin = Math.max(0, mainBounds.width - contentWidth)
-    return Math.min(centerMargin, maxMargin)
-  }, [viewportWidth, mainBounds.left, mainBounds.width])
+    const contentWidth = 640; // from .narrow
+    const centerPosition = (viewportWidth - contentWidth) / 2;
+    const centerMargin = Math.max(0, centerPosition - mainBounds.left);
+    const maxMargin = Math.max(0, mainBounds.width - contentWidth);
+    return Math.min(centerMargin, maxMargin);
+  }, [viewportWidth, mainBounds.left, mainBounds.width]);
 
   return (
     <ContextProvider
@@ -148,13 +164,15 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       <div className="contents">
         <div
           className="grow flex flex-col"
-          style={{
-            marginTop: mainBounds.top,
-            marginLeft: mainBounds.left,
-            width: mainBounds.width,
-            '--narrow-margin-left': `${narrowLeftMargin}px`,
-            paddingBottom: 'env(safe-area-inset-bottom)',
-          } as CSSProperties}
+          style={
+            {
+              marginTop: mainBounds.top,
+              marginLeft: mainBounds.left,
+              width: mainBounds.width,
+              '--narrow-margin-left': `${narrowLeftMargin}px`,
+              paddingBottom: 'env(safe-area-inset-bottom)',
+            } as CSSProperties
+          }
         >
           <main
             ref={mainRef}
@@ -224,10 +242,13 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
         </div>
       </div>
 
-      <OffcanavasSidebar visible={offcanvasSidebarVisible} onClose={() => setOffcanvasSidebarVisible(false)} />
+      <OffcanavasSidebar
+        visible={offcanvasSidebarVisible}
+        onClose={() => setOffcanvasSidebarVisible(false)}
+      />
 
       {searchModal}
       {accountModal}
     </ContextProvider>
-  )
+  );
 };

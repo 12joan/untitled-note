@@ -62,11 +62,13 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'react/require-default-props': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx'] }],
     'react/jsx-props-no-spreading': 'off',
     'react/no-children-prop': 'off',
     'react/function-component-definition': 'off',
+    'jsx-a11y/no-noninteractive-tabindex': 'off',
   },
   overrides: [],
 };
