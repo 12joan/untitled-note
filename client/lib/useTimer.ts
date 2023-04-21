@@ -5,10 +5,16 @@ const useTimerFactory =
     setTimer: (callback: () => void, delay: number) => number,
     clearTimer: (timerId: number) => void
   ) =>
-  (callback: () => void, delay: number, dependencies: DependencyList = []) => {
+  (
+    callback: () => void,
+    delay: number | null,
+    dependencies: DependencyList = []
+  ) => {
     useEffect(() => {
-      const timer = setTimer(callback, delay);
-      return () => clearTimer(timer);
+      if (delay !== null) {
+        const timer = setTimer(callback, delay);
+        return () => clearTimer(timer);
+      }
     }, dependencies);
   };
 
