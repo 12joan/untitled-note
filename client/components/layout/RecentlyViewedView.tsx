@@ -1,24 +1,22 @@
-import React from 'react'
-
-import { useElementSize } from '~/lib/useElementSize'
-import { useTitle } from '~/lib/useTitle'
-import { useContext, ContextProvider } from '~/lib/context'
-import { RecentlyViewedDocumentLink } from '~/lib/routes'
-import { Future, unwrapFuture } from '~/lib/monads'
-import { PartialDocument } from '~/lib/types'
-
-import { BackButton } from '~/components/BackButton'
-import { DocumentIndex } from '~/components/DocumentIndex'
-import { LoadingView } from '~/components/LoadingView'
+import React from 'react';
+import { ContextProvider, useContext } from '~/lib/context';
+import { Future, unwrapFuture } from '~/lib/monads';
+import { RecentlyViewedDocumentLink } from '~/lib/routes';
+import { PartialDocument } from '~/lib/types';
+import { useElementSize } from '~/lib/useElementSize';
+import { useTitle } from '~/lib/useTitle';
+import { BackButton } from '~/components/BackButton';
+import { DocumentIndex } from '~/components/DocumentIndex';
+import { LoadingView } from '~/components/LoadingView';
 
 export const RecentlyViewedView = () => {
-  const [{ width: viewWidth }, viewRef] = useElementSize()
+  const [{ width: viewWidth }, viewRef] = useElementSize();
 
-  useTitle('Recently viewed')
+  useTitle('Recently viewed');
 
   const { futureRecentlyViewedDocuments } = useContext() as {
-    futureRecentlyViewedDocuments: Future<PartialDocument[]>
-  }
+    futureRecentlyViewedDocuments: Future<PartialDocument[]>;
+  };
 
   return (
     <div ref={viewRef} className="grow flex flex-col">
@@ -34,15 +32,15 @@ export const RecentlyViewedView = () => {
               viewWidth={viewWidth}
               documents={documents}
               linkComponent={RecentlyViewedDocumentLink}
-              ifEmpty={(
+              ifEmpty={
                 <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-5 select-none">
                   No recently viewed documents
                 </div>
-              )}
+              }
             />
           ),
         })}
       </ContextProvider>
     </div>
-  )
-}
+  );
+};

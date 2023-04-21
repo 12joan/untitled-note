@@ -69,6 +69,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/no-children-prop': 'off',
     'react/function-component-definition': 'off',
+    'react/no-unstable-nested-components': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
     'jsx-a11y/anchor-has-content': 'off',
   },

@@ -1,39 +1,48 @@
-import React, { useState, useLayoutEffect } from 'react'
-
-import { useTimeout } from '~/lib/useTimer'
-
-import { ModalRoot, ModalPanel } from '~/components/Modal'
-import { ProjectsBar } from '~/components/layout/ProjectsBar'
-import { Sidebar } from '~/components/layout/Sidebar'
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
+import React, { useLayoutEffect, useState } from 'react';
+import { useTimeout } from '~/lib/useTimer';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
+import { ProjectsBar } from '~/components/layout/ProjectsBar';
+import { Sidebar } from '~/components/layout/Sidebar';
+import { ModalPanel, ModalRoot } from '~/components/Modal';
 
 export interface OffcanvasSidebarProps {
-  visible: boolean
-  onClose: () => void
+  visible: boolean;
+  onClose: () => void;
 }
 
-export const OffcanavasSidebar = ({ visible, onClose }: OffcanvasSidebarProps) => {
-  const [display, setDisplay] = useState(visible)
-  const [transitionVisible, setTransitionVisible] = useState(visible)
+export const OffcanavasSidebar = ({
+  visible,
+  onClose,
+}: OffcanvasSidebarProps) => {
+  const [display, setDisplay] = useState(visible);
+  const [transitionVisible, setTransitionVisible] = useState(visible);
 
   // Set display to true immediately
   useLayoutEffect(() => {
     if (visible) {
-      setDisplay(true)
+      setDisplay(true);
     }
-  }, [visible])
+  }, [visible]);
 
   // Set display to false when transition is complete
-  useTimeout(() => {
-    if (!visible) {
-      setDisplay(false)
-    }
-  }, 300, [visible])
+  useTimeout(
+    () => {
+      if (!visible) {
+        setDisplay(false);
+      }
+    },
+    300,
+    [visible]
+  );
 
   // Set transitionVisible to true an instant after display is set to true
-  useTimeout(() => {
-    setTransitionVisible(visible)
-  }, 0, [visible])
+  useTimeout(
+    () => {
+      setTransitionVisible(visible);
+    },
+    0,
+    [visible]
+  );
 
   return (
     <ModalRoot open={visible} onClose={onClose}>
@@ -41,7 +50,9 @@ export const OffcanavasSidebar = ({ visible, onClose }: OffcanvasSidebarProps) =
         <ModalPanel
           className="max-w-full absolute top-0 left-0 bottom-0 bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog transition-[transform,opacity] flex duration-300"
           style={{
-            transform: transitionVisible ? 'translateX(0)' : 'translateX(-100%)',
+            transform: transitionVisible
+              ? 'translateX(0)'
+              : 'translateX(-100%)',
             opacity: transitionVisible ? 1 : 0,
             display: display ? undefined : 'none',
           }}
@@ -67,5 +78,5 @@ export const OffcanavasSidebar = ({ visible, onClose }: OffcanvasSidebarProps) =
         </ModalPanel>
       </div>
     </ModalRoot>
-  )
-}
+  );
+};
