@@ -47,7 +47,7 @@ import EditorTags from '~/components/EditorTags';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import FormattingToolbar from '~/components/layout/FormattingToolbar';
-import TextareaAutosize from '~/components/TextareaAutosize';
+import { TextareaAutosize } from '~/components/TextareaAutosize';
 import { Tooltip } from '~/components/Tooltip';
 
 export interface EditorProps {
@@ -133,11 +133,11 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     }
   }, [isDirty]);
 
-  const titleRef = useRef<HTMLDivElement>();
+  const titleRef = useRef<HTMLTextAreaElement>(null);
   const tagsRef = useRef<HTMLDivElement>();
   const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
   const editorElementRef = useRef<HTMLDivElement>();
-  const editorRef = useRef<PlateEditor | null>(null);
+  const editorRef = useRef<PlateEditor>(null);
 
   useEffect(() => {
     editorElementRef.current = document.querySelector(
@@ -314,7 +314,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 interface WithEditorStateProps {
   initialDocument: Document;
   debouncedUpdateBody: (editor: PlateEditor) => void;
-  titleRef: MutableRefObject<HTMLDivElement | undefined>;
+  titleRef: MutableRefObject<HTMLTextAreaElement | null>;
   editorRef: MutableRefObject<PlateEditor | null>;
   restoreSelectionForEditor: () => void;
 }
