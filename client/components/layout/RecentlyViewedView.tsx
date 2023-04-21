@@ -7,9 +7,9 @@ import { RecentlyViewedDocumentLink } from '~/lib/routes'
 import { Future, unwrapFuture } from '~/lib/monads'
 import { PartialDocument } from '~/lib/types'
 
-import BackButton from '~/components/BackButton'
+import { BackButton } from '~/components/BackButton'
 import { DocumentIndex } from '~/components/DocumentIndex'
-import LoadingView from '~/components/LoadingView'
+import { LoadingView } from '~/components/LoadingView'
 
 export const RecentlyViewedView = () => {
   const [{ width: viewWidth }, viewRef] = useElementSize()

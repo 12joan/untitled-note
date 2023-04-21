@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, ForwardedRef } from 'react'
 import * as ReactRouter from 'react-router-dom'
 
 export interface LinkProps extends ReactRouter.LinkProps {
@@ -6,8 +6,11 @@ export interface LinkProps extends ReactRouter.LinkProps {
   className?: string;
 }
 
-
-export const Link = forwardRef(({ nav = false, className: userClassName = '', ...otherProps }: LinkProps, ref) => {
+export const Link = forwardRef(({
+  nav = false,
+  className: userClassName = '',
+  ...otherProps
+}: LinkProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const className = `select-none ${userClassName}`
 
   if (nav) {

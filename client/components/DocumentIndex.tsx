@@ -15,7 +15,7 @@ export interface DocumentIndexProps extends Omit<ItemIndexProps, 'items' | 'card
 export const DocumentIndex = ({
   documents,
   linkComponent = DocumentLink,
-    ...otherProps
+  ...otherProps
 }: DocumentIndexProps) => {
   const itemForDocument = (doc: PartialDocument): Item => ({
     key: doc.id,

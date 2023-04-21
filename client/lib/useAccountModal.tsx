@@ -43,7 +43,8 @@ export interface AccountModalOpenProps {
 
 const AccountModal = ({
   initialSection = sectionKeys[0],
-  onClose
+  open,
+  onClose,
 }: AccountModalOpenProps & Omit<StyledModalProps, 'children'>) => {
   const [activeSectionKey, setActiveSectionKey] = useOverrideable(initialSection)
 

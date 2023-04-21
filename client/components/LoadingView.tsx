@@ -1,10 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, CSSProperties } from 'react'
 
 import { useContext } from '~/lib/context'
 import { useTimeout } from '~/lib/useTimer'
 
-const LoadingView = ({ style = {}, showImmediately = false, ...otherProps }) => {
-  const { topBarHeight = 0 } = useContext()
+export interface LoadingViewProps extends Record<string, any> {
+  style?: CSSProperties
+  showImmediately?: boolean
+}
+
+export const LoadingView = ({
+  style = {},
+  showImmediately = false,
+  ...otherProps
+}: LoadingViewProps) => {
+  const { topBarHeight = 0 } = useContext() as { topBarHeight?: number }
+
   const [showLoading, setShowLoading] = useState(showImmediately)
 
   useTimeout(() => !showImmediately && setShowLoading(true), 500)
@@ -36,5 +46,3 @@ const LoadingView = ({ style = {}, showImmediately = false, ...otherProps }) => 
     </div>
   )
 }
-
-export default LoadingView

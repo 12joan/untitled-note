@@ -18,7 +18,7 @@ import { fetchDocument } from '~/lib/apis/document'
 import { OverviewLink } from '~/lib/routes'
 import { PartialDocument, Document } from '~/lib/types'
 
-import LoadingView from '~/components/LoadingView'
+import { LoadingView } from '~/components/LoadingView'
 import Editor from '~/components/Editor'
 
 export interface EditorViewProps {

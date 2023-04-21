@@ -1,14 +1,21 @@
 import Compressor from 'compressorjs';
-import ProjectImageAPI from '~/lib/resources/ProjectImageAPI';
-import uploadFile from '~/lib/uploadFile';
+import { updateProjectImage } from '~/lib/apis/project';
+import { uploadFile } from '~/lib/uploadFile';
 
-const uploadProjectImage = async ({
+export interface UploadProjectImageOptions {
+  projectId: number;
+  file: File;
+  availableSpace: number;
+  showFileStorage: () => void;
+}
+
+export const uploadProjectImage = async ({
   projectId,
   file: originalFile,
   availableSpace,
   showFileStorage,
-}) => {
-  const compressedFile = await new Promise((resolve, reject) => {
+}: UploadProjectImageOptions) => {
+  const compressedFile: File | Blob = await new Promise((resolve, reject) => {
     // eslint-disable-next-line no-new
     new Compressor(originalFile, {
       mimeType: 'image/jpeg',
@@ -35,9 +42,7 @@ const uploadProjectImage = async ({
     file: compressedFile,
     role: 'project-image',
     withinTransaction: async (s3File) => {
-      const setImageResponse = await ProjectImageAPI(projectId).update({
-        image_id: s3File.id,
-      });
+      const setImageResponse = await updateProjectImage(projectId, s3File.id);
 
       if (!setImageResponse.ok) {
         // eslint-disable-next-line no-console
@@ -48,7 +53,6 @@ const uploadProjectImage = async ({
   });
 };
 
-const removeProjectImage = (projectId) =>
-  ProjectImageAPI(projectId).update({ image_id: null });
-
-export { uploadProjectImage, removeProjectImage };
+export const removeProjectImage = (projectId: number) => (
+  updateProjectImage(projectId, null)
+)

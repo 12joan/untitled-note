@@ -1,4 +1,4 @@
-const copyPath = (path) => {
+export const copyPath = (path: string) => {
   const url = `${window.location.origin}${path}`;
 
   if (window.location.protocol === 'http:') {
@@ -8,5 +8,3 @@ const copyPath = (path) => {
     navigator.clipboard.writeText(url);
   }
 };
-
-export default copyPath;

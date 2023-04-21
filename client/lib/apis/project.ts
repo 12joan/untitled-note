@@ -24,6 +24,13 @@ export const updateProject = (
   }).then((response) => response.json()) as Promise<Project>
 );
 
+export const deleteProject = (projectId: number) => (
+  fetchAPIEndpoint({
+    method: 'DELETE',
+    path: `/api/v1/projects/${projectId}`,
+  })
+);
+
 export const updateProjectOrder = (order: Project['id'][]) => (
   fetchAPIEndpoint({
     method: 'PUT',
@@ -32,9 +39,13 @@ export const updateProjectOrder = (order: Project['id'][]) => (
   })
 );
 
-export const deleteProject = (projectId: number) => (
+export const updateProjectImage = (
+  projectId: number,
+  fileId: number | null
+) => (
   fetchAPIEndpoint({
-    method: 'DELETE',
-    path: `/api/v1/projects/${projectId}`,
+    method: 'PUT',
+    path: `/api/v1/projects/${projectId}/image`,
+    data: { image_id: fileId },
   })
 );

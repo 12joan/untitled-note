@@ -7,12 +7,12 @@ import {
 import { handleDeleteFileError } from '~/lib/handleErrors'
 import { filesize } from '~/lib/filesize'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
-import { StorageQuotaUsage, File } from '~/lib/types'
+import { StorageQuotaUsage, S3File } from '~/lib/types'
 import { Future, sequenceFutures, unwrapFuture } from '~/lib/monads'
 
 import { Meter } from '~/components/Meter'
 import { Dropdown, DropdownItem } from '~/components/Dropdown'
-import LoadingView from '~/components/LoadingView'
+import { LoadingView } from '~/components/LoadingView'
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon'
 import DownloadIcon from '~/components/icons/DownloadIcon'
 import DeleteIcon from '~/components/icons/DeleteIcon'
@@ -20,7 +20,7 @@ import DeleteIcon from '~/components/icons/DeleteIcon'
 export const FileStorageSection = () => {
   const { futureQuotaUsage, futureFiles } = useContext() as {
     futureQuotaUsage: Future<StorageQuotaUsage>
-    futureFiles: Future<File[]>
+    futureFiles: Future<S3File[]>
   }
 
   const futureData = sequenceFutures({
@@ -28,11 +28,11 @@ export const FileStorageSection = () => {
     files: futureFiles,
   })
 
-  const deleteFile = (file: File) => handleDeleteFileError(
+  const deleteFile = (file: S3File) => handleDeleteFileError(
     deleteFileAPI(file.id),
   ).then(() => dispatchGlobalEvent('s3File:delete', { s3FileId: file.id }))
 
-  const fileMenu = (file: File) => (
+  const fileMenu = (file: S3File) => (
     <>
       <DropdownItem
         icon={DownloadIcon}

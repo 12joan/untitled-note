@@ -15,24 +15,40 @@ export const createBlankDocument = (
 
 export const fetchDocument = (
   projectId: number,
-  documentId: number
+  id: number
 ) => (
   fetchAPIEndpoint({
-    path: `/api/v1/projects/${projectId}/documents/${documentId}`,
+    path: `/api/v1/projects/${projectId}/documents/${id}`,
   }).then((response) => response.json()) as Promise<Document>
 );
 
-export interface StreamDocumentsOptions {
-  projectId: number;
-  params: Record<string, any>;
-  callback: (data: PartialDocument[]) => void;
-}
+export const updateDocument = (
+  projectId: number,
+  id: number,
+  document: Partial<Document>
+) => (
+  fetchAPIEndpoint({
+    method: 'PUT',
+    path: `/api/v1/projects/${projectId}/documents/${id}`,
+    data: { document },
+  }).then((response) => response.json()) as Promise<Document>
+);
 
-export const streamDocuments = ({
-  projectId,
-  params,
-  callback
-}: StreamDocumentsOptions) => streamAction(
+export const deleteDocument = (
+  projectId: number,
+  id: number
+) => (
+  fetchAPIEndpoint({
+    method: 'DELETE',
+    path: `/api/v1/projects/${projectId}/documents/${id}`,
+  }).then((response) => response.json()) as Promise<Document>
+);
+
+export const streamDocuments = (
+  projectId: number,
+  params: Record<string, any>,
+  callback: (documents: PartialDocument[]) => void
+) => streamAction(
   'Document',
   'index',
   {

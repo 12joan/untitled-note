@@ -31,6 +31,8 @@ export const streamAction = <T>(
       received(data) {
         callback(JSON.parse(data));
       },
+
+      unsubscribe() {},
     }
   );
 };

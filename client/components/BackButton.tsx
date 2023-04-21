@@ -1,13 +1,20 @@
 import React, { useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
+import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut'
 import { OverviewLink } from '~/lib/routes'
 
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon'
 
-const BackButton = ({ className: userClassName, ...otherProps }) => {
-  const linkRef = useRef()
+export interface BackButtonProps extends Record<string, any> {
+  className?: string
+}
+
+export const BackButton = ({
+  className: userClassName = '',
+  ...otherProps
+}: BackButtonProps) => {
+  const linkRef = useRef<any>()
 
   const { state } = useLocation()
   const { linkOriginator = undefined } = state || {}
@@ -31,8 +38,18 @@ const BackButton = ({ className: userClassName, ...otherProps }) => {
   })
 
   return linkOriginator
-    ? <button type="button" onClick={() => window.history.back()} {...linkProps} />
-    : <OverviewLink preventScrollReset={false} {...linkProps} />
+    ? (
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        {...linkProps}
+      />
+    )
+    : (
+      <OverviewLink
+        to={{}}
+        preventScrollReset={false}
+        {...linkProps}
+      />
+    )
 }
-
-export default BackButton

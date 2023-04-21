@@ -20,12 +20,12 @@ import {
 } from '~/lib/config'
 import { Project, PartialDocument, Tag } from '~/lib/types'
 
-import PopOutLink from '~/components/PopOutLink'
+import { PopOutLink } from '~/components/PopOutLink'
 import { DocumentIndex } from '~/components/DocumentIndex'
-import TagIndex from '~/components/TagIndex'
-import PinnedDragTarget from '~/components/PinnedDragTarget'
-import NoDocumentsView from '~/components/NoDocumentsView'
-import LoadingView from '~/components/LoadingView'
+import { TagIndex } from '~/components/TagIndex'
+import { PinnedDragTarget } from '~/components/PinnedDragTarget'
+import { NoDocumentsView } from '~/components/NoDocumentsView'
+import { LoadingView } from '~/components/LoadingView'
 
 export const OverviewView = () => {
   const [{ width: viewWidth }, viewRef] = useElementSize()
@@ -55,7 +55,7 @@ export const OverviewView = () => {
 
   return (
     <div ref={viewRef} className="grow flex flex-col gap-5">
-      <PopOutLink as={EditProjectLink} label="Edit project">
+      <PopOutLink as={EditProjectLink} asProps={{ to: {} }} label="Edit project">
         <h1 className="h1">
           {project.name}
         </h1>

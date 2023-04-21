@@ -1432,6 +1432,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/rails__actioncable@npm:^6.1.6":
+  version: 6.1.6
+  resolution: "@types/rails__actioncable@npm:6.1.6"
+  checksum: 314aa04c5586a03dcaca75003cf031fd5ef549dfb4d5211be46253e67b1841b59f601e4c839b26b3376b11bb6803720bdf6496f61e377bafb49edd924dd0be6b
+  languageName: node
+  linkType: hard
+
 "@types/react-beautiful-dnd@npm:^13.1.4":
   version: 13.1.4
   resolution: "@types/react-beautiful-dnd@npm:13.1.4"
@@ -5614,6 +5621,7 @@ __metadata:
     "@tailwindcss/typography": ^0.5.9
     "@tippyjs/react": ^4.2.6
     "@types/node": ^18.15.11
+    "@types/rails__actioncable": ^6.1.6
     "@types/react": ^18.0.35
     "@types/react-beautiful-dnd": ^13.1.4
     "@types/react-dom": ^18.0.11

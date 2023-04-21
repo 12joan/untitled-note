@@ -1,17 +1,32 @@
-import axios from 'axios';
-import S3FilesAPI from '~/lib/resources/S3FilesAPI';
+import axios, { AxiosProgressEvent } from 'axios';
+import { allocateFile, deleteFile } from '~/lib/apis/file';
+import { S3File } from '~/lib/types';
 
-const uploadFile = async ({
+export type UploadProgressEvent = AxiosProgressEvent;
+
+export interface UploadFileOptions {
+  projectId: number;
+  file: File | Blob;
+  role: S3File['role'];
+  withinTransaction?: (s3File: S3File) => Promise<void>;
+  abortSignal?: AbortSignal;
+  onUploadStart?: (s3File: S3File) => void;
+  onUploadProgress?: (event: UploadProgressEvent) => void;
+}
+
+export const uploadFile = async ({
   projectId,
   file,
   role,
-  withinTransaction = () => {},
-  abortSignal = null,
+  withinTransaction = () => Promise.resolve(),
+  abortSignal,
   onUploadStart = () => {},
   onUploadProgress = () => {},
-}) => {
-  const { presigned_post: presignedPost, ...s3File } = await S3FilesAPI.create({
-    project_id: projectId,
+}: UploadFileOptions) => {
+  const {
+    presigned_post: presignedPost,
+    ...s3File
+  } = await allocateFile(projectId, {
     role,
     filename: file.name,
     size: file.size,
@@ -44,7 +59,7 @@ const uploadFile = async ({
 
     return s3File;
   } catch (error) {
-    S3FilesAPI.destroy(s3File).catch((destroyError) => {
+    deleteFile(s3File.id).catch((destroyError) => {
       // eslint-disable-next-line no-console
       console.error('Failed to destroy file after upload error');
       // eslint-disable-next-line no-console
@@ -54,5 +69,3 @@ const uploadFile = async ({
     throw error;
   }
 };
-
-export default uploadFile;

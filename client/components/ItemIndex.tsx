@@ -2,7 +2,7 @@ import React, { useMemo, ComponentType, ReactNode, MouseEvent } from 'react'
 
 import { DragData, handleDragStartWithData } from '~/lib/dragData'
 
-import PopOutLink from '~/components/PopOutLink'
+import { PopOutLink } from '~/components/PopOutLink'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 
 export type Item = {
@@ -55,7 +55,14 @@ export const ItemIndex = ({
     )
 
     return showAllLink
-      ? <PopOutLink as={showAllLink} label="Show all" children={heading} />
+      ? (
+        <PopOutLink
+          as={showAllLink}
+          asProps={{ to: {} }}
+          label="Show all"
+          children={heading}
+        />
+      )
       : heading
   })()
 

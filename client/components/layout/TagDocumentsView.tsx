@@ -9,12 +9,12 @@ import { streamDocuments } from '~/lib/apis/document'
 import { mapFuture, unwrapFuture, Future } from '~/lib/monads'
 import { Tag, PartialDocument } from '~/lib/types'
 
-import BackButton from '~/components/BackButton'
+import { BackButton } from '~/components/BackButton'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { Dropdown } from '~/components/Dropdown'
-import TagMenu from '~/components/TagMenu'
+import { TagMenu } from '~/components/TagMenu'
 import { DocumentIndex } from '~/components/DocumentIndex'
-import LoadingView from '~/components/LoadingView'
+import { LoadingView } from '~/components/LoadingView'
 import CaretDownIcon from '~/components/icons/CaretDownIcon'
 
 export interface TagDocumentsViewProps {
@@ -35,11 +35,11 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
   )
 
   const futureDocuments: Future<PartialDocument[]> = mapFuture(
-    useStream<PartialDocument[]>((callback) => streamDocuments({
-      projectId,
-      params: { tag_id: tagId },
-      callback
-    }), [tagId]),
+    useStream<PartialDocument[]>((resolve) => (
+      streamDocuments(projectId, {
+        tag_id: tagId
+      }, resolve)
+    ), [tagId]),
     (documents) => documents.filter(doc => !doc.blank)
   )
 
@@ -70,7 +70,7 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
             </h1>
           ),
           resolved: (tag) => (
-            <Dropdown items={<TagMenu tag={tag} />} placement="bottom-start">
+            <Dropdown items={<TagMenu tag={tag!} />} placement="bottom-start">
               <button type="button" className="btn btn-link-subtle text-left flex items-center">
                 <h1 className="h1">Tag: {tag!.text}</h1>
 

@@ -58,7 +58,7 @@ export type Tag = {
   updated_at: string;
 };
 
-export type File = {
+export type S3File = {
   id: number;
   role: 'project-image' | 'attachment';
   filename: string;

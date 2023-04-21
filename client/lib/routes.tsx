@@ -1,12 +1,14 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect, useMemo, ReactNode, ForwardedRef } from 'react'
 import { Routes, Navigate, useRoutes } from 'react-router-dom'
 
 import { useContext } from '~/lib/context'
 import { getLastView } from '~/lib/restoreProjectView'
+import { Project } from '~/lib/types'
+import { removeProjectFromHistory } from '~/lib/projectHistory'
 
 import { forwardParams } from '~/lib/forwardParams'
 import { AwaitRedirect } from '~/components/AwaitRedirect'
-import StreamProjectData from '~/components/StreamProjectData'
+import { StreamProjectData } from '~/components/StreamProjectData'
 import { ProjectView } from '~/components/layout/ProjectView'
 import { RestoreLastOpenProject } from '~/components/RestoreLastOpenProject'
 import { Link, LinkProps } from '~/components/Link'
@@ -25,11 +27,21 @@ export const ApplicationRoutes = () => {
     },
     {
       path: '/projects/:projectId/*',
-      element: forwardParams(({ projectId }: { projectId: string }) => (
-        <StreamProjectData projectId={parseInt(projectId)}>
-          <ProjectRoutes projectId={projectId} />
-        </StreamProjectData>
-      )),
+      element: forwardParams(({
+        projectId: rawProjectId,
+      }: { projectId: string }) => {
+        const projectId = parseInt(rawProjectId, 10)
+
+        return (
+          <WithProject projectId={projectId}>
+            {(project) => (
+              <StreamProjectData project={project}>
+                <ProjectRoutes project={project} />
+              </StreamProjectData>
+            )}
+          </WithProject>
+        )
+      }),
     },
     {
       path: '*',
@@ -40,7 +52,43 @@ export const ApplicationRoutes = () => {
   return routesComponent
 }
 
-const ProjectRoutes = ({ projectId }: { projectId: string }) => {
+interface WithProject {
+  projectId: number
+  children: (project: Project) => JSX.Element
+}
+
+const WithProject = ({
+  projectId,
+  children,
+}: WithProject): JSX.Element => {
+  const { projects } = useContext() as {
+    projects: Project[]
+  }
+
+  const project = useMemo(() => (
+    projects.find(project => project.id === projectId)
+  ), [projects, projectId])
+
+  return project
+    ? children(project)
+    : <ProjectDoesNotExist projectId={projectId} />
+}
+
+const ProjectDoesNotExist = ({ projectId }: { projectId: number }) => {
+  useEffect(() => {
+    removeProjectFromHistory(projectId)
+  }, [projectId])
+
+  return <Navigate to="/" replace />
+}
+
+interface ProjectRoutesProps {
+  project: Project
+}
+
+const ProjectRoutes = ({
+  project,
+}: ProjectRoutesProps) => {
   const routesComponent = useRoutes([
     {
       path: 'await_redirect',
@@ -87,7 +135,7 @@ const ProjectRoutes = ({ projectId }: { projectId: string }) => {
     {
       path: '*',
       element: forwardParams(() => (
-        <Navigate to={`/projects/${projectId}/overview`} replace />
+        <Navigate to={`/projects/${project.id}/overview`} replace />
       )),
     },
   ])
@@ -107,7 +155,7 @@ const createLinkComponent = <
   getPath: (options: T) => string
 ) => forwardRef(
   ({ to, ...otherProps }: RouteLinkProps<T>,
-  ref
+  ref: ForwardedRef<HTMLAnchorElement>
 ) => {
   const {
     projectId: currentProject,

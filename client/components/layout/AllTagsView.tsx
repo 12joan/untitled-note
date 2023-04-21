@@ -6,9 +6,9 @@ import { useContext, ContextProvider } from '~/lib/context'
 import { Tag } from '~/lib/types'
 import { Future, unwrapFuture } from '~/lib/monads'
 
-import BackButton from '~/components/BackButton'
-import TagIndex from '~/components/TagIndex'
-import LoadingView from '~/components/LoadingView'
+import { BackButton } from '~/components/BackButton'
+import { TagIndex } from '~/components/TagIndex'
+import { LoadingView } from '~/components/LoadingView'
 
 export const AllTagsView = () => {
   const [{ width: viewWidth }, viewRef] = useElementSize()

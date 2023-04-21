@@ -1,11 +1,11 @@
-import React, { useRef, ReactNode, ElementType, ElementType } from 'react'
+import React, { useRef, ReactNode, ElementType, MouseEvent } from 'react'
 import { followCursor } from 'tippy.js'
 
-import useEventListener from '~/lib/useEventListener'
+import { useEventListener } from '~/lib/useEventListener'
 import { useContext, ContextProvider } from '~/lib/context'
 import { IconProps } from '~/components/icons/makeIcon'
 
-import { Tippy, TippyProps } from '~/components/Tippy'
+import { Tippy, TippyProps, TippyInstance } from '~/components/Tippy'
 
 export interface DropdownProps extends TippyProps {
   items: ReactNode;
@@ -17,15 +17,13 @@ export const Dropdown = ({
   className: userClassName = '',
   ...otherProps
 }: DropdownProps) => {
-  const tippyRef = useRef()
-  const getTippy = () => tippyRef.current._tippy
-  const isVisible = () => getTippy().state.isVisible
-  const close = () => getTippy().hide()
+  const tippyRef = useRef<TippyInstance>(null)
+  const close = () => tippyRef.current?.hide()
 
   const className = `rounded-lg backdrop-blur-lg shadow-lg w-auto max-w-full ${userClassName}`
 
-  useEventListener(window, 'keydown', event => {
-    if (event.key === 'Escape' && isVisible()) {
+  useEventListener(window, 'keydown', (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && tippyRef.current?.state?.isVisible) {
       close()
     }
   })
@@ -66,7 +64,9 @@ export const DropdownItem = ({
   children,
   ...otherProps
 }: DropdownItemProps) => {
-  const { closeDropdown } = useContext()
+  const { closeDropdown } = useContext() as {
+    closeDropdown: () => void;
+  }
 
   const buttonProps = Component === 'button'
     ? { type: 'button' }
@@ -76,7 +76,7 @@ export const DropdownItem = ({
     <Component
       {...buttonProps}
       className={`block w-full text-left p-3 pr-5 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
-      onClick={event => {
+      onClick={(event: MouseEvent) => {
         closeDropdown()
         onClick(event)
       }}
@@ -100,7 +100,7 @@ export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
       followCursor="initial"
       trigger="contextmenu"
       placement="bottom-start"
-      offset={0}
+      offset={[0, 0]}
       {...dropdownProps}
     />
   )

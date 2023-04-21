@@ -1,7 +1,10 @@
 import { useRef } from 'react';
-import useEffectAfterFirst from '~/lib/useEffectAfterFirst';
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 
-const useValueChanged = (value, onChange) => {
+export const useValueChanged = <T>(
+  value: T,
+  onChange: (previousValue: T, value: T) => void
+) => {
   const previousValue = useRef(value);
 
   useEffectAfterFirst(() => {
@@ -9,5 +12,3 @@ const useValueChanged = (value, onChange) => {
     previousValue.current = value;
   }, [value]);
 };
-
-export default useValueChanged;

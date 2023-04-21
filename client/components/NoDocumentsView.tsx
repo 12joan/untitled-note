@@ -1,10 +1,10 @@
 import React from 'react'
 
-import useNewDocument from '~/lib/useNewDocument'
+import { useNewDocument } from '~/lib/useNewDocument'
 
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 
-const NoDocumentsView = () => {
+export const NoDocumentsView = () => {
   const createNewDocument = useNewDocument()
 
   return (
@@ -16,7 +16,7 @@ const NoDocumentsView = () => {
       <button
         type="button"
         className="btn btn-rect btn-primary ring-offset-slate-100 dark:ring-offset-slate-800 flex gap-2 items-center"
-        onClick={createNewDocument}
+        onClick={() => createNewDocument()}
       >
         <NewDocumentIcon size="1.25em" noAriaLabel />
 
@@ -25,5 +25,3 @@ const NoDocumentsView = () => {
     </div>
   )
 }
-
-export default NoDocumentsView

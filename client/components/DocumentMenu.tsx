@@ -1,13 +1,16 @@
 import React from 'react'
 
 import { useContext } from '~/lib/context'
-import copyPath from '~/lib/copyPath'
+import { copyPath } from '~/lib/copyPath'
 import { DocumentLink, documentPath } from '~/lib/routes'
 import { toggleDocumentPinned } from '~/lib/transformDocument'
-import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import {
+  updateDocument as updateDocumentAPI,
+  deleteDocument as deleteDocumentAPI,
+} from '~/lib/apis/document'
 import { dispatchGlobalEvent } from '~/lib/globalEvents'
 import { handleUpdateDocumentError, handleDeleteDocumentError } from '~/lib/handleErrors'
-import useReplaceModal from '~/lib/useReplaceModal'
+import { useReplaceModal } from '~/lib/useReplaceModal'
 import { TAB_OR_WINDOW } from '~/lib/environment'
 import { PartialDocument, Document } from '~/lib/types'
 
@@ -34,20 +37,29 @@ export const DocumentMenu = ({
   openFind = undefined,
   showReplace = false,
 }: DocumentMenuProps) => {
-  const { projectId } = useContext()
-  const api = DocumentsAPI(projectId)
+  const { projectId } = useContext() as { projectId: number }
 
-  const updateDocument = updateDocumentOverride || (delta => handleUpdateDocumentError(api.update({ id: doc.id, ...delta })))
+  const updateDocument = updateDocumentOverride || ((delta) => {
+    handleUpdateDocumentError(
+      updateDocumentAPI(projectId, doc.id, delta)
+    )
+  })
 
-  const copyLink = () => copyPath(documentPath(projectId, doc.id))
+  const copyLink = () => copyPath(documentPath({ projectId: projectId, documentId: doc.id }))
 
   const isPinned = doc.pinned_at !== null
   const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { invalidateEditor }))
 
-  const [replaceModal, openReplaceModal] = useReplaceModal()
+  const {
+    modal: replaceModal,
+    open: openReplaceModal,
+  } = useReplaceModal({ documentId: doc.id })
 
   const deleteDocument = () => {
-    handleDeleteDocumentError(api.destroy(doc))
+    handleDeleteDocumentError(
+      deleteDocumentAPI(projectId, doc.id)
+    )
+
     dispatchGlobalEvent('document:delete', { documentId: doc.id })
   }
 
@@ -72,7 +84,7 @@ export const DocumentMenu = ({
       )}
 
       {showReplace && (
-        <DropdownItem icon={ReplaceIcon} onClick={() => openReplaceModal({ documentId: doc.id })}>
+        <DropdownItem icon={ReplaceIcon} onClick={openReplaceModal}>
           Replace in document
         </DropdownItem>
       )}

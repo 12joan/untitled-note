@@ -1,19 +1,25 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { useContext } from '~/lib/context'
 import { useDragTarget } from '~/lib/dragData'
 import { pinDocument } from '~/lib/transformDocument'
-import DocumentsAPI from '~/lib/resources/DocumentsAPI'
+import { updateDocument } from '~/lib/apis/document'
 
-const PinnedDragTarget = ({ children, indicatorClassName = '' }) => {
-  const { projectId } = useContext()
+export interface PinnedDragTargetProps {
+  indicatorClassName?: string
+  children: ReactNode
+}
+
+export const PinnedDragTarget = ({
+  indicatorClassName = '',
+  children,
+}: PinnedDragTargetProps) => {
+  const { projectId } = useContext() as { projectId: number }
 
   const pinnedDragTargetProps = useDragTarget({
-    acceptTypes: ['document'],
+    type: 'document',
     predicate: ({ pinned_at }) => !pinned_at,
-    onDrop: (event, doc) => {
-      DocumentsAPI(projectId).update(pinDocument(doc))
-    },
+    onDrop: (doc) => updateDocument(projectId, doc.id, pinDocument(doc)),
   })
 
   return (
@@ -29,5 +35,3 @@ const PinnedDragTarget = ({ children, indicatorClassName = '' }) => {
     </div>
   )
 }
-
-export default PinnedDragTarget

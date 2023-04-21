@@ -4,7 +4,7 @@ import { useContext } from '~/lib/context'
 import { useTitle } from '~/lib/useTitle'
 import { Project } from '~/lib/types'
 
-import BackButton from '~/components/BackButton'
+import { BackButton } from '~/components/BackButton'
 import { EditProjectName } from '~/components/EditProjectName'
 import { EditProjectIcon } from '~/components/EditProjectIcon'
 import { ProjectActions } from '~/components/ProjectActions'

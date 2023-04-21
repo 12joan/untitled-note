@@ -1,4 +1,4 @@
-export type ClassNamesObject = Record<string, string | undefined>;
+export type ClassNamesObject = Record<string, string | undefined | null>;
 
 export type GroupedClassNames =
   | ClassNamesObject

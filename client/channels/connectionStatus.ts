@@ -1,13 +1,18 @@
 import { useRef, useState } from 'react';
 import { dispatchGlobalEvent, useGlobalEvent } from '~/lib/globalEvents';
 
-const CONNECTION_STATUS_CONNECTING = 'connecting';
-const CONNECTION_STATUS_CONNECTED = 'connected';
-const CONNECTION_STATUS_DISCONNECTED = 'disconnected';
+export const CONNECTION_STATUS_CONNECTING = 'connecting';
+export const CONNECTION_STATUS_CONNECTED = 'connected';
+export const CONNECTION_STATUS_DISCONNECTED = 'disconnected';
 
-let connectionStatus = CONNECTION_STATUS_CONNECTING;
+export type ConnectionStatus =
+  | typeof CONNECTION_STATUS_CONNECTING
+  | typeof CONNECTION_STATUS_CONNECTED
+  | typeof CONNECTION_STATUS_DISCONNECTED;
 
-const handleSubscriptionStatusChanged = (subscriptionConnected) => {
+let connectionStatus: ConnectionStatus = CONNECTION_STATUS_CONNECTING;
+
+export const handleSubscriptionStatusChanged = (subscriptionConnected: boolean) => {
   const newStatus = subscriptionConnected
     ? CONNECTION_STATUS_CONNECTED
     : CONNECTION_STATUS_DISCONNECTED;
@@ -18,33 +23,33 @@ const handleSubscriptionStatusChanged = (subscriptionConnected) => {
   }
 };
 
-const useConnectionStatus = () => {
+export const useConnectionStatus = () => {
   const [status, setStatus] = useState(connectionStatus);
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useGlobalEvent('connectionStatusChanged', (newStatus) => {
     if (newStatus === CONNECTION_STATUS_CONNECTED) {
-      clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+
       setStatus(newStatus);
     } else {
-      timeoutRef.current = setTimeout(() => setStatus(newStatus), 1000);
+      timeoutRef.current = setTimeout(() => {
+        setStatus(newStatus);
+        timeoutRef.current = null;
+      }, 1000);
     }
   });
 
   return status;
 };
 
-const useConnected = () =>
-  useConnectionStatus() === CONNECTION_STATUS_CONNECTED;
-const useDisconnected = () =>
-  useConnectionStatus() === CONNECTION_STATUS_DISCONNECTED;
+export const useConnected = () => (
+  useConnectionStatus() === CONNECTION_STATUS_CONNECTED
+);
 
-export {
-  CONNECTION_STATUS_CONNECTING,
-  CONNECTION_STATUS_CONNECTED,
-  CONNECTION_STATUS_DISCONNECTED,
-  handleSubscriptionStatusChanged,
-  useConnectionStatus,
-  useConnected,
-  useDisconnected,
-};
+export const useDisconnected = () => (
+  useConnectionStatus() === CONNECTION_STATUS_DISCONNECTED
+);

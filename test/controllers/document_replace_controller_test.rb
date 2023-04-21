@@ -33,5 +33,6 @@ class DocumentReplaceControllerTest < ActionDispatch::IntegrationTest
 
     parsed_response = JSON.parse(response.body)
     assert_equal 13, parsed_response['occurrences']
+    assert_equal 1, parsed_response['documents']
   end
 end

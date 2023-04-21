@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Dialog } from '@headlessui/react'
 
 import { ContextProvider } from '~/lib/context'
+import { groupedClassNames, GroupedClassNames } from '~/lib/groupedClassNames'
 
-import WithCloseButton from '~/components/WithCloseButton'
+import { WithCloseButton } from '~/components/WithCloseButton'
 
-export const ModalRoot = ({ open, onClose, className: userClassName = '', ...otherProps }) => {
+export interface ModalRootProps extends Record<string, any> {
+  open: boolean
+  onClose: () => void
+  className?: string
+  children: ReactNode
+}
+
+export const ModalRoot = ({
+  open,
+  onClose,
+  className:
+  userClassName = '',
+  ...otherProps
+}: ModalRootProps) => {
   const className = `${userClassName} modal-root relative z-30 ${open ? '' : 'pointer-events-none'}`
 
   return (
@@ -22,7 +36,11 @@ export const ModalRoot = ({ open, onClose, className: userClassName = '', ...oth
   )
 }
 
-export const ModalTitle = ({ children }) => {
+export interface ModalTitleProps {
+  children: ReactNode
+}
+
+export const ModalTitle = ({ children }: ModalTitleProps) => {
   return (
     <Dialog.Title
       className="text-xl font-medium select-none"
@@ -31,17 +49,24 @@ export const ModalTitle = ({ children }) => {
   )
 }
 
-export const ModalTitleWithCloseButton = ({ onClose, children }) => {
+export interface ModalTitleWithCloseButtonProps extends ModalTitleProps {
+  onClose: () => void
+}
+
+export const ModalTitleWithCloseButton = ({
+  onClose,
+  ...otherProps
+}: ModalTitleWithCloseButtonProps) => {
   return (
     <WithCloseButton onClose={onClose}>
-      <ModalTitle children={children} />
+      <ModalTitle {...otherProps} />
     </WithCloseButton>
   )
 }
 
 export const ModalPanel = Dialog.Panel
 
-export export interface StyledModalProps {
+export interface StyledModalProps {
   open: boolean;
   onClose: () => void;
   customBackdropClassNames?: GroupedClassNames;
@@ -55,7 +80,7 @@ export const StyledModal = ({
   customBackdropClassNames,
   customPanelClassNames,
   children,
-}: ModalProps) => {
+}: StyledModalProps) => {
   const backdropClassName = groupedClassNames({
     position: 'fixed inset-0',
     display: 'flex',

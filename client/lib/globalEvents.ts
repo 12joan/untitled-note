@@ -5,10 +5,10 @@ type EventListeners = Set<EventListener>;
 
 const eventListeners = new Map<string, EventListeners>();
 
-const useGlobalEvent = (
+export const useGlobalEvent = (
   eventName: string,
   handler: EventListener,
-  deps: DependencyList,
+  deps?: DependencyList,
 ) => {
   useEffect(() => {
     if (!eventListeners.has(eventName)) {
@@ -24,7 +24,7 @@ const useGlobalEvent = (
   }, deps);
 };
 
-const dispatchGlobalEvent = (eventName: string, ...args: any[]) => {
+export const dispatchGlobalEvent = (eventName: string, ...args: any[]) => {
   const listeners = eventListeners.get(eventName);
 
   if (listeners) {
@@ -32,5 +32,3 @@ const dispatchGlobalEvent = (eventName: string, ...args: any[]) => {
     [...listeners].forEach((listener) => listener(...args));
   }
 };
-
-export { useGlobalEvent, dispatchGlobalEvent };

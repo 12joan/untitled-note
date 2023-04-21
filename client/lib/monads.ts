@@ -64,6 +64,14 @@ export const bindFuture = <T, R>(
   resolved: (data) => f(data),
 });
 
+export const thenFuture = <T>(
+  future: Future<T>,
+  f: (data: T) => void
+) => unwrapFuture(future, {
+  pending: undefined,
+  resolved: f,
+});
+
 export const sequenceFutures = <T extends { [key: string]: any }>(
   futures: { [K in keyof T]: Future<T[K]> }
 ): Future<T> => (

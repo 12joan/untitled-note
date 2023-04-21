@@ -17,17 +17,15 @@ import {
 } from '~/lib/config'
 import { PartialDocument, Tag } from '~/lib/types'
 import { Future, mapFuture, orDefaultFuture } from '~/lib/monads'
-import { IconProps } from '~/components/icons/makeIcon'
 
-import PinnedDragTarget from '~/components/PinnedDragTarget'
+import { PinnedDragTarget } from '~/components/PinnedDragTarget'
 import { InlinePlaceholder } from '~/components/Placeholder'
 import { ContextMenuDropdown } from '~/components/Dropdown'
 import { DocumentMenu } from '~/components/DocumentMenu'
-import TagMenu from '~/components/TagMenu'
+import { TagMenu } from '~/components/TagMenu'
 import OverviewIcon from '~/components/icons/OverviewIcon'
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
 import SearchIcon from '~/components/icons/SearchIcon'
-import SettingsIcon from '~/components/icons/SettingsIcon'
 
 export interface SidebarProps {
   onButtonClick?: () => void
