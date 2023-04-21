@@ -46,7 +46,7 @@ import { Dropdown } from '~/components/Dropdown';
 import EditorTags from '~/components/EditorTags';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
-import FormattingToolbar from '~/components/layout/FormattingToolbar';
+import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
 import { TextareaAutosize } from '~/components/TextareaAutosize';
 import { Tooltip } from '~/components/Tooltip';
 

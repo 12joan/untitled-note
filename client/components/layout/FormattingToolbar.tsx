@@ -20,13 +20,13 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_UL,
   ELEMENT_OL,
-  ELEMENT_LI,
+  PlateEditor,
 } from '@udecode/plate-headless'
 
-import useKeyboardShortcut from '~/lib/useKeyboardShortcut'
+import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut'
 import { isLinkInSelection, useToggleLink } from '~/lib/editor/links'
 
-import Tooltip from '~/components/Tooltip'
+import { Tooltip } from '~/components/Tooltip'
 import BoldIcon from '~/components/icons/formatting/BoldIcon'
 import ItalicIcon from '~/components/icons/formatting/ItalicIcon'
 import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon'
@@ -40,10 +40,14 @@ import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon'
 import IndentIcon from '~/components/icons/formatting/IndentIcon'
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon'
 
-const FormattingToolbar = ({ editor }) => {
+export interface FormattingToolbarProps {
+  editor: PlateEditor;
+}
+
+export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
   const toggleLink = useToggleLink(editor)
 
-  const toggleElementProps = element => {
+  const toggleElementProps = (element: string) => {
     const pluginType = getPluginType(editor, element)
 
     return {
@@ -52,7 +56,7 @@ const FormattingToolbar = ({ editor }) => {
     }
   }
 
-  const toggleMarkProps = mark => {
+  const toggleMarkProps = (mark: string) => {
     const pluginType = getPluginType(editor, mark)
 
     return {
@@ -61,7 +65,7 @@ const FormattingToolbar = ({ editor }) => {
     }
   }
 
-  const toggleListProps = listType => {
+  const toggleListProps = (listType: string) => {
     const pluginType = getPluginType(editor, listType)
 
     return {
@@ -82,7 +86,7 @@ const FormattingToolbar = ({ editor }) => {
   // Meta+K toggles link only if there is a selection;
   // otherwise it opens the search modal
   useKeyboardShortcut(
-    () => document.querySelector('[data-slate-editor]'),
+    () => document.querySelector('[data-slate-editor]')!,
     ['MetaShiftU', 'MetaK'],
     (event, key) => {
       const hasSelection = getSelectionText(editor).length > 0
@@ -137,5 +141,3 @@ const FormattingToolbar = ({ editor }) => {
     </div>
   )
 }
-
-export default FormattingToolbar
