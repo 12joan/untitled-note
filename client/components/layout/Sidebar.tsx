@@ -1,60 +1,66 @@
-import React, { forwardRef, ElementType, ReactNode, MouseEvent } from 'react'
-
-import { useContext, ContextProvider } from '~/lib/context'
+import React, { ElementType, forwardRef, MouseEvent, ReactNode } from 'react';
+import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
+import { ContextProvider, useContext } from '~/lib/context';
+import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
+import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
 import {
-  OverviewLink,
   DocumentLink,
+  OverviewLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
-  TagsLink,
   TagLink,
-} from '~/lib/routes'
-import { makeDocumentDragData, handleDragStartWithData } from '~/lib/dragData'
-import { useNewDocument } from '~/lib/useNewDocument'
-import {
-  TOP_N_RECENTLY_VIEWED_DOCUMENTS,
-  TOP_N_TAGS,
-} from '~/lib/config'
-import { PartialDocument, Tag } from '~/lib/types'
-import { Future, mapFuture, orDefaultFuture } from '~/lib/monads'
-
-import { PinnedDragTarget } from '~/components/PinnedDragTarget'
-import { InlinePlaceholder } from '~/components/Placeholder'
-import { ContextMenuDropdown } from '~/components/Dropdown'
-import { DocumentMenu } from '~/components/DocumentMenu'
-import { TagMenu } from '~/components/TagMenu'
-import OverviewIcon from '~/components/icons/OverviewIcon'
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
-import SearchIcon from '~/components/icons/SearchIcon'
+  TagsLink,
+} from '~/lib/routes';
+import { PartialDocument, Tag } from '~/lib/types';
+import { useNewDocument } from '~/lib/useNewDocument';
+import { DocumentMenu } from '~/components/DocumentMenu';
+import { ContextMenuDropdown } from '~/components/Dropdown';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
+import OverviewIcon from '~/components/icons/OverviewIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import { PinnedDragTarget } from '~/components/PinnedDragTarget';
+import { InlinePlaceholder } from '~/components/Placeholder';
+import { TagMenu } from '~/components/TagMenu';
 
 export interface SidebarProps {
-  onButtonClick?: () => void
+  onButtonClick?: () => void;
 }
 
-export const Sidebar = ({
-  onButtonClick = () => {}
-}: SidebarProps) => {
+export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
   const {
     futurePinnedDocuments,
     futureRecentlyViewedDocuments,
     futureTags,
     showSearchModal,
   } = useContext() as {
-    futurePinnedDocuments: Future<PartialDocument[]>
-    futureRecentlyViewedDocuments: Future<PartialDocument[]>
-    futureTags: Future<Tag[]>
-    showSearchModal: () => void
-  }
+    futurePinnedDocuments: Future<PartialDocument[]>;
+    futureRecentlyViewedDocuments: Future<PartialDocument[]>;
+    futureTags: Future<Tag[]>;
+    showSearchModal: () => void;
+  };
 
-  const createNewDocument = useNewDocument()
+  const createNewDocument = useNewDocument();
 
   return (
     <ContextProvider onButtonClick={onButtonClick}>
       <div className="w-48 lg:w-56 space-y-5 pb-3">
         <section className="-ml-3">
-          <ButtonWithIcon as={OverviewLink} nav icon={OverviewIcon} label="Overview" />
-          <ButtonWithIcon icon={NewDocumentIcon} label="New document" onClick={() => createNewDocument()} />
-          <ButtonWithIcon icon={SearchIcon} label="Search" onClick={showSearchModal} />
+          <ButtonWithIcon
+            as={OverviewLink}
+            nav
+            icon={OverviewIcon}
+            label="Overview"
+          />
+          <ButtonWithIcon
+            icon={NewDocumentIcon}
+            label="New document"
+            onClick={() => createNewDocument()}
+          />
+          <ButtonWithIcon
+            icon={SearchIcon}
+            label="Search"
+            onClick={showSearchModal}
+          />
         </section>
 
         <PinnedDragTarget indicatorClassName="right-0">
@@ -68,46 +74,48 @@ export const Sidebar = ({
           as={RecentlyViewedDocumentLink}
           heading="Recently viewed"
           headingLink={RecentlyViewedLink}
-          futureDocuments={mapFuture(
-            futureRecentlyViewedDocuments,
-            (docs) => docs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS)
+          futureDocuments={mapFuture(futureRecentlyViewedDocuments, (docs) =>
+            docs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS)
           )}
         />
 
         <FutureTagsSection
           heading="Tags"
           headingLink={TagsLink}
-          futureTags={mapFuture(
-            futureTags,
-            (tags) => tags.slice(0, TOP_N_TAGS)
+          futureTags={mapFuture(futureTags, (tags) =>
+            tags.slice(0, TOP_N_TAGS)
           )}
         />
       </div>
     </ContextProvider>
-  )
-}
+  );
+};
 
 const useOnButtonClick = () => {
   const { onButtonClick } = useContext() as {
-    onButtonClick: () => void
-  }
+    onButtonClick: () => void;
+  };
 
-  return onButtonClick
-}
+  return onButtonClick;
+};
 
-interface FutureDocumentsSectionProps extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
+interface FutureDocumentsSectionProps
+  extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
   as?: ElementType;
   futureDocuments: Future<PartialDocument[]>;
 }
 
 const FutureDocumentsSection = ({
   as = DocumentLink,
-    futureDocuments,
+  futureDocuments,
   ...otherProps
 }: FutureDocumentsSectionProps) => {
   const buttonForDocument = (doc: PartialDocument) => (
     <div key={doc.id}>
-      <ContextMenuDropdown items={<DocumentMenu document={doc} />} appendTo={document.body}>
+      <ContextMenuDropdown
+        items={<DocumentMenu document={doc} />}
+        appendTo={document.body}
+      >
         <Button
           as={as}
           documentId={doc.id}
@@ -118,20 +126,20 @@ const FutureDocumentsSection = ({
         />
       </ContextMenuDropdown>
     </div>
-  )
+  );
 
   return (
     <FutureSectionWithHeading
-      futureChildren={mapFuture(
-        futureDocuments,
-        (documents) => documents.map(buttonForDocument)
+      futureChildren={mapFuture(futureDocuments, (documents) =>
+        documents.map(buttonForDocument)
       )}
       {...otherProps}
     />
-  )
-}
+  );
+};
 
-interface FutureTagsSectionProps extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
+interface FutureTagsSectionProps
+  extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
   futureTags: Future<Tag[]>;
 }
 
@@ -141,7 +149,10 @@ const FutureTagsSection = ({
 }: FutureTagsSectionProps) => {
   const buttonForTag = (tag: Tag) => (
     <div key={tag.id}>
-      <ContextMenuDropdown items={<TagMenu tag={tag} />} appendTo={document.body}>
+      <ContextMenuDropdown
+        items={<TagMenu tag={tag} />}
+        appendTo={document.body}
+      >
         <Button
           as={TagLink}
           tagId={tag.id}
@@ -151,20 +162,18 @@ const FutureTagsSection = ({
         />
       </ContextMenuDropdown>
     </div>
-  )
+  );
 
   return (
     <FutureSectionWithHeading
-      futureChildren={mapFuture(
-        futureTags,
-        (tags) => tags.map(buttonForTag)
-      )}
+      futureChildren={mapFuture(futureTags, (tags) => tags.map(buttonForTag))}
       {...otherProps}
     />
-  )
-}
+  );
+};
 
-interface FutureSectionWithHeadingProps extends Omit<SectionWithHeadingProps, 'children'> {
+interface FutureSectionWithHeadingProps
+  extends Omit<SectionWithHeadingProps, 'children'> {
   futureChildren: Future<ReactNode>;
 }
 
@@ -175,19 +184,14 @@ const FutureSectionWithHeading = ({
   const children = orDefaultFuture(
     futureChildren,
     <InlinePlaceholder length="100%" />
-  )
+  );
 
   if (Array.isArray(children) && children.length === 0) {
-    return null
+    return null;
   }
 
-  return (
-    <SectionWithHeading
-      children={children}
-      {...otherProps}
-    />
-  )
-}
+  return <SectionWithHeading children={children} {...otherProps} />;
+};
 
 interface SectionWithHeadingProps {
   heading: string;
@@ -200,17 +204,17 @@ const SectionWithHeading = ({
   headingLink: HeadingLink,
   children,
 }: SectionWithHeadingProps) => {
-  const onButtonClick = useOnButtonClick()
+  const onButtonClick = useOnButtonClick();
 
-  const headingComponent = HeadingLink
-    ? (
-      <HeadingLink
-        className="btn btn-link-subtle"
-        onClick={onButtonClick}
-        children={heading}
-      />
-    )
-    : heading
+  const headingComponent = HeadingLink ? (
+    <HeadingLink
+      className="btn btn-link-subtle"
+      onClick={onButtonClick}
+      children={heading}
+    />
+  ) : (
+    heading
+  );
 
   return (
     <section>
@@ -218,12 +222,10 @@ const SectionWithHeading = ({
         {headingComponent}
       </strong>
 
-      <div className="-ml-3">
-        {children}
-      </div>
+      <div className="-ml-3">{children}</div>
     </section>
-  )
-}
+  );
+};
 
 interface ButtonWithIconProps extends Record<string, any> {
   as?: ElementType;
@@ -239,19 +241,17 @@ const ButtonWithIcon = ({
   onClick = () => {},
   ...otherProps
 }: ButtonWithIconProps) => {
-  const onButtonClick = useOnButtonClick()
+  const onButtonClick = useOnButtonClick();
 
-  const buttonProps = Component === 'button'
-    ? { type: 'button' }
-    : {}
+  const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
   return (
     <Component
       {...buttonProps}
       className="btn w-full px-3 py-2 flex gap-2 items-center"
       onClick={(event: MouseEvent) => {
-        onButtonClick()
-        onClick(event)
+        onButtonClick();
+        onClick(event);
       }}
       {...otherProps}
     >
@@ -261,8 +261,8 @@ const ButtonWithIcon = ({
 
       {label}
     </Component>
-  )
-}
+  );
+};
 
 interface ButtonProps extends Record<string, any> {
   as?: ElementType;
@@ -270,29 +270,32 @@ interface ButtonProps extends Record<string, any> {
   onClick?: (event: MouseEvent) => void;
 }
 
-const Button = forwardRef(({
-  as: Component = 'button',
-  label,
-  onClick = () => {},
-  ...otherProps
-}: ButtonProps, ref) => {
-  const onButtonClick = useOnButtonClick()
+const Button = forwardRef(
+  (
+    {
+      as: Component = 'button',
+      label,
+      onClick = () => {},
+      ...otherProps
+    }: ButtonProps,
+    ref
+  ) => {
+    const onButtonClick = useOnButtonClick();
 
-  const buttonProps = Component === 'button'
-    ? { type: 'button' }
-    : {}
+    const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
-  return (
-    <Component
-      ref={ref}
-      {...buttonProps}
-      className="btn w-full px-3 py-1 block text-left"
-      children={label}
-      onClick={(event: MouseEvent) => {
-        onButtonClick()
-        onClick(event)
-      }}
-      {...otherProps}
-    />
-  )
-})
+    return (
+      <Component
+        ref={ref}
+        {...buttonProps}
+        className="btn w-full px-3 py-1 block text-left"
+        children={label}
+        onClick={(event: MouseEvent) => {
+          onButtonClick();
+          onClick(event);
+        }}
+        {...otherProps}
+      />
+    );
+  }
+);
