@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
-import { focusEditor } from '@udecode/plate-headless';
-import normalizeRange from '~/lib/editor/normalizeRange';
-import useEffectAfterFirst from '~/lib/useEffectAfterFirst';
+import { focusEditor, PlateEditor } from '@udecode/plate-headless';
+import { Selection } from 'slate';
+import { normalizeRange } from '~/lib/editor/normalizeRange';
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 
-const selectionRestorationForDocument = {};
-const scrollRestorationForDocument = {};
+const selectionRestorationForDocument: Record<number, Selection> = {};
+const scrollRestorationForDocument: Record<number, number> = {};
 
-const useSaveSelection = (documentId, editor) =>
+export const useSaveSelection = (documentId: number, editor: PlateEditor) =>
   useEffectAfterFirst(() => {
     selectionRestorationForDocument[documentId] = editor.selection;
   }, [editor.selection]);
 
-const useSaveScroll = (documentId) =>
+export const useSaveScroll = (documentId: number) =>
   useEffect(() => {
     const updateScroll = () => {
       scrollRestorationForDocument[documentId] = window.scrollY;
@@ -25,7 +26,7 @@ const useSaveScroll = (documentId) =>
     return () => window.removeEventListener('scroll', updateScroll);
   }, []);
 
-const setSelection = (editor, selection) => {
+export const setSelection = (editor: PlateEditor, selection?: Selection) => {
   // Returns null if the selection is not valid
   const normalizedSelection = selection && normalizeRange(editor, selection);
 
@@ -34,22 +35,14 @@ const setSelection = (editor, selection) => {
   }
 };
 
-const setScroll = (scroll) => {
+export const setScroll = (scroll?: number) => {
   if (scroll) {
     window.scrollTo(0, scroll);
   }
 };
 
-const restoreSelection = (documentId, editor) =>
+export const restoreSelection = (documentId: number, editor: PlateEditor) =>
   setSelection(editor, selectionRestorationForDocument[documentId]);
-const restoreScroll = (documentId) =>
-  setScroll(scrollRestorationForDocument[documentId]);
 
-export {
-  useSaveSelection,
-  useSaveScroll,
-  setSelection,
-  setScroll,
-  restoreSelection,
-  restoreScroll,
-};
+export const restoreScroll = (documentId: number) =>
+  setScroll(scrollRestorationForDocument[documentId]);
