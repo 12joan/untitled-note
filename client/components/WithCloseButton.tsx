@@ -1,13 +1,11 @@
-import React, { ReactNode } from 'react'
-
-import { groupedClassNames, GroupedClassNames } from '~/lib/groupedClassNames'
-
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon'
+import React, { ReactNode } from 'react';
+import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 export interface WithCloseButtonProps {
-  onClose: () => void
-  customClassNames?: GroupedClassNames
-  children: ReactNode
+  onClose: () => void;
+  customClassNames?: GroupedClassNames;
+  children: ReactNode;
 }
 
 export const WithCloseButton = ({
@@ -15,12 +13,15 @@ export const WithCloseButton = ({
   customClassNames,
   children,
 }: WithCloseButtonProps) => {
-  const className = groupedClassNames({
-    display: 'flex',
-    items: 'items-center',
-    justify: 'justify-between',
-    gap: 'gap-2',
-  }, customClassNames)
+  const className = groupedClassNames(
+    {
+      display: 'flex',
+      items: 'items-center',
+      justify: 'justify-between',
+      gap: 'gap-2',
+    },
+    customClassNames
+  );
 
   return (
     <div className={className}>
@@ -34,5 +35,5 @@ export const WithCloseButton = ({
         <LargeCloseIcon size="1.25em" ariaLabel="Close" />
       </button>
     </div>
-  )
-}
+  );
+};

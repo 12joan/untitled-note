@@ -1,11 +1,9 @@
-import React, { useRef, ReactNode, ElementType, MouseEvent } from 'react'
-import { followCursor } from 'tippy.js'
-
-import { useEventListener } from '~/lib/useEventListener'
-import { useContext, ContextProvider } from '~/lib/context'
-import { IconProps } from '~/components/icons/makeIcon'
-
-import { Tippy, TippyProps, TippyInstance } from '~/components/Tippy'
+import React, { ElementType, MouseEvent, ReactNode, useRef } from 'react';
+import { followCursor } from 'tippy.js';
+import { ContextProvider, useContext } from '~/lib/context';
+import { useEventListener } from '~/lib/useEventListener';
+import { IconProps } from '~/components/icons/makeIcon';
+import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
 
 export interface DropdownProps extends TippyProps {
   items: ReactNode;
@@ -17,22 +15,22 @@ export const Dropdown = ({
   className: userClassName = '',
   ...otherProps
 }: DropdownProps) => {
-  const tippyRef = useRef<TippyInstance>(null)
-  const close = () => tippyRef.current?.hide()
+  const tippyRef = useRef<TippyInstance>(null);
+  const close = () => tippyRef.current?.hide();
 
-  const className = `rounded-lg backdrop-blur-lg shadow-lg w-auto max-w-full ${userClassName}`
+  const className = `rounded-lg backdrop-blur-lg shadow-lg w-auto max-w-full ${userClassName}`;
 
   useEventListener(window, 'keydown', (event: KeyboardEvent) => {
     if (event.key === 'Escape' && tippyRef.current?.state?.isVisible) {
-      close()
+      close();
     }
-  })
+  });
 
   return (
     <ContextProvider closeDropdown={close}>
       <Tippy
         ref={tippyRef}
-        render={attrs => (
+        render={(attrs) => (
           <div
             className={className}
             tabIndex={-1}
@@ -45,8 +43,8 @@ export const Dropdown = ({
         {...otherProps}
       />
     </ContextProvider>
-  )
-}
+  );
+};
 
 export interface DropdownItemProps extends Record<string, any> {
   as?: ElementType;
@@ -66,19 +64,17 @@ export const DropdownItem = ({
 }: DropdownItemProps) => {
   const { closeDropdown } = useContext() as {
     closeDropdown: () => void;
-  }
+  };
 
-  const buttonProps = Component === 'button'
-    ? { type: 'button' }
-    : {}
+  const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
   return (
     <Component
       {...buttonProps}
       className={`block w-full text-left p-3 pr-5 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
       onClick={(event: MouseEvent) => {
-        closeDropdown()
-        onClick(event)
+        closeDropdown();
+        onClick(event);
       }}
       {...otherProps}
     >
@@ -90,8 +86,8 @@ export const DropdownItem = ({
 
       {children}
     </Component>
-  )
-}
+  );
+};
 
 export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
   return (
@@ -103,5 +99,5 @@ export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
       offset={[0, 0]}
       {...dropdownProps}
     />
-  )
-}
+  );
+};

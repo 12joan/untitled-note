@@ -1,61 +1,58 @@
-import React, { useState, useRef, ChangeEvent, FocusEvent } from 'react'
-import { useFloating, offset, shift } from '@floating-ui/react-dom'
-import emojiData from '@emoji-mart/data'
-import EmojiPicker from '@emoji-mart/react'
-
-import { useContext } from '~/lib/context'
-import { useIsMounted } from '~/lib/useIsMounted'
-import { useOverrideable } from '~/lib/useOverrideable'
-import { uploadProjectImage, removeProjectImage } from '~/lib/projectImageActions'
+import React, { ChangeEvent, FocusEvent, useRef, useState } from 'react';
+import emojiData from '@emoji-mart/data';
+import EmojiPicker from '@emoji-mart/react';
+import { offset, shift, useFloating } from '@floating-ui/react-dom';
+import { updateProject as updateProjectAPI } from '~/lib/apis/project';
+import { useContext } from '~/lib/context';
+import { filesize } from '~/lib/filesize';
 import {
-  updateProject as updateProjectAPI,
-} from '~/lib/apis/project'
-import { retry } from '~/lib/retry'
-import {
-  handleUploadFileError,
   handleRemoveProjectImageError,
   handleUpdateProjectError,
-} from '~/lib/handleErrors'
-import { mergeRefs } from '~/lib/refUtils'
-import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut'
-import { filesize } from '~/lib/filesize'
-import { Project } from '~/lib/types'
+  handleUploadFileError,
+} from '~/lib/handleErrors';
+import { Future, orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import {
-  Future,
-  orDefaultFuture,
-  unwrapFuture,
-} from '~/lib/monads'
-import { AccountModalOpenProps } from '~/lib/useAccountModal'
-
-import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner'
+  removeProjectImage,
+  uploadProjectImage,
+} from '~/lib/projectImageActions';
+import { mergeRefs } from '~/lib/refUtils';
+import { retry } from '~/lib/retry';
+import { Project } from '~/lib/types';
+import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
+import { useIsMounted } from '~/lib/useIsMounted';
+import { useOverrideable } from '~/lib/useOverrideable';
+import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EditProjectIcon = () => {
-  const { project } = useContext() as { project: Project }
-  const isMounted = useIsMounted()
+  const { project } = useContext() as { project: Project };
+  const isMounted = useIsMounted();
 
-  const [localProject, setLocalProject] = useOverrideable(project)
-  const [hasImage, overrideHasImage] = useOverrideable(!!localProject.image_url)
+  const [localProject, setLocalProject] = useOverrideable(project);
+  const [hasImage, overrideHasImage] = useOverrideable(
+    !!localProject.image_url
+  );
 
   const [imageFormState, setImageFormState] = useState<
     'idle' | 'uploading' | 'removing'
-  >('idle')
+  >('idle');
 
   const updateProject = (params: Partial<Project>) => {
     setLocalProject({
       ...localProject,
       ...params,
-    })
+    });
 
     handleUpdateProjectError(
-      retry(
-        () => updateProjectAPI(project.id, params),
-        { shouldRetry: isMounted }
-      )
-    ).catch(error => {
-      console.error(error)
-      setLocalProject(project)
-    })
-  }
+      retry(() => updateProjectAPI(project.id, params), {
+        shouldRetry: isMounted,
+      })
+    ).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      setLocalProject(project);
+    });
+  };
 
   return (
     <div>
@@ -69,11 +66,8 @@ export const EditProjectIcon = () => {
           setState={setImageFormState}
         />
 
-        {(!hasImage && imageFormState === 'idle') && (
-          <EmojiForm
-            project={localProject}
-            updateProject={updateProject}
-          />
+        {!hasImage && imageFormState === 'idle' && (
+          <EmojiForm project={localProject} updateProject={updateProject} />
         )}
 
         <BackgroundColourForm
@@ -83,14 +77,14 @@ export const EditProjectIcon = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export interface ImageFormProps {
-  hasImage: boolean
-  overrideHasImage: (hasImage: boolean) => void
-  state: 'idle' | 'uploading' | 'removing'
-  setState: (state: 'idle' | 'uploading' | 'removing') => void
+  hasImage: boolean;
+  overrideHasImage: (hasImage: boolean) => void;
+  state: 'idle' | 'uploading' | 'removing';
+  setState: (state: 'idle' | 'uploading' | 'removing') => void;
 }
 
 const ImageForm = ({
@@ -99,39 +93,37 @@ const ImageForm = ({
   state,
   setState,
 }: ImageFormProps) => {
-  const {
-    projectId,
-    futureRemainingQuota,
-    showAccountModal,
-  } = useContext() as {
-    projectId: number
-    futureRemainingQuota: Future<number>
-    showAccountModal: (props: AccountModalOpenProps) => void
-  }
+  const { projectId, futureRemainingQuota, showAccountModal } =
+    useContext() as {
+      projectId: number;
+      futureRemainingQuota: Future<number>;
+      showAccountModal: (props: AccountModalOpenProps) => void;
+    };
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const showFileStorage = () => showAccountModal({
-    initialSection: 'fileStorage',
-  })
+  const showFileStorage = () =>
+    showAccountModal({
+      initialSection: 'fileStorage',
+    });
 
-  const isUploading = state === 'uploading'
-  const isRemoving = state === 'removing'
-  const isBusy = isUploading || isRemoving
+  const isUploading = state === 'uploading';
+  const isRemoving = state === 'removing';
+  const isBusy = isUploading || isRemoving;
 
   const showFileSelector = () => {
-    const fileInput = fileInputRef.current
-    fileInput?.click()
-  }
+    const fileInput = fileInputRef.current;
+    fileInput?.click();
+  };
 
   const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
-    const originalFile = event.target.files?.[0]
+    const originalFile = event.target.files?.[0];
 
     if (!originalFile) {
-      return
+      return;
     }
 
-    setState('uploading')
+    setState('uploading');
 
     handleUploadFileError(
       uploadProjectImage({
@@ -140,16 +132,16 @@ const ImageForm = ({
         availableSpace: orDefaultFuture(futureRemainingQuota, Infinity),
         showFileStorage,
       }).then(() => overrideHasImage(true))
-    ).finally(() => setState('idle'))
-  }
+    ).finally(() => setState('idle'));
+  };
 
   const handleRemoveImage = () => {
-    setState('removing')
+    setState('removing');
 
     handleRemoveProjectImageError(
       removeProjectImage(projectId).then(() => overrideHasImage(false))
-    ).finally(() => setState('idle'))
-  }
+    ).finally(() => setState('idle'));
+  };
 
   return (
     <div>
@@ -170,7 +162,10 @@ const ImageForm = ({
           onClick={showFileSelector}
           disabled={isBusy}
         >
-          <ReplaceWithSpinner isSpinner={isUploading} spinnerAriaLabel="Uploading image">
+          <ReplaceWithSpinner
+            isSpinner={isUploading}
+            spinnerAriaLabel="Uploading image"
+          >
             {hasImage ? 'Replace' : 'Upload'} image
           </ReplaceWithSpinner>
         </button>
@@ -182,7 +177,10 @@ const ImageForm = ({
             onClick={handleRemoveImage}
             disabled={isBusy}
           >
-            <ReplaceWithSpinner isSpinner={isRemoving} spinnerAriaLabel="Removing image">
+            <ReplaceWithSpinner
+              isSpinner={isRemoving}
+              spinnerAriaLabel="Removing image"
+            >
               Remove image
             </ReplaceWithSpinner>
           </button>
@@ -196,51 +194,53 @@ const ImageForm = ({
             type="button"
             className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
             onClick={showFileStorage}
-            children={`${filesize(remainingQuota)} available`}
-          />
+          >
+            {filesize(remainingQuota)} available
+          </button>
         ),
       })}
     </div>
-  )
-}
+  );
+};
 
 export interface EmojiFormProps {
-  project: Project
-  updateProject: (params: Partial<Project>) => void
+  project: Project;
+  updateProject: (params: Partial<Project>) => void;
 }
 
-const EmojiForm = ({
-  project,
-  updateProject,
-}: EmojiFormProps) => {
-  const buttonRef = useRef<HTMLButtonElement>(null)
+const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { emoji } = project
-  const hasEmoji = !!emoji
-  const setEmoji = (emoji: Project['emoji']) => updateProject({ emoji })
+  const { emoji } = project;
+  const hasEmoji = !!emoji;
+  const setEmoji = (emoji: Project['emoji']) => updateProject({ emoji });
 
-  const [pickerVisible, setPickerVisible] = useState(false)
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   const closePicker = (focusButton = true) => {
-    setPickerVisible(false)
+    setPickerVisible(false);
 
     if (focusButton) {
-      buttonRef.current?.focus()
+      buttonRef.current?.focus();
     }
-  }
+  };
 
-  useGlobalKeyboardShortcut('Escape', event => {
-    if (pickerVisible) {
-      event.preventDefault()
-      closePicker()
-    }
-  }, [pickerVisible])
+  useGlobalKeyboardShortcut(
+    'Escape',
+    (event) => {
+      if (pickerVisible) {
+        event.preventDefault();
+        closePicker();
+      }
+    },
+    [pickerVisible]
+  );
 
   const handleBlur = (event: FocusEvent) => {
     if (pickerVisible && !event.currentTarget.contains(event.relatedTarget)) {
-      closePicker(event.relatedTarget === null)
+      closePicker(event.relatedTarget === null);
     }
-  }
+  };
 
   const {
     x: pickerX,
@@ -251,7 +251,7 @@ const EmojiForm = ({
   } = useFloating({
     placement: 'bottom-start',
     middleware: [offset(10), shift()],
-  })
+  });
 
   return (
     <div className="space-y-2">
@@ -263,10 +263,10 @@ const EmojiForm = ({
             ref={mergeRefs([buttonRef, floatingReferenceRef])}
             type="button"
             className="btn btn-rect btn-secondary"
-            onClick={event => {
+            onClick={(event) => {
               // Prevent the picker from registering a click outside
-              event.stopPropagation()
-              setPickerVisible(true)
+              event.stopPropagation();
+              setPickerVisible(true);
             }}
           >
             {hasEmoji ? `${emoji} Change emoji` : 'Choose emoji'}
@@ -293,30 +293,30 @@ const EmojiForm = ({
               top: pickerY ?? 0,
             }}
             onBlur={handleBlur}
-            onMouseDown={event => {
+            onMouseDown={(event) => {
               // Prevent blur when clicking inside picker (WebKit)
-              event.preventDefault()
+              event.preventDefault();
             }}
           >
             <EmojiPicker
               data={emojiData}
               autoFocus
               onEmojiSelect={({ native: emoji }: { native: string }) => {
-                closePicker()
-                setEmoji(emoji)
+                closePicker();
+                setEmoji(emoji);
               }}
             />
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export interface BackgroundColourFormProps {
-  project: Project
-  updateProject: (params: Partial<Project>) => void
-  hasImage: boolean
+  project: Project;
+  updateProject: (params: Partial<Project>) => void;
+  hasImage: boolean;
 }
 
 const BackgroundColourForm = ({
@@ -324,18 +324,21 @@ const BackgroundColourForm = ({
   updateProject,
   hasImage,
 }: BackgroundColourFormProps) => {
-  const { background_colour: backgroundColour } = project
+  const { background_colour: backgroundColour } = project;
 
-  const setBackgroundColor = (
-    colour: Project['background_colour']
-  ) => updateProject({ background_colour: colour })
+  const setBackgroundColor = (colour: Project['background_colour']) =>
+    updateProject({ background_colour: colour });
 
   return (
     <div className="space-y-2">
       <h3 className="font-medium select-none">Background colour</h3>
 
       <div className="flex flex-wrap gap-2 items-center">
-        {[['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']].map(([value, label]) => (
+        {[
+          ['auto', 'Auto'],
+          ['light', 'Light'],
+          ['dark', 'Dark'],
+        ].map(([value, label]) => (
           <label key={value} className="flex items-center space-x-2">
             <input
               type="radio"
@@ -356,5 +359,5 @@ const BackgroundColourForm = ({
         </p>
       )}
     </div>
-  )
-}
+  );
+};

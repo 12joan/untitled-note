@@ -38,6 +38,7 @@ module.exports = {
     'no-shadow': 'off',
     'no-bitwise': 'off',
     'no-use-before-define': 'off',
+    'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
     'import/order': ['off', { 'newlines-between': 'always' }],
     'import/no-unresolved': 'off',
@@ -72,6 +73,8 @@ module.exports = {
     'react/no-unstable-nested-components': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
     'jsx-a11y/anchor-has-content': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
   },
   overrides: [],
 };

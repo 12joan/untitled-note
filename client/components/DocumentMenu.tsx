@@ -1,26 +1,27 @@
-import React from 'react'
-
-import { useContext } from '~/lib/context'
-import { copyPath } from '~/lib/copyPath'
-import { DocumentLink, documentPath } from '~/lib/routes'
-import { toggleDocumentPinned } from '~/lib/transformDocument'
+import React from 'react';
 import {
-  updateDocument as updateDocumentAPI,
   deleteDocument as deleteDocumentAPI,
-} from '~/lib/apis/document'
-import { dispatchGlobalEvent } from '~/lib/globalEvents'
-import { handleUpdateDocumentError, handleDeleteDocumentError } from '~/lib/handleErrors'
-import { useReplaceModal } from '~/lib/useReplaceModal'
-import { TAB_OR_WINDOW } from '~/lib/environment'
-import { PartialDocument, Document } from '~/lib/types'
-
-import { DropdownItem } from '~/components/Dropdown'
-import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon'
-import CopyIcon from '~/components/icons/CopyIcon'
-import PinIcon from '~/components/icons/PinIcon'
-import SearchIcon from '~/components/icons/SearchIcon'
-import ReplaceIcon from '~/components/icons/ReplaceIcon'
-import DeleteIcon from '~/components/icons/DeleteIcon'
+  updateDocument as updateDocumentAPI,
+} from '~/lib/apis/document';
+import { useContext } from '~/lib/context';
+import { copyPath } from '~/lib/copyPath';
+import { TAB_OR_WINDOW } from '~/lib/environment';
+import { dispatchGlobalEvent } from '~/lib/globalEvents';
+import {
+  handleDeleteDocumentError,
+  handleUpdateDocumentError,
+} from '~/lib/handleErrors';
+import { DocumentLink, documentPath } from '~/lib/routes';
+import { toggleDocumentPinned } from '~/lib/transformDocument';
+import { Document, PartialDocument } from '~/lib/types';
+import { useReplaceModal } from '~/lib/useReplaceModal';
+import { DropdownItem } from '~/components/Dropdown';
+import CopyIcon from '~/components/icons/CopyIcon';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
+import PinIcon from '~/components/icons/PinIcon';
+import ReplaceIcon from '~/components/icons/ReplaceIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
 
 export interface DocumentMenuProps {
   document: PartialDocument;
@@ -37,35 +38,39 @@ export const DocumentMenu = ({
   openFind = undefined,
   showReplace = false,
 }: DocumentMenuProps) => {
-  const { projectId } = useContext() as { projectId: number }
+  const { projectId } = useContext() as { projectId: number };
 
-  const updateDocument = updateDocumentOverride || ((delta) => {
-    handleUpdateDocumentError(
-      updateDocumentAPI(projectId, doc.id, delta)
-    )
-  })
+  const updateDocument =
+    updateDocumentOverride ||
+    ((delta) => {
+      handleUpdateDocumentError(updateDocumentAPI(projectId, doc.id, delta));
+    });
 
-  const copyLink = () => copyPath(documentPath({ projectId: projectId, documentId: doc.id }))
+  const copyLink = () =>
+    copyPath(documentPath({ projectId, documentId: doc.id }));
 
-  const isPinned = doc.pinned_at !== null
-  const togglePinned = () => updateDocument(toggleDocumentPinned(doc, { invalidateEditor }))
+  const isPinned = doc.pinned_at !== null;
+  const togglePinned = () =>
+    updateDocument(toggleDocumentPinned(doc, { invalidateEditor }));
 
-  const {
-    modal: replaceModal,
-    open: openReplaceModal,
-  } = useReplaceModal({ documentId: doc.id })
+  const { modal: replaceModal, open: openReplaceModal } = useReplaceModal({
+    documentId: doc.id,
+  });
 
   const deleteDocument = () => {
-    handleDeleteDocumentError(
-      deleteDocumentAPI(projectId, doc.id)
-    )
+    handleDeleteDocumentError(deleteDocumentAPI(projectId, doc.id));
 
-    dispatchGlobalEvent('document:delete', { documentId: doc.id })
-  }
+    dispatchGlobalEvent('document:delete', { documentId: doc.id });
+  };
 
   return (
     <>
-      <DropdownItem icon={OpenInNewTabIcon} as={DocumentLink} documentId={doc.id} target="_blank">
+      <DropdownItem
+        icon={OpenInNewTabIcon}
+        as={DocumentLink}
+        documentId={doc.id}
+        target="_blank"
+      >
         Open in new {TAB_OR_WINDOW}
       </DropdownItem>
 
@@ -89,11 +94,15 @@ export const DocumentMenu = ({
         </DropdownItem>
       )}
 
-      <DropdownItem icon={DeleteIcon} className="children:text-red-500 dark:children:text-red-400" onClick={deleteDocument}>
+      <DropdownItem
+        icon={DeleteIcon}
+        className="children:text-red-500 dark:children:text-red-400"
+        onClick={deleteDocument}
+      >
         Delete document
       </DropdownItem>
 
       {replaceModal}
     </>
-  )
-}
+  );
+};

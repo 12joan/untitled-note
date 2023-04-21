@@ -1,4 +1,4 @@
-// TODO: Remove me 
+// TODO: Remove me
 import { Document } from '~/lib/types';
 
 export interface EditorProps {

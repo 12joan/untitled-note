@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export interface MeterProps extends Record<string, any> {
-  max: number
-  value: number
-  className?: string
+  max: number;
+  value: number;
+  className?: string;
 }
 
 export const Meter = ({
@@ -24,5 +24,5 @@ export const Meter = ({
         }}
       />
     </div>
-  )
-}
+  );
+};

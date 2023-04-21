@@ -1,18 +1,17 @@
-import React from 'react'
-
-import { useContext } from '~/lib/context'
-import { useIsMounted } from '~/lib/useIsMounted'
-import { useNormalizedInput } from '~/lib/useNormalizedInput'
-import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled'
-import { updateProject } from '~/lib/apis/project'
-import { retry } from '~/lib/retry'
-import { handleUpdateProjectError } from '~/lib/handleErrors'
-import { Project } from '~/lib/types'
+import React from 'react';
+import { updateProject } from '~/lib/apis/project';
+import { useContext } from '~/lib/context';
+import { handleUpdateProjectError } from '~/lib/handleErrors';
+import { retry } from '~/lib/retry';
+import { Project } from '~/lib/types';
+import { useIsMounted } from '~/lib/useIsMounted';
+import { useNormalizedInput } from '~/lib/useNormalizedInput';
+import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 
 export const EditProjectName = () => {
-  const { project } = useContext() as { project: Project }
+  const { project } = useContext() as { project: Project };
 
-  const isMounted = useIsMounted()
+  const isMounted = useIsMounted();
 
   const {
     value: name,
@@ -21,25 +20,25 @@ export const EditProjectName = () => {
     resetValue: resetName,
   } = useNormalizedInput({
     initial: project.name,
-    normalize: name => name.trim(),
-    validate: name => name.trim().length > 0,
-  })
+    normalize: (name) => name.trim(),
+    validate: (name) => name.trim().length > 0,
+  });
 
-  useWaitUntilSettled(name, () =>  {
+  useWaitUntilSettled(name, () => {
     if (!nameIsValid) {
-      return
+      return;
     }
 
     handleUpdateProjectError(
-      retry(
-        () => updateProject(project.id, { name }),
-        { shouldRetry: isMounted }
-      )
-    ).catch(error => {
-      console.error(error)
-      resetName()
-    })
-  })
+      retry(() => updateProject(project.id, { name }), {
+        shouldRetry: isMounted,
+      })
+    ).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      resetName();
+    });
+  });
 
   return (
     <label className="block space-y-2">
@@ -53,5 +52,5 @@ export const EditProjectName = () => {
         placeholder="My Project"
       />
     </label>
-  )
+  );
 };

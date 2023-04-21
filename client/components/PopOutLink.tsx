@@ -1,12 +1,11 @@
-import React, { ComponentType, ReactNode } from 'react'
-
-import CaretRightIcon from '~/components/icons/CaretRightIcon'
+import React, { ComponentType, ReactNode } from 'react';
+import CaretRightIcon from '~/components/icons/CaretRightIcon';
 
 export interface PopOutLinkProps<T> {
-  as: ComponentType<T>
-  asProps: T
-  label: string
-  children: ReactNode
+  as: ComponentType<T>;
+  asProps: T;
+  label: string;
+  children: ReactNode;
 }
 
 export const PopOutLink = <T,>({
@@ -30,5 +29,5 @@ export const PopOutLink = <T,>({
         <CaretRightIcon noAriaLabel />
       </div>
     </LinkComponent>
-  )
-}
+  );
+};

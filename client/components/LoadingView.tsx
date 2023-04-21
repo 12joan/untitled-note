@@ -1,11 +1,10 @@
-import React, { useState, CSSProperties } from 'react'
-
-import { useContext } from '~/lib/context'
-import { useTimeout } from '~/lib/useTimer'
+import React, { CSSProperties, useState } from 'react';
+import { useContext } from '~/lib/context';
+import { useTimeout } from '~/lib/useTimer';
 
 export interface LoadingViewProps extends Record<string, any> {
-  style?: CSSProperties
-  showImmediately?: boolean
+  style?: CSSProperties;
+  showImmediately?: boolean;
 }
 
 export const LoadingView = ({
@@ -13,11 +12,11 @@ export const LoadingView = ({
   showImmediately = false,
   ...otherProps
 }: LoadingViewProps) => {
-  const { topBarHeight = 0 } = useContext() as { topBarHeight?: number }
+  const { topBarHeight = 0 } = useContext() as { topBarHeight?: number };
 
-  const [showLoading, setShowLoading] = useState(showImmediately)
+  const [showLoading, setShowLoading] = useState(showImmediately);
 
-  useTimeout(() => !showImmediately && setShowLoading(true), 500)
+  useTimeout(() => !showImmediately && setShowLoading(true), 500);
 
   return (
     <div
@@ -31,7 +30,7 @@ export const LoadingView = ({
     >
       {showLoading && (
         <div className="flex gap-2" aria-live="polite" aria-label="Loading">
-          {[0, 333, 667].map(delay => (
+          {[0, 333, 667].map((delay) => (
             <div
               key={delay}
               className="w-4 h-4 bg-slate-300 dark:bg-slate-700 rounded-full animate-grow"
@@ -44,5 +43,5 @@ export const LoadingView = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};

@@ -1,28 +1,26 @@
-import React from 'react'
-
-import { useNewDocument } from '~/lib/useNewDocument'
-import { useRenameTag } from '~/lib/useRenameTag'
-import { Tag } from '~/lib/types'
-
-import { DropdownItem } from '~/components/Dropdown'
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon'
-import EditIcon from '~/components/icons/EditIcon'
+import React from 'react';
+import { Tag } from '~/lib/types';
+import { useNewDocument } from '~/lib/useNewDocument';
+import { useRenameTag } from '~/lib/useRenameTag';
+import { DropdownItem } from '~/components/Dropdown';
+import EditIcon from '~/components/icons/EditIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 
 export interface TagMenuProps {
   tag: Tag;
 }
 
 export const TagMenu = ({ tag }: TagMenuProps) => {
-  const createNewDocument = useNewDocument()
+  const createNewDocument = useNewDocument();
 
-  const {
-    modal: renameTagModal,
-    open: openRenameTagModal,
-  } = useRenameTag(tag)
+  const { modal: renameTagModal, open: openRenameTagModal } = useRenameTag(tag);
 
   return (
     <>
-      <DropdownItem icon={NewDocumentIcon} onClick={() => createNewDocument({ tag })}>
+      <DropdownItem
+        icon={NewDocumentIcon}
+        onClick={() => createNewDocument({ tag })}
+      >
         New document with tag
       </DropdownItem>
 
@@ -32,5 +30,5 @@ export const TagMenu = ({ tag }: TagMenuProps) => {
 
       {renameTagModal}
     </>
-  )
-}
+  );
+};
