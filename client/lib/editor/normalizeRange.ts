@@ -11,7 +11,17 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Editor, Node, Path, Range, Text } from 'slate';
+import { PlateEditor } from '@udecode/plate-headless';
+import {
+  BaseEditor,
+  BaseElement,
+  Editor,
+  Node,
+  Path,
+  Point,
+  Range,
+  Text,
+} from 'slate';
 
 /**
  * Normalize a 'pending point' a.k.a a point based on the dom state before applying
@@ -19,9 +29,9 @@ import { Editor, Node, Path, Range, Text } from 'slate';
  * marks we have to 'walk' the offset from the starting position to ensure we still
  * have a valid point inside the document
  */
-function normalizePoint(editor, point) {
+export const normalizePoint = (editor: PlateEditor, point: Point) => {
   let { path, offset } = point;
-  if (!Editor.hasPath(editor, path)) {
+  if (!Editor.hasPath(editor as BaseEditor, path)) {
     return null;
   }
 
@@ -30,8 +40,8 @@ function normalizePoint(editor, point) {
     return null;
   }
 
-  const parentBlock = Editor.above(editor, {
-    match: (n) => Editor.isBlock(editor, n),
+  const parentBlock = Editor.above(editor as BaseEditor, {
+    match: (n) => Editor.isBlock(editor as BaseEditor, n as BaseElement),
     at: path,
   });
 
@@ -40,7 +50,10 @@ function normalizePoint(editor, point) {
   }
 
   while (offset > leaf.text.length) {
-    const entry = Editor.next(editor, { at: path, match: Text.isText });
+    const entry = Editor.next(editor as BaseEditor, {
+      at: path,
+      match: Text.isText,
+    });
     if (!entry || !Path.isDescendant(entry[1], parentBlock[1])) {
       return null;
     }
@@ -50,12 +63,12 @@ function normalizePoint(editor, point) {
   }
 
   return { path, offset };
-}
+};
 
 /**
  * Normalize a 'pending selection' to ensure it's valid in the current document state.
  */
-function normalizeRange(editor, range) {
+export const normalizeRange = (editor: PlateEditor, range: Range) => {
   const anchor = normalizePoint(editor, range.anchor);
   if (!anchor) {
     return null;
@@ -71,6 +84,6 @@ function normalizeRange(editor, range) {
   }
 
   return { anchor, focus };
-}
+};
 
 export default normalizeRange;
