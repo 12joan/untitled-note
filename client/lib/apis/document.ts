@@ -1,5 +1,5 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { Document, PartialDocument } from '~/lib/types';
+import { Document, LocalDocument, PartialDocument } from '~/lib/types';
 
 import { streamAction } from '~/channels/dataChannel';
 
@@ -18,16 +18,30 @@ export const fetchDocument = (projectId: number, id: number) =>
     path: `/api/v1/projects/${projectId}/documents/${id}`,
   }).then((response) => response.json()) as Promise<Document>;
 
+type DocumentRequestData = Partial<
+  Omit<LocalDocument, 'tags'> & {
+    tags_attributes: { text: string }[];
+  }
+>;
+
 export const updateDocument = (
   projectId: number,
   id: number,
-  document: Partial<Document>
-) =>
-  fetchAPIEndpoint({
+  { tags, ...delta }: Partial<LocalDocument>
+) => {
+  const data: DocumentRequestData = {
+    ...delta,
+    tags_attributes: tags?.map((tag) => ({
+      text: tag.text,
+    })),
+  };
+
+  return fetchAPIEndpoint({
     method: 'PUT',
     path: `/api/v1/projects/${projectId}/documents/${id}`,
-    data: { document },
+    data,
   }).then((response) => response.json()) as Promise<Document>;
+};
 
 export const deleteDocument = (projectId: number, id: number) =>
   fetchAPIEndpoint({

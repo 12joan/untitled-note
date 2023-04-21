@@ -34,7 +34,7 @@ import {
 } from '~/lib/editor/selectionAndScrollManagement';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { overviewPath } from '~/lib/routes';
-import { Document } from '~/lib/types';
+import { Document, LocalDocument } from '~/lib/types';
 import { useDebounce } from '~/lib/useDebounce';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import useEnqueuedPromises from '~/lib/useEnqueuedPromises';
@@ -43,7 +43,7 @@ import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { Dropdown } from '~/components/Dropdown';
-import EditorTags from '~/components/EditorTags';
+import { EditorTags } from '~/components/EditorTags';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
@@ -61,7 +61,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   };
 
   const [workingDocument, setWorkingDocument] =
-    useStateWhileMounted(initialDocument);
+    useStateWhileMounted<LocalDocument>(initialDocument);
 
   useTitle(workingDocument.safe_title);
 
@@ -84,7 +84,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
   const [enqueueUpdatePromise, updateIsDirty] = useEnqueuedPromises();
 
-  const updateDocument = (delta: Partial<Document>) =>
+  const updateDocument = (delta: Partial<LocalDocument>) =>
     setWorkingDocument((previousDocument) => {
       const updatedDocument = {
         ...previousDocument,

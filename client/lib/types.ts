@@ -9,6 +9,20 @@ export type Project = {
   archived_at: string | null;
 };
 
+export type Tag = {
+  id: number;
+  text: string;
+  project_id: number;
+  documents_count: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type LocalTag = Partial<Tag> & {
+  localId?: any;
+  text: string;
+};
+
 export type Document = {
   id: number;
   title: string;
@@ -22,6 +36,10 @@ export type Document = {
   created_at: string;
   updated_at: string;
   pinned_at: string | null;
+};
+
+export type LocalDocument = Omit<Document, 'tags'> & {
+  tags: LocalTag[];
 };
 
 export type PartialDocument = Pick<
@@ -48,15 +66,6 @@ export type DocumentSearchResult = {
     field: string;
     snippet: string;
   }[];
-};
-
-export type Tag = {
-  id: number;
-  text: string;
-  project_id: number;
-  documents_count: number;
-  created_at: string;
-  updated_at: string;
 };
 
 export type S3File = {

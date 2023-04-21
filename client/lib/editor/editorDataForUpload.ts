@@ -8,7 +8,7 @@ import { getPlainBody } from '~/lib/editor/getPlainBody';
 
 const excludedTypes = [ELEMENT_MENTION_INPUT];
 
-const editorDataForUpload = (editor: PlateEditor) => {
+export const editorDataForUpload = (editor: PlateEditor) => {
   const filteredEditor = filterDescendants(editor, (node) => {
     const { type } = node;
 
@@ -31,5 +31,3 @@ const editorDataForUpload = (editor: PlateEditor) => {
     plain_body: getPlainBody(filteredEditor),
   };
 };
-
-export default editorDataForUpload;
