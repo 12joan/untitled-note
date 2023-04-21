@@ -2,7 +2,7 @@ import React, { useRef, useState, useReducer, useEffect, useMemo } from 'react'
 import { toDOMRange } from '@udecode/plate-headless'
 
 import { useContext } from '~/lib/context'
-import useStateWhenSettled from '~/lib/useStateWhenSettled'
+import { useStateWhenSettled } from '~/lib/useStateWhenSettled'
 import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut'
 import { FIND_SUPPORTED } from '~/lib/environment'
 
