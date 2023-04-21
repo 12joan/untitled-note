@@ -13,12 +13,20 @@ import {
   toggleCodeBlock,
   toggleList,
   unwrapList,
+  AutoformatPlugin,
+  AutoformatBlockRule,
+  AutoformatMarkRule,
+  PlateEditor
 } from '@udecode/plate-headless';
 
-const isSelectionInCodeBlock = (editor) =>
+const isSelectionInCodeBlock = (editor: PlateEditor): boolean =>
   !!getAboveNode(editor, { match: { type: ELEMENT_CODE_BLOCK } });
 
-const blockRule = (type, match, otherProps = {}) => ({
+const blockRule = (
+  type: AutoformatBlockRule['type'],
+  match: AutoformatBlockRule['match'],
+  otherProps: Partial<AutoformatBlockRule> = {}
+): AutoformatBlockRule => ({
   mode: 'block',
   type,
   match,
@@ -27,7 +35,11 @@ const blockRule = (type, match, otherProps = {}) => ({
   ...otherProps,
 });
 
-const markRule = (type, match, otherProps = {}) => ({
+const markRule = (
+  type: AutoformatMarkRule['type'],
+  match: AutoformatMarkRule['match'],
+  otherProps: Partial<AutoformatMarkRule> = {}
+): AutoformatMarkRule => ({
   mode: 'mark',
   type,
   match,
@@ -35,7 +47,9 @@ const markRule = (type, match, otherProps = {}) => ({
   ...otherProps,
 });
 
-const autoformatOptions = {
+export const autoformatOptions: {
+  options: AutoformatPlugin;
+} = {
   options: {
     rules: [
       blockRule(ELEMENT_H1, '# '),
@@ -55,8 +69,6 @@ const autoformatOptions = {
       markRule(MARK_STRIKETHROUGH, '~'),
       markRule(MARK_CODE, '`'),
     ],
-    enabledUndoOnDelete: true,
+    enableUndoOnDelete: true,
   },
 };
-
-export default autoformatOptions;

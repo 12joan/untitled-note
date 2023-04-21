@@ -24,7 +24,7 @@ import { ContextProvider, useContext } from '~/lib/context';
 import { editorDataForUpload } from '~/lib/editor/editorDataForUpload';
 import { useFind } from '~/lib/editor/find';
 import { useLinkModalProvider } from '~/lib/editor/links';
-import usePlugins from '~/lib/editor/plugins';
+import { usePlugins } from '~/lib/editor/plugins';
 import {
   restoreScroll,
   restoreSelection,

@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, ElementType } from 'react'
 import {
   createPlugins,
   createSoftBreakPlugin,
@@ -32,16 +32,18 @@ import {
   ELEMENT_LI,
   ELEMENT_MENTION,
   ELEMENT_MENTION_INPUT,
+  PlateRenderElementProps,
+  PlatePlugin,
 } from '@udecode/plate-headless'
 
 import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs'
 import { createImperativeEventsPlugin } from '~/lib/editor/imperativeEvents'
-import codeBlockOptions from '~/lib/editor/codeBlock'
-import softBreakOptions from '~/lib/editor/softBreak'
-import resetNodeOptions from '~/lib/editor/resetNode'
-import exitBreakOptions from '~/lib/editor/exitBreak'
-import autoformatOptions from '~/lib/editor/autoformat'
-import tabbableOptions from '~/lib/editor/tabbable'
+import { codeBlockOptions } from '~/lib/editor/codeBlock'
+import { softBreakOptions } from '~/lib/editor/softBreak'
+import { resetNodeOptions } from '~/lib/editor/resetNode'
+import { exitBreakOptions } from '~/lib/editor/exitBreak'
+import { autoformatOptions } from '~/lib/editor/autoformat'
+import { tabbableOptions } from '~/lib/editor/tabbable'
 import { LinkComponent } from '~/lib/editor/links'
 import {
   MentionComponent,
@@ -54,11 +56,12 @@ import {
   Attachment,
 } from '~/lib/editor/attachments'
 
-const makeElementComponent = (Component, props = {}) => ({ children, nodeProps = {}, attributes }) => (
+const makeElementComponent = (
+  Component: ElementType
+) => ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) => (
   <Component
     {...nodeProps}
     {...attributes}
-    {...props}
     children={children}
   />
 )
@@ -81,15 +84,15 @@ const components = {
   [ELEMENT_ATTACHMENT]: Attachment,
 }
 
-const usePlugins = options => {
-  const attachmentPlugins = useAttachmentPlugins()
+export const usePlugins = () => {
+  const attachmentPlugins: PlatePlugin[] = useAttachmentPlugins()
 
   /**
    * Known plugin order dependencies:
    * - Imperative events before blockquote
    */
 
-  const pluginList = [
+  const pluginList: PlatePlugin[] = [
     useMemo(() => createImperativeEventsPlugin(), []),
     useMemo(() => createParagraphPlugin(), []),
     useMemo(() => createBoldPlugin(), []),
@@ -116,5 +119,3 @@ const usePlugins = options => {
     components,
   }), [pluginList])
 }
-
-export default usePlugins

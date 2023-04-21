@@ -1,6 +1,11 @@
-import { KEYS_HEADING } from '@udecode/plate-headless';
+import {
+  KEYS_HEADING,
+  ExitBreakPlugin,
+} from '@udecode/plate-headless';
 
-const exitBreakOptions = {
+export const exitBreakOptions: {
+  options: ExitBreakPlugin;
+} = {
   options: {
     rules: [
       {
@@ -21,5 +26,3 @@ const exitBreakOptions = {
     ],
   },
 };
-
-export default exitBreakOptions;

@@ -6,6 +6,7 @@ import {
   isSelectionAtBlockStart,
   isSelectionAtCodeBlockStart,
   unwrapCodeBlock,
+  ResetNodePlugin,
 } from '@udecode/plate-headless';
 
 const commonRule = {
@@ -13,7 +14,9 @@ const commonRule = {
   hotkey: 'backspace',
 };
 
-const resetNodeOptions = {
+export const resetNodeOptions: {
+  options: ResetNodePlugin;
+} = {
   options: {
     disableEditorReset: true,
     disableFirstBlockReset: true,
@@ -32,5 +35,3 @@ const resetNodeOptions = {
     ],
   },
 };
-
-export default resetNodeOptions;

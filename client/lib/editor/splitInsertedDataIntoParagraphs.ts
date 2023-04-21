@@ -3,9 +3,11 @@ import {
   ELEMENT_PARAGRAPH,
   isText,
   KEY_DESERIALIZE_HTML,
+  TDescendant,
+  TElement,
 } from '@udecode/plate-headless';
 
-const splitFragmentIntoParagraphs = (fragment) => {
+const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {
   const newFragment = fragment.flatMap((node) => {
     const nodeIsText = isText(node);
 
@@ -14,13 +16,13 @@ const splitFragmentIntoParagraphs = (fragment) => {
       return node;
     }
 
-    const paragraphs = [];
+    const paragraphs: TElement[] = [];
 
     const newParagraph = () => {
       paragraphs.push({ type: ELEMENT_PARAGRAPH, children: [] });
     };
 
-    const appendToLastParagraph = (child) => {
+    const appendToLastParagraph = (child: TDescendant) => {
       paragraphs[paragraphs.length - 1].children.push(child);
     };
 
@@ -57,7 +59,7 @@ const splitFragmentIntoParagraphs = (fragment) => {
   return newFragment;
 };
 
-const createSplitInsertedDataIntoParagraphsPlugin = createPluginFactory({
+export const createSplitInsertedDataIntoParagraphsPlugin = createPluginFactory({
   key: 'splitInsertedDataIntoParagraphs',
   inject: {
     pluginsByKey: {
@@ -72,5 +74,3 @@ const createSplitInsertedDataIntoParagraphsPlugin = createPluginFactory({
     },
   },
 });
-
-export { createSplitInsertedDataIntoParagraphsPlugin };

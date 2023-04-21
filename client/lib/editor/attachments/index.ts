@@ -1,3 +1,4 @@
+import { PlatePlugin } from '@udecode/plate-headless';
 import { useMemo } from 'react';
 import { useContext } from '~/lib/context';
 import { Future, orDefaultFuture } from '~/lib/monads';
@@ -7,7 +8,7 @@ import { ELEMENT_ATTACHMENT } from './constants';
 import { createAttachmentPlugin } from './plugin';
 import { getUploadIsInProgress } from './uploadsInProgressStore';
 
-export const useAttachmentPlugins = () => {
+export const useAttachmentPlugins = (): PlatePlugin[] => {
   const { projectId, futureRemainingQuota, showAccountModal } =
     useContext() as {
       projectId: number;
@@ -24,7 +25,7 @@ export const useAttachmentPlugins = () => {
           showFileStorage: () =>
             showAccountModal({ initialSection: 'fileStorage' }),
         },
-      }),
+      }) as PlatePlugin,
     ],
     [projectId, futureRemainingQuota]
   );

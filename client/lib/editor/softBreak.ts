@@ -1,6 +1,11 @@
-import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-headless';
+import {
+  ELEMENT_BLOCKQUOTE,
+  SoftBreakPlugin,
+} from '@udecode/plate-headless';
 
-const softBreakOptions = {
+export const softBreakOptions: {
+  options: SoftBreakPlugin;
+} = {
   options: {
     rules: [
       {
@@ -15,5 +20,3 @@ const softBreakOptions = {
     ],
   },
 };
-
-export default softBreakOptions;
