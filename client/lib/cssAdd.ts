@@ -1,6 +1,6 @@
-const cssAdd = (...unnormalizedValues) => {
+export const cssAdd = (...unnormalizedValues: (number | string)[]) => {
   // Make sure all numeric values have units
-  const values = unnormalizedValues.map((value) =>
+  const values: string[] = unnormalizedValues.map((value) =>
     typeof value === 'number' ? `${value}px` : value
   );
 
@@ -14,5 +14,3 @@ const cssAdd = (...unnormalizedValues) => {
 
   return `calc(${values.join(' + ')})`;
 };
-
-export default cssAdd;

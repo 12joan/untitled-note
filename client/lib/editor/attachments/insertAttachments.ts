@@ -1,23 +1,27 @@
 import {
   getPluginOptions,
   insertNodes,
+  PlateEditor,
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-headless';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import { handleUploadFileError } from '~/lib/handleErrors';
-import uploadFile from '~/lib/uploadFile';
+import { uploadFile, UploadProgressEvent } from '~/lib/uploadFile';
 import { ELEMENT_ATTACHMENT } from './constants';
-import uploadsInProgressStore from './uploadsInProgressStore';
+import { AttachmentElement, AttachmentPlugin } from './types';
+import { deregisterUpload, registerUpload } from './uploadsInProgressStore';
 import { nodeAtPathIsEmptyParagraph, removeAllAttachmentNodes } from './utils';
 
-const insertAttachments = (editor, blockIndex, files) =>
+export const insertAttachments = (
+  editor: PlateEditor,
+  blockIndex: number,
+  files: File[]
+) =>
   handleUploadFileError(
     new Promise((resolve, reject) => {
-      const { projectId, availableSpace, showFileStorage } = getPluginOptions(
-        editor,
-        ELEMENT_ATTACHMENT
-      );
+      const { projectId, availableSpace, showFileStorage } =
+        getPluginOptions<AttachmentPlugin>(editor, ELEMENT_ATTACHMENT);
 
       const requiredSpace = files.reduce((total, file) => total + file.size, 0);
 
@@ -37,24 +41,24 @@ const insertAttachments = (editor, blockIndex, files) =>
         blockIndex,
       ]);
 
-      const addedIndices = [];
+      const addedIndices: number[] = [];
 
       files.forEach((file, index) => {
-        let s3FileId = null;
+        let s3FileId: number | null = null;
 
         const abortController = new AbortController();
 
-        const handleUploadStart = ({ id }) => {
+        const handleUploadStart = ({ id }: { id: number }) => {
           s3FileId = id;
 
-          uploadsInProgressStore.register(s3FileId, { abortController });
+          registerUpload(s3FileId, { abortController });
 
           const attachmentNode = {
             type: ELEMENT_ATTACHMENT,
             children: [{ text: '' }],
             s3FileId,
             filename: file.name,
-          };
+          } as AttachmentElement;
 
           // The index (relative to blockIndex) we want to insert the attachment
           // node at is equal to the number of nodes whose indices are less than
@@ -80,7 +84,7 @@ const insertAttachments = (editor, blockIndex, files) =>
           });
         };
 
-        const handleUploadProgress = (progressEvent) =>
+        const handleUploadProgress = (progressEvent: UploadProgressEvent) =>
           dispatchGlobalEvent('s3File:uploadProgress', {
             s3FileId,
             progressEvent,
@@ -95,15 +99,16 @@ const insertAttachments = (editor, blockIndex, files) =>
           onUploadProgress: handleUploadProgress,
         })
           .then(() => {
-            uploadsInProgressStore.remove(s3FileId);
-            dispatchGlobalEvent('s3File:uploadComplete', { s3FileId });
+            if (s3FileId !== null) {
+              deregisterUpload(s3FileId);
+              dispatchGlobalEvent('s3File:uploadComplete', { s3FileId });
+            }
           })
           .catch((error) => {
             if (s3FileId !== null) {
               removeAllAttachmentNodes(editor, s3FileId);
+              deregisterUpload(s3FileId);
             }
-
-            uploadsInProgressStore.remove(s3FileId);
 
             if (error.name !== 'CanceledError') {
               throw error;
@@ -113,5 +118,3 @@ const insertAttachments = (editor, blockIndex, files) =>
       });
     })
   );
-
-export default insertAttachments;

@@ -16,7 +16,7 @@ import { OverviewLink } from '~/lib/routes';
 import { Document, PartialDocument } from '~/lib/types';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
-import Editor from '~/components/Editor';
+import { Editor } from '~/components/Editor';
 import { LoadingView } from '~/components/LoadingView';
 
 export interface EditorViewProps {

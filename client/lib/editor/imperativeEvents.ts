@@ -1,3 +1,4 @@
+import { DependencyList } from 'react';
 import { createPluginFactory } from '@udecode/plate-headless';
 import { dispatchGlobalEvent, useGlobalEvent } from '~/lib/globalEvents';
 
@@ -5,11 +6,11 @@ const supportedEvents = ['onChange', 'onKeyDown'];
 const globalEventPrefix = 'editor:';
 
 const handlerForEvent =
-  (eventName) =>
-  (...args) =>
+  (eventName: string) =>
+  (...args: any[]) =>
     dispatchGlobalEvent(`${globalEventPrefix}${eventName}`, ...args);
 
-const createImperativeEventsPlugin = createPluginFactory({
+export const createImperativeEventsPlugin = createPluginFactory({
   key: 'imperativeEvents',
   handlers: supportedEvents.reduce(
     (handlers, eventName) => ({
@@ -20,13 +21,11 @@ const createImperativeEventsPlugin = createPluginFactory({
   ),
 });
 
-const useEditorEvent = supportedEvents.reduce(
+export const useEditorEvent = supportedEvents.reduce(
   (hooks, eventName) => ({
     ...hooks,
-    [eventName]: (...args) =>
-      useGlobalEvent(`${globalEventPrefix}${eventName}`, ...args),
+    [eventName]: (handler: EventListener, deps?: DependencyList) =>
+      useGlobalEvent(`${globalEventPrefix}${eventName}`, handler, deps),
   }),
   {}
 );
-
-export { createImperativeEventsPlugin, useEditorEvent };

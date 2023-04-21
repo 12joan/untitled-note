@@ -2,31 +2,34 @@ import {
   ELEMENT_PARAGRAPH,
   getEditorString,
   getNode,
+  PlateEditor,
   removeNodes,
   someNode,
+  TNode,
 } from '@udecode/plate-headless';
+import { Path } from 'slate';
 import {
   useFocused as useSlateFocused,
   useSelected as useSlateSelected,
 } from 'slate-react';
 import { ELEMENT_ATTACHMENT } from './constants';
 
-const matchAttachmentNode = (id) => (node) =>
+export const matchAttachmentNode = (id: number) => (node: TNode) =>
   node.type === ELEMENT_ATTACHMENT && node.s3FileId === id;
 
-const attachmentNodeExists = (editor, id) =>
+export const attachmentNodeExists = (editor: PlateEditor, id: number) =>
   someNode(editor, {
     at: [],
     match: matchAttachmentNode(id),
   });
 
-const removeAllAttachmentNodes = (editor, id) =>
+export const removeAllAttachmentNodes = (editor: PlateEditor, id: number) =>
   removeNodes(editor, {
     at: [],
     match: matchAttachmentNode(id),
   });
 
-const nodeAtPathIsEmptyParagraph = (editor, path) => {
+export const nodeAtPathIsEmptyParagraph = (editor: PlateEditor, path: Path) => {
   const node = getNode(editor, path);
 
   return (
@@ -36,12 +39,8 @@ const nodeAtPathIsEmptyParagraph = (editor, path) => {
   );
 };
 
-const useSelected = () => useSlateSelected() & useSlateFocused();
-
-export {
-  matchAttachmentNode,
-  attachmentNodeExists,
-  removeAllAttachmentNodes,
-  nodeAtPathIsEmptyParagraph,
-  useSelected,
+export const useSelected = () => {
+  const isSelected = useSlateSelected();
+  const isFocused = useSlateFocused();
+  return isSelected && isFocused;
 };

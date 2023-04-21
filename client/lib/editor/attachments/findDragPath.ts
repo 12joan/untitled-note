@@ -11,11 +11,13 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { DragEvent } from 'react';
+import { PlateEditor } from '@udecode/plate-headless';
 import { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 
-const findDragPath = (editor, rawEvent) => {
+export const findDragPath = (editor: PlateEditor, rawEvent: DragEvent) => {
   const event = rawEvent.nativeEvent ?? rawEvent;
 
   const { clientX: x, clientY: y } = event;
@@ -45,7 +47,7 @@ const findDragPath = (editor, rawEvent) => {
   }
 
   // Resolve a Slate range from the DOM range.
-  const range = ReactEditor.toSlateRange(editor, domRange, {
+  const range = ReactEditor.toSlateRange(editor as ReactEditor, domRange, {
     exactMatch: false,
     suppressThrow: false,
   });
@@ -63,5 +65,3 @@ const findDragPath = (editor, rawEvent) => {
 
   return path;
 };
-
-export default findDragPath;

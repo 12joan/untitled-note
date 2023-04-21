@@ -1,4 +1,7 @@
-export type ClassNamesObject = Record<string, string | undefined | null>;
+export type ClassNamesObject = Record<
+  string,
+  string | undefined | null | false
+>;
 
 export type GroupedClassNames =
   | ClassNamesObject
@@ -29,8 +32,5 @@ const resolveGroupedClassNames = (
     .replace(/\s+/g, ' ')
     .trim();
 
-export const groupedClassNames = (
-  base: ClassNamesObject,
-  ...overrides: GroupedClassNames[]
-): string =>
-  resolveGroupedClassNames(overrides.reduce(mergeGroupedClassNames, base));
+export const groupedClassNames = (...xs: GroupedClassNames[]): string =>
+  resolveGroupedClassNames(xs.reduce(mergeGroupedClassNames, {}));

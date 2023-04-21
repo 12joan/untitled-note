@@ -1,4 +1,6 @@
-const commonClassNames = {
+import { GroupedClassNames } from '~/lib/groupedClassNames';
+
+export const commonClassNames: GroupedClassNames = {
   border: 'border dark:border-transparent',
   bg: 'dark:bg-slate-800',
   padding: 'p-3',
@@ -7,5 +9,3 @@ const commonClassNames = {
   select: 'select-none',
   display: 'flex gap-2 items-center',
 };
-
-export default commonClassNames;

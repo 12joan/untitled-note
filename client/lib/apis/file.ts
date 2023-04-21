@@ -20,6 +20,12 @@ export const allocateFile = (
     data: { file, project_id: projectId },
   }).then((response) => response.json()) as Promise<AllocateFileResult>;
 
+export const fetchFile = (id: number) =>
+  fetchAPIEndpoint({
+    method: 'GET',
+    path: `/api/v1/s3_files/${id}`,
+  }).then((response) => response.json()) as Promise<S3File>;
+
 export const deleteFile = (id: number) =>
   fetchAPIEndpoint({
     method: 'DELETE',

@@ -10,7 +10,7 @@ import { useSelected, useFocused } from 'slate-react'
 
 import { useContext } from '~/lib/context'
 import groupedClassNames from '~/lib/groupedClassNames'
-import getPlainBody from '~/lib/editor/getPlainBody'
+import { getPlainBody } from '~/lib/editor/getPlainBody'
 import { useEditorEvent } from '~/lib/editor/imperativeEvents'
 import useCombobox from '~/lib/useCombobox'
 import useComboboxFloating from '~/lib/useComboboxFloating'
