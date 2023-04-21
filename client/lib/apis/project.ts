@@ -1,6 +1,8 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
 import { Project } from '~/lib/types';
 
+import { streamAction } from '~/channels/dataChannel';
+
 export const createProject = (
   project: Partial<Project> & {
     name: Project['name'];
@@ -38,3 +40,13 @@ export const updateProjectImage = (projectId: number, fileId: number | null) =>
     path: `/api/v1/projects/${projectId}/image`,
     data: { image_id: fileId },
   });
+
+export const streamProjects = (callback: (projects: Project[]) => void) =>
+  streamAction(
+    'Project',
+    'index',
+    {
+      query: 'all',
+    },
+    callback
+  );
