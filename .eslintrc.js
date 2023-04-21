@@ -70,6 +70,7 @@ module.exports = {
     'react/no-children-prop': 'off',
     'react/function-component-definition': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
+    'jsx-a11y/anchor-has-content': 'off',
   },
   overrides: [],
 };
