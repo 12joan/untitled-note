@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useMemo, useRef, useState } from 'react';
+import React, { useId, useMemo, useRef, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -20,97 +20,94 @@ import LargePlusIcon from '~/components/icons/LargePlusIcon';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
 
-export interface ProjectsBarProps extends Record<string, any> {
+export interface ProjectsBarProps {
   onButtonClick?: (event: React.MouseEvent) => void;
 }
 
-export const ProjectsBar = forwardRef(
-  ({ onButtonClick = () => {}, ...otherProps }: ProjectsBarProps, ref) => {
-    const { projectId, projects } = useContext() as {
-      projectId: number;
-      projects: Project[];
-    };
+export const ProjectsBar = ({ onButtonClick = () => {} }: ProjectsBarProps) => {
+  const { projectId, projects } = useContext() as {
+    projectId: number;
+    projects: Project[];
+  };
 
-    const { modal: newProjectModal, open: openNewProjectModal } =
-      useNewProject();
+  const { modal: newProjectModal, open: openNewProjectModal } = useNewProject();
 
-    const [localProjects, setLocalProjects] = useOverrideable(projects);
+  const [localProjects, setLocalProjects] = useOverrideable(projects);
 
-    const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
-      () =>
-        groupList(localProjects, (project) =>
-          project.archived_at ? 'archivedProjects' : 'unarchivedProjects'
-        ),
-      [localProjects]
-    );
+  const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
+    () =>
+      groupList(localProjects, (project) =>
+        project.archived_at ? 'archivedProjects' : 'unarchivedProjects'
+      ),
+    [localProjects]
+  );
 
-    const handleDragEnd: OnDragEndResponder = ({ source, destination }) => {
-      if (!destination) return;
+  const handleDragEnd: OnDragEndResponder = ({ source, destination }) => {
+    if (!destination) return;
 
-      const newProjects = [...unarchivedProjects, ...archivedProjects];
-      const [removed] = newProjects.splice(source.index, 1);
-      newProjects.splice(destination.index, 0, removed);
-      setLocalProjects(newProjects);
+    const newProjects = [...unarchivedProjects, ...archivedProjects];
+    const [removed] = newProjects.splice(source.index, 1);
+    newProjects.splice(destination.index, 0, removed);
+    setLocalProjects(newProjects);
 
-      handleReorderProjectsError(
-        updateProjectOrder(newProjects.map(({ id }) => id))
-      ).catch(() => setLocalProjects(localProjects));
-    };
+    handleReorderProjectsError(
+      updateProjectOrder(newProjects.map(({ id }) => id))
+    ).catch(() => setLocalProjects(localProjects));
+  };
 
-    const nonce = useCSPNonce();
+  const nonce = useCSPNonce();
 
-    return (
-      <>
-        {newProjectModal}
+  return (
+    <>
+      {newProjectModal}
 
-        <DragDropContext onDragEnd={handleDragEnd} nonce={nonce}>
-          <Droppable droppableId="projects" direction="vertical">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="p-3"
-              >
-                {unarchivedProjects.map((project, index) => (
-                  <ProjectListItem
-                    key={project.id}
-                    project={project}
-                    index={index}
-                    draggable
-                    onButtonClick={onButtonClick}
-                  />
-                ))}
+      <DragDropContext onDragEnd={handleDragEnd} nonce={nonce}>
+        <Droppable droppableId="projects" direction="vertical">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="p-3"
+            >
+              {unarchivedProjects.map((project, index) => (
+                <ProjectListItem
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  draggable
+                  onButtonClick={onButtonClick}
+                />
+              ))}
 
-                {provided.placeholder}
+              {provided.placeholder}
 
-                {archivedProjects.length > 0 && (
-                  <ProjectFolder
-                    name="Archived projects"
-                    projects={archivedProjects}
-                    initialExpanded={archivedProjects.some(
-                      ({ id }) => id === projectId
-                    )}
-                    onButtonClick={onButtonClick}
-                  />
-                )}
+              {archivedProjects.length > 0 && (
+                <ProjectFolder
+                  name="Archived projects"
+                  projects={archivedProjects}
+                  initialExpanded={archivedProjects.some(
+                    ({ id }) => id === projectId
+                  )}
+                  onButtonClick={onButtonClick}
+                />
+              )}
 
-                <Tooltip content="New project" placement="right" fixed>
-                  <button
-                    type="button"
-                    className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
-                    onClick={openNewProjectModal}
-                  >
-                    <LargePlusIcon size="2em" ariaLabel="New project" />
-                  </button>
-                </Tooltip>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </>
-    );
-  }
-);
+              <Tooltip content="New project" placement="right" fixed>
+                <button
+                  type="button"
+                  className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
+                  onClick={openNewProjectModal}
+                >
+                  <LargePlusIcon size="2em" ariaLabel="New project" />
+                </button>
+              </Tooltip>
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
+  );
+};
 
 interface ProjectFolderProps {
   name: string;
@@ -131,7 +128,6 @@ const ProjectFolder = ({
   const [{ height: collapsibleHeight }, collapsibleRef] = useElementSize();
 
   const buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement> = {
-    type: 'button',
     onClick: () => setIsExpanded(!isExpanded),
     'aria-controls': id,
     'aria-expanded': isExpanded,
@@ -150,15 +146,17 @@ const ProjectFolder = ({
             <Tooltip content="Archived projects" placement="right" fixed>
               {isExpanded ? (
                 <button
-                  {...buttonProps}
+                  type="button"
                   className="btn w-12 h-12 flex justify-center items-center text-slate-400 dark:text-slate-500"
+                  {...buttonProps}
                 >
                   <ChevronUpIcon size="2em" noAriaLabel />
                 </button>
               ) : (
                 <button
-                  {...buttonProps}
+                  type="button"
                   className="btn w-12 h-12 border border-dashed p-1.5 grid gap-1 grid-cols-2 border-slate-400 dark:border-slate-500"
+                  {...buttonProps}
                 >
                   {projects.slice(0, 4).map((project) => (
                     <ProjectIcon
@@ -218,7 +216,7 @@ const ProjectListItem = ({
   tabIndex = 0,
 }: ProjectListItemProps) => {
   const { projectId: currentProjectId } = useContext() as { projectId: number };
-  const isCurrentProject = project.id == currentProjectId;
+  const isCurrentProject = project.id === currentProjectId;
 
   const [tippyTriggerTarget, setTippyTriggerTarget] = useState(null);
 

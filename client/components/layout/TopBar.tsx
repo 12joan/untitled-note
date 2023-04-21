@@ -28,94 +28,95 @@ export interface TopBar {
   onSidebarButtonClick?: () => void;
 }
 
-export const TopBar = forwardRef(
-  ({ showSidebarButton = false, onSidebarButtonClick }: TopBar, ref) => {
-    const { project, showSearchModal, showAccountModal } = useContext() as {
-      project: Project;
-      showSearchModal: () => void;
-      showAccountModal: () => void;
-    };
+export const TopBar = ({
+  showSidebarButton = false,
+  onSidebarButtonClick,
+}: TopBar) => {
+  const { project, showSearchModal, showAccountModal } = useContext() as {
+    project: Project;
+    showSearchModal: () => void;
+    showAccountModal: () => void;
+  };
 
-    const { isXs } = useBreakpoints();
+  const { isXs } = useBreakpoints();
 
-    const createNewDocument = useNewDocument();
+  const createNewDocument = useNewDocument();
 
-    const mainActions: Action[] = [
-      {
-        icon: NewDocumentIcon,
-        label: 'New document',
-        onClick: createNewDocument,
-      },
-      { icon: SearchIcon, label: 'Search', onClick: showSearchModal },
-      { icon: SettingsIcon, label: 'Settings' },
-    ];
+  const mainActions: Action[] = [
+    {
+      icon: NewDocumentIcon,
+      label: 'New document',
+      onClick: createNewDocument,
+    },
+    { icon: SearchIcon, label: 'Search', onClick: showSearchModal },
+    { icon: SettingsIcon, label: 'Settings' },
+  ];
 
-    const accountActions: Action[] = [
-      { icon: AccountIcon, label: 'Account info', onClick: showAccountModal },
-      { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
-    ];
+  const accountActions: Action[] = [
+    { icon: AccountIcon, label: 'Account info', onClick: showAccountModal },
+    { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
+  ];
 
-    const isDisconnected = useDisconnected();
+  const isDisconnected = useDisconnected();
 
-    return (
-      <>
-        {showSidebarButton && (
-          <Tooltip content="Show sidebar" fixed>
-            <NavButton
-              icon={SidebarIcon}
-              label="Show sidebar"
-              onClick={onSidebarButtonClick}
-            />
-          </Tooltip>
-        )}
-
-        {isDisconnected ? (
-          <div
-            className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white"
-            aria-live="assertive"
-          >
-            <OfflineIcon size="1.25em" noAriaLabel />
-            Connection lost
-          </div>
-        ) : (
-          <div
-            className={`font-medium ${
-              showSidebarButton ? '' : '-ml-3'
-            } px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}
-          >
-            {project.name}
-          </div>
-        )}
-
-        <div className="grow" />
-
-        {isXs ? (
-          <>
-            {mainActions.map(({ label, ...otherProps }) => (
-              <Tooltip key={label} content={label} fixed>
-                <NavButton label={label} {...otherProps} />
-              </Tooltip>
-            ))}
-
-            <NavDropdown
-              icon={AccountIcon}
-              label="Account"
-              actions={accountActions}
-              trigger="mouseenter click"
-              interactiveBorder={10}
-            />
-          </>
-        ) : (
-          <NavDropdown
-            icon={MenuIcon}
-            label="Menu"
-            actions={[...mainActions, ...accountActions]}
+  return (
+    <>
+      {showSidebarButton && (
+        <Tooltip content="Show sidebar" fixed>
+          <NavButton
+            icon={SidebarIcon}
+            label="Show sidebar"
+            onClick={onSidebarButtonClick}
           />
-        )}
-      </>
-    );
-  }
-);
+        </Tooltip>
+      )}
+
+      {isDisconnected ? (
+        <div
+          className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white"
+          aria-live="assertive"
+        >
+          <OfflineIcon size="1.25em" noAriaLabel />
+          Connection lost
+        </div>
+      ) : (
+        <div
+          className={`font-medium ${
+            showSidebarButton ? '' : '-ml-3'
+          } px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}
+        >
+          {project.name}
+        </div>
+      )}
+
+      <div className="grow" />
+
+      {isXs ? (
+        <>
+          {mainActions.map(({ label, ...otherProps }) => (
+            <Tooltip key={label} content={label} fixed>
+              <NavButton label={label} {...otherProps} />
+            </Tooltip>
+          ))}
+
+          <NavDropdown
+            icon={AccountIcon}
+            label="Account"
+            actions={accountActions}
+            trigger="mouseenter click"
+            interactiveBorder={10}
+          />
+        </>
+      ) : (
+        <NavDropdown
+          icon={MenuIcon}
+          label="Menu"
+          actions={[...mainActions, ...accountActions]}
+        />
+      )}
+    </>
+  );
+};
 
 interface NavDropdownProps extends Omit<DropdownProps, 'items'> {
   icon: ElementType<IconProps>;

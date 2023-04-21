@@ -99,6 +99,7 @@ export const EditorView = ({ documentId }: EditorViewProps) => {
       const doesNotExist = error?.response?.status === 404;
 
       if (!doesNotExist) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
 
