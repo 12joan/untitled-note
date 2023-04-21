@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 export const useEffectAfterFirst = (
   callback: () => void,
   dependencies: React.DependencyList = [],
-  shouldExecute: boolean = true
+  shouldExecute = true
 ) => {
   const isFirst = useRef(true);
 

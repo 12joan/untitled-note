@@ -1,4 +1,4 @@
-import { useMemo, useState, ChangeEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, useMemo, useState } from 'react';
 
 export interface UseNormalizedInputOptions {
   initial: string;
@@ -26,9 +26,11 @@ export const useNormalizedInput = ({
 
   const props = {
     value,
-    onChange: (event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value),
+    onChange: (event: ChangeEvent<HTMLInputElement>) =>
+      setValue(event.target.value),
     onBlur: normalizeValue,
-    onKeyDown: (event: KeyboardEvent) => event.key === 'Enter' && normalizeValue(),
+    onKeyDown: (event: KeyboardEvent) =>
+      event.key === 'Enter' && normalizeValue(),
   };
 
   return { value, props, isValid, resetValue };

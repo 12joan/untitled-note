@@ -1,23 +1,21 @@
-import React, { ElementType, ReactNode } from 'react'
-
-import { useModal } from '~/lib/useModal'
-import { useBreakpoints } from '~/lib/useBreakpoints'
-import { IconProps } from '~/components/icons/makeIcon'
-import { useOverrideable } from '~/lib/useOverrideable'
-
+import React, { ElementType, ReactNode } from 'react';
+import { useBreakpoints } from '~/lib/useBreakpoints';
+import { useModal } from '~/lib/useModal';
+import { useOverrideable } from '~/lib/useOverrideable';
 import {
   EmailAndPasswordSection,
   FileStorageSection,
-} from '~/components/accountModalSections'
-import { StyledModal, StyledModalProps, ModalTitle } from '~/components/Modal'
-import { WithCloseButton } from '~/components/WithCloseButton'
-import AccountIcon from '~/components/icons/AccountIcon'
-import StorageIcon from '~/components/icons/StorageIcon'
+} from '~/components/accountModalSections';
+import AccountIcon from '~/components/icons/AccountIcon';
+import { IconProps } from '~/components/icons/makeIcon';
+import StorageIcon from '~/components/icons/StorageIcon';
+import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
+import { WithCloseButton } from '~/components/WithCloseButton';
 
 type Section = {
   title: string;
   icon: ElementType<IconProps>;
-  component: ElementType<{}>;
+  component: ElementType<Record<string, never>>;
 };
 
 const sections: Record<string, Section> = {
@@ -46,30 +44,31 @@ const AccountModal = ({
   open,
   onClose,
 }: AccountModalOpenProps & Omit<StyledModalProps, 'children'>) => {
-  const [activeSectionKey, setActiveSectionKey] = useOverrideable(initialSection)
+  const [activeSectionKey, setActiveSectionKey] =
+    useOverrideable(initialSection);
 
-  const {
-    title: activeSectionTitle,
-    component: ActiveSectionComponent,
-  } = sections[activeSectionKey]
+  const { title: activeSectionTitle, component: ActiveSectionComponent } =
+    sections[activeSectionKey];
 
-  const { isSm: horizontalLayout } = useBreakpoints()
+  const { isSm: horizontalLayout } = useBreakpoints();
 
   const withCloseButton = (children: ReactNode) => (
     <WithCloseButton
-      customClassNames={{ items: horizontalLayout ? 'items-center' : 'items-start' }}
+      customClassNames={{
+        items: horizontalLayout ? 'items-center' : 'items-start',
+      }}
       onClose={onClose}
       children={children}
     />
-  )
+  );
 
   const withCloseButtonHorizontal = horizontalLayout
     ? withCloseButton
-    : (children: ReactNode) => children
+    : (children: ReactNode) => children;
 
   const withCloseButtonVertical = horizontalLayout
     ? (children: ReactNode) => children
-    : withCloseButton
+    : withCloseButton;
 
   return (
     <StyledModal
@@ -90,6 +89,7 @@ const AccountModal = ({
               {Object.entries(sections).map(([key, { title, icon: Icon }]) => (
                 <button
                   key={key}
+                  type="button"
                   className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
                   data-active={key === activeSectionKey}
                   onClick={() => setActiveSectionKey(key)}
@@ -124,11 +124,10 @@ const AccountModal = ({
         </div>
       </div>
     </StyledModal>
-  )
-}
+  );
+};
 
-export const useAccountModal = () => (
+export const useAccountModal = () =>
   useModal<AccountModalOpenProps | undefined>((modalProps, openProps) => (
     <AccountModal {...modalProps} {...(openProps || {})} />
-  ))
-);
+  ));

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, DependencyList } from 'react';
+import { DependencyList, useLayoutEffect, useState } from 'react';
 import { Future, pendingFuture, resolvedFuture } from '~/lib/monads';
 import { Stream } from '~/lib/types';
 

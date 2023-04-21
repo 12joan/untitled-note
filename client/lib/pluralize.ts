@@ -2,7 +2,7 @@ export const pluralize = (
   count: number,
   singular: string,
   plural?: string,
-  zero?: string,
+  zero?: string
 ) => {
   if (count === 0 && zero) {
     return zero;
@@ -12,6 +12,6 @@ export const pluralize = (
     return `${count} ${singular}`;
   }
 
-  const noun = plural ? plural : `${singular}s`;
+  const noun = plural || `${singular}s`;
   return `${count} ${noun}`;
 };

@@ -1,4 +1,4 @@
-import { useEffect, DependencyList } from 'react';
+import { DependencyList, useEffect } from 'react';
 
 type EventListener = (...args: any[]) => void;
 type EventListeners = Set<EventListener>;
@@ -8,7 +8,7 @@ const eventListeners = new Map<string, EventListeners>();
 export const useGlobalEvent = (
   eventName: string,
   handler: EventListener,
-  deps?: DependencyList,
+  deps?: DependencyList
 ) => {
   useEffect(() => {
     if (!eventListeners.has(eventName)) {

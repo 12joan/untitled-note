@@ -20,17 +20,17 @@ const mergeGroupedClassNames = (
   return { ...base, ...custom };
 };
 
-const resolveGroupedClassNames = (groupedClassNames: ClassNamesObject): string => (
+const resolveGroupedClassNames = (
+  groupedClassNames: ClassNamesObject
+): string =>
   Object.values(groupedClassNames)
     .filter(Boolean)
     .join(' ')
     .replace(/\s+/g, ' ')
-    .trim()
-);
+    .trim();
 
 export const groupedClassNames = (
   base: ClassNamesObject,
   ...overrides: GroupedClassNames[]
-): string => (
-  resolveGroupedClassNames(overrides.reduce(mergeGroupedClassNames, base))
-);
+): string =>
+  resolveGroupedClassNames(overrides.reduce(mergeGroupedClassNames, base));

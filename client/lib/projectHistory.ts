@@ -8,9 +8,6 @@ const {
   key: 'projectHistory',
 });
 
-export {
-  projectWasOpened,
-  removeProjectFromHistory,
-};
+export { projectWasOpened, removeProjectFromHistory };
 
 export const getLastOpenedProject = () => getProjectHistory()[0];

@@ -11,7 +11,7 @@ export const retry = <T>(
     interval = 1000,
     shouldRetry = () => true,
   }: RetryOptions = {}
-): Promise<T> => (
+): Promise<T> =>
   new Promise((resolve, reject) => {
     const attempt = (retriesLeft: number) =>
       func()
@@ -29,5 +29,4 @@ export const retry = <T>(
         });
 
     attempt(maxRetries);
-  })
-);
+  });

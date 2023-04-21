@@ -1,4 +1,4 @@
-import { useState, DragEvent } from 'react';
+import { DragEvent, useState } from 'react';
 import { PartialDocument } from '~/lib/types';
 
 type BaseDragData = {
@@ -13,23 +13,21 @@ type DocumentDragData = BaseDragData & {
 
 export type DragData = DocumentDragData;
 
-const makeDragData = <T extends DragData>(
-  type: T['type'],
-  data: T['data'],
-) => ({ type, data }) as T;
+const makeDragData = <T extends DragData>(type: T['type'], data: T['data']) =>
+  ({ type, data } as T);
 
-export const makeDocumentDragData = (
-  doc: PartialDocument
-): DocumentDragData => makeDragData('document', doc);
+export const makeDocumentDragData = (doc: PartialDocument): DocumentDragData =>
+  makeDragData('document', doc);
 
 let currentDragData: DragData | null = null;
 
-export const handleDragStartWithData = (dragData: DragData) => (event: DragEvent) => {
-  if (dragData !== null) {
-    currentDragData = dragData;
-    event.dataTransfer.setData('text/x-note-drag', 'true');
-  }
-};
+export const handleDragStartWithData =
+  (dragData: DragData) => (event: DragEvent) => {
+    if (dragData !== null) {
+      currentDragData = dragData;
+      event.dataTransfer.setData('text/x-note-drag', 'true');
+    }
+  };
 
 const getDragData = (event: DragEvent): DragData | null => {
   return event.dataTransfer.types.includes('text/x-note-drag')
@@ -50,18 +48,18 @@ export const useDragTarget = <T extends DragData>({
 }: UseDragTargetOptions<T>) => {
   const [dragOver, setDragOver] = useState(false);
 
-  const ifAccepts = (
-    handler: (event: DragEvent, dragData: T) => void
-  ) => (event: DragEvent) => {
-    const dragData = getDragData(event);
-    if (dragData?.type !== type) return;
+  const ifAccepts =
+    (handler: (event: DragEvent, dragData: T) => void) =>
+    (event: DragEvent) => {
+      const dragData = getDragData(event);
+      if (dragData?.type !== type) return;
 
-    const typedDragData = dragData as T;
+      const typedDragData = dragData as T;
 
-    if (predicate(typedDragData.data)) {
-      handler(event, typedDragData);
-    }
-  };
+      if (predicate(typedDragData.data)) {
+        handler(event, typedDragData);
+      }
+    };
 
   const onDragOver = ifAccepts((event) => {
     event.preventDefault();

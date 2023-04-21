@@ -1,4 +1,4 @@
-import { KeyboardEvent, DependencyList } from 'react';
+import { DependencyList, KeyboardEvent } from 'react';
 import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
 
 export const useGlobalKeyboardShortcut = (
@@ -6,10 +6,5 @@ export const useGlobalKeyboardShortcut = (
   callback: (event: KeyboardEvent, key: string) => void,
   deps: DependencyList = []
 ) => {
-  useKeyboardShortcut(
-    () => document.body,
-    keys,
-    callback,
-    deps
-  );
+  useKeyboardShortcut(() => document.body, keys, callback, deps);
 };

@@ -1,12 +1,12 @@
+import { Stream } from '~/lib/types';
 import { handleSubscriptionStatusChanged } from './connectionStatus';
 import consumer from './consumer';
-import { Stream } from '~/lib/types';
 
 export const streamAction = <T>(
   model: string,
   action: string,
   params: Record<string, any>,
-  callback: (data: T) => void,
+  callback: (data: T) => void
 ): Stream => {
   return consumer.subscriptions.create(
     {

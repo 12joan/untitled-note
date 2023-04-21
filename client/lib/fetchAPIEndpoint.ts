@@ -20,7 +20,9 @@ export const fetchAPIEndpoint = ({
   return fetch(pathWithQuery, {
     method,
     headers: {
-      'X-CSRF-Token': document.querySelector("[name='csrf-token']")!.getAttribute('content')!,
+      'X-CSRF-Token': document
+        .querySelector("[name='csrf-token']")!
+        .getAttribute('content')!,
       'Content-Type': 'application/json',
       ...headers,
     },

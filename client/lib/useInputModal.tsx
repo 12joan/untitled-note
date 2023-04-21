@@ -1,20 +1,18 @@
-import React, { useRef, useEffect, FormEvent } from 'react'
-
-import { useModal } from '~/lib/useModal'
-import { useNormalizedInput } from '~/lib/useNormalizedInput'
-
-import { StyledModal, StyledModalProps, ModalTitle } from '~/components/Modal'
+import React, { FormEvent, useEffect, useRef } from 'react';
+import { useModal } from '~/lib/useModal';
+import { useNormalizedInput } from '~/lib/useNormalizedInput';
+import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 
 export interface InputModalProps {
-  title: string
-  inputLabel: string
-  inputPlaceholder: string
-  confirmLabel: string
-  cancelLabel?: string
-  initialValue?: string
-  normalizeInput?: (value: string) => string
-  autoSelect?: boolean
-  onConfirm: (value: string) => void
+  title: string;
+  inputLabel: string;
+  inputPlaceholder: string;
+  confirmLabel: string;
+  cancelLabel?: string;
+  initialValue?: string;
+  normalizeInput?: (value: string) => string;
+  autoSelect?: boolean;
+  onConfirm: (value: string) => void;
 }
 
 const InputModal = ({
@@ -30,24 +28,24 @@ const InputModal = ({
   open,
   onClose,
 }: InputModalProps & Omit<StyledModalProps, 'children'>) => {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { value, props } = useNormalizedInput({
     initial: initialValue,
     normalize: normalizeInput,
-  })
+  });
 
   useEffect(() => {
     if (autoSelect) {
-      inputRef.current?.select()
+      inputRef.current?.select();
     }
-  }, [])
+  }, []);
 
   const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
-    onClose()
-    onConfirm(value)
-  }
+    event.preventDefault();
+    onClose();
+    onConfirm(value);
+  };
 
   return (
     <StyledModal open={open} onClose={onClose}>
@@ -55,9 +53,7 @@ const InputModal = ({
         <ModalTitle children={title} />
 
         <label className="block space-y-2">
-          <div className="font-medium select-none">
-            {inputLabel}
-          </div>
+          <div className="font-medium select-none">{inputLabel}</div>
 
           <input
             ref={inputRef}
@@ -70,7 +66,11 @@ const InputModal = ({
         </label>
 
         <div className="flex justify-end space-x-2">
-          <button type="button" className="btn btn-rect btn-modal-secondary" onClick={onClose}>
+          <button
+            type="button"
+            className="btn btn-rect btn-modal-secondary"
+            onClick={onClose}
+          >
             {cancelLabel}
           </button>
 
@@ -80,11 +80,8 @@ const InputModal = ({
         </div>
       </form>
     </StyledModal>
-  )
-}
+  );
+};
 
-export const useInputModal = (props: InputModalProps) => (
-  useModal((modalProps) => (
-    <InputModal {...modalProps} {...props} />
-  ))
-);
+export const useInputModal = (props: InputModalProps) =>
+  useModal((modalProps) => <InputModal {...modalProps} {...props} />);

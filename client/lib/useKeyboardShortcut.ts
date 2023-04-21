@@ -1,4 +1,4 @@
-import { useEffect, DependencyList, KeyboardEvent } from 'react';
+import { DependencyList, KeyboardEvent, useEffect } from 'react';
 import { keyWithModifiers } from '~/lib/keyWithModifiers';
 
 export const useKeyboardShortcut = (

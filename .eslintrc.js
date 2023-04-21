@@ -33,6 +33,7 @@ module.exports = {
     ],
     'consistent-return': 'off',
     'prefer-promise-reject-errors': 'off',
+    'default-case': 'off',
     'no-plusplus': 'off',
     'no-param-reassign': 'off',
     'no-shadow': 'off',

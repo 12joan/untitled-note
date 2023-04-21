@@ -23,15 +23,15 @@ export const uploadFile = async ({
   onUploadStart = () => {},
   onUploadProgress = () => {},
 }: UploadFileOptions) => {
-  const {
-    presigned_post: presignedPost,
-    ...s3File
-  } = await allocateFile(projectId, {
-    role,
-    filename: file.name,
-    size: file.size,
-    content_type: file.type || 'application/octet-stream',
-  });
+  const { presigned_post: presignedPost, ...s3File } = await allocateFile(
+    projectId,
+    {
+      role,
+      filename: file.name,
+      size: file.size,
+      content_type: file.type || 'application/octet-stream',
+    }
+  );
 
   onUploadStart(s3File);
 

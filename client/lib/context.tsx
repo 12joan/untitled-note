@@ -1,12 +1,17 @@
-import React, { createContext, useContext as reactUseContext, ReactNode } from 'react'
+import React, {
+  createContext,
+  ReactNode,
+  useContext as reactUseContext,
+  useMemo,
+} from 'react';
 
-const Context = createContext({})
+const Context = createContext({});
 
-export const useContext = () => reactUseContext(Context)
+export const useContext = () => reactUseContext(Context);
 
 export interface ContextProviderProps extends Record<string, any> {
-  children: ReactNode
-  context?: Record<string, any>
+  children: ReactNode;
+  context?: Record<string, any>;
 }
 
 export const ContextProvider = ({
@@ -14,18 +19,16 @@ export const ContextProvider = ({
   children,
   ...otherProps
 }: ContextProviderProps) => {
-  // const oldContext = useContext()
-  // const newContext = { ...oldContext, ...(context || {}), ...otherProps }
+  const oldContext = useContext();
 
-  const context = {
-    ...useContext(),
-    ...contextProp,
-    ...otherProps,
-  };
-
-  return (
-    <Context.Provider value={context}>
-      {children}
-    </Context.Provider>
+  const context = useMemo(
+    () => ({
+      ...oldContext,
+      ...contextProp,
+      ...otherProps,
+    }),
+    [oldContext, contextProp, otherProps]
   );
+
+  return <Context.Provider value={context}>{children}</Context.Provider>;
 };

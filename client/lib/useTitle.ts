@@ -5,7 +5,7 @@ type TitleEntry = {
   title: string;
 };
 
-let titleStack = [{ title: APP_NAME }];
+let titleStack: TitleEntry[] = [{ title: APP_NAME }];
 
 const updateTitle = () => {
   document.title = titleStack[titleStack.length - 1].title;

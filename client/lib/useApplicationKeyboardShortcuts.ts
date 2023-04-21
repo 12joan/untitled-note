@@ -1,10 +1,10 @@
-import { RefObject, KeyboardEvent } from 'react';
+import { KeyboardEvent, RefObject } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { projectPath } from '~/lib/routes';
+import { Project } from '~/lib/types';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useNewDocument } from '~/lib/useNewDocument';
-import { Project } from '~/lib/types';
 
 export interface UseApplicationKeyboardShortcutsOptions {
   sectionRefs: RefObject<HTMLElement | null>[];
@@ -102,9 +102,8 @@ export const useApplicationKeyboardShortcuts = ({
         currentSectionIndex = 0;
       }
 
-      const newSectionIndex = (
-        currentSectionIndex + 1
-      ) % visibleSections.length;
+      const newSectionIndex =
+        (currentSectionIndex + 1) % visibleSections.length;
 
       visibleSections[newSectionIndex]?.focus();
     },

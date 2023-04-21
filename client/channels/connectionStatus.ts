@@ -12,7 +12,9 @@ export type ConnectionStatus =
 
 let connectionStatus: ConnectionStatus = CONNECTION_STATUS_CONNECTING;
 
-export const handleSubscriptionStatusChanged = (subscriptionConnected: boolean) => {
+export const handleSubscriptionStatusChanged = (
+  subscriptionConnected: boolean
+) => {
   const newStatus = subscriptionConnected
     ? CONNECTION_STATUS_CONNECTED
     : CONNECTION_STATUS_DISCONNECTED;
@@ -46,10 +48,8 @@ export const useConnectionStatus = () => {
   return status;
 };
 
-export const useConnected = () => (
-  useConnectionStatus() === CONNECTION_STATUS_CONNECTED
-);
+export const useConnected = () =>
+  useConnectionStatus() === CONNECTION_STATUS_CONNECTED;
 
-export const useDisconnected = () => (
-  useConnectionStatus() === CONNECTION_STATUS_DISCONNECTED
-);
+export const useDisconnected = () =>
+  useConnectionStatus() === CONNECTION_STATUS_DISCONNECTED;

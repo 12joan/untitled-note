@@ -16,7 +16,7 @@ type MakeLocalHistoryResult<T> = {
 };
 
 export const makeLocalHistory = <T>({
-  key
+  key,
 }: MakeLocalHistoryOptions): MakeLocalHistoryResult<T> => {
   const touchItem = (item: T) => {
     const oldItems = getLocalStorage<T[]>(key) ?? [];

@@ -2,23 +2,23 @@ import { createToast } from '~/lib/createToast';
 import { filesize } from '~/lib/filesize';
 import { Toast } from '~/lib/types';
 
-const handleErrors = (
-  toastForError: (error: any) => Toast
-) => <T>(promise: Promise<T>): Promise<T> => {
-  return promise.catch((error: any) => {
-    // eslint-disable-next-line no-console
-    console.log(error);
-
-    try {
-      createToast(toastForError(error));
-    } catch (error) {
+const handleErrors =
+  (toastForError: (error: any) => Toast) =>
+  <T>(promise: Promise<T>): Promise<T> => {
+    return promise.catch((error: any) => {
       // eslint-disable-next-line no-console
-      console.error('Error while creating toast:', error);
-    }
+      console.log(error);
 
-    throw error;
-  });
-};
+      try {
+        createToast(toastForError(error));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error while creating toast:', error);
+      }
+
+      throw error;
+    });
+  };
 
 export const handleCreateProjectError = handleErrors(() => ({
   title: 'Failed to create project',
@@ -94,14 +94,16 @@ export const handleRenameTagError = handleErrors((error) => {
   if (error.response?.status === 422) {
     return {
       title: 'Tag name already exists',
-      message: 'A tag with this name already exists. Please choose a different name.',
+      message:
+        'A tag with this name already exists. Please choose a different name.',
       autoClose: 'slow',
     };
   }
 
   return {
     title: 'Failed to rename tag',
-    message: 'An error occurred while renaming the tag. Make sure you are connected to the internet and try again.',
+    message:
+      'An error occurred while renaming the tag. Make sure you are connected to the internet and try again.',
     autoClose: 'slow',
   };
 });
@@ -152,7 +154,8 @@ export const handleUploadFileError = handleErrors(({ reason, data = {} }) => {
 
   return {
     title: 'Failed to complete upload',
-    message: 'An error occurred while completing the upload. Make sure you are connected to the internet and try again.',
+    message:
+      'An error occurred while completing the upload. Make sure you are connected to the internet and try again.',
     autoClose: 'slow',
   };
 });

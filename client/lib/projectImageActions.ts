@@ -53,6 +53,5 @@ export const uploadProjectImage = async ({
   });
 };
 
-export const removeProjectImage = (projectId: number) => (
-  updateProjectImage(projectId, null)
-)
+export const removeProjectImage = (projectId: number) =>
+  updateProjectImage(projectId, null);

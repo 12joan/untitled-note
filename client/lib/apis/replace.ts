@@ -10,21 +10,20 @@ export type ReplaceResult = {
   documents: number;
 };
 
-export const replaceInProject = (
-  projectId: number,
-  options: ReplaceOptions
-) => fetchAPIEndpoint({
-  method: 'POST',
-  path: `/api/v1/projects/${projectId}/replace`,
-  data: options,
-}).then((response) => response.json()) as Promise<ReplaceResult>;
+export const replaceInProject = (projectId: number, options: ReplaceOptions) =>
+  fetchAPIEndpoint({
+    method: 'POST',
+    path: `/api/v1/projects/${projectId}/replace`,
+    data: options,
+  }).then((response) => response.json()) as Promise<ReplaceResult>;
 
 export const replaceInDocument = (
   projectId: number,
   documentId: number,
   options: ReplaceOptions
-) => fetchAPIEndpoint({
-  method: 'POST',
-  path: `/api/v1/projects/${projectId}/documents/${documentId}/replace`,
-  data: options,
-}).then((response) => response.json()) as Promise<ReplaceResult>;
+) =>
+  fetchAPIEndpoint({
+    method: 'POST',
+    path: `/api/v1/projects/${projectId}/documents/${documentId}/replace`,
+    data: options,
+  }).then((response) => response.json()) as Promise<ReplaceResult>;

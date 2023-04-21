@@ -5,47 +5,36 @@ export const createProject = (
   project: Partial<Project> & {
     name: Project['name'];
   }
-) => (
+) =>
   fetchAPIEndpoint({
     method: 'POST',
     path: '/api/v1/projects',
     data: { project },
-  }).then((response) => response.json()) as Promise<Project>
-);
+  }).then((response) => response.json()) as Promise<Project>;
 
-export const updateProject = (
-  projectId: number,
-  project: Partial<Project>
-) => (
+export const updateProject = (projectId: number, project: Partial<Project>) =>
   fetchAPIEndpoint({
     method: 'PUT',
     path: `/api/v1/projects/${projectId}`,
     data: { project },
-  }).then((response) => response.json()) as Promise<Project>
-);
+  }).then((response) => response.json()) as Promise<Project>;
 
-export const deleteProject = (projectId: number) => (
+export const deleteProject = (projectId: number) =>
   fetchAPIEndpoint({
     method: 'DELETE',
     path: `/api/v1/projects/${projectId}`,
-  })
-);
+  });
 
-export const updateProjectOrder = (order: Project['id'][]) => (
+export const updateProjectOrder = (order: Project['id'][]) =>
   fetchAPIEndpoint({
     method: 'PUT',
     path: '/api/v1/project_order',
     data: { order },
-  })
-);
+  });
 
-export const updateProjectImage = (
-  projectId: number,
-  fileId: number | null
-) => (
+export const updateProjectImage = (projectId: number, fileId: number | null) =>
   fetchAPIEndpoint({
     method: 'PUT',
     path: `/api/v1/projects/${projectId}/image`,
     data: { image_id: fileId },
-  })
-);
+  });

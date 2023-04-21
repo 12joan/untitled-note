@@ -24,7 +24,8 @@ export type Document = {
   pinned_at: string | null;
 };
 
-export type PartialDocument = Pick<Document,
+export type PartialDocument = Pick<
+  Document,
   | 'id'
   | 'title'
   | 'safe_title'

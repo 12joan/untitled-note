@@ -1,9 +1,7 @@
-import { useRef, useState, SetStateAction, Dispatch } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useIsMounted } from '~/lib/useIsMounted';
 
-export const useStateWhileMounted = <T>(
-  initialState: T | (() => T)
-) => {
+export const useStateWhileMounted = <T>(initialState: T | (() => T)) => {
   const [state, setState] = useState<T>(initialState);
   const stateRef = useRef(state);
   const isMounted = useIsMounted();
@@ -17,8 +15,5 @@ export const useStateWhileMounted = <T>(
     }
   };
 
-  return [state, setStateWhileMounted] as [
-    T,
-    Dispatch<SetStateAction<T>>,
-  ];
+  return [state, setStateWhileMounted] as [T, Dispatch<SetStateAction<T>>];
 };

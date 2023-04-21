@@ -7,9 +7,7 @@ export interface TransformDocumentOptions {
 const transformDocument = (
   doc: Partial<Document>,
   delta: Partial<Document>,
-  {
-    invalidateEditor = true,
-  }: TransformDocumentOptions = {}
+  { invalidateEditor = true }: TransformDocumentOptions = {}
 ): Partial<Document> => ({
   id: doc.id,
   ...(invalidateEditor
@@ -21,36 +19,30 @@ const transformDocument = (
 export const pinDocument = (
   doc: Partial<Document>,
   options: TransformDocumentOptions = {}
-) => (
+) =>
   transformDocument(
     doc,
     {
       pinned_at: new Date().toISOString(),
     },
     options
-  )
-);
+  );
 
 export const unpinDocument = (
   doc: Partial<Document>,
   options: TransformDocumentOptions = {}
-) => (
+) =>
   transformDocument(
     doc,
     {
       pinned_at: null,
     },
     options
-  )
-)
+  );
 
 export const toggleDocumentPinned = (
   doc: Partial<Document> & {
     pinned_at: Document['pinned_at'];
   },
   options: TransformDocumentOptions = {}
-) => (
-  doc.pinned_at
-    ? unpinDocument(doc, options)
-    : pinDocument(doc, options)
-);
+) => (doc.pinned_at ? unpinDocument(doc, options) : pinDocument(doc, options));

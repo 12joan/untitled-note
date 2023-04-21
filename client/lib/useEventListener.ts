@@ -1,4 +1,4 @@
-import { useEffect, DependencyList } from 'react';
+import { DependencyList, useEffect } from 'react';
 
 export const useEventListener = <T extends Event>(
   target: EventTarget,
