@@ -161,7 +161,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     restoreSelection(initialDocument.id, editorRef.current!);
 
   const { findDialog, openFind } = useFind({
-    editorRef,
+    editor: editorRef.current || undefined,
     restoreSelection: restoreSelectionForEditor,
     setSelection: (selection: Range) =>
       setSelection(editorRef.current!, selection),

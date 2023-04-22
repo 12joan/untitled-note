@@ -8,3 +8,13 @@ interface Window {
 interface Document {
   caretPositionFromPoint: (x: number, y: number) => CaretPosition | null;
 }
+
+declare class Highlight {
+  constructor(domRange?: Range);
+
+  add(domRange: Range): void;
+}
+
+declare namespace CSS {
+  const highlights: Map<string, Highlight>;
+}

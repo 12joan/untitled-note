@@ -1,8 +1,24 @@
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { toDOMRange } from '@udecode/plate-headless';
+import React, {
+  KeyboardEvent,
+  ReactNode,
+  RefObject,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
+import {
+  PlateEditor,
+  TEditor,
+  TElement,
+  toDOMRange,
+  TText,
+} from '@udecode/plate-headless';
+import { Path, Range as SlateRange } from 'slate';
 import { useContext } from '~/lib/context';
 import { FIND_SUPPORTED } from '~/lib/environment';
-import useGlobalKeyboardShortcut from '~/lib/useGlobalKeyboardShortcut';
+import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useStateWhenSettled } from '~/lib/useStateWhenSettled';
 import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon';
 import ChevronRightIcon from '~/components/icons/ChevronRightIcon';
@@ -10,29 +26,36 @@ import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 const HIGHLIGHT_LIMIT = 3000;
 
-const forEachTextNode = ({ children }, callback, parentPath = []) => {
+type DOMRange = Range;
+
+const forEachTextNode = (
+  { children }: TEditor | TElement,
+  callback: (node: TText, path: Path) => void,
+  parentPath: Path = []
+) => {
   children.forEach((child, index) => {
     const path = [...parentPath, index];
 
-    if (child.text !== undefined) {
-      callback(child, path);
-    } else if (child.children?.length) {
+    if ('text' in child) {
+      callback(child as TText, path);
+    } else if ('children' in child && child.children.length > 0) {
       forEachTextNode(child, callback, path);
     }
   });
 };
 
-const getMatchesInNode = (node, query) => {
+const getMatches = (editor: PlateEditor, query: string) => {
   if (query === '') return [];
 
-  const matches = [];
+  const matches: SlateRange[] = [];
   const queryLength = query.length;
   const lowerCaseQuery = query.toLowerCase();
 
-  forEachTextNode(node, (textNode, path) => {
+  forEachTextNode(editor, (textNode, path) => {
     const text = textNode.text.toLowerCase();
     let offset = 0;
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const index = text.indexOf(lowerCaseQuery, offset);
 
@@ -50,25 +73,40 @@ const getMatchesInNode = (node, query) => {
   return matches;
 };
 
-const useFind = ({ editorRef, restoreSelection, setSelection }) => {
+export interface UseFindOptions {
+  editor?: PlateEditor;
+  restoreSelection: () => void;
+  setSelection: (range: SlateRange) => void;
+}
+
+export type UseFindResult = {
+  findDialog?: ReactNode;
+  openFind?: () => void;
+};
+
+export const useFind = ({
+  editor,
+  restoreSelection,
+  setSelection,
+}: UseFindOptions) => {
   if (!FIND_SUPPORTED) return {};
 
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [query, settledQuery, rawSetQuery, setQueryWithoutWaiting] =
     useStateWhenSettled('', { debounceTime: 200 });
-  const [matches, setMatches] = useState([]);
-  const [currentMatch, setCurrentMatch] = useState(undefined);
+  const [matches, setMatches] = useState<SlateRange[]>([]);
+  const [currentMatch, setCurrentMatch] = useState<number | null>(null);
   const [scrollToCurrentMatchKey, scrollToCurrentMatch] = useReducer(
     (x) => x + 1,
     0
   );
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // When the find dialog is opened, focus the input
   const open = () => {
     setIsOpen(true);
-    setTimeout(() => inputRef.current.select(), 0);
+    setTimeout(() => inputRef.current?.select(), 0);
   };
 
   // When the find dialog is closed, reset the query and matches
@@ -76,11 +114,11 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     setIsOpen(false);
     setQueryWithoutWaiting('');
     setMatches([]);
-    setCurrentMatch(undefined);
+    setCurrentMatch(null);
 
     // If the current match exists, select it; otherwise, restore the selection
-    const currentMatchRange =
-      currentMatch !== undefined && matches[currentMatch];
+    const currentMatchRange = currentMatch !== null && matches[currentMatch];
+
     if (currentMatchRange) {
       setSelection(currentMatchRange);
     } else {
@@ -88,8 +126,10 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     }
   };
 
-  // When the user presses Meta+F, open the find dialog. If the find dialog was
-  // already open, close it and let the browser handle the keyboad shortcut.
+  /**
+   * When the user presses Meta+F, open the find dialog. If the find dialog was
+   * already open, close it and let the browser handle the keyboad shortcut.
+   */
   useGlobalKeyboardShortcut('MetaF', (event) => {
     if (event.target === inputRef.current) {
       close();
@@ -100,18 +140,18 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   });
 
   // When the query changes, reset the current match
-  const setQuery = (query) => {
-    setCurrentMatch(undefined);
+  const setQuery = (query: string) => {
+    setCurrentMatch(null);
     rawSetQuery(query);
   };
 
-  // Recompute matches when the query changes or the input gains focus, but only
-  // if the find dialog is open and the input is focused
+  /**
+   * Recompute matches when the query changes or the input gains focus, but only
+   * if the find dialog is open and the input is focused
+   */
   useEffect(() => {
-    const editor = editorRef.current;
-
     if (editor && isOpen && isFocused) {
-      setMatches(getMatchesInNode(editor, settledQuery));
+      setMatches(getMatches(editor, settledQuery));
     }
   }, [isOpen, isFocused, settledQuery]);
 
@@ -119,42 +159,41 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   useEffect(() => {
     if (
       matches.length > 0 &&
-      (currentMatch === undefined || currentMatch >= matches.length)
+      (currentMatch === null || currentMatch >= matches.length)
     ) {
       setCurrentMatch(0);
     }
   }, [matches]);
 
-  const matchDOMRanges = useMemo(
+  const matchDOMRanges: DOMRange[] = useMemo(
     () =>
-      matches.map((slateRange) => toDOMRange(editorRef.current, slateRange)),
+      editor
+        ? matches.map((slateRange) => toDOMRange(editor, slateRange)!)
+        : [],
     [matches]
   );
 
   // Highlight matches
   useEffect(() => {
-    const editor = editorRef.current;
-
     if (FIND_SUPPORTED && editor) {
-      const [currentMatchRange, otherMatchRanges] =
-        !isFocused || currentMatch === undefined
-          ? [undefined, matchDOMRanges]
-          : [
-              matchDOMRanges[currentMatch],
-              matchDOMRanges
-                .slice(0, currentMatch)
-                .concat(matchDOMRanges.slice(currentMatch + 1)),
-            ];
+      const currentMatchRange =
+        isFocused && currentMatch !== null
+          ? matchDOMRanges[currentMatch]
+          : null;
 
-      // Only highlight up to HIHGLIGHT_LIMIT matches either side of the current match
-      const limitedOtherMatchRangesStart = Math.max(
-        0,
-        currentMatch - HIGHLIGHT_LIMIT
+      const otherMatchRanges = matchDOMRanges.filter(
+        (_, index) => index !== currentMatch
       );
-      const limitedOtherMatchRangesEnd = Math.min(
-        matches.length,
-        currentMatch + HIGHLIGHT_LIMIT
-      );
+
+      // Only highlight up to HIGHLIGHT_LIMIT matches either side of the current match
+      const limitedOtherMatchRangesStart =
+        currentMatch === null ? 0 : Math.max(0, currentMatch - HIGHLIGHT_LIMIT);
+
+      const limitedOtherMatchRangesEnd =
+        currentMatch === null
+          ? matches.length
+          : Math.min(matches.length, currentMatch + HIGHLIGHT_LIMIT);
+
       const limitedOtherMatchRanges = otherMatchRanges.slice(
         limitedOtherMatchRangesStart,
         limitedOtherMatchRangesEnd
@@ -181,20 +220,22 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
   // Scroll to the current match
   useEffect(() => {
     const currentMatchRange =
-      currentMatch !== undefined && matchDOMRanges[currentMatch];
+      currentMatch !== null && matchDOMRanges[currentMatch];
 
     if (currentMatchRange) {
-      currentMatchRange.startContainer?.parentNode?.scrollIntoView({
+      currentMatchRange.startContainer?.parentElement?.scrollIntoView({
         block: 'center',
       });
     }
   }, [currentMatch, scrollToCurrentMatchKey]);
 
-  const changeMatch = (delta) => {
+  const changeMatch = (delta: number) => {
     if (matches.length === 1) {
       scrollToCurrentMatch();
     } else {
-      setCurrentMatch((currentMatch + delta + matches.length) % matches.length);
+      setCurrentMatch(
+        ((currentMatch ?? 0) + delta + matches.length) % matches.length
+      );
     }
   };
 
@@ -204,12 +245,12 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
         query={query}
         setQuery={setQuery}
         inputRef={inputRef}
-        currentMatch={currentMatch + 1}
+        currentMatch={currentMatch}
         totalMatches={matches.length}
         changeMatch={changeMatch}
         showMatches={
           settledQuery.length > 0 &&
-          (matches.length === 0 || currentMatch !== undefined)
+          (matches.length === 0 || currentMatch !== null)
         }
         setFocused={setIsFocused}
         onClose={close}
@@ -218,6 +259,18 @@ const useFind = ({ editorRef, restoreSelection, setSelection }) => {
     openFind: open,
   };
 };
+
+interface FindDialogProps {
+  query: string;
+  setQuery: (query: string) => void;
+  inputRef: RefObject<HTMLInputElement>;
+  currentMatch: number | null;
+  totalMatches: number;
+  changeMatch: (delta: number) => void;
+  showMatches: boolean;
+  setFocused: (isFocused: boolean) => void;
+  onClose: () => void;
+}
 
 const FindDialog = ({
   query,
@@ -229,17 +282,19 @@ const FindDialog = ({
   showMatches,
   setFocused,
   onClose,
-}) => {
-  const containerRef = useRef();
-  const { topBarHeight } = useContext();
+}: FindDialogProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { topBarHeight } = useContext() as {
+    topBarHeight: number;
+  };
 
-  const handleInputKeyDown = (event) => {
+  const handleInputKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && totalMatches > 0) {
       changeMatch(1);
     }
   };
 
-  const handleContainerKeyDown = (event) => {
+  const handleContainerKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       onClose();
     }
@@ -286,7 +341,7 @@ const FindDialog = ({
               </button>
 
               <span className="select-none" role="status">
-                {currentMatch} of {totalMatches}
+                {currentMatch! + 1} of {totalMatches}
               </span>
 
               <button
@@ -317,5 +372,3 @@ const FindDialog = ({
     </div>
   );
 };
-
-export { useFind };
