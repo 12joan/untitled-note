@@ -1,9 +1,15 @@
-import React, { ElementType, forwardRef, MouseEvent, ReactNode } from 'react';
+import React, {
+  ElementType,
+  forwardRef,
+  MouseEvent,
+  ReactElement,
+  ReactNode,
+} from 'react';
 import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
 import { ContextProvider, useContext } from '~/lib/context';
 import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
 import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
-import { PolyProps } from '~/lib/polymorphic';
+import { PolyProps, PolyRef } from '~/lib/polymorphic';
 import {
   DocumentLink,
   OverviewLink,
@@ -157,7 +163,7 @@ const FutureTagsSection = ({
       >
         <Button
           as={TagLink}
-          tagId={tag.id}
+          to={{ tagId: tag.id }}
           nav
           label={tag.text}
           onContextMenu={(event: MouseEvent) => event.preventDefault()}
@@ -238,61 +244,73 @@ type ButtonWithIconProps<C extends ElementType> = PolyProps<
   }
 >;
 
-const ButtonWithIcon = <C extends ElementType = 'button'>({
-  as,
-  icon: Icon,
-  label,
-  onClick = () => {},
-  ...otherProps
-}: ButtonWithIconProps<C>) => {
-  const Component = as || 'button';
-  const buttonProps = Component === 'button' ? { type: 'button' } : {};
+type ButtonWithIconComponent = <C extends ElementType = 'button'>(
+  props: ButtonWithIconProps<C>
+) => ReactElement | null;
 
-  const onButtonClick = useOnButtonClick();
-
-  return (
-    <Component
-      {...(buttonProps as any)}
-      className="btn w-full px-3 py-2 flex gap-2 items-center"
-      onClick={(event: MouseEvent) => {
-        onButtonClick();
-        onClick(event);
-      }}
-      {...otherProps}
-    >
-      <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
-        <Icon size="1.25em" noAriaLabel />
-      </span>
-
-      {label}
-    </Component>
-  );
-};
-
-interface ButtonProps extends Record<string, any> {
-  as?: ElementType;
-  label: string;
-  onClick?: (event: MouseEvent) => void;
-}
-
-const Button = forwardRef(
-  (
+const ButtonWithIcon: ButtonWithIconComponent = forwardRef(
+  <C extends ElementType = 'button'>(
     {
-      as: Component = 'button',
+      as,
+      icon: Icon,
       label,
       onClick = () => {},
       ...otherProps
-    }: ButtonProps,
-    ref
+    }: ButtonWithIconProps<C>,
+    ref: PolyRef<C>
   ) => {
-    const onButtonClick = useOnButtonClick();
-
+    const Component = as || 'button';
     const buttonProps = Component === 'button' ? { type: 'button' } : {};
+
+    const onButtonClick = useOnButtonClick();
 
     return (
       <Component
         ref={ref}
-        {...buttonProps}
+        {...(buttonProps as any)}
+        className="btn w-full px-3 py-2 flex gap-2 items-center"
+        onClick={(event: MouseEvent) => {
+          onButtonClick();
+          onClick(event);
+        }}
+        {...otherProps}
+      >
+        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+          <Icon size="1.25em" noAriaLabel />
+        </span>
+
+        {label}
+      </Component>
+    );
+  }
+);
+
+type ButtonProps<C extends ElementType> = PolyProps<
+  C,
+  {
+    label: string;
+    onClick?: (event: MouseEvent) => void;
+  }
+>;
+
+type ButtonComponent = <C extends ElementType = 'button'>(
+  props: ButtonProps<C>
+) => ReactElement | null;
+
+const Button: ButtonComponent = forwardRef(
+  <C extends ElementType = 'button'>(
+    { as, label, onClick = () => {}, ...otherProps }: ButtonProps<C>,
+    ref: PolyRef<C>
+  ) => {
+    const Component = as || 'button';
+    const buttonProps = Component === 'button' ? { type: 'button' } : {};
+
+    const onButtonClick = useOnButtonClick();
+
+    return (
+      <Component
+        ref={ref}
+        {...(buttonProps as any)}
         className="btn w-full px-3 py-1 block text-left"
         children={label}
         onClick={(event: MouseEvent) => {
