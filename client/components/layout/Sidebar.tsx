@@ -79,7 +79,7 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
         </PinnedDragTarget>
 
         <FutureDocumentsSection
-          as={RecentlyViewedDocumentLink}
+          buttonAs={RecentlyViewedDocumentLink}
           heading="Recently viewed"
           headingLink={RecentlyViewedLink}
           futureDocuments={mapFuture(futureRecentlyViewedDocuments, (docs) =>
@@ -107,17 +107,17 @@ const useOnButtonClick = () => {
   return onButtonClick;
 };
 
-interface FutureDocumentsSectionProps
+interface FutureDocumentsSectionProps<ButtonAs extends typeof DocumentLink>
   extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
-  as?: ElementType;
+  buttonAs?: ButtonAs;
   futureDocuments: Future<PartialDocument[]>;
 }
 
-const FutureDocumentsSection = ({
-  as = DocumentLink,
+const FutureDocumentsSection = <ButtonAs extends typeof DocumentLink>({
+  buttonAs,
   futureDocuments,
   ...otherProps
-}: FutureDocumentsSectionProps) => {
+}: FutureDocumentsSectionProps<ButtonAs>) => {
   const buttonForDocument = (doc: PartialDocument) => (
     <div key={doc.id}>
       <ContextMenuDropdown
@@ -125,8 +125,8 @@ const FutureDocumentsSection = ({
         appendTo={document.body}
       >
         <Button
-          as={as}
-          documentId={doc.id}
+          as={buttonAs || DocumentLink}
+          to={{ documentId: doc.id }}
           nav
           label={doc.safe_title}
           onContextMenu={(event: MouseEvent) => event.preventDefault()}
