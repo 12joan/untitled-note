@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export interface UseModalRenderProps {
   open: boolean;
@@ -10,7 +10,7 @@ export interface UseModalOptions {
   onClose?: () => void;
 }
 
-export const useModal = <T = undefined,>(
+export const useModal = <T = undefined>(
   render: (modalProps: UseModalRenderProps, openProps: T) => JSX.Element,
   { onOpen, onClose }: UseModalOptions = {}
 ) => {
@@ -19,23 +19,23 @@ export const useModal = <T = undefined,>(
 
   type OpenOptions = T extends undefined ? [] : [T];
 
-  const open = (...args: OpenOptions) => {
+  const open = useCallback((...args: OpenOptions) => {
     setOpenProps(args[0] as T);
     onOpen?.();
-  };
+  }, [onOpen]);
 
-  const close = () => {
+  const close = useCallback(() => {
     setOpenProps(null);
     onClose?.();
-  };
+  }, [onClose]);
 
-  const toggle = (...args: OpenOptions) => {
+  const toggle = useCallback((...args: OpenOptions) => {
     if (isOpen) {
       close();
     } else {
       open(...args);
     }
-  };
+  }, [close, open, isOpen]);
 
   const modal = isOpen
     ? render({ open: isOpen, onClose: close }, openProps)

@@ -12,7 +12,7 @@ export const fetchSearchResults = async (
   query: string
 ): Promise<DocumentSearchResult[]> => {
   const response = await fetchAPIEndpoint({
-    path: `/api/projects/${projectId}/search`,
+    path: `/api/v1/projects/${projectId}/search`,
     query: { q: query },
   });
 

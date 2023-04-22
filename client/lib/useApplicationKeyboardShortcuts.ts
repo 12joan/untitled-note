@@ -58,7 +58,7 @@ export const useApplicationKeyboardShortcuts = ({
       event.stopPropagation();
       toggleSearchModal();
     },
-    []
+    [toggleSearchModal]
   );
 
   // Move focus between sections

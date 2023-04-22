@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_22_203220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,7 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
   end
 
   create_table "s3_files", force: :cascade do |t|
-    t.bigint "original_project_id", null: false
+    t.bigint "original_project_id"
     t.string "role"
     t.string "s3_key"
     t.string "filename"

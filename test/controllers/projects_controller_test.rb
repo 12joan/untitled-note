@@ -41,6 +41,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'can destroy project with files' do
+    create(:s3_file, original_project: @project)
+
+    assert_difference('Project.count', -1) do
+      delete api_v1_project_url(@project)
+    end
+
+    assert_response :success
+  end
+
   test 'cannot update project belonging to other user' do
     as_user(create(:user))
 

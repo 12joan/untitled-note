@@ -34,6 +34,7 @@ export const updateDocument = (
     tags_attributes: tags?.map((tag) => ({
       text: tag.text,
     })),
+    blank: false,
   };
 
   return fetchAPIEndpoint({
@@ -47,7 +48,7 @@ export const deleteDocument = (projectId: number, id: number) =>
   fetchAPIEndpoint({
     method: 'DELETE',
     path: `/api/v1/projects/${projectId}/documents/${id}`,
-  }).then((response) => response.json()) as Promise<Document>;
+  });
 
 export const streamDocuments = (
   projectId: number,
