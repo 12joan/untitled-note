@@ -16,12 +16,12 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
         S3File.stub_any_instance(:url, 'some url') do
           assert_difference('S3File.count') do
             post api_v1_s3_files_url, params: {
+              project_id: @project.id,
               file: {
                 role: 'project-image',
                 filename: 'image.png',
                 size: 150 * 1024,
                 content_type: 'image/png',
-                project_id: @project.id,
               },
             }
           end
@@ -41,12 +41,12 @@ class S3FilesControllerTest < ActionDispatch::IntegrationTest
     stub_allowed(false, 'Some error') do
       assert_no_difference('S3File.count') do
         post api_v1_s3_files_url, params: {
+          project_id: @project.id,
           file: {
             role: 'project-image',
             filename: 'image.png',
             size: 150 * 1024,
             content_type: 'image/png',
-            project_id: @project.id,
           },
         }
       end
