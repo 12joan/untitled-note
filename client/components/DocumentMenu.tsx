@@ -68,7 +68,7 @@ export const DocumentMenu = ({
       <DropdownItem
         icon={OpenInNewTabIcon}
         as={DocumentLink}
-        documentId={doc.id}
+        to={{ documentId: doc.id }}
         target="_blank"
       >
         Open in new {TAB_OR_WINDOW}
