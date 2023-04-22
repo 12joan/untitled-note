@@ -57,11 +57,7 @@ export const ItemIndex = ({
       const heading = <h2 className="h2 select-none" children={title} />;
 
       return showAllLink ? (
-        <PopOutLink
-          as={showAllLink}
-          label="Show all"
-          children={heading}
-        />
+        <PopOutLink as={showAllLink} label="Show all" children={heading} />
       ) : (
         heading
       );

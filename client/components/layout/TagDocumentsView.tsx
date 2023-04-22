@@ -1,7 +1,7 @@
 import React from 'react';
 import { streamDocuments } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';
-import { Future, mapFuture, unwrapFuture, orDefaultFuture } from '~/lib/monads';
+import { Future, mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import { OverviewLink } from '~/lib/routes';
 import { PartialDocument, Tag } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
