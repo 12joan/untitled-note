@@ -2,13 +2,13 @@
   "name": "note",
   "private": true,
   "scripts": {
-    "build": "bin/vite build",
+    "build": "tsc && bin/vite build",
     "start": "yarn rails",
     "dev": "concurrently \"yarn rails\" \"yarn dev:vite\"",
     "rails": "bundle exec rails server -b 0.0.0.0 -p 3000",
     "dev:vite": "bin/vite serve",
     "build-electron": "vite build -c vite.electron.config.js",
-    "lint": "eslint client electron/src" 
+    "lint": "eslint client electron/src"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
@@ -42,6 +42,14 @@
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/node": "^18.15.11",
+    "@types/rails__actioncable": "^6.1.6",
+    "@types/react": "^18.0.35",
+    "@types/react-beautiful-dnd": "^13.1.4",
+    "@types/react-dom": "^18.0.11",
+    "@types/runes": "^0.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
     "@vitejs/plugin-react": "^2.2.0",
     "autoprefixer": "^10.4.14",
     "concurrently": "^7.6.0",
@@ -64,6 +72,8 @@
     "sass": "^1.59.2",
     "scriptjs": "^2.5.9",
     "tailwindcss": "^3.2.7",
+    "typescript": "^5.0.4",
+    "typescript-language-server": "^3.3.2",
     "vite": "^3.2.5",
     "vite-plugin-ruby": "^3.1.3"
   },

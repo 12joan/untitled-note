@@ -8,7 +8,7 @@ module API
       end
 
       def create
-        file_params = params.permit(:role, :filename, :size, :content_type)
+        file_params = params.require(:file).permit(:role, :filename, :size, :content_type)
         project = current_user.projects.find(params.require(:project_id))
 
         allowed, error = UploadAllowed.allowed?(user: current_user, file_params: file_params)
