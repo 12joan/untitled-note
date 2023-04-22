@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { ReactNode, SVGProps } from 'react';
 
-export interface IconProps extends React.SVGProps<SVGSVGElement> {
+export interface IconProps extends SVGProps<SVGSVGElement> {
   size?: number | string;
   ariaLabel?: string;
   noAriaLabel?: boolean;
   className?: string;
 }
 
-export default (children: React.ReactNode) =>
+export default (children: ReactNode) =>
   ({
     size = '1em',
     ariaLabel,

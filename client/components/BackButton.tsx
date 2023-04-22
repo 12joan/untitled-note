@@ -44,6 +44,6 @@ export const BackButton = ({
       {...linkProps}
     />
   ) : (
-    <OverviewLink to={{}} preventScrollReset={false} {...linkProps} />
+    <OverviewLink preventScrollReset={false} {...linkProps} />
   );
 };

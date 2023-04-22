@@ -119,9 +119,7 @@ export const EditorView = ({ documentId }: EditorViewProps) => {
           <h1 className="h1">{heading}</h1>
           <p className="text-lg font-light">{explanation}</p>
           <p>
-            <OverviewLink to={{}} className="btn btn-link">
-              Go back
-            </OverviewLink>
+            <OverviewLink className="btn btn-link">Go back</OverviewLink>
           </p>
         </div>
       );

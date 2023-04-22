@@ -62,9 +62,7 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
           documents are tagged with them.
         </p>
         <p>
-          <OverviewLink to={{}} className="btn btn-link">
-            Go back
-          </OverviewLink>
+          <OverviewLink className="btn btn-link">Go back</OverviewLink>
         </p>
       </div>
     );

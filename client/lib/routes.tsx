@@ -1,4 +1,11 @@
-import React, { ForwardedRef, forwardRef, useEffect, useMemo } from 'react';
+import React, {
+  AnchorHTMLAttributes,
+  ForwardedRef,
+  forwardRef,
+  Ref,
+  useEffect,
+  useMemo,
+} from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { forwardParams } from '~/lib/forwardParams';
@@ -165,20 +172,31 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
   return routesComponent;
 };
 
-export interface RouteLinkProps<T> extends Omit<LinkProps, 'to'> {
-  to: Omit<T, 'projectId'> & {
-    projectId?: number;
-  };
-}
+type HasRequiredKeys<T> = Exclude<
+  keyof T,
+  {
+    [K in keyof T]-?: Record<string, never> extends Pick<T, K> ? K : never;
+  }[keyof T]
+> extends never
+  ? false
+  : true;
 
 const createLinkComponent = <
-  T extends Record<string, any> & { projectId: number }
+  T extends Record<string, any> & { projectId?: number }
 >(
   getPath: (options: T) => string
-) =>
-  forwardRef(
+) => {
+  type WithOptionalProjectId = Omit<T, 'projectId'> & { projectId?: number };
+
+  type ToProp = HasRequiredKeys<WithOptionalProjectId> extends true
+    ? { to: WithOptionalProjectId }
+    : { to?: WithOptionalProjectId };
+
+  type RouteLinkProps = Omit<LinkProps, 'to'> & ToProp;
+
+  return forwardRef(
     (
-      { to, ...otherProps }: RouteLinkProps<T>,
+      { to, ...otherProps }: RouteLinkProps,
       ref: ForwardedRef<HTMLAnchorElement>
     ) => {
       const { projectId: currentProject, linkOriginator } = useContext() as {
@@ -188,7 +206,7 @@ const createLinkComponent = <
 
       const path = getPath({
         ...to,
-        projectId: to.projectId ?? currentProject,
+        projectId: to?.projectId ?? currentProject,
       } as T);
 
       return (
@@ -196,6 +214,7 @@ const createLinkComponent = <
       );
     }
   );
+};
 
 type ProjectRoute = {
   projectId: number;
@@ -231,8 +250,8 @@ export const recentlyViewedDocumentPath = (args: ProjectDocumentRoute) =>
 
 export const LogoutLink = forwardRef(
   (
-    props: React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    ref: React.Ref<HTMLAnchorElement>
+    props: AnchorHTMLAttributes<HTMLAnchorElement>,
+    ref: Ref<HTMLAnchorElement>
   ) => {
     return <a ref={ref} href={logoutPath} {...props} />;
   }

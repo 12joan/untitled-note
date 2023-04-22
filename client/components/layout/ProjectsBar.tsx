@@ -1,4 +1,13 @@
-import React, { useId, useMemo, useRef, useState } from 'react';
+import React, {
+  ButtonHTMLAttributes,
+  KeyboardEvent,
+  MouseEvent,
+  ReactElement,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -21,7 +30,7 @@ import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
 
 export interface ProjectsBarProps {
-  onButtonClick?: (event: React.MouseEvent) => void;
+  onButtonClick?: (event: MouseEvent) => void;
 }
 
 export const ProjectsBar = ({ onButtonClick = () => {} }: ProjectsBarProps) => {
@@ -113,7 +122,7 @@ interface ProjectFolderProps {
   name: string;
   projects: Project[];
   initialExpanded?: boolean;
-  onButtonClick: (event: React.MouseEvent) => void;
+  onButtonClick: (event: MouseEvent) => void;
 }
 
 const ProjectFolder = ({
@@ -127,7 +136,7 @@ const ProjectFolder = ({
 
   const [{ height: collapsibleHeight }, collapsibleRef] = useElementSize();
 
-  const buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement> = {
+  const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = {
     onClick: () => setIsExpanded(!isExpanded),
     'aria-controls': id,
     'aria-expanded': isExpanded,
@@ -204,7 +213,7 @@ interface ProjectListItemProps {
   project: Project;
   index: number;
   draggable?: boolean;
-  onButtonClick: (event: React.MouseEvent) => void;
+  onButtonClick: (event: MouseEvent) => void;
   tabIndex?: number;
 }
 
@@ -218,7 +227,8 @@ const ProjectListItem = ({
   const { projectId: currentProjectId } = useContext() as { projectId: number };
   const isCurrentProject = project.id === currentProjectId;
 
-  const [tippyTriggerTarget, setTippyTriggerTarget] = useState(null);
+  const [tippyTriggerTarget, setTippyTriggerTarget] =
+    useState<HTMLAnchorElement | null>(null);
 
   const tippyRef = useRef<TippyInstance>(null);
   const hideTooltip = () => tippyRef.current?.hide();
@@ -227,7 +237,7 @@ const ProjectListItem = ({
     renderFunc: (props: {
       containerProps: Record<string, any>;
       handleProps: Record<string, any>;
-    }) => React.ReactElement
+    }) => ReactElement
   ) => {
     if (draggable) {
       return (
@@ -273,15 +283,15 @@ const ProjectListItem = ({
             {...handleProps}
             // Link props
             as={isCurrentProject ? OverviewLink : ProjectLink}
-            projectId={project.id}
+            to={{ projectId: project.id }}
             // HTML attributes
             className="w-12 h-12 btn text-xl shadow"
             style={{ cursor: 'pointer' }}
-            onClick={(event: React.MouseEvent) => {
+            onClick={(event: MouseEvent) => {
               hideTooltip();
               onButtonClick(event);
             }}
-            onKeyDown={(event: React.KeyboardEvent) => {
+            onKeyDown={(event: KeyboardEvent) => {
               if (event.key === ' ') {
                 hideTooltip();
               }

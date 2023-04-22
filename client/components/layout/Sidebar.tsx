@@ -3,6 +3,7 @@ import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
 import { ContextProvider, useContext } from '~/lib/context';
 import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
 import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
+import { PolyProps } from '~/lib/polymorphic';
 import {
   DocumentLink,
   OverviewLink,
@@ -15,6 +16,7 @@ import { PartialDocument, Tag } from '~/lib/types';
 import { useNewDocument } from '~/lib/useNewDocument';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { ContextMenuDropdown } from '~/components/Dropdown';
+import { IconProps } from '~/components/icons/makeIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
@@ -227,27 +229,30 @@ const SectionWithHeading = ({
   );
 };
 
-interface ButtonWithIconProps extends Record<string, any> {
-  as?: ElementType;
-  icon: ElementType;
-  label: string;
-  onClick?: (event: MouseEvent) => void;
-}
+type ButtonWithIconProps<C extends ElementType> = PolyProps<
+  C,
+  {
+    icon: ElementType<IconProps>;
+    label: string;
+    onClick?: (event: MouseEvent) => void;
+  }
+>;
 
-const ButtonWithIcon = ({
-  as: Component = 'button',
+const ButtonWithIcon = <C extends ElementType = 'button'>({
+  as,
   icon: Icon,
   label,
   onClick = () => {},
   ...otherProps
-}: ButtonWithIconProps) => {
-  const onButtonClick = useOnButtonClick();
-
+}: ButtonWithIconProps<C>) => {
+  const Component = as || 'button';
   const buttonProps = Component === 'button' ? { type: 'button' } : {};
+
+  const onButtonClick = useOnButtonClick();
 
   return (
     <Component
-      {...buttonProps}
+      {...(buttonProps as any)}
       className="btn w-full px-3 py-2 flex gap-2 items-center"
       onClick={(event: MouseEvent) => {
         onButtonClick();

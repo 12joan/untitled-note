@@ -1,23 +1,27 @@
-import React, { ComponentType, ReactNode } from 'react';
+import React, { ElementType, ReactNode } from 'react';
+import { PolyProps } from '~/lib/polymorphic';
 import CaretRightIcon from '~/components/icons/CaretRightIcon';
 
-export interface PopOutLinkProps<T> {
-  as: ComponentType<T>;
-  asProps: T;
-  label: string;
-  children: ReactNode;
-}
+export type PopOutLinkProps<C extends ElementType> = PolyProps<
+  C,
+  {
+    label: string;
+    children: ReactNode;
+  }
+>;
 
-export const PopOutLink = <T,>({
-  as: LinkComponent,
-  asProps,
+export const PopOutLink = <C extends ElementType = 'a'>({
+  as,
   label,
   children,
-}: PopOutLinkProps<T>) => {
+  ...otherProps
+}: PopOutLinkProps<C>) => {
+  const LinkComponent = as || 'a';
+
   return (
     <LinkComponent
       className="btn btn-link-subtle flex items-center gap-0 hocus:gap-3 group transition-[gap]"
-      {...asProps}
+      {...otherProps}
     >
       {children}
 

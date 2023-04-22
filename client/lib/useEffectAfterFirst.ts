@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { DependencyList, useEffect, useRef } from 'react';
 
 export const useEffectAfterFirst = (
   callback: () => void,
-  dependencies: React.DependencyList = [],
+  dependencies: DependencyList = [],
   shouldExecute = true
 ) => {
   const isFirst = useRef(true);
