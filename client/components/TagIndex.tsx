@@ -18,7 +18,9 @@ export const TagIndex = ({ tags, ...otherProps }: TagIndexProps) => {
     preview: pluralize(tag.documents_count, 'document'),
     as: TagLink,
     buttonProps: {
-      tagId: tag.id,
+      to: {
+        tagId: tag.id,
+      },
     },
     contextMenu: <TagMenu tag={tag} />,
   });

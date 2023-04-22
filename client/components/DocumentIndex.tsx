@@ -22,7 +22,9 @@ export const DocumentIndex = ({
     preview: doc.preview,
     as: linkComponent,
     buttonProps: {
-      documentId: doc.id,
+      to: {
+        documentId: doc.id,
+      },
     },
     contextMenu: <DocumentMenu document={doc} />,
     dragData: makeDocumentDragData(doc),

@@ -59,7 +59,6 @@ export const ItemIndex = ({
       return showAllLink ? (
         <PopOutLink
           as={showAllLink}
-          asProps={{ to: {} }}
           label="Show all"
           children={heading}
         />
