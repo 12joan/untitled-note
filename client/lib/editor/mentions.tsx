@@ -1,122 +1,194 @@
-import React, { useRef, useMemo } from 'react'
-import { createPortal } from 'react-dom'
+import React, { ReactNode, RefObject, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
-  getMentionOnSelectItem,
-  findMentionInput,
-  removeMentionInput,
   ELEMENT_MENTION,
-} from '@udecode/plate-headless'
-import { useSelected, useFocused } from 'slate-react'
+  findMentionInput,
+  getMentionOnSelectItem,
+  MentionPlugin,
+  PlateRenderElementProps,
+  removeMentionInput,
+  TMentionElement,
+  TMentionInputElement,
+  Value,
+} from '@udecode/plate-headless';
+import { useFocused, useSelected } from 'slate-react';
+import { useContext } from '~/lib/context';
+import { getPlainBody } from '~/lib/editor/getPlainBody';
+import { useEditorEvent } from '~/lib/editor/imperativeEvents';
+import { groupedClassNames } from '~/lib/groupedClassNames';
+import { includes } from '~/lib/includes';
+import { Future, mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
+import { DocumentLink } from '~/lib/routes';
+import { PartialDocument } from '~/lib/types';
+import { useCombobox } from '~/lib/useCombobox';
+import { useComboboxFloating } from '~/lib/useComboboxFloating';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import DocumentIcon from '~/components/icons/DocumentIcon';
+import { InlinePlaceholder } from '~/components/Placeholder';
 
-import { useContext } from '~/lib/context'
-import groupedClassNames from '~/lib/groupedClassNames'
-import { getPlainBody } from '~/lib/editor/getPlainBody'
-import { useEditorEvent } from '~/lib/editor/imperativeEvents'
-import useCombobox from '~/lib/useCombobox'
-import useComboboxFloating from '~/lib/useComboboxFloating'
-import includes from '~/lib/includes'
-import { DocumentLink } from '~/lib/routes'
+type DocumentMention = {
+  documentId: number;
+  fallbackText: string;
+};
 
-import { InlinePlaceholder } from '~/components/Placeholder'
-import DocumentIcon from '~/components/icons/DocumentIcon'
-import DeleteIcon from '~/components/icons/DeleteIcon'
+export const MentionComponent = ({
+  attributes,
+  children,
+  element,
+}: PlateRenderElementProps<Value, TMentionElement>) => {
+  const { documentId, fallbackText } = element as any as DocumentMention;
 
-const MentionComponent = ({ attributes, children, element }) => {
-  const { futurePartialDocuments, documentId: currentDocumentId } = useContext()
-  const linkRef = useRef()
+  const { futurePartialDocuments, documentId: currentDocumentId } =
+    useContext() as {
+      futurePartialDocuments: Future<PartialDocument[]>;
+      documentId: number;
+    };
 
-  const futureDocument = futurePartialDocuments.map(
-    partialDocuments => partialDocuments.find(doc => doc.id === element.documentId)
-  )
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const selected = useSelected()
-  const focused = useFocused()
-  const selectedAndFocused = selected && focused
+  const futureDocument = mapFuture(futurePartialDocuments, (partialDocuments) =>
+    partialDocuments.find((doc) => doc.id === documentId)
+  );
 
-  useEditorEvent.onKeyDown(event => {
-    if (selectedAndFocused && event.key === 'Enter') {
-      event.preventDefault()
-      event.stopPropagation()
-      linkRef.current.click()
-    }
-  }, [selectedAndFocused])
+  const selected = useSelected();
+  const focused = useFocused();
+  const selectedAndFocused = selected && focused;
+
+  useEditorEvent(
+    'keyDown',
+    (event) => {
+      if (selectedAndFocused && event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+        linkRef.current?.click();
+      }
+    },
+    [selectedAndFocused]
+  );
 
   const className = groupedClassNames({
     main: 'btn btn-link btn-no-rounded rounded font-medium no-underline',
     selected: selectedAndFocused && 'focus-ring',
-  })
+  });
 
   return (
-    <>
-      <span {...attributes} contentEditable={false}>
-        {futureDocument.map(doc => (
+    <span {...attributes} contentEditable={false}>
+      {unwrapFuture(futureDocument, {
+        pending: <InlinePlaceholder />,
+        resolved: (doc) => (
           <DocumentLink
             ref={linkRef}
             contentEditable={false}
             className={className}
-            documentId={element.documentId}
-            children={doc?.safe_title ?? `[Deleted document: ${element.fallbackText}]`}
-            onClick={event => {
-              if (element.documentId === currentDocumentId) {
-                event.preventDefault()
+            to={{ documentId }}
+            children={doc?.safe_title ?? `[Deleted document: ${fallbackText}]`}
+            onClick={(event) => {
+              if (documentId === currentDocumentId) {
+                event.preventDefault();
               }
             }}
           />
-        )).orDefault(<InlinePlaceholder />)}
+        ),
+      })}
 
-        {children}
-      </span>
-    </>
-  )
-}
+      {children}
+    </span>
+  );
+};
 
-const MentionInputComponent = ({ editor, attributes, children, element }) => {
-  const { futurePartialDocuments, mentionSuggestionsContainerRef } = useContext()
+type MentionSuggestion = {
+  key: any;
+  label: string;
+  icon: ReactNode;
+  onCommit: () => void;
+};
 
-  const handleSelectItem = item => getMentionOnSelectItem({ key: ELEMENT_MENTION })(editor, item)
+export const MentionInputComponent = ({
+  editor,
+  attributes,
+  children,
+  element,
+}: PlateRenderElementProps<Value, TMentionInputElement>) => {
+  const { futurePartialDocuments, mentionSuggestionsContainerRef } =
+    useContext() as {
+      futurePartialDocuments: Future<PartialDocument[]>;
+      mentionSuggestionsContainerRef: RefObject<HTMLDivElement>;
+    };
 
-  const query = getPlainBody(element)
-  const [, path] = findMentionInput(editor)
+  const handleSelectItem = (item: DocumentMention) =>
+    getMentionOnSelectItem({
+      key: ELEMENT_MENTION,
+    })(editor, item as any);
 
-  const matchingDocuments = useMemo(() => futurePartialDocuments.orDefault([]).filter(
-    doc => doc.title && includes(doc.title, query)
-  ), [futurePartialDocuments, query])
+  const query = getPlainBody(element);
+  const [, path] = findMentionInput(editor)!;
 
-  const suggestions = useMemo(() => [
-    ...matchingDocuments.map(doc => ({
-      key: doc.id,
-      icon: <DocumentIcon size="1.25em" noAriaLabel className="text-primary-500 dark:text-primary-400 data-active:text-white" />,
-      label: doc.title,
-      onCommit: () => handleSelectItem({
-        documentId: doc.id,
-        fallbackText: doc.safe_title,
-      }),
-    })),
+  const matchingDocuments = useMemo(
+    () =>
+      orDefaultFuture(futurePartialDocuments, []).filter(
+        (doc) => doc.title && includes(doc.title, query)
+      ),
+    [futurePartialDocuments, query]
+  );
 
-    {
-      key: 'cancel',
-      icon: <DeleteIcon size="1.25em" noAriaLabel className="text-red-500 dark:text-red-400 data-active:text-white" />,
-      label: 'Cancel mention',
-      onCommit: () => removeMentionInput(editor, path),
-    },
-  ], [matchingDocuments, path])
+  const suggestions: MentionSuggestion[] = useMemo(
+    () => [
+      ...matchingDocuments.map((doc) => ({
+        key: doc.id,
+        label: doc.title,
+        icon: (
+          <DocumentIcon
+            size="1.25em"
+            noAriaLabel
+            className="text-primary-500 dark:text-primary-400 data-active:text-white"
+          />
+        ),
+        onCommit: () =>
+          handleSelectItem({
+            documentId: doc.id,
+            fallbackText: doc.safe_title,
+          }),
+      })),
 
-  const { inputProps, showSuggestions, suggestionContainerProps, mapSuggestions } = useCombobox({
+      {
+        key: 'cancel',
+        icon: (
+          <DeleteIcon
+            size="1.25em"
+            noAriaLabel
+            className="text-red-500 dark:text-red-400 data-active:text-white"
+          />
+        ),
+        label: 'Cancel mention',
+        onCommit: () => removeMentionInput(editor, path),
+      },
+    ],
+    [matchingDocuments, path]
+  );
+
+  const {
+    inputProps,
+    showSuggestions,
+    suggestionContainerProps,
+    mapSuggestions,
+  } = useCombobox({
     query,
     suggestions,
     keyForSuggestion: ({ key }) => key,
     onCommit: ({ onCommit }) => onCommit(),
     completeOnTab: true,
     hideWhenEmptyQuery: false,
-  })
+  });
 
   // onFocus and onBlur are intentionally not used
-  const { onChange, onKeyDown, onFocus, onBlur, ...restInputProps } = inputProps
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { onChange, onKeyDown, onFocus, onBlur, ...restInputProps } =
+    inputProps;
 
-  useEditorEvent.onChange(onChange, [onChange])
-  useEditorEvent.onKeyDown(onKeyDown, [onKeyDown])
+  useEditorEvent('change', () => (onChange as any)?.(), [onChange]);
+  useEditorEvent('keyDown', (event) => onKeyDown?.(event as any), [onKeyDown]);
 
-  const comboboxFloating = useComboboxFloating({ allowOverflow: true })
+  const comboboxFloating = useComboboxFloating({ allowOverflow: true });
 
   const suggestionsContainer = showSuggestions && (
     <div
@@ -124,20 +196,22 @@ const MentionInputComponent = ({ editor, attributes, children, element }) => {
       {...suggestionContainerProps}
       className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
     >
-      {mapSuggestions(({ suggestion: { icon, label }, active, suggestionProps }) => (
-        <div
-          {...suggestionProps}
-          data-active={active}
-          className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer flex gap-2 items-center"
-        >
-          {icon}
-          <span>{label}</span>
-        </div>
-      ))}
+      {mapSuggestions(
+        ({ suggestion: { icon, label }, active, suggestionProps }) => (
+          <div
+            {...suggestionProps}
+            data-active={active}
+            className="px-3 py-2 data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer flex gap-2 items-center"
+          >
+            {icon}
+            <span>{label}</span>
+          </div>
+        )
+      )}
     </div>
-  )
+  );
 
-  const mentionSuggestionsContainer = mentionSuggestionsContainerRef.current
+  const mentionSuggestionsContainer = mentionSuggestionsContainerRef.current;
 
   return (
     <>
@@ -150,22 +224,16 @@ const MentionInputComponent = ({ editor, attributes, children, element }) => {
         @{children}
       </span>
 
-      {mentionSuggestionsContainer && createPortal(
-        suggestionsContainer,
-        mentionSuggestionsContainer,
-      )}
+      {mentionSuggestionsContainer &&
+        createPortal(suggestionsContainer, mentionSuggestionsContainer)}
     </>
-  )
-}
+  );
+};
 
-const mentionOptions = {
+export const mentionOptions: {
+  options: MentionPlugin;
+} = {
   options: {
-    createMentionNode: x => x,
+    createMentionNode: (x) => x as any,
   },
-}
-
-export {
-  MentionComponent,
-  MentionInputComponent,
-  mentionOptions,
-}
+};

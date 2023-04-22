@@ -1,5 +1,5 @@
 import { createPluginFactory } from '@udecode/plate-headless';
-import { setGlobalStore } from '~/lib/globalStores';
+import { setGlobalStore } from '~/lib/globalStore';
 import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { findDragPath } from './findDragPath';

@@ -8,9 +8,7 @@ export interface UseWaitUntilSettledOptions {
 export const useWaitUntilSettled = <T>(
   value: T,
   handleChange: (value: T) => void,
-  {
-    debounceTime = 500,
-  }: UseWaitUntilSettledOptions = {}
+  { debounceTime = 500 }: UseWaitUntilSettledOptions = {}
 ) => {
   const afterFirst = useRef(false);
   const initialValue = useRef(value);

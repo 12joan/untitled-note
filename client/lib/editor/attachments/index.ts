@@ -1,5 +1,5 @@
-import { PlatePlugin } from '@udecode/plate-headless';
 import { useMemo } from 'react';
+import { PlatePlugin } from '@udecode/plate-headless';
 import { useContext } from '~/lib/context';
 import { Future, orDefaultFuture } from '~/lib/monads';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';

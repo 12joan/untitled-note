@@ -1,70 +1,64 @@
-import { useMemo, ElementType } from 'react'
+import React, { ElementType, useMemo } from 'react';
 import {
-  createPlugins,
-  createSoftBreakPlugin,
-  createResetNodePlugin,
-  createExitBreakPlugin,
-  createTrailingBlockPlugin,
   createAutoformatPlugin,
-  createTabbablePlugin,
-  createParagraphPlugin,
-  createBoldPlugin,
-  createItalicPlugin,
-  createStrikethroughPlugin,
-  createCodePlugin,
-  createLinkPlugin,
-  createHeadingPlugin,
   createBlockquotePlugin,
+  createBoldPlugin,
   createCodeBlockPlugin,
+  createCodePlugin,
+  createExitBreakPlugin,
+  createHeadingPlugin,
+  createItalicPlugin,
+  createLinkPlugin,
   createListPlugin,
   createMentionPlugin,
-  ELEMENT_PARAGRAPH,
-  MARK_BOLD,
-  MARK_ITALIC,
-  MARK_STRIKETHROUGH,
-  MARK_CODE,
-  ELEMENT_LINK,
-  ELEMENT_H1,
+  createParagraphPlugin,
+  createPlugins,
+  createResetNodePlugin,
+  createSoftBreakPlugin,
+  createStrikethroughPlugin,
+  createTabbablePlugin,
+  createTrailingBlockPlugin,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
-  ELEMENT_UL,
-  ELEMENT_OL,
+  ELEMENT_H1,
   ELEMENT_LI,
+  ELEMENT_LINK,
   ELEMENT_MENTION,
   ELEMENT_MENTION_INPUT,
-  PlateRenderElementProps,
+  ELEMENT_OL,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_UL,
+  MARK_BOLD,
+  MARK_CODE,
+  MARK_ITALIC,
+  MARK_STRIKETHROUGH,
   PlatePlugin,
-} from '@udecode/plate-headless'
-
-import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs'
-import { createImperativeEventsPlugin } from '~/lib/editor/imperativeEvents'
-import { codeBlockOptions } from '~/lib/editor/codeBlock'
-import { softBreakOptions } from '~/lib/editor/softBreak'
-import { resetNodeOptions } from '~/lib/editor/resetNode'
-import { exitBreakOptions } from '~/lib/editor/exitBreak'
-import { autoformatOptions } from '~/lib/editor/autoformat'
-import { tabbableOptions } from '~/lib/editor/tabbable'
-import { LinkComponent } from '~/lib/editor/links'
+  PlateRenderElementProps,
+} from '@udecode/plate-headless';
+import {
+  Attachment,
+  ELEMENT_ATTACHMENT,
+  useAttachmentPlugins,
+} from '~/lib/editor/attachments';
+import { autoformatOptions } from '~/lib/editor/autoformat';
+import { codeBlockOptions } from '~/lib/editor/codeBlock';
+import { exitBreakOptions } from '~/lib/editor/exitBreak';
+import { useImperativeEventsPlugins } from '~/lib/editor/imperativeEvents';
+import { LinkComponent } from '~/lib/editor/links';
 import {
   MentionComponent,
   MentionInputComponent,
   mentionOptions,
-} from '~/lib/editor/mentions'
-import {
-  ELEMENT_ATTACHMENT,
-  useAttachmentPlugins,
-  Attachment,
-} from '~/lib/editor/attachments'
+} from '~/lib/editor/mentions';
+import { resetNodeOptions } from '~/lib/editor/resetNode';
+import { softBreakOptions } from '~/lib/editor/softBreak';
+import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
+import { tabbableOptions } from '~/lib/editor/tabbable';
 
-const makeElementComponent = (
-  Component: ElementType
-) => ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) => (
-  <Component
-    {...nodeProps}
-    {...attributes}
-    children={children}
-  />
-)
+const makeElementComponent =
+  (Component: ElementType) =>
+  ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) =>
+    <Component {...nodeProps} {...attributes} children={children} />;
 
 const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
@@ -82,10 +76,11 @@ const components = {
   [ELEMENT_MENTION]: MentionComponent,
   [ELEMENT_MENTION_INPUT]: MentionInputComponent,
   [ELEMENT_ATTACHMENT]: Attachment,
-}
+};
 
 export const usePlugins = () => {
-  const attachmentPlugins: PlatePlugin[] = useAttachmentPlugins()
+  const imperativeEventsPlugins = useImperativeEventsPlugins();
+  const attachmentPlugins = useAttachmentPlugins();
 
   /**
    * Known plugin order dependencies:
@@ -93,7 +88,7 @@ export const usePlugins = () => {
    */
 
   const pluginList: PlatePlugin[] = [
-    useMemo(() => createImperativeEventsPlugin(), []),
+    ...imperativeEventsPlugins,
     useMemo(() => createParagraphPlugin(), []),
     useMemo(() => createBoldPlugin(), []),
     useMemo(() => createItalicPlugin(), []),
@@ -113,9 +108,13 @@ export const usePlugins = () => {
     useMemo(() => createAutoformatPlugin(autoformatOptions), []),
     useMemo(() => createSplitInsertedDataIntoParagraphsPlugin(), []),
     ...attachmentPlugins,
-  ]
+  ];
 
-  return useMemo(() => createPlugins(pluginList, {
-    components,
-  }), [pluginList])
-}
+  return useMemo(
+    () =>
+      createPlugins(pluginList, {
+        components,
+      }),
+    [pluginList]
+  );
+};

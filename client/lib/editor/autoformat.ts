@@ -1,4 +1,7 @@
 import {
+  AutoformatBlockRule,
+  AutoformatMarkRule,
+  AutoformatPlugin,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
@@ -10,13 +13,10 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  PlateEditor,
   toggleCodeBlock,
   toggleList,
   unwrapList,
-  AutoformatPlugin,
-  AutoformatBlockRule,
-  AutoformatMarkRule,
-  PlateEditor
 } from '@udecode/plate-headless';
 
 const isSelectionInCodeBlock = (editor: PlateEditor): boolean =>

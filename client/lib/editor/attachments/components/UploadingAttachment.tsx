@@ -22,7 +22,7 @@ export const UploadingAttachment = ({
     ({ s3FileId: updatedS3FileId, progressEvent }) => {
       if (updatedS3FileId === s3FileId) {
         setUploadedBytes(progressEvent.loaded);
-        setTotalBytes(progressEvent.total);
+        setTotalBytes(progressEvent.total ?? Infinity);
       }
     },
     [s3FileId]

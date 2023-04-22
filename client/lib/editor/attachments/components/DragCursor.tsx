@@ -1,13 +1,9 @@
 import React, { useMemo } from 'react';
 import { cssAdd } from '~/lib/cssAdd';
-import { useGlobalStore } from '~/lib/globalStores';
+import { useGlobalStore } from '~/lib/globalStore';
 
 export const DragCursor = () => {
-  const position = useGlobalStore<number | null>(
-    'dragCursorPosition',
-    null,
-    false
-  );
+  const position = useGlobalStore('dragCursorPosition');
 
   const { left, right, top } = useMemo(() => {
     if (position === null) {

@@ -86,7 +86,7 @@ export const insertAttachments = (
 
         const handleUploadProgress = (progressEvent: UploadProgressEvent) =>
           dispatchGlobalEvent('s3File:uploadProgress', {
-            s3FileId,
+            s3FileId: s3FileId!,
             progressEvent,
           });
 

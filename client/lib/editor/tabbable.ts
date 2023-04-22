@@ -4,12 +4,12 @@ import {
   findNode,
   getNodeEntry,
   PlateEditor,
-  TabbablePlugin,
   TabbableEntry,
+  TabbablePlugin,
 } from '@udecode/plate-headless';
 
 export const tabbableOptions: {
-  options: TabbablePlugin
+  options: TabbablePlugin;
 } = {
   options: {
     query: (editor: PlateEditor) => {
@@ -26,7 +26,7 @@ export const tabbableOptions: {
       const [slateNode, path] = nodeEntry;
 
       return Array.from(document.querySelectorAll('.slate-popover button')).map(
-        (domNode) => ({ domNode, slateNode, path }) as TabbableEntry
+        (domNode) => ({ domNode, slateNode, path } as TabbableEntry)
       );
     },
     globalEventListener: true,

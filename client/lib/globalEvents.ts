@@ -1,34 +1,39 @@
-import { DependencyList, useEffect } from 'react';
+import { DependencyList } from 'react';
+import {
+  BaseEventTypes,
+  createEventEmitter,
+  dispatchEvent,
+  EventListener,
+  useEvent,
+} from '~/lib/customEvents';
+import { GlobalStoreTypes } from '~/lib/globalStore';
+import { Toast } from '~/lib/types';
+import { UploadProgressEvent } from '~/lib/uploadFile';
 
-type EventListener = (...args: any[]) => void;
-type EventListeners = Set<EventListener>;
+import { ConnectionStatus } from '~/channels/connectionStatus';
 
-const eventListeners = new Map<string, EventListeners>();
+export type GlobalEventTypes = BaseEventTypes & {
+  'document:delete': [{ documentId: number }];
+  's3File:uploadProgress': [
+    { s3FileId: number; progressEvent: UploadProgressEvent }
+  ];
+  's3File:uploadComplete': [{ s3FileId: number }];
+  's3File:delete': [{ s3FileId: number }];
+  toast: [Toast];
+  connectionStatusChanged: [ConnectionStatus];
+} & {
+  [K in keyof GlobalStoreTypes as `store:${K}`]: [GlobalStoreTypes[K]];
+};
 
-export const useGlobalEvent = (
-  eventName: string,
-  handler: EventListener,
+export const globalEventEmitter = createEventEmitter<GlobalEventTypes>();
+
+export const useGlobalEvent = <K extends keyof GlobalEventTypes>(
+  eventName: K,
+  handler: EventListener<GlobalEventTypes[K]>,
   deps?: DependencyList
-) => {
-  useEffect(() => {
-    if (!eventListeners.has(eventName)) {
-      eventListeners.set(eventName, new Set());
-    }
+) => useEvent(globalEventEmitter, eventName, handler, deps);
 
-    const listeners = eventListeners.get(eventName);
-    listeners?.add(handler);
-
-    return () => {
-      listeners?.delete(handler);
-    };
-  }, deps);
-};
-
-export const dispatchGlobalEvent = (eventName: string, ...args: any[]) => {
-  const listeners = eventListeners.get(eventName);
-
-  if (listeners) {
-    // The [...listeners] prevents infinite loops in case the set is modified by the listener
-    [...listeners].forEach((listener) => listener(...args));
-  }
-};
+export const dispatchGlobalEvent = <K extends keyof GlobalEventTypes>(
+  eventName: K,
+  ...args: GlobalEventTypes[K]
+) => dispatchEvent(globalEventEmitter, eventName, ...args);

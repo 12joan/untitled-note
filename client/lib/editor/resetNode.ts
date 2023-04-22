@@ -5,8 +5,8 @@ import {
   ELEMENT_PARAGRAPH,
   isSelectionAtBlockStart,
   isSelectionAtCodeBlockStart,
-  unwrapCodeBlock,
   ResetNodePlugin,
+  unwrapCodeBlock,
 } from '@udecode/plate-headless';
 
 const commonRule = {
