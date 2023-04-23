@@ -19,6 +19,7 @@ import { mergeRefs } from '~/lib/refUtils';
 import { retry } from '~/lib/retry';
 import { Project } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useIsMounted } from '~/lib/useIsMounted';
 import { useOverrideable } from '~/lib/useOverrideable';
@@ -253,6 +254,8 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     middleware: [offset(10), shift()],
   });
 
+  const nonce = useCSPNonce();
+
   return (
     <div className="space-y-2">
       <h3 className="font-medium select-none">Emoji</h3>
@@ -304,6 +307,9 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
               onEmojiSelect={({ native: emoji }: { native: string }) => {
                 closePicker();
                 setEmoji(emoji);
+              }}
+              styleProps={{
+                nonce,
               }}
             />
           </div>

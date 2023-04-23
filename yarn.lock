@@ -3418,10 +3418,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-mart@npm:^5.5.2":
+"emoji-mart@npm:5.5.2":
   version: 5.5.2
   resolution: "emoji-mart@npm:5.5.2"
   checksum: a9d8db731443581baebafbcb8494086e9d02b1475ddee9901fc657a7e8f08c14594a810605a3abe8d52627b75f5d78ea19adf3166fb0f38cea174694f86635f9
+  languageName: node
+  linkType: hard
+
+"emoji-mart@patch:emoji-mart@npm%3A5.5.2#./.yarn/patches/emoji-mart-npm-5.5.2-10ed58131e.patch::locator=note%40workspace%3A.":
+  version: 5.5.2
+  resolution: "emoji-mart@patch:emoji-mart@npm%3A5.5.2#./.yarn/patches/emoji-mart-npm-5.5.2-10ed58131e.patch::version=5.5.2&hash=3ed3e8&locator=note%40workspace%3A."
+  checksum: 99804499b082d5ec133e679ae4ffd004a4aef5557dad6853a70feff5e562d15296b95fad7cc9a5f936e4b0a7435fa1c41a85028d7d93ebb8b865c54c6c45621c
   languageName: node
   linkType: hard
 
