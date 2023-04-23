@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, useNavigate } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  ScrollRestoration,
+  useNavigate,
+} from 'react-router-dom';
 import { IS_ELECTRON } from '~/lib/environment';
 import { App } from '~/components/layout/App';
 
@@ -20,10 +25,20 @@ const ElectronNavigation = () => {
 document.addEventListener('DOMContentLoaded', () => {
   const root = createRoot(document.querySelector('#application')!);
 
-  root.render(
-    <BrowserRouter>
-      {IS_ELECTRON && <ElectronNavigation />}
-      <App />
-    </BrowserRouter>
-  );
+  const router = createBrowserRouter([
+    {
+      path: '/*',
+      element: (
+        <>
+          {IS_ELECTRON && <ElectronNavigation />}
+
+          <App />
+
+          <ScrollRestoration getKey={(location) => location.pathname} />
+        </>
+      ),
+    },
+  ]);
+
+  root.render(<RouterProvider router={router} />);
 });

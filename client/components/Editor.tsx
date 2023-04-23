@@ -26,12 +26,10 @@ import { useFind } from '~/lib/editor/find';
 import { useLinkModalProvider } from '~/lib/editor/links';
 import { usePlugins } from '~/lib/editor/plugins';
 import {
-  restoreScroll,
   restoreSelection,
   setSelection,
-  useSaveScroll,
   useSaveSelection,
-} from '~/lib/editor/selectionAndScrollManagement';
+} from '~/lib/editor/restoreSelection';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { overviewPath } from '~/lib/routes';
 import { Document, LocalDocument } from '~/lib/types';
@@ -342,13 +340,10 @@ const WithEditorState = ({
       } else {
         restoreSelectionForEditor();
       }
-
-      restoreScroll(initialDocument.id);
     }, 0);
   }, []);
 
   useSaveSelection(initialDocument.id, editor);
-  useSaveScroll(initialDocument.id);
 
   const [forceUpdateBodyKey, forceUpdateBody] = useReducer((x) => x + 1, 0);
 
