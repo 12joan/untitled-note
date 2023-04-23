@@ -4,6 +4,7 @@ import EmojiPicker from '@emoji-mart/react';
 import { offset, shift, useFloating } from '@floating-ui/react-dom';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useContext } from '~/lib/context';
+import { useCSPNonce } from '~/lib/useCSPNonce';
 import { filesize } from '~/lib/filesize';
 import {
   handleRemoveProjectImageError,
@@ -253,6 +254,8 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     middleware: [offset(10), shift()],
   });
 
+  const nonce = useCSPNonce();
+
   return (
     <div className="space-y-2">
       <h3 className="font-medium select-none">Emoji</h3>
@@ -304,6 +307,9 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
               onEmojiSelect={({ native: emoji }: { native: string }) => {
                 closePicker();
                 setEmoji(emoji);
+              }}
+              styleProps={{
+                nonce,
               }}
             />
           </div>

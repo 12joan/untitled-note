@@ -80,6 +80,7 @@
   "packageManager": "yarn@3.5.0",
   "resolutions": {
     "react-textarea-autosize@^8.4.1": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
-    "react-textarea-autosize@^8.3.3": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch"
+    "react-textarea-autosize@^8.3.3": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
+    "emoji-mart@^5.5.2": "patch:emoji-mart@npm%3A5.5.2#./.yarn/patches/emoji-mart-npm-5.5.2-10ed58131e.patch"
   }
 }
