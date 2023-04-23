@@ -24,9 +24,14 @@ export interface EditorViewProps {
 }
 
 export const EditorView = ({ documentId }: EditorViewProps) => {
-  const { projectId, futurePartialDocuments } = useContext() as {
+  const {
+    projectId,
+    futurePartialDocuments,
+    topBarHeight = 0,
+  } = useContext() as {
     projectId: number;
     futurePartialDocuments: Future<PartialDocument[]>;
+    topBarHeight?: number;
   };
 
   const [searchParams] = useSearchParams();
@@ -87,7 +92,20 @@ export const EditorView = ({ documentId }: EditorViewProps) => {
   }, [projectId, documentId, refetchKey]);
 
   return unwrapFutureServiceResult(fsrInitialDocument, {
-    pending: <LoadingView />,
+    pending: (
+      // Hack to make React Router scroll restoration work
+      <div className="relative" style={{ minHeight: '1000000vh' }}>
+        <div
+          className="flex sticky min-h-screen"
+          style={{
+            top: topBarHeight,
+            paddingBottom: topBarHeight,
+          }}
+        >
+          <LoadingView />
+        </div>
+      </div>
+    ),
     success: (initialDocument) => (
       <div className="grow flex flex-col">
         <ContextProvider documentId={documentId}>

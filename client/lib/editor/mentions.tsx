@@ -194,7 +194,7 @@ export const MentionInputComponent = ({
     <div
       {...comboboxFloating.suggestionsProps}
       {...suggestionContainerProps}
-      className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-scroll"
+      className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-auto"
     >
       {mapSuggestions(
         ({ suggestion: { icon, label }, active, suggestionProps }) => (
