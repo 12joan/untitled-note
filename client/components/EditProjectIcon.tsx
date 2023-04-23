@@ -4,7 +4,6 @@ import EmojiPicker from '@emoji-mart/react';
 import { offset, shift, useFloating } from '@floating-ui/react-dom';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useContext } from '~/lib/context';
-import { useCSPNonce } from '~/lib/useCSPNonce';
 import { filesize } from '~/lib/filesize';
 import {
   handleRemoveProjectImageError,
@@ -20,6 +19,7 @@ import { mergeRefs } from '~/lib/refUtils';
 import { retry } from '~/lib/retry';
 import { Project } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useIsMounted } from '~/lib/useIsMounted';
 import { useOverrideable } from '~/lib/useOverrideable';
