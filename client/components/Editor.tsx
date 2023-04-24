@@ -1,6 +1,4 @@
 import React, {
-  ChangeEvent,
-  KeyboardEvent,
   MutableRefObject,
   ReactNode,
   useEffect,
@@ -42,10 +40,10 @@ import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { Dropdown } from '~/components/Dropdown';
 import { EditorTags } from '~/components/EditorTags';
+import { EditorTitle } from '~/components/EditorTitle';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
-import { TextareaAutosize } from '~/components/TextareaAutosize';
 import { Tooltip } from '~/components/Tooltip';
 
 export interface EditorProps {
@@ -244,21 +242,11 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
       <div className="cursor-text" onClick={() => titleRef.current?.focus()}>
         <div className="lg:narrow flex gap-2">
-          <TextareaAutosize
+          <EditorTitle
             ref={titleRef}
-            className="min-w-0 grow h1 text-black dark:text-white placeholder:truncate"
-            defaultValue={initialDocument.title || ''}
-            placeholder="Untitled document"
-            ignorePlaceholder
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-              setTitle(event.target.value)
-            }
-            onKeyDown={(event: KeyboardEvent) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                editorElementRef.current?.focus();
-              }
-            }}
+            initialTitle={initialDocument.title || ''}
+            onChange={setTitle}
+            onEnter={() => editorElementRef.current?.focus()}
           />
 
           {!tagsVisible && (
