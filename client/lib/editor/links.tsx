@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
   ELEMENT_LINK,
+  focusEditor,
   getAboveNode,
   getEditorString,
   getSelectionText,
@@ -223,7 +224,10 @@ export const LinkComponent = ({
     });
   };
 
-  const removeLink = () => unwrapLink(editor);
+  const removeLink = () => {
+    unwrapLink(editor);
+    focusEditor(editor);
+  };
 
   return (
     <span {...attributes}>
