@@ -79,42 +79,53 @@ const components = {
 };
 
 export const usePlugins = () => {
-  const imperativeEventsPlugins = useImperativeEventsPlugins();
-  const attachmentPlugins = useAttachmentPlugins();
-
   /**
+   * It's important that the plugins are memoized, otherwise the editor will
+   * re-render at inopportune moments. This causes bugs such as selection
+   * jumping when blurring the find dialog.
+   *
    * Known plugin order dependencies:
    * - Imperative events before blockquote
    */
 
-  const pluginList: PlatePlugin[] = [
-    ...imperativeEventsPlugins,
-    useMemo(() => createParagraphPlugin(), []),
-    useMemo(() => createBoldPlugin(), []),
-    useMemo(() => createItalicPlugin(), []),
-    useMemo(() => createStrikethroughPlugin(), []),
-    useMemo(() => createCodePlugin(), []),
-    useMemo(() => createLinkPlugin(), []),
-    useMemo(() => createHeadingPlugin({ options: { levels: 1 } }), []),
-    useMemo(() => createBlockquotePlugin(), []),
-    useMemo(() => createCodeBlockPlugin(codeBlockOptions), []),
-    useMemo(() => createListPlugin(), []),
-    useMemo(() => createMentionPlugin(mentionOptions), []),
-    useMemo(() => createSoftBreakPlugin(softBreakOptions), []),
-    useMemo(() => createResetNodePlugin(resetNodeOptions), []),
-    useMemo(() => createExitBreakPlugin(exitBreakOptions), []),
-    useMemo(() => createTabbablePlugin(tabbableOptions), []),
-    useMemo(() => createTrailingBlockPlugin(), []),
-    useMemo(() => createAutoformatPlugin(autoformatOptions), []),
-    useMemo(() => createSplitInsertedDataIntoParagraphsPlugin(), []),
-    ...attachmentPlugins,
-  ];
+  const imperativeEventsPlugins = useImperativeEventsPlugins();
+
+  const staticPlugins = useMemo(() => [
+    createParagraphPlugin(),
+    createBoldPlugin(),
+    createItalicPlugin(),
+    createStrikethroughPlugin(),
+    createCodePlugin(),
+    createLinkPlugin(),
+    createHeadingPlugin({ options: { levels: 1 } }),
+    createBlockquotePlugin(),
+    createCodeBlockPlugin(codeBlockOptions),
+    createListPlugin(),
+    createMentionPlugin(mentionOptions),
+    createSoftBreakPlugin(softBreakOptions),
+    createResetNodePlugin(resetNodeOptions),
+    createExitBreakPlugin(exitBreakOptions),
+    createTabbablePlugin(tabbableOptions),
+    createTrailingBlockPlugin(),
+    createAutoformatPlugin(autoformatOptions),
+    createSplitInsertedDataIntoParagraphsPlugin(),
+  ], []);
+
+  const attachmentPlugins = useAttachmentPlugins();
 
   return useMemo(
     () =>
-      createPlugins(pluginList, {
+      createPlugins([
+        ...imperativeEventsPlugins,
+        ...staticPlugins,
+        ...attachmentPlugins,
+      ], {
         components,
       }),
-    [pluginList]
+    [
+      imperativeEventsPlugins,
+      staticPlugins,
+      attachmentPlugins,
+    ],
   );
 };
