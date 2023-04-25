@@ -32,7 +32,6 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  PlatePlugin,
   PlateRenderElementProps,
 } from '@udecode/plate-headless';
 import {
@@ -90,42 +89,40 @@ export const usePlugins = () => {
 
   const imperativeEventsPlugins = useImperativeEventsPlugins();
 
-  const staticPlugins = useMemo(() => [
-    createParagraphPlugin(),
-    createBoldPlugin(),
-    createItalicPlugin(),
-    createStrikethroughPlugin(),
-    createCodePlugin(),
-    createLinkPlugin(),
-    createHeadingPlugin({ options: { levels: 1 } }),
-    createBlockquotePlugin(),
-    createCodeBlockPlugin(codeBlockOptions),
-    createListPlugin(),
-    createMentionPlugin(mentionOptions),
-    createSoftBreakPlugin(softBreakOptions),
-    createResetNodePlugin(resetNodeOptions),
-    createExitBreakPlugin(exitBreakOptions),
-    createTabbablePlugin(tabbableOptions),
-    createTrailingBlockPlugin(),
-    createAutoformatPlugin(autoformatOptions),
-    createSplitInsertedDataIntoParagraphsPlugin(),
-  ], []);
+  const staticPlugins = useMemo(
+    () => [
+      createParagraphPlugin(),
+      createBoldPlugin(),
+      createItalicPlugin(),
+      createStrikethroughPlugin(),
+      createCodePlugin(),
+      createLinkPlugin(),
+      createHeadingPlugin({ options: { levels: 1 } }),
+      createBlockquotePlugin(),
+      createCodeBlockPlugin(codeBlockOptions),
+      createListPlugin(),
+      createMentionPlugin(mentionOptions),
+      createSoftBreakPlugin(softBreakOptions),
+      createResetNodePlugin(resetNodeOptions),
+      createExitBreakPlugin(exitBreakOptions),
+      createTabbablePlugin(tabbableOptions),
+      createTrailingBlockPlugin(),
+      createAutoformatPlugin(autoformatOptions),
+      createSplitInsertedDataIntoParagraphsPlugin(),
+    ],
+    []
+  );
 
   const attachmentPlugins = useAttachmentPlugins();
 
   return useMemo(
     () =>
-      createPlugins([
-        ...imperativeEventsPlugins,
-        ...staticPlugins,
-        ...attachmentPlugins,
-      ], {
-        components,
-      }),
-    [
-      imperativeEventsPlugins,
-      staticPlugins,
-      attachmentPlugins,
-    ],
+      createPlugins(
+        [...imperativeEventsPlugins, ...staticPlugins, ...attachmentPlugins],
+        {
+          components,
+        }
+      ),
+    [imperativeEventsPlugins, staticPlugins, attachmentPlugins]
   );
 };

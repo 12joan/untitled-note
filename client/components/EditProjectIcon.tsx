@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FocusEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import emojiData from '@emoji-mart/data';
 import EmojiPicker from '@emoji-mart/react';
 import { offset, shift, useFloating } from '@floating-ui/react-dom';
@@ -20,6 +20,7 @@ import { retry } from '~/lib/retry';
 import { Project } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
 import { useCSPNonce } from '~/lib/useCSPNonce';
+import { useFocusOut } from '~/lib/useFocusOut';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useIsMounted } from '~/lib/useIsMounted';
 import { useOverrideable } from '~/lib/useOverrideable';
@@ -237,11 +238,11 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     [pickerVisible]
   );
 
-  const handleBlur = (event: FocusEvent) => {
-    if (pickerVisible && !event.currentTarget.contains(event.relatedTarget)) {
+  const [focusOutRef, focusOutProps] = useFocusOut((event) => {
+    if (pickerVisible) {
       closePicker(event.relatedTarget === null);
     }
-  };
+  });
 
   const {
     x: pickerX,
@@ -288,14 +289,14 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
 
         {pickerVisible && (
           <div
-            ref={pickerRef}
+            ref={mergeRefs([pickerRef, focusOutRef])}
+            {...focusOutProps}
             className="z-20 pb-5"
             style={{
               position: pickerPosition,
               left: pickerX ?? 0,
               top: pickerY ?? 0,
             }}
-            onBlur={handleBlur}
             onMouseDown={(event) => {
               // Prevent blur when clicking inside picker (WebKit)
               event.preventDefault();

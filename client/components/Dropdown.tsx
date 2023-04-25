@@ -3,6 +3,7 @@ import { followCursor } from 'tippy.js';
 import { ContextProvider, useContext } from '~/lib/context';
 import { PolyProps } from '~/lib/polymorphic';
 import { useEventListener } from '~/lib/useEventListener';
+import { useFocusOut } from '~/lib/useFocusOut';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
 
@@ -27,22 +28,26 @@ export const Dropdown = ({
     }
   });
 
+  const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(close);
+
   return (
     <ContextProvider closeDropdown={close}>
-      <Tippy
-        ref={tippyRef}
-        render={(attrs) => (
-          <div
-            className={className}
-            tabIndex={-1}
-            children={items}
-            {...attrs}
-          />
-        )}
-        trigger="click"
-        interactive
-        {...otherProps}
-      />
+      <div ref={focusOutRef} {...focusOutProps} className="contents">
+        <Tippy
+          ref={tippyRef}
+          render={(attrs) => (
+            <div
+              className={className}
+              tabIndex={-1}
+              children={items}
+              {...attrs}
+            />
+          )}
+          trigger="click"
+          interactive
+          {...otherProps}
+        />
+      </div>
     </ContextProvider>
   );
 };
