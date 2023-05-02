@@ -15,6 +15,7 @@ import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
 import { useAccountModal } from '~/lib/useAccountModal';
+import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useElementBounds } from '~/lib/useElementBounds';
@@ -87,9 +88,16 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     close: hideAccountModal,
   } = useAccountModal();
 
+  const {
+    modal: settingsModal,
+    open: showSettingsModal,
+    close: hideSettingsModal,
+  } = useSettingsModal();
+
   useEffect(() => {
     hideSearchModal();
     hideAccountModal();
+    hideSettingsModal();
   }, [childView.key, projectId]);
 
   const useFormattingToolbar = useCallback(
@@ -160,6 +168,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       topBarHeight={topBarHeight}
       showSearchModal={showSearchModal}
       showAccountModal={showAccountModal}
+      showSettingsModal={showSettingsModal}
     >
       <div className="contents">
         <div
@@ -249,6 +258,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
       {searchModal}
       {accountModal}
+      {settingsModal}
     </ContextProvider>
   );
 };

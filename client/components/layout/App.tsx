@@ -9,6 +9,7 @@ import { ErrorBoundary } from '~/components/ErrorBoundary';
 import { NoProjectsView } from '~/components/layout/NoProjectsView';
 import { ToastContainer } from '~/components/layout/ToastContainer';
 import { LoadingView } from '~/components/LoadingView';
+import { useSettingsProvider } from '~/lib/settings';
 
 export const App = () => {
   const [projectsCacheKey, invalidateProjectsCache] = useReducer(
@@ -23,6 +24,8 @@ export const App = () => {
     futureQuotaUsage,
     ({ quota, used }) => quota - used
   );
+
+  const { settings, setSettings } = useSettingsProvider();
 
   const fallback = (
     <div className="p-5 space-y-3">
@@ -51,6 +54,8 @@ export const App = () => {
             futureQuotaUsage={futureQuotaUsage}
             futureFiles={futureFiles}
             futureRemainingQuota={futureRemainingQuota}
+            settings={settings}
+            setSettings={setSettings}
           >
             {projects.length === 0 ? (
               <NoProjectsView />

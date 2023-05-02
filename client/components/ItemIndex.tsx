@@ -101,7 +101,7 @@ const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => {
 
 const ListIndex = ({ items }: IndexProps) => {
   return (
-    <div className="rounded-lg border dark:border-transparent divide-y">
+    <div className="list-group">
       {items.map((item) => (
         <ListItem key={item.key} item={item} />
       ))}
@@ -137,7 +137,7 @@ const ListItem = ({ item, ...otherProps }: ItemProps) => {
   return (
     <Item
       item={item}
-      className="btn btn-no-rounded w-full p-3 space-y-1 cursor-pointer group-first:rounded-t-lg group-last:rounded-b-lg bg-white dark:bg-slate-800"
+      className="list-group-item btn btn-no-rounded cursor-pointer bg-white dark:bg-slate-800 space-y-1"
       {...otherProps}
     >
       {item.label}

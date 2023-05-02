@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
       resource :project_order, only: %i[update], controller: :project_order
       resources :s3_files, only: %i[create destroy show]
+      resource :settings, only: %i[show update]
     end
   end
 

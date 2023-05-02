@@ -31,6 +31,9 @@ module.exports = {
           800: '#20197d',
           900: '#0d0a4d',
         },
+        slate: {
+          850: '#162032',
+        },
         'page-bg-light': colors.white,
         'page-bg-dark': colors.slate[900],
       },
@@ -64,6 +67,10 @@ module.exports = {
       addVariant('hocus', ['&:hover', '&:focus-visible']);
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &']);
       addVariant('group-focus-visible', ['.group:focus-visible &']);
+      addVariant(
+        'group-focus-visible-within',
+        '.group:has(:focus-visible) &'
+      );
       addVariant(
         'stretch-focus-visible',
         '&:has(.stretch-target:focus-visible)'
