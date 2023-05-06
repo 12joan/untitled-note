@@ -1,3 +1,5 @@
+import { KeyboardShortcutConfig } from '~/lib/keyboardShortcuts';
+
 export type Project = {
   id: number;
   name: string;
@@ -97,4 +99,18 @@ export type Query = 'all' | boolean | { [property: string]: Query };
 
 export type Stream = {
   unsubscribe: () => void;
+};
+
+export type KeyboardShortcutContext = {
+  toggleSearchModal: () => void;
+  createNewDocument: () => void;
+  cycleFocus: () => void;
+};
+
+export type KeyboardShortcut = {
+  id: string;
+  label: string;
+  hint?: string;
+  config?: KeyboardShortcutConfig;
+  action: (context: KeyboardShortcutContext) => void;
 };

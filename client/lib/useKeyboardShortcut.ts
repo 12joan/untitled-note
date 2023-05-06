@@ -7,6 +7,8 @@ export const useKeyboardShortcut = (
   callback: (event: KeyboardEvent, key: string) => void,
   deps: DependencyList = []
 ) => {
+  console.warn('useKeyboardShortcut is deprecated', new Error().stack);
+
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       const keyList = Array.isArray(keys) ? keys : [keys];

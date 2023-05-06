@@ -1,4 +1,3 @@
-import { KeyboardEvent } from 'react';
 import { BaseSchema, SetVersion, createMigrate } from '~/lib/schema';
 
 const migrations: Record<number, (settings: any) => any> = {};
@@ -6,12 +5,12 @@ export const migrateSettings = createMigrate(migrations);
 
 // Original schema
 type SettingsSchemaV1 = SetVersion<BaseSchema, 1> & {
-  userKeyboardShortcuts: {
-    [key: string]: KeyboardShortcutV1 | null;
+  keyboardShortcutOverrides: {
+    [key: string]: KeyboardShortcutConfigV1 | null;
   };
 };
 
-type KeyboardShortcutV1 = {
+type KeyboardShortcutConfigV1 = {
   key: string;
   keyLabel?: string;
   altKey?: boolean;
@@ -22,7 +21,7 @@ type KeyboardShortcutV1 = {
 
 const originalDefaultSettings: SettingsSchemaV1 = {
   version: 1,
-  userKeyboardShortcuts: {},
+  keyboardShortcutOverrides: {},
 };
 
 /**
@@ -39,7 +38,7 @@ const originalDefaultSettings: SettingsSchemaV1 = {
  */
 
 export type SettingsSchema = SettingsSchemaV1;
-export type KeyboardShortcut = KeyboardShortcutV1;
+export type KeyboardShortcutConfig = KeyboardShortcutConfigV1;
 export const LATEST_SETTINGS_VERSION = 1;
 
 export const defaultSettings: SettingsSchema = migrateSettings(

@@ -1,6 +1,51 @@
-import { KeyboardShortcut } from '~/lib/settingsSchema';
+import { useMemo } from 'react';
+import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
+import { useSettings } from '~/lib/settings';
+import { KeyboardShortcut } from '~/lib/types';
 
-export type { KeyboardShortcut };
+export type { KeyboardShortcutConfig };
+
+// TODO: Change default configs based on platform and browser
+const keyboardShortcuts: KeyboardShortcut[] = [
+  {
+    id: 'search',
+    label: 'Search',
+    config: {
+      key: 'k',
+      metaKey: true,
+    },
+    action: ({ toggleSearchModal }) => toggleSearchModal(),
+  },
+  {
+    id: 'new-document',
+    label: 'New document',
+    config: {
+      key: 'n',
+      metaKey: true,
+      shiftKey: true,
+    },
+    action: ({ createNewDocument }) => createNewDocument(),
+  },
+  {
+    id: 'cycle-focus',
+    label: 'Cycle focus',
+    hint: 'Cycle focus between the main sections of the interface',
+    config: {
+      key: 'F6',
+      altKey: true,
+    },
+    action: ({ cycleFocus }) => cycleFocus(),
+  },
+];
+
+export const useKeyboardShortcuts = () => {
+  const [keyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
+
+  return useMemo(() => keyboardShortcuts.map((keyboardShortcut) => ({
+    ...keyboardShortcut,
+    config: keyboardShortcutOverrides[keyboardShortcut.id] || keyboardShortcut.config,
+  })), [keyboardShortcutOverrides]);
+};
 
 const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
   ArrowDown: 'modified',
@@ -11,6 +56,18 @@ const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
   Delete: 'always',
   End: 'modified',
   Enter: 'modified',
+  F1: 'always',
+  F2: 'always',
+  F3: 'always',
+  F4: 'always',
+  F5: 'always',
+  F6: 'always',
+  F7: 'always',
+  F8: 'always',
+  F9: 'always',
+  F10: 'always',
+  F11: 'always',
+  F12: 'always',
   Home: 'modified',
   PageDown: 'modified',
   PageUp: 'modified',
@@ -70,6 +127,9 @@ export const getKeyLabel = ({ key, keyCode }: KeyboardEvent) => {
 
   if (keyLabel) return keyLabel;
 
+  // Workaround for function key keycodes
+  if (/F\d+/.test(key)) return key;
+
   if (/^[a-z0-9]$/i.test(fromKeyCode)) {
     return fromKeyCode.toUpperCase();
   }
@@ -85,12 +145,12 @@ export const getShortcutLabel = ({
   ctrlKey = false,
   metaKey = false,
   shiftKey = false,
-}: KeyboardShortcut) => {
+}: KeyboardShortcutConfig) => {
   const parts: string[] = [];
 
   if (ctrlKey) parts.push('^');
-  if (shiftKey) parts.push('⇧');
   if (altKey) parts.push('⌥');
+  if (shiftKey) parts.push('⇧');
   if (metaKey) parts.push('⌘');
 
   parts.push(keyLabel);
@@ -98,8 +158,8 @@ export const getShortcutLabel = ({
   return parts.join('');
 };
 
-export const isKeyboardShortcut = (
-  shortcut: KeyboardShortcut,
+export const compareKeyboardShortcut = (
+  shortcut: KeyboardShortcutConfig,
   event: KeyboardEvent
 ) => (
   event.key === shortcut.key &&

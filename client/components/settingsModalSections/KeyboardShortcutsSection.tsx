@@ -1,43 +1,19 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '~/components/Tooltip';
 import { useEventListener } from '~/lib/useEventListener';
 import { useSettings } from '~/lib/settings';
-import { KeyboardShortcut, isUsableShortcut, getShortcutLabel, getKeyLabel, isKeyboardShortcut } from '~/lib/keyboardShortcuts';
-
-const shortcutableCommands: [string, string][] = [
-  ['search', 'Search'],
-  ['newProject', 'New project'],
-  ['newFile', 'New file'],
-  ['newFolder', 'New folder'],
-  ['rename', 'Rename'],
-  ['delete', 'Delete'],
-  ['move', 'Move'],
-  ['copy', 'Copy'],
-  ['duplicate', 'Duplicate'],
-  ['download', 'Download'],
-  ['upload', 'Upload'],
-  ['selectAll', 'Select all'],
-];
-
-// TODO: Change defaults based on platform and browser
-const defaultKeyboardShortcuts: Record<string, KeyboardShortcut> = {
-  search: { key: 'k', metaKey: true },
-};
+import { useKeyboardShortcuts, KeyboardShortcutConfig, isUsableShortcut, getShortcutLabel, getKeyLabel, compareKeyboardShortcut } from '~/lib/keyboardShortcuts';
 
 export const KeyboardShortcutsSection = () => {
-  const [userKeyboardShortcuts, setUserKeyboardShortcuts] = useSettings('userKeyboardShortcuts');
+  const keyboardShortcuts = useKeyboardShortcuts();
+  const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
 
-  const keyboardShortcuts = useMemo(() => ({
-    ...defaultKeyboardShortcuts,
-    ...userKeyboardShortcuts,
-  }), [userKeyboardShortcuts]);
+  const [recordingId, setRecordingId] = useState<string | null>(null);
 
-  const [recordingCommand, setRecordingCommand] = useState<string | null>(null);
-
-  const setRecordingKeyboardShortcut = recordingCommand ? ((shortcut: KeyboardShortcut | null) => {
-    setUserKeyboardShortcuts({
-      ...userKeyboardShortcuts,
-      [recordingCommand]: shortcut,
+  const setRecordingKeyboardShortcut = recordingId ? ((config: KeyboardShortcutConfig | null) => {
+    setKeyboardShortcutOverrides({
+      ...keyboardShortcutOverrides,
+      [recordingId]: config,
     });
   }) : null;
 
@@ -45,7 +21,7 @@ export const KeyboardShortcutsSection = () => {
     document.body,
     'keydown',
     (event: KeyboardEvent) => {
-      if (recordingCommand === null) return;
+      if (recordingId === null) return;
       if (event.key === 'Tab') return;
 
       event.preventDefault();
@@ -55,18 +31,18 @@ export const KeyboardShortcutsSection = () => {
       if (!isModified) {
         if (event.key === 'Backspace') {
           setRecordingKeyboardShortcut!(null);
-          setRecordingCommand(null);
+          setRecordingId(null);
           return;
         }
 
         if (event.key === 'Escape') {
-          setRecordingCommand(null);
+          setRecordingId(null);
           return;
         }
       }
 
-      const isDuplicate = Object.entries(keyboardShortcuts).some(([command, shortcut]) => (
-        command !== recordingCommand && shortcut && isKeyboardShortcut(shortcut, event)
+      const isDuplicate = keyboardShortcuts.some(({ id, config }) => (
+        id !== recordingId && config && compareKeyboardShortcut(config, event)
       ));
 
       if (!isUsableShortcut(event) || isDuplicate) {
@@ -84,21 +60,20 @@ export const KeyboardShortcutsSection = () => {
         shiftKey: event.shiftKey,
       });
 
-      setRecordingCommand(null);
+      setRecordingId(null);
     },
-    [recordingCommand],
+    [recordingId],
     true
   );
 
   return (
     <>
       <ul className="list-group">
-        {shortcutableCommands.map(([command, commandLabel]) => {
-          const isRecording = recordingCommand === command;
-          const keyboardShortcut: KeyboardShortcut | null = keyboardShortcuts[command] || null;
+        {keyboardShortcuts.map(({ id, label, hint, config }) => {
+          const isRecording = recordingId === id;
 
           return (
-            <div key={command} className="group flex">
+            <div key={id} className="group flex">
               <Tooltip
                 content={
                   <div className="space-y-2 text-sm font-normal text-center">
@@ -112,16 +87,24 @@ export const KeyboardShortcutsSection = () => {
               >
                 <button
                   type="button"
-                  className="list-group-item bg-slate-50/90 dark:bg-slate-900/90 flex justify-between no-focus-ring cursor-pointer hover:bg-slate-100/90 dark:hover:bg-slate-850/90"
-                  onClick={() => setRecordingCommand(isRecording ? null : command)}
-                  onBlur={() => setRecordingCommand(null)}
+                  className="text-left list-group-item bg-slate-50/90 dark:bg-slate-900/90 flex items-center gap-2 justify-between no-focus-ring cursor-pointer hover:bg-slate-100/90 dark:hover:bg-slate-850/90"
+                  onClick={() => setRecordingId(isRecording ? null : id)}
+                  onBlur={() => setRecordingId(null)}
                 >
-                  <span>{commandLabel}</span>
+                  <div>
+                    <div>{label}</div>
+                    {hint && (
+                      <div className="text-sm text-slate-500 dark:text-slate-400">
+                        {hint}
+                      </div>
+                    )}
+                  </div>
+
                   <span
-                    className="btn btn-link group-focus-visible-within:focus-ring group-hover:btn-link-hover"
+                    className="btn btn-link group-focus-visible-within:focus-ring group-hover:btn-link-hover shrink-0"
                   >
                     {isRecording ? <>Recording&hellip;</> : (
-                      keyboardShortcut ? getShortcutLabel(keyboardShortcut) : 'Add shortcut'
+                      config ? getShortcutLabel(config) : 'Add shortcut'
                     )}
                   </span>
                 </button>
@@ -134,7 +117,7 @@ export const KeyboardShortcutsSection = () => {
       <button
         type="button"
         className="btn btn-link"
-        onClick={() => setUserKeyboardShortcuts({})}
+        onClick={() => setKeyboardShortcutOverrides({})}
       >
         Reset to defaults
       </button>

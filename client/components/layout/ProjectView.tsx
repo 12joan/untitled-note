@@ -152,7 +152,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       formattingToolbarRef,
     ],
     toggleSearchModal,
-  });
+  }, [toggleSearchModal]);
 
   const narrowLeftMargin = useMemo(() => {
     const contentWidth = 640; // from .narrow
