@@ -5,11 +5,14 @@ import { KeyboardShortcut } from '~/lib/types';
 
 export type { KeyboardShortcutConfig };
 
+const getSequential = (event: KeyboardEvent) => parseInt(event.code.replace('Digit', ''), 10);
+
 // TODO: Change default configs based on platform and browser
 const keyboardShortcuts: KeyboardShortcut[] = [
   {
     id: 'search',
     label: 'Search',
+    hint: 'Search project',
     config: {
       key: 'k',
       metaKey: true,
@@ -19,12 +22,24 @@ const keyboardShortcuts: KeyboardShortcut[] = [
   {
     id: 'new-document',
     label: 'New document',
+    hint: 'Create new document',
     config: {
       key: 'n',
       metaKey: true,
       shiftKey: true,
     },
     action: ({ createNewDocument }) => createNewDocument(),
+  },
+  {
+    id: 'switch-project',
+    label: 'Switch to project 1',
+    hint: 'Shortcuts for projects 2-9 are automatically generated',
+    sequential: true,
+    config: {
+      key: '1',
+      metaKey: true,
+    },
+    action: ({ switchProject }, event) => switchProject(getSequential(event)),
   },
   {
     id: 'cycle-focus',
@@ -43,7 +58,9 @@ export const useKeyboardShortcuts = () => {
 
   return useMemo(() => keyboardShortcuts.map((keyboardShortcut) => ({
     ...keyboardShortcut,
-    config: keyboardShortcutOverrides[keyboardShortcut.id] || keyboardShortcut.config,
+    config: keyboardShortcut.id in keyboardShortcutOverrides
+      ? keyboardShortcutOverrides[keyboardShortcut.id]
+      : keyboardShortcut.config,
   })), [keyboardShortcutOverrides]);
 };
 
@@ -160,11 +177,17 @@ export const getShortcutLabel = ({
 
 export const compareKeyboardShortcut = (
   shortcut: KeyboardShortcutConfig,
-  event: KeyboardEvent
-) => (
-  event.key === shortcut.key &&
+  event: KeyboardEvent,
+  sequential = false,
+) => {
+  const matchesKey = event.key === shortcut.key;
+  const matchesSequential = sequential && /Digit[^0]/.test(event.code);
+
+  return (
+    (matchesKey || matchesSequential) &&
     event.altKey === !!shortcut.altKey &&
     event.ctrlKey === !!shortcut.ctrlKey &&
     event.metaKey === !!shortcut.metaKey &&
     event.shiftKey === !!shortcut.shiftKey
-);
+  );
+};

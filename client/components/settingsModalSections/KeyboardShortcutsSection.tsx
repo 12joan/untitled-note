@@ -45,9 +45,24 @@ export const KeyboardShortcutsSection = () => {
         id !== recordingId && config && compareKeyboardShortcut(config, event)
       ));
 
-      if (!isUsableShortcut(event) || isDuplicate) {
+      const isSequential = keyboardShortcuts.some(({ id, sequential }) => (
+        id === recordingId && sequential
+      ));
+
+      const satisfiesSequential = !isSequential || event.code === 'Digit1';
+
+      if (!isUsableShortcut(event) || isDuplicate || !satisfiesSequential) {
         // TODO: Shake animation + ARIA alert
-        console.log(isDuplicate ? 'Duplicate shortcut' : 'Invalid shortcut');
+        console.log('Invalid shortcut');
+
+        if (isDuplicate) {
+          console.log('Duplicate shortcut');
+        }
+
+        if (!satisfiesSequential) {
+          console.log('Must end in 1');
+        }
+
         return;
       }
 
@@ -69,7 +84,7 @@ export const KeyboardShortcutsSection = () => {
   return (
     <>
       <ul className="list-group">
-        {keyboardShortcuts.map(({ id, label, hint, config }) => {
+        {keyboardShortcuts.map(({ id, label, hint, sequential, config }) => {
           const isRecording = recordingId === id;
 
           return (
@@ -78,6 +93,9 @@ export const KeyboardShortcutsSection = () => {
                 content={
                   <div className="space-y-2 text-sm font-normal text-center">
                     <p>Type a shortcut</p>
+                    {sequential && (
+                      <p>Must end in 1</p>
+                    )}
                     <p><strong className="font-medium">Backspace</strong>: No shortcut</p>
                     <p><strong className="font-medium">Escape</strong>: Cancel</p>
                   </div>
@@ -93,11 +111,9 @@ export const KeyboardShortcutsSection = () => {
                 >
                   <div>
                     <div>{label}</div>
-                    {hint && (
-                      <div className="text-sm text-slate-500 dark:text-slate-400">
-                        {hint}
-                      </div>
-                    )}
+                    <div className="text-sm text-slate-500 dark:text-slate-400">
+                      {hint}
+                    </div>
                   </div>
 
                   <span

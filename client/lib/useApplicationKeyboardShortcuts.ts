@@ -1,4 +1,4 @@
-import { useMemo, DependencyList } from 'react';
+import { useMemo, DependencyList, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { projectPath } from '~/lib/routes';
@@ -18,19 +18,27 @@ export const useApplicationKeyboardShortcuts = ({
   toggleSearchModal,
   sectionRefs,
 }: UseApplicationKeyboardShortcutsOptions, deps: DependencyList) => {
-  const { projects, projectId } = useContext() as {
+  const { projects } = useContext() as {
     projects: Project[];
-    projectId: string;
   };
 
   const navigate = useNavigate();
   const createNewDocument = useNewDocument();
 
+  const switchProject = useCallback((n: number) => {
+    const project = projects.filter((project) => !project.archived_at)[n - 1];
+
+    if (project) {
+      navigate(projectPath({ projectId: project.id }));
+    }
+  }, [projects]);
+
   const context: KeyboardShortcutContext = useMemo(() => ({
     toggleSearchModal,
     createNewDocument,
+    switchProject,
     cycleFocus: () => cycleFocus({ sectionRefs }),
-  }), deps);
+  }), [...deps, switchProject]);
 
   const keyboardShortcuts = useKeyboardShortcuts();
 
@@ -40,29 +48,16 @@ export const useApplicationKeyboardShortcuts = ({
     (event: KeyboardEvent) => {
       if (event.defaultPrevented) return;
 
-      keyboardShortcuts.forEach(({ config, action }) => {
-        if (config && compareKeyboardShortcut(config, event)) {
+      keyboardShortcuts.some(({ sequential, config, action }) => {
+        if (config && compareKeyboardShortcut(config, event, sequential)) {
+          action(context, event);
           event.preventDefault();
-          action(context);
+          return true;
         }
+
+        return false;
       });
     },
     [keyboardShortcuts, context],
   );
-
-  // // Switch project
-  // useGlobalKeyboardShortcut(
-  //   [1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((n) => [`Meta${n}`, `MetaShift${n}`]),
-  //   (event: KeyboardEvent) => {
-  //     const index = Number(event.key) - 1;
-  //     const project = projects.filter((project) => !project.archived_at)[index];
-
-  //     if (project) {
-  //       event.preventDefault();
-  //       event.stopPropagation();
-  //       navigate(projectPath({ projectId: project.id }));
-  //     }
-  //   },
-  //   [projects]
-  // );
 };
