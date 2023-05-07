@@ -70,7 +70,7 @@ export const useKeyboardShortcuts = (): KeyboardShortcut[] => {
   );
 };
 
-const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
+const specialKeys: Record<string, 'always' | 'modified'> = {
   ArrowDown: 'modified',
   ArrowLeft: 'modified',
   ArrowRight: 'modified',
@@ -96,7 +96,7 @@ const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
   PageUp: 'modified',
 };
 
-const KEY_LABELS: Record<string, string> = {
+const keyLabels: Record<string, string> = {
   ArrowDown: '↓',
   ArrowLeft: '←',
   ArrowRight: '→',
@@ -133,7 +133,7 @@ export const isUsableShortcut = ({
   if (keyCode === 32) return false;
   if (key.length === 1) return true;
 
-  const specialStatus = SPECIAL_KEYS[key];
+  const specialStatus = specialKeys[key];
 
   if (specialStatus === 'always') return true;
 
@@ -144,8 +144,11 @@ export const isUsableShortcut = ({
   return false;
 };
 
-export const getKeyLabel = ({ key, keyCode }: KeyboardEvent) => {
-  const keyLabel = KEY_LABELS[key];
+export const getKeyLabel = ({ key, keyCode, code }: KeyboardEvent) => {
+  // Workaround for ⌥N
+  if (code === 'KeyN') return 'N';
+
+  const keyLabel = keyLabels[key];
   const fromKeyCode = String.fromCharCode(keyCode);
 
   if (keyLabel) return keyLabel;
