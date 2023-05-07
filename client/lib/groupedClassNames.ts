@@ -4,6 +4,7 @@ export type ClassNamesObject = Record<
 >;
 
 export type GroupedClassNames =
+  | string
   | ClassNamesObject
   | ((base: ClassNamesObject) => ClassNamesObject)
   | undefined;
@@ -18,6 +19,12 @@ const mergeGroupedClassNames = (
 
   if (typeof custom === 'function') {
     return custom(base);
+  }
+
+  if (typeof custom === 'string') {
+    return mergeGroupedClassNames(base, {
+      _string: `${base._string || ''} ${custom}`,
+    });
   }
 
   return { ...base, ...custom };

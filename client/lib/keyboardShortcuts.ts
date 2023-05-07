@@ -54,17 +54,18 @@ const keyboardShortcuts: KeyboardShortcut[] = [
   },
 ];
 
-export const useKeyboardShortcuts = () => {
+export const useKeyboardShortcuts = (): KeyboardShortcut[] => {
   const [keyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
 
   return useMemo(
     () =>
       keyboardShortcuts.map((keyboardShortcut) => ({
         ...keyboardShortcut,
-        config:
+        config: (
           keyboardShortcut.id in keyboardShortcutOverrides
             ? keyboardShortcutOverrides[keyboardShortcut.id]
-            : keyboardShortcut.config,
+            : keyboardShortcut.config
+        ) ?? undefined,
       })),
     [keyboardShortcutOverrides]
   );

@@ -6,21 +6,27 @@ import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
+import { groupedClassNames, GroupedClassNames } from '~/lib/groupedClassNames';
 
-export interface DropdownProps extends TippyProps {
+export const dropdownClassNames: GroupedClassNames = {
+  width: 'w-auto max-w-full',
+  backdropBlur: 'backdrop-blur-lg',
+  shadow: 'shadow-dialog',
+  rounded: 'rounded-lg',
+};
+
+export interface DropdownProps extends Omit<TippyProps, 'className'> {
   items: ReactNode;
-  className?: string;
+  className?: GroupedClassNames;
 }
 
 export const Dropdown = ({
   items,
-  className: userClassName = '',
+  className,
   ...otherProps
 }: DropdownProps) => {
   const tippyRef = useRef<TippyInstance>(null);
   const close = () => tippyRef.current?.hide();
-
-  const className = `rounded-lg backdrop-blur-lg shadow-lg w-auto max-w-full ${userClassName}`;
 
   useEventListener(window, 'keydown', (event: KeyboardEvent) => {
     if (event.key === 'Escape' && tippyRef.current?.state?.isVisible) {
@@ -37,7 +43,7 @@ export const Dropdown = ({
           ref={tippyRef}
           render={(attrs) => (
             <div
-              className={className}
+              className={groupedClassNames(dropdownClassNames, className)}
               tabIndex={-1}
               children={items}
               {...attrs}
@@ -52,11 +58,23 @@ export const Dropdown = ({
   );
 };
 
+export const dropdownItemClassNames: GroupedClassNames = {
+  display: 'flex',
+  width: 'w-full',
+  textAlign: 'text-left',
+  padding: 'p-3',
+  backgroundColor: 'bg-slate-100/75 dark:bg-slate-700/75',
+  hocusBackgroundColor: 'hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75',
+  gap: 'gap-3',
+  alignItems: 'items-center',
+  rounded: 'first:rounded-t-lg last:rounded-b-lg',
+};
+
 export type DropdownItemProps<C extends ElementType> = PolyProps<
   C,
   {
     icon?: ElementType<IconProps>;
-    className?: string;
+    className?: GroupedClassNames;
     onClick?: (event: MouseEvent) => void;
     children: ReactNode;
   }
@@ -65,7 +83,7 @@ export type DropdownItemProps<C extends ElementType> = PolyProps<
 export const DropdownItem = <C extends ElementType = 'button'>({
   as,
   icon: Icon,
-  className = '',
+  className,
   onClick = () => {},
   children,
   ...otherProps
@@ -80,7 +98,7 @@ export const DropdownItem = <C extends ElementType = 'button'>({
   return (
     <Component
       {...(buttonProps as any)}
-      className={`block w-full text-left p-3 pr-5 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 flex gap-3 items-center first:rounded-t-lg last:rounded-b-lg ${className}`}
+      className={groupedClassNames(dropdownItemClassNames, className)}
       onClick={(event: MouseEvent) => {
         closeDropdown();
         onClick(event);
@@ -93,7 +111,7 @@ export const DropdownItem = <C extends ElementType = 'button'>({
         </span>
       )}
 
-      {children}
+      <span className="mr-2">{children}</span>
     </Component>
   );
 };

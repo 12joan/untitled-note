@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { createToast } from '~/lib/createToast';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
@@ -9,10 +9,20 @@ import {
   KeyboardShortcutConfig,
   useKeyboardShortcuts,
 } from '~/lib/keyboardShortcuts';
+import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';
+import { KeyboardShortcut } from '~/lib/types';
 import { useEventListener } from '~/lib/useEventListener';
+import { useFocusOut } from '~/lib/useFocusOut';
 import { useTemporaryState } from '~/lib/useTemporaryState';
-import { Tooltip } from '~/components/Tooltip';
+import {
+  Dropdown,
+  DropdownItem,
+  dropdownItemClassNames,
+} from '~/components/Dropdown';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 type RecordShortcutError = 'duplicate' | 'notSequential' | 'invalid';
 
@@ -24,6 +34,7 @@ const recordShortcutErrorMessages: Record<RecordShortcutError, string> = {
 
 export const KeyboardShortcutsSection = () => {
   const keyboardShortcuts = useKeyboardShortcuts();
+
   const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings(
     'keyboardShortcutOverrides'
   );
@@ -50,6 +61,11 @@ export const KeyboardShortcutsSection = () => {
     (event: KeyboardEvent) => {
       if (recordingId === null) return;
       if (['Tab', 'Shift', 'Control', 'Alt', 'Meta'].includes(event.key))
+        return;
+      if (
+        !(event.target as HTMLElement).dataset.keyboardShortcutItem &&
+        ['Enter', ' '].includes(event.key)
+      )
         return;
 
       event.preventDefault();
@@ -122,59 +138,20 @@ export const KeyboardShortcutsSection = () => {
   return (
     <>
       <ul className="list-group">
-        {keyboardShortcuts.map(({ id, label, hint, sequential, config }) => {
-          const isRecording = recordingId === id;
-
+        {keyboardShortcuts.map((keyboardShortcut) => {
           return (
-            <div key={id} className="group flex">
-              <Tooltip
-                content={
-                  <div className="space-y-2 text-sm font-normal text-center">
-                    <p>Type a shortcut</p>
-                    {sequential && <p>Must end in 1</p>}
-                    <p>
-                      <strong className="font-medium">Backspace</strong>: No
-                      shortcut
-                    </p>
-                    <p>
-                      <strong className="font-medium">Escape</strong>: Cancel
-                    </p>
-                  </div>
-                }
-                placement="bottom"
-                visible={isRecording}
-              >
-                <button
-                  type="button"
-                  className="text-left list-group-item bg-slate-50/90 dark:bg-slate-900/90 flex items-center gap-2 justify-between no-focus-ring cursor-pointer hover:bg-slate-100/90 dark:hover:bg-slate-850/90"
-                  onClick={() => setRecordingId(isRecording ? null : id)}
-                  onBlur={() => setRecordingId(null)}
-                >
-                  <div>
-                    <div>{label}</div>
-                    <div className="text-sm text-slate-500 dark:text-slate-400">
-                      {hint}
-                    </div>
-                  </div>
-
-                  <span
-                    className={groupedClassNames({
-                      btn: 'btn btn-link',
-                      hocus:
-                        'group-focus-visible-within:focus-ring group-hover:btn-link-hover',
-                      misc: 'shrink-0',
-                      shake: isShaking && isRecording && 'animate-shake',
-                    })}
-                  >
-                    {(() => {
-                      if (isRecording) return <>Recording&hellip;</>;
-                      if (config) return getShortcutLabel(config);
-                      return 'Add shortcut';
-                    })()}
-                  </span>
-                </button>
-              </Tooltip>
-            </div>
+            <KeyboardShortcutItem
+              key={keyboardShortcut.id}
+              keyboardShortcut={keyboardShortcut}
+              isRecording={recordingId === keyboardShortcut.id}
+              setIsRecording={(isRecording) =>
+                setRecordingId(isRecording ? keyboardShortcut.id : null)
+              }
+              isShaking={isShaking}
+              removeKeyboardShortcut={() =>
+                setRecordingKeyboardShortcut?.(null)
+              }
+            />
           );
         })}
       </ul>
@@ -187,5 +164,142 @@ export const KeyboardShortcutsSection = () => {
         Reset to defaults
       </button>
     </>
+  );
+};
+
+interface KeyboardShortcutItemProps {
+  keyboardShortcut: KeyboardShortcut;
+  isRecording: boolean;
+  setIsRecording: (isRecording: boolean) => void;
+  isShaking: boolean;
+  removeKeyboardShortcut: () => void;
+}
+
+const KeyboardShortcutItem = ({
+  keyboardShortcut: { id, label, config, hint, sequential = false },
+  isRecording,
+  setIsRecording,
+  isShaking,
+  removeKeyboardShortcut,
+}: KeyboardShortcutItemProps) => {
+  const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(() =>
+    setIsRecording(false)
+  );
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLSpanElement>(null);
+
+  return (
+    <div
+      key={id}
+      ref={mergeRefs([containerRef, focusOutRef])}
+      className="group flex"
+      {...focusOutProps}
+    >
+      <button
+        type="button"
+        className="text-left list-group-item bg-slate-50/90 dark:bg-slate-900/90 flex items-center gap-2 justify-between no-focus-ring cursor-pointer hover:bg-slate-100/90 dark:hover:bg-slate-850/90 stretch-target"
+        onClick={() => setIsRecording(!isRecording)}
+        data-keyboard-shortcut-item
+      >
+        <div>
+          <div>{label}</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400">
+            {hint}
+          </div>
+        </div>
+        <span
+          ref={popoverRef}
+          className={groupedClassNames({
+            btn: 'btn btn-link',
+            hocus:
+              'group-stretch-focus-visible:focus-ring group-hover:btn-link-hover',
+            misc: 'shrink-0',
+          })}
+        >
+          {(() => {
+            if (isRecording) return <>Recording&hellip;</>;
+            if (config) return getShortcutLabel(config);
+            return 'Add shortcut';
+          })()}
+        </span>
+      </button>
+
+      <Dropdown
+        reference={popoverRef}
+        appendTo={containerRef.current ?? undefined}
+        items={
+          <KeyboardShortcutDropdown
+            sequential={sequential}
+            onRemove={() => {
+              removeKeyboardShortcut();
+              setIsRecording(false);
+            }}
+            onCancel={() => setIsRecording(false)}
+          />
+        }
+        placement="bottom"
+        className={{
+          shake: isShaking && isRecording && 'animate-shake',
+        }}
+        visible={isRecording}
+      />
+    </div>
+  );
+};
+
+interface KeyboardShortcutDropdownProps {
+  sequential: boolean;
+  onRemove: () => void;
+  onCancel: () => void;
+}
+
+const KeyboardShortcutDropdown = ({
+  sequential,
+  onRemove,
+  onCancel,
+}: KeyboardShortcutDropdownProps) => {
+  return (
+    <div
+      className="contents cursor-default"
+      onClick={(event) => event.stopPropagation()}
+    >
+      <div
+        className={groupedClassNames(dropdownItemClassNames, {
+          display: 'block',
+          hocusBackgroundColor: undefined,
+          textAlign: 'text-center',
+          padding: 'py-3 px-5',
+        })}
+      >
+        <div className="flex items-center justify-center my-1">
+          <div className="rounded-full bg-black/[0.03] dark:bg-white/5 text-slate-500 dark:text-slate-400 p-3">
+            <KeyboardShortcutsIcon noAriaLabel size="1.25em" />
+          </div>
+        </div>
+
+        <h3 className="text-lg font-medium">Record shortcut</h3>
+
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Type a keyboard shortcut
+        </p>
+
+        {sequential && (
+          <p className="mt-2">
+            <span className="text-xs bg-slate-200 dark:bg-slate-800 rounded px-2 py-1">
+              Must end in 1
+            </span>
+          </p>
+        )}
+      </div>
+
+      <DropdownItem icon={DeleteIcon} onClick={onRemove}>
+        Remove shortcut
+      </DropdownItem>
+
+      <DropdownItem icon={LargeCloseIcon} onClick={onCancel}>
+        Stop recording
+      </DropdownItem>
+    </div>
   );
 };

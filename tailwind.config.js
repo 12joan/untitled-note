@@ -38,7 +38,7 @@ module.exports = {
       },
       animation: {
         grow: 'grow 1s ease-in-out infinite',
-        shake: 'shake 0.375s linear 1',
+        shake: 'shake 0.25s linear 2',
       },
       keyframes: {
         grow: {
@@ -48,9 +48,9 @@ module.exports = {
         },
         shake: {
           '0%': { transform: 'translateX(0)' },
-          '25%': { transform: 'translateX(0.5rem)' },
+          '25%': { transform: 'translateX(0.75rem)' },
           '50%': { transform: 'translateX(0)' },
-          '75%': { transform: 'translateX(-0.5rem)' },
+          '75%': { transform: 'translateX(-0.75rem)' },
           '100%': { transform: 'translateX(0)' },
         },
       },
@@ -75,12 +75,12 @@ module.exports = {
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &']);
       addVariant('group-focus-visible', ['.group:focus-visible &']);
       addVariant(
-        'group-focus-visible-within',
-        '.group:has(:focus-visible) &'
-      );
-      addVariant(
         'stretch-focus-visible',
         '&:has(.stretch-target:focus-visible)'
+      );
+      addVariant(
+        'group-stretch-focus-visible',
+        '.group:has(.stretch-target:focus-visible) &'
       );
       addVariant('stretch-hover', '&:has(.stretch-target:hover)');
       addVariant('children', '& > *');
