@@ -1,12 +1,12 @@
 import React, { ElementType, MouseEvent, ReactNode, useRef } from 'react';
 import { followCursor } from 'tippy.js';
 import { ContextProvider, useContext } from '~/lib/context';
+import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { PolyProps } from '~/lib/polymorphic';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
-import { groupedClassNames, GroupedClassNames } from '~/lib/groupedClassNames';
 
 export const dropdownClassNames: GroupedClassNames = {
   width: 'w-auto max-w-full',

@@ -243,6 +243,7 @@ const KeyboardShortcutItem = ({
           shake: isShaking && isRecording && 'animate-shake',
         }}
         visible={isRecording}
+        trigger={undefined}
       />
     </div>
   );

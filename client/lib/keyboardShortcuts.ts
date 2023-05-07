@@ -61,11 +61,10 @@ export const useKeyboardShortcuts = (): KeyboardShortcut[] => {
     () =>
       keyboardShortcuts.map((keyboardShortcut) => ({
         ...keyboardShortcut,
-        config: (
-          keyboardShortcut.id in keyboardShortcutOverrides
+        config:
+          (keyboardShortcut.id in keyboardShortcutOverrides
             ? keyboardShortcutOverrides[keyboardShortcut.id]
-            : keyboardShortcut.config
-        ) ?? undefined,
+            : keyboardShortcut.config) ?? undefined,
       })),
     [keyboardShortcutOverrides]
   );
