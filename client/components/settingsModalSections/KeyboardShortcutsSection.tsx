@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import {
   compareKeyboardShortcut,
   getKeyLabel,
@@ -10,6 +10,17 @@ import {
 import { useSettings } from '~/lib/settings';
 import { useEventListener } from '~/lib/useEventListener';
 import { Tooltip } from '~/components/Tooltip';
+import { createToast } from '~/lib/createToast';
+import { useTemporaryState } from '~/lib/useTemporaryState';
+import { groupedClassNames } from '~/lib/groupedClassNames';
+
+type RecordShortcutError = 'duplicate' | 'notSequential' | 'invalid';
+
+const recordShortcutErrorMessages: Record<RecordShortcutError, string> = {
+  duplicate: 'This shortcut is already in use.',
+  notSequential: 'The shortcut must end in 1.',
+  invalid: 'This shortcut cannot be used.',
+};
 
 export const KeyboardShortcutsSection = () => {
   const keyboardShortcuts = useKeyboardShortcuts();
@@ -18,6 +29,11 @@ export const KeyboardShortcutsSection = () => {
   );
 
   const [recordingId, setRecordingId] = useState<string | null>(null);
+
+  const [isShaking, setIsShaking] = useTemporaryState(false, {
+    resetAfter: 375,
+    dependencies: [recordingId],
+  });
 
   const setRecordingKeyboardShortcut = recordingId
     ? (config: KeyboardShortcutConfig | null) => {
@@ -54,29 +70,35 @@ export const KeyboardShortcutsSection = () => {
         }
       }
 
-      const isDuplicate = keyboardShortcuts.some(
-        ({ id, config }) =>
-          id !== recordingId && config && compareKeyboardShortcut(config, event)
-      );
+      const error: RecordShortcutError | null = (() => {
+        const isDuplicate = keyboardShortcuts.some(
+          ({ id, config }) =>
+            id !== recordingId && config && compareKeyboardShortcut(config, event)
+        );
 
-      const isSequential = keyboardShortcuts.some(
-        ({ id, sequential }) => id === recordingId && sequential
-      );
+        if (isDuplicate) return 'duplicate';
 
-      const satisfiesSequential = !isSequential || event.code === 'Digit1';
 
-      if (!isUsableShortcut(event) || isDuplicate || !satisfiesSequential) {
-        // TODO: Shake animation + ARIA alert
-        if (isDuplicate) {
-          // eslint-disable-next-line no-console
-          console.log('Duplicate shortcut');
-        } else if (!satisfiesSequential) {
-          // eslint-disable-next-line no-console
-          console.log('Must end in 1');
-        } else {
-          // eslint-disable-next-line no-console
-          console.log('Invalid shortcut');
-        }
+        const isSequential = keyboardShortcuts.some(
+          ({ id, sequential }) => id === recordingId && sequential
+        );
+
+        if (isSequential && event.code !== 'Digit1') return 'notSequential';
+
+        if (!isUsableShortcut(event)) return 'invalid';
+
+        return null;
+      })();
+
+      if (error) {
+        createToast({
+          title: 'Failed to record shortcut',
+          message: recordShortcutErrorMessages[error],
+          autoClose: 'fast',
+          ariaLive: 'assertive',
+        });
+
+        setIsShaking(true);
 
         return;
       }
@@ -134,7 +156,12 @@ export const KeyboardShortcutsSection = () => {
                     </div>
                   </div>
 
-                  <span className="btn btn-link group-focus-visible-within:focus-ring group-hover:btn-link-hover shrink-0">
+                  <span className={groupedClassNames({
+                    btn: 'btn btn-link',
+                    hocus: 'group-focus-visible-within:focus-ring group-hover:btn-link-hover',
+                    misc: 'shrink-0',
+                    shake: isShaking && isRecording && 'animate-shake',
+                  })}>
                     {(() => {
                       if (isRecording) return <>Recording&hellip;</>;
                       if (config) return getShortcutLabel(config);

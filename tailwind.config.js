@@ -11,7 +11,6 @@ module.exports = {
       zIndex: {
         5: '5',
       },
-
       boxShadow: {
         dialog:
           '0 0.75rem 2rem rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
@@ -39,12 +38,20 @@ module.exports = {
       },
       animation: {
         grow: 'grow 1s ease-in-out infinite',
+        shake: 'shake 0.375s linear 1',
       },
       keyframes: {
         grow: {
           '0%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.25)' },
           '100%': { transform: 'scale(1)' },
+        },
+        shake: {
+          '0%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(0.5rem)' },
+          '50%': { transform: 'translateX(0)' },
+          '75%': { transform: 'translateX(-0.5rem)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
       ringOffsetColor: {
