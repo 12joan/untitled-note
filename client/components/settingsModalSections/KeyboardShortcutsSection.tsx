@@ -1,4 +1,6 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
+import { createToast } from '~/lib/createToast';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
   compareKeyboardShortcut,
   getKeyLabel,
@@ -9,10 +11,8 @@ import {
 } from '~/lib/keyboardShortcuts';
 import { useSettings } from '~/lib/settings';
 import { useEventListener } from '~/lib/useEventListener';
-import { Tooltip } from '~/components/Tooltip';
-import { createToast } from '~/lib/createToast';
 import { useTemporaryState } from '~/lib/useTemporaryState';
-import { groupedClassNames } from '~/lib/groupedClassNames';
+import { Tooltip } from '~/components/Tooltip';
 
 type RecordShortcutError = 'duplicate' | 'notSequential' | 'invalid';
 
@@ -73,11 +73,12 @@ export const KeyboardShortcutsSection = () => {
       const error: RecordShortcutError | null = (() => {
         const isDuplicate = keyboardShortcuts.some(
           ({ id, config }) =>
-            id !== recordingId && config && compareKeyboardShortcut(config, event)
+            id !== recordingId &&
+            config &&
+            compareKeyboardShortcut(config, event)
         );
 
         if (isDuplicate) return 'duplicate';
-
 
         const isSequential = keyboardShortcuts.some(
           ({ id, sequential }) => id === recordingId && sequential
@@ -156,12 +157,15 @@ export const KeyboardShortcutsSection = () => {
                     </div>
                   </div>
 
-                  <span className={groupedClassNames({
-                    btn: 'btn btn-link',
-                    hocus: 'group-focus-visible-within:focus-ring group-hover:btn-link-hover',
-                    misc: 'shrink-0',
-                    shake: isShaking && isRecording && 'animate-shake',
-                  })}>
+                  <span
+                    className={groupedClassNames({
+                      btn: 'btn btn-link',
+                      hocus:
+                        'group-focus-visible-within:focus-ring group-hover:btn-link-hover',
+                      misc: 'shrink-0',
+                      shake: isShaking && isRecording && 'animate-shake',
+                    })}
+                  >
                     {(() => {
                       if (isRecording) return <>Recording&hellip;</>;
                       if (config) return getShortcutLabel(config);

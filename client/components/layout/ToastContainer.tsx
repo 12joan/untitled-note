@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Portal } from '@headlessui/react';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { Toast as ToastProps } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTimeout } from '~/lib/useTimer';
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
-import { Portal } from '@headlessui/react';
 
 const AUTO_CLOSE_DURATION = {
   none: null,
@@ -30,9 +30,7 @@ export const ToastContainer = () => {
 
   return (
     <Portal>
-      <div
-        className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden"
-      >
+      <div className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">
         {toasts.map(({ key, ...toast }) => (
           <Toast key={key} {...toast} />
         ))}
@@ -41,7 +39,13 @@ export const ToastContainer = () => {
   );
 };
 
-const Toast = ({ title, message, autoClose, ariaLive = 'polite', button }: ToastProps) => {
+const Toast = ({
+  title,
+  message,
+  autoClose,
+  ariaLive = 'polite',
+  button,
+}: ToastProps) => {
   const [visible, setVisible] = useState(false);
   const [inDOM, setInDOM] = useState(true);
   const [isClosing, setIsClosing] = useState(false);

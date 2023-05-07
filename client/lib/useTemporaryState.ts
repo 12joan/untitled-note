@@ -1,4 +1,11 @@
-import { useState, useLayoutEffect, Dispatch, SetStateAction, DependencyList, useCallback } from 'react';
+import {
+  DependencyList,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { useTimeout } from './useTimer';
 
 export interface UseTemporaryStateOptions {
@@ -8,10 +15,7 @@ export interface UseTemporaryStateOptions {
 
 export const useTemporaryState = <T>(
   initialValue: T,
-  {
-    resetAfter,
-    dependencies = [],
-  }: UseTemporaryStateOptions = {},
+  { resetAfter, dependencies = [] }: UseTemporaryStateOptions = {}
 ): [T, Dispatch<SetStateAction<T>>, () => void] => {
   const [isClean, setIsClean] = useState(true);
   const [value, rawSetValue] = useState(initialValue);
