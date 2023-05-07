@@ -83,6 +83,7 @@ export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
 
   // Meta+K toggles link only if there is a selection;
   // otherwise it opens the search modal
+  // TODO: Deprecate useKeyboardShortcut
   useKeyboardShortcut(
     () => document.querySelector('[data-slate-editor]')!,
     ['MetaShiftU', 'MetaK'],

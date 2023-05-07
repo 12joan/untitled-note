@@ -31,6 +31,7 @@ export const BackButton = ({
     ),
   };
 
+  // TODO: Deprecate useGlobalKeyboardShortcut
   useGlobalKeyboardShortcut('MetaAltArrowUp', (event) => {
     event.preventDefault();
     event.stopPropagation();

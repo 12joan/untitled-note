@@ -130,6 +130,7 @@ export const useFind = ({
    * When the user presses Meta+F, open the find dialog. If the find dialog was
    * already open, close it and let the browser handle the keyboad shortcut.
    */
+  // TODO: Deprecate useGlobalKeyboardShortcut
   useGlobalKeyboardShortcut('MetaF', (event) => {
     if (event.target === inputRef.current) {
       close();

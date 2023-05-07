@@ -1,15 +1,14 @@
 import { DependencyList, KeyboardEvent, useEffect } from 'react';
 import { keyWithModifiers } from '~/lib/keyWithModifiers';
 
+// TODO: Deprecate useKeyboardShortcut
+
 export const useKeyboardShortcut = (
   getElement: () => HTMLElement,
   keys: string | string[],
   callback: (event: KeyboardEvent, key: string) => void,
   deps: DependencyList = []
 ) => {
-  // eslint-disable-next-line no-console
-  console.warn('useKeyboardShortcut is deprecated', new Error().stack);
-
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       const keyList = Array.isArray(keys) ? keys : [keys];

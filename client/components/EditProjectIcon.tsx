@@ -227,6 +227,7 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     }
   };
 
+  // TODO: Deprecate useGlobalKeyboardShortcut
   useGlobalKeyboardShortcut(
     'Escape',
     (event) => {
