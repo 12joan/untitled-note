@@ -1,23 +1,24 @@
-import { useMemo, DependencyList, useCallback } from 'react';
+import { DependencyList, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
+import { cycleFocus, CycleFocusOptions } from '~/lib/cycleFocus';
+import {
+  compareKeyboardShortcut,
+  useKeyboardShortcuts,
+} from '~/lib/keyboardShortcuts';
 import { projectPath } from '~/lib/routes';
-import { Project } from '~/lib/types';
-import { useNewDocument } from '~/lib/useNewDocument';
-import { KeyboardShortcutContext } from '~/lib/types';
-import { useKeyboardShortcuts, compareKeyboardShortcut } from '~/lib/keyboardShortcuts';
+import { KeyboardShortcutContext, Project } from '~/lib/types';
 import { useEventListener } from '~/lib/useEventListener';
-import { CycleFocusOptions, cycleFocus } from '~/lib/cycleFocus';
+import { useNewDocument } from '~/lib/useNewDocument';
 
-export interface UseApplicationKeyboardShortcutsOptions extends Pick<KeyboardShortcutContext,
-  | 'toggleSearchModal'
->, CycleFocusOptions {
-}
+export interface UseApplicationKeyboardShortcutsOptions
+  extends Pick<KeyboardShortcutContext, 'toggleSearchModal'>,
+    CycleFocusOptions {}
 
-export const useApplicationKeyboardShortcuts = ({
-  toggleSearchModal,
-  sectionRefs,
-}: UseApplicationKeyboardShortcutsOptions, deps: DependencyList) => {
+export const useApplicationKeyboardShortcuts = (
+  { toggleSearchModal, sectionRefs }: UseApplicationKeyboardShortcutsOptions,
+  deps: DependencyList
+) => {
   const { projects } = useContext() as {
     projects: Project[];
   };
@@ -25,20 +26,26 @@ export const useApplicationKeyboardShortcuts = ({
   const navigate = useNavigate();
   const createNewDocument = useNewDocument();
 
-  const switchProject = useCallback((n: number) => {
-    const project = projects.filter((project) => !project.archived_at)[n - 1];
+  const switchProject = useCallback(
+    (n: number) => {
+      const project = projects.filter((project) => !project.archived_at)[n - 1];
 
-    if (project) {
-      navigate(projectPath({ projectId: project.id }));
-    }
-  }, [projects]);
+      if (project) {
+        navigate(projectPath({ projectId: project.id }));
+      }
+    },
+    [projects]
+  );
 
-  const context: KeyboardShortcutContext = useMemo(() => ({
-    toggleSearchModal,
-    createNewDocument,
-    switchProject,
-    cycleFocus: () => cycleFocus({ sectionRefs }),
-  }), [...deps, switchProject]);
+  const context: KeyboardShortcutContext = useMemo(
+    () => ({
+      toggleSearchModal,
+      createNewDocument,
+      switchProject,
+      cycleFocus: () => cycleFocus({ sectionRefs }),
+    }),
+    [...deps, switchProject]
+  );
 
   const keyboardShortcuts = useKeyboardShortcuts();
 
@@ -58,6 +65,6 @@ export const useApplicationKeyboardShortcuts = ({
         return false;
       });
     },
-    [keyboardShortcuts, context],
+    [keyboardShortcuts, context]
   );
 };

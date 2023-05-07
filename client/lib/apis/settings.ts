@@ -16,4 +16,3 @@ export const updateSettings = (settings: SettingsSchema) =>
       },
     },
   });
-

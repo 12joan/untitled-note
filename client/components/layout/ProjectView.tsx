@@ -15,12 +15,12 @@ import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
 import { useAccountModal } from '~/lib/useAccountModal';
-import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useElementBounds } from '~/lib/useElementBounds';
 import { useElementSize } from '~/lib/useElementSize';
 import { useSearchModal } from '~/lib/useSearchModal';
+import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useViewportSize } from '~/lib/useViewportSize';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { AllTagsView } from '~/components/layout/AllTagsView';
@@ -143,16 +143,19 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     }
   }, [projectId, viewPath]);
 
-  useApplicationKeyboardShortcuts({
-    sectionRefs: [
-      mainRef,
-      projectsBarRef,
-      topBarRef,
-      sideBarRef,
-      formattingToolbarRef,
-    ],
-    toggleSearchModal,
-  }, [toggleSearchModal]);
+  useApplicationKeyboardShortcuts(
+    {
+      sectionRefs: [
+        mainRef,
+        projectsBarRef,
+        topBarRef,
+        sideBarRef,
+        formattingToolbarRef,
+      ],
+      toggleSearchModal,
+    },
+    [toggleSearchModal]
+  );
 
   const narrowLeftMargin = useMemo(() => {
     const contentWidth = 640; // from .narrow

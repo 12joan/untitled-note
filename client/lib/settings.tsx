@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
-import { SettingsSchema, migrateSettings, defaultSettings, LATEST_SETTINGS_VERSION } from '~/lib/settingsSchema';
+import { useEffect, useState } from 'react';
 import { fetchSettings, updateSettings } from '~/lib/apis/settings';
+import { useContext } from '~/lib/context';
 import {
   FutureServiceResult,
+  orDefaultFutureServiceResult,
   pendingFutureServiceResult,
   promiseToFutureServiceResult,
-  orDefaultFutureServiceResult,
 } from '~/lib/monads';
-import { useContext } from '~/lib/context';
+import {
+  defaultSettings,
+  LATEST_SETTINGS_VERSION,
+  migrateSettings,
+  SettingsSchema,
+} from '~/lib/settingsSchema';
 import { useOverrideable } from '~/lib/useOverrideable';
 
 type SettingsContext = {
@@ -16,14 +21,19 @@ type SettingsContext = {
 };
 
 export const useSettingsProvider = (): SettingsContext => {
-  const [fsrSettings, setFsrSettings] = useState<FutureServiceResult<SettingsSchema, any>>(pendingFutureServiceResult);
+  const [fsrSettings, setFsrSettings] = useState<
+    FutureServiceResult<SettingsSchema, any>
+  >(pendingFutureServiceResult);
 
   useEffect(() => {
     // TODO: Handle errors
     promiseToFutureServiceResult(
       fetchSettings().then((settings: any) => {
         if (settings) {
-          return migrateSettings(settings, LATEST_SETTINGS_VERSION) as SettingsSchema;
+          return migrateSettings(
+            settings,
+            LATEST_SETTINGS_VERSION
+          ) as SettingsSchema;
         }
 
         return defaultSettings;
@@ -46,8 +56,13 @@ export const useSettingsProvider = (): SettingsContext => {
   return { settings, setSettings };
 };
 
-export function useSettings(): [SettingsSchema, (settings: SettingsSchema) => void];
-export function useSettings<K extends keyof SettingsSchema>(key: K): [SettingsSchema[K], (value: SettingsSchema[K]) => void];
+export function useSettings(): [
+  SettingsSchema,
+  (settings: SettingsSchema) => void
+];
+export function useSettings<K extends keyof SettingsSchema>(
+  key: K
+): [SettingsSchema[K], (value: SettingsSchema[K]) => void];
 
 export function useSettings<K extends keyof SettingsSchema>(key?: K) {
   const { settings, setSettings } = useContext() as SettingsContext;

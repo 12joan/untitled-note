@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { useSettings } from '~/lib/settings';
+import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { KeyboardShortcut } from '~/lib/types';
 
 export type { KeyboardShortcutConfig };
 
-const getSequential = (event: KeyboardEvent) => parseInt(event.code.replace('Digit', ''), 10);
+const getSequential = (event: KeyboardEvent) =>
+  parseInt(event.code.replace('Digit', ''), 10);
 
 // TODO: Change default configs based on platform and browser
 const keyboardShortcuts: KeyboardShortcut[] = [
@@ -56,12 +57,17 @@ const keyboardShortcuts: KeyboardShortcut[] = [
 export const useKeyboardShortcuts = () => {
   const [keyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
 
-  return useMemo(() => keyboardShortcuts.map((keyboardShortcut) => ({
-    ...keyboardShortcut,
-    config: keyboardShortcut.id in keyboardShortcutOverrides
-      ? keyboardShortcutOverrides[keyboardShortcut.id]
-      : keyboardShortcut.config,
-  })), [keyboardShortcutOverrides]);
+  return useMemo(
+    () =>
+      keyboardShortcuts.map((keyboardShortcut) => ({
+        ...keyboardShortcut,
+        config:
+          keyboardShortcut.id in keyboardShortcutOverrides
+            ? keyboardShortcutOverrides[keyboardShortcut.id]
+            : keyboardShortcut.config,
+      })),
+    [keyboardShortcutOverrides]
+  );
 };
 
 const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
@@ -102,12 +108,12 @@ const KEY_LABELS: Record<string, string> = {
   Home: '↖',
   PageDown: '⇟',
   PageUp: '⇞',
-  '_': '-',
+  _: '-',
   '+': '=',
   '{': '[',
   '}': ']',
   ':': ';',
-  '"': '\'',
+  '"': "'",
   '|': '\\',
   '<': ',',
   '>': '.',
@@ -178,7 +184,7 @@ export const getShortcutLabel = ({
 export const compareKeyboardShortcut = (
   shortcut: KeyboardShortcutConfig,
   event: KeyboardEvent,
-  sequential = false,
+  sequential = false
 ) => {
   const matchesKey = event.key === shortcut.key;
   const matchesSequential = sequential && /Digit[^0]/.test(event.code);

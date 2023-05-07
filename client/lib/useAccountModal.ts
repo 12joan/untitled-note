@@ -1,5 +1,11 @@
-import { createSectionedModal, SectionedModalOpenProps } from '~/lib/sectionedModal';
-import { EmailAndPasswordSection, FileStorageSection } from '~/components/accountModalSections';
+import {
+  createSectionedModal,
+  SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
+import {
+  EmailAndPasswordSection,
+  FileStorageSection,
+} from '~/components/accountModalSections';
 import AccountIcon from '~/components/icons/AccountIcon';
 import StorageIcon from '~/components/icons/StorageIcon';
 

@@ -1,4 +1,4 @@
-import { BaseSchema, SetVersion, createMigrate } from '~/lib/schema';
+import { BaseSchema, createMigrate, SetVersion } from '~/lib/schema';
 
 const migrations: Record<number, (settings: any) => any> = {};
 export const migrateSettings = createMigrate(migrations);
@@ -29,7 +29,7 @@ const originalDefaultSettings: SettingsSchemaV1 = {
  * type SettingsSchemaV2 = SetVersion<SettingsSchemaV1, 2> & {
  *   theme: string;
  * };
- * 
+ *
  * migrations[2] = (settings: SettingsSchemaV1): SettingsSchemaV2 => ({
  *   ...settings,
  *   version: 2,

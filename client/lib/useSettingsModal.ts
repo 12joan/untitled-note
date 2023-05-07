@@ -1,6 +1,9 @@
-import { createSectionedModal, SectionedModalOpenProps } from '~/lib/sectionedModal';
-import { KeyboardShortcutsSection } from '~/components/settingsModalSections';
+import {
+  createSectionedModal,
+  SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
 import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
+import { KeyboardShortcutsSection } from '~/components/settingsModalSections';
 
 export type SettingsModalOpenProps = SectionedModalOpenProps;
 

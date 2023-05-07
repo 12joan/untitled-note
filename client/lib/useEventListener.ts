@@ -5,10 +5,11 @@ export const useEventListener = <T extends Event>(
   event: string,
   callback: (event: T) => void,
   dependencies: DependencyList = [],
-  useCapture = false,
+  useCapture = false
 ) => {
   useEffect(() => {
     target.addEventListener(event, callback as EventListener, useCapture);
-    return () => target.removeEventListener(event, callback as EventListener, useCapture);
+    return () =>
+      target.removeEventListener(event, callback as EventListener, useCapture);
   }, dependencies);
 };

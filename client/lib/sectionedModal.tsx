@@ -18,7 +18,7 @@ export interface SectionedModalOpenProps {
 
 export const createSectionedModal = (
   sectionedModalId: string,
-  sections: { [key: string]: Section },
+  sections: { [key: string]: Section }
 ) => {
   const sectionKeys = Object.keys(sections);
 
@@ -71,24 +71,26 @@ export const createSectionedModal = (
           <div className="shrink-0 bg-black/5 max-sm:border-b sm:border-r dark:border-transparent max-sm:rounded-t-2xl sm:rounded-l-2xl p-5 sm:px-2">
             {withCloseButtonVertical(
               <div className="grow space-y-2" role="tablist">
-                {Object.entries(sections).map(([key, { title, icon: Icon }]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
-                    data-active={key === activeSectionKey}
-                    onClick={() => setActiveSectionKey(key)}
-                    role="tab"
-                    aria-selected={key === activeSectionKey}
-                    aria-controls={idForSectionKey(key)}
-                  >
-                    <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
-                      <Icon size="1.25em" noAriaLabel />
-                    </span>
+                {Object.entries(sections).map(
+                  ([key, { title, icon: Icon }]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
+                      data-active={key === activeSectionKey}
+                      onClick={() => setActiveSectionKey(key)}
+                      role="tab"
+                      aria-selected={key === activeSectionKey}
+                      aria-controls={idForSectionKey(key)}
+                    >
+                      <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
+                        <Icon size="1.25em" noAriaLabel />
+                      </span>
 
-                    {title}
-                  </button>
-                ))}
+                      {title}
+                    </button>
+                  )
+                )}
               </div>
             )}
           </div>

@@ -7,6 +7,7 @@ export const useKeyboardShortcut = (
   callback: (event: KeyboardEvent, key: string) => void,
   deps: DependencyList = []
 ) => {
+  // eslint-disable-next-line no-console
   console.warn('useKeyboardShortcut is deprecated', new Error().stack);
 
   useEffect(() => {

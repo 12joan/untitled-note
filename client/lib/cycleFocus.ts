@@ -4,9 +4,7 @@ export interface CycleFocusOptions {
   sectionRefs: RefObject<HTMLElement | null>[];
 }
 
-export const cycleFocus = ({
-  sectionRefs,
-}: CycleFocusOptions) => {
+export const cycleFocus = ({ sectionRefs }: CycleFocusOptions) => {
   const visibleSections = sectionRefs
     .filter(({ current: section }) => {
       if (!section) {
@@ -25,8 +23,8 @@ export const cycleFocus = ({
     })
     .map(({ current }) => current);
 
-  let currentSectionIndex = visibleSections.findIndex(
-    (section) => section?.contains(document.activeElement)
+  let currentSectionIndex = visibleSections.findIndex((section) =>
+    section?.contains(document.activeElement)
   );
 
   if (currentSectionIndex === -1) {

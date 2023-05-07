@@ -32,17 +32,13 @@ export const TopBar = ({
   showSidebarButton = false,
   onSidebarButtonClick,
 }: TopBar) => {
-  const {
-    project,
-    showSearchModal,
-    showAccountModal,
-    showSettingsModal,
-  } = useContext() as {
-    project: Project;
-    showSearchModal: () => void;
-    showAccountModal: () => void;
-    showSettingsModal: () => void;
-  };
+  const { project, showSearchModal, showAccountModal, showSettingsModal } =
+    useContext() as {
+      project: Project;
+      showSearchModal: () => void;
+      showAccountModal: () => void;
+      showSettingsModal: () => void;
+    };
 
   const { isXs } = useBreakpoints();
 

@@ -1,32 +1,45 @@
 import React, { useState } from 'react';
-import { Tooltip } from '~/components/Tooltip';
-import { useEventListener } from '~/lib/useEventListener';
+import {
+  compareKeyboardShortcut,
+  getKeyLabel,
+  getShortcutLabel,
+  isUsableShortcut,
+  KeyboardShortcutConfig,
+  useKeyboardShortcuts,
+} from '~/lib/keyboardShortcuts';
 import { useSettings } from '~/lib/settings';
-import { useKeyboardShortcuts, KeyboardShortcutConfig, isUsableShortcut, getShortcutLabel, getKeyLabel, compareKeyboardShortcut } from '~/lib/keyboardShortcuts';
+import { useEventListener } from '~/lib/useEventListener';
+import { Tooltip } from '~/components/Tooltip';
 
 export const KeyboardShortcutsSection = () => {
   const keyboardShortcuts = useKeyboardShortcuts();
-  const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
+  const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings(
+    'keyboardShortcutOverrides'
+  );
 
   const [recordingId, setRecordingId] = useState<string | null>(null);
 
-  const setRecordingKeyboardShortcut = recordingId ? ((config: KeyboardShortcutConfig | null) => {
-    setKeyboardShortcutOverrides({
-      ...keyboardShortcutOverrides,
-      [recordingId]: config,
-    });
-  }) : null;
+  const setRecordingKeyboardShortcut = recordingId
+    ? (config: KeyboardShortcutConfig | null) => {
+        setKeyboardShortcutOverrides({
+          ...keyboardShortcutOverrides,
+          [recordingId]: config,
+        });
+      }
+    : null;
 
   useEventListener(
     document.body,
     'keydown',
     (event: KeyboardEvent) => {
       if (recordingId === null) return;
-      if (event.key === 'Tab') return;
+      if (['Tab', 'Shift', 'Control', 'Alt', 'Meta'].includes(event.key))
+        return;
 
       event.preventDefault();
 
-      const isModified = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
+      const isModified =
+        event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
 
       if (!isModified) {
         if (event.key === 'Backspace') {
@@ -41,26 +54,28 @@ export const KeyboardShortcutsSection = () => {
         }
       }
 
-      const isDuplicate = keyboardShortcuts.some(({ id, config }) => (
-        id !== recordingId && config && compareKeyboardShortcut(config, event)
-      ));
+      const isDuplicate = keyboardShortcuts.some(
+        ({ id, config }) =>
+          id !== recordingId && config && compareKeyboardShortcut(config, event)
+      );
 
-      const isSequential = keyboardShortcuts.some(({ id, sequential }) => (
-        id === recordingId && sequential
-      ));
+      const isSequential = keyboardShortcuts.some(
+        ({ id, sequential }) => id === recordingId && sequential
+      );
 
       const satisfiesSequential = !isSequential || event.code === 'Digit1';
 
       if (!isUsableShortcut(event) || isDuplicate || !satisfiesSequential) {
         // TODO: Shake animation + ARIA alert
-        console.log('Invalid shortcut');
-
         if (isDuplicate) {
+          // eslint-disable-next-line no-console
           console.log('Duplicate shortcut');
-        }
-
-        if (!satisfiesSequential) {
+        } else if (!satisfiesSequential) {
+          // eslint-disable-next-line no-console
           console.log('Must end in 1');
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('Invalid shortcut');
         }
 
         return;
@@ -93,11 +108,14 @@ export const KeyboardShortcutsSection = () => {
                 content={
                   <div className="space-y-2 text-sm font-normal text-center">
                     <p>Type a shortcut</p>
-                    {sequential && (
-                      <p>Must end in 1</p>
-                    )}
-                    <p><strong className="font-medium">Backspace</strong>: No shortcut</p>
-                    <p><strong className="font-medium">Escape</strong>: Cancel</p>
+                    {sequential && <p>Must end in 1</p>}
+                    <p>
+                      <strong className="font-medium">Backspace</strong>: No
+                      shortcut
+                    </p>
+                    <p>
+                      <strong className="font-medium">Escape</strong>: Cancel
+                    </p>
                   </div>
                 }
                 placement="bottom"
@@ -116,12 +134,12 @@ export const KeyboardShortcutsSection = () => {
                     </div>
                   </div>
 
-                  <span
-                    className="btn btn-link group-focus-visible-within:focus-ring group-hover:btn-link-hover shrink-0"
-                  >
-                    {isRecording ? <>Recording&hellip;</> : (
-                      config ? getShortcutLabel(config) : 'Add shortcut'
-                    )}
+                  <span className="btn btn-link group-focus-visible-within:focus-ring group-hover:btn-link-hover shrink-0">
+                    {(() => {
+                      if (isRecording) return <>Recording&hellip;</>;
+                      if (config) return getShortcutLabel(config);
+                      return 'Add shortcut';
+                    })()}
                   </span>
                 </button>
               </Tooltip>
