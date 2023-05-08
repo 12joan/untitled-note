@@ -32,10 +32,10 @@ export const TopBar = ({
   showSidebarButton = false,
   onSidebarButtonClick,
 }: TopBar) => {
-  const { project, showSearchModal, showAccountModal, showSettingsModal } =
+  const { project, toggleSearchModal, showAccountModal, showSettingsModal } =
     useContext() as {
       project: Project;
-      showSearchModal: () => void;
+      toggleSearchModal: () => void;
       showAccountModal: () => void;
       showSettingsModal: () => void;
     };
@@ -50,7 +50,7 @@ export const TopBar = ({
       label: 'New document',
       onClick: createNewDocument,
     },
-    { icon: SearchIcon, label: 'Search', onClick: showSearchModal },
+    { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
     { icon: SettingsIcon, label: 'Settings', onClick: showSettingsModal },
   ];
 

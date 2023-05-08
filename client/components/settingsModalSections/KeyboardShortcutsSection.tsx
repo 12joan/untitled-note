@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { createToast } from '~/lib/createToast';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
+  KeyboardShortcut,
   compareKeyboardShortcut,
   getKeyLabel,
   getShortcutLabel,
@@ -11,7 +12,6 @@ import {
 } from '~/lib/keyboardShortcuts';
 import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';
-import { KeyboardShortcut } from '~/lib/types';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useTemporaryState } from '~/lib/useTemporaryState';

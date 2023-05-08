@@ -39,12 +39,12 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
     futurePinnedDocuments,
     futureRecentlyViewedDocuments,
     futureTags,
-    showSearchModal,
+    toggleSearchModal,
   } = useContext() as {
     futurePinnedDocuments: Future<PartialDocument[]>;
     futureRecentlyViewedDocuments: Future<PartialDocument[]>;
     futureTags: Future<Tag[]>;
-    showSearchModal: () => void;
+    toggleSearchModal: () => void;
   };
 
   const createNewDocument = useNewDocument();
@@ -67,7 +67,7 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
           <ButtonWithIcon
             icon={SearchIcon}
             label="Search"
-            onClick={showSearchModal}
+            onClick={toggleSearchModal}
           />
         </section>
 

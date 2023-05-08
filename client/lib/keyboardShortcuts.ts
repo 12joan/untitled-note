@@ -1,58 +1,22 @@
 import { useMemo } from 'react';
 import { useSettings } from '~/lib/settings';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
-import { KeyboardShortcut } from '~/lib/types';
+import {
+  keyboardShortcutCommands,
+  BaseCommand,
+  KeyboardShortcutCommand,
+} from '~/lib/commands';
 
 export type { KeyboardShortcutConfig };
 
-const getSequential = (event: KeyboardEvent) =>
-  parseInt(event.code.replace('Digit', ''), 10);
+export type KeyboardShortcut = BaseCommand & KeyboardShortcutCommand['keyboardShortcut'];
 
-// TODO: Change default configs based on platform and browser
-const keyboardShortcuts: KeyboardShortcut[] = [
-  {
-    id: 'search',
-    label: 'Search',
-    hint: 'Search project',
-    config: {
-      key: 'k',
-      metaKey: true,
-    },
-    action: ({ toggleSearchModal }) => toggleSearchModal(),
-  },
-  {
-    id: 'new-document',
-    label: 'New document',
-    hint: 'Create new document',
-    config: {
-      key: 'n',
-      metaKey: true,
-      shiftKey: true,
-    },
-    action: ({ createNewDocument }) => createNewDocument(),
-  },
-  {
-    id: 'switch-project',
-    label: 'Switch to project 1',
-    hint: 'Shortcuts for projects 2-9 are automatically generated',
-    sequential: true,
-    config: {
-      key: '1',
-      metaKey: true,
-    },
-    action: ({ switchProject }, event) => switchProject(getSequential(event)),
-  },
-  {
-    id: 'cycle-focus',
-    label: 'Cycle focus',
-    hint: 'Cycle focus between the main sections of the interface',
-    config: {
-      key: 'F6',
-      altKey: true,
-    },
-    action: ({ cycleFocus }) => cycleFocus(),
-  },
-];
+const keyboardShortcuts: KeyboardShortcut[] = keyboardShortcutCommands.map(
+  ({ keyboardShortcut, ...command }) => ({
+    ...command,
+    ...keyboardShortcut,
+  })
+);
 
 export const useKeyboardShortcuts = (): KeyboardShortcut[] => {
   const [keyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
@@ -200,3 +164,6 @@ export const compareKeyboardShortcut = (
     event.shiftKey === !!shortcut.shiftKey
   );
 };
+
+export const getSequential = (event: KeyboardEvent) =>
+  parseInt(event.code.replace('Digit', ''), 10);

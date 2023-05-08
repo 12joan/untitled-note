@@ -101,19 +101,3 @@ export type Query = 'all' | boolean | { [property: string]: Query };
 export type Stream = {
   unsubscribe: () => void;
 };
-
-export type KeyboardShortcutContext = {
-  toggleSearchModal: () => void;
-  createNewDocument: () => void;
-  switchProject: (n: number) => void;
-  cycleFocus: () => void;
-};
-
-export type KeyboardShortcut = {
-  id: string;
-  label: string;
-  hint: string;
-  sequential?: boolean;
-  config?: KeyboardShortcutConfig;
-  action: (context: KeyboardShortcutContext, event: KeyboardEvent) => void;
-};

@@ -33,6 +33,7 @@ import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
 import { Sidebar } from '~/components/layout/Sidebar';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
 import { TopBar } from '~/components/layout/TopBar';
+import { cycleFocus } from '~/lib/cycleFocus';
 
 export interface ProjectViewProps {
   childView: {
@@ -77,9 +78,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const {
     modal: searchModal,
-    open: showSearchModal,
-    close: hideSearchModal,
     toggle: toggleSearchModal,
+    close: hideSearchModal,
   } = useSearchModal();
 
   const {
@@ -143,19 +143,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     }
   }, [projectId, viewPath]);
 
-  useApplicationKeyboardShortcuts(
-    {
-      sectionRefs: [
-        mainRef,
-        projectsBarRef,
-        topBarRef,
-        sideBarRef,
-        formattingToolbarRef,
-      ],
-      toggleSearchModal,
-    },
-    [toggleSearchModal]
-  );
+  const keyboardShortcutIICElements = useApplicationKeyboardShortcuts();
 
   const narrowLeftMargin = useMemo(() => {
     const contentWidth = 640; // from .narrow
@@ -169,9 +157,18 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     <ContextProvider
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
-      showSearchModal={showSearchModal}
+      toggleSearchModal={toggleSearchModal}
       showAccountModal={showAccountModal}
       showSettingsModal={showSettingsModal}
+      cycleFocus={() => cycleFocus({
+        sectionRefs: [
+          mainRef,
+          projectsBarRef,
+          topBarRef,
+          sideBarRef,
+          formattingToolbarRef,
+        ],
+      })}
     >
       <div className="contents">
         <div
@@ -262,6 +259,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       {searchModal}
       {accountModal}
       {settingsModal}
+      {keyboardShortcutIICElements}
     </ContextProvider>
   );
 };
