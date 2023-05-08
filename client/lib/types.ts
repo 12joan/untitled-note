@@ -1,5 +1,3 @@
-import { KeyboardShortcutConfig } from '~/lib/keyboardShortcuts';
-
 export type Project = {
   id: number;
   name: string;

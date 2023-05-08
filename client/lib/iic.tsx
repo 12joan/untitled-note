@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useLayoutEffect, ReactElement, useState } from 'react';
+import React, {
+  FC,
+  ReactElement,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 
 export type IICRenderFn = () => () => void;
 
@@ -31,16 +37,10 @@ const ImmediatelyInvokedComponent = ({
   return null;
 };
 
-export const iic = (
-  render: IICRenderFn,
-  baseProps: IICRenderProps = {}
-): IIC => (props: IICRenderProps) => (
-  <ImmediatelyInvokedComponent
-    render={render}
-    {...baseProps}
-    {...props}
-  />
-);
+export const iic =
+  (render: IICRenderFn, baseProps: IICRenderProps = {}): IIC =>
+  (props: IICRenderProps) =>
+    <ImmediatelyInvokedComponent render={render} {...baseProps} {...props} />;
 
 export const useDeployIICs = (): [ReactElement[], (iic: IIC) => void] => {
   const [iics, setIICs] = useState<IIC[]>([]);
@@ -54,8 +54,9 @@ export const useDeployIICs = (): [ReactElement[], (iic: IIC) => void] => {
   };
 
   const iicElements = iics.map((Component, i) => (
+    // eslint-disable-next-line react/no-array-index-key
     <Component key={i} afterMount={() => removeIIC(Component)} />
   ));
 
   return [iicElements, deployIIC];
-}
+};

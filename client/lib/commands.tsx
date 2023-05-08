@@ -1,12 +1,12 @@
-import { ReactElement } from 'react';
-import { IIC, iic } from '~/lib/iic';
-import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
-import { useContext } from '~/lib/context';
-import { useNewDocument } from '~/lib/useNewDocument';
-import { getSequential } from '~/lib/keyboardShortcuts';
-import { Project } from '~/lib/types';
+import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from '~/lib/context';
+import { IIC, iic } from '~/lib/iic';
+import { getSequential } from '~/lib/keyboardShortcuts';
 import { projectPath } from '~/lib/routes';
+import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
+import { Project } from '~/lib/types';
+import { useNewDocument } from '~/lib/useNewDocument';
 
 export type BaseCommand = {
   id: string;
@@ -79,22 +79,28 @@ const commands: Command[] = [
         key: '1',
         metaKey: true,
       },
-      overrideAction: (event) => iic(() => {
-        const { projects } = useContext() as {
-          projects: Project[];
-        };
+      overrideAction: (event) =>
+        iic(
+          () => {
+            const { projects } = useContext() as {
+              projects: Project[];
+            };
 
-        const navigate = useNavigate();
+            const navigate = useNavigate();
 
-        const n = getSequential(event);
-        const project = projects.filter((project) => !project.archived_at)[n - 1];
+            const n = getSequential(event);
+            const project = projects.filter((project) => !project.archived_at)[
+              n - 1
+            ];
 
-        return () => {
-          if (project) {
-            navigate(projectPath({ projectId: project.id }));
-          }
-        };
-      }, { layoutEffect: false }),
+            return () => {
+              if (project) {
+                navigate(projectPath({ projectId: project.id }));
+              }
+            };
+          },
+          { layoutEffect: false }
+        ),
     },
     action: noopIIC,
   },
@@ -116,6 +122,8 @@ export const searchCommands: SearchCommand[] = commands.filter(
   (command): command is SearchCommand => 'search' in command
 );
 
-export const keyboardShortcutCommands: KeyboardShortcutCommand[] = commands.filter(
-  (command): command is KeyboardShortcutCommand => 'keyboardShortcut' in command
-);
+export const keyboardShortcutCommands: KeyboardShortcutCommand[] =
+  commands.filter(
+    (command): command is KeyboardShortcutCommand =>
+      'keyboardShortcut' in command
+  );

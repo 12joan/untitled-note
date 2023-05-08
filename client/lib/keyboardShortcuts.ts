@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
-import { useSettings } from '~/lib/settings';
-import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import {
-  keyboardShortcutCommands,
   BaseCommand,
   KeyboardShortcutCommand,
+  keyboardShortcutCommands,
 } from '~/lib/commands';
+import { useSettings } from '~/lib/settings';
+import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 
 export type { KeyboardShortcutConfig };
 
-export type KeyboardShortcut = BaseCommand & KeyboardShortcutCommand['keyboardShortcut'];
+export type KeyboardShortcut = BaseCommand &
+  KeyboardShortcutCommand['keyboardShortcut'];
 
 const keyboardShortcuts: KeyboardShortcut[] = keyboardShortcutCommands.map(
   ({ keyboardShortcut, ...command }) => ({

@@ -11,6 +11,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { ContextProvider, useContext } from '~/lib/context';
+import { cycleFocus } from '~/lib/cycleFocus';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
@@ -33,7 +34,6 @@ import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
 import { Sidebar } from '~/components/layout/Sidebar';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
 import { TopBar } from '~/components/layout/TopBar';
-import { cycleFocus } from '~/lib/cycleFocus';
 
 export interface ProjectViewProps {
   childView: {
@@ -160,15 +160,17 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       toggleSearchModal={toggleSearchModal}
       showAccountModal={showAccountModal}
       showSettingsModal={showSettingsModal}
-      cycleFocus={() => cycleFocus({
-        sectionRefs: [
-          mainRef,
-          projectsBarRef,
-          topBarRef,
-          sideBarRef,
-          formattingToolbarRef,
-        ],
-      })}
+      cycleFocus={() =>
+        cycleFocus({
+          sectionRefs: [
+            mainRef,
+            projectsBarRef,
+            topBarRef,
+            sideBarRef,
+            formattingToolbarRef,
+          ],
+        })
+      }
     >
       <div className="contents">
         <div

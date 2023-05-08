@@ -2,11 +2,11 @@ import React, { useRef, useState } from 'react';
 import { createToast } from '~/lib/createToast';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
-  KeyboardShortcut,
   compareKeyboardShortcut,
   getKeyLabel,
   getShortcutLabel,
   isUsableShortcut,
+  KeyboardShortcut,
   KeyboardShortcutConfig,
   useKeyboardShortcuts,
 } from '~/lib/keyboardShortcuts';
