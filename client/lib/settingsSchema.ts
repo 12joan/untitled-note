@@ -13,6 +13,10 @@ type SettingsSchemaV1 = SetVersion<BaseSchema, 1> & {
 type KeyboardShortcutConfigV1 = {
   key: string;
   keyLabel?: string;
+  customComparison?: {
+    property: keyof KeyboardEvent;
+    value: any;
+  };
   altKey?: boolean;
   ctrlKey?: boolean;
   metaKey?: boolean;

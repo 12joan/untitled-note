@@ -1,10 +1,6 @@
 import { useDeployIICs } from '~/lib/iic';
-import {
-  compareKeyboardShortcut,
-} from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
-import {
-  useKeyboardShortcuts,
-} from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
+import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
+import { useKeyboardShortcuts } from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
 import { useEventListener } from '~/lib/useEventListener';
 
 export const useApplicationKeyboardShortcuts = () => {

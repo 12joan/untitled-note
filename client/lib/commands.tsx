@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
+import { envSpecific } from '~/lib/environment';
 import { IIC, iic } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
@@ -20,7 +21,6 @@ import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
-import { envSpecific } from '~/lib/environment';
 
 export type BaseCommand = {
   id: string;
@@ -76,6 +76,24 @@ const commands: Command[] = [
     action: iic(() => (useContext() as any).toggleSearchModal),
   },
   {
+    id: 'new-document',
+    label: 'New document',
+    search: {
+      description: 'Create new document',
+      icon: <NewDocumentIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Create new document',
+      config: parseKeyboardShortcut('mod+alt+n', {
+        customComparison: {
+          property: 'keyCode',
+          value: 78,
+        },
+      }),
+    },
+    action: iic(useNewDocument, { layoutEffect: false }),
+  },
+  {
     id: 'settings',
     label: 'Settings',
     search: {
@@ -104,6 +122,54 @@ const commands: Command[] = [
       hint: 'Open account info',
     },
     action: iic(() => (useContext() as any).toggleAccountModal),
+  },
+  {
+    id: 'cycle-focus',
+    label: 'Cycle focus',
+    keyboardShortcut: {
+      hint: 'Cycle focus between the main sections of the interface',
+      config: parseKeyboardShortcut('alt+F6'),
+    },
+    action: iic(() => (useContext() as any).cycleFocus),
+  },
+  {
+    id: 'switch-project',
+    label: 'Switch to project 1',
+    keyboardShortcut: {
+      hint: 'Shortcuts for projects 2-9 are automatically generated',
+      sequential: true,
+      config: parseKeyboardShortcut(
+        envSpecific({
+          byBrowser: {
+            default: 'mod+1',
+            safari: 'mod+shift+1',
+          },
+        })
+      ),
+      overrideAction: (event) =>
+        iic(
+          () => {
+            const { projects } = useContext() as {
+              projects: Project[];
+            };
+
+            const navigate = useNavigate();
+
+            const n = getSequential(event);
+            const project = projects.filter((project) => !project.archived_at)[
+              n - 1
+            ];
+
+            return () => {
+              if (project) {
+                navigate(projectPath({ projectId: project.id }));
+              }
+            };
+          },
+          { layoutEffect: false }
+        ),
+    },
+    action: noopIIC,
   },
   {
     id: 'overview',
@@ -152,66 +218,6 @@ const commands: Command[] = [
       hint: 'Jump to all tags',
     },
     action: navigateInProjectIIC(tagsPath),
-  },
-  {
-    id: 'new-document',
-    label: 'New document',
-    search: {
-      description: 'Create new document',
-      icon: <NewDocumentIcon size="1.25em" noAriaLabel />,
-    },
-    keyboardShortcut: {
-      hint: 'Create new document',
-      config: parseKeyboardShortcut('mod+alt+n'),
-    },
-    action: iic(useNewDocument, { layoutEffect: false }),
-  },
-  {
-    id: 'switch-project',
-    label: 'Switch to project 1',
-    keyboardShortcut: {
-      hint: 'Shortcuts for projects 2-9 are automatically generated',
-      sequential: true,
-      config: {
-        key: '1',
-        metaKey: true,
-      },
-      overrideAction: (event) =>
-        iic(
-          () => {
-            const { projects } = useContext() as {
-              projects: Project[];
-            };
-
-            const navigate = useNavigate();
-
-            const n = getSequential(event);
-            const project = projects.filter((project) => !project.archived_at)[
-              n - 1
-            ];
-
-            return () => {
-              if (project) {
-                navigate(projectPath({ projectId: project.id }));
-              }
-            };
-          },
-          { layoutEffect: false }
-        ),
-    },
-    action: noopIIC,
-  },
-  {
-    id: 'cycle-focus',
-    label: 'Cycle focus',
-    keyboardShortcut: {
-      hint: 'Cycle focus between the main sections of the interface',
-      config: {
-        key: 'F6',
-        altKey: true,
-      },
-    },
-    action: iic(() => (useContext() as any).cycleFocus),
   },
 ];
 

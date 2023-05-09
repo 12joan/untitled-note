@@ -2,10 +2,13 @@ import React, { useRef, useState } from 'react';
 import { createToast } from '~/lib/createToast';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
-import { getKeyLabel } from '~/lib/keyboardShortcuts/getKeyLabel';
 import { getKeyboardShortcutLabel } from '~/lib/keyboardShortcuts/getKeyboardShortcutLabel';
+import { getKeyLabel } from '~/lib/keyboardShortcuts/getKeyLabel';
 import { isUsableShortcut } from '~/lib/keyboardShortcuts/isUsableShortcut';
-import { KeyboardShortcut, KeyboardShortcutConfig } from '~/lib/keyboardShortcuts/types';
+import {
+  KeyboardShortcut,
+  KeyboardShortcutConfig,
+} from '~/lib/keyboardShortcuts/types';
 import { useKeyboardShortcuts } from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
 import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';

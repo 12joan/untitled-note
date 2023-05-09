@@ -1,6 +1,6 @@
-import { useSettings } from '~/lib/settings';
 import { useMemo } from 'react';
 import { keyboardShortcutCommands } from '~/lib/commands';
+import { useSettings } from '~/lib/settings';
 import { KeyboardShortcut } from './types';
 
 const keyboardShortcuts: KeyboardShortcut[] = keyboardShortcutCommands.map(

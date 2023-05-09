@@ -5,7 +5,17 @@ export const compareKeyboardShortcut = (
   event: KeyboardEvent,
   sequential = false
 ) => {
-  const matchesKey = event.key === shortcut.key;
+  const matchesKey: boolean = (() => {
+    if (shortcut.customComparison) {
+      return (
+        event[shortcut.customComparison.property] ===
+        shortcut.customComparison.value
+      );
+    }
+
+    return event.key === shortcut.key;
+  })();
+
   const matchesSequential = sequential && /Digit[^0]/.test(event.code);
 
   return (

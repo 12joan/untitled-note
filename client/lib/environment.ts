@@ -33,16 +33,17 @@ export const BROWSER: Browser = (() => {
 })();
 
 type OptionalExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
-type By<K extends string, T> = OptionalExcept<Record<K | 'default', T>, 'default'>;
+type By<K extends string, T> = OptionalExcept<
+  Record<K | 'default', T>,
+  'default'
+>;
 
 export type EnvironmentSpecific<T> =
   | T
   | { byOS: By<OperatingSystem, T> }
-  | { byBrowser: By<Browser, T> }
+  | { byBrowser: By<Browser, T> };
 
-export const envSpecific = <T>(
-  value: EnvironmentSpecific<T>
-): T => {
+export const envSpecific = <T>(value: EnvironmentSpecific<T>): T => {
   if (value && typeof value === 'object' && 'byOS' in value) {
     return envSpecific(value.byOS[OPERATING_SYSTEM] || value.byOS.default);
   }

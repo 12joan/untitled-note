@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { forwardParams } from '~/lib/forwardParams';
@@ -165,4 +162,3 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
 
   return routesComponent;
 };
-
