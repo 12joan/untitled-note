@@ -3,7 +3,7 @@ import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
 import { ContextProvider } from '~/lib/context';
 import { mapFuture, unwrapFuture } from '~/lib/monads';
-import { ApplicationRoutes } from '~/lib/routes';
+import { ApplicationRoutes } from '~/lib/routing';
 import { useSettingsProvider } from '~/lib/settings';
 import { useStream } from '~/lib/useStream';
 import { ErrorBoundary } from '~/components/ErrorBoundary';

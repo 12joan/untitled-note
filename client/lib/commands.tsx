@@ -2,7 +2,8 @@ import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { IIC, iic } from '~/lib/iic';
-import { getSequential } from '~/lib/keyboardShortcuts';
+import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
+import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
   editProjectPath,
   overviewPath,
@@ -19,6 +20,7 @@ import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
+import { envSpecific } from '~/lib/environment';
 
 export type BaseCommand = {
   id: string;
@@ -69,10 +71,7 @@ const commands: Command[] = [
     label: 'Search project',
     keyboardShortcut: {
       hint: 'Search project',
-      config: {
-        key: 'k',
-        metaKey: true,
-      },
+      config: parseKeyboardShortcut('mod+k'),
     },
     action: iic(() => (useContext() as any).toggleSearchModal),
   },
@@ -85,10 +84,12 @@ const commands: Command[] = [
     },
     keyboardShortcut: {
       hint: 'Open settings',
-      config: {
-        key: ',',
-        metaKey: true,
-      },
+      config: envSpecific({
+        byOS: {
+          default: undefined,
+          mac: parseKeyboardShortcut('meta+,'),
+        },
+      }),
     },
     action: iic(() => (useContext() as any).toggleSettingsModal),
   },
@@ -114,9 +115,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to overview',
     },
-    action: navigateInProjectIIC(({ projectId }) =>
-      overviewPath({ projectId })
-    ),
+    action: navigateInProjectIIC(overviewPath),
   },
   {
     id: 'edit-project',
@@ -128,9 +127,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to edit project',
     },
-    action: navigateInProjectIIC(({ projectId }) =>
-      editProjectPath({ projectId })
-    ),
+    action: navigateInProjectIIC(editProjectPath),
   },
   {
     id: 'recently-viewed',
@@ -142,9 +139,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to recently viewed',
     },
-    action: navigateInProjectIIC(({ projectId }) =>
-      recentlyViewedPath({ projectId })
-    ),
+    action: navigateInProjectIIC(recentlyViewedPath),
   },
   {
     id: 'all-tags',
@@ -156,7 +151,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to all tags',
     },
-    action: navigateInProjectIIC(({ projectId }) => tagsPath({ projectId })),
+    action: navigateInProjectIIC(tagsPath),
   },
   {
     id: 'new-document',
@@ -167,11 +162,7 @@ const commands: Command[] = [
     },
     keyboardShortcut: {
       hint: 'Create new document',
-      config: {
-        key: 'n',
-        metaKey: true,
-        shiftKey: true,
-      },
+      config: parseKeyboardShortcut('mod+alt+n'),
     },
     action: iic(useNewDocument, { layoutEffect: false }),
   },
