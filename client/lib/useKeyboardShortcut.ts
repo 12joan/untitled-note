@@ -1,6 +1,8 @@
 import { DependencyList, KeyboardEvent, useEffect } from 'react';
 import { keyWithModifiers } from '~/lib/keyWithModifiers';
 
+// TODO: Deprecate useKeyboardShortcut
+
 export const useKeyboardShortcut = (
   getElement: () => HTMLElement,
   keys: string | string[],

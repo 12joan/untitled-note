@@ -11,7 +11,6 @@ module.exports = {
       zIndex: {
         5: '5',
       },
-
       boxShadow: {
         dialog:
           '0 0.75rem 2rem rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
@@ -31,17 +30,28 @@ module.exports = {
           800: '#20197d',
           900: '#0d0a4d',
         },
+        slate: {
+          850: '#162032',
+        },
         'page-bg-light': colors.white,
         'page-bg-dark': colors.slate[900],
       },
       animation: {
         grow: 'grow 1s ease-in-out infinite',
+        shake: 'shake 0.25s linear 2',
       },
       keyframes: {
         grow: {
           '0%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.25)' },
           '100%': { transform: 'scale(1)' },
+        },
+        shake: {
+          '0%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(0.75rem)' },
+          '50%': { transform: 'translateX(0)' },
+          '75%': { transform: 'translateX(-0.75rem)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
       ringOffsetColor: {
@@ -67,6 +77,10 @@ module.exports = {
       addVariant(
         'stretch-focus-visible',
         '&:has(.stretch-target:focus-visible)'
+      );
+      addVariant(
+        'group-stretch-focus-visible',
+        '.group:has(.stretch-target:focus-visible) &'
       );
       addVariant('stretch-hover', '&:has(.stretch-target:hover)');
       addVariant('children', '& > *');

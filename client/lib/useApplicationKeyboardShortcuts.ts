@@ -1,112 +1,32 @@
-import { KeyboardEvent, RefObject } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useContext } from '~/lib/context';
-import { projectPath } from '~/lib/routes';
-import { Project } from '~/lib/types';
-import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
-import { useNewDocument } from '~/lib/useNewDocument';
+import { useDeployIICs } from '~/lib/iic';
+import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
+import { useKeyboardShortcuts } from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
+import { useEventListener } from '~/lib/useEventListener';
 
-export interface UseApplicationKeyboardShortcutsOptions {
-  sectionRefs: RefObject<HTMLElement | null>[];
-  toggleSearchModal: () => void;
-}
+export const useApplicationKeyboardShortcuts = () => {
+  const [iicElements, deployIIC] = useDeployIICs();
+  const keyboardShortcuts = useKeyboardShortcuts();
 
-export const useApplicationKeyboardShortcuts = ({
-  sectionRefs,
-  toggleSearchModal,
-}: UseApplicationKeyboardShortcutsOptions) => {
-  const { projects, projectId } = useContext() as {
-    projects: Project[];
-    projectId: string;
-  };
-
-  const navigate = useNavigate();
-  const createNewDocument = useNewDocument();
-
-  // Switch project
-  useGlobalKeyboardShortcut(
-    [1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((n) => [`Meta${n}`, `MetaShift${n}`]),
+  useEventListener(
+    document,
+    'keydown',
     (event: KeyboardEvent) => {
-      const index = Number(event.key) - 1;
-      const project = projects.filter((project) => !project.archived_at)[index];
+      if (event.defaultPrevented) return;
 
-      if (project) {
-        event.preventDefault();
-        event.stopPropagation();
-        navigate(projectPath({ projectId: project.id }));
-      }
-    },
-    [projects]
-  );
-
-  // New document
-  useGlobalKeyboardShortcut(
-    'MetaShiftN',
-    (event: KeyboardEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      createNewDocument();
-    },
-    [projectId]
-  );
-
-  // Search
-  useGlobalKeyboardShortcut(
-    ['MetaK', 'MetaJ', 'MetaG'],
-    (event: KeyboardEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleSearchModal();
-    },
-    [toggleSearchModal]
-  );
-
-  // Move focus between sections
-  useGlobalKeyboardShortcut(
-    'AltF6',
-    (event: KeyboardEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const visibleSections = sectionRefs
-        .filter(({ current: section }) => {
-          if (!section) {
-            return false;
+      keyboardShortcuts.some(
+        ({ config, sequential, action, overrideAction }) => {
+          if (config && compareKeyboardShortcut(config, event, sequential)) {
+            deployIIC(overrideAction ? overrideAction(event) : action);
+            event.preventDefault();
+            return true;
           }
 
-          if (!document.body.contains(section)) {
-            return false;
-          }
-
-          if (window.getComputedStyle(section).display === 'none') {
-            return false;
-          }
-
-          return true;
-        })
-        .map(({ current }) => current);
-
-      let currentSectionIndex = visibleSections.findIndex((section) =>
-        section?.contains(document.activeElement)
-      );
-
-      if (currentSectionIndex === -1) {
-        const focusTrap = document.activeElement?.closest(
-          '[data-focus-trap="true"]'
-        );
-
-        if (focusTrap) {
-          return;
+          return false;
         }
-
-        currentSectionIndex = 0;
-      }
-
-      const newSectionIndex =
-        (currentSectionIndex + 1) % visibleSections.length;
-
-      visibleSections[newSectionIndex]?.focus();
+      );
     },
-    [sectionRefs]
+    [keyboardShortcuts]
   );
+
+  return iicElements;
 };

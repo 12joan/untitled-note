@@ -153,6 +153,15 @@
       }
     }
   }
+
+  .btn-hover {
+    content: '';
+    @apply after:absolute after:inset-0 after:opacity-5 after:dark:opacity-10 after:bg-slate-900 after:dark:bg-slate-50;
+  }
+
+  .btn-link-hover {
+    @apply brightness-75 dark:brightness-125;
+  }
 }
 
 @layer components {
@@ -167,13 +176,12 @@
 
     // Hover effect
 
-    &:not(.btn-link, .btn-link-subtle):hover::after {
-      content: '';
-      @apply absolute inset-0 opacity-5 dark:opacity-10 bg-slate-900 dark:bg-slate-50;
+    &:not(.btn-link, .btn-link-subtle) {
+      @apply hover:btn-hover;
     }
 
     &.btn-link {
-      @apply hover:brightness-75 dark:hover:brightness-125;
+      @apply hover:btn-link-hover;
     }
 
     // Variants
@@ -217,6 +225,14 @@
 
   .h2 {
     @apply text-xl sm:text-2xl;
+  }
+
+  .list-group {
+    @apply rounded-lg border dark:border-transparent divide-y;
+  }
+
+  .list-group-item {
+    @apply w-full p-3 group-first:rounded-t-lg group-last:rounded-b-lg;
   }
 }
 

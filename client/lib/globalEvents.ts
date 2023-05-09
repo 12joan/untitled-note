@@ -21,6 +21,7 @@ export type GlobalEventTypes = BaseEventTypes & {
   's3File:delete': [{ s3FileId: number }];
   toast: [Toast];
   connectionStatusChanged: [ConnectionStatus];
+  closeAllModalsExcept: [string];
 } & {
   [K in keyof GlobalStoreTypes as `store:${K}`]: [GlobalStoreTypes[K]];
 };

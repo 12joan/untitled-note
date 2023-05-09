@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
+import { dispatchGlobalEvent, useGlobalEvent } from '~/lib/globalEvents';
 
 export interface UseModalRenderProps {
   open: boolean;
@@ -14,6 +15,8 @@ export const useModal = <T = undefined,>(
   render: (modalProps: UseModalRenderProps, openProps: T) => JSX.Element,
   { onOpen, onClose }: UseModalOptions = {}
 ) => {
+  const id = useId();
+
   const [openProps, setOpenProps] = useState<T | null>(null);
   const isOpen = openProps !== null;
 
@@ -23,6 +26,7 @@ export const useModal = <T = undefined,>(
     (...args: OpenOptions) => {
       setOpenProps(args[0] as T);
       onOpen?.();
+      dispatchGlobalEvent('closeAllModalsExcept', id);
     },
     [onOpen]
   );
@@ -41,6 +45,16 @@ export const useModal = <T = undefined,>(
       }
     },
     [close, open, isOpen]
+  );
+
+  useGlobalEvent(
+    'closeAllModalsExcept',
+    (exceptId) => {
+      if (exceptId !== id) {
+        close();
+      }
+    },
+    [id, close]
   );
 
   const modal = isOpen

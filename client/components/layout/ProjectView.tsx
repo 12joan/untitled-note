@@ -11,6 +11,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { ContextProvider, useContext } from '~/lib/context';
+import { cycleFocus } from '~/lib/cycleFocus';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
@@ -20,6 +21,7 @@ import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useElementBounds } from '~/lib/useElementBounds';
 import { useElementSize } from '~/lib/useElementSize';
 import { useSearchModal } from '~/lib/useSearchModal';
+import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useViewportSize } from '~/lib/useViewportSize';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { AllTagsView } from '~/components/layout/AllTagsView';
@@ -76,20 +78,26 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const {
     modal: searchModal,
-    open: showSearchModal,
-    close: hideSearchModal,
     toggle: toggleSearchModal,
+    close: hideSearchModal,
   } = useSearchModal();
 
   const {
     modal: accountModal,
-    open: showAccountModal,
+    toggle: toggleAccountModal,
     close: hideAccountModal,
   } = useAccountModal();
+
+  const {
+    modal: settingsModal,
+    toggle: toggleSettingsModal,
+    close: hideSettingsModal,
+  } = useSettingsModal();
 
   useEffect(() => {
     hideSearchModal();
     hideAccountModal();
+    hideSettingsModal();
   }, [childView.key, projectId]);
 
   const useFormattingToolbar = useCallback(
@@ -135,16 +143,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     }
   }, [projectId, viewPath]);
 
-  useApplicationKeyboardShortcuts({
-    sectionRefs: [
-      mainRef,
-      projectsBarRef,
-      topBarRef,
-      sideBarRef,
-      formattingToolbarRef,
-    ],
-    toggleSearchModal,
-  });
+  const keyboardShortcutIICElements = useApplicationKeyboardShortcuts();
 
   const narrowLeftMargin = useMemo(() => {
     const contentWidth = 640; // from .narrow
@@ -158,8 +157,20 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     <ContextProvider
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
-      showSearchModal={showSearchModal}
-      showAccountModal={showAccountModal}
+      toggleSearchModal={toggleSearchModal}
+      toggleAccountModal={toggleAccountModal}
+      toggleSettingsModal={toggleSettingsModal}
+      cycleFocus={() =>
+        cycleFocus({
+          sectionRefs: [
+            mainRef,
+            projectsBarRef,
+            topBarRef,
+            sideBarRef,
+            formattingToolbarRef,
+          ],
+        })
+      }
     >
       <div className="contents">
         <div
@@ -249,6 +260,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
       {searchModal}
       {accountModal}
+      {settingsModal}
+      {keyboardShortcutIICElements}
     </ContextProvider>
   );
 };

@@ -87,6 +87,7 @@ export type Toast = {
   title: string;
   message: string;
   autoClose: 'none' | 'fast' | 'slow';
+  ariaLive?: 'off' | 'polite' | 'assertive';
   button?: {
     label: string;
     onClick: () => void;

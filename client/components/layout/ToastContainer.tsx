@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Portal } from '@headlessui/react';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { Toast as ToastProps } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
@@ -28,19 +29,23 @@ export const ToastContainer = () => {
   );
 
   return (
-    <div
-      aria-live="polite"
-      aria-atomic="true"
-      className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden"
-    >
-      {toasts.map(({ key, ...toast }) => (
-        <Toast key={key} {...toast} />
-      ))}
-    </div>
+    <Portal>
+      <div className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">
+        {toasts.map(({ key, ...toast }) => (
+          <Toast key={key} {...toast} />
+        ))}
+      </div>
+    </Portal>
   );
 };
 
-const Toast = ({ title, message, autoClose, button }: ToastProps) => {
+const Toast = ({
+  title,
+  message,
+  autoClose,
+  ariaLive = 'polite',
+  button,
+}: ToastProps) => {
   const [visible, setVisible] = useState(false);
   const [inDOM, setInDOM] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
@@ -72,6 +77,8 @@ const Toast = ({ title, message, autoClose, button }: ToastProps) => {
         marginBottom: visible ? 0 : `calc(-${toastHeight}px - 1rem)`,
         transform: visible ? 'translateX(0)' : 'translateX(110%)',
       }}
+      aria-live={ariaLive}
+      aria-hidden="false"
     >
       <div className="shrink-1 w-96 space-y-1 select-none">
         <strong className="font-medium">{title}</strong>
