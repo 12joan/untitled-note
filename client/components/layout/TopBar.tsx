@@ -32,12 +32,12 @@ export const TopBar = ({
   showSidebarButton = false,
   onSidebarButtonClick,
 }: TopBar) => {
-  const { project, toggleSearchModal, showAccountModal, showSettingsModal } =
+  const { project, toggleSearchModal, toggleAccountModal, toggleSettingsModal } =
     useContext() as {
       project: Project;
       toggleSearchModal: () => void;
-      showAccountModal: () => void;
-      showSettingsModal: () => void;
+      toggleAccountModal: () => void;
+      toggleSettingsModal: () => void;
     };
 
   const { isXs } = useBreakpoints();
@@ -51,11 +51,11 @@ export const TopBar = ({
       onClick: createNewDocument,
     },
     { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
-    { icon: SettingsIcon, label: 'Settings', onClick: showSettingsModal },
+    { icon: SettingsIcon, label: 'Settings', onClick: toggleSettingsModal },
   ];
 
   const accountActions: Action[] = [
-    { icon: AccountIcon, label: 'Account info', onClick: showAccountModal },
+    { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
     { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
   ];
 

@@ -95,17 +95,17 @@ const ImageForm = ({
   state,
   setState,
 }: ImageFormProps) => {
-  const { projectId, futureRemainingQuota, showAccountModal } =
+  const { projectId, futureRemainingQuota, toggleAccountModal } =
     useContext() as {
       projectId: number;
       futureRemainingQuota: Future<number>;
-      showAccountModal: (props: AccountModalOpenProps) => void;
+      toggleAccountModal: (props: AccountModalOpenProps) => void;
     };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const showFileStorage = () =>
-    showAccountModal({
+    toggleAccountModal({
       initialSection: 'fileStorage',
     });
 

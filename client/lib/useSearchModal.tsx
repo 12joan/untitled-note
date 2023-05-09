@@ -33,7 +33,6 @@ import { useModal } from '~/lib/useModal';
 import { useNewDocument } from '~/lib/useNewDocument';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 import DocumentIcon from '~/components/icons/DocumentIcon';
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
@@ -42,13 +41,15 @@ import TagIcon from '~/components/icons/TagIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { StyledModal, StyledModalProps } from '~/components/Modal';
 import { ProjectIcon } from '~/components/ProjectIcon';
+import { iic, IIC, mergeIICs, liftToIIC, useDeployIICs } from '~/lib/iic';
+import { searchCommands, SearchCommand } from '~/lib/commands';
 
 type Suggestion = {
   key: string;
   label: string;
   icon?: ReactNode;
   description?: string | { __html: string };
-  onCommit: () => void;
+  onCommit: IIC;
 };
 
 interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
@@ -56,12 +57,12 @@ interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
   getLabel: (item: T) => Suggestion['label'];
   getIcon?: (item: T) => Suggestion['icon'];
   getDescription?: (item: T) => Suggestion['description'];
-  action: (item: T) => void;
+  action: (item: T) => IIC;
 }
 
 const makeDynamicSuggestion = <T,>(
   item: T,
-  handleAction: (action: () => void) => void,
+  handleAction: (action: IIC) => IIC,
   {
     getKey,
     getLabel,
@@ -75,23 +76,14 @@ const makeDynamicSuggestion = <T,>(
   label: getLabel(item),
   icon: getIcon(item),
   description: getDescription(item),
-  onCommit: () => handleAction(() => action(item)),
+  onCommit: handleAction(action(item)),
   ...rest,
 });
 
 type SuggestionSource = (
   searchQuery: string,
-  handleAction: (action: () => void) => void
+  handleAction: (action: IIC) => IIC
 ) => Suggestion[];
-
-interface MakeListSourceOptions<T> extends MakeDynamicSuggestionOptions<T> {
-  list: T[];
-}
-
-const makeListSource =
-  <T,>({ list, ...rest }: MakeListSourceOptions<T>): SuggestionSource =>
-  (searchQuery, handleAction) =>
-    list.map((item) => makeDynamicSuggestion(item, handleAction, rest));
 
 interface MakeFilteredListSourceOptions<T>
   extends MakeDynamicSuggestionOptions<T> {
@@ -120,29 +112,35 @@ const makeFilteredListSource =
       .map((item) => makeDynamicSuggestion(item, handleAction, rest));
   };
 
-interface MakeSingletonSourceOptions
-  extends Omit<Suggestion, 'key' | 'label' | 'onCommit'> {
-  name: string;
-  action: () => void;
+interface MakeListSourceOptions<T> extends MakeDynamicSuggestionOptions<T> {
+  list: T[];
 }
 
-const makeSingletonSource =
-  ({ name, action, ...rest }: MakeSingletonSourceOptions): SuggestionSource =>
-  (searchQuery, handleAction) =>
-    includes(name, searchQuery)
-      ? [
-          {
-            key: name,
-            label: name,
-            onCommit: () => handleAction(() => action()),
-            ...rest,
-          },
-        ]
-      : [];
+const makeListSource = <T,>({
+  list,
+  ...rest
+}: MakeListSourceOptions<T>): SuggestionSource =>
+  makeFilteredListSource({
+    list,
+    getFilterable: () => '',
+    ...rest,
+  });
+
+const commandsSource = makeFilteredListSource({
+  list: searchCommands,
+  getFilterable: ({ label }) => label,
+  getKey: ({ id }) => `command-${id}`,
+  getLabel: ({ label }) => label,
+  getDescription: ({ search: { description } }) => description,
+  getIcon: ({ search: { icon } }) => icon,
+  action: ({ action }) => action,
+});
 
 const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
+  const [iicElements, deployIIC] = useDeployIICs();
+
   const navigate = useNavigate();
-  const performNewDocument = useNewDocument();
+  const navigateIIC = liftToIIC<[string]>(navigate, { layoutEffect: false });
 
   const {
     projects,
@@ -187,10 +185,10 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
     }
   }, []);
 
-  const handleAction = (action: () => void) => {
-    onClose();
-    action();
-  };
+  const handleAction = (action: IIC) => mergeIICs(
+    action,
+    liftToIIC(onClose)()
+  );
 
   useEffect(() => {
     setFsrSearchResults(pendingFutureServiceResult());
@@ -207,43 +205,9 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
 
   const suggestions: Suggestion[] = useMemo(() => {
     const suggestionSources: SuggestionSource[] = [
-      makeSingletonSource({
-        name: 'Overview',
-        icon: <OverviewIcon size="1.25em" noAriaLabel />,
-        description: 'Jump to overview',
-        action: () => navigate(overviewPath({ projectId: currentProject.id })),
-      }),
+      commandsSource,
 
-      makeSingletonSource({
-        name: 'Edit project',
-        icon: <SettingsIcon size="1.25em" noAriaLabel />,
-        description: 'Jump to edit project',
-        action: () =>
-          navigate(editProjectPath({ projectId: currentProject.id })),
-      }),
-
-      makeSingletonSource({
-        name: 'Recently viewed',
-        icon: <RecentIcon size="1.25em" noAriaLabel />,
-        description: 'Jump to recently viewed',
-        action: () =>
-          navigate(recentlyViewedPath({ projectId: currentProject.id })),
-      }),
-
-      makeSingletonSource({
-        name: 'All tags',
-        icon: <TagsIcon size="1.25em" noAriaLabel />,
-        description: 'Jump to all tags',
-        action: () => navigate(tagsPath({ projectId: currentProject.id })),
-      }),
-
-      makeSingletonSource({
-        name: 'New document',
-        icon: <NewDocumentIcon size="1.25em" noAriaLabel />,
-        description: 'Create new document',
-        action: performNewDocument,
-      }),
-
+      // Projects
       makeFilteredListSource({
         list: projects,
         include: ({ id }) => id !== currentProject.id,
@@ -256,10 +220,11 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
             className="w-5 h-5 rounded text-xs shadow-sm"
           />
         ),
-        action: ({ id }) => navigate(projectPath({ projectId: id })),
+        action: ({ id }) => navigateIIC(projectPath({ projectId: id })),
         description: 'Switch to project',
       }),
 
+      // Tags
       makeFilteredListSource({
         list: tags,
         getFilterable: ({ text }) => text,
@@ -267,10 +232,11 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         getLabel: ({ text }) => text,
         icon: <TagIcon size="1.25em" noAriaLabel />,
         action: ({ id }) =>
-          navigate(tagPath({ projectId: currentProject.id, tagId: id })),
+          navigateIIC(tagPath({ projectId: currentProject.id, tagId: id })),
         description: 'Jump to tag',
       }),
 
+      // Document titles
       makeFilteredListSource({
         list: partialDocuments.filter(
           ({ id }) => !searchResultDocumentIds.includes(id)
@@ -281,11 +247,12 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         icon: <DocumentIcon size="1.25em" noAriaLabel />,
         description: 'Open document',
         action: ({ id }) =>
-          navigate(
+          navigateIIC(
             documentPath({ projectId: currentProject.id, documentId: id })
           ),
       }),
 
+      // Search results
       makeListSource({
         list: searchResults,
         getKey: ({ document: { id } }) => `document-${id}`,
@@ -300,7 +267,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
           return snippet.length > 0 ? { __html: snippet } : 'Open document';
         },
         action: ({ document: { id } }) =>
-          navigate(
+          navigateIIC(
             documentPath({ projectId: currentProject.id, documentId: id })
           ),
       }),
@@ -327,7 +294,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
     query: trimmedSearchQuery,
     suggestions,
     keyForSuggestion: ({ key }) => key,
-    onCommit: ({ onCommit }) => onCommit(),
+    onCommit: ({ onCommit }) => deployIIC(onCommit),
     hideWhenNoSuggestions: false,
   });
 
@@ -338,105 +305,109 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
   });
 
   return (
-    <StyledModal
-      open={open}
-      onClose={onClose}
-      customBackdropClassNames={{
-        overflow: null,
-        bg: null,
-      }}
-      customPanelClassNames={{
-        margin: 'mt-[20vh] mb-auto',
-        width: 'narrow',
-        shadow: 'before:shadow-dialog-heavy',
-        rounded: 'before:rounded-xl',
-        padding: null,
-        bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
-      }}
-    >
-      <div className="flex px-5 py-3 gap-2 items-center">
-        <SearchIcon
-          size="1.25em"
-          className="text-slate-500 dark:text-slate-400"
-          noAriaLabel
-        />
+    <>
+      <StyledModal
+        open={open}
+        onClose={onClose}
+        customBackdropClassNames={{
+          overflow: null,
+          bg: null,
+        }}
+        customPanelClassNames={{
+          margin: 'mt-[20vh] mb-auto',
+          width: 'narrow',
+          shadow: 'before:shadow-dialog-heavy',
+          rounded: 'before:rounded-xl',
+          padding: null,
+          bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
+        }}
+      >
+        <div className="flex px-5 py-3 gap-2 items-center">
+          <SearchIcon
+            size="1.25em"
+            className="text-slate-500 dark:text-slate-400"
+            noAriaLabel
+          />
 
-        <input
-          {...inputProps}
-          ref={inputRef}
-          type="text"
-          className="grow text-xl bg-transparent no-focus-ring"
-          placeholder={`Search ${currentProject.name}`}
-          value={searchQuery}
-          onChange={(event) => {
-            setSearchQuery(event.target.value);
-            inputProps.onChange?.(event);
-          }}
-          onKeyDown={(event) => {
-            inputProps.onKeyDown?.(event);
+          <input
+            {...inputProps}
+            ref={inputRef}
+            type="text"
+            className="grow text-xl bg-transparent no-focus-ring"
+            placeholder={`Search ${currentProject.name}`}
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              inputProps.onChange?.(event);
+            }}
+            onKeyDown={(event) => {
+              inputProps.onKeyDown?.(event);
 
-            if (event.key === 'Escape' && !isEmpty) {
-              event.preventDefault();
-              event.stopPropagation();
-              setSearchQuery('');
-            }
-          }}
-        />
-      </div>
-
-      {showSuggestions && (
-        <div
-          {...suggestionContainerProps}
-          className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto"
-        >
-          {mapSuggestions(
-            ({
-              suggestion: { label, icon, description },
-              active,
-              suggestionProps,
-            }) => (
-              <div
-                {...suggestionProps}
-                data-active={active}
-                className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-3 flex gap-2"
-              >
-                <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
-                  {icon}
-                </div>
-
-                <div className="grow">
-                  <div>{label}</div>
-
-                  {typeof description === 'string' && (
-                    <div
-                      className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
-                      children={description}
-                    />
-                  )}
-
-                  {typeof description === 'object' && (
-                    <div
-                      className="text-sm"
-                      // eslint-disable-next-line react/no-danger
-                      dangerouslySetInnerHTML={description}
-                    />
-                  )}
-                </div>
-              </div>
-            )
-          )}
-
-          {hint && (
-            <div
-              className="p-2 text-slate-500 dark:text-slate-400"
-              aria-live="polite"
-            >
-              {hint}
-            </div>
-          )}
+              if (event.key === 'Escape' && !isEmpty) {
+                event.preventDefault();
+                event.stopPropagation();
+                setSearchQuery('');
+              }
+            }}
+          />
         </div>
-      )}
-    </StyledModal>
+
+        {showSuggestions && (
+          <div
+            {...suggestionContainerProps}
+            className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto"
+          >
+            {mapSuggestions(
+              ({
+                suggestion: { label, icon, description },
+                active,
+                suggestionProps,
+              }) => (
+                <div
+                  {...suggestionProps}
+                  data-active={active}
+                  className="p-2 rounded-lg data-active:bg-primary-500 dark:data-active:bg-primary-400 data-active:text-white cursor-pointer scroll-my-3 flex gap-2"
+                >
+                  <div className="translate-y-0.5 w-5 h-5 text-primary-500 dark:text-primary-400 data-active:text-white dark:data-active:text-white">
+                    {icon}
+                  </div>
+
+                  <div className="grow">
+                    <div>{label}</div>
+
+                    {typeof description === 'string' && (
+                      <div
+                        className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
+                        children={description}
+                      />
+                    )}
+
+                    {typeof description === 'object' && (
+                      <div
+                        className="text-sm"
+                        // eslint-disable-next-line react/no-danger
+                        dangerouslySetInnerHTML={description}
+                      />
+                    )}
+                  </div>
+                </div>
+              )
+            )}
+
+            {hint && (
+              <div
+                className="p-2 text-slate-500 dark:text-slate-400"
+                aria-live="polite"
+              >
+                {hint}
+              </div>
+            )}
+          </div>
+        )}
+      </StyledModal>
+
+      {iicElements}
+    </>
   );
 };
 

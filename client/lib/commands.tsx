@@ -7,6 +7,12 @@ import { projectPath } from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { Project } from '~/lib/types';
 import { useNewDocument } from '~/lib/useNewDocument';
+import AccountIcon from '~/components/icons/AccountIcon';
+import OverviewIcon from '~/components/icons/OverviewIcon';
+import RecentIcon from '~/components/icons/RecentIcon';
+import SettingsIcon from '~/components/icons/SettingsIcon';
+import TagsIcon from '~/components/icons/TagsIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 
 export type BaseCommand = {
   id: string;
@@ -39,10 +45,6 @@ const commands: Command[] = [
   {
     id: 'search',
     label: 'Search project',
-    search: {
-      description: 'Search project',
-      icon: <i className="fas fa-search" />,
-    },
     keyboardShortcut: {
       hint: 'Search project',
       config: {
@@ -53,11 +55,87 @@ const commands: Command[] = [
     action: iic(() => (useContext() as any).toggleSearchModal),
   },
   {
+    id: 'settings',
+    label: 'Settings',
+    search: {
+      description: 'Open settings',
+      icon: <SettingsIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Open settings',
+      config: {
+        key: ',',
+        metaKey: true,
+      },
+    },
+    action: iic(() => (useContext() as any).toggleSettingsModal),
+  },
+  {
+    id: 'account-info',
+    label: 'Account info',
+    search: {
+      description: 'Open account info',
+      icon: <AccountIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Open account info',
+    },
+    action: iic(() => (useContext() as any).toggleAccountModal),
+  },
+  {
+    id: 'overview',
+    label: 'Overview',
+    search: {
+      description: 'Jump to overview',
+      icon: <OverviewIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Jump to overview',
+    },
+    action: iic(() => () => alert('Overview')),
+  },
+  {
+    id: 'edit-project',
+    label: 'Edit project',
+    search: {
+      description: 'Jump to edit project',
+      icon: <SettingsIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Jump to edit project',
+    },
+    action: iic(() => () => alert('Edit project')),
+  },
+  {
+    id: 'recently-viewed',
+    label: 'Recently viewed',
+    search: {
+      description: 'Jump to recently viewed',
+      icon: <RecentIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Jump to recently viewed',
+    },
+    action: iic(() => () => alert('Recently viewed')),
+  },
+  {
+    id: 'all-tags',
+    label: 'All tags',
+    search: {
+      description: 'Jump to all tags',
+      icon: <TagsIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Jump to all tags',
+    },
+    action: iic(() => () => alert('All tags')),
+  },
+  {
     id: 'new-document',
     label: 'New document',
     search: {
       description: 'Create new document',
-      icon: <i className="fas fa-file" />,
+      icon: <NewDocumentIcon size="1.25em" noAriaLabel />,
     },
     keyboardShortcut: {
       hint: 'Create new document',

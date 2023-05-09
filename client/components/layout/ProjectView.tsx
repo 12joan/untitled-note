@@ -84,13 +84,13 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const {
     modal: accountModal,
-    open: showAccountModal,
+    toggle: toggleAccountModal,
     close: hideAccountModal,
   } = useAccountModal();
 
   const {
     modal: settingsModal,
-    open: showSettingsModal,
+    toggle: toggleSettingsModal,
     close: hideSettingsModal,
   } = useSettingsModal();
 
@@ -158,8 +158,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
       toggleSearchModal={toggleSearchModal}
-      showAccountModal={showAccountModal}
-      showSettingsModal={showSettingsModal}
+      toggleAccountModal={toggleAccountModal}
+      toggleSettingsModal={toggleSettingsModal}
       cycleFocus={() =>
         cycleFocus({
           sectionRefs: [

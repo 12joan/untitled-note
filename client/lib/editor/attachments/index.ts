@@ -9,11 +9,11 @@ import { createAttachmentPlugin } from './plugin';
 import { getUploadIsInProgress } from './uploadsInProgressStore';
 
 export const useAttachmentPlugins = (): PlatePlugin[] => {
-  const { projectId, futureRemainingQuota, showAccountModal } =
+  const { projectId, futureRemainingQuota, toggleAccountModal } =
     useContext() as {
       projectId: number;
       futureRemainingQuota: Future<number>;
-      showAccountModal: (props: AccountModalOpenProps) => void;
+      toggleAccountModal: (props: AccountModalOpenProps) => void;
     };
 
   return useMemo(
@@ -23,7 +23,7 @@ export const useAttachmentPlugins = (): PlatePlugin[] => {
           projectId,
           availableSpace: orDefaultFuture(futureRemainingQuota, Infinity),
           showFileStorage: () =>
-            showAccountModal({ initialSection: 'fileStorage' }),
+            toggleAccountModal({ initialSection: 'fileStorage' }),
         },
       }) as PlatePlugin,
     ],
