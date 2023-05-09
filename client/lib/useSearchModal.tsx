@@ -1,7 +1,9 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchSearchResults } from '~/lib/apis/search';
+import { searchCommands } from '~/lib/commands';
 import { useContext } from '~/lib/context';
+import { IIC, liftToIIC, mergeIICs, useDeployIICs } from '~/lib/iic';
 import { includes } from '~/lib/includes';
 import {
   Future,
@@ -13,15 +15,7 @@ import {
   successFutureServiceResult,
   unwrapFutureServiceResult,
 } from '~/lib/monads';
-import {
-  documentPath,
-  editProjectPath,
-  overviewPath,
-  projectPath,
-  recentlyViewedPath,
-  tagPath,
-  tagsPath,
-} from '~/lib/routes';
+import { documentPath, projectPath, tagPath } from '~/lib/routes';
 import {
   DocumentSearchResult,
   PartialDocument,
@@ -30,19 +24,12 @@ import {
 } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useModal } from '~/lib/useModal';
-import { useNewDocument } from '~/lib/useNewDocument';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 import DocumentIcon from '~/components/icons/DocumentIcon';
-import OverviewIcon from '~/components/icons/OverviewIcon';
-import RecentIcon from '~/components/icons/RecentIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
-import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagIcon from '~/components/icons/TagIcon';
-import TagsIcon from '~/components/icons/TagsIcon';
 import { StyledModal, StyledModalProps } from '~/components/Modal';
 import { ProjectIcon } from '~/components/ProjectIcon';
-import { iic, IIC, mergeIICs, liftToIIC, useDeployIICs } from '~/lib/iic';
-import { searchCommands, SearchCommand } from '~/lib/commands';
 
 type Suggestion = {
   key: string;
@@ -85,44 +72,38 @@ type SuggestionSource = (
   handleAction: (action: IIC) => IIC
 ) => Suggestion[];
 
-interface MakeFilteredListSourceOptions<T>
-  extends MakeDynamicSuggestionOptions<T> {
+interface MakeListSourceOptions<T> extends MakeDynamicSuggestionOptions<T> {
   list: T[];
-  include?: (item: T) => boolean;
-  getFilterable: (item: T) => string;
+  include?: (item: T, searchQuery: string) => boolean;
 }
 
-const makeFilteredListSource =
+const makeListSource =
   <T,>({
     list,
     include = () => true,
-    getFilterable,
     ...rest
-  }: MakeFilteredListSourceOptions<T>): SuggestionSource =>
+  }: MakeListSourceOptions<T>): SuggestionSource =>
   (searchQuery, handleAction) => {
     return list
-      .filter((item) => {
-        if (!include(item)) {
-          return false;
-        }
-
-        const filterable = getFilterable(item);
-        return filterable && includes(filterable, searchQuery);
-      })
+      .filter((item) => include(item, searchQuery))
       .map((item) => makeDynamicSuggestion(item, handleAction, rest));
   };
 
-interface MakeListSourceOptions<T> extends MakeDynamicSuggestionOptions<T> {
-  list: T[];
+interface MakeFilteredListSourceOptions<T> extends MakeListSourceOptions<T> {
+  getFilterable: (item: T) => string;
 }
 
-const makeListSource = <T,>({
-  list,
+const makeFilteredListSource = <T,>({
+  include = () => true,
+  getFilterable,
   ...rest
-}: MakeListSourceOptions<T>): SuggestionSource =>
-  makeFilteredListSource({
-    list,
-    getFilterable: () => '',
+}: MakeFilteredListSourceOptions<T>): SuggestionSource =>
+  makeListSource({
+    include: (item, searchQuery) => {
+      if (!include(item, searchQuery)) return false;
+      const filterable = getFilterable(item);
+      return Boolean(filterable && includes(filterable, searchQuery));
+    },
     ...rest,
   });
 
@@ -185,10 +166,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
     }
   }, []);
 
-  const handleAction = (action: IIC) => mergeIICs(
-    action,
-    liftToIIC(onClose)()
-  );
+  const handleAction = (action: IIC) => mergeIICs(action, liftToIIC(onClose)());
 
   useEffect(() => {
     setFsrSearchResults(pendingFutureServiceResult());
@@ -255,7 +233,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
       // Search results
       makeListSource({
         list: searchResults,
-        getKey: ({ document: { id } }) => `document-${id}`,
+        getKey: ({ document: { id } }) => `document-${id}`, // ` <- Fix syntax highlighting
         getLabel: ({ document }) => document.safe_title,
         icon: <DocumentIcon size="1.25em" noAriaLabel />,
         getDescription: ({ highlights }) => {

@@ -3,16 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { IIC, iic } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts';
-import { projectPath } from '~/lib/routes';
+import {
+  editProjectPath,
+  overviewPath,
+  projectPath,
+  recentlyViewedPath,
+  tagsPath,
+} from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { Project } from '~/lib/types';
 import { useNewDocument } from '~/lib/useNewDocument';
 import AccountIcon from '~/components/icons/AccountIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 
 export type BaseCommand = {
   id: string;
@@ -39,6 +45,22 @@ export type KeyboardShortcutCommand = BaseCommand & {
 export type Command = SearchCommand | KeyboardShortcutCommand;
 
 const noopIIC = iic(() => () => {});
+
+const navigateInProjectIIC = (
+  pathFn: (options: { projectId: number }) => string
+) =>
+  iic(
+    () => {
+      const { projectId } = useContext() as {
+        projectId: number;
+      };
+
+      const navigate = useNavigate();
+
+      return () => navigate(pathFn({ projectId }));
+    },
+    { layoutEffect: false }
+  );
 
 // TODO: Change default configs based on platform and browser
 const commands: Command[] = [
@@ -92,7 +114,9 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to overview',
     },
-    action: iic(() => () => alert('Overview')),
+    action: navigateInProjectIIC(({ projectId }) =>
+      overviewPath({ projectId })
+    ),
   },
   {
     id: 'edit-project',
@@ -104,7 +128,9 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to edit project',
     },
-    action: iic(() => () => alert('Edit project')),
+    action: navigateInProjectIIC(({ projectId }) =>
+      editProjectPath({ projectId })
+    ),
   },
   {
     id: 'recently-viewed',
@@ -116,7 +142,9 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to recently viewed',
     },
-    action: iic(() => () => alert('Recently viewed')),
+    action: navigateInProjectIIC(({ projectId }) =>
+      recentlyViewedPath({ projectId })
+    ),
   },
   {
     id: 'all-tags',
@@ -128,7 +156,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to all tags',
     },
-    action: iic(() => () => alert('All tags')),
+    action: navigateInProjectIIC(({ projectId }) => tagsPath({ projectId })),
   },
   {
     id: 'new-document',

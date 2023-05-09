@@ -32,13 +32,17 @@ export const TopBar = ({
   showSidebarButton = false,
   onSidebarButtonClick,
 }: TopBar) => {
-  const { project, toggleSearchModal, toggleAccountModal, toggleSettingsModal } =
-    useContext() as {
-      project: Project;
-      toggleSearchModal: () => void;
-      toggleAccountModal: () => void;
-      toggleSettingsModal: () => void;
-    };
+  const {
+    project,
+    toggleSearchModal,
+    toggleAccountModal,
+    toggleSettingsModal,
+  } = useContext() as {
+    project: Project;
+    toggleSearchModal: () => void;
+    toggleAccountModal: () => void;
+    toggleSettingsModal: () => void;
+  };
 
   const { isXs } = useBreakpoints();
 
