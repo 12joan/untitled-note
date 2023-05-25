@@ -162,6 +162,7 @@ export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
               disabled={disabled}
               onClick={onClick}
               onMouseDown={(event) => event.preventDefault()}
+              aria-pressed={active}
             >
               <Icon
                 size="1.25em"
