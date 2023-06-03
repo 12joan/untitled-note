@@ -58,6 +58,7 @@ Rails.application.reloader.to_prepare do
 
           broadcast make_broadcasting('Document#index', %i[user_id project_id], params).tap { "broadcasting on #{_1}" }
           broadcast make_broadcasting('Document#show', %i[user_id project_id id], params)
+          broadcast make_broadcasting('Tag#index', %i[user_id project_id], params)
         end
       },
 
