@@ -15,24 +15,14 @@ export const streamAction = <T>(
       action,
       params: {
         ...params,
-        __subscription_id: Math.random(), // Allow multiple identical subscriptions
+        // Allow multiple identical subscriptions
+        __subscription_id: Math.random(),
       },
     },
-
     {
-      connected() {
-        handleSubscriptionStatusChanged(true);
-      },
-
-      disconnected() {
-        handleSubscriptionStatusChanged(false);
-      },
-
-      received(data) {
-        callback(JSON.parse(data));
-      },
-
-      unsubscribe() {},
+      connected: () => handleSubscriptionStatusChanged(true),
+      disconnected: () => handleSubscriptionStatusChanged(false),
+      received: (data: string) => callback(JSON.parse(data)),
     }
   );
 };
