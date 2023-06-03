@@ -1,3 +1,5 @@
+import { ifMac } from '~/lib/environment';
+
 export const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
   ArrowDown: 'modified',
   ArrowLeft: 'modified',
@@ -24,18 +26,25 @@ export const SPECIAL_KEYS: Record<string, 'always' | 'modified'> = {
   PageUp: 'modified',
 };
 
+export const MODIFIER_LABELS = {
+  alt: ifMac('⌥', 'Alt+'),
+  ctrl: ifMac('⌃', 'Ctrl+'),
+  meta: ifMac('⌘', 'Meta+'),
+  shift: ifMac('⇧', 'Shift+'),
+};
+
 export const KEY_LABELS: Record<string, string> = {
-  ArrowDown: '↓',
-  ArrowLeft: '←',
-  ArrowRight: '→',
-  ArrowUp: '↑',
-  Backspace: '⌫',
-  Delete: '⌦',
-  End: '↘',
-  Enter: '↵',
-  Home: '↖',
-  PageDown: '⇟',
-  PageUp: '⇞',
+  ArrowDown: ifMac('↓', 'Down'),
+  ArrowLeft: ifMac('←', 'Left'),
+  ArrowRight: ifMac('→', 'Right'),
+  ArrowUp: ifMac('↑', 'Up'),
+  Backspace: ifMac('⌫', 'Backspace'),
+  Delete: ifMac('⌦', 'Delete'),
+  End: ifMac('↘', 'End'),
+  Enter: ifMac('↵', 'Enter'),
+  Home: ifMac('↖', 'Home'),
+  PageDown: ifMac('⇟', 'Page Down'),
+  PageUp: ifMac('⇞', 'Page Up'),
   _: '-',
   '+': '=',
   '{': '[',
