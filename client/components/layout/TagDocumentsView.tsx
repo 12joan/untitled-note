@@ -1,7 +1,7 @@
 import React from 'react';
 import { streamDocuments } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';
-import { Future, mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
+import { Future, mapFuture, unwrapFuture } from '~/lib/monads';
 import { OverviewLink } from '~/lib/routes';
 import { PartialDocument, Tag } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
@@ -53,7 +53,12 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
     })
   );
 
-  if (!orDefaultFuture<Tag | undefined | boolean>(futureTag, false)) {
+  const isNotFound = unwrapFuture(futureTag, {
+    pending: false,
+    resolved: (tag) => tag === undefined,
+  });
+
+  if (isNotFound) {
     return (
       <div className="space-y-3">
         <h1 className="h1">Tag not found</h1>
