@@ -105,7 +105,7 @@ const commands: Command[] = [
       config: envSpecific({
         byOS: {
           default: undefined,
-          mac: parseKeyboardShortcut('meta+,'),
+          mac: parseKeyboardShortcut('mod+,'),
         },
       }),
     },

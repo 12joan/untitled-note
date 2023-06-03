@@ -54,3 +54,5 @@ export const envSpecific = <T>(value: EnvironmentSpecific<T>): T => {
 
   return value;
 };
+
+export const ifMac = <T>(macValue: T, defaultValue: T): T => IS_APPLE ? macValue : defaultValue;

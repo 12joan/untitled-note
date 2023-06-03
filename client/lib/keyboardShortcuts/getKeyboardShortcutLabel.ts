@@ -1,6 +1,6 @@
+import { MODIFIER_LABELS } from './constants';
 import { KeyboardShortcutConfig } from './types';
 
-// TODO: Use the native shortcut format on Windows and Linux
 export const getKeyboardShortcutLabel = ({
   key,
   keyLabel = key.toUpperCase(),
@@ -11,10 +11,10 @@ export const getKeyboardShortcutLabel = ({
 }: KeyboardShortcutConfig) => {
   const parts: string[] = [];
 
-  if (ctrlKey) parts.push('^');
-  if (altKey) parts.push('⌥');
-  if (shiftKey) parts.push('⇧');
-  if (metaKey) parts.push('⌘');
+  if (ctrlKey) parts.push(MODIFIER_LABELS.ctrl);
+  if (altKey) parts.push(MODIFIER_LABELS.alt);
+  if (shiftKey) parts.push(MODIFIER_LABELS.shift);
+  if (metaKey) parts.push(MODIFIER_LABELS.meta);
 
   parts.push(keyLabel);
 
