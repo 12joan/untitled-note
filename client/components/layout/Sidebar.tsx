@@ -122,7 +122,6 @@ const FutureDocumentsSection = <ButtonAs extends typeof DocumentLink>({
     <div key={doc.id}>
       <ContextMenuDropdown
         items={<DocumentMenu document={doc} />}
-        appendTo={document.body}
       >
         <Button
           as={buttonAs || DocumentLink}
@@ -159,7 +158,6 @@ const FutureTagsSection = ({
     <div key={tag.id}>
       <ContextMenuDropdown
         items={<TagMenu tag={tag} />}
-        appendTo={document.body}
       >
         <Button
           as={TagLink}
