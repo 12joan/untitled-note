@@ -20,6 +20,10 @@ class ReplaceInDocumentTest < ActiveSupport::TestCase
     assert_replaces 'TextInNestedList'
   end
 
+  test 'replaces text in plain body' do
+    assert_replaces 'TextInPlainBody', in_plain_body: true
+  end
+
   test 'replacement is case insensitive' do
     assert_replaces 'topleveltextnode'
   end
@@ -64,18 +68,23 @@ class ReplaceInDocumentTest < ActiveSupport::TestCase
 
   private
 
-  def replaces?(text)
+  def replaces?(text, in_plain_body: false)
     document = create_document
     ReplaceInDocument.perform(document: document, find: text, replace: 'REPLACED')
-    document.reload.body.include?('REPLACED')
+
+    if in_plain_body
+      document.reload.plain_body.include?('REPLACED')
+    else
+      document.reload.body.include?('REPLACED')
+    end
   end
 
-  def assert_replaces(text)
-    assert replaces?(text), "Expected #{text} to be replaced"
+  def assert_replaces(text, **options)
+    assert replaces?(text, **options), "Expected #{text} to be replaced"
   end
 
-  def refute_replaces(text)
-    refute replaces?(text), "Expected #{text} not to be replaced"
+  def refute_replaces(text, **options)
+    refute replaces?(text, **options), "Expected #{text} not to be replaced"
   end
 
   def create_document
@@ -106,7 +115,10 @@ class ReplaceInDocumentTest < ActiveSupport::TestCase
 
         p { text 'NEEDLE1 tExT wItH NEEDLE1 sPeCiFiC cApItAlIsAtIoN NEEDLE1' }
         p { text 'NEEDLE2NEEDLE2NEEDLE2NEEDLE2' }
+
+        p { text 'This is required to make TextInPlainBody work' }
       end,
+      plain_body: 'TextInPlainBody',
       body_type: 'json/slate',
     )
   end
