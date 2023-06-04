@@ -120,9 +120,7 @@ const FutureDocumentsSection = <ButtonAs extends typeof DocumentLink>({
 }: FutureDocumentsSectionProps<ButtonAs>) => {
   const buttonForDocument = (doc: PartialDocument) => (
     <div key={doc.id}>
-      <ContextMenuDropdown
-        items={<DocumentMenu document={doc} />}
-      >
+      <ContextMenuDropdown items={<DocumentMenu document={doc} />}>
         <Button
           as={buttonAs || DocumentLink}
           to={{ documentId: doc.id }}
@@ -156,9 +154,7 @@ const FutureTagsSection = ({
 }: FutureTagsSectionProps) => {
   const buttonForTag = (tag: Tag) => (
     <div key={tag.id}>
-      <ContextMenuDropdown
-        items={<TagMenu tag={tag} />}
-      >
+      <ContextMenuDropdown items={<TagMenu tag={tag} />}>
         <Button
           as={TagLink}
           to={{ tagId: tag.id }}
