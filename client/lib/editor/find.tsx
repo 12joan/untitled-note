@@ -310,65 +310,76 @@ const FindDialog = ({
       }
     }, 0);
 
+  const matchComponents =
+    showMatches &&
+    (totalMatches > 0 ? (
+      <>
+        <button
+          type="button"
+          className="btn p-2 2xs:aspect-square max-2xs:grow flex justify-center"
+          onClick={() => changeMatch(-1)}
+        >
+          <ChevronLeftIcon size="1.25em" ariaLabel="Previous match" />
+        </button>
+
+        <span className="select-none" role="status">
+          {currentMatch! + 1} of {totalMatches}
+        </span>
+
+        <button
+          type="button"
+          className="btn p-2 2xs:aspect-square max-2xs:grow flex justify-center"
+          onClick={() => changeMatch(1)}
+        >
+          <ChevronRightIcon size="1.25em" ariaLabel="Next match" />
+        </button>
+      </>
+    ) : (
+      <span
+        className="select-none text-slate-500 dark:text-slate-400"
+        role="status"
+      >
+        No matches
+      </span>
+    ));
+
   return (
     <div
       ref={containerRef}
-      className="sticky z-[7] h-0"
+      className="fixed sm:sticky z-[15] h-0 max-sm:left-5 max-sm:right-5"
       style={{ top: topBarHeight }}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleContainerKeyDown}
     >
-      <div className="lg:narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-lg rounded-lg flex gap-1 items-center pr-2 children:shrink-0">
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Find in document"
-          className="grow w-0 bg-transparent p-3 no-focus-ring"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          onKeyDown={handleInputKeyDown}
-        />
+      <div className="lg:narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog rounded-lg">
+        <div className="flex gap-1 items-center chidren:shrink-0 pr-2">
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Find in document"
+            className="grow w-0 bg-transparent p-3 pr-0 no-focus-ring"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={handleInputKeyDown}
+          />
 
-        {showMatches &&
-          (totalMatches > 0 ? (
-            <>
-              <button
-                type="button"
-                className="btn p-2 aspect-square"
-                onClick={() => changeMatch(-1)}
-              >
-                <ChevronLeftIcon size="1.25em" ariaLabel="Previous match" />
-              </button>
+          <div className="hidden 2xs:contents">{matchComponents}</div>
 
-              <span className="select-none" role="status">
-                {currentMatch! + 1} of {totalMatches}
-              </span>
+          <button
+            type="button"
+            className="btn p-2 aspect-square"
+            onClick={onClose}
+          >
+            <LargeCloseIcon size="1.25em" ariaLabel="Close" />
+          </button>
+        </div>
 
-              <button
-                type="button"
-                className="btn p-2 aspect-square"
-                onClick={() => changeMatch(1)}
-              >
-                <ChevronRightIcon size="1.25em" ariaLabel="Next match" />
-              </button>
-            </>
-          ) : (
-            <span
-              className="select-none text-slate-500 dark:text-slate-400"
-              role="status"
-            >
-              No matches
-            </span>
-          ))}
-
-        <button
-          type="button"
-          className="btn p-2 aspect-square"
-          onClick={onClose}
-        >
-          <LargeCloseIcon size="1.25em" ariaLabel="Close" />
-        </button>
+        {matchComponents && (
+          <div className="flex items-center justify-center 2xs:hidden p-2 pt-0 gap-2 children:shrink-0">
+            {matchComponents}
+          </div>
+        )}
       </div>
     </div>
   );
