@@ -1,4 +1,4 @@
-import { createPluginFactory } from '@udecode/plate-headless';
+import { createPluginFactory } from '@udecode/plate';
 import { setGlobalStore } from '~/lib/globalStore';
 import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';

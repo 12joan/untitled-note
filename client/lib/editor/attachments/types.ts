@@ -2,7 +2,7 @@ import {
   PlateRenderElementProps,
   TElement,
   Value,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { GroupedClassNames } from '~/lib/groupedClassNames';
 import { S3File } from '~/lib/types';
 

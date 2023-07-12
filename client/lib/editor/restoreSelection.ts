@@ -1,4 +1,4 @@
-import { focusEditor, PlateEditor } from '@udecode/plate-headless';
+import { focusEditor, PlateEditor } from '@udecode/plate';
 import { Selection } from 'slate';
 import { normalizeRange } from '~/lib/editor/normalizeRange';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';

@@ -33,7 +33,7 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   PlateRenderElementProps,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import {
   Attachment,
   ELEMENT_ATTACHMENT,

@@ -1,4 +1,4 @@
-import { ExitBreakPlugin, KEYS_HEADING } from '@udecode/plate-headless';
+import { ExitBreakPlugin, KEYS_HEADING } from '@udecode/plate';
 
 export const exitBreakOptions: {
   options: ExitBreakPlugin;

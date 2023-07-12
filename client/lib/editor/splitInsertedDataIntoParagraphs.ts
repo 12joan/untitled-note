@@ -5,7 +5,7 @@ import {
   KEY_DESERIALIZE_HTML,
   TDescendant,
   TElement,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 
 const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {
   const newFragment = fragment.flatMap((node) => {

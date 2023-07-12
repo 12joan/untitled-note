@@ -4,7 +4,7 @@ import {
   PlateEditor,
   removeNodes,
   withoutNormalizing,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import { handleUploadFileError } from '~/lib/handleErrors';
 import { uploadFile, UploadProgressEvent } from '~/lib/uploadFile';

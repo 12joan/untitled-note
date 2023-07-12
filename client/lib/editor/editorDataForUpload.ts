@@ -1,4 +1,4 @@
-import { ELEMENT_MENTION_INPUT, PlateEditor } from '@udecode/plate-headless';
+import { ELEMENT_MENTION_INPUT, PlateEditor } from '@udecode/plate';
 import {
   ELEMENT_ATTACHMENT,
   getAttachmentIsUploading,

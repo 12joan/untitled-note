@@ -6,7 +6,7 @@ import {
   PlateEditor,
   TabbableEntry,
   TabbablePlugin,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 
 export const tabbableOptions: {
   options: TabbablePlugin;
