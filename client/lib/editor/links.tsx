@@ -21,7 +21,7 @@ import {
   unwrapLink,
   upsertLink,
   Value,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';

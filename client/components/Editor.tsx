@@ -15,7 +15,7 @@ import {
   Plate,
   PlateEditor,
   usePlateEditorState,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { Range } from 'slate';
 import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';

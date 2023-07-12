@@ -21,7 +21,7 @@ import {
   toggleMark,
   toggleNodeType,
   unindentListItems,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { isLinkInSelection, useToggleLink } from '~/lib/editor/links';
 import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';

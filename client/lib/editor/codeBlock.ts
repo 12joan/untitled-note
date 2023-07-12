@@ -1,4 +1,4 @@
-import { DeserializeHtml } from '@udecode/plate-headless';
+import { DeserializeHtml } from '@udecode/plate';
 
 export const codeBlockOptions: {
   deserializeHtml: DeserializeHtml;

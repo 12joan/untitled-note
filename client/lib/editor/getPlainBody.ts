@@ -1,4 +1,4 @@
-import { TNode } from '@udecode/plate-headless';
+import { TNode } from '@udecode/plate';
 
 const rawGetPlainBody = (node: TNode): string => {
   const { type, text, children } = node;

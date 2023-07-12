@@ -12,7 +12,7 @@ import {
   select,
   unwrapList,
   withoutNormalizing,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 

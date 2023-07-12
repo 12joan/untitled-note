@@ -14,7 +14,7 @@ import {
   TElement,
   toDOMRange,
   TText,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { Path, Range as SlateRange } from 'slate';
 import { useContext } from '~/lib/context';
 import { FIND_SUPPORTED } from '~/lib/environment';

@@ -6,7 +6,7 @@ import {
   removeNodes,
   someNode,
   TNode,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { Path } from 'slate';
 import {
   useFocused as useSlateFocused,

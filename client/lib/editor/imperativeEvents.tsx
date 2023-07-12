@@ -10,7 +10,7 @@ import {
   createPluginFactory,
   PlatePlugin,
   Value,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import {
   createEventEmitter,
   dispatchEvent,

@@ -10,7 +10,7 @@ import {
   TMentionElement,
   TMentionInputElement,
   Value,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 import { useFocused, useSelected } from 'slate-react';
 import { useContext } from '~/lib/context';
 import { getPlainBody } from '~/lib/editor/getPlainBody';

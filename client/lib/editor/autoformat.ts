@@ -17,7 +17,7 @@ import {
   toggleCodeBlock,
   toggleList,
   unwrapList,
-} from '@udecode/plate-headless';
+} from '@udecode/plate';
 
 const isSelectionInCodeBlock = (editor: PlateEditor): boolean =>
   !!getAboveNode(editor, { match: { type: ELEMENT_CODE_BLOCK } });

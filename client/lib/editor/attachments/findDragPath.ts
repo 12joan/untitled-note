@@ -12,7 +12,7 @@
  */
 
 import { DragEvent } from 'react';
-import { PlateEditor } from '@udecode/plate-headless';
+import { PlateEditor } from '@udecode/plate';
 import { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { nodeAtPathIsEmptyParagraph } from './utils';

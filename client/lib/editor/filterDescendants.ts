@@ -1,4 +1,4 @@
-import { TDescendant, TEditor, TElement, TNode } from '@udecode/plate-headless';
+import { TDescendant, TEditor, TElement, TNode } from '@udecode/plate';
 
 export const filterDescendants = <T extends TEditor | TElement>(
   { children, ...restNode }: T,
