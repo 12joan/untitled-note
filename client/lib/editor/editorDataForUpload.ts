@@ -8,8 +8,8 @@ import { getPlainBody } from '~/lib/editor/getPlainBody';
 
 const excludedTypes = [ELEMENT_MENTION_INPUT];
 
-export const editorDataForUpload = (editor: PlateEditor) => {
-  const filteredEditor = filterDescendants(editor, (node) => {
+export const getFilteredEditor = (editor: PlateEditor) =>
+  filterDescendants(editor, (node) => {
     const { type } = node;
 
     if (typeof type === 'string') {
@@ -24,6 +24,9 @@ export const editorDataForUpload = (editor: PlateEditor) => {
 
     return true;
   });
+
+export const editorDataForUpload = (editor: PlateEditor) => {
+  const filteredEditor = getFilteredEditor(editor);
 
   return {
     body: JSON.stringify(filteredEditor.children),

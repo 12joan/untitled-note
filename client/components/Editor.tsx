@@ -19,7 +19,10 @@ import {
 import { Range } from 'slate';
 import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';
-import { editorDataForUpload } from '~/lib/editor/editorDataForUpload';
+import {
+  editorDataForUpload,
+  getFilteredEditor,
+} from '~/lib/editor/editorDataForUpload';
 import { useFind } from '~/lib/editor/find';
 import { useLinkModalProvider } from '~/lib/editor/links';
 import { usePlugins } from '~/lib/editor/plugins';
@@ -200,6 +203,9 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       invalidateEditor={false}
       openFind={openFind}
       showReplace
+      getEditorChildrenForExport={() =>
+        getFilteredEditor(editorRef.current!).children
+      }
     />
   );
 

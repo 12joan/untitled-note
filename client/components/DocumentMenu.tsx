@@ -4,7 +4,7 @@ import {
   updateDocument as updateDocumentAPI,
 } from '~/lib/apis/document';
 import { useContext } from '~/lib/context';
-import { copyPath } from '~/lib/copyPath';
+import { copyText } from '~/lib/copyText';
 import { TAB_OR_WINDOW } from '~/lib/environment';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import {
@@ -14,10 +14,12 @@ import {
 import { DocumentLink, documentPath } from '~/lib/routes';
 import { toggleDocumentPinned } from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
+import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
 import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
+import DownloadIcon from '~/components/icons/DownloadIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
@@ -29,14 +31,16 @@ export interface DocumentMenuProps {
   invalidateEditor?: boolean;
   openFind?: () => void;
   showReplace?: boolean;
+  getEditorChildrenForExport?: UseExportModalOptions['getEditorChildren'];
 }
 
 export const DocumentMenu = ({
   document: doc,
   updateDocument: updateDocumentOverride,
   invalidateEditor = true,
-  openFind = undefined,
+  openFind,
   showReplace = false,
+  getEditorChildrenForExport,
 }: DocumentMenuProps) => {
   const { projectId } = useContext() as { projectId: number };
 
@@ -46,8 +50,10 @@ export const DocumentMenu = ({
       handleUpdateDocumentError(updateDocumentAPI(projectId, doc.id, delta));
     });
 
-  const copyLink = () =>
-    copyPath(documentPath({ projectId, documentId: doc.id }));
+  const copyLink = () => {
+    const path = documentPath({ projectId, documentId: doc.id });
+    copyText(`${window.location.origin}${path}`);
+  };
 
   const isPinned = doc.pinned_at !== null;
   const togglePinned = () =>
@@ -55,6 +61,11 @@ export const DocumentMenu = ({
 
   const { modal: replaceModal, open: openReplaceModal } = useReplaceModal({
     documentId: doc.id,
+  });
+
+  const { modal: exportModal, open: openExportModal } = useExportModal({
+    document: doc,
+    getEditorChildren: getEditorChildrenForExport!,
   });
 
   const deleteDocument = () => {
@@ -94,6 +105,12 @@ export const DocumentMenu = ({
         </DropdownItem>
       )}
 
+      {getEditorChildrenForExport && (
+        <DropdownItem icon={DownloadIcon} onClick={() => openExportModal()}>
+          Export document
+        </DropdownItem>
+      )}
+
       <DropdownItem
         icon={DeleteIcon}
         className="children:text-red-500 dark:children:text-red-400"
@@ -103,6 +120,7 @@ export const DocumentMenu = ({
       </DropdownItem>
 
       {replaceModal}
+      {exportModal}
     </>
   );
 };

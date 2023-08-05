@@ -1,4 +1,4 @@
-import React, { ElementType, ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useModal } from '~/lib/useModal';
 import { useOverrideable } from '~/lib/useOverrideable';
@@ -6,19 +6,20 @@ import { IconProps } from '~/components/icons/makeIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { WithCloseButton } from '~/components/WithCloseButton';
 
-export type Section = {
+export type Section<T extends object> = {
   title: string;
-  icon: ElementType<IconProps>;
-  component: ElementType<Record<string, never>>;
+  icon: FC<IconProps>;
+  component: FC<T>;
 };
 
 export interface SectionedModalOpenProps {
   initialSection?: string;
 }
 
-export const createSectionedModal = (
+export const createSectionedModal = <T extends object>(
   sectionedModalId: string,
-  sections: { [key: string]: Section }
+  sections: { [key: string]: Section<T> },
+  sectionProps: T
 ) => {
   const sectionKeys = Object.keys(sections);
 
@@ -106,7 +107,7 @@ export const createSectionedModal = (
             )}
 
             <div className="space-y-3">
-              <ActiveSectionComponent />
+              <ActiveSectionComponent {...sectionProps} />
             </div>
           </div>
         </div>

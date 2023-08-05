@@ -1,8 +1,4 @@
-import {
-  PlateRenderElementProps,
-  TElement,
-  Value,
-} from '@udecode/plate';
+import { PlateRenderElementProps, TElement, Value } from '@udecode/plate';
 import { GroupedClassNames } from '~/lib/groupedClassNames';
 import { S3File } from '~/lib/types';
 

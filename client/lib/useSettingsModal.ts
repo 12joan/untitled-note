@@ -7,10 +7,14 @@ import { KeyboardShortcutsSection } from '~/components/settingsModalSections';
 
 export type SettingsModalOpenProps = SectionedModalOpenProps;
 
-export const useSettingsModal = createSectionedModal('settings-modal', {
-  emailAndPassword: {
-    title: 'Keyboard shortcuts',
-    icon: KeyboardShortcutsIcon,
-    component: KeyboardShortcutsSection,
+export const useSettingsModal = createSectionedModal(
+  'settings-modal',
+  {
+    emailAndPassword: {
+      title: 'Keyboard shortcuts',
+      icon: KeyboardShortcutsIcon,
+      component: KeyboardShortcutsSection,
+    },
   },
-});
+  {}
+);
