@@ -6,11 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {
-  createPluginFactory,
-  PlatePlugin,
-  Value,
-} from '@udecode/plate';
+import { createPluginFactory, PlatePlugin, Value } from '@udecode/plate';
 import {
   createEventEmitter,
   dispatchEvent,
