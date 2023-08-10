@@ -72,13 +72,21 @@ export const MentionComponent = ({
   });
 
   return (
-    <span {...attributes} contentEditable={false}>
+    <span
+      {...attributes}
+      contentEditable={false}
+      /**
+       * Chrome workaround: Ensure that clicking to the right of a mention
+       * selects the following empty text node, not the mention itself. Side
+       * effect: Mention text wraps independently of the rest of the text.
+       */
+      className="inline-block"
+    >
       {unwrapFuture(futureDocument, {
         pending: <InlinePlaceholder />,
         resolved: (doc) => (
           <DocumentLink
             ref={linkRef}
-            contentEditable={false}
             className={className}
             to={{ documentId }}
             children={doc?.safe_title ?? `[Deleted document: ${fallbackText}]`}
