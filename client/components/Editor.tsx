@@ -118,7 +118,6 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     () => (
       <Plate
         editorRef={editorRef}
-        id="editor"
         plugins={plugins}
         initialValue={initialValue}
         normalizeInitialValue
