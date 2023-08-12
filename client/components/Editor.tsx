@@ -6,18 +6,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  createPlateEditor,
-  deserializeHtml,
-  ELEMENT_PARAGRAPH,
-  Plate,
-  PlateEditor,
-  PlatePlugin,
-  usePlateEditorState,
-} from '@udecode/plate';
+import { Plate, PlateEditor, usePlateEditorState } from '@udecode/plate';
 import { Range } from 'slate';
-import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';
 import {
   editorDataForUpload,
@@ -31,13 +21,14 @@ import {
   setSelection,
   useSaveSelection,
 } from '~/lib/editor/restoreSelection';
+import { useInitialValue } from '~/lib/editor/useInitialValue';
+import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
+import { useSyncDocument } from '~/lib/editor/useSyncDocument';
 import { useGlobalEvent } from '~/lib/globalEvents';
-import { overviewPath } from '~/lib/routes';
-import { Document, LocalDocument } from '~/lib/types';
+import { Document } from '~/lib/types';
+import { useBeforeUnload } from '~/lib/useBeforeUnload';
 import { useDebounce } from '~/lib/useDebounce';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
-import { useEnqueuedPromises } from '~/lib/useEnqueuedPromises';
-import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
@@ -48,137 +39,6 @@ import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
 import { Tooltip } from '~/components/Tooltip';
-
-type UseSyncDocumentOptions = {
-  clientId: string;
-  initialDocument: Document;
-};
-
-const useSyncDocument = ({
-  clientId,
-  initialDocument,
-}: UseSyncDocumentOptions) => {
-  const { projectId } = useContext() as {
-    projectId: number;
-  };
-
-  const [workingDocument, setWorkingDocument] =
-    useStateWhileMounted<LocalDocument>(initialDocument);
-
-  const extractServerDrivenData = (remoteDocument: Document) =>
-    setWorkingDocument((localDocument) => ({
-      ...localDocument,
-      safe_title: remoteDocument.safe_title,
-      tags: localDocument.tags.map((localTag) => {
-        if (localTag.id) {
-          return localTag;
-        }
-
-        const remoteTag = remoteDocument.tags.find(
-          (remoteTag) => remoteTag.text === localTag.text
-        );
-
-        return remoteTag || localTag;
-      }),
-    }));
-
-  const [enqueueUpdatePromise, updateIsDirty] = useEnqueuedPromises();
-
-  const updateDocument = (delta: Partial<LocalDocument>) =>
-    setWorkingDocument((previousDocument) => {
-      const updatedDocument = {
-        ...previousDocument,
-        ...delta,
-        updated_by: clientId,
-      };
-
-      enqueueUpdatePromise(() =>
-        updateDocumentAPI(projectId, initialDocument.id, updatedDocument).then(
-          extractServerDrivenData
-        )
-      );
-
-      return updatedDocument;
-    });
-
-  return {
-    workingDocument,
-    updateDocument,
-    updateIsDirty,
-  };
-};
-
-const useWarnIfUnsavedChanges = (isDirty: boolean) => {
-  useEffect(() => {
-    if (isDirty) {
-      const beforeUnloadHandler = (event: BeforeUnloadEvent) => {
-        event.preventDefault();
-        event.returnValue = '';
-      };
-
-      window.addEventListener('beforeunload', beforeUnloadHandler);
-      return () =>
-        window.removeEventListener('beforeunload', beforeUnloadHandler);
-    }
-  }, [isDirty]);
-};
-
-type UseInitialValueOptions = {
-  initialDocument: Document;
-  plugins: PlatePlugin[];
-};
-
-const useInitialValue = ({
-  initialDocument,
-  plugins,
-}: UseInitialValueOptions) =>
-  useMemo(() => {
-    const bodyFormat = initialDocument.body_type.split('/')[0];
-    const emptyDocument = [
-      { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-    ];
-
-    if (bodyFormat === 'empty') {
-      return emptyDocument;
-    }
-
-    if (bodyFormat === 'html') {
-      const tempEditor = createPlateEditor({ plugins });
-
-      const initialValue = deserializeHtml(tempEditor, {
-        element: initialDocument.body,
-        stripWhitespace: true,
-      });
-
-      return initialValue[0]?.type ? initialValue : emptyDocument;
-    }
-
-    if (bodyFormat === 'json') {
-      return JSON.parse(initialDocument.body);
-    }
-
-    throw new Error(`Unknown body format: ${bodyFormat}`);
-  }, []);
-
-type UseNavigateAwayOnDeleteOptions = {
-  documentId: Document['id'];
-};
-
-const useNavigateAwayOnDelete = ({
-  documentId,
-}: UseNavigateAwayOnDeleteOptions) => {
-  const { projectId } = useContext() as {
-    projectId: number;
-  };
-
-  const navigate = useNavigate();
-
-  useGlobalEvent('document:delete', ({ documentId: deletedDocumentId }) => {
-    if (deletedDocumentId === documentId) {
-      navigate(overviewPath({ projectId }));
-    }
-  });
-};
 
 export interface EditorProps {
   clientId: string;
@@ -234,7 +94,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     750
   );
 
-  useWarnIfUnsavedChanges(updateIsDirty || titleIsDirty || bodyIsDirty);
+  useBeforeUnload(updateIsDirty || titleIsDirty || bodyIsDirty);
 
   const { findDialog, openFind } = useFind({
     editor: editorRef.current || undefined,
