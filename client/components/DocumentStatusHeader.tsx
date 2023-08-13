@@ -43,7 +43,19 @@ export const DocumentStatusHeader = ({
         </div>
 
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Last saved <TimeAgo date={lastSuccessfulUpdate} timeStyle="mini" />{' '}
+          Last saved{' '}
+          <TimeAgo
+            date={lastSuccessfulUpdate}
+            timeStyle={{
+              steps: [
+                { formatAs: 'second' },
+                { formatAs: 'minute' },
+                { formatAs: 'hour' },
+                { formatAs: 'day' },
+              ],
+              labels: ['mini', 'short'],
+            }}
+          />{' '}
           ago
         </p>
       </div>
