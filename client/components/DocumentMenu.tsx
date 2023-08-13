@@ -26,6 +26,7 @@ import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
 
 export interface DocumentMenuProps {
+  statusHeader?: React.ReactNode;
   document: PartialDocument;
   updateDocument?: (delta: Partial<Document>) => void;
   invalidateEditor?: boolean;
@@ -35,6 +36,7 @@ export interface DocumentMenuProps {
 }
 
 export const DocumentMenu = ({
+  statusHeader,
   document: doc,
   updateDocument: updateDocumentOverride,
   invalidateEditor = true,
@@ -76,6 +78,8 @@ export const DocumentMenu = ({
 
   return (
     <>
+      {statusHeader}
+
       <DropdownItem
         icon={OpenInNewTabIcon}
         as={DocumentLink}

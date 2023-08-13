@@ -84,14 +84,19 @@ export type StorageQuotaUsage = {
 };
 
 export type Toast = {
+  id: string;
   title: string;
-  message: string;
+  message: string | (() => React.ReactNode);
   autoClose: 'none' | 'fast' | 'slow';
   ariaLive?: 'off' | 'polite' | 'assertive';
   button?: {
     label: string;
     onClick: () => void;
   };
+};
+
+export type ToastWithoutId = Omit<Toast, 'id'> & {
+  id?: string;
 };
 
 export type Query = 'all' | boolean | { [property: string]: Query };

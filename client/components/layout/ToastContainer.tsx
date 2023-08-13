@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Portal } from '@headlessui/react';
 import { useGlobalEvent } from '~/lib/globalEvents';
-import { Toast as ToastProps } from '~/lib/types';
+import { Toast as ToastData } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTimeout } from '~/lib/useTimer';
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
@@ -13,26 +13,29 @@ const AUTO_CLOSE_DURATION = {
 };
 
 export const ToastContainer = () => {
-  const [toasts, setToasts] = useState<(ToastProps & { key: number })[]>([]);
+  const [toasts, setToasts] = useState<ToastData[]>([]);
 
   useGlobalEvent(
-    'toast',
-    (toast: ToastProps) =>
-      setToasts([
-        {
-          ...toast,
-          key: toasts.length,
-        },
-        ...toasts,
-      ]),
+    'toast:upsert',
+    (toast: ToastData) => {
+      const toastIndex = toasts.findIndex((t) => t.id === toast.id);
+
+      if (toastIndex === -1) {
+        setToasts((toasts) => [toast, ...toasts]);
+      } else {
+        const newToasts = [...toasts];
+        newToasts[toastIndex] = toast;
+        setToasts(newToasts);
+      }
+    },
     [toasts]
   );
 
   return (
     <Portal>
       <div className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">
-        {toasts.map(({ key, ...toast }) => (
-          <Toast key={key} {...toast} />
+        {toasts.map((toast) => (
+          <Toast key={toast.id} {...toast} />
         ))}
       </div>
     </Portal>
@@ -40,32 +43,65 @@ export const ToastContainer = () => {
 };
 
 const Toast = ({
+  id,
   title,
   message,
   autoClose,
   ariaLive = 'polite',
   button,
-}: ToastProps) => {
+}: ToastData) => {
+  const [targetState, setTargetState] = useState<'open' | 'closed'>('open');
   const [visible, setVisible] = useState(false);
   const [inDOM, setInDOM] = useState(true);
-  const [isClosing, setIsClosing] = useState(false);
 
   const [{ height: toastHeight }, ref] = useElementSize();
 
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 50);
-  }, []);
+  useTimeout(() => setVisible(targetState === 'open'), 50, [targetState]);
 
-  const close = () => {
-    setIsClosing(true);
-    setTimeout(() => setVisible(false), 50);
-    setTimeout(() => setInDOM(false), 300);
+  useTimeout(
+    () => {
+      if (targetState === 'closed') {
+        setInDOM(false);
+      }
+    },
+    300,
+    [targetState]
+  );
+
+  const close = () => setTargetState('closed');
+
+  const reopen = () => {
+    setInDOM(true);
+    setTargetState('open');
   };
 
   const autoCloseDuration = AUTO_CLOSE_DURATION[autoClose];
   useTimeout(close, autoCloseDuration);
 
+  useGlobalEvent(
+    'toast:close',
+    (toastId: string) => {
+      if (toastId === id && targetState !== 'closed') {
+        close();
+      }
+    },
+    [id, targetState]
+  );
+
+  useGlobalEvent(
+    'toast:reopen',
+    (toastId: string) => {
+      if (toastId === id && targetState !== 'open') {
+        reopen();
+      }
+    },
+    [id, targetState]
+  );
+
   if (!inDOM) return null;
+
+  const resolvedMessage =
+    typeof message === 'function' ? message() : <p>{message}</p>;
 
   return (
     <div
@@ -73,7 +109,8 @@ const Toast = ({
       className="pointer-events-auto bg-slate-100/75 backdrop-blur shadow-dialog rounded-2xl dark:bg-slate-800/75 flex gap-8 p-4 items-start max-w-full transition-[margin,transform]"
       style={{
         position: toastHeight > 0 ? undefined : 'absolute',
-        transitionProperty: visible || isClosing ? undefined : 'none',
+        transitionProperty:
+          visible || targetState === 'closed' ? undefined : 'none',
         marginBottom: visible ? 0 : `calc(-${toastHeight}px - 1rem)`,
         transform: visible ? 'translateX(0)' : 'translateX(110%)',
       }}
@@ -83,7 +120,7 @@ const Toast = ({
       <div className="shrink-1 w-96 space-y-1 select-none">
         <strong className="font-medium">{title}</strong>
 
-        <p className="text-sm">{message}</p>
+        <div className="space-y-1 text-sm">{resolvedMessage}</div>
 
         {button && (
           <button

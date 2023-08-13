@@ -9,6 +9,7 @@ export const useEnqueuedPromises = () => {
   const inflightPromise = useRef<TPromise | null>(null);
   const enqueuedPromiseProvider = useRef<TPromiseFn | null>(null);
   const [isDirty, setIsDirty] = useStateWhileMounted(false);
+  const [isFailing, setIsFailing] = useStateWhileMounted(false);
 
   const initiatePromise = (promiseProvider: TPromiseFn) => {
     setIsDirty(true);
@@ -16,9 +17,8 @@ export const useEnqueuedPromises = () => {
     inflightPromise.current = retry(promiseProvider, {
       maxRetries: Infinity,
       interval: 3000,
-      shouldRetry: () => {
-        return enqueuedPromiseProvider.current === null;
-      },
+      shouldRetry: () => enqueuedPromiseProvider.current === null,
+      setIsFailing,
     })
       .then(() => {
         if (enqueuedPromiseProvider.current === null) {
@@ -43,5 +43,9 @@ export const useEnqueuedPromises = () => {
     }
   };
 
-  return [enqueuePromise, isDirty] as const;
+  return {
+    enqueuePromise,
+    isDirty,
+    isFailing,
+  };
 };

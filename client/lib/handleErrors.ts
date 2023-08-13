@@ -1,9 +1,9 @@
-import { createToast } from '~/lib/createToast';
 import { filesize } from '~/lib/filesize';
-import { Toast } from '~/lib/types';
+import { createToast } from '~/lib/toasts';
+import { ToastWithoutId } from '~/lib/types';
 
 const handleErrors =
-  (toastForError: (error: any) => Toast) =>
+  (toastForError: (error: any) => ToastWithoutId) =>
   <T>(promise: Promise<T>): Promise<T> => {
     return promise.catch((error: any) => {
       // eslint-disable-next-line no-console

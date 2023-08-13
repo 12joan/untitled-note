@@ -8,7 +8,9 @@
     "rails": "bundle exec rails server -b 0.0.0.0 -p 3000",
     "dev:vite": "bin/vite serve",
     "build-electron": "vite build -c vite.electron.config.js",
-    "lint": "eslint client electron/src"
+    "lint": "eslint client electron/src",
+    "typecheck": "tsc --noEmit --incremental",
+    "typecheck:watch": "yarn typecheck --watch"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
@@ -23,6 +25,7 @@
     "compressorjs": "^1.2.1",
     "emoji-mart": "^5.5.2",
     "human-readable": "^0.2.1",
+    "javascript-time-ago": "^2.5.9",
     "locale-includes": "^1.0.5",
     "pretty": "^2.0.0",
     "prop-types": "^15.8.1",
@@ -31,6 +34,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "6",
     "react-textarea-autosize": "^8.4.1",
+    "react-time-ago": "^7.2.1",
     "runes": "^0.4.3",
     "scheduler": "^0.23.0",
     "slate": "^0.94.0",

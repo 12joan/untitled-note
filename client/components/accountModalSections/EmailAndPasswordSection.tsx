@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { resetPassword } from '~/lib/apis/resetPassword';
-import { createToast } from '~/lib/createToast';
 import { handleResetPasswordError } from '~/lib/handleErrors';
+import { createToast } from '~/lib/toasts';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EmailAndPasswordSection = () => {

@@ -1,5 +1,4 @@
 import React, {
-  MutableRefObject,
   ReactNode,
   useEffect,
   useMemo,
@@ -7,17 +6,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  createPlateEditor,
-  deserializeHtml,
-  ELEMENT_PARAGRAPH,
-  Plate,
-  PlateEditor,
-  usePlateEditorState,
-} from '@udecode/plate';
+import { Plate, PlateEditor, usePlateEditorState } from '@udecode/plate';
 import { Range } from 'slate';
-import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { ContextProvider, useContext } from '~/lib/context';
 import {
   editorDataForUpload,
@@ -31,16 +21,18 @@ import {
   setSelection,
   useSaveSelection,
 } from '~/lib/editor/restoreSelection';
+import { useInitialValue } from '~/lib/editor/useInitialValue';
+import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
+import { useSyncDocument } from '~/lib/editor/useSyncDocument';
 import { useGlobalEvent } from '~/lib/globalEvents';
-import { overviewPath } from '~/lib/routes';
-import { Document, LocalDocument } from '~/lib/types';
+import { Document } from '~/lib/types';
+import { useBeforeUnload } from '~/lib/useBeforeUnload';
 import { useDebounce } from '~/lib/useDebounce';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
-import { useEnqueuedPromises } from '~/lib/useEnqueuedPromises';
-import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
+import { DocumentStatusHeader } from '~/components/DocumentStatusHeader';
 import { Dropdown } from '~/components/Dropdown';
 import { EditorTags } from '~/components/EditorTags';
 import { EditorTitle } from '~/components/EditorTitle';
@@ -55,50 +47,42 @@ export interface EditorProps {
 }
 
 export const Editor = ({ clientId, initialDocument }: EditorProps) => {
-  const { projectId } = useContext() as {
-    projectId: number;
-  };
+  useNavigateAwayOnDelete({ documentId: initialDocument.id });
 
-  const [workingDocument, setWorkingDocument] =
-    useStateWhileMounted<LocalDocument>(initialDocument);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  const tagsRef = useRef<HTMLDivElement>();
+  const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<PlateEditor>(null);
+
+  const [tagsVisible, setTagsVisible] = useState(
+    initialDocument.tags.length > 0
+  );
+
+  const restoreSelectionForEditor = () =>
+    restoreSelection(initialDocument.id, editorRef.current!);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (initialDocument.blank) {
+        titleRef.current?.focus();
+      } else {
+        restoreSelectionForEditor();
+      }
+    }, 0);
+  }, []);
+
+  const {
+    workingDocument,
+    updateDocument,
+    isDirty: updateIsDirty,
+    isFailing: updateIsFailing,
+    lastSuccessfulUpdate,
+  } = useSyncDocument({
+    clientId,
+    initialDocument,
+  });
 
   useTitle(workingDocument.safe_title);
-
-  const extractServerDrivenData = (remoteDocument: Document) =>
-    setWorkingDocument((localDocument) => ({
-      ...localDocument,
-      safe_title: remoteDocument.safe_title,
-      tags: localDocument.tags.map((localTag) => {
-        if (localTag.id) {
-          return localTag;
-        }
-
-        const remoteTag = remoteDocument.tags.find(
-          (remoteTag) => remoteTag.text === localTag.text
-        );
-
-        return remoteTag || localTag;
-      }),
-    }));
-
-  const [enqueueUpdatePromise, updateIsDirty] = useEnqueuedPromises();
-
-  const updateDocument = (delta: Partial<LocalDocument>) =>
-    setWorkingDocument((previousDocument) => {
-      const updatedDocument = {
-        ...previousDocument,
-        ...delta,
-        updated_by: clientId,
-      };
-
-      enqueueUpdatePromise(() =>
-        updateDocumentAPI(projectId, initialDocument.id, updatedDocument).then(
-          extractServerDrivenData
-        )
-      );
-
-      return updatedDocument;
-    });
 
   const [debouncedUpdateTitle, titleIsDirty] = useDebounce(
     (title: string) => updateDocument({ title }),
@@ -118,46 +102,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   );
 
   const isDirty = updateIsDirty || titleIsDirty || bodyIsDirty;
-
-  useEffect(() => {
-    if (isDirty) {
-      const beforeUnloadHandler = (event: BeforeUnloadEvent) => {
-        event.preventDefault();
-        event.returnValue = '';
-      };
-
-      window.addEventListener('beforeunload', beforeUnloadHandler);
-      return () =>
-        window.removeEventListener('beforeunload', beforeUnloadHandler);
-    }
-  }, [isDirty]);
-
-  const titleRef = useRef<HTMLTextAreaElement>(null);
-  const tagsRef = useRef<HTMLDivElement>();
-  const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
-  const editorElementRef = useRef<HTMLDivElement>();
-  const editorRef = useRef<PlateEditor>(null);
-
-  useEffect(() => {
-    editorElementRef.current = document.querySelector(
-      '[data-slate-editor]'
-    ) as HTMLDivElement;
-  }, []);
-
-  const [tagsVisible, setTagsVisible] = useState(
-    initialDocument.tags.length > 0
-  );
-
-  const navigate = useNavigate();
-
-  useGlobalEvent('document:delete', ({ documentId }) => {
-    if (documentId === initialDocument.id) {
-      navigate(overviewPath({ projectId }));
-    }
-  });
-
-  const restoreSelectionForEditor = () =>
-    restoreSelection(initialDocument.id, editorRef.current!);
+  useBeforeUnload(isDirty);
 
   const { findDialog, openFind } = useFind({
     editor: editorRef.current || undefined,
@@ -166,57 +111,21 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       setSelection(editorRef.current!, selection),
   });
 
-  const plugins = usePlugins();
-
-  const initialValue = useMemo(() => {
-    const bodyFormat = initialDocument.body_type.split('/')[0];
-    const emptyDocument = [
-      { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-    ];
-
-    if (bodyFormat === 'empty') {
-      return emptyDocument;
-    }
-
-    if (bodyFormat === 'html') {
-      const tempEditor = createPlateEditor({ plugins });
-
-      const initialValue = deserializeHtml(tempEditor, {
-        element: initialDocument.body,
-        stripWhitespace: true,
-      });
-
-      return initialValue[0]?.type ? initialValue : emptyDocument;
-    }
-
-    if (bodyFormat === 'json') {
-      return JSON.parse(initialDocument.body);
-    }
-
-    throw new Error(`Unknown body format: ${bodyFormat}`);
-  }, []);
-
-  const documentMenu = (
-    <DocumentMenu
-      document={workingDocument}
-      updateDocument={updateDocument}
-      invalidateEditor={false}
-      openFind={openFind}
-      showReplace
-      getEditorChildrenForExport={() =>
-        getFilteredEditor(editorRef.current!).children
-      }
-    />
-  );
-
   const withLinkModalProvider = useLinkModalProvider({
     onClose: restoreSelectionForEditor,
+  });
+
+  const plugins = usePlugins();
+
+  const initialValue = useInitialValue({
+    initialDocument,
+    plugins,
   });
 
   const plateComponent = useMemo(
     () => (
       <Plate
-        id="editor"
+        editorRef={editorRef}
         plugins={plugins}
         initialValue={initialValue}
         normalizeInitialValue
@@ -229,13 +138,30 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         <WithEditorState
           initialDocument={initialDocument}
           debouncedUpdateBody={debouncedUpdateBody}
-          titleRef={titleRef}
-          editorRef={editorRef}
-          restoreSelectionForEditor={restoreSelectionForEditor}
         />
       </Plate>
     ),
     [plugins]
+  );
+
+  const documentMenu = (
+    <DocumentMenu
+      statusHeader={
+        <DocumentStatusHeader
+          isDirty={isDirty}
+          isFailing={updateIsFailing}
+          lastSuccessfulUpdate={lastSuccessfulUpdate}
+        />
+      }
+      document={workingDocument}
+      updateDocument={updateDocument}
+      invalidateEditor={false}
+      openFind={openFind}
+      showReplace
+      getEditorChildrenForExport={() =>
+        getFilteredEditor(editorRef.current!).children
+      }
+    />
   );
 
   return (
@@ -252,7 +178,12 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
             ref={titleRef}
             initialTitle={initialDocument.title || ''}
             onChange={setTitle}
-            onEnter={() => editorElementRef.current?.focus()}
+            onEnter={() =>
+              setSelection(editorRef.current!, {
+                anchor: { path: [0, 0], offset: 0 },
+                focus: { path: [0, 0], offset: 0 },
+              })
+            }
           />
 
           {!tagsVisible && (
@@ -306,36 +237,16 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 interface WithEditorStateProps {
   initialDocument: Document;
   debouncedUpdateBody: (editor: PlateEditor) => void;
-  titleRef: MutableRefObject<HTMLTextAreaElement | null>;
-  editorRef: MutableRefObject<PlateEditor | null>;
-  restoreSelectionForEditor: () => void;
 }
 
 const WithEditorState = ({
   initialDocument,
   debouncedUpdateBody,
-  titleRef,
-  editorRef,
-  restoreSelectionForEditor,
 }: WithEditorStateProps) => {
-  const editor = usePlateEditorState('editor');
+  const editor = usePlateEditorState();
   const { useFormattingToolbar } = useContext() as {
     useFormattingToolbar: (children: ReactNode) => JSX.Element;
   };
-
-  useEffect(() => {
-    editorRef.current = editor;
-  }, [editor]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (initialDocument.blank) {
-        titleRef.current?.focus();
-      } else {
-        restoreSelectionForEditor();
-      }
-    }, 0);
-  }, []);
 
   useSaveSelection(initialDocument.id, editor);
 

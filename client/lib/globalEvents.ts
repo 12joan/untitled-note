@@ -19,7 +19,9 @@ export type GlobalEventTypes = BaseEventTypes & {
   ];
   's3File:uploadComplete': [{ s3FileId: number }];
   's3File:delete': [{ s3FileId: number }];
-  toast: [Toast];
+  'toast:upsert': [Toast];
+  'toast:close': [string];
+  'toast:reopen': [string];
   connectionStatusChanged: [ConnectionStatus];
   closeAllModalsExcept: [string];
 } & {

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { createToast } from '~/lib/createToast';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
 import { getKeyboardShortcutLabel } from '~/lib/keyboardShortcuts/getKeyboardShortcutLabel';
@@ -12,6 +11,7 @@ import {
 import { useKeyboardShortcuts } from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
 import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';
+import { createToast } from '~/lib/toasts';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useTemporaryState } from '~/lib/useTemporaryState';
