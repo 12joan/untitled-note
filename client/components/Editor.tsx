@@ -70,7 +70,13 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     }, 0);
   }, []);
 
-  const { workingDocument, updateDocument, updateIsDirty } = useSyncDocument({
+  const {
+    workingDocument,
+    updateDocument,
+    isDirty: updateIsDirty,
+    // isFailing: updateIsFailing,
+    // lastSuccessfulUpdate,
+  } = useSyncDocument({
     clientId,
     initialDocument,
   });

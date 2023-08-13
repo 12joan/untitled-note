@@ -6,9 +6,9 @@ import {
   ReplaceResult,
 } from '~/lib/apis/replace';
 import { useContext } from '~/lib/context';
-import { createToast } from '~/lib/createToast';
 import { handleReplaceError } from '~/lib/handleErrors';
 import { pluralize } from '~/lib/pluralize';
+import { createToast } from '~/lib/toasts';
 import { useModal } from '~/lib/useModal';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
