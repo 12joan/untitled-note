@@ -32,6 +32,7 @@ import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
+import { DocumentStatusHeader } from '~/components/DocumentStatusHeader';
 import { Dropdown } from '~/components/Dropdown';
 import { EditorTags } from '~/components/EditorTags';
 import { EditorTitle } from '~/components/EditorTitle';
@@ -74,8 +75,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     workingDocument,
     updateDocument,
     isDirty: updateIsDirty,
-    // isFailing: updateIsFailing,
-    // lastSuccessfulUpdate,
+    isFailing: updateIsFailing,
+    lastSuccessfulUpdate,
   } = useSyncDocument({
     clientId,
     initialDocument,
@@ -100,7 +101,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     750
   );
 
-  useBeforeUnload(updateIsDirty || titleIsDirty || bodyIsDirty);
+  const isDirty = updateIsDirty || titleIsDirty || bodyIsDirty;
+  useBeforeUnload(isDirty);
 
   const { findDialog, openFind } = useFind({
     editor: editorRef.current || undefined,
@@ -144,6 +146,13 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
   const documentMenu = (
     <DocumentMenu
+      statusHeader={
+        <DocumentStatusHeader
+          isDirty={isDirty}
+          isFailing={updateIsFailing}
+          lastSuccessfulUpdate={lastSuccessfulUpdate}
+        />
+      }
       document={workingDocument}
       updateDocument={updateDocument}
       invalidateEditor={false}

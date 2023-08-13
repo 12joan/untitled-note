@@ -21,9 +21,8 @@ export const useSyncDocument = ({
     projectId: number;
   };
 
-  const [lastSuccessfulUpdate, setLastSuccessfulUpdate] = useStateWhileMounted(
-    () => Date.parse(initialDocument.updated_at)
-  );
+  const [lastSuccessfulUpdate, setLastSuccessfulUpdate] =
+    useStateWhileMounted<Date>(() => new Date(initialDocument.updated_at));
 
   const [workingDocument, setWorkingDocument] =
     useStateWhileMounted<LocalDocument>(initialDocument);
@@ -67,7 +66,7 @@ export const useSyncDocument = ({
           updatedDocument
         );
         extractServerDrivenData(updateResult);
-        setLastSuccessfulUpdate(Date.now());
+        setLastSuccessfulUpdate(new Date());
         setChangesSinceLastUpdate(0);
       });
 
