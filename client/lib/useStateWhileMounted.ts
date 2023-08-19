@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useIsMounted } from '~/lib/useIsMounted';
 
 export const useStateWhileMounted = <T>(initialState: T | (() => T)) => {
@@ -6,11 +6,18 @@ export const useStateWhileMounted = <T>(initialState: T | (() => T)) => {
   const stateRef = useRef(state);
   const isMounted = useIsMounted();
 
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   const setStateWhileMounted = (argument: SetStateAction<T>) => {
     if (isMounted()) {
-      setState(argument as T);
-      stateRef.current = argument as T;
+      setState(argument);
     } else if (typeof argument === 'function') {
+      /**
+       * The setter function may have side effects. Call it anyway and discard
+       * the result.
+       */
       (argument as (state: T) => T)(stateRef.current!);
     }
   };
