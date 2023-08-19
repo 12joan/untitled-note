@@ -27,7 +27,7 @@ export const retry = <T>(
             reject(error);
           } else {
             // eslint-disable-next-line no-console
-            console.warn(error);
+            console.error(error);
             // eslint-disable-next-line no-console
             console.warn(`Retrying in ${interval}ms...`);
             setTimeout(() => attempt(retriesLeft - 1), interval);
