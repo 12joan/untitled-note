@@ -196,7 +196,10 @@ export const MentionInputComponent = ({
   useEditorEvent('change', () => (onChange as any)?.(), [onChange]);
   useEditorEvent('keyDown', (event) => onKeyDown?.(event as any), [onKeyDown]);
 
-  const comboboxFloating = useComboboxFloating({ allowOverflow: true });
+  const comboboxFloating = useComboboxFloating({
+    flip: true,
+    autoUpdate: true,
+  });
 
   const suggestionsContainer = showSuggestions && (
     <div
