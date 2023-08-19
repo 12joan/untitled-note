@@ -2,6 +2,7 @@ import {
   HTMLProps,
   InputHTMLAttributes,
   KeyboardEvent,
+  MouseEvent,
   ReactNode,
   useMemo,
   useState,
@@ -14,7 +15,7 @@ export interface UseComboboxOptions<T> {
   query: string;
   suggestions: T[];
   keyForSuggestion: (suggestion: T) => string;
-  onCommit: (suggestion: T) => void;
+  onCommit: (suggestion: T, altBehaviour: boolean) => void;
   completeOnTab?: boolean;
   hideOnBlur?: boolean;
   hideWhenNoSuggestions?: boolean;
@@ -69,8 +70,11 @@ export const useCombobox = <T>({
   const handleMouseOverSuggestion = (index: number) => () =>
     setActiveSuggestionIndex(index);
 
-  const handleClickSuggestion = (index: number) => () =>
-    onCommit(suggestions[index]);
+  const isAltBehaviour = (event: KeyboardEvent | MouseEvent) =>
+    event.ctrlKey || event.metaKey;
+
+  const handleClickSuggestion = (index: number) => (event: MouseEvent) =>
+    onCommit(suggestions[index], isAltBehaviour(event));
 
   const handleKeyDown = (event: KeyboardEvent) => {
     const step = (delta: number) => {
@@ -106,14 +110,15 @@ export const useCombobox = <T>({
           break;
 
         case 'Enter':
+        case 'MetaEnter':
           event.preventDefault();
-          onCommit(activeSuggestion);
+          onCommit(activeSuggestion, isAltBehaviour(event));
           break;
 
         case 'Tab':
           event.preventDefault();
           if (completeOnTab) {
-            onCommit(activeSuggestion);
+            onCommit(activeSuggestion, false);
           } else {
             step(1);
           }
