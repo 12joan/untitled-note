@@ -1,6 +1,17 @@
-import { offset, shift, size, useFloating } from '@floating-ui/react-dom';
+import {
+  autoPlacement,
+  autoUpdate,
+  offset,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom';
 
-export const useComboboxFloating = ({ allowOverflow = false } = {}) => {
+export const useComboboxFloating = ({
+  flip: shouldFlip = false,
+  autoUpdate: shouldAutoUpdate = false,
+  padding = 10,
+} = {}) => {
   const {
     x: suggestionsX,
     y: suggestionsY,
@@ -8,19 +19,23 @@ export const useComboboxFloating = ({ allowOverflow = false } = {}) => {
     floating: suggestionsRef,
     strategy: suggestionsPosition,
   } = useFloating({
-    placement: 'bottom-start',
     middleware: [
-      offset(10),
-      shift(),
+      shouldFlip &&
+        autoPlacement({
+          allowedPlacements: ['top-start', 'bottom-start'],
+        }),
+      offset(padding),
+      shift({
+        padding,
+      }),
       size({
         apply: ({ availableHeight, elements }) => {
-          if (!allowOverflow) {
-            elements.floating.style.maxHeight = `${availableHeight}px`;
-          }
+          elements.floating.style.maxHeight = `${availableHeight}px`;
         },
-        padding: 10,
+        padding,
       }),
     ],
+    whileElementsMounted: shouldAutoUpdate ? autoUpdate : undefined,
   });
 
   const suggestionsProps = {
