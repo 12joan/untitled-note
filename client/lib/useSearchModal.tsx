@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { fetchSearchResults } from '~/lib/apis/search';
 import { searchCommands } from '~/lib/commands';
 import { useContext } from '~/lib/context';
@@ -30,6 +29,7 @@ import SearchIcon from '~/components/icons/SearchIcon';
 import TagIcon from '~/components/icons/TagIcon';
 import { StyledModal, StyledModalProps } from '~/components/Modal';
 import { ProjectIcon } from '~/components/ProjectIcon';
+import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 type Suggestion = {
   key: string;
@@ -114,24 +114,14 @@ const commandsSource = makeFilteredListSource({
   getLabel: ({ label }) => label,
   getDescription: ({ search: { description } }) => description,
   getIcon: ({ search: { icon } }) => icon,
-  action: ({ action }) => action,
+  action: ({ action }, altBehaviour) => action(altBehaviour),
 });
 
 const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
   const [iicElements, deployIIC] = useDeployIICs();
 
-  const navigate = useNavigate();
-
-  const openIIC = liftToIIC(
-    (path: string, newTab = false) => {
-      if (newTab) {
-        window.open(path, '_blank');
-      } else {
-        navigate(path);
-      }
-    },
-    { layoutEffect: false }
-  );
+  const navigateOrOpen = useNavigateOrOpen();
+  const openIIC = liftToIIC(navigateOrOpen, { layoutEffect: false });
 
   const {
     projects,
