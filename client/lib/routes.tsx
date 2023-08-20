@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { useContext } from '~/lib/context';
 import { getLastView } from '~/lib/restoreProjectView';
+import { newDocumentToken } from '~/components/AwaitNewDocument';
 import { Link, LinkProps } from '~/components/Link';
 
 type HasRequiredKeys<T> = Exclude<
@@ -64,25 +65,46 @@ type ProjectTagRoute = ProjectRoute & {
   tagId: number;
 };
 
+type ProjectOptionalTagRoute = ProjectRoute & {
+  tagId?: number;
+};
+
 export const logoutPath = '/auth/logout';
+
 export const awaitRedirectPath = ({ projectId }: Partial<ProjectRoute>) =>
   projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect';
+
 export const overviewPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/overview`;
+
 export const projectPath = ({ projectId }: ProjectRoute) =>
   getLastView(projectId) ?? overviewPath({ projectId });
+
 export const editProjectPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/edit`;
+
 export const recentlyViewedPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/recently_viewed`;
+
 export const tagPath = ({ projectId, tagId }: ProjectTagRoute) =>
   `/projects/${projectId}/tags/${tagId}`;
+
 export const tagsPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/tags`;
+
 export const documentPath = ({ projectId, documentId }: ProjectDocumentRoute) =>
   `/projects/${projectId}/editor/${documentId}`;
+
 export const recentlyViewedDocumentPath = (args: ProjectDocumentRoute) =>
   `${documentPath(args)}?recently_viewed`;
+
+export const newDocumentPath = ({
+  projectId,
+  tagId,
+}: ProjectOptionalTagRoute) =>
+  `/projects/${projectId}${
+    tagId ? `/tags/${tagId}` : ''
+  }/new_document#${newDocumentToken}`;
 
 export const LogoutLink = forwardRef(
   (
@@ -103,3 +125,4 @@ export const DocumentLink = createLinkComponent(documentPath);
 export const RecentlyViewedDocumentLink = createLinkComponent(
   recentlyViewedDocumentPath
 );
+export const NewDocumentLink = createLinkComponent(newDocumentPath);

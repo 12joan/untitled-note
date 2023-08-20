@@ -16,7 +16,7 @@ export const useApplicationKeyboardShortcuts = () => {
       keyboardShortcuts.some(
         ({ config, sequential, action, overrideAction }) => {
           if (config && compareKeyboardShortcut(config, event, sequential)) {
-            deployIIC(overrideAction ? overrideAction(event) : action);
+            deployIIC(overrideAction ? overrideAction(event) : action());
             event.preventDefault();
             return true;
           }

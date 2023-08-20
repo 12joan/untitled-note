@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useContext } from '~/lib/context';
 import { envSpecific } from '~/lib/environment';
 import { IIC, iic } from '~/lib/iic';
@@ -7,6 +6,7 @@ import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
   editProjectPath,
+  newDocumentPath,
   overviewPath,
   projectPath,
   recentlyViewedPath,
@@ -14,18 +14,18 @@ import {
 } from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { Project } from '~/lib/types';
-import { useNewDocument } from '~/lib/useNewDocument';
 import AccountIcon from '~/components/icons/AccountIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
+import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 export type BaseCommand = {
   id: string;
   label: string;
-  action: IIC;
+  action: (altBehaviour?: boolean) => IIC;
 };
 
 export type SearchCommand = BaseCommand & {
@@ -48,8 +48,9 @@ export type Command = SearchCommand | KeyboardShortcutCommand;
 
 const noopIIC = iic(() => () => {});
 
-const navigateInProjectIIC = (
-  pathFn: (options: { projectId: number }) => string
+const openInProjectIIC = (
+  pathFn: (options: { projectId: number }) => string,
+  newTab: boolean
 ) =>
   iic(
     () => {
@@ -57,9 +58,9 @@ const navigateInProjectIIC = (
         projectId: number;
       };
 
-      const navigate = useNavigate();
+      const navigateOrOpen = useNavigateOrOpen();
 
-      return () => navigate(pathFn({ projectId }));
+      return () => navigateOrOpen(pathFn({ projectId }), newTab);
     },
     { layoutEffect: false }
   );
@@ -73,7 +74,7 @@ const commands: Command[] = [
       hint: 'Search project',
       config: parseKeyboardShortcut('mod+k'),
     },
-    action: iic(() => (useContext() as any).toggleSearchModal),
+    action: () => iic(() => (useContext() as any).toggleSearchModal),
   },
   {
     id: 'new-document',
@@ -91,7 +92,7 @@ const commands: Command[] = [
         },
       }),
     },
-    action: iic(useNewDocument, { layoutEffect: false }),
+    action: (newTab = false) => openInProjectIIC(newDocumentPath, newTab),
   },
   {
     id: 'settings',
@@ -109,7 +110,7 @@ const commands: Command[] = [
         },
       }),
     },
-    action: iic(() => (useContext() as any).toggleSettingsModal),
+    action: () => iic(() => (useContext() as any).toggleSettingsModal),
   },
   {
     id: 'account-info',
@@ -121,7 +122,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Open account info',
     },
-    action: iic(() => (useContext() as any).toggleAccountModal),
+    action: () => iic(() => (useContext() as any).toggleAccountModal),
   },
   {
     id: 'cycle-focus',
@@ -130,7 +131,7 @@ const commands: Command[] = [
       hint: 'Cycle focus between the main sections of the interface',
       config: parseKeyboardShortcut('alt+F6'),
     },
-    action: iic(() => (useContext() as any).cycleFocus),
+    action: () => iic(() => (useContext() as any).cycleFocus),
   },
   {
     id: 'switch-project',
@@ -153,7 +154,7 @@ const commands: Command[] = [
               projects: Project[];
             };
 
-            const navigate = useNavigate();
+            const navigateOrOpen = useNavigateOrOpen();
 
             const n = getSequential(event);
             const project = projects.filter((project) => !project.archived_at)[
@@ -162,14 +163,14 @@ const commands: Command[] = [
 
             return () => {
               if (project) {
-                navigate(projectPath({ projectId: project.id }));
+                navigateOrOpen(projectPath({ projectId: project.id }));
               }
             };
           },
           { layoutEffect: false }
         ),
     },
-    action: noopIIC,
+    action: () => noopIIC,
   },
   {
     id: 'overview',
@@ -181,7 +182,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to overview',
     },
-    action: navigateInProjectIIC(overviewPath),
+    action: (newTab = false) => openInProjectIIC(overviewPath, newTab),
   },
   {
     id: 'edit-project',
@@ -193,7 +194,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to edit project',
     },
-    action: navigateInProjectIIC(editProjectPath),
+    action: (newTab = false) => openInProjectIIC(editProjectPath, newTab),
   },
   {
     id: 'recently-viewed',
@@ -205,7 +206,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to recently viewed',
     },
-    action: navigateInProjectIIC(recentlyViewedPath),
+    action: (newTab = false) => openInProjectIIC(recentlyViewedPath, newTab),
   },
   {
     id: 'all-tags',
@@ -217,7 +218,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Jump to all tags',
     },
-    action: navigateInProjectIIC(tagsPath),
+    action: (newTab = false) => openInProjectIIC(tagsPath, newTab),
   },
 ];
 

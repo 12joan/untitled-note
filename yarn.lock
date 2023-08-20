@@ -1508,6 +1508,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-cookie@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@types/js-cookie@npm:3.0.3"
+  checksum: 927254ec37ce4fbe4d9d54f53a446b4351259799d9933db5808ddb7c430396aa2496bdd0a4e47e1b56048ffbec98645cbd4daa9e3ed9a6fff55e25eb640fcb15
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -5293,6 +5300,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 2dbd2809c6180fbcf060c6957cb82dbb47edae0ead6bd71cbeedf448aa6b6923115003b995f7d3e3077bfe2cb76295ea6b584eb7196cca8ba0a09f389f64967a
+  languageName: node
+  linkType: hard
+
 "js-sdsl@npm:^4.1.4":
   version: 4.4.0
   resolution: "js-sdsl@npm:4.4.0"
@@ -5839,6 +5853,7 @@ __metadata:
     "@tailwindcss/line-clamp": ^0.4.2
     "@tailwindcss/typography": ^0.5.9
     "@tippyjs/react": ^4.2.6
+    "@types/js-cookie": ^3.0.3
     "@types/node": ^18.15.11
     "@types/rails__actioncable": ^6.1.6
     "@types/react": ^18.0.35
@@ -5867,6 +5882,7 @@ __metadata:
     eslint-plugin-simple-import-sort: ^10.0.0
     human-readable: ^0.2.1
     javascript-time-ago: ^2.5.9
+    js-cookie: ^3.0.5
     locale-includes: ^1.0.5
     postcss: ^8.4.21
     postcss-flexbugs-fixes: ^5.0.2

@@ -1,6 +1,6 @@
 import React from 'react';
+import { NewDocumentLink } from '~/lib/routes';
 import { Tag } from '~/lib/types';
-import { useNewDocument } from '~/lib/useNewDocument';
 import { useRenameTag } from '~/lib/useRenameTag';
 import { DropdownItem } from '~/components/Dropdown';
 import EditIcon from '~/components/icons/EditIcon';
@@ -11,15 +11,14 @@ export interface TagMenuProps {
 }
 
 export const TagMenu = ({ tag }: TagMenuProps) => {
-  const createNewDocument = useNewDocument();
-
   const { modal: renameTagModal, open: openRenameTagModal } = useRenameTag(tag);
 
   return (
     <>
       <DropdownItem
         icon={NewDocumentIcon}
-        onClick={() => createNewDocument({ tag })}
+        as={NewDocumentLink}
+        to={{ tagId: tag.id }}
       >
         New document with tag
       </DropdownItem>

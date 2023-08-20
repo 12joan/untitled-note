@@ -5,7 +5,7 @@ let promisePath: Promise<string> | null = null;
 let fallbackPath: string | null = null;
 
 export interface AwaitRedirectOptions {
-  navigate: (path: string) => void;
+  navigate?: (path: string) => void;
   promisePath: Promise<string>;
   fallbackPath: string;
   projectId?: number;
@@ -16,10 +16,12 @@ export const awaitRedirect = ({
   promisePath: _promisePath,
   fallbackPath: _fallbackPath,
   projectId,
-}: AwaitRedirectOptions) => {
+}: AwaitRedirectOptions): string => {
   promisePath = _promisePath;
   fallbackPath = _fallbackPath;
-  navigate(awaitRedirectPath({ projectId }));
+  const path = awaitRedirectPath({ projectId });
+  navigate?.(path);
+  return path;
 };
 
 export const useAwaitRedirect = (callback: (path: string) => void) => {

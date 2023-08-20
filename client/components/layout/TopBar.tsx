@@ -1,9 +1,8 @@
 import React, { ElementType, forwardRef } from 'react';
 import { useContext } from '~/lib/context';
-import { LogoutLink } from '~/lib/routes';
+import { LogoutLink, NewDocumentLink } from '~/lib/routes';
 import { Project } from '~/lib/types';
 import { useBreakpoints } from '~/lib/useBreakpoints';
-import { useNewDocument } from '~/lib/useNewDocument';
 import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
 import AccountIcon from '~/components/icons/AccountIcon';
 import LogoutIcon from '~/components/icons/LogoutIcon';
@@ -46,14 +45,8 @@ export const TopBar = ({
 
   const { isXs } = useBreakpoints();
 
-  const createNewDocument = useNewDocument();
-
   const mainActions: Action[] = [
-    {
-      icon: NewDocumentIcon,
-      label: 'New document',
-      onClick: createNewDocument,
-    },
+    { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
     { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
     { icon: SettingsIcon, label: 'Settings', onClick: toggleSettingsModal },
   ];

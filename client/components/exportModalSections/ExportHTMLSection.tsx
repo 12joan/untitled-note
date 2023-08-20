@@ -1,8 +1,8 @@
 import React, { useMemo, useReducer, useRef, useState } from 'react';
 import { getEditorString, Plate, PlateEditor, Value } from '@udecode/plate';
+import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { copyText } from '~/lib/copyText';
 import { getHtmlForExport } from '~/lib/editor/getHtmlForExport';
-import { setLocalStorage, useLocalStorage } from '~/lib/localStorage';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
 import { ExportModalSectionProps } from './types';

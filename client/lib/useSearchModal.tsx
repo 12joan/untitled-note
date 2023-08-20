@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { fetchSearchResults } from '~/lib/apis/search';
 import { searchCommands } from '~/lib/commands';
 import { useContext } from '~/lib/context';
@@ -30,13 +29,14 @@ import SearchIcon from '~/components/icons/SearchIcon';
 import TagIcon from '~/components/icons/TagIcon';
 import { StyledModal, StyledModalProps } from '~/components/Modal';
 import { ProjectIcon } from '~/components/ProjectIcon';
+import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 type Suggestion = {
   key: string;
   label: string;
   icon?: ReactNode;
   description?: string | { __html: string };
-  onCommit: IIC;
+  onCommit: (altBehaviour: boolean) => IIC;
 };
 
 interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
@@ -44,7 +44,7 @@ interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
   getLabel: (item: T) => Suggestion['label'];
   getIcon?: (item: T) => Suggestion['icon'];
   getDescription?: (item: T) => Suggestion['description'];
-  action: (item: T) => IIC;
+  action: (item: T, altBehaviour: boolean) => IIC;
 }
 
 const makeDynamicSuggestion = <T,>(
@@ -63,7 +63,7 @@ const makeDynamicSuggestion = <T,>(
   label: getLabel(item),
   icon: getIcon(item),
   description: getDescription(item),
-  onCommit: handleAction(action(item)),
+  onCommit: (altBehaviour: boolean) => handleAction(action(item, altBehaviour)),
   ...rest,
 });
 
@@ -114,14 +114,14 @@ const commandsSource = makeFilteredListSource({
   getLabel: ({ label }) => label,
   getDescription: ({ search: { description } }) => description,
   getIcon: ({ search: { icon } }) => icon,
-  action: ({ action }) => action,
+  action: ({ action }, altBehaviour) => action(altBehaviour),
 });
 
 const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
   const [iicElements, deployIIC] = useDeployIICs();
 
-  const navigate = useNavigate();
-  const navigateIIC = liftToIIC<[string]>(navigate, { layoutEffect: false });
+  const navigateOrOpen = useNavigateOrOpen();
+  const openIIC = liftToIIC(navigateOrOpen, { layoutEffect: false });
 
   const {
     projects,
@@ -198,7 +198,8 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
             className="w-5 h-5 rounded text-xs shadow-sm"
           />
         ),
-        action: ({ id }) => navigateIIC(projectPath({ projectId: id })),
+        action: ({ id }, newTab) =>
+          openIIC(projectPath({ projectId: id }), newTab),
         description: 'Switch to project',
       }),
 
@@ -209,8 +210,8 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         getKey: ({ id }) => `tag-${id}`,
         getLabel: ({ text }) => text,
         icon: <TagIcon size="1.25em" noAriaLabel />,
-        action: ({ id }) =>
-          navigateIIC(tagPath({ projectId: currentProject.id, tagId: id })),
+        action: ({ id }, newTab) =>
+          openIIC(tagPath({ projectId: currentProject.id, tagId: id }), newTab),
         description: 'Jump to tag',
       }),
 
@@ -224,9 +225,10 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         getLabel: ({ title }) => title,
         icon: <DocumentIcon size="1.25em" noAriaLabel />,
         description: 'Open document',
-        action: ({ id }) =>
-          navigateIIC(
-            documentPath({ projectId: currentProject.id, documentId: id })
+        action: ({ id }, newTab) =>
+          openIIC(
+            documentPath({ projectId: currentProject.id, documentId: id }),
+            newTab
           ),
       }),
 
@@ -244,9 +246,10 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
 
           return snippet.length > 0 ? { __html: snippet } : 'Open document';
         },
-        action: ({ document: { id } }) =>
-          navigateIIC(
-            documentPath({ projectId: currentProject.id, documentId: id })
+        action: ({ document: { id } }, newTab) =>
+          openIIC(
+            documentPath({ projectId: currentProject.id, documentId: id }),
+            newTab
           ),
       }),
     ];
@@ -272,7 +275,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
     query: trimmedSearchQuery,
     suggestions,
     keyForSuggestion: ({ key }) => key,
-    onCommit: ({ onCommit }) => deployIIC(onCommit),
+    onCommit: ({ onCommit }, altBehaviour) => deployIIC(onCommit(altBehaviour)),
     hideWhenNoSuggestions: false,
   });
 

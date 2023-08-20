@@ -2,7 +2,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   useLocalStorage,
-} from '~/lib/localStorage';
+} from '~/lib/browserStorage';
 
 export interface MakeLocalHistoryOptions {
   key: string;
