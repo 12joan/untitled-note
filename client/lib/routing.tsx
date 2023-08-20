@@ -4,6 +4,7 @@ import { useContext } from '~/lib/context';
 import { forwardParams } from '~/lib/forwardParams';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
 import { Project } from '~/lib/types';
+import { AwaitNewDocument } from '~/components/AwaitNewDocument';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { ProjectView } from '~/components/layout/ProjectView';
 import { RestoreLastOpenProject } from '~/components/RestoreLastOpenProject';
@@ -90,6 +91,16 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
         <ProjectView
           childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }}
         />
+      )),
+    },
+    {
+      path: 'new_document',
+      element: forwardParams(() => <AwaitNewDocument />),
+    },
+    {
+      path: 'tags/:tagId/new_document',
+      element: forwardParams(({ tagId }: { tagId: string }) => (
+        <AwaitNewDocument tagId={parseInt(tagId, 10)} />
       )),
     },
     {

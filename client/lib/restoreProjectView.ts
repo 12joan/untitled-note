@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage } from '~/lib/localStorage';
+import { getLocalStorage, setLocalStorage } from '~/lib/browserStorage';
 
 export const setLastView = (projectId: number, view: string) => {
   setLocalStorage(`lastView:${projectId}`, view);

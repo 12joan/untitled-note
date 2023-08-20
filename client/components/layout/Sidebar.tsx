@@ -12,6 +12,7 @@ import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
 import { PolyProps, PolyRef } from '~/lib/polymorphic';
 import {
   DocumentLink,
+  NewDocumentLink,
   OverviewLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
@@ -19,7 +20,6 @@ import {
   TagsLink,
 } from '~/lib/routes';
 import { PartialDocument, Tag } from '~/lib/types';
-import { useNewDocument } from '~/lib/useNewDocument';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { ContextMenuDropdown } from '~/components/Dropdown';
 import { IconProps } from '~/components/icons/makeIcon';
@@ -47,8 +47,6 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
     toggleSearchModal: () => void;
   };
 
-  const createNewDocument = useNewDocument();
-
   return (
     <ContextProvider onButtonClick={onButtonClick}>
       <div className="w-48 lg:w-56 space-y-5 pb-3">
@@ -60,9 +58,9 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
             label="Overview"
           />
           <ButtonWithIcon
+            as={NewDocumentLink}
             icon={NewDocumentIcon}
             label="New document"
-            onClick={() => createNewDocument()}
           />
           <ButtonWithIcon
             icon={SearchIcon}

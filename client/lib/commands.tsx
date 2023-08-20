@@ -7,6 +7,7 @@ import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
   editProjectPath,
+  newDocumentPath,
   overviewPath,
   projectPath,
   recentlyViewedPath,
@@ -14,7 +15,6 @@ import {
 } from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
 import { Project } from '~/lib/types';
-import { useNewDocument } from '~/lib/useNewDocument';
 import AccountIcon from '~/components/icons/AccountIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
@@ -91,7 +91,7 @@ const commands: Command[] = [
         },
       }),
     },
-    action: iic(useNewDocument, { layoutEffect: false }),
+    action: navigateInProjectIIC(newDocumentPath),
   },
   {
     id: 'settings',
