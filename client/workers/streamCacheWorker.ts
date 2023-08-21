@@ -60,6 +60,11 @@ self.addEventListener('connect', (event: any) => {
       const cacheDb = await cacheDbPromise;
       await cacheDb.delete('streamResults', key);
     },
+
+    async clear() {
+      const cacheDb = await cacheDbPromise;
+      await cacheDb.clear('streamResults');
+    },
   };
 
   const port = event.ports[0];

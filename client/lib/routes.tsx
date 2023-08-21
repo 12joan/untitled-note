@@ -1,9 +1,4 @@
-import React, {
-  AnchorHTMLAttributes,
-  ForwardedRef,
-  forwardRef,
-  Ref,
-} from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import { useContext } from '~/lib/context';
 import { getLastView } from '~/lib/restoreProjectView';
 import { newDocumentToken } from '~/components/AwaitNewDocument';
@@ -69,8 +64,6 @@ type ProjectOptionalTagRoute = ProjectRoute & {
   tagId?: number;
 };
 
-export const logoutPath = '/auth/logout';
-
 export const awaitRedirectPath = ({ projectId }: Partial<ProjectRoute>) =>
   projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect';
 
@@ -105,15 +98,6 @@ export const newDocumentPath = ({
   `/projects/${projectId}${
     tagId ? `/tags/${tagId}` : ''
   }/new_document#${newDocumentToken}`;
-
-export const LogoutLink = forwardRef(
-  (
-    props: AnchorHTMLAttributes<HTMLAnchorElement>,
-    ref: Ref<HTMLAnchorElement>
-  ) => {
-    return <a ref={ref} href={logoutPath} {...props} />;
-  }
-);
 
 export const OverviewLink = createLinkComponent(overviewPath);
 export const ProjectLink = createLinkComponent(projectPath);

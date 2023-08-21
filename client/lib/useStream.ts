@@ -1,12 +1,7 @@
 import { DependencyList, useLayoutEffect, useState } from 'react';
-import { wrap } from 'comlink';
 import { Future, pendingFuture, resolvedFuture } from '~/lib/monads';
-import { Stream, StreamCacheWorkerAPI } from '~/lib/types';
-
-import StreamCacheWorker from '~/workers/streamCache?sharedworker';
-
-const streamCacheWorker = new StreamCacheWorker();
-const streamCache = wrap<StreamCacheWorkerAPI>(streamCacheWorker.port);
+import { streamCache } from '~/lib/streamCacheAdapter';
+import { Stream } from '~/lib/types';
 
 export type UseStreamOptions<T> = {
   getStream: (consumer: (data: T) => void) => Stream;

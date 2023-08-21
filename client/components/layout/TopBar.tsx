@@ -1,6 +1,6 @@
 import React, { ElementType, forwardRef } from 'react';
 import { useContext } from '~/lib/context';
-import { LogoutLink, NewDocumentLink } from '~/lib/routes';
+import { NewDocumentLink } from '~/lib/routes';
 import { Project } from '~/lib/types';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
@@ -13,6 +13,7 @@ import OfflineIcon from '~/components/icons/OfflineIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import SidebarIcon from '~/components/icons/SidebarIcon';
+import { LogoutButton } from '~/components/LogoutButton';
 import { Tooltip } from '~/components/Tooltip';
 
 import { useDisconnected } from '~/channels/connectionStatus';
@@ -53,7 +54,7 @@ export const TopBar = ({
 
   const accountActions: Action[] = [
     { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
-    { icon: LogoutIcon, label: 'Log out', as: LogoutLink },
+    { icon: LogoutIcon, label: 'Log out', as: LogoutButton },
   ];
 
   const isDisconnected = useDisconnected();

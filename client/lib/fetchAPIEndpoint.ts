@@ -1,3 +1,5 @@
+import { csrfToken } from '~/lib/csrfToken';
+
 export interface FetchAPIEndpointOptions {
   path: string;
   method?: string;
@@ -20,9 +22,7 @@ export const fetchAPIEndpoint = ({
   return fetch(pathWithQuery, {
     method,
     headers: {
-      'X-CSRF-Token': document
-        .querySelector("[name='csrf-token']")!
-        .getAttribute('content')!,
+      'X-CSRF-Token': csrfToken,
       'Content-Type': 'application/json',
       ...headers,
     },
