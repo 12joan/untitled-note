@@ -16,10 +16,32 @@ export const App = () => {
     (x) => x + 1,
     0
   );
-  const futureProjects = useStream(streamProjects, [projectsCacheKey]);
 
-  const futureQuotaUsage = useStream(streamQuotaUsage, []);
-  const futureFiles = useStream(streamFiles, []);
+  const futureProjects = useStream(
+    {
+      getStream: streamProjects,
+      cacheKey: 'projects',
+      disableCacheLoad: projectsCacheKey > 0,
+    },
+    [projectsCacheKey]
+  );
+
+  const futureQuotaUsage = useStream(
+    {
+      getStream: streamQuotaUsage,
+      cacheKey: 'quota-usage',
+    },
+    []
+  );
+
+  const futureFiles = useStream(
+    {
+      getStream: streamFiles,
+      cacheKey: 'files',
+    },
+    []
+  );
+
   const futureRemainingQuota = mapFuture(
     futureQuotaUsage,
     ({ quota, used }) => quota - used

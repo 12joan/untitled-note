@@ -33,14 +33,17 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
 
   const futureDocuments: Future<PartialDocument[]> = mapFuture(
     useStream<PartialDocument[]>(
-      (resolve) =>
-        streamDocuments(
-          projectId,
-          {
-            tag_id: tagId,
-          },
-          resolve
-        ),
+      {
+        getStream: (resolve) =>
+          streamDocuments(
+            projectId,
+            {
+              tag_id: tagId,
+            },
+            resolve
+          ),
+        cacheKey: `tag-documents-${tagId}`,
+      },
       [tagId]
     ),
     (documents) => documents.filter((doc) => !doc.blank)

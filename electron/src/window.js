@@ -39,7 +39,7 @@ const getWindowSettings = () => ({
 });
 
 const showErrorPage = (browserWindow) =>
-  browserWindow.loadFile(path.join(__dirname, '../pages/error.html'));
+  browserWindow.loadFile(path.join(__dirname, '../dist/error.html'));
 
 const loadApp = async (browserWindow, url) => {
   await browserWindow.loadFile(path.join(__dirname, '../dist/loading.html'));
@@ -73,7 +73,7 @@ const createWindow = async ({
   webContents.on('did-fail-load', () => showErrorPage(browserWindow));
 
   // Reload app via IPC
-  ipcMain.on('reload-app', loadApp);
+  ipcMain.on('reload-app', () => loadApp(browserWindow, url));
 
   // Prevent flash of white screen
   browserWindow.once('ready-to-show', () => browserWindow.show());

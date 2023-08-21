@@ -12,6 +12,7 @@
     "publish-app": "electron-forge publish"
   },
   "dependencies": {
+    "electron": "^22.2.0",
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "update-electron-app": "^2.0.1"
