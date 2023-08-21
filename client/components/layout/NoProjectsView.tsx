@@ -1,7 +1,7 @@
 import React from 'react';
-import { LogoutLink } from '~/lib/routes';
 import { useNewProject } from '~/lib/useNewProject';
 import { useTitle } from '~/lib/useTitle';
+import { LogoutButton } from '~/components/LogoutButton';
 
 export const NoProjectsView = () => {
   useTitle('Create a project');
@@ -27,9 +27,9 @@ export const NoProjectsView = () => {
           New project
         </button>
 
-        <p>
-          <LogoutLink className="btn btn-link font-medium">Log out</LogoutLink>
-        </p>
+        <LogoutButton className="btn btn-link font-medium">
+          Log out
+        </LogoutButton>
       </div>
     </div>
   );

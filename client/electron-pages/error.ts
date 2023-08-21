@@ -3,10 +3,10 @@ const redirectToApp = window.electron.reloadApp;
 if (window.location.hash === '#reload') {
   redirectToApp();
 } else {
-  window.history.replaceState(null, null, '#reload');
+  window.history.replaceState(null, '', '#reload');
 }
 
-let easterEgg = null;
+let easterEgg: HTMLParagraphElement | null = null;
 const easterEggParts = [
   'you CLICK app icon?',
   ' you click their image like the button?',
@@ -18,13 +18,13 @@ const easterEggParts = [
 ];
 let easterEggIndex = -1;
 
-const easterEggHandler = (event) => {
+const easterEggHandler = (event: Event) => {
   if (easterEgg === null) {
     easterEgg = document.createElement('p');
     easterEgg.style.fontStyle = 'italic';
     easterEgg.style.fontSize = '1.5em';
     easterEgg.ariaLive = 'assertive';
-    event.target.parentNode.appendChild(easterEgg);
+    (event.target as HTMLElement).parentNode!.appendChild(easterEgg);
   }
 
   const nextPart = easterEggParts[++easterEggIndex];
@@ -39,7 +39,7 @@ const easterEggHandler = (event) => {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  const appIcon = document.getElementById('app-icon');
+  const appIcon = document.getElementById('app-icon')!;
   appIcon.addEventListener('click', easterEggHandler);
 
   appIcon.addEventListener('keydown', (event) => {
@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.getElementById('retry').addEventListener('click', () => {
+  document.getElementById('retry')!.addEventListener('click', () => {
     redirectToApp();
   });
 });

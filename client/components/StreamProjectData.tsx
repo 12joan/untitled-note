@@ -23,20 +23,26 @@ export const StreamProjectData = ({
   const recentlyViewedDocuments = useRecentlyViewedDocuments();
 
   const futureTags = useStream<Tag[]>(
-    (resolve) => streamTags(projectId, resolve),
+    {
+      getStream: (resolve) => streamTags(projectId, resolve),
+      cacheKey: `project-tags-${projectId}`,
+    },
     [projectId]
   );
 
   const futurePartialDocumentsIncludingBlank = useStream<PartialDocument[]>(
-    (resolve) =>
-      streamDocuments(
-        projectId,
-        {
-          sort_by: 'created_at',
-          sort_order: 'desc',
-        },
-        resolve
-      ),
+    {
+      getStream: (resolve) =>
+        streamDocuments(
+          projectId,
+          {
+            sort_by: 'created_at',
+            sort_order: 'desc',
+          },
+          resolve
+        ),
+      cacheKey: `project-documents-${projectId}`,
+    },
     [projectId]
   );
 
