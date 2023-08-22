@@ -1,15 +1,15 @@
 {
   "name": "note-electron",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
   "main": "src/main.js",
   "scripts": {
     "build": "cd .. && yarn build-electron",
     "start": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env development",
     "start-staging": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env staging",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish-app": "electron-forge publish"
+    "package": "electron-forge package --arch universal --platform=dawin",
+    "make": "electron-forge make --arch universal --platform=darwin",
+    "publish-app": "electron-forge publish --arch=universal --platform=darwin"
   },
   "dependencies": {
     "electron": "^22.2.0",

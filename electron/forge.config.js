@@ -7,7 +7,13 @@ module.exports = {
     executableName: 'UntitledNoteApp',
     appBundleId: 'xyz.untitlednote.app',
     icon: 'icons/app-icon',
-    osxSign: {},
+    ignore: [
+      /^\/out\//g, // See https://github.com/electron/forge/issues/3310
+      '/\\.yarn($|/)',
+    ],
+    osxSign: {
+      identity: credentials.osxSign.identity,
+    },
     osxNotarize: {
       tool: 'notarytool',
       keychainProfile: credentials.osxNotarize.keychainProfile,
