@@ -11,6 +11,7 @@ import { App } from '~/components/layout/App';
 
 import '~/channels';
 import '~/lib/commonEntrypoint';
+import '~/lib/registerServiceWorker';
 
 const ElectronNavigation = () => {
   const navigate = useNavigate();
