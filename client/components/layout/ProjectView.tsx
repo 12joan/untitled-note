@@ -12,6 +12,7 @@ import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { ContextProvider, useContext } from '~/lib/context';
 import { cycleFocus } from '~/lib/cycleFocus';
+import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
@@ -145,13 +146,15 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const keyboardShortcutIICElements = useApplicationKeyboardShortcuts();
 
+  const editorFontSize = useEditorFontSize();
+  const narrowWidth = 640 * Math.max(editorFontSize / 100, 1);
+
   const narrowLeftMargin = useMemo(() => {
-    const contentWidth = 640; // from .narrow
-    const centerPosition = (viewportWidth - contentWidth) / 2;
+    const centerPosition = (viewportWidth - narrowWidth) / 2;
     const centerMargin = Math.max(0, centerPosition - mainBounds.left);
-    const maxMargin = Math.max(0, mainBounds.width - contentWidth);
+    const maxMargin = Math.max(0, mainBounds.width - narrowWidth);
     return Math.min(centerMargin, maxMargin);
-  }, [viewportWidth, mainBounds.left, mainBounds.width]);
+  }, [narrowWidth, viewportWidth, mainBounds.left, mainBounds.width]);
 
   return (
     <ContextProvider
@@ -180,6 +183,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
               marginTop: mainBounds.top,
               marginLeft: mainBounds.left,
               width: mainBounds.width,
+              '--narrow-width': `${narrowWidth}px`,
               '--narrow-margin-left': `${narrowLeftMargin}px`,
               paddingBottom: 'env(safe-area-inset-bottom)',
             } as CSSProperties

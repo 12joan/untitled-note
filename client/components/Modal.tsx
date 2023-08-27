@@ -40,12 +40,7 @@ export interface ModalTitleProps {
 }
 
 export const ModalTitle = ({ children }: ModalTitleProps) => {
-  return (
-    <Dialog.Title
-      className="text-xl font-medium select-none"
-      children={children}
-    />
-  );
+  return <Dialog.Title className="h2 select-none" children={children} />;
 };
 
 export interface ModalTitleWithCloseButtonProps extends ModalTitleProps {

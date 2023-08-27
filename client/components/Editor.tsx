@@ -24,6 +24,7 @@ import {
 import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useSyncDocument } from '~/lib/editor/useSyncDocument';
+import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { Document } from '~/lib/types';
 import { useBeforeUnload } from '~/lib/useBeforeUnload';
@@ -53,6 +54,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const tagsRef = useRef<HTMLDivElement>();
   const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<PlateEditor>(null);
+
+  const fontSize = useEditorFontSizeCSSValue();
 
   const [tagsVisible, setTagsVisible] = useState(
     initialDocument.tags.length > 0
@@ -131,8 +134,9 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         normalizeInitialValue
         editableProps={{
           className:
-            'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white text-lg no-focus-ring children:lg:narrow',
+            'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white no-focus-ring children:lg:narrow',
           placeholder: 'Write something...',
+          style: { fontSize },
         }}
       >
         <WithEditorState
@@ -141,7 +145,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         />
       </Plate>
     ),
-    [plugins]
+    [plugins, fontSize]
   );
 
   const documentMenu = (
@@ -173,7 +177,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       </div>
 
       <div className="cursor-text" onClick={() => titleRef.current?.focus()}>
-        <div className="lg:narrow flex gap-2">
+        <div className="lg:narrow flex gap-2 items-center">
           <EditorTitle
             ref={titleRef}
             initialTitle={initialDocument.title || ''}

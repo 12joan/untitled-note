@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { useContext } from '~/lib/context';
 import { envSpecific } from '~/lib/environment';
-import { IIC, iic } from '~/lib/iic';
+import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
@@ -20,6 +20,11 @@ import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
+import {
+  decreaseEditorFontSize,
+  increaseEditorFontSize,
+  resetEditorFontSize,
+} from './editorFontSize';
 import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 export type BaseCommand = {
@@ -46,7 +51,7 @@ export type KeyboardShortcutCommand = BaseCommand & {
 
 export type Command = SearchCommand | KeyboardShortcutCommand;
 
-const noopIIC = iic(() => () => {});
+const noopIIC = liftToIIC(() => {})();
 
 const openInProjectIIC = (
   pathFn: (options: { projectId: number }) => string,
@@ -93,6 +98,33 @@ const commands: Command[] = [
       }),
     },
     action: (newTab = false) => openInProjectIIC(newDocumentPath, newTab),
+  },
+  {
+    id: 'decrease-font-size',
+    label: 'Decrease font size',
+    keyboardShortcut: {
+      hint: 'Decrease document font size',
+      config: parseKeyboardShortcut('mod+shift+-'),
+    },
+    action: liftToIIC(decreaseEditorFontSize),
+  },
+  {
+    id: 'increase-font-size',
+    label: 'Increase font size',
+    keyboardShortcut: {
+      hint: 'Increase document font size',
+      config: parseKeyboardShortcut('mod+shift+='),
+    },
+    action: liftToIIC(increaseEditorFontSize),
+  },
+  {
+    id: 'reset-font-size',
+    label: 'Reset font size',
+    keyboardShortcut: {
+      hint: 'Reset document font size',
+      config: parseKeyboardShortcut('mod+shift+0'),
+    },
+    action: liftToIIC(resetEditorFontSize),
   },
   {
     id: 'settings',
