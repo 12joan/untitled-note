@@ -32,7 +32,7 @@ export const EditorTitle = forwardRef(
           ref={ref}
           className="min-w-0 grow h1 em:text-2xl sm:em:text-3xl text-black dark:text-white placeholder:truncate"
           style={{
-            lineHeight: '1',
+            lineHeight: '1.2em',
           }}
           defaultValue={initialTitle}
           placeholder="Untitled document"
