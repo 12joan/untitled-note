@@ -85,8 +85,8 @@
   .prose {
     // Spacing for block elements
     & > * {
-      margin-top: 0.5em !important;
-      margin-bottom: 0.5em !important;
+      margin-top: 0.75em !important;
+      margin-bottom: 0.75em !important;
     }
 
     & > ul, & > ol {
@@ -102,7 +102,7 @@
 
     p {
       @apply em:text-lg;
-      line-height: 1.5em;
+      line-height: 1.55em;
     }
 
     ul, ol {
@@ -132,7 +132,7 @@
 
     h1 {
       @apply h2 mt-0 em:text-xl sm:em:text-2xl;
-      line-height: 1;
+      line-height: 1.2em;
     }
 
     // Remove text color on strong
