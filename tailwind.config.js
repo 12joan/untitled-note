@@ -71,22 +71,39 @@ module.exports = {
     typography,
     plugin(({ addVariant }) => {
       addVariant('window-inactive', 'body.inactive &');
+
       addVariant('hocus', ['&:hover', '&:focus-visible']);
+
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &']);
       addVariant('group-focus-visible', ['.group:focus-visible &']);
+
       addVariant(
         'stretch-focus-visible',
         '&:has(.stretch-target:focus-visible)'
       );
+
       addVariant(
         'group-stretch-focus-visible',
         '.group:has(.stretch-target:focus-visible) &'
       );
+
       addVariant('stretch-hover', '&:has(.stretch-target:hover)');
+
       addVariant('children', '& > *');
+
       ['data-active', 'data-drag-over'].forEach((dataAttribute) => {
         const selector = `[${dataAttribute}=true]`;
         addVariant(dataAttribute, [`&${selector}`, `${selector} &`]);
+      });
+
+      // https://github.com/tailwindlabs/tailwindcss/discussions/3105#discussioncomment-248885
+      addVariant('em', ({ container }) => {
+        container.walkRules(rule => {
+          rule.selector = `.em\\:${rule.selector.slice(1)}`;
+          rule.walkDecls((decl) => {
+            decl.value = decl.value.replace('rem', 'em');
+          });
+        });
       });
     }),
   ],

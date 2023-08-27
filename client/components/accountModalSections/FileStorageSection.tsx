@@ -54,7 +54,7 @@ export const FileStorageSection = () => {
     resolved: ({ quotaUsage, files }) => (
       <>
         <div className="space-y-2">
-          <h3 className="text-lg font-medium select-none">
+          <h3 className="h3 select-none">
             Storage used (
             {Math.round((100 * quotaUsage.used) / quotaUsage.quota)}%)
           </h3>
@@ -69,9 +69,7 @@ export const FileStorageSection = () => {
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-lg font-medium select-none">
-            Files ({files.length})
-          </h3>
+          <h3 className="h3 select-none">Files ({files.length})</h3>
 
           {files.map((file) => (
             <div

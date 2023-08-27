@@ -77,15 +77,16 @@
   }
 
   .narrow {
-    @apply mr-auto w-full max-w-screen-sm;
+    @apply mr-auto w-full;
+    max-width: var(--narrow-width, 640px);
     margin-left: var(--narrow-margin-left, auto);
   }
 
   .prose {
     // Spacing for block elements
     & > * {
-      margin-top: 0.75rem !important;
-      margin-bottom: 0 !important;
+      margin-top: 0.5em !important;
+      margin-bottom: 0.5em !important;
     }
 
     & > ul, & > ol {
@@ -99,8 +100,13 @@
       @apply overflow-wrap-normal;
     }
 
+    p {
+      @apply em:text-lg;
+      line-height: 1.5em;
+    }
+
     ul, ol {
-      padding-left: calc(1.5rem + var(--list-style-offset, 1ch));
+      padding-left: calc(1.5em + var(--list-style-offset, 1ch));
     }
 
     blockquote {
@@ -125,7 +131,8 @@
     }
 
     h1 {
-      @apply h2 mt-0;
+      @apply h2 mt-0 em:text-xl sm:em:text-2xl;
+      line-height: 1;
     }
 
     // Remove text color on strong
@@ -144,7 +151,7 @@
         @apply font-normal;
       }
 
-      @apply bg-slate-100 dark:bg-black/50 px-1 py-[0.125rem] rounded;
+      @apply bg-slate-100 dark:bg-black/50 px-[0.25em] py-[0.125em] rounded-[0.25em];
     }
 
     pre {
@@ -215,7 +222,7 @@
     }
   }
 
-  .h1, .h2 {
+  .h1, .h2, .h3 {
     @apply font-medium;
   }
 
@@ -225,6 +232,10 @@
 
   .h2 {
     @apply text-xl sm:text-2xl;
+  }
+
+  .h3 {
+    @apply text-lg sm:text-xl;
   }
 
   .list-group {
