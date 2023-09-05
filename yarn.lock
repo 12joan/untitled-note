@@ -793,15 +793,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/react@npm:^1.7.13":
-  version: 1.7.13
-  resolution: "@headlessui/react@npm:1.7.13"
+"@headlessui/react@npm:^1.7.17":
+  version: 1.7.17
+  resolution: "@headlessui/react@npm:1.7.17"
   dependencies:
     client-only: ^0.0.1
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: 132e5fce86978b9a6fd9d669fb556acec783debcd8f510c99226b3b3229dad50a13aeed69fc9af66465fc7029487ecfc46e6226f14218b760d5a309e08c0d059
+  checksum: 0cdb67747e7f606f78214dac0b48573247779e70534b4471515c094b74addda173dc6a9847d33aea9c6e6bc151016c034125328953077e32aa7947ebabed91f7
   languageName: node
   linkType: hard
 
@@ -5803,7 +5803,7 @@ __metadata:
     "@emoji-mart/data": ^1.1.2
     "@emoji-mart/react": ^1.1.1
     "@floating-ui/react-dom": ^1.3.0
-    "@headlessui/react": ^1.7.13
+    "@headlessui/react": ^1.7.17
     "@popperjs/core": ^2.11.6
     "@rails/actioncable": ^7.0.7
     "@tippyjs/react": ^4.2.6
