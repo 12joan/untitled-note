@@ -41,6 +41,7 @@ import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
 import { Tooltip } from '~/components/Tooltip';
+import {groupedClassNames} from '~/lib/groupedClassNames';
 
 export interface EditorProps {
   clientId: string;
@@ -133,8 +134,13 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         initialValue={initialValue}
         normalizeInitialValue
         editableProps={{
-          className:
-            'grow prose prose-slate dark:prose-invert max-w-none text-black dark:text-white no-focus-ring children:lg:narrow',
+          className: groupedClassNames({
+            sizing: 'grow max-w-none children:lg:narrow',
+            spacing: 'em:mt-3 em:space-y-3',
+            textColor: 'text-black dark:text-white',
+            focusRing: 'no-focus-ring',
+            baseFontSize: 'slate-void:em:text-lg slate-string:em:text-lg/[28px]',
+          }),
           placeholder: 'Write something...',
           style: { fontSize },
         }}
@@ -169,10 +175,10 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   );
 
   return (
-    <>
+    <div className="contents em:space-y-3">
       {findDialog}
 
-      <div className="lg:narrow mb-3">
+      <div className="lg:narrow">
         <BackButton />
       </div>
 
@@ -234,7 +240,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       )}
 
       <div ref={mentionSuggestionsContainerRef} />
-    </>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import {
 
 const STORAGE_KEY = 'editorFontSize';
 const DEFAULT_FONT_SIZE = 100;
-const MIN_FONT_SIZE = 30;
+const MIN_FONT_SIZE = 100;
 const MAX_FONT_SIZE = 200;
 const FONT_SIZE_INCREMENT = 10;
 

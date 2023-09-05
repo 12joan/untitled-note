@@ -1,8 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 const plugin = require('tailwindcss/plugin');
-const lineClamp = require('@tailwindcss/line-clamp');
-const typography = require('@tailwindcss/typography');
 
 module.exports = {
   content: ['./client/**/*.{js,ts,jsx,tsx,html}', './app/views/**/*.html.erb'],
@@ -67,8 +65,6 @@ module.exports = {
     },
   },
   plugins: [
-    lineClamp,
-    typography,
     plugin(({ addVariant }) => {
       addVariant('window-inactive', 'body.inactive &');
 
@@ -95,6 +91,9 @@ module.exports = {
         const selector = `[${dataAttribute}=true]`;
         addVariant(dataAttribute, [`&${selector}`, `${selector} &`]);
       });
+
+      addVariant('slate-void', '& [data-slate-void]');
+      addVariant('slate-string', ['& [data-slate-string]', '& [data-slate-zero-width]']);
 
       // https://github.com/tailwindlabs/tailwindcss/discussions/3105#discussioncomment-248885
       addVariant('em', ({ container }) => {
