@@ -76,6 +76,10 @@
     word-break: normal;
   }
 
+  .list-overflow {
+    @apply overflow-x-auto overflow-wrap-normal;
+  }
+
   .narrow {
     @apply mr-auto w-full;
     max-width: var(--narrow-width, 640px);

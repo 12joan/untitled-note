@@ -68,7 +68,7 @@ const makeElementComponent =
     );
 
 const listStyle =
-  'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg';
+  'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
 const codeStyle = 'bg-slate-800 dark:bg-slate-950 text-white em:text-sm';
 
 const components = {
