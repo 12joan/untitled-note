@@ -26,6 +26,7 @@ import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useSyncDocument } from '~/lib/editor/useSyncDocument';
 import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
 import { useGlobalEvent } from '~/lib/globalEvents';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { Document } from '~/lib/types';
 import { useBeforeUnload } from '~/lib/useBeforeUnload';
 import { useDebounce } from '~/lib/useDebounce';
@@ -41,7 +42,6 @@ import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
 import { Tooltip } from '~/components/Tooltip';
-import {groupedClassNames} from '~/lib/groupedClassNames';
 
 export interface EditorProps {
   clientId: string;
@@ -139,7 +139,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
             spacing: 'em:mt-3 em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
-            baseFontSize: 'slate-void:em:text-lg slate-string:em:text-lg/[28px]',
+            baseFontSize:
+              'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
           }),
           placeholder: 'Write something...',
           style: { fontSize },

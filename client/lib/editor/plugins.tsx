@@ -53,19 +53,22 @@ import { resetNodeOptions } from '~/lib/editor/resetNode';
 import { softBreakOptions } from '~/lib/editor/softBreak';
 import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
 import { tabbableOptions } from '~/lib/editor/tabbable';
-import {groupedClassNames} from '../groupedClassNames';
+import { groupedClassNames } from '../groupedClassNames';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>
   ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) =>
-  <Component
-    {...nodeProps} 
-    {...attributes}
-    className={className}
-    children={children}
-  />;
+    (
+      <Component
+        {...nodeProps}
+        {...attributes}
+        className={className}
+        children={children}
+      />
+    );
 
-const listStyle = 'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg';
+const listStyle =
+  'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
 const codeStyle = 'bg-slate-800 dark:bg-slate-950 text-white em:text-sm';
 
 const components = {
@@ -73,38 +76,59 @@ const components = {
   [MARK_BOLD]: makeElementComponent('strong'),
   [MARK_ITALIC]: makeElementComponent('em'),
   [MARK_STRIKETHROUGH]: makeElementComponent('del'),
-  [MARK_CODE]: makeElementComponent('code', groupedClassNames({
-    code: codeStyle,
-    rounded: 'rounded',
-    padding: 'em:px-1.5 em:py-1',
-  })),
+  [MARK_CODE]: makeElementComponent(
+    'code',
+    groupedClassNames({
+      code: codeStyle,
+      rounded: 'rounded',
+      padding: 'em:px-1.5 em:py-1',
+    })
+  ),
   [ELEMENT_LINK]: LinkComponent,
-  [ELEMENT_H1]: makeElementComponent('h1', groupedClassNames({
-    fontWeight: 'font-medium',
-    fontSize: 'slate-string:em:text-xl slate-string:sm:em:text-2xl',
-    leading: 'slate-string:reset-leading',
-  })),
-  [ELEMENT_BLOCKQUOTE]: makeElementComponent('blockquote', groupedClassNames({
-    padding: 'em:pl-4',
-    text: 'italic',
-    linePosition: 'relative after:absolute after:left-0 after:inset-y-0 after:em:w-1',
-    lineColor: 'after:bg-slate-200 after:dark:bg-slate-700',
-    lineStyle: 'after:rounded-full',
-  })),
-  [ELEMENT_CODE_BLOCK]: makeElementComponent('pre', groupedClassNames({
-    code: codeStyle,
-    rounded: 'rounded-md',
-    padding: 'em:px-5 em:py-4',
-    overflow: 'overflow-x-auto',
-  })),
-  [ELEMENT_UL]: makeElementComponent('ul', groupedClassNames({
-    list: listStyle,
-    unorderedList: 'list-disc marker:text-slate-300 dark:marker:text-slate-600',
-  })),
-  [ELEMENT_OL]: makeElementComponent('ol', groupedClassNames({
-    list: listStyle,
-    orderedList: 'list-decimal marker:text-slate-500 dark:marker:text-slate-400',
-  })),
+  [ELEMENT_H1]: makeElementComponent(
+    'h1',
+    groupedClassNames({
+      fontWeight: 'font-medium',
+      fontSize: 'slate-string:em:text-xl slate-string:sm:em:text-2xl',
+      leading: 'slate-string:reset-leading',
+    })
+  ),
+  [ELEMENT_BLOCKQUOTE]: makeElementComponent(
+    'blockquote',
+    groupedClassNames({
+      padding: 'em:pl-4',
+      text: 'italic',
+      linePosition:
+        'relative after:absolute after:left-0 after:inset-y-0 after:em:w-1',
+      lineColor: 'after:bg-slate-200 after:dark:bg-slate-700',
+      lineStyle: 'after:rounded-full',
+    })
+  ),
+  [ELEMENT_CODE_BLOCK]: makeElementComponent(
+    'pre',
+    groupedClassNames({
+      code: codeStyle,
+      rounded: 'rounded-md',
+      padding: 'em:px-5 em:py-4',
+      overflow: 'overflow-x-auto',
+    })
+  ),
+  [ELEMENT_UL]: makeElementComponent(
+    'ul',
+    groupedClassNames({
+      list: listStyle,
+      unorderedList:
+        'list-disc marker:text-slate-300 dark:marker:text-slate-600',
+    })
+  ),
+  [ELEMENT_OL]: makeElementComponent(
+    'ol',
+    groupedClassNames({
+      list: listStyle,
+      orderedList:
+        'list-decimal marker:text-slate-500 dark:marker:text-slate-400',
+    })
+  ),
   [ELEMENT_LI]: makeElementComponent('li', 'em:pl-1.5'),
   [ELEMENT_MENTION]: MentionComponent,
   [ELEMENT_MENTION_INPUT]: MentionInputComponent,
