@@ -276,7 +276,11 @@ export const LinkComponent = ({
           )
         }
       >
-        <a {...linkProps} className="btn btn-link font-medium underline" children={children} />
+        <a
+          {...linkProps}
+          className="btn btn-link font-medium underline"
+          children={children}
+        />
       </Tippy>
     </span>
   );
