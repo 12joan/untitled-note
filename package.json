@@ -44,7 +44,7 @@
     "slate": "^0.94.1",
     "slate-history": "^0.93.0",
     "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.94.0",
+    "slate-react": "^0.94.2",
     "tippy.js": "^6.3.7"
   },
   "version": "0.1.0",
