@@ -126,8 +126,8 @@ class S3FileTest < ActiveSupport::TestCase
   private
 
   def mock_s3_objects(expected_keys = [@s3_file.s3_key])
-    s3_bucket = MiniTest::Mock.new
-    s3_objects = expected_keys.map { MiniTest::Mock.new }
+    s3_bucket = Minitest::Mock.new
+    s3_objects = expected_keys.map { Minitest::Mock.new }
 
     expected_keys.zip(s3_objects).each do |key, s3_object|
       s3_bucket.expect(:object, s3_object, [key])

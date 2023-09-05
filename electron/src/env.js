@@ -4,7 +4,7 @@ const development = {
     protocol: 'http',
   },
   devTools: true,
-}
+};
 
 const production = {
   app: {
@@ -12,7 +12,7 @@ const production = {
     protocol: 'https',
   },
   devTools: false,
-}
+};
 
 const staging = {
   app: {
@@ -20,17 +20,17 @@ const staging = {
     protocol: 'https',
   },
   devTools: true,
-}
+};
 
 const environments = {
   development,
   production,
   staging,
-}
+};
 
-const index = process.argv.indexOf('--env')
-const envName = index > -1 ? process.argv[index + 1] : 'production'
+const index = process.argv.indexOf('--env');
+const envName = index > -1 ? process.argv[index + 1] : 'production';
 
 module.exports = {
   ENV: environments[envName],
-}
+};

@@ -43,6 +43,7 @@ yarn-debug.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+tsconfig.tsbuildinfo
 
 # Vite Ruby
 /public/vite*
@@ -56,3 +57,9 @@ node_modules
 /electron/yarn-error.log
 /electron/out
 /electron-credentials.js
+/electron/.yarn/*
+!/electron/.yarn/patches
+!/electron/.yarn/plugins
+!/electron/.yarn/releases
+!/electron/.yarn/sdks
+!/electron/.yarn/versions

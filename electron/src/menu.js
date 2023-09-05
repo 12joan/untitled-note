@@ -1,17 +1,14 @@
-const { Menu, shell } = require('electron')
-const {
-  isMac,
-  setZoomFactor,
-} = require('./helpers')
-const { ENV } = require('./env')
+const { Menu, shell } = require('electron');
+const { isMac, setZoomFactor } = require('./helpers');
+const { ENV } = require('./env');
 
-const withFocusedWindow = handler => (item, focusedWindow) => {
+const withFocusedWindow = (handler) => (item, focusedWindow) => {
   if (focusedWindow) {
-    handler(focusedWindow, item)
+    handler(focusedWindow, item);
   }
-}
+};
 
-module.exports = options => {
+const createMenu = () => {
   const appMenu = {
     label: 'Untitled Note App',
     submenu: [
@@ -42,7 +39,7 @@ module.exports = options => {
         role: 'quit',
       },
     ],
-  }
+  };
 
   const editMenu = {
     label: 'Edit',
@@ -79,7 +76,7 @@ module.exports = options => {
         role: 'selectall',
       },
     ],
-  }
+  };
 
   // back, forward, reload, toggle fullscreen, zoom, toggle dev tools
   const viewMenu = {
@@ -88,19 +85,23 @@ module.exports = options => {
       {
         label: 'Back',
         accelerator: 'CmdOrCtrl+[',
-        click: withFocusedWindow(focusedWindow => focusedWindow.webContents.send('navigate', -1)),
+        click: withFocusedWindow((focusedWindow) =>
+          focusedWindow.webContents.send('navigate', -1)
+        ),
       },
       {
         label: 'Forward',
         accelerator: 'CmdOrCtrl+]',
-        click: withFocusedWindow(focusedWindow => focusedWindow.webContents.send('navigate', 1)),
+        click: withFocusedWindow((focusedWindow) =>
+          focusedWindow.webContents.send('navigate', 1)
+        ),
       },
       {
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
         click: (item, focusedWindow) => {
           if (focusedWindow) {
-            focusedWindow.reload()
+            focusedWindow.reload();
           }
         },
       },
@@ -108,39 +109,41 @@ module.exports = options => {
       {
         label: 'Toggle Full Scream',
         accelerator: isMac ? 'Ctrl+Command+F' : 'F11',
-        click: withFocusedWindow(focusedWindow => focusedWindow.setFullScreen(
-          !focusedWindow.isFullScreen()
-        )),
+        click: withFocusedWindow((focusedWindow) =>
+          focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+        ),
       },
       {
         label: 'Zoom In',
         accelerator: 'CmdOrCtrl+=',
-        click: withFocusedWindow(focusedWindow => setZoomFactor(
-          focusedWindow,
-          zoomFactor => zoomFactor + 0.1
-        )),
+        click: withFocusedWindow((focusedWindow) =>
+          setZoomFactor(focusedWindow, (zoomFactor) => zoomFactor + 0.1)
+        ),
       },
       {
         label: 'Zoom Out',
         accelerator: 'CmdOrCtrl+-',
-        click: withFocusedWindow(focusedWindow => setZoomFactor(
-          focusedWindow,
-          zoomFactor => zoomFactor - 0.1
-        )),
+        click: withFocusedWindow((focusedWindow) =>
+          setZoomFactor(focusedWindow, (zoomFactor) => zoomFactor - 0.1)
+        ),
       },
       {
         label: 'Reset Zoom',
         accelerator: 'CmdOrCtrl+0',
-        click: withFocusedWindow(focusedWindow => setZoomFactor(focusedWindow, 1)),
+        click: withFocusedWindow((focusedWindow) =>
+          setZoomFactor(focusedWindow, 1)
+        ),
       },
       { type: 'separator' },
       ENV.devTools && {
         label: 'Toggle Developer Tools',
         accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click: withFocusedWindow(focusedWindow => focusedWindow.toggleDevTools()),
+        click: withFocusedWindow((focusedWindow) =>
+          focusedWindow.toggleDevTools()
+        ),
       },
     ].filter(Boolean),
-  }
+  };
 
   const windowMenu = {
     label: 'Window',
@@ -157,7 +160,7 @@ module.exports = options => {
         role: 'close',
       },
     ],
-  }
+  };
 
   const helpMenu = {
     label: 'Help',
@@ -168,13 +171,13 @@ module.exports = options => {
         click: () => shell.openExternal('https://untitlednote.xyz/'),
       },
     ],
-  }
+  };
 
-  return Menu.buildFromTemplate([
-    isMac && appMenu,
-    editMenu,
-    viewMenu,
-    windowMenu,
-    helpMenu,
-  ].filter(Boolean))
-}
+  return Menu.buildFromTemplate(
+    [isMac && appMenu, editMenu, viewMenu, windowMenu, helpMenu].filter(Boolean)
+  );
+};
+
+module.exports = {
+  createMenu,
+};

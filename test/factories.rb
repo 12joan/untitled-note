@@ -28,4 +28,9 @@ FactoryBot.define do
     size { 100 }
     content_type { 'image/png' }
   end
+
+  factory :settings do
+    user
+    data { { hello: 'world' }.to_json }
+  end
 end

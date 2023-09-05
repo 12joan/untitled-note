@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_03_185120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,7 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
   end
 
   create_table "s3_files", force: :cascade do |t|
-    t.bigint "original_project_id", null: false
+    t.bigint "original_project_id"
     t.string "role"
     t.string "s3_key"
     t.string "filename"
@@ -75,12 +75,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
     t.index ["owner_id"], name: "index_s3_files_on_owner_id"
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_settings_on_user_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "text"
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "documents_count", default: 0, null: false
     t.index ["project_id"], name: "index_tags_on_project_id"
     t.index ["text", "project_id"], name: "index_tags_on_text_and_project_id", unique: true
   end
@@ -102,5 +109,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_28_103329) do
   add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "s3_files", "projects", column: "original_project_id"
   add_foreign_key "s3_files", "users", column: "owner_id"
+  add_foreign_key "settings", "users"
   add_foreign_key "tags", "projects"
 end

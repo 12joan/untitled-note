@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
       resource :project_order, only: %i[update], controller: :project_order
       resources :s3_files, only: %i[create destroy show]
+      resource :settings, only: %i[show update]
     end
   end
 
@@ -25,7 +26,7 @@ Rails.application.routes.draw do
 
   get '/auth/auth0/callback', to: 'auth0#callback'
   get '/auth/failure', to: 'auth0#failure'
-  get '/auth/logout', to: 'auth0#logout'
+  delete '/auth/logout', to: 'auth0#logout'
   post '/auth/reset_password', to: 'auth0#reset_password'
 
   get '/welcome', to: 'welcome#index', as: :welcome

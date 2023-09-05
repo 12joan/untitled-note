@@ -13,6 +13,7 @@ module API
 
         render json: {
           occurrences: count,
+          documents: 1,
         }
       end
     end

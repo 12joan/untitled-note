@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
-    'tailwindcss': {},
-    'autoprefixer': {},
+    tailwindcss: {},
+    autoprefixer: {},
     'postcss-import': {},
     'postcss-flexbugs-fixes': {},
     // Firefox does not support :has() pseudo-class
@@ -13,4 +13,4 @@ module.exports = {
       stage: 3,
     },
   },
-}
+};

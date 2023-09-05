@@ -1,5 +1,5 @@
-const { execSync } = require('child_process')
-const credentials = require('../electron-credentials')
+const { execSync } = require('child_process');
+const credentials = require('../electron-credentials');
 
 module.exports = {
   packagerConfig: {
@@ -7,7 +7,13 @@ module.exports = {
     executableName: 'UntitledNoteApp',
     appBundleId: 'xyz.untitlednote.app',
     icon: 'icons/app-icon',
-    osxSign: {},
+    ignore: [
+      /^\/out\//g, // See https://github.com/electron/forge/issues/3310
+      '/\\.yarn($|/)',
+    ],
+    osxSign: {
+      identity: credentials.osxSign.identity,
+    },
     osxNotarize: {
       tool: 'notarytool',
       keychainProfile: credentials.osxNotarize.keychainProfile,
@@ -38,7 +44,7 @@ module.exports = {
   ],
   hooks: {
     generateAssets: () => {
-      execSync('yarn run build')
+      execSync('yarn run build');
     },
   },
   publishers: [
@@ -54,4 +60,4 @@ module.exports = {
       },
     },
   ],
-}
+};

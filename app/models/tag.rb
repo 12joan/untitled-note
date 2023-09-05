@@ -7,4 +7,8 @@ class Tag < ApplicationRecord
 
   include Queryable.permit(*%i[id text project_id documents_count created_at updated_at])
   include Listenable
+
+  def documents_count
+    documents.not_blank.count
+  end
 end

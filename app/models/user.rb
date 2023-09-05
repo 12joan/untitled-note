@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :login_sessions, dependent: :destroy
   has_many :projects, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_many :s3_files, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_one :settings, dependent: :destroy
 
   # Auth0 supplies the user's email address in the 'name' field. This may break
   # in the future if Auth0 changes this behaviour.

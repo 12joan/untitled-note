@@ -2,7 +2,11 @@ class TagsAPI < ApplicationAPI
   def index
     set_project
 
-    @project.tags.order('documents_count DESC, id').all.map do |tag|
+    unsorted_tags = @project.tags.all
+
+    sorted_tags = unsorted_tags.sort_by { |tag| -tag.documents_count }
+
+    sorted_tags.map do |tag|
       tag.query(params[:query])
     end
   end

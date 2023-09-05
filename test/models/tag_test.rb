@@ -18,7 +18,7 @@ class TagTest < ActiveSupport::TestCase
     create(:tag, project: project2, text: 'A tag')
   end
 
-  test 'documents_count is incremented when a new DocumentsTag is created' do
+  test 'documents_count is incremented and decremented when documents are created and destroyed' do
     project = create(:project)
 
     tag = create(:tag, project: project, text: 'A tag')
@@ -37,6 +37,23 @@ class TagTest < ActiveSupport::TestCase
     assert_equal 2, tag.reload.documents_count
 
     document1.destroy!
+
+    assert_equal 1, tag.reload.documents_count
+  end
+
+  test 'documents_count is not incremented by blank documents until they become non-blank' do
+    project = create(:project)
+
+    tag = create(:tag, project: project, text: 'A tag')
+    assert_equal 0, tag.documents_count
+
+    document = Document.create!(project: project, tags_attributes: [
+      { text: tag.text },
+    ], blank: true)
+
+    assert_equal 0, tag.reload.documents_count
+
+    document.update!(blank: false)
 
     assert_equal 1, tag.reload.documents_count
   end

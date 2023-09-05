@@ -4,8 +4,8 @@
 
 /* Z-index:
  *  5 - Focus ring
- *  7 - Find dialog
- * 10 - TopBar
+ * 10 - Fixed layout
+ * 15 - Find dialog
  * 20 - Tippy
  * 30 - Modals
  * 40 - Tippy inside modal
@@ -44,7 +44,7 @@
   }
 
   // Fix box-shadow for inputs on iOS
-  input[type="text"] {
+  input[type="text"], input[type="url"] {
     @apply appearance-none;
   }
 }
@@ -76,81 +76,27 @@
     word-break: normal;
   }
 
-  .narrow {
-    @apply mx-auto w-full max-w-screen-sm;
+  .list-overflow {
+    @apply overflow-x-auto overflow-wrap-normal;
   }
 
-  .prose {
-    // Spacing for block elements
-    & > * {
-      margin-top: 0.75rem !important;
-      margin-bottom: 0 !important;
-    }
+  .narrow {
+    @apply mr-auto w-full;
+    max-width: var(--narrow-width, 640px);
+    margin-left: var(--narrow-margin-left, auto);
+  }
 
-    & > ul, & > ol {
-      * {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-      }
+  .reset-leading {
+    line-height: inherit !important;
+  }
 
-      // Prevent overflow in deeply nested lists
-      @apply overflow-x-auto;
-      @apply overflow-wrap-normal;
-    }
+  .btn-hover {
+    content: '';
+    @apply after:absolute after:inset-0 after:opacity-5 after:dark:opacity-10 after:bg-slate-900 after:dark:bg-slate-50;
+  }
 
-    ul, ol {
-      padding-left: calc(1.5rem + var(--list-style-offset, 1ch));
-    }
-
-    blockquote {
-      // Remove font-weight: 500 for blockquotes
-      &:not(strong *) {
-        @apply font-normal;
-      }
-
-      // Remove quotation marks for blockquotes
-      &::before, &::after {
-        content: '';
-      }
-
-      // Round the left border of blockquotes
-      @apply border-l-0 relative;
-
-      &::after {
-        @apply absolute left-0 top-0 bottom-0 w-1 rounded-full;
-        content: '';
-        background-color: var(--tw-prose-quote-borders);
-      }
-    }
-
-    h1 {
-      @apply h2 mt-0;
-    }
-
-    // Remove text color on strong
-    strong {
-      @apply text-inherit;
-    }
-
-    code {
-      // Remove backticks
-      &::before, &::after {
-        content: none;
-      }
-
-      // Remove font weight
-      &:not(strong *) {
-        @apply font-normal;
-      }
-
-      @apply bg-slate-100 dark:bg-black/50 px-1 py-[0.125rem] rounded;
-    }
-
-    pre {
-      code {
-        background: transparent !important;
-      }
-    }
+  .btn-link-hover {
+    @apply brightness-75 dark:brightness-125;
   }
 }
 
@@ -166,13 +112,12 @@
 
     // Hover effect
 
-    &:not(.btn-link, .btn-link-subtle):hover::after {
-      content: '';
-      @apply absolute inset-0 opacity-5 dark:opacity-10 bg-slate-900 dark:bg-slate-50;
+    &:not(.btn-link, .btn-link-subtle) {
+      @apply hover:btn-hover;
     }
 
     &.btn-link {
-      @apply hover:brightness-75 dark:hover:brightness-125;
+      @apply hover:btn-link-hover;
     }
 
     // Variants
@@ -206,7 +151,7 @@
     }
   }
 
-  .h1, .h2 {
+  .h1, .h2, .h3 {
     @apply font-medium;
   }
 
@@ -216,6 +161,18 @@
 
   .h2 {
     @apply text-xl sm:text-2xl;
+  }
+
+  .h3 {
+    @apply text-lg sm:text-xl;
+  }
+
+  .list-group {
+    @apply rounded-lg border dark:border-transparent divide-y;
+  }
+
+  .list-group-item {
+    @apply w-full p-3 group-first:rounded-t-lg group-last:rounded-b-lg;
   }
 }
 
