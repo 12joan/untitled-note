@@ -5963,7 +5963,7 @@ __metadata:
     sass: ^1.59.2
     scheduler: ^0.23.0
     scriptjs: ^2.5.9
-    slate: ^0.94.0
+    slate: ^0.94.1
     slate-history: ^0.93.0
     slate-hyperscript: ^0.77.0
     slate-react: ^0.94.0
@@ -7464,14 +7464,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate@npm:^0.94.0":
-  version: 0.94.0
-  resolution: "slate@npm:0.94.0"
+"slate@npm:^0.94.1":
+  version: 0.94.1
+  resolution: "slate@npm:0.94.1"
   dependencies:
     immer: ^9.0.6
     is-plain-object: ^5.0.0
     tiny-warning: ^1.0.3
-  checksum: a86a09f3e0db5d5d405cc7baa4256fe94a10b761a7f9fa941f68256c1198769b382fddb7fb6186c5e98197c1e123c84802ddbb6b2898bc8b67853a1c40bf927d
+  checksum: 07666fe3373e59aaa19261366fd3cf1df546edfc0162fb88d675d71f158ebd1bf0630fd00ecc9152ab6547080f3e90c9f6d1504e09c25b3bf980cceb9b15c3c1
   languageName: node
   linkType: hard
 
