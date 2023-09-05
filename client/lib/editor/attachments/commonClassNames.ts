@@ -5,7 +5,7 @@ export const commonClassNames: GroupedClassNames = {
   bg: 'dark:bg-slate-800',
   padding: 'p-3',
   rounded: 'rounded-lg',
-  reset: 'not-prose text-ui text-base',
+  reset: 'text-base text-ui',
   select: 'select-none',
   display: 'flex gap-2 items-center',
 };

@@ -136,7 +136,7 @@ export const EditorTags = forwardRef(
 
     return (
       <div
-        className="lg:narrow mt-3 flex flex-wrap gap-2"
+        className="lg:narrow flex flex-wrap gap-2"
         style={{ display: visible ? undefined : 'none' }}
       >
         {tags.map((tag) => (

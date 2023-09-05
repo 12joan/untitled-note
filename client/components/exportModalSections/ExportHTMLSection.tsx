@@ -64,8 +64,8 @@ export const ExportHTMLSection = ({
         <span className="select-none">Include document title as H1</span>
       </label>
 
-      <div className="prose relative">
-        <pre className="h-[400px] focus-within:focus-ring ring-offset-2 bg-slate-900">
+      <div className="relative">
+        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-slate-900 p-4 text-white text-sm/relaxed">
           <Plate<Value>
             editorRef={editorRef}
             key={resetKey}

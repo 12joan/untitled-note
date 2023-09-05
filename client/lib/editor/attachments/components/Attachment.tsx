@@ -81,7 +81,7 @@ const UploadedAttachment = ({
   };
 
   return (
-    <div {...attributes} className="not-prose">
+    <div {...attributes}>
       <div contentEditable={false}>
         {unwrapFutureServiceResult(fsrFetchedData, {
           pending: <PendingAttachment {...commonProps} />,
