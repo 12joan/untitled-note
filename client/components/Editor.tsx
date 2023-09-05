@@ -140,7 +140,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:
-              'slate-void:em:text-lg slate-string:em:text-lg/[28px]',
+              'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
           }),
           placeholder: 'Write something...',
           style: { fontSize },
