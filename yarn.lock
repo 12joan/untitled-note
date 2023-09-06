@@ -5960,7 +5960,7 @@ __metadata:
     react-textarea-autosize: ^8.4.1
     react-time-ago: ^7.2.1
     runes: ^0.4.3
-    sass: ^1.59.2
+    sass: ^1.66.1
     scheduler: ^0.23.0
     scriptjs: ^2.5.9
     slate: ^0.94.1
@@ -7308,16 +7308,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.59.2":
-  version: 1.59.2
-  resolution: "sass@npm:1.59.2"
+"sass@npm:^1.66.1":
+  version: 1.66.1
+  resolution: "sass@npm:1.66.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: ab015ac49beb1252373023cc79b687aabd7850a7f450250b2fbe4eb3f64b0aef6759f8c7b33234221788a0e42cdd3999edfb5995218e474123b99cb126773e30
+  checksum: 74fc11d0fcd5e16c5331b57dd59865705a299c64e89f2b99646869caeb011dc8d0b6144a6c74a90c264e9ef70654207dbf44fc9b7e3393f8bd14809b904c8a52
   languageName: node
   linkType: hard
 
