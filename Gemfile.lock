@@ -236,7 +236,7 @@ GEM
       ffi (~> 1.0)
     redis (4.8.1)
     regexp_parser (2.8.1)
-    rexml (3.2.5)
+    rexml (3.2.6)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sass-rails (6.0.0)
