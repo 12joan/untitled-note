@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import { useAppContext } from '~/lib/appContext';
 import { forwardParams } from '~/lib/forwardParams';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
+import { getLastView } from '~/lib/restoreProjectView';
 import { Project } from '~/lib/types';
 import { AwaitNewDocument } from '~/components/AwaitNewDocument';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
@@ -84,7 +85,7 @@ interface ProjectRoutesProps {
 const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
   const routesComponent = useRoutes([
     {
-      path: 'await_redirect',
+      path: '/await_redirect',
       element: forwardParams(() => (
         <ProjectView
           childView={{ type: 'awaitRedirect', key: 'awaitRedirect', props: {} }}
@@ -92,17 +93,17 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'new_document',
+      path: '/new_document',
       element: forwardParams(() => <AwaitNewDocument />),
     },
     {
-      path: 'tags/:tagId/new_document',
+      path: '/tags/:tagId/new_document',
       element: forwardParams(({ tagId }: { tagId: string }) => (
         <AwaitNewDocument tagId={parseInt(tagId, 10)} />
       )),
     },
     {
-      path: 'overview',
+      path: '/overview',
       element: forwardParams(() => (
         <ProjectView
           childView={{ type: 'overview', key: 'overview', props: {} }}
@@ -110,7 +111,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'edit',
+      path: '/edit',
       element: forwardParams(() => (
         <ProjectView
           childView={{ type: 'editProject', key: 'editProject', props: {} }}
@@ -118,7 +119,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'recently_viewed',
+      path: '/recently_viewed',
       element: forwardParams(() => (
         <ProjectView
           childView={{
@@ -130,7 +131,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'tags/:tagId',
+      path: '/tags/:tagId',
       element: forwardParams(({ tagId }: { tagId: string }) => (
         <ProjectView
           childView={{
@@ -142,7 +143,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'tags',
+      path: '/tags',
       element: forwardParams(() => (
         <ProjectView
           childView={{ type: 'allTags', key: 'allTags', props: {} }}
@@ -150,7 +151,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: 'editor/:documentId',
+      path: '/editor/:documentId',
       element: forwardParams(({ documentId }: { documentId: string }) => (
         <ProjectView
           childView={{
@@ -162,7 +163,13 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: '*',
+      path: '/',
+      element: forwardParams(() => (
+        <Navigate to={getLastView(project.id) || 'overview'} replace />
+      )),
+    },
+    {
+      path: '/*',
       element: forwardParams(() => (
         <Navigate to={`/projects/${project.id}/overview`} replace />
       )),

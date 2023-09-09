@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :login_sessions, dependent: :destroy
   has_many :projects, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_many :documents, through: :projects
   has_many :s3_files, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one :settings, dependent: :destroy
 

@@ -65,11 +65,11 @@ type ProjectOptionalTagRoute = ProjectRoute & {
 export const awaitRedirectPath = ({ projectId }: Partial<ProjectRoute>) =>
   projectId ? `/projects/${projectId}/await_redirect` : '/await_redirect';
 
+export const projectPath = ({ projectId }: ProjectRoute) =>
+  `/projects/${projectId}`;
+
 export const overviewPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/overview`;
-
-export const projectPath = ({ projectId }: ProjectRoute) =>
-  getLastView(projectId) ?? overviewPath({ projectId });
 
 export const editProjectPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/edit`;
