@@ -1,5 +1,6 @@
 import { useCallback, useId, useState } from 'react';
 import { dispatchGlobalEvent, useGlobalEvent } from '~/lib/globalEvents';
+import { useStableGetter } from '~/lib/useStableGetter';
 
 export interface UseModalRenderProps {
   open: boolean;
@@ -19,6 +20,7 @@ export const useModal = <T = undefined,>(
 
   const [openProps, setOpenProps] = useState<T | null>(null);
   const isOpen = openProps !== null;
+  const getIsOpen = useStableGetter(isOpen);
 
   type OpenOptions = T extends undefined ? [] : [T];
 
@@ -38,13 +40,13 @@ export const useModal = <T = undefined,>(
 
   const toggle = useCallback(
     (...args: OpenOptions) => {
-      if (isOpen) {
+      if (getIsOpen()) {
         close();
       } else {
         open(...args);
       }
     },
-    [close, open, isOpen]
+    [close, open, getIsOpen]
   );
 
   useGlobalEvent(

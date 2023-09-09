@@ -1,4 +1,4 @@
-import React, { ReactNode, RefObject, useMemo, useRef } from 'react';
+import React, { ReactNode, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   ELEMENT_MENTION,
@@ -12,14 +12,13 @@ import {
   Value,
 } from '@udecode/plate';
 import { useFocused, useSelected } from 'slate-react';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { getPlainBody } from '~/lib/editor/getPlainBody';
 import { useEditorEvent } from '~/lib/editor/imperativeEvents';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { includes } from '~/lib/includes';
-import { Future, mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
+import { mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import { DocumentLink } from '~/lib/routes';
-import { PartialDocument } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import DeleteIcon from '~/components/icons/DeleteIcon';
@@ -38,11 +37,8 @@ export const MentionComponent = ({
 }: PlateRenderElementProps<Value, TMentionElement>) => {
   const { documentId, fallbackText } = element as any as DocumentMention;
 
-  const { futurePartialDocuments, documentId: currentDocumentId } =
-    useContext() as {
-      futurePartialDocuments: Future<PartialDocument[]>;
-      documentId: number;
-    };
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
+  const currentDocumentId = useAppContext('documentId');
 
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -117,11 +113,10 @@ export const MentionInputComponent = ({
   children,
   element,
 }: PlateRenderElementProps<Value, TMentionInputElement>) => {
-  const { futurePartialDocuments, mentionSuggestionsContainerRef } =
-    useContext() as {
-      futurePartialDocuments: Future<PartialDocument[]>;
-      mentionSuggestionsContainerRef: RefObject<HTMLDivElement>;
-    };
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
+  const mentionSuggestionsContainerRef = useAppContext(
+    'mentionSuggestionsContainerRef'
+  );
 
   const handleSelectItem = (item: DocumentMention) =>
     getMentionOnSelectItem({

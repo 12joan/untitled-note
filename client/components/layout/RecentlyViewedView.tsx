@@ -1,22 +1,21 @@
-import React from 'react';
-import { ContextProvider, useContext } from '~/lib/context';
-import { Future, unwrapFuture } from '~/lib/monads';
+import React, { memo } from 'react';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
+import { unwrapFuture } from '~/lib/monads';
 import { RecentlyViewedDocumentLink } from '~/lib/routes';
-import { PartialDocument } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentIndex } from '~/components/DocumentIndex';
 import { LoadingView } from '~/components/LoadingView';
 
-export const RecentlyViewedView = () => {
+export const RecentlyViewedView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
 
   useTitle('Recently viewed');
 
-  const { futureRecentlyViewedDocuments } = useContext() as {
-    futureRecentlyViewedDocuments: Future<PartialDocument[]>;
-  };
+  const futureRecentlyViewedDocuments = useAppContext(
+    'futureRecentlyViewedDocuments'
+  );
 
   return (
     <div ref={viewRef} className="grow flex flex-col">
@@ -24,7 +23,7 @@ export const RecentlyViewedView = () => {
 
       <h1 className="h1 select-none mb-5">Recently viewed</h1>
 
-      <ContextProvider linkOriginator="Recently viewed">
+      <AppContextProvider linkOriginator="Recently viewed">
         {unwrapFuture(futureRecentlyViewedDocuments, {
           pending: <LoadingView />,
           resolved: (documents) => (
@@ -40,7 +39,7 @@ export const RecentlyViewedView = () => {
             />
           ),
         })}
-      </ContextProvider>
+      </AppContextProvider>
     </div>
   );
-};
+});

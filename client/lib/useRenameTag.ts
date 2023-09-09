@@ -1,11 +1,11 @@
 import { updateTag } from '~/lib/apis/tag';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { handleRenameTagError } from '~/lib/handleErrors';
 import { Tag } from '~/lib/types';
 import { useInputModal } from '~/lib/useInputModal';
 
 export const useRenameTag = (tag: Tag) => {
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
 
   return useInputModal({
     title: 'Rename tag',

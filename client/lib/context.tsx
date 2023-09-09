@@ -1,34 +1,65 @@
 import React, {
-  createContext,
+  Context,
+  createContext as _createContext,
   ReactNode,
-  useContext as reactUseContext,
+  useContext as _useContext,
   useMemo,
 } from 'react';
 
-const Context = createContext({});
+type WrappedValue<T> = { data: T } | null;
 
-export const useContext = () => reactUseContext(Context);
-
-export interface ContextProviderProps extends Record<string, any> {
+export type ProviderProps<T> = Partial<T> & {
   children: ReactNode;
-  context?: Record<string, any>;
-}
+};
 
-export const ContextProvider = ({
-  context: contextProp = {},
-  children,
-  ...otherProps
-}: ContextProviderProps) => {
-  const oldContext = useContext();
+export const createContext = <
+  T extends Record<string, unknown>
+>(defaultValues: { [K in keyof T]: WrappedValue<T[K]> }) => {
+  const contexts = Object.fromEntries(
+    Object.entries(defaultValues).map(([key, value]) => [
+      key,
+      _createContext(value),
+    ])
+  ) as { [K in keyof T]: Context<WrappedValue<T[K]>> };
 
-  const context = useMemo(
-    () => ({
-      ...oldContext,
-      ...contextProp,
-      ...otherProps,
-    }),
-    [oldContext, contextProp, otherProps]
-  );
+  const useContext = <K extends keyof T>(key: K) => {
+    const wrappedValue = _useContext(contexts[key]);
 
-  return <Context.Provider value={context}>{children}</Context.Provider>;
+    if (wrappedValue === null) {
+      throw new Error(`Context value for ${key as string} has not been set`);
+    }
+
+    return wrappedValue.data;
+  };
+
+  const SingleProvider = <K extends keyof T>({
+    children,
+    contextKey: key,
+    value,
+  }: {
+    children: ReactNode;
+    contextKey: K;
+    value: T[K];
+  }) => {
+    const wrappedValue = useMemo(() => ({ data: value }), [value]);
+    const { Provider } = contexts[key];
+
+    return <Provider value={wrappedValue}>{children}</Provider>;
+  };
+
+  const Provider = ({ children, ...values }: ProviderProps<T>): JSX.Element => {
+    let wrappedChildren = children as JSX.Element;
+
+    Object.entries(values).forEach(([key, value]) => {
+      wrappedChildren = (
+        <SingleProvider contextKey={key} value={value}>
+          {wrappedChildren}
+        </SingleProvider>
+      );
+    });
+
+    return wrappedChildren;
+  };
+
+  return { useContext, Provider };
 };

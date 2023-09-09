@@ -4,7 +4,7 @@ import UpstreamHeadedTippy, {
 } from '@tippyjs/react';
 import UpstreamTippy from '@tippyjs/react/headless';
 import { Instance } from 'tippy.js';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { mapRef } from '~/lib/refUtils';
 
 import 'tippy.js/dist/tippy.css';
@@ -24,10 +24,7 @@ const makeTippyComponent = (
           element && ((element as any)._tippy as TippyInstance)
       );
 
-    const { inModal = false } = useContext() as {
-      inModal: boolean;
-    };
-
+    const inModal = useAppContext('inModal') || false;
     return <TippyComponent ref={ref} zIndex={inModal ? 40 : 20} {...props} />;
   });
 

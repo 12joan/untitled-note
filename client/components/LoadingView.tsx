@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { useTimeout } from '~/lib/useTimer';
 
 export interface LoadingViewProps extends Record<string, any> {
@@ -12,8 +12,7 @@ export const LoadingView = ({
   showImmediately = false,
   ...otherProps
 }: LoadingViewProps) => {
-  const { topBarHeight = 0 } = useContext() as { topBarHeight?: number };
-
+  const topBarHeight = useAppContext('topBarHeight');
   const [showLoading, setShowLoading] = useState(showImmediately);
 
   useTimeout(() => !showImmediately && setShowLoading(true), 500);

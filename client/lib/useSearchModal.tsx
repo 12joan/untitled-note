@@ -1,11 +1,10 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSearchResults } from '~/lib/apis/search';
+import { useAppContext } from '~/lib/appContext';
 import { searchCommands } from '~/lib/commands';
-import { useContext } from '~/lib/context';
 import { IIC, liftToIIC, mergeIICs, useDeployIICs } from '~/lib/iic';
 import { includes } from '~/lib/includes';
 import {
-  Future,
   FutureServiceResult,
   orDefaultFuture,
   orDefaultFutureServiceResult,
@@ -15,12 +14,7 @@ import {
   unwrapFutureServiceResult,
 } from '~/lib/monads';
 import { documentPath, projectPath, tagPath } from '~/lib/routes';
-import {
-  DocumentSearchResult,
-  PartialDocument,
-  Project,
-  Tag,
-} from '~/lib/types';
+import { DocumentSearchResult } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useModal } from '~/lib/useModal';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
@@ -123,17 +117,10 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
   const navigateOrOpen = useNavigateOrOpen();
   const openIIC = liftToIIC(navigateOrOpen, { layoutEffect: false });
 
-  const {
-    projects,
-    project: currentProject,
-    futureTags,
-    futurePartialDocuments,
-  } = useContext() as {
-    projects: Project[];
-    project: Project;
-    futureTags: Future<Tag[]>;
-    futurePartialDocuments: Future<PartialDocument[]>;
-  };
+  const projects = useAppContext('projects');
+  const currentProject = useAppContext('project');
+  const futureTags = useAppContext('futureTags');
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
 
   const tags = orDefaultFuture(futureTags, []);
   const partialDocuments = orDefaultFuture(futurePartialDocuments, []);

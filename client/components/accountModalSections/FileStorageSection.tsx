@@ -1,11 +1,11 @@
 import React from 'react';
 import { deleteFile as deleteFileAPI } from '~/lib/apis/file';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { filesize } from '~/lib/filesize';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import { handleDeleteFileError } from '~/lib/handleErrors';
-import { Future, sequenceFutures, unwrapFuture } from '~/lib/monads';
-import { S3File, StorageQuotaUsage } from '~/lib/types';
+import { sequenceFutures, unwrapFuture } from '~/lib/monads';
+import { S3File } from '~/lib/types';
 import { Dropdown, DropdownItem } from '~/components/Dropdown';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
@@ -14,10 +14,8 @@ import { LoadingView } from '~/components/LoadingView';
 import { Meter } from '~/components/Meter';
 
 export const FileStorageSection = () => {
-  const { futureQuotaUsage, futureFiles } = useContext() as {
-    futureQuotaUsage: Future<StorageQuotaUsage>;
-    futureFiles: Future<S3File[]>;
-  };
+  const futureQuotaUsage = useAppContext('futureQuotaUsage');
+  const futureFiles = useAppContext('futureFiles');
 
   const futureData = sequenceFutures({
     quotaUsage: futureQuotaUsage,

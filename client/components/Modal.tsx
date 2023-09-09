@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Dialog } from '@headlessui/react';
-import { ContextProvider } from '~/lib/context';
+import { AppContextProvider } from '~/lib/appContext';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { WithCloseButton } from '~/components/WithCloseButton';
 
@@ -22,7 +22,7 @@ export const ModalRoot = ({
   }`;
 
   return (
-    <ContextProvider inModal>
+    <AppContextProvider inModal>
       <Dialog
         static
         open={open}
@@ -31,7 +31,7 @@ export const ModalRoot = ({
         aria-hidden={!open}
         {...otherProps}
       />
-    </ContextProvider>
+    </AppContextProvider>
   );
 };
 

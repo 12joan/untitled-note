@@ -5,11 +5,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { includes } from '~/lib/includes';
-import { Future, orDefaultFuture } from '~/lib/monads';
+import { orDefaultFuture } from '~/lib/monads';
 import { TagLink } from '~/lib/routes';
-import { LocalDocument, LocalTag, Tag } from '~/lib/types';
+import { LocalDocument, LocalTag } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import CloseIcon from '~/components/icons/CloseIcon';
@@ -64,10 +64,7 @@ export const EditorTags = forwardRef(
       return remainingTags;
     };
 
-    const { futureTags: futureAllTags } = useContext() as {
-      futureTags: Future<Tag[]>;
-    };
-
+    const futureAllTags = useAppContext('futureTags');
     const allTags: LocalTag[] = orDefaultFuture(futureAllTags, []);
 
     const unusedTags = useMemo(

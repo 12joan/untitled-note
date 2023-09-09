@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { streamDocuments } from '~/lib/apis/document';
-import { ContextProvider, useContext } from '~/lib/context';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { Future, mapFuture, unwrapFuture } from '~/lib/monads';
 import { OverviewLink } from '~/lib/routes';
 import { PartialDocument, Tag } from '~/lib/types';
@@ -19,13 +19,11 @@ export interface TagDocumentsViewProps {
   tagId: number;
 }
 
-export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
+export const TagDocumentsView = memo(({ tagId }: TagDocumentsViewProps) => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
 
-  const { projectId, futureTags } = useContext() as {
-    projectId: number;
-    futureTags: Future<Tag[]>;
-  };
+  const projectId = useAppContext('projectId');
+  const futureTags = useAppContext('futureTags');
 
   const futureTag: Future<Tag | undefined> = mapFuture(futureTags, (tags) =>
     tags.find((tag) => tag.id === tagId)
@@ -105,7 +103,7 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
         })}
       </div>
 
-      <ContextProvider
+      <AppContextProvider
         linkOriginator={unwrapFuture(futureTag, {
           pending: 'Tag',
           resolved: (tag) => tag!.text,
@@ -117,7 +115,7 @@ export const TagDocumentsView = ({ tagId }: TagDocumentsViewProps) => {
             <DocumentIndex viewWidth={viewWidth} documents={documents} />
           ),
         })}
-      </ContextProvider>
+      </AppContextProvider>
     </div>
   );
-};
+});

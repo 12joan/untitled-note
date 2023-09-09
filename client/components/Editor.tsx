@@ -1,14 +1,7 @@
-import React, {
-  ReactNode,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Plate, PlateEditor, usePlateEditorState } from '@udecode/plate';
 import { Range } from 'slate';
-import { ContextProvider, useContext } from '~/lib/context';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import {
   editorDataForUpload,
   getFilteredEditor,
@@ -233,7 +226,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       />
 
       {withLinkModalProvider(
-        <ContextProvider
+        <AppContextProvider
           mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
           linkOriginator={workingDocument.safe_title}
           children={plateComponent}
@@ -255,9 +248,7 @@ const WithEditorState = ({
   debouncedUpdateBody,
 }: WithEditorStateProps) => {
   const editor = usePlateEditorState();
-  const { useFormattingToolbar } = useContext() as {
-    useFormattingToolbar: (children: ReactNode) => JSX.Element;
-  };
+  const useFormattingToolbar = useAppContext('useFormattingToolbar');
 
   useSaveSelection(initialDocument.id, editor);
 

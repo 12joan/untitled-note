@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef } from 'react';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { getLastView } from '~/lib/restoreProjectView';
 import { newDocumentToken } from '~/components/AwaitNewDocument';
 import { Link, LinkProps } from '~/components/Link';
@@ -31,10 +31,8 @@ const createLinkComponent = <
       { to, ...otherProps }: RouteLinkProps,
       ref: ForwardedRef<HTMLAnchorElement>
     ) => {
-      const { projectId: currentProject, linkOriginator } = useContext() as {
-        projectId: number;
-        linkOriginator?: string;
-      };
+      const currentProject = useAppContext('projectId');
+      const linkOriginator = useAppContext('linkOriginator');
 
       const path = getPath({
         ...to,

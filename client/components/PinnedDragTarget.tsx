@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { updateDocument } from '~/lib/apis/document';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { useDragTarget } from '~/lib/dragData';
 import { pinDocument } from '~/lib/transformDocument';
 
@@ -13,7 +13,7 @@ export const PinnedDragTarget = ({
   indicatorClassName = '',
   children,
 }: PinnedDragTargetProps) => {
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
 
   const pinnedDragTargetProps = useDragTarget({
     type: 'document',

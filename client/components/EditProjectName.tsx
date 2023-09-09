@@ -1,16 +1,14 @@
 import React from 'react';
 import { updateProject } from '~/lib/apis/project';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { handleUpdateProjectError } from '~/lib/handleErrors';
 import { retry } from '~/lib/retry';
-import { Project } from '~/lib/types';
 import { useIsMounted } from '~/lib/useIsMounted';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 
 export const EditProjectName = () => {
-  const { project } = useContext() as { project: Project };
-
+  const project = useAppContext('project');
   const isMounted = useIsMounted();
 
   const {

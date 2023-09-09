@@ -1,19 +1,25 @@
-import { DependencyList, useEffect, useRef } from 'react';
+import { DependencyList, useEffect, useLayoutEffect, useRef } from 'react';
 
-export const useEffectAfterFirst = (
-  callback: () => void,
-  dependencies: DependencyList = [],
-  shouldExecute = true
-) => {
-  const isFirst = useRef(true);
+const makeUseEffectAfterFirst =
+  (useEffectHook: typeof useEffect | typeof useLayoutEffect) =>
+  (
+    callback: () => void,
+    dependencies: DependencyList = [],
+    shouldExecute = true
+  ) => {
+    const isFirst = useRef(true);
 
-  useEffect(() => {
-    if (shouldExecute) {
-      if (isFirst.current) {
-        isFirst.current = false;
-      } else {
-        return callback();
+    useEffectHook(() => {
+      if (shouldExecute) {
+        if (isFirst.current) {
+          isFirst.current = false;
+        } else {
+          return callback();
+        }
       }
-    }
-  }, dependencies);
-};
+    }, dependencies);
+  };
+
+export const useEffectAfterFirst = makeUseEffectAfterFirst(useEffect);
+export const useLayoutEffectAfterFirst =
+  makeUseEffectAfterFirst(useLayoutEffect);

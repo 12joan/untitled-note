@@ -1,7 +1,6 @@
-import React, { ElementType, forwardRef } from 'react';
-import { useContext } from '~/lib/context';
+import React, { ElementType, forwardRef, memo } from 'react';
+import { useAppContext } from '~/lib/appContext';
 import { NewDocumentLink } from '~/lib/routes';
-import { Project } from '~/lib/types';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
 import AccountIcon from '~/components/icons/AccountIcon';
@@ -28,95 +27,87 @@ export interface TopBar {
   onSidebarButtonClick?: () => void;
 }
 
-export const TopBar = ({
-  showSidebarButton = false,
-  onSidebarButtonClick,
-}: TopBar) => {
-  const {
-    project,
-    toggleSearchModal,
-    toggleAccountModal,
-    toggleSettingsModal,
-  } = useContext() as {
-    project: Project;
-    toggleSearchModal: () => void;
-    toggleAccountModal: () => void;
-    toggleSettingsModal: () => void;
-  };
+export const TopBar = memo(
+  ({ showSidebarButton = false, onSidebarButtonClick }: TopBar) => {
+    const project = useAppContext('project');
+    const toggleSearchModal = useAppContext('toggleSearchModal');
+    const toggleSettingsModal = useAppContext('toggleSettingsModal');
+    const toggleAccountModal = useAppContext('toggleAccountModal');
 
-  const { isXs } = useBreakpoints();
+    const { isXs } = useBreakpoints();
 
-  const mainActions: Action[] = [
-    { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
-    { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
-    { icon: SettingsIcon, label: 'Settings', onClick: toggleSettingsModal },
-  ];
+    const mainActions: Action[] = [
+      { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
+      { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
+      { icon: SettingsIcon, label: 'Settings', onClick: toggleSettingsModal },
+    ];
 
-  const accountActions: Action[] = [
-    { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
-    { icon: LogoutIcon, label: 'Log out', as: LogoutButton },
-  ];
+    const accountActions: Action[] = [
+      { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
+      { icon: LogoutIcon, label: 'Log out', as: LogoutButton },
+    ];
 
-  const isDisconnected = useDisconnected();
+    const isDisconnected = useDisconnected();
 
-  return (
-    <>
-      {showSidebarButton && (
-        <Tooltip content="Show sidebar" fixed>
-          <NavButton
-            icon={SidebarIcon}
-            label="Show sidebar"
-            onClick={onSidebarButtonClick}
-          />
-        </Tooltip>
-      )}
+    return (
+      <>
+        {showSidebarButton && (
+          <Tooltip content="Show sidebar" fixed>
+            <NavButton
+              icon={SidebarIcon}
+              label="Show sidebar"
+              onClick={onSidebarButtonClick}
+            />
+          </Tooltip>
+        )}
 
-      {isDisconnected ? (
-        <div
-          className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white"
-          aria-live="assertive"
-        >
-          <OfflineIcon size="1.25em" noAriaLabel />
-          Connection lost
-        </div>
-      ) : (
-        <div
-          className={`font-medium ${
-            showSidebarButton ? '' : '-ml-3'
-          } px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}
-        >
-          {project.name}
-        </div>
-      )}
+        {isDisconnected ? (
+          <div
+            className="font-medium px-3 py-1 rounded-full bg-red-500 pointer-events-auto select-none flex items-center gap-2 text-white"
+            aria-live="assertive"
+          >
+            <OfflineIcon size="1.25em" noAriaLabel />
+            Connection lost
+          </div>
+        ) : (
+          <div
+            className={`font-medium ${
+              showSidebarButton ? '' : '-ml-3'
+            } px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate`}
+          >
+            {project.name}
+          </div>
+        )}
 
-      <div className="grow" />
+        <div className="grow" />
 
-      {isXs ? (
-        <>
-          {mainActions.map(({ label, ...otherProps }) => (
-            <Tooltip key={label} content={label} fixed>
-              <NavButton label={label} {...otherProps} />
-            </Tooltip>
-          ))}
+        {isXs ? (
+          <>
+            {mainActions.map(({ label, ...otherProps }) => (
+              <Tooltip key={label} content={label} fixed>
+                <NavButton label={label} {...otherProps} />
+              </Tooltip>
+            ))}
 
+            <NavDropdown
+              icon={AccountIcon}
+              label="Account"
+              actions={accountActions}
+              trigger="mouseenter click"
+              interactiveBorder={10}
+            />
+          </>
+        ) : (
           <NavDropdown
-            icon={AccountIcon}
-            label="Account"
-            actions={accountActions}
-            trigger="mouseenter click"
-            interactiveBorder={10}
+            icon={MenuIcon}
+            label="Menu"
+            actions={[...mainActions, ...accountActions]}
           />
-        </>
-      ) : (
-        <NavDropdown
-          icon={MenuIcon}
-          label="Menu"
-          actions={[...mainActions, ...accountActions]}
-        />
-      )}
-    </>
-  );
-};
+        )}
+      </>
+    );
+  }
+);
 
 interface NavDropdownProps extends Omit<DropdownProps, 'items'> {
   icon: ElementType<IconProps>;

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createProject } from '~/lib/apis/project';
+import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
-import { useContext } from '~/lib/context';
 import { handleCreateProjectError } from '~/lib/handleErrors';
 import { projectPath } from '~/lib/routes';
 import { useInputModal } from '~/lib/useInputModal';
@@ -9,10 +9,7 @@ import { useInputModal } from '~/lib/useInputModal';
 export const useNewProject = () => {
   const navigate = useNavigate();
   const { pathname: currentPath } = useLocation();
-
-  const { invalidateProjectsCache } = useContext() as {
-    invalidateProjectsCache: () => void;
-  };
+  const invalidateProjectsCache = useAppContext('invalidateProjectsCache');
 
   return useInputModal({
     title: 'New project',
