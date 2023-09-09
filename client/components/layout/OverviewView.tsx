@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
-import { ContextProvider, useContext } from '~/lib/context';
-import { Future, sequenceFutures, unwrapFuture } from '~/lib/monads';
+import { sequenceFutures, unwrapFuture } from '~/lib/monads';
 import {
   EditProjectLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
   TagsLink,
 } from '~/lib/routes';
-import { PartialDocument, Project, Tag } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { DocumentIndex } from '~/components/DocumentIndex';
@@ -18,22 +17,16 @@ import { PinnedDragTarget } from '~/components/PinnedDragTarget';
 import { PopOutLink } from '~/components/PopOutLink';
 import { TagIndex } from '~/components/TagIndex';
 
-export const OverviewView = () => {
+export const OverviewView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
 
-  const {
-    project,
-    futurePartialDocuments,
-    futurePinnedDocuments,
-    futureRecentlyViewedDocuments,
-    futureTags,
-  } = useContext() as {
-    project: Project;
-    futurePartialDocuments: Future<PartialDocument[]>;
-    futurePinnedDocuments: Future<PartialDocument[]>;
-    futureRecentlyViewedDocuments: Future<PartialDocument[]>;
-    futureTags: Future<Tag[]>;
-  };
+  const project = useAppContext('project');
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
+  const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
+  const futureRecentlyViewedDocuments = useAppContext(
+    'futureRecentlyViewedDocuments'
+  );
+  const futureTags = useAppContext('futureTags');
 
   useTitle(project.name);
 
@@ -58,7 +51,7 @@ export const OverviewView = () => {
           recentlyViewedDocuments,
           tags,
         }) => (
-          <ContextProvider linkOriginator="Overview">
+          <AppContextProvider linkOriginator="Overview">
             <DocumentIndex
               viewWidth={viewWidth}
               title="Pinned documents"
@@ -92,9 +85,9 @@ export const OverviewView = () => {
               documents={documents}
               ifEmpty={<NoDocumentsView />}
             />
-          </ContextProvider>
+          </AppContextProvider>
         ),
       })}
     </div>
   );
-};
+});

@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useReducer, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchDocument } from '~/lib/apis/document';
-import { ContextProvider, useContext } from '~/lib/context';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import {
-  Future,
   FutureServiceResult,
   mapFuture,
   pendingFutureServiceResult,
@@ -13,7 +12,7 @@ import {
 } from '~/lib/monads';
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments';
 import { OverviewLink } from '~/lib/routes';
-import { Document, PartialDocument } from '~/lib/types';
+import { Document } from '~/lib/types';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 import { Editor } from '~/components/Editor';
@@ -23,16 +22,11 @@ export interface EditorViewProps {
   documentId: number;
 }
 
-export const EditorView = ({ documentId }: EditorViewProps) => {
-  const {
-    projectId,
-    futurePartialDocuments,
-    topBarHeight = 0,
-  } = useContext() as {
-    projectId: number;
-    futurePartialDocuments: Future<PartialDocument[]>;
-    topBarHeight?: number;
-  };
+// eslint-disable-next-line react/prop-types
+export const EditorView = memo(({ documentId }: EditorViewProps) => {
+  const projectId = useAppContext('projectId');
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
+  const topBarHeight = useAppContext('topBarHeight');
 
   const [searchParams] = useSearchParams();
   const isFromRecentlyViewed = searchParams.has('recently_viewed');
@@ -108,9 +102,9 @@ export const EditorView = ({ documentId }: EditorViewProps) => {
     ),
     success: (initialDocument) => (
       <div className="grow flex flex-col">
-        <ContextProvider documentId={documentId}>
+        <AppContextProvider documentId={documentId}>
           <Editor clientId={clientId} initialDocument={initialDocument} />
-        </ContextProvider>
+        </AppContextProvider>
       </div>
     ),
     failure: (error) => {
@@ -143,4 +137,4 @@ export const EditorView = ({ documentId }: EditorViewProps) => {
       );
     },
   });
-};
+});

@@ -1,14 +1,13 @@
-import React from 'react';
-import { useContext } from '~/lib/context';
-import { Project } from '~/lib/types';
+import React, { memo } from 'react';
+import { useAppContext } from '~/lib/appContext';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { EditProjectIcon } from '~/components/EditProjectIcon';
 import { EditProjectName } from '~/components/EditProjectName';
 import { ProjectActions } from '~/components/ProjectActions';
 
-export const EditProjectView = () => {
-  const { project } = useContext() as { project: Project };
+export const EditProjectView = memo(() => {
+  const project = useAppContext('project');
 
   useTitle(`Edit ${project.name}`);
 
@@ -28,4 +27,4 @@ export const EditProjectView = () => {
       </div>
     </div>
   );
-};
+});

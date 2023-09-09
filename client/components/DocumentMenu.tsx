@@ -3,7 +3,7 @@ import {
   deleteDocument as deleteDocumentAPI,
   updateDocument as updateDocumentAPI,
 } from '~/lib/apis/document';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { copyText } from '~/lib/copyText';
 import { TAB_OR_WINDOW } from '~/lib/environment';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
@@ -44,7 +44,7 @@ export const DocumentMenu = ({
   showReplace = false,
   getEditorChildrenForExport,
 }: DocumentMenuProps) => {
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
 
   const updateDocument =
     updateDocumentOverride ||

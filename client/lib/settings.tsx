@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchSettings, updateSettings } from '~/lib/apis/settings';
-import { useContext } from '~/lib/context';
+import { AppContext, useAppContext } from '~/lib/appContext';
 import {
   FutureServiceResult,
   orDefaultFutureServiceResult,
@@ -15,10 +15,7 @@ import {
 } from '~/lib/settingsSchema';
 import { useOverrideable } from '~/lib/useOverrideable';
 
-type SettingsContext = {
-  settings: SettingsSchema;
-  setSettings: (settings: SettingsSchema) => void;
-};
+type SettingsContext = Pick<AppContext, 'settings' | 'setSettings'>;
 
 export const useSettingsProvider = (): SettingsContext => {
   const [fsrSettings, setFsrSettings] = useState<
@@ -65,7 +62,8 @@ export function useSettings<K extends keyof SettingsSchema>(
 ): [SettingsSchema[K], (value: SettingsSchema[K]) => void];
 
 export function useSettings<K extends keyof SettingsSchema>(key?: K) {
-  const { settings, setSettings } = useContext() as SettingsContext;
+  const settings = useAppContext('settings');
+  const setSettings = useAppContext('setSettings');
 
   if (key) {
     return [

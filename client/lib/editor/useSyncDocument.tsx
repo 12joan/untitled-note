@@ -1,6 +1,6 @@
 import React from 'react';
 import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { pluralize } from '~/lib/pluralize';
 import { useToast } from '~/lib/toasts';
 import { Document, LocalDocument } from '~/lib/types';
@@ -17,9 +17,7 @@ export const useSyncDocument = ({
   clientId,
   initialDocument,
 }: UseSyncDocumentOptions) => {
-  const { projectId } = useContext() as {
-    projectId: number;
-  };
+  const projectId = useAppContext('projectId');
 
   const [lastSuccessfulUpdate, setLastSuccessfulUpdate] =
     useStateWhileMounted<Date>(() => new Date(initialDocument.updated_at));

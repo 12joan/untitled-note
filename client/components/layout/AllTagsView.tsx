@@ -1,21 +1,17 @@
-import React from 'react';
-import { ContextProvider, useContext } from '~/lib/context';
-import { Future, unwrapFuture } from '~/lib/monads';
-import { Tag } from '~/lib/types';
+import React, { memo } from 'react';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
+import { unwrapFuture } from '~/lib/monads';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { LoadingView } from '~/components/LoadingView';
 import { TagIndex } from '~/components/TagIndex';
 
-export const AllTagsView = () => {
+export const AllTagsView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
+  const futureTags = useAppContext('futureTags');
 
   useTitle('All tags');
-
-  const { futureTags } = useContext() as {
-    futureTags: Future<Tag[]>;
-  };
 
   return (
     <div ref={viewRef} className="grow flex flex-col">
@@ -23,7 +19,7 @@ export const AllTagsView = () => {
 
       <h1 className="h1 select-none mb-5">All tags</h1>
 
-      <ContextProvider linkOriginator="All tags">
+      <AppContextProvider linkOriginator="All tags">
         {unwrapFuture(futureTags, {
           pending: <LoadingView />,
           resolved: (tags) => (
@@ -39,7 +35,7 @@ export const AllTagsView = () => {
             />
           ),
         })}
-      </ContextProvider>
+      </AppContextProvider>
     </div>
   );
-};
+});

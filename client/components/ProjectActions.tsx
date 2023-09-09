@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteProject, updateProject } from '~/lib/apis/project';
+import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
-import { useContext } from '~/lib/context';
 import {
   handleArchiveProjectError,
   handleDeleteProjectError,
@@ -11,7 +11,7 @@ import {
 import { Future, mapFuture, unwrapFuture } from '~/lib/monads';
 import { pluralize } from '~/lib/pluralize';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
-import { PartialDocument, Project } from '~/lib/types';
+import { Project } from '~/lib/types';
 import { useModal } from '~/lib/useModal';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
@@ -19,10 +19,8 @@ import { InlinePlaceholder } from '~/components/Placeholder';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const ProjectActions = () => {
-  const { project, futurePartialDocuments } = useContext() as {
-    project: Project;
-    futurePartialDocuments: Future<PartialDocument[]>;
-  };
+  const project = useAppContext('project');
+  const futurePartialDocuments = useAppContext('futurePartialDocuments');
 
   const futureDocumentCount = mapFuture(
     futurePartialDocuments,

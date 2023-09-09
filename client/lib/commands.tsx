@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { envSpecific } from '~/lib/environment';
 import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
@@ -13,7 +13,6 @@ import {
   tagsPath,
 } from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
-import { Project } from '~/lib/types';
 import AccountIcon from '~/components/icons/AccountIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
@@ -59,10 +58,7 @@ const openInProjectIIC = (
 ) =>
   iic(
     () => {
-      const { projectId } = useContext() as {
-        projectId: number;
-      };
-
+      const projectId = useAppContext('projectId');
       const navigateOrOpen = useNavigateOrOpen();
 
       return () => navigateOrOpen(pathFn({ projectId }), newTab);
@@ -79,7 +75,7 @@ const commands: Command[] = [
       hint: 'Search project',
       config: parseKeyboardShortcut('mod+k'),
     },
-    action: () => iic(() => (useContext() as any).toggleSearchModal),
+    action: () => iic(() => useAppContext('toggleSearchModal')),
   },
   {
     id: 'new-document',
@@ -142,7 +138,7 @@ const commands: Command[] = [
         },
       }),
     },
-    action: () => iic(() => (useContext() as any).toggleSettingsModal),
+    action: () => iic(() => useAppContext('toggleSettingsModal')),
   },
   {
     id: 'account-info',
@@ -154,7 +150,7 @@ const commands: Command[] = [
     keyboardShortcut: {
       hint: 'Open account info',
     },
-    action: () => iic(() => (useContext() as any).toggleAccountModal),
+    action: () => iic(() => useAppContext('toggleAccountModal')),
   },
   {
     id: 'cycle-focus',
@@ -163,7 +159,7 @@ const commands: Command[] = [
       hint: 'Cycle focus between the main sections of the interface',
       config: parseKeyboardShortcut('alt+F6'),
     },
-    action: () => iic(() => (useContext() as any).cycleFocus),
+    action: () => iic(() => useAppContext('cycleFocus')),
   },
   {
     id: 'switch-project',
@@ -182,10 +178,7 @@ const commands: Command[] = [
       overrideAction: (event) =>
         iic(
           () => {
-            const { projects } = useContext() as {
-              projects: Project[];
-            };
-
+            const projects = useAppContext('projects');
             const navigateOrOpen = useNavigateOrOpen();
 
             const n = getSequential(event);

@@ -1,12 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { createBlankDocument } from '~/lib/apis/document';
+import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
 import {
   getSessionCookieStorage,
   setSessionCookieStorage,
 } from '~/lib/browserStorage';
-import { useContext } from '~/lib/context';
 import { handleCreateDocumentError } from '~/lib/handleErrors';
 import { documentPath } from '~/lib/routes';
 import { Tag } from '~/lib/types';
@@ -31,7 +31,7 @@ export interface AwaitNewDocumentProps {
 
 export const AwaitNewDocument = ({ tagId }: AwaitNewDocumentProps) => {
   const { pathname: currentPath, hash } = useLocation();
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
   const [awaitPath, setAwaitPath] = useState<string | null>(null);
 
   useLayoutEffect(() => {

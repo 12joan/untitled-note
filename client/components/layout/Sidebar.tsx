@@ -1,12 +1,13 @@
 import React, {
   ElementType,
   forwardRef,
+  memo,
   MouseEvent,
   ReactElement,
   ReactNode,
 } from 'react';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
-import { ContextProvider, useContext } from '~/lib/context';
 import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
 import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
 import { PolyProps, PolyRef } from '~/lib/polymorphic';
@@ -34,21 +35,16 @@ export interface SidebarProps {
   onButtonClick?: () => void;
 }
 
-export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
-  const {
-    futurePinnedDocuments,
-    futureRecentlyViewedDocuments,
-    futureTags,
-    toggleSearchModal,
-  } = useContext() as {
-    futurePinnedDocuments: Future<PartialDocument[]>;
-    futureRecentlyViewedDocuments: Future<PartialDocument[]>;
-    futureTags: Future<Tag[]>;
-    toggleSearchModal: () => void;
-  };
+export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
+  const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
+  const futureRecentlyViewedDocuments = useAppContext(
+    'futureRecentlyViewedDocuments'
+  );
+  const futureTags = useAppContext('futureTags');
+  const toggleSearchModal = useAppContext('toggleSearchModal');
 
   return (
-    <ContextProvider onButtonClick={onButtonClick}>
+    <AppContextProvider onButtonClick={onButtonClick}>
       <div className="w-48 lg:w-56 space-y-5 pb-3">
         <section className="-ml-3">
           <ButtonWithIcon
@@ -93,17 +89,9 @@ export const Sidebar = ({ onButtonClick = () => {} }: SidebarProps) => {
           )}
         />
       </div>
-    </ContextProvider>
+    </AppContextProvider>
   );
-};
-
-const useOnButtonClick = () => {
-  const { onButtonClick } = useContext() as {
-    onButtonClick: () => void;
-  };
-
-  return onButtonClick;
-};
+});
 
 interface FutureDocumentsSectionProps<ButtonAs extends typeof DocumentLink>
   extends Omit<FutureSectionWithHeadingProps, 'futureChildren'> {
@@ -204,7 +192,7 @@ const SectionWithHeading = ({
   headingLink: HeadingLink,
   children,
 }: SectionWithHeadingProps) => {
-  const onButtonClick = useOnButtonClick();
+  const onButtonClick = useAppContext('onButtonClick');
 
   const headingComponent = HeadingLink ? (
     <HeadingLink
@@ -254,7 +242,7 @@ const ButtonWithIcon: ButtonWithIconComponent = forwardRef(
     const Component = as || 'button';
     const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
-    const onButtonClick = useOnButtonClick();
+    const onButtonClick = useAppContext('onButtonClick');
 
     return (
       <Component
@@ -297,7 +285,7 @@ const Button: ButtonComponent = forwardRef(
     const Component = as || 'button';
     const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
-    const onButtonClick = useOnButtonClick();
+    const onButtonClick = useAppContext('onButtonClick');
 
     return (
       <Component

@@ -1,7 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { streamDocuments } from '~/lib/apis/document';
 import { streamTags } from '~/lib/apis/tag';
-import { ContextProvider } from '~/lib/context';
+import { AppContextProvider } from '~/lib/appContext';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import { mapFuture, thenFuture } from '~/lib/monads';
 import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments';
@@ -99,26 +99,27 @@ export const StreamProjectData = ({
 
   const futureRecentlyViewedDocuments = useMemo(
     () =>
-      mapFuture(futurePartialDocuments, (documents) =>
-        recentlyViewedDocuments
-          .map((documentId) =>
-            documents.find(
-              (partialDocument) => partialDocument.id === documentId
+      mapFuture(
+        futurePartialDocuments,
+        (documents) =>
+          recentlyViewedDocuments
+            .map((documentId) =>
+              documents.find(
+                (partialDocument) => partialDocument.id === documentId
+              )
             )
-          )
-          .filter((doc) => doc !== undefined && doc.pinned_at === null)
+            .filter(
+              (doc) => doc !== undefined && doc.pinned_at === null
+            ) as PartialDocument[]
       ),
     [futurePartialDocuments, recentlyViewedDocuments]
   );
 
   return (
-    <ContextProvider
+    <AppContextProvider
       projectId={projectId}
       project={project}
       futureTags={futureTags}
-      futurePartialDocumentsIncludingBlank={
-        futurePartialDocumentsIncludingBlank
-      }
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}
       futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}

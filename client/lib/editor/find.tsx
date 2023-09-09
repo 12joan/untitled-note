@@ -16,7 +16,7 @@ import {
   TText,
 } from '@udecode/plate';
 import { Path, Range as SlateRange } from 'slate';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { FIND_SUPPORTED } from '~/lib/environment';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useStateWhenSettled } from '~/lib/useStateWhenSettled';
@@ -285,9 +285,7 @@ const FindDialog = ({
   onClose,
 }: FindDialogProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { topBarHeight } = useContext() as {
-    topBarHeight: number;
-  };
+  const topBarHeight = useAppContext('topBarHeight');
 
   const handleInputKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && totalMatches > 0) {

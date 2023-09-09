@@ -1,20 +1,16 @@
 import { useMemo } from 'react';
 import { PlatePlugin } from '@udecode/plate';
-import { useContext } from '~/lib/context';
-import { Future, orDefaultFuture } from '~/lib/monads';
-import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { useAppContext } from '~/lib/appContext';
+import { orDefaultFuture } from '~/lib/monads';
 import { Attachment } from './components/Attachment';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { createAttachmentPlugin } from './plugin';
 import { getUploadIsInProgress } from './uploadsInProgressStore';
 
 export const useAttachmentPlugins = (): PlatePlugin[] => {
-  const { projectId, futureRemainingQuota, toggleAccountModal } =
-    useContext() as {
-      projectId: number;
-      futureRemainingQuota: Future<number>;
-      toggleAccountModal: (props: AccountModalOpenProps) => void;
-    };
+  const projectId = useAppContext('projectId');
+  const futureRemainingQuota = useAppContext('futureRemainingQuota');
+  const toggleAccountModal = useAppContext('toggleAccountModal');
 
   return useMemo(
     () => [

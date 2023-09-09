@@ -1,6 +1,6 @@
 import React, { ElementType, MouseEvent, ReactNode, useRef } from 'react';
 import { followCursor } from 'tippy.js';
-import { ContextProvider, useContext } from '~/lib/context';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { PolyProps } from '~/lib/polymorphic';
 import { useEventListener } from '~/lib/useEventListener';
@@ -37,7 +37,7 @@ export const Dropdown = ({
   const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(close);
 
   return (
-    <ContextProvider closeDropdown={close}>
+    <AppContextProvider closeDropdown={close}>
       <div ref={focusOutRef} {...focusOutProps} className="contents">
         <Tippy
           ref={tippyRef}
@@ -54,7 +54,7 @@ export const Dropdown = ({
           {...otherProps}
         />
       </div>
-    </ContextProvider>
+    </AppContextProvider>
   );
 };
 
@@ -91,9 +91,7 @@ export const DropdownItem = <C extends ElementType = 'button'>({
   const Component = as || 'button';
   const buttonProps = Component === 'button' ? { type: 'button' } : {};
 
-  const { closeDropdown } = useContext() as {
-    closeDropdown: () => void;
-  };
+  const closeDropdown = useAppContext('closeDropdown');
 
   return (
     <Component

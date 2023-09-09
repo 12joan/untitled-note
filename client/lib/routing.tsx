@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { forwardParams } from '~/lib/forwardParams';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
 import { getLastView } from '~/lib/restoreProjectView';
@@ -56,9 +56,7 @@ interface WithProject {
 }
 
 const WithProject = ({ projectId, children }: WithProject): JSX.Element => {
-  const { projects } = useContext() as {
-    projects: Project[];
-  };
+  const projects = useAppContext('projects');
 
   const project = useMemo(
     () => projects.find((project) => project.id === projectId),

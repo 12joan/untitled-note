@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
-import { ContextProvider, useContext } from '~/lib/context';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { cycleFocus } from '~/lib/cycleFocus';
 import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
@@ -45,11 +45,10 @@ export interface ProjectViewProps {
 }
 
 export const ProjectView = ({ childView }: ProjectViewProps) => {
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
+  const { pathname: viewPath } = useLocation();
 
   useEffect(() => projectWasOpened(projectId), [projectId]);
-
-  const { pathname: viewPath } = useLocation();
 
   const projectsBarRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLDivElement>(null);
@@ -76,6 +75,14 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   }, [topBarHeight]);
 
   const [offcanvasSidebarVisible, setOffcanvasSidebarVisible] = useState(false);
+  const showOffcanvasSidebar = useCallback(
+    () => setOffcanvasSidebarVisible(true),
+    []
+  );
+  const hideOffcanvasSidebar = useCallback(
+    () => setOffcanvasSidebarVisible(false),
+    []
+  );
 
   const {
     modal: searchModal,
@@ -118,7 +125,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   useEffect(() => {
     if (sidebarAlwaysVisible) {
-      setOffcanvasSidebarVisible(false);
+      hideOffcanvasSidebar();
     }
   }, [sidebarAlwaysVisible]);
 
@@ -157,23 +164,25 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   }, [narrowWidth, viewportWidth, mainBounds.left, mainBounds.width]);
 
   return (
-    <ContextProvider
+    <AppContextProvider
       useFormattingToolbar={useFormattingToolbar}
       topBarHeight={topBarHeight}
       toggleSearchModal={toggleSearchModal}
       toggleAccountModal={toggleAccountModal}
       toggleSettingsModal={toggleSettingsModal}
-      cycleFocus={() =>
-        cycleFocus({
-          sectionRefs: [
-            mainRef,
-            projectsBarRef,
-            topBarRef,
-            sideBarRef,
-            formattingToolbarRef,
-          ],
-        })
-      }
+      cycleFocus={useCallback(
+        () =>
+          cycleFocus({
+            sectionRefs: [
+              mainRef,
+              projectsBarRef,
+              topBarRef,
+              sideBarRef,
+              formattingToolbarRef,
+            ],
+          }),
+        []
+      )}
     >
       <div className="contents">
         <div
@@ -235,7 +244,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
           >
             <TopBar
               showSidebarButton={!sidebarAlwaysVisible}
-              onSidebarButtonClick={() => setOffcanvasSidebarVisible(true)}
+              onSidebarButtonClick={showOffcanvasSidebar}
             />
           </nav>
 
@@ -259,13 +268,13 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
       <OffcanavasSidebar
         visible={offcanvasSidebarVisible}
-        onClose={() => setOffcanvasSidebarVisible(false)}
+        onClose={hideOffcanvasSidebar}
       />
 
       {searchModal}
       {accountModal}
       {settingsModal}
       {keyboardShortcutIICElements}
-    </ContextProvider>
+    </AppContextProvider>
   );
 };

@@ -5,7 +5,7 @@ import {
   ReplaceOptions,
   ReplaceResult,
 } from '~/lib/apis/replace';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { handleReplaceError } from '~/lib/handleErrors';
 import { pluralize } from '~/lib/pluralize';
 import { createToast } from '~/lib/toasts';
@@ -23,7 +23,7 @@ const ReplaceModal = ({
   open,
   onClose,
 }: ReplaceModalProps & Omit<StyledModalProps, 'children'>) => {
-  const { projectId } = useContext() as { projectId: number };
+  const projectId = useAppContext('projectId');
 
   const [findValue, setFindValue] = useState('');
   const [replaceValue, setReplaceValue] = useState('');

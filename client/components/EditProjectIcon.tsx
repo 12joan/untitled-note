@@ -3,14 +3,14 @@ import emojiData from '@emoji-mart/data';
 import EmojiPicker from '@emoji-mart/react';
 import { offset, shift, useFloating } from '@floating-ui/react-dom';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
-import { useContext } from '~/lib/context';
+import { useAppContext } from '~/lib/appContext';
 import { filesize } from '~/lib/filesize';
 import {
   handleRemoveProjectImageError,
   handleUpdateProjectError,
   handleUploadFileError,
 } from '~/lib/handleErrors';
-import { Future, orDefaultFuture, unwrapFuture } from '~/lib/monads';
+import { orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import {
   removeProjectImage,
   uploadProjectImage,
@@ -18,7 +18,6 @@ import {
 import { mergeRefs } from '~/lib/refUtils';
 import { retry } from '~/lib/retry';
 import { Project } from '~/lib/types';
-import { AccountModalOpenProps } from '~/lib/useAccountModal';
 import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
@@ -27,7 +26,7 @@ import { useOverrideable } from '~/lib/useOverrideable';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EditProjectIcon = () => {
-  const { project } = useContext() as { project: Project };
+  const project = useAppContext('project');
   const isMounted = useIsMounted();
 
   const [localProject, setLocalProject] = useOverrideable(project);
@@ -95,12 +94,9 @@ const ImageForm = ({
   state,
   setState,
 }: ImageFormProps) => {
-  const { projectId, futureRemainingQuota, toggleAccountModal } =
-    useContext() as {
-      projectId: number;
-      futureRemainingQuota: Future<number>;
-      toggleAccountModal: (props: AccountModalOpenProps) => void;
-    };
+  const projectId = useAppContext('projectId');
+  const futureRemainingQuota = useAppContext('futureRemainingQuota');
+  const toggleAccountModal = useAppContext('toggleAccountModal');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
