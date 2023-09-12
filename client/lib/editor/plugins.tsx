@@ -73,7 +73,7 @@ const codeStyle = 'bg-slate-800 dark:bg-slate-950 text-white em:text-sm';
 
 const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
-  [MARK_BOLD]: makeElementComponent('strong'),
+  [MARK_BOLD]: makeElementComponent('strong', 'font-semibold'),
   [MARK_ITALIC]: makeElementComponent('em'),
   [MARK_STRIKETHROUGH]: makeElementComponent('del'),
   [MARK_CODE]: makeElementComponent(
