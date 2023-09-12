@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef } from 'react';
 import { useAppContext } from '~/lib/appContext';
-import { getLastView } from '~/lib/restoreProjectView';
 import { newDocumentToken } from '~/components/AwaitNewDocument';
 import { Link, LinkProps } from '~/components/Link';
 

@@ -8,7 +8,7 @@
     "rails": "bundle exec rails server -b 0.0.0.0 -p 3000",
     "dev:vite": "bin/vite serve",
     "build-electron": "vite build -c vite.electron.config.js",
-    "lint": "eslint client electron/src",
+    "lint": "eslint client electron/src --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental",
     "typecheck:watch": "yarn typecheck --watch"
   },
