@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Plate, PlateEditor, usePlateEditorState } from '@udecode/plate';
+import {
+  isEditorFocused,
+  Plate,
+  PlateEditor,
+  usePlateEditorState,
+} from '@udecode/plate';
 import { Range } from 'slate';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import {
@@ -108,9 +113,27 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       setSelection(editorRef.current!, selection),
   });
 
-  const withLinkModalProvider = useLinkModalProvider({
-    onClose: restoreSelectionForEditor,
-  });
+  const withLinkModalProvider = useLinkModalProvider();
+
+  const wasFocusedBeforeModalRef = useRef<boolean>(false);
+
+  useGlobalEvent(
+    'modal:open',
+    () => {
+      wasFocusedBeforeModalRef.current = isEditorFocused(editorRef.current!);
+    },
+    [editorRef]
+  );
+
+  useGlobalEvent(
+    'modal:close',
+    () => {
+      if (wasFocusedBeforeModalRef.current) {
+        restoreSelectionForEditor();
+      }
+    },
+    [editorRef]
+  );
 
   const plugins = usePlugins();
 

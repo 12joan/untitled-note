@@ -26,16 +26,21 @@ export const useModal = <T = undefined,>(
 
   const open = useCallback(
     (...args: OpenOptions) => {
-      setOpenProps(args[0] as T);
-      onOpen?.();
-      dispatchGlobalEvent('closeAllModalsExcept', id);
+      if (!getIsOpen()) {
+        setOpenProps(args[0] as T);
+        onOpen?.();
+        dispatchGlobalEvent('modal:open', id);
+      }
     },
     [onOpen]
   );
 
   const close = useCallback(() => {
-    setOpenProps(null);
-    onClose?.();
+    if (getIsOpen()) {
+      setOpenProps(null);
+      onClose?.();
+      dispatchGlobalEvent('modal:close', id);
+    }
   }, [onClose]);
 
   const toggle = useCallback(
@@ -50,9 +55,9 @@ export const useModal = <T = undefined,>(
   );
 
   useGlobalEvent(
-    'closeAllModalsExcept',
-    (exceptId) => {
-      if (exceptId !== id) {
+    'modal:open',
+    (openedId) => {
+      if (openedId !== id) {
         close();
       }
     },

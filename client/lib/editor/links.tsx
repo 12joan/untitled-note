@@ -135,11 +135,10 @@ type OpenLinkModalFn = (props: LinkModalProps) => void;
 
 const LinkModalContext = createContext<OpenLinkModalFn | null>(null);
 
-export const useLinkModalProvider = ({ onClose }: { onClose: () => void }) => {
-  const { modal, open } = useModal<LinkModalProps>(
-    (modalProps, openProps) => <LinkModal {...modalProps} {...openProps} />,
-    { onClose }
-  );
+export const useLinkModalProvider = () => {
+  const { modal, open } = useModal<LinkModalProps>((modalProps, openProps) => (
+    <LinkModal {...modalProps} {...openProps} />
+  ));
 
   const withLinkModalProvider = (children: JSX.Element): JSX.Element => (
     <>
