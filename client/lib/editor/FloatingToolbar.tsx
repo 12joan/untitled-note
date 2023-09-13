@@ -2,12 +2,16 @@ import React, { ElementType, ReactNode } from 'react';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { PolyProps } from '~/lib/polymorphic';
 import { IconProps } from '~/components/icons/makeIcon';
-import { Tippy, TippyProps } from '~/components/Tippy';
+import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
 import { Tooltip } from '~/components/Tooltip';
 
 export interface FloatingToolbarProps {
-  open: boolean;
-  tippyProps?: Partial<TippyProps>;
+  open?: boolean;
+  tippyProps?: Partial<
+    TippyProps & {
+      ref: React.RefObject<TippyInstance>;
+    }
+  >;
   containerProps?: React.HTMLAttributes<HTMLDivElement>;
   items: ReactNode;
   children?: TippyProps['children'];
@@ -27,21 +31,19 @@ export const FloatingToolbar = ({
       appendTo={document.body}
       interactive
       {...tippyProps}
-      render={(attrs) =>
-        open && (
-          <div
-            className={groupedClassNames(
-              'rounded-lg backdrop-blur shadow text-base slate-popover',
-              containerClassName
-            )}
-            contentEditable={false}
-            {...attrs}
-            {...containerProps}
-          >
-            {items}
-          </div>
-        )
-      }
+      render={(attrs) => (
+        <div
+          className={groupedClassNames(
+            'rounded-lg backdrop-blur shadow text-base slate-popover',
+            containerClassName
+          )}
+          contentEditable={false}
+          {...attrs}
+          {...containerProps}
+        >
+          {items}
+        </div>
+      )}
     >
       {children}
     </Tippy>
