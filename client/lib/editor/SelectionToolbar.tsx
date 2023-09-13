@@ -1,5 +1,9 @@
 import React, { MouseEvent } from 'react';
-import { isSelectionExpanded, usePlateEditorState } from '@udecode/plate';
+import {
+  isRangeInSameBlock,
+  isSelectionExpanded,
+  usePlateEditorState,
+} from '@udecode/plate';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 import {
   formattingButtonClassNames,
@@ -8,7 +12,8 @@ import {
 
 export const SelectionToolbar = () => {
   const editor = usePlateEditorState();
-  const open = isSelectionExpanded(editor);
+  const open =
+    isSelectionExpanded(editor) && (isRangeInSameBlock(editor) ?? false);
 
   const formattingButtons = useInlineFormattingButtons(editor).filter(
     ({ disabled }) => !disabled
