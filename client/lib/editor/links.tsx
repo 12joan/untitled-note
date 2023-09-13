@@ -9,27 +9,32 @@ import React, {
 } from 'react';
 import {
   ELEMENT_LINK,
+  findNodePath,
   focusEditor,
-  getAboveNode,
-  getEditorString,
+  getNodeString,
   getSelectionText,
   insertLink,
   isSelectionExpanded,
   PlateEditor,
   PlateRenderElementProps,
+  replaceNodeChildren,
+  setNodes,
   someNode,
   TLinkElement,
   unwrapLink,
-  upsertLink,
+  usePlateSelectors,
   Value,
 } from '@udecode/plate';
 import { useSelected } from 'slate-react';
+import { copyText } from '~/lib/copyText';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
+import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import EditIcon from '~/components/icons/EditIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
+import { TippyInstance } from '~/components/Tippy';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 
 export const isLinkInSelection = (editor: PlateEditor) =>
@@ -183,13 +188,26 @@ export const LinkComponent = ({
   nodeProps,
   attributes,
   children,
+  element,
 }: PlateRenderElementProps<Value, TLinkElement>) => {
-  const [selectedLink, selectedLinkPath] = getAboveNode<TLinkElement>(editor, {
-    match: { type: ELEMENT_LINK },
-  }) || [undefined, undefined];
+  // Re-render on any selection change
+  usePlateSelectors().keySelection();
+
+  const findPath = () => findNodePath(editor, element)!;
+
+  const tippyRef = useRef<TippyInstance>(null);
+
   const selected = useSelected();
-  const selectionCollapsed = !isSelectionExpanded(editor);
-  const open = selected && selectionCollapsed && selectedLink !== undefined;
+  const openable = !isSelectionExpanded(editor);
+  const controlledOpen = openable && selected;
+
+  useEffect(() => {
+    if (controlledOpen) {
+      tippyRef.current?.show();
+    } else {
+      tippyRef.current?.hide();
+    }
+  }, [controlledOpen]);
 
   const safeHref = useMemo(() => {
     const unsafeHref = nodeProps!.href;
@@ -212,49 +230,75 @@ export const LinkComponent = ({
   const openLink = () =>
     Object.assign(document.createElement('a'), linkProps).click();
 
+  const copyLink = () => copyText(safeHref);
+
   const openModal = useOpenLinkModal();
 
+  const updateLink = ({ url, text }: LinkData) => {
+    const path = findPath();
+
+    // Update url
+    setNodes(editor, { url }, { at: path });
+
+    // Update text
+    replaceNodeChildren(editor, {
+      at: path,
+      nodes: [{ text }],
+    });
+  };
+
   const editLink = () => {
-    const { url } = selectedLink!;
-    const text = getEditorString(editor, selectedLinkPath);
+    const { url } = element;
+    const text = getNodeString(element);
 
     openModal({
       initialText: text === url ? '' : text,
       initialUrl: url,
-      onConfirm: (args) => upsertLink(editor, args),
+      onConfirm: updateLink,
     });
   };
 
   const removeLink = () => {
-    unwrapLink(editor);
+    unwrapLink(editor, { at: findPath() });
     focusEditor(editor);
   };
 
   return (
     <span {...attributes}>
       <FloatingToolbar
-        open={open}
+        tippyProps={{
+          ref: tippyRef,
+          trigger: 'mouseenter click',
+        }}
         items={
-          <>
-            <FloatingToolbarItem
-              icon={OpenInNewTabIcon}
-              label="Open link"
-              onClick={openLink}
-            />
+          openable && (
+            <>
+              <FloatingToolbarItem
+                icon={OpenInNewTabIcon}
+                label="Open link"
+                onClick={openLink}
+              />
 
-            <FloatingToolbarItem
-              icon={EditIcon}
-              label="Edit link"
-              onClick={editLink}
-            />
+              <FloatingToolbarItem
+                icon={CopyIcon}
+                label="Copy link"
+                onClick={copyLink}
+              />
 
-            <FloatingToolbarItem
-              icon={DeleteIcon}
-              label="Remove link"
-              className="text-red-500 dark:text-red-400"
-              onClick={removeLink}
-            />
-          </>
+              <FloatingToolbarItem
+                icon={EditIcon}
+                label="Edit link"
+                onClick={editLink}
+              />
+
+              <FloatingToolbarItem
+                icon={DeleteIcon}
+                label="Remove link"
+                className="text-red-500 dark:text-red-400"
+                onClick={removeLink}
+              />
+            </>
+          )
         }
       >
         <a
