@@ -1,3 +1,5 @@
+import { twMerge } from 'tailwind-merge';
+
 export type ClassNamesObject = Record<
   string,
   string | undefined | null | false
@@ -23,7 +25,7 @@ const mergeGroupedClassNames = (
 
   if (typeof custom === 'string') {
     return mergeGroupedClassNames(base, {
-      _string: `${base._string || ''} ${custom}`,
+      _string: twMerge(base._string, custom),
     });
   }
 

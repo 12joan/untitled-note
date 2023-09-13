@@ -14,6 +14,7 @@ import {
   getEditorString,
   getSelectionText,
   insertLink,
+  isSelectionExpanded,
   PlateEditor,
   PlateRenderElementProps,
   someNode,
@@ -29,8 +30,7 @@ import DeleteIcon from '~/components/icons/DeleteIcon';
 import EditIcon from '~/components/icons/EditIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
-import { Tippy } from '~/components/Tippy';
-import { Tooltip } from '~/components/Tooltip';
+import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 
 export const isLinkInSelection = (editor: PlateEditor) =>
   someNode(editor, { match: { type: ELEMENT_LINK } });
@@ -187,7 +187,9 @@ export const LinkComponent = ({
   const [selectedLink, selectedLinkPath] = getAboveNode<TLinkElement>(editor, {
     match: { type: ELEMENT_LINK },
   }) || [undefined, undefined];
-  const selected = useSelected() && selectedLink !== undefined;
+  const selected = useSelected();
+  const selectionCollapsed = !isSelectionExpanded(editor);
+  const open = selected && selectionCollapsed && selectedLink !== undefined;
 
   const safeHref = useMemo(() => {
     const unsafeHref = nodeProps!.href;
@@ -230,49 +232,29 @@ export const LinkComponent = ({
 
   return (
     <span {...attributes}>
-      <Tippy
-        placement="top"
-        visible={selected}
-        appendTo={document.body}
-        interactive
-        render={(attrs) =>
-          selected && (
-            <div
-              className="rounded-lg backdrop-blur shadow text-base slate-popover"
-              {...attrs}
-              contentEditable={false}
-            >
-              <Tooltip content="Open link">
-                <button
-                  type="button"
-                  className="p-3 rounded-l-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-                  onClick={openLink}
-                >
-                  <OpenInNewTabIcon size="1.25em" ariaLabel="Open link" />
-                </button>
-              </Tooltip>
+      <FloatingToolbar
+        open={open}
+        items={
+          <>
+            <FloatingToolbarItem
+              icon={OpenInNewTabIcon}
+              label="Open link"
+              onClick={openLink}
+            />
 
-              <Tooltip content="Edit link">
-                <button
-                  type="button"
-                  className="p-3 bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-primary-500 dark:text-primary-400"
-                  onClick={editLink}
-                >
-                  <EditIcon size="1.25em" ariaLabel="Edit link" />
-                </button>
-              </Tooltip>
+            <FloatingToolbarItem
+              icon={EditIcon}
+              label="Edit link"
+              onClick={editLink}
+            />
 
-              <Tooltip content="Remove link">
-                <button
-                  type="button"
-                  className="p-3 rounded-r-lg bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75 text-red-500 dark:text-red-400"
-                  onClick={removeLink}
-                >
-                  <DeleteIcon size="1.25em" ariaLabel="Remove link" />
-                </button>
-              </Tooltip>
-            </div>
-          )
+            <FloatingToolbarItem
+              icon={DeleteIcon}
+              label="Remove link"
+              className="text-red-500 dark:text-red-400"
+              onClick={removeLink}
+            />
+          </>
         }
       >
         <a
@@ -280,7 +262,7 @@ export const LinkComponent = ({
           className="btn btn-link font-medium underline"
           children={children}
         />
-      </Tippy>
+      </FloatingToolbar>
     </span>
   );
 };
