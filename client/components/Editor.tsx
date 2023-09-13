@@ -12,6 +12,7 @@ import {
   getFilteredEditor,
 } from '~/lib/editor/editorDataForUpload';
 import { useFind } from '~/lib/editor/find';
+import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
 import { useLinkModalProvider } from '~/lib/editor/links';
 import { usePlugins } from '~/lib/editor/plugins';
 import {
@@ -19,6 +20,7 @@ import {
   setSelection,
   useSaveSelection,
 } from '~/lib/editor/restoreSelection';
+import { SelectionToolbar } from '~/lib/editor/SelectionToolbar';
 import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useSyncDocument } from '~/lib/editor/useSyncDocument';
@@ -38,7 +40,6 @@ import { EditorTags } from '~/components/EditorTags';
 import { EditorTitle } from '~/components/EditorTitle';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
-import { FormattingToolbar } from '~/components/layout/FormattingToolbar';
 import { Tooltip } from '~/components/Tooltip';
 
 export interface EditorProps {
@@ -166,6 +167,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
           initialDocument={initialDocument}
           debouncedUpdateBody={debouncedUpdateBody}
         />
+
+        <SelectionToolbar />
       </Plate>
     ),
     [plugins, fontSize]
