@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
   ELEMENT_LINK,
+  findNodePath,
   focusEditor,
   getNodeString,
   getSelectionText,
@@ -16,10 +17,11 @@ import {
   isSelectionExpanded,
   PlateEditor,
   PlateRenderElementProps,
+  replaceNodeChildren,
+  setNodes,
   someNode,
   TLinkElement,
   unwrapLink,
-  upsertLink,
   usePlateSelectors,
   Value,
 } from '@udecode/plate';
@@ -191,6 +193,8 @@ export const LinkComponent = ({
   // Re-render on any selection change
   usePlateSelectors().keySelection();
 
+  const findPath = () => findNodePath(editor, element)!;
+
   const tippyRef = useRef<TippyInstance>(null);
 
   const selected = useSelected();
@@ -230,6 +234,19 @@ export const LinkComponent = ({
 
   const openModal = useOpenLinkModal();
 
+  const updateLink = ({ url, text }: LinkData) => {
+    const path = findPath();
+
+    // Update url
+    setNodes(editor, { url }, { at: path });
+
+    // Update text
+    replaceNodeChildren(editor, {
+      at: path,
+      nodes: [{ text }],
+    });
+  };
+
   const editLink = () => {
     const { url } = element;
     const text = getNodeString(element);
@@ -237,12 +254,12 @@ export const LinkComponent = ({
     openModal({
       initialText: text === url ? '' : text,
       initialUrl: url,
-      onConfirm: (args) => upsertLink(editor, args),
+      onConfirm: updateLink,
     });
   };
 
   const removeLink = () => {
-    unwrapLink(editor);
+    unwrapLink(editor, { at: findPath() });
     focusEditor(editor);
   };
 
