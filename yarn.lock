@@ -1672,12 +1672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-beautiful-dnd@npm:^13.1.4":
-  version: 13.1.4
-  resolution: "@types/react-beautiful-dnd@npm:13.1.4"
+"@types/react-beautiful-dnd@npm:^13.1.5":
+  version: 13.1.5
+  resolution: "@types/react-beautiful-dnd@npm:13.1.5"
   dependencies:
     "@types/react": "*"
-  checksum: 76220f1031721e73f712cf0021de6a3cf4049260ec29996cd587876ebd6ed01b9c31d8efb5cf230eb4d2b6259525ffe0f3054667732d30c79df37e49f9398c5e
+  checksum: d1d6f07302d601b3a5564dc45f75c7276297b7286adc4dd63c069f779af98c4a23c18a111fceee996a2a9a2ffb185e7e74917d8b9fd7e61be454698553ba78ec
   languageName: node
   linkType: hard
 
@@ -5915,7 +5915,7 @@ __metadata:
     "@types/node": ^18.17.14
     "@types/rails__actioncable": ^6.1.6
     "@types/react": ^18.0.35
-    "@types/react-beautiful-dnd": ^13.1.4
+    "@types/react-beautiful-dnd": ^13.1.5
     "@types/react-dom": ^18.2.7
     "@types/runes": ^0.4.1
     "@typescript-eslint/eslint-plugin": ^5.62.0
