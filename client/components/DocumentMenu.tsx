@@ -20,31 +20,34 @@ import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
+import FocusModeIcon from '~/components/icons/FocusModeIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
 
 export interface DocumentMenuProps {
+  isEditor?: boolean;
   statusHeader?: React.ReactNode;
   document: PartialDocument;
   updateDocument?: (delta: Partial<Document>) => void;
   invalidateEditor?: boolean;
   openFind?: () => void;
-  showReplace?: boolean;
   getEditorChildrenForExport?: UseExportModalOptions['getEditorChildren'];
 }
 
 export const DocumentMenu = ({
+  isEditor = false,
   statusHeader,
   document: doc,
   updateDocument: updateDocumentOverride,
   invalidateEditor = true,
   openFind,
-  showReplace = false,
   getEditorChildrenForExport,
 }: DocumentMenuProps) => {
   const projectId = useAppContext('projectId');
+  const focusModeEnabled = useAppContext('focusModeEnabled');
+  const toggleFocusMode = useAppContext('toggleFocusMode');
 
   const updateDocument =
     updateDocumentOverride ||
@@ -97,13 +100,19 @@ export const DocumentMenu = ({
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
 
+      {isEditor && (
+        <DropdownItem icon={FocusModeIcon} onClick={toggleFocusMode}>
+          {focusModeEnabled ? 'Exit' : 'Enter'} focus mode
+        </DropdownItem>
+      )}
+
       {openFind && (
         <DropdownItem icon={SearchIcon} onClick={openFind}>
           Find in document
         </DropdownItem>
       )}
 
-      {showReplace && (
+      {isEditor && (
         <DropdownItem icon={ReplaceIcon} onClick={openReplaceModal}>
           Replace in document
         </DropdownItem>

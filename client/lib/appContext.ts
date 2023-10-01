@@ -31,6 +31,8 @@ export type AppContext = {
   toggleSearchModal: () => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
   toggleSettingsModal: () => void;
+  focusModeEnabled: boolean;
+  toggleFocusMode: () => void;
   cycleFocus: () => void;
   linkOriginator?: string;
   inModal?: boolean;
@@ -62,6 +64,8 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     toggleSearchModal: null,
     toggleAccountModal: null,
     toggleSettingsModal: null,
+    focusModeEnabled: null,
+    toggleFocusMode: null,
     cycleFocus: null,
     onButtonClick: null,
     closeDropdown: null,
