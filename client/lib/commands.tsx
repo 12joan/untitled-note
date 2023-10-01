@@ -123,6 +123,15 @@ const commands: Command[] = [
     action: liftToIIC(resetEditorFontSize),
   },
   {
+    id: 'toggle-focus-mode',
+    label: 'Toggle focus mode',
+    keyboardShortcut: {
+      hint: "Hide everything except the document you're working on",
+      config: parseKeyboardShortcut('mod+shift+f'),
+    },
+    action: () => iic(() => useAppContext('toggleFocusMode')),
+  },
+  {
     id: 'settings',
     label: 'Settings',
     search: {

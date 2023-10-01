@@ -176,6 +176,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
   const documentMenu = (
     <DocumentMenu
+      isEditor
       statusHeader={
         <DocumentStatusHeader
           isDirty={isDirty}
@@ -187,7 +188,6 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       updateDocument={updateDocument}
       invalidateEditor={false}
       openFind={openFind}
-      showReplace
       getEditorChildrenForExport={() =>
         getFilteredEditor(editorRef.current!).children
       }

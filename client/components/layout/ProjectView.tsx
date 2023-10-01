@@ -10,12 +10,14 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { cycleFocus } from '~/lib/cycleFocus';
 import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
+import { createToast } from '~/lib/toasts';
 import { useAccountModal } from '~/lib/useAccountModal';
 import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts';
 import { useBreakpoints } from '~/lib/useBreakpoints';
@@ -83,6 +85,39 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     () => setOffcanvasSidebarVisible(false),
     []
   );
+
+  const [focusModeEnabled, setFocusModeEnabled] = useState(false);
+
+  const isEditor = childView.type === 'editor';
+
+  const toggleFocusMode = useCallback(() => {
+    if (isEditor) {
+      setFocusModeEnabled((enabled) => !enabled);
+    } else {
+      createToast({
+        title: 'Could not enable focus mode',
+        message: 'Focus mode is only available in the editor',
+        autoClose: 'fast',
+      });
+    }
+  }, [isEditor]);
+
+  const cancelFocusModeOnHocus = useMemo(
+    () =>
+      focusModeEnabled
+        ? {
+            onPointerEnter: () => setFocusModeEnabled(false),
+            onFocus: () => setFocusModeEnabled(false),
+          }
+        : {},
+    [focusModeEnabled]
+  );
+
+  useEffect(() => {
+    if (!isEditor) {
+      setFocusModeEnabled(false);
+    }
+  }, [isEditor]);
 
   const {
     modal: searchModal,
@@ -170,6 +205,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       toggleSearchModal={toggleSearchModal}
       toggleAccountModal={toggleAccountModal}
       toggleSettingsModal={toggleSettingsModal}
+      focusModeEnabled={focusModeEnabled}
+      toggleFocusMode={toggleFocusMode}
       cycleFocus={useCallback(
         () =>
           cycleFocus({
@@ -184,97 +221,102 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
         []
       )}
     >
-      <div className="contents">
-        <div
-          className="grow flex flex-col"
-          style={
-            {
-              marginTop: mainBounds.top,
-              marginLeft: mainBounds.left,
-              width: mainBounds.width,
-              '--narrow-width': `${narrowWidth}px`,
-              '--narrow-margin-left': `${narrowLeftMargin}px`,
-              paddingBottom: 'env(safe-area-inset-bottom)',
-            } as CSSProperties
-          }
-        >
-          <main
-            ref={mainRef}
-            className="grow flex flex-col pb-5"
-            tabIndex={0}
-            aria-label="Main"
+      <div className={twMerge('contents', focusModeEnabled && 'focus-mode')}>
+        <div className="contents">
+          <div
+            className="grow flex flex-col"
+            style={
+              {
+                marginTop: mainBounds.top,
+                marginLeft: mainBounds.left,
+                width: mainBounds.width,
+                '--narrow-width': `${narrowWidth}px`,
+                '--narrow-margin-left': `${narrowLeftMargin}px`,
+                paddingBottom: 'env(safe-area-inset-bottom)',
+              } as CSSProperties
+            }
           >
-            <ChildView
-              key={`${projectId}/${childView.key}`}
-              {...childView.props}
-            />
-          </main>
-        </div>
-      </div>
-
-      <div
-        className="fixed inset-0 flex pointer-events-none z-10"
-        style={{
-          paddingTop: 'env(safe-area-inset-top)',
-          paddingRight: 'env(safe-area-inset-right)',
-          paddingBottom: 'env(safe-area-inset-bottom)',
-          paddingLeft: 'env(safe-area-inset-left)',
-        }}
-      >
-        {sidebarAlwaysVisible && (
-          <nav
-            ref={projectsBarRef}
-            className="pointer-events-auto overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent"
-            style={{
-              marginLeft: 'calc(-1 * env(safe-area-inset-left))',
-              paddingLeft: 'env(safe-area-inset-left)',
-            }}
-            tabIndex={0}
-            aria-label="Projects bar"
-            children={<ProjectsBar />}
-          />
-        )}
-
-        <div className="grow flex flex-col">
-          <nav
-            ref={mergeRefs([topBarRef, topBarSizeRef])}
-            className="p-5 flex items-center gap-2"
-            tabIndex={0}
-            aria-label="Top bar"
-          >
-            <TopBar
-              showSidebarButton={!sidebarAlwaysVisible}
-              onSidebarButtonClick={showOffcanvasSidebar}
-            />
-          </nav>
-
-          <div className="grow flex h-0">
-            {sidebarAlwaysVisible && (
-              <nav
-                ref={sideBarRef}
-                className="pointer-events-auto overflow-y-auto p-5 pt-1 pr-1"
-                tabIndex={0}
-                aria-label="Sidebar"
-                children={<Sidebar />}
+            <main
+              ref={mainRef}
+              className="grow flex flex-col pb-5"
+              tabIndex={0}
+              aria-label="Main"
+            >
+              <ChildView
+                key={`${projectId}/${childView.key}`}
+                {...childView.props}
               />
-            )}
-
-            <div ref={mainBoundsRef} className="grow mt-1 mx-5" />
-
-            <div ref={formattingToolbarContainerRef} className="contents" />
+            </main>
           </div>
         </div>
+
+        <div
+          className="fixed inset-0 flex pointer-events-none z-10"
+          style={{
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingRight: 'env(safe-area-inset-right)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+            paddingLeft: 'env(safe-area-inset-left)',
+          }}
+        >
+          {sidebarAlwaysVisible && (
+            <nav
+              ref={projectsBarRef}
+              className="pointer-events-auto overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent hide-in-focus-mode"
+              {...cancelFocusModeOnHocus}
+              style={{
+                marginLeft: 'calc(-1 * env(safe-area-inset-left))',
+                paddingLeft: 'env(safe-area-inset-left)',
+              }}
+              tabIndex={0}
+              aria-label="Projects bar"
+              children={<ProjectsBar />}
+            />
+          )}
+
+          <div className="grow flex flex-col">
+            <nav
+              ref={mergeRefs([topBarRef, topBarSizeRef])}
+              className="p-5 flex items-center gap-2 hide-in-focus-mode"
+              {...cancelFocusModeOnHocus}
+              tabIndex={0}
+              aria-label="Top bar"
+            >
+              <TopBar
+                showSidebarButton={!sidebarAlwaysVisible}
+                onSidebarButtonClick={showOffcanvasSidebar}
+              />
+            </nav>
+
+            <div className="grow flex h-0">
+              {sidebarAlwaysVisible && (
+                <nav
+                  ref={sideBarRef}
+                  className="pointer-events-auto overflow-y-auto p-5 pt-1 pr-1 hide-in-focus-mode"
+                  {...cancelFocusModeOnHocus}
+                  tabIndex={0}
+                  aria-label="Sidebar"
+                  children={<Sidebar />}
+                />
+              )}
+
+              <div ref={mainBoundsRef} className="grow mt-1 mx-5" />
+
+              <div ref={formattingToolbarContainerRef} className="contents" />
+            </div>
+          </div>
+        </div>
+
+        <OffcanavasSidebar
+          visible={offcanvasSidebarVisible}
+          onClose={hideOffcanvasSidebar}
+        />
+
+        {searchModal}
+        {accountModal}
+        {settingsModal}
+        {keyboardShortcutIICElements}
       </div>
-
-      <OffcanavasSidebar
-        visible={offcanvasSidebarVisible}
-        onClose={hideOffcanvasSidebar}
-      />
-
-      {searchModal}
-      {accountModal}
-      {settingsModal}
-      {keyboardShortcutIICElements}
     </AppContextProvider>
   );
 };
