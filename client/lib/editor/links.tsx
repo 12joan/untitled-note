@@ -35,6 +35,7 @@ import EditIcon from '~/components/icons/EditIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { TippyInstance } from '~/components/Tippy';
+import { useElementSize } from '../useElementSize';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 
 export const isLinkInSelection = (editor: PlateEditor) =>
@@ -197,6 +198,15 @@ export const LinkComponent = ({
 
   const tippyRef = useRef<TippyInstance>(null);
 
+  /**
+   * For narrow links, use zero open delay so that the link can be used as a
+   * crossing-based trigger for the toolbar. For wider links that are
+   * difficult to avoid crossing, use a non-zero open delay.
+   * https://en.wikipedia.org/wiki/Crossing-based_interface
+   */
+  const [{ width: linkWidth }, linkRef] = useElementSize();
+  const openDelay = linkWidth > 215 ? 75 : 0;
+
   const selected = useSelected();
   const openable = !isSelectionExpanded(editor);
   const controlledOpen = openable && selected;
@@ -269,6 +279,7 @@ export const LinkComponent = ({
         tippyProps={{
           ref: tippyRef,
           trigger: 'mouseenter click',
+          delay: [openDelay, 0],
         }}
         items={
           openable && (
@@ -302,6 +313,7 @@ export const LinkComponent = ({
         }
       >
         <a
+          ref={linkRef}
           {...linkProps}
           className="btn btn-link font-medium underline"
           children={children}
