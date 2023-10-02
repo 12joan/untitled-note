@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import {
   isEditorFocused,
   Plate,
@@ -27,10 +34,12 @@ import { useSyncDocument } from '~/lib/editor/useSyncDocument';
 import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { createToast } from '~/lib/toasts';
 import { Document } from '~/lib/types';
 import { useBeforeUnload } from '~/lib/useBeforeUnload';
 import { useDebounce } from '~/lib/useDebounce';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
+import { useOverrideable } from '~/lib/useOverrideable';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { DocumentMenu } from '~/components/DocumentMenu';
@@ -41,6 +50,8 @@ import { EditorTitle } from '~/components/EditorTitle';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import { Tooltip } from '~/components/Tooltip';
+import LockIcon from './icons/LockIcon';
+import UnlockIcon from './icons/UnlockIcon';
 
 export interface EditorProps {
   clientId: string;
@@ -107,6 +118,30 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const isDirty = updateIsDirty || titleIsDirty || bodyIsDirty;
   useBeforeUnload(isDirty);
 
+  const isLocked = workingDocument.locked_at !== null;
+  const [isReadOnly, overrideReadOnly] = useOverrideable(isLocked);
+
+  const temporarilyUnlock = useCallback(() => {
+    overrideReadOnly(false);
+
+    createToast({
+      title: 'Temporarily unlocked document',
+      message: 'The document will remain locked when you leave this page',
+      autoClose: 'fast',
+    });
+  }, []);
+
+  const resumeLock = useCallback(() => overrideReadOnly(true), []);
+
+  const lockedProps = useMemo(() => {
+    if (!isReadOnly) return {};
+
+    return {
+      onDoubleClick: temporarilyUnlock,
+      title: 'Double click to edit',
+    };
+  }, [isReadOnly, temporarilyUnlock]);
+
   const { findDialog, openFind } = useFind({
     editor: editorRef.current || undefined,
     restoreSelection: restoreSelectionForEditor,
@@ -150,6 +185,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         plugins={plugins}
         initialValue={initialValue}
         normalizeInitialValue
+        readOnly={isReadOnly}
         editableProps={{
           className: groupedClassNames({
             sizing: 'grow max-w-none children:lg:narrow',
@@ -161,6 +197,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
           }),
           placeholder: 'Write something...',
           style: { fontSize },
+          ...lockedProps,
         }}
       >
         <WithEditorState
@@ -168,10 +205,10 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
           debouncedUpdateBody={debouncedUpdateBody}
         />
 
-        <SelectionToolbar />
+        {!isReadOnly && <SelectionToolbar />}
       </Plate>
     ),
-    [plugins, fontSize]
+    [plugins, isReadOnly, fontSize, lockedProps]
   );
 
   const documentMenu = (
@@ -214,14 +251,49 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
                 focus: { path: [0, 0], offset: 0 },
               })
             }
+            textareaProps={{
+              readOnly: isReadOnly,
+              ...lockedProps,
+            }}
           />
 
-          {!tagsVisible && (
-            <div onClick={(event) => event.stopPropagation()}>
+          <div
+            className="contents"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {isLocked && (
+              <Tooltip
+                content={isReadOnly ? 'Edit document' : 'Finish editing'}
+                placement="bottom"
+              >
+                <button
+                  type="button"
+                  className="btn p-2 aspect-square shrink-0"
+                  onClick={() => {
+                    if (isReadOnly) {
+                      temporarilyUnlock();
+                    } else {
+                      resumeLock();
+                    }
+                  }}
+                >
+                  {isReadOnly ? (
+                    <LockIcon size="1.25em" ariaLabel="Locked" />
+                  ) : (
+                    <UnlockIcon
+                      size="1.25em"
+                      ariaLabel="Temporarily unlocked"
+                    />
+                  )}
+                </button>
+              </Tooltip>
+            )}
+
+            {!tagsVisible && (
               <Tooltip content="Add tags" placement="bottom">
                 <button
                   type="button"
-                  className="btn p-2 aspect-square"
+                  className="btn p-2 aspect-square shrink-0"
                   onClick={() => {
                     setTagsVisible(true);
                     tagsRef.current?.focus();
@@ -230,12 +302,10 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
                   <TagsIcon size="1.25em" ariaLabel="Add tags" />
                 </button>
               </Tooltip>
-            </div>
-          )}
+            )}
 
-          <div onClick={(event) => event.stopPropagation()}>
             <Dropdown items={documentMenu} placement="bottom-end">
-              <button type="button" className="btn p-2 aspect-square">
+              <button type="button" className="btn p-2 aspect-square shrink-0">
                 <OverflowMenuIcon size="1.25em" ariaLabel="Document menu" />
               </button>
             </Dropdown>

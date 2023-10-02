@@ -16,33 +16,38 @@ const transformDocument = (
   ...delta,
 });
 
-export const pinDocument = (
-  doc: Partial<Document>,
-  options: TransformDocumentOptions = {}
-) =>
-  transformDocument(
-    doc,
-    {
-      pinned_at: new Date().toISOString(),
-    },
-    options
-  );
+const createTimestampedProperty = (key: 'pinned_at' | 'locked_at') => {
+  const enableProperty = (
+    doc: Partial<Document>,
+    options: TransformDocumentOptions = {}
+  ) => transformDocument(doc, { [key]: new Date().toISOString() }, options);
 
-export const unpinDocument = (
-  doc: Partial<Document>,
-  options: TransformDocumentOptions = {}
-) =>
-  transformDocument(
-    doc,
-    {
-      pinned_at: null,
-    },
-    options
-  );
+  const disableProperty = (
+    doc: Partial<Document>,
+    options: TransformDocumentOptions = {}
+  ) => transformDocument(doc, { [key]: null }, options);
 
-export const toggleDocumentPinned = (
-  doc: Partial<Document> & {
-    pinned_at: Document['pinned_at'];
-  },
-  options: TransformDocumentOptions = {}
-) => (doc.pinned_at ? unpinDocument(doc, options) : pinDocument(doc, options));
+  const toggleProperty = (
+    doc: Partial<Document>,
+    options: TransformDocumentOptions = {}
+  ) =>
+    doc[key] ? disableProperty(doc, options) : enableProperty(doc, options);
+
+  return {
+    enableProperty,
+    disableProperty,
+    toggleProperty,
+  };
+};
+
+export const {
+  enableProperty: pinDocument,
+  disableProperty: unpinDocument,
+  toggleProperty: toggleDocumentPinned,
+} = createTimestampedProperty('pinned_at');
+
+export const {
+  enableProperty: lockDocument,
+  disableProperty: unlockDocument,
+  toggleProperty: toggleDocumentLocked,
+} = createTimestampedProperty('locked_at');

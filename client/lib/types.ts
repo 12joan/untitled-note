@@ -36,6 +36,7 @@ export type Document = {
   created_at: string;
   updated_at: string;
   pinned_at: string | null;
+  locked_at: string | null;
 };
 
 export type LocalDocument = Omit<Document, 'tags'> & {
@@ -52,6 +53,7 @@ export type PartialDocument = Pick<
   | 'updated_by'
   | 'updated_at'
   | 'pinned_at'
+  | 'locked_at'
 >;
 
 export type DocumentSearchResult = {
