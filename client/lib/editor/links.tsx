@@ -22,6 +22,7 @@ import {
   someNode,
   TLinkElement,
   unwrapLink,
+  usePlateReadOnly,
   usePlateSelectors,
   Value,
 } from '@udecode/plate';
@@ -194,8 +195,8 @@ export const LinkComponent = ({
   // Re-render on any selection change
   usePlateSelectors().keySelection();
 
+  const isReadOnly = usePlateReadOnly();
   const findPath = () => findNodePath(editor, element)!;
-
   const tippyRef = useRef<TippyInstance>(null);
 
   /**
@@ -296,18 +297,22 @@ export const LinkComponent = ({
                 onClick={copyLink}
               />
 
-              <FloatingToolbarItem
-                icon={EditIcon}
-                label="Edit link"
-                onClick={editLink}
-              />
+              {!isReadOnly && (
+                <>
+                  <FloatingToolbarItem
+                    icon={EditIcon}
+                    label="Edit link"
+                    onClick={editLink}
+                  />
 
-              <FloatingToolbarItem
-                icon={DeleteIcon}
-                label="Remove link"
-                className="text-red-500 dark:text-red-400"
-                onClick={removeLink}
-              />
+                  <FloatingToolbarItem
+                    icon={DeleteIcon}
+                    label="Remove link"
+                    className="text-red-500 dark:text-red-400"
+                    onClick={removeLink}
+                  />
+                </>
+              )}
             </>
           )
         }

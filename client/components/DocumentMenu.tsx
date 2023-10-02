@@ -12,7 +12,10 @@ import {
   handleUpdateDocumentError,
 } from '~/lib/handleErrors';
 import { DocumentLink, documentPath } from '~/lib/routes';
-import { toggleDocumentPinned } from '~/lib/transformDocument';
+import {
+  toggleDocumentLocked,
+  toggleDocumentPinned,
+} from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
 import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
@@ -21,6 +24,7 @@ import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
 import FocusModeIcon from '~/components/icons/FocusModeIcon';
+import LockIcon from '~/components/icons/LockIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
@@ -63,6 +67,10 @@ export const DocumentMenu = ({
   const isPinned = doc.pinned_at !== null;
   const togglePinned = () =>
     updateDocument(toggleDocumentPinned(doc, { invalidateEditor }));
+
+  const isLocked = doc.locked_at !== null;
+  const toggleLocked = () =>
+    updateDocument(toggleDocumentLocked(doc, { invalidateEditor }));
 
   const { modal: replaceModal, open: openReplaceModal } = useReplaceModal({
     documentId: doc.id,
@@ -123,6 +131,10 @@ export const DocumentMenu = ({
           Export document
         </DropdownItem>
       )}
+
+      <DropdownItem icon={LockIcon} onClick={toggleLocked}>
+        {isLocked ? 'Unlock' : 'Lock'} document
+      </DropdownItem>
 
       <DropdownItem
         icon={DeleteIcon}

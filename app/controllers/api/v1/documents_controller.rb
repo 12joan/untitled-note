@@ -30,7 +30,7 @@ module API
 
       # Only allow a list of trusted parameters through.
       def document_params
-        params.require(:document).permit(:title, :body, :body_type, :plain_body, :blank, :updated_by, :pinned_at)
+        params.require(:document).permit(:title, :body, :body_type, :plain_body, :blank, :updated_by, :pinned_at, :locked_at)
       end
 
       def tags_attributes

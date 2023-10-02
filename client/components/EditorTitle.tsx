@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   KeyboardEvent,
   Ref,
+  TextareaHTMLAttributes,
   useRef,
 } from 'react';
 import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
@@ -10,13 +11,14 @@ import { TextareaAutosize } from '~/components/TextareaAutosize';
 
 export interface EditorTitleProps {
   initialTitle: string;
+  textareaProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'style'>;
   onChange: (title: string) => void;
   onEnter: () => void;
 }
 
 export const EditorTitle = forwardRef(
   (
-    { initialTitle, onChange, onEnter }: EditorTitleProps,
+    { initialTitle, textareaProps = {}, onChange, onEnter }: EditorTitleProps,
     ref: Ref<HTMLTextAreaElement>
   ) => {
     const fontSize = useEditorFontSizeCSSValue();
@@ -48,6 +50,7 @@ export const EditorTitle = forwardRef(
               onEnter();
             }
           }}
+          {...textareaProps}
         />
       </div>
     );
