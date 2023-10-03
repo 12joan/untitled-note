@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import {
   isRangeInSameBlock,
   isSelectionExpanded,
-  usePlateEditorState,
+  useEditorState,
 } from '@udecode/plate';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 import {
@@ -11,7 +11,7 @@ import {
 } from './FormattingToolbar';
 
 export const SelectionToolbar = () => {
-  const editor = usePlateEditorState();
+  const editor = useEditorState();
   const open =
     isSelectionExpanded(editor) && (isRangeInSameBlock(editor) ?? false);
 
