@@ -22,7 +22,7 @@ import {
   someNode,
   TLinkElement,
   unwrapLink,
-  usePlateReadOnly,
+  useEditorReadOnly,
   usePlateSelectors,
   Value,
 } from '@udecode/plate';
@@ -193,9 +193,9 @@ export const LinkComponent = ({
   element,
 }: PlateRenderElementProps<Value, TLinkElement>) => {
   // Re-render on any selection change
-  usePlateSelectors().keySelection();
+  usePlateSelectors().versionSelection();
 
-  const isReadOnly = usePlateReadOnly();
+  const isReadOnly = useEditorReadOnly();
   const findPath = () => findNodePath(editor, element)!;
   const tippyRef = useRef<TippyInstance>(null);
 

@@ -9,8 +9,9 @@ import React, {
 import {
   isEditorFocused,
   Plate,
+  PlateContent,
   PlateEditor,
-  usePlateEditorState,
+  useEditorState,
 } from '@udecode/plate';
 import { Range } from 'slate';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
@@ -186,20 +187,21 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         initialValue={initialValue}
         normalizeInitialValue
         readOnly={isReadOnly}
-        editableProps={{
-          className: groupedClassNames({
+      >
+        <PlateContent
+          className={groupedClassNames({
             sizing: 'grow max-w-none children:lg:narrow',
             spacing: 'em:mt-3 em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:
               'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
-          }),
-          placeholder: 'Write something...',
-          style: { fontSize },
-          ...lockedProps,
-        }}
-      >
+          })}
+          placeholder="Write something..."
+          style={{ fontSize }}
+          {...lockedProps}
+        />
+
         <WithEditorState
           initialDocument={initialDocument}
           debouncedUpdateBody={debouncedUpdateBody}
@@ -343,7 +345,7 @@ const WithEditorState = ({
   initialDocument,
   debouncedUpdateBody,
 }: WithEditorStateProps) => {
-  const editor = usePlateEditorState();
+  const editor = useEditorState();
   const useFormattingToolbar = useAppContext('useFormattingToolbar');
 
   useSaveSelection(initialDocument.id, editor);

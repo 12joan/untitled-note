@@ -1,5 +1,11 @@
 import React, { useMemo, useReducer, useRef, useState } from 'react';
-import { getEditorString, Plate, PlateEditor, Value } from '@udecode/plate';
+import {
+  getEditorString,
+  Plate,
+  PlateContent,
+  PlateEditor,
+  Value,
+} from '@udecode/plate';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { copyText } from '~/lib/copyText';
 import { getHtmlForExport } from '~/lib/editor/getHtmlForExport';
@@ -79,7 +85,6 @@ export const ExportHTMLSection = ({
                 ],
               },
             ]}
-            editableProps={{ className: 'no-focus-ring min-h-full' }}
             onChange={() => {
               if (
                 editorRef.current!.operations.some(
@@ -89,7 +94,9 @@ export const ExportHTMLSection = ({
                 setIsModified(true);
               }
             }}
-          />
+          >
+            <PlateContent className="no-focus-ring min-h-full" />
+          </Plate>
         </pre>
 
         {isModified && (
