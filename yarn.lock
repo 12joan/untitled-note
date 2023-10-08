@@ -2398,12 +2398,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-serializer-csv@npm:24.4.0":
-  version: 24.4.0
-  resolution: "@udecode/plate-serializer-csv@npm:24.4.0"
+"@udecode/plate-serializer-csv@npm:24.4.2":
+  version: 24.4.2
+  resolution: "@udecode/plate-serializer-csv@npm:24.4.2"
   dependencies:
     "@udecode/plate-common": 24.4.0
-    "@udecode/plate-table": 24.4.0
+    "@udecode/plate-table": 24.4.2
     papaparse: ^5.4.1
   peerDependencies:
     react: ">=16.8.0"
@@ -2412,13 +2412,13 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: cc779c9a3521af4790d47e0e74f8bfbdcca9c9fe256fdc17d35700a85087954f4d9ed0e7f7f6b0b53403012ccbda362de8376f41e6c4028c9b949f55d384bf07
+  checksum: 681c8b26941b45928f4f61f117bfe84edbb25cd8e9186ab7f6b7bb9a4944698b4cea074d381d730fc93cf39114b2a7b61d93880e771509140ff4e092b58aa422
   languageName: node
   linkType: hard
 
-"@udecode/plate-serializer-docx@npm:24.4.1":
-  version: 24.4.1
-  resolution: "@udecode/plate-serializer-docx@npm:24.4.1"
+"@udecode/plate-serializer-docx@npm:24.4.2":
+  version: 24.4.2
+  resolution: "@udecode/plate-serializer-docx@npm:24.4.2"
   dependencies:
     "@udecode/plate-common": 24.4.0
     "@udecode/plate-heading": 24.4.0
@@ -2426,7 +2426,7 @@ __metadata:
     "@udecode/plate-indent-list": 24.4.0
     "@udecode/plate-media": 24.4.0
     "@udecode/plate-paragraph": 24.4.0
-    "@udecode/plate-table": 24.4.0
+    "@udecode/plate-table": 24.4.2
     validator: ^13.9.0
   peerDependencies:
     react: ">=16.8.0"
@@ -2435,7 +2435,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: db834b4138f830c2de2c2ebfde1ab5a9f527c7f739350586265155554efec2f82844ad384021f105743011bdbf4bde0d752c5db7000cb16f9a08f67d7abc65dc
+  checksum: c814ee4463c5dfeee6f47225632c668e8d93f972f10c229ef4ded1c9a357248616c988a6e582b4cfe6ad872e14d209ce0a0b7874f3d24fea2b3639d3bb10ace5
   languageName: node
   linkType: hard
 
@@ -2516,9 +2516,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-table@npm:24.4.0":
-  version: 24.4.0
-  resolution: "@udecode/plate-table@npm:24.4.0"
+"@udecode/plate-table@npm:24.4.2":
+  version: 24.4.2
+  resolution: "@udecode/plate-table@npm:24.4.2"
   dependencies:
     "@udecode/plate-common": 24.4.0
     "@udecode/plate-resizable": 24.4.0
@@ -2529,7 +2529,7 @@ __metadata:
     slate: ">=0.94.0"
     slate-history: ">=0.93.0"
     slate-react: ">=0.99.0"
-  checksum: 1ca6259fe9b6544f0482fba272d246c98cb4190c314518c69c9db0e29a1005beea3728481a4cf74721a02bd659cf4409d68ca911900b7e7caa7ed364a1ed9073
+  checksum: 457057fde61fe427d7724d0be9c6ea648def62ff12d5ccb3d6a1b0479e223b7925acb2e8132ad49f9118e5e36e785d81895856cdab9df819d7560d8c923e3845
   languageName: node
   linkType: hard
 
@@ -2572,9 +2572,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate@npm:^24.4.1":
-  version: 24.4.1
-  resolution: "@udecode/plate@npm:24.4.1"
+"@udecode/plate@npm:^24.4.2":
+  version: 24.4.2
+  resolution: "@udecode/plate@npm:24.4.2"
   dependencies:
     "@udecode/plate-alignment": 24.4.0
     "@udecode/plate-autoformat": 24.4.0
@@ -2606,13 +2606,13 @@ __metadata:
     "@udecode/plate-reset-node": 24.4.0
     "@udecode/plate-resizable": 24.4.0
     "@udecode/plate-select": 24.4.0
-    "@udecode/plate-serializer-csv": 24.4.0
-    "@udecode/plate-serializer-docx": 24.4.1
+    "@udecode/plate-serializer-csv": 24.4.2
+    "@udecode/plate-serializer-docx": 24.4.2
     "@udecode/plate-serializer-html": 24.4.0
     "@udecode/plate-serializer-md": 24.4.0
     "@udecode/plate-suggestion": 24.4.0
     "@udecode/plate-tabbable": 24.4.0
-    "@udecode/plate-table": 24.4.0
+    "@udecode/plate-table": 24.4.2
     "@udecode/plate-trailing-block": 24.4.0
   peerDependencies:
     react: ">=16.8.0"
@@ -2621,7 +2621,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: dca81ddfa97058def009c64e4afafc62d8afa36a30b004681c391ad444c8ef20e4787561edfc03ac52f71330e54dd84f69bd2e66e2964780a3e84d82a7261867
+  checksum: 1e18e6badb7cefd0e0a97169bc69d6161c4346e63c2f2da601b629e985416a5f0bf36cd9a895433d0ce76f455570e1ad8aae269a129be7c7b01314df9e03ab2d
   languageName: node
   linkType: hard
 
@@ -5979,7 +5979,7 @@ __metadata:
     "@types/runes": ^0.4.1
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
-    "@udecode/plate": ^24.4.1
+    "@udecode/plate": ^24.4.2
     "@vitejs/plugin-react": ^2.2.0
     autoprefixer: ^10.4.14
     axios: ^1.5.1

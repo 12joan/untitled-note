@@ -21,7 +21,7 @@
     "@rails/actioncable": "^7.1.0",
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.4",
-    "@udecode/plate": "^24.4.1",
+    "@udecode/plate": "^24.4.2",
     "axios": "^1.5.1",
     "comlink": "^4.4.1",
     "compressorjs": "^1.2.1",
