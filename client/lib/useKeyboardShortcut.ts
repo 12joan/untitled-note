@@ -13,12 +13,10 @@ export const useKeyboardShortcut = (
     const handler = (event: KeyboardEvent) => {
       const keyList = Array.isArray(keys) ? keys : [keys];
       const key = keyWithModifiers(event);
-
       if (!event.defaultPrevented && keyList.includes(key)) {
         callback(event, key);
       }
     };
-
     const el = getElement();
     el.addEventListener('keydown', handler as any);
     return () => el.removeEventListener('keydown', handler as any);

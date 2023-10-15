@@ -3,7 +3,7 @@ import { BaseSchema, createMigrate, SetVersion } from '~/lib/schema';
 const migrations: Record<number, (settings: any) => any> = {};
 export const migrateSettings = createMigrate(migrations);
 
-// Original schema
+// Schema v1: Original schema
 type SettingsSchemaV1 = SetVersion<BaseSchema, 1> & {
   keyboardShortcutOverrides: {
     [key: string]: KeyboardShortcutConfigV1 | null;
@@ -28,22 +28,24 @@ const originalDefaultSettings: SettingsSchemaV1 = {
   keyboardShortcutOverrides: {},
 };
 
-/**
- * // Add theme
- * type SettingsSchemaV2 = SetVersion<SettingsSchemaV1, 2> & {
- *   theme: string;
- * };
- *
- * migrations[2] = (settings: SettingsSchemaV1): SettingsSchemaV2 => ({
- *   ...settings,
- *   version: 2,
- *   theme: 'light',
- * });
- */
+// Schema v2: Add deeper dark mode option
+type SettingsSchemaV2 = SetVersion<SettingsSchemaV1, 2> & {
+  deeperDarkMode: boolean;
+};
 
-export type SettingsSchema = SettingsSchemaV1;
+migrations[2] = (settings: SettingsSchemaV1): SettingsSchemaV2 => ({
+  ...settings,
+  version: 2,
+  deeperDarkMode: false,
+});
+
+// Add migrations here
+
+// Update these when schema changes
+export type SettingsSchema = SettingsSchemaV2;
+export const LATEST_SETTINGS_VERSION = 2;
+
 export type KeyboardShortcutConfig = KeyboardShortcutConfigV1;
-export const LATEST_SETTINGS_VERSION = 1;
 
 export const defaultSettings: SettingsSchema = migrateSettings(
   originalDefaultSettings,

@@ -95,8 +95,8 @@ export const StyledModal = ({
       shadow: 'before:shadow-dialog',
       rounded: 'before:rounded-2xl',
       padding: 'p-5',
-      bg: 'before:bg-slate-100/90 before:dark:bg-slate-800/90',
-      ringOffset: 'ring-offset-slate-100 dark:ring-offset-slate-800',
+      bg: 'before:bg-plain-100/90 before:dark:bg-plain-800/90',
+      ringOffset: 'ring-offset-plain-100 dark:ring-offset-plain-800',
     },
     customPanelClassNames
   );

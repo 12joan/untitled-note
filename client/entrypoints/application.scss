@@ -12,6 +12,39 @@
  * 50 - Toasts
  */
 
+body {
+  // Slate
+  --color-plain-50: 248 250 252;
+  --color-plain-100: 241 245 249;
+  --color-plain-200: 226 232 240;
+  --color-plain-300: 203 213 225;
+  --color-plain-400: 148 163 184;
+  --color-plain-500: 100 116 139;
+  --color-plain-600: 71 85 105;
+  --color-plain-700: 51 65 85;
+  --color-plain-800: 30 41 59;
+  --color-plain-850: 22 32 50;
+  --color-plain-900: 15 23 42;
+  --color-plain-950: 2 6 23;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.deeper-dark-mode {
+    --color-plain-50: 250 250 250;
+    --color-plain-100: 245 245 245;
+    --color-plain-200: 229 229 229;
+    --color-plain-300: 212 212 212;
+    --color-plain-400: 163 163 163;
+    --color-plain-500: 115 115 115;
+    --color-plain-600: 82 82 82;
+    --color-plain-700: 64 64 64;
+    --color-plain-800: 38 38 38;
+    --color-plain-850: 30 30 30;
+    --color-plain-900: 0 0 0;
+    --color-plain-950: 23 23 23;
+  }
+}
+
 @layer base {
   *:focus-visible, .focus-ring {
     outline: none;
@@ -19,15 +52,15 @@
   }
 
   *, ::before, ::after {
-    @apply border-slate-200 dark:border-slate-700;
+    @apply border-plain-200 dark:border-plain-700;
   }
 
   body {
     @apply overflow-wrap-break-word;
   }
 
-  input::placeholder, textarea::placeholder, [data-slate-placeholder] {
-    @apply text-slate-400 dark:text-slate-500;
+  input::placeholder, textarea::placeholder, [-slate-placeholder] {
+    @apply text-plain-400 dark:text-plain-500;
   }
 
   button {
@@ -51,7 +84,7 @@
 
 @layer utilities {
   .text-ui {
-    @apply text-slate-700 dark:text-slate-200;
+    @apply text-plain-700 dark:text-plain-200;
   }
 
   .transparent-blur {
@@ -92,7 +125,7 @@
 
   .btn-hover {
     content: '';
-    @apply after:absolute after:inset-0 after:opacity-5 after:dark:opacity-10 after:bg-slate-900 after:dark:bg-slate-50;
+    @apply after:absolute after:inset-0 after:opacity-5 after:dark:opacity-10 after:bg-plain-900 after:dark:bg-plain-50;
   }
 
   .btn-link-hover {
@@ -131,7 +164,7 @@
     // Variants
 
     &.btn-link {
-      @apply text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400;
+      @apply text-primary-500 dark:text-primary-400 window-inactive:text-plain-500 dark:window-inactive:text-plain-400;
     }
 
     &.btn-link-subtle {
@@ -143,11 +176,11 @@
     }
 
     &.btn-secondary {
-      @apply bg-slate-100 dark:bg-slate-800;
+      @apply bg-plain-100 dark:bg-plain-800;
     }
 
     &.btn-modal-secondary {
-      @apply bg-slate-300/50 dark:bg-slate-700/50;
+      @apply bg-plain-300/50 dark:bg-plain-700/50;
     }
 
     &.btn-primary {
@@ -185,7 +218,7 @@
 }
 
 .tippy-box[data-theme~='custom'] {
-  @apply text-inherit bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur font-medium shadow;
+  @apply text-inherit bg-plain-100/75 dark:bg-plain-700/75 backdrop-blur font-medium shadow;
 }
 
 [data-tippy-root] {
@@ -194,7 +227,7 @@
   @apply select-none;
 }
 
-[data-slate-placeholder] {
+[-slate-placeholder] {
   // Fix editor placeholder causing body to scroll horizontally
   width: auto !important;
 
@@ -202,7 +235,7 @@
   opacity: 1 !important;
 }
 
-[data-slate-editor]:focus [data-slate-placeholder] {
+[-slate-editor]:focus [-slate-placeholder] {
   // Hide placeholder when editor is focused
   opacity: 0 !important;
 }

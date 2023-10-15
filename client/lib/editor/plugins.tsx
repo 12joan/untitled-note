@@ -69,7 +69,7 @@ const makeElementComponent =
 
 const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
-const codeStyle = 'bg-slate-800 dark:bg-slate-950 text-white em:text-sm';
+const codeStyle = 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm';
 
 const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
@@ -100,7 +100,7 @@ const components = {
       text: 'italic',
       linePosition:
         'relative after:absolute after:left-0 after:inset-y-0 after:em:w-1',
-      lineColor: 'after:bg-slate-200 after:dark:bg-slate-700',
+      lineColor: 'after:bg-plain-200 after:dark:bg-plain-700',
       lineStyle: 'after:rounded-full',
     })
   ),
@@ -118,7 +118,7 @@ const components = {
     groupedClassNames({
       list: listStyle,
       unorderedList:
-        'list-disc marker:text-slate-300 dark:marker:text-slate-600',
+        'list-disc marker:text-plain-300 dark:marker:text-plain-600',
     })
   ),
   [ELEMENT_OL]: makeElementComponent(
@@ -126,7 +126,7 @@ const components = {
     groupedClassNames({
       list: listStyle,
       orderedList:
-        'list-decimal marker:text-slate-500 dark:marker:text-slate-400',
+        'list-decimal marker:text-plain-500 dark:marker:text-plain-400',
     })
   ),
   [ELEMENT_LI]: makeElementComponent('li', 'em:pl-1.5'),

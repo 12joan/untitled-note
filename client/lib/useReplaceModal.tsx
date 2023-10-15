@@ -82,7 +82,7 @@ const ReplaceModal = ({
           <input
             type="text"
             required
-            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-plain-400 dark:placeholder:text-plain-500 dark:focus:bg-plain-900"
             placeholder="Find text"
             value={findValue}
             onChange={(event) => setFindValue(event.target.value)}
@@ -94,7 +94,7 @@ const ReplaceModal = ({
 
           <input
             type="text"
-            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-plain-400 dark:placeholder:text-plain-500 dark:focus:bg-plain-900"
             placeholder="Replace text"
             value={replaceValue}
             onChange={(event) => setReplaceValue(event.target.value)}

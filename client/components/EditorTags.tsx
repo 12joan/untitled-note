@@ -16,9 +16,9 @@ import CloseIcon from '~/components/icons/CloseIcon';
 import PlusIcon from '~/components/icons/PlusIcon';
 
 const tagClassName =
-  'bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center';
+  'bg-plain-50 dark:bg-plain-800 rounded-full flex items-center justify-center';
 const tagButtonClassName =
-  'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400 rounded-full flex items-center justify-center';
+  'hover:bg-plain-200 dark:hover:bg-plain-700 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400 rounded-full flex items-center justify-center';
 
 type TagSuggestion = {
   key: string;
@@ -139,7 +139,7 @@ export const EditorTags = forwardRef(
         {tags.map((tag) => (
           <div
             key={tag.id ?? tag.localId}
-            className={`${tagClassName} stretch-focus-visible:focus-ring stretch-hover:bg-slate-200 dark:stretch-hover:bg-slate-700`}
+            className={`${tagClassName} stretch-focus-visible:focus-ring stretch-hover:bg-plain-200 dark:stretch-hover:bg-plain-700`}
           >
             {linkForTag({
               tag,
@@ -217,7 +217,7 @@ export const EditorTags = forwardRef(
             <div
               {...comboboxFloating.suggestionsProps}
               {...suggestionContainerProps}
-              className="z-20 bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-auto"
+              className="z-20 bg-plain-100/75 dark:bg-plain-700/75 backdrop-blur shadow-lg rounded-lg w-48 max-w-full overflow-y-auto"
             >
               {mapSuggestions(({ suggestion, active, suggestionProps }) => (
                 <div

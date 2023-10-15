@@ -334,7 +334,7 @@ const FindDialog = ({
       </>
     ) : (
       <span
-        className="select-none text-slate-500 dark:text-slate-400"
+        className="select-none text-plain-500 dark:text-plain-400"
         role="status"
       >
         No matches
@@ -350,7 +350,7 @@ const FindDialog = ({
       onBlur={handleBlur}
       onKeyDown={handleContainerKeyDown}
     >
-      <div className="lg:narrow bg-slate-100/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog rounded-lg">
+      <div className="lg:narrow bg-plain-100/75 dark:bg-plain-700/75 backdrop-blur-lg shadow-dialog rounded-lg">
         <div className="flex gap-1 items-center chidren:shrink-0 pr-2">
           <input
             ref={inputRef}

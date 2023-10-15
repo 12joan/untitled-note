@@ -46,7 +46,7 @@ export const UploadingAttachment = ({
         <Meter value={uploadedBytes} max={totalBytes} />
 
         <div
-          className="text-sm text-slate-500 dark:text-slate-400"
+          className="text-sm text-plain-500 dark:text-plain-400"
           role="status"
         >
           {filesize(uploadedBytes)} of{' '}

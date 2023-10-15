@@ -39,9 +39,9 @@ export const ProjectIcon: ProjectIconComponent = forwardRef(
     const hasImage = !!project.image_url;
 
     const bgClassName = {
-      auto: 'bg-white text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-      light: 'bg-white text-slate-500',
-      dark: 'bg-slate-800 text-slate-400',
+      auto: 'bg-white text-plain-500 dark:bg-plain-800 dark:text-plain-400',
+      light: 'bg-white text-plain-500',
+      dark: 'bg-plain-800 text-plain-400',
     }[project.background_colour];
 
     return (

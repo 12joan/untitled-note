@@ -32,7 +32,7 @@ export const RecentlyViewedView = memo(() => {
               documents={documents}
               linkComponent={RecentlyViewedDocumentLink}
               ifEmpty={
-                <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-5 select-none">
+                <div className="bg-plain-100 dark:bg-plain-800 rounded-lg p-5 select-none">
                   No recently viewed documents
                 </div>
               }

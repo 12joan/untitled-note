@@ -61,7 +61,7 @@ export const ExportHTMLSection = ({
       <label className="flex gap-2 items-start">
         <input
           type="checkbox"
-          className="ring-offset-slate-100 dark:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ring-offset-plain-100 dark:ring-offset-plain-800 disabled:opacity-50 disabled:cursor-not-allowed"
           checked={includeTitle}
           onChange={(event) => setIncludeTitle(event.target.checked)}
           disabled={isModified}
@@ -71,7 +71,7 @@ export const ExportHTMLSection = ({
       </label>
 
       <div className="relative">
-        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-slate-900 p-4 text-white text-sm/relaxed">
+        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-plain-900 p-4 text-white text-sm/relaxed">
           <Plate<Value>
             editorRef={editorRef}
             key={resetKey}
@@ -103,7 +103,7 @@ export const ExportHTMLSection = ({
           <div>
             <button
               type="button"
-              className="btn btn-rect btn-danger flex items-center gap-2 absolute top-3 right-3 z-50 ring-offset-slate-900"
+              className="btn btn-rect btn-danger flex items-center gap-2 absolute top-3 right-3 z-50 ring-offset-plain-900"
               onClick={reset}
             >
               Undo changes

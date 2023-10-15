@@ -42,7 +42,7 @@ export const DocumentStatusHeader = ({
           })()}
         </div>
 
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-plain-500 dark:text-plain-400">
           Last saved{' '}
           <TimeAgo
             date={lastSuccessfulUpdate}

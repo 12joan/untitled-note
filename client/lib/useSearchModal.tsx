@@ -287,13 +287,13 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
           shadow: 'before:shadow-dialog-heavy',
           rounded: 'before:rounded-xl',
           padding: null,
-          bg: 'before:bg-slate-50/75 before:dark:bg-slate-700/75',
+          bg: 'before:bg-plain-50/75 before:dark:bg-plain-700/75',
         }}
       >
         <div className="flex px-5 py-3 gap-2 items-center">
           <SearchIcon
             size="1.25em"
-            className="text-slate-500 dark:text-slate-400"
+            className="text-plain-500 dark:text-plain-400"
             noAriaLabel
           />
 
@@ -345,7 +345,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
 
                     {typeof description === 'string' && (
                       <div
-                        className="text-sm text-slate-500 dark:text-slate-400 data-active:text-white dark:data-active:text-white"
+                        className="text-sm text-plain-500 dark:text-plain-400 data-active:text-white dark:data-active:text-white"
                         children={description}
                       />
                     )}
@@ -364,7 +364,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
 
             {hint && (
               <div
-                className="p-2 text-slate-500 dark:text-slate-400"
+                className="p-2 text-plain-500 dark:text-plain-400"
                 aria-live="polite"
               >
                 {hint}

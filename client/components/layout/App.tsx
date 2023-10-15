@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
 import { AppContextProvider } from '~/lib/appContext';
@@ -48,6 +48,15 @@ export const App = () => {
   );
 
   const { settings, setSettings } = useSettingsProvider();
+  const { deeperDarkMode } = settings;
+
+  useEffect(() => {
+    if (deeperDarkMode) {
+      document.body.classList.add('deeper-dark-mode');
+    } else {
+      document.body.classList.remove('deeper-dark-mode');
+    }
+  }, [deeperDarkMode]);
 
   const fallback = (
     <div className="p-5 space-y-3">
@@ -66,30 +75,31 @@ export const App = () => {
   );
 
   return (
-    <ErrorBoundary fallback={fallback}>
-      {unwrapFuture(futureProjects, {
-        pending: <LoadingView />,
-        resolved: (projects) => (
-          <AppContextProvider
-            projects={projects}
-            invalidateProjectsCache={invalidateProjectsCache}
-            futureQuotaUsage={futureQuotaUsage}
-            futureFiles={futureFiles}
-            futureRemainingQuota={futureRemainingQuota}
-            settings={settings}
-            setSettings={setSettings}
-          >
-            {projects.length === 0 ? (
-              <NoProjectsView />
-            ) : (
-              <>
-                <ApplicationRoutes />
-                <ToastContainer />
-              </>
-            )}
-          </AppContextProvider>
-        ),
-      })}
-    </ErrorBoundary>
+    <AppContextProvider
+      invalidateProjectsCache={invalidateProjectsCache}
+      futureQuotaUsage={futureQuotaUsage}
+      futureFiles={futureFiles}
+      futureRemainingQuota={futureRemainingQuota}
+      settings={settings}
+      setSettings={setSettings}
+    >
+      <ErrorBoundary fallback={fallback}>
+        {unwrapFuture(futureProjects, {
+          pending: <LoadingView />,
+          resolved: (projects) => (
+            <AppContextProvider projects={projects}>
+              {projects.length === 0 ? (
+                <NoProjectsView />
+              ) : (
+                <>
+                  <ApplicationRoutes />
+                  <ToastContainer />
+                </>
+              )}
+            </AppContextProvider>
+          ),
+        })}
+      </ErrorBoundary>
+    </AppContextProvider>
   );
 };

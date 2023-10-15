@@ -63,8 +63,8 @@ export const dropdownItemClassNames: GroupedClassNames = {
   width: 'w-full',
   textAlign: 'text-left',
   padding: 'p-3',
-  backgroundColor: 'bg-slate-100/75 dark:bg-slate-700/75',
-  hocusBackgroundColor: 'hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75',
+  backgroundColor: 'bg-plain-100/75 dark:bg-plain-700/75',
+  hocusBackgroundColor: 'hocus:bg-plain-200/75 dark:hocus:bg-plain-800/75',
   gap: 'gap-3',
   alignItems: 'items-center',
   rounded: 'first:rounded-t-lg last:rounded-b-lg',
@@ -104,7 +104,7 @@ export const DropdownItem = <C extends ElementType = 'button'>({
       {...otherProps}
     >
       {Icon && (
-        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-plain-500 dark:window-inactive:text-plain-400">
           <Icon size="1.25em" noAriaLabel />
         </span>
       )}
