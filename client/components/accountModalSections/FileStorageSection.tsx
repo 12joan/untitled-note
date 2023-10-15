@@ -59,7 +59,7 @@ export const FileStorageSection = () => {
 
           <Meter max={quotaUsage.quota} value={quotaUsage.used} />
 
-          <div className="text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-sm text-plain-500 dark:text-plain-400">
             {filesize(quotaUsage.used)} of {filesize(quotaUsage.quota)} used
             <br />
             {filesize(quotaUsage.quota - quotaUsage.used)} remaining
@@ -72,12 +72,12 @@ export const FileStorageSection = () => {
           {files.map((file) => (
             <div
               key={file.id}
-              className="rounded-lg flex gap-3 items-center p-3 bg-slate-50/90 dark:bg-slate-900/90"
+              className="rounded-lg flex gap-3 items-center p-3 bg-plain-50/90 dark:bg-plain-900/90"
             >
               <div className="grow">
                 {file.filename}
 
-                <div className="text-sm text-slate-500 dark:text-slate-400">
+                <div className="text-sm text-plain-500 dark:text-plain-400">
                   {filesize(file.size)}
                   {file.role === 'project-image' && (
                     <> &middot; Used as project image</>
@@ -97,7 +97,7 @@ export const FileStorageSection = () => {
           ))}
 
           {files.length === 0 && (
-            <div className="text-sm text-slate-500 dark:text-slate-400">
+            <div className="text-sm text-plain-500 dark:text-plain-400">
               No files uploaded yet
             </div>
           )}

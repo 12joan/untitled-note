@@ -118,13 +118,13 @@ const CardItem = ({ item, cardPreviewHeight, ...otherProps }: ItemProps) => {
   return (
     <Item
       item={item}
-      className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-slate-800 dark:border-transparent"
+      className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-plain-800 dark:border-transparent"
       {...otherProps}
     >
       <strong className="block text-lg font-medium" children={item.label} />
 
       <p
-        className="text-sm line-clamp-2 text-slate-500 dark:text-slate-400"
+        className="text-sm line-clamp-2 text-plain-500 dark:text-plain-400"
         style={{ height: cardPreviewHeight }}
       >
         {item.preview}
@@ -137,12 +137,12 @@ const ListItem = ({ item, ...otherProps }: ItemProps) => {
   return (
     <Item
       item={item}
-      className="list-group-item btn btn-no-rounded cursor-pointer bg-white dark:bg-slate-800 space-y-1"
+      className="list-group-item btn btn-no-rounded cursor-pointer bg-white dark:bg-plain-800 space-y-1"
       {...otherProps}
     >
       {item.label}
 
-      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+      <p className="text-xs text-plain-500 dark:text-plain-400 truncate">
         {item.preview}
       </p>
     </Item>

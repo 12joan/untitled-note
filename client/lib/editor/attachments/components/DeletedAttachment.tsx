@@ -8,7 +8,7 @@ export const DeletedAttachment = ({
 }: BaseAttachmentProps) => {
   const className = groupedClassNames(commonClassNames, selectedClassNames, {
     reset: null,
-    color: 'text-slate-500 dark:text-slate-400',
+    color: 'text-plain-500 dark:text-plain-400',
   });
 
   return <div className={className}>Deleted file</div>;

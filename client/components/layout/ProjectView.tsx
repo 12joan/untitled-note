@@ -262,7 +262,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
           {sidebarAlwaysVisible && (
             <nav
               ref={projectsBarRef}
-              className="pointer-events-auto overflow-y-auto border-r bg-slate-50 dark:bg-black/25 dark:border-transparent hide-in-focus-mode"
+              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent hide-in-focus-mode"
               {...cancelFocusModeOnHocus}
               style={{
                 marginLeft: 'calc(-1 * env(safe-area-inset-left))',

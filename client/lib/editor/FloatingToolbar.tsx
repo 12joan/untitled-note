@@ -78,7 +78,7 @@ export const FloatingToolbarItem = <C extends ElementType = 'button'>({
             padding: 'p-3',
             rounded: 'first:rounded-l-lg last:rounded-r-lg',
             backgroundColor:
-              'bg-slate-100/75 dark:bg-slate-700/75 hocus:bg-slate-200/75 dark:hocus:bg-slate-800/75',
+              'bg-plain-100/75 dark:bg-plain-700/75 hocus:bg-plain-200/75 dark:hocus:bg-plain-800/75',
             textColor: 'text-primary-500 dark:text-primary-400',
             disabled: 'disabled:opacity-50 disabled:cursor-not-allowed',
           },

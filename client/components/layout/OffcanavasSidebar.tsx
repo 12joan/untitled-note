@@ -46,7 +46,7 @@ export const OffcanavasSidebar = memo(
       <ModalRoot open={visible} onClose={onClose}>
         <div className="fixed inset-0" data-focus-trap={visible}>
           <ModalPanel
-            className="max-w-full absolute top-0 left-0 bottom-0 bg-slate-50/75 dark:bg-slate-700/75 backdrop-blur-lg shadow-dialog transition-[transform,opacity] flex duration-300"
+            className="max-w-full absolute top-0 left-0 bottom-0 bg-plain-50/75 dark:bg-plain-800/75 backdrop-blur-lg shadow-dialog transition-[transform,opacity] flex duration-300"
             style={{
               transform: transitionVisible
                 ? 'translateX(0)'
@@ -56,7 +56,7 @@ export const OffcanavasSidebar = memo(
             }}
           >
             <div
-              className="shrink-0 overflow-y-auto bg-slate-100/75 dark:bg-slate-900/25 border-r dark:border-transparent"
+              className="shrink-0 overflow-y-auto bg-plain-100/75 dark:bg-plain-900/25 border-r dark:border-transparent"
               style={{ paddingLeft: 'env(safe-area-inset-left)' }}
             >
               <ProjectsBar onButtonClick={onClose} />

@@ -26,10 +26,10 @@ export const PinnedDragTarget = ({
       {children}
 
       <div
-        className={`hidden data-drag-over:flex pointer-events-none absolute -inset-2 rounded-lg border border-dashed box-border bg-slate-100/50 dark:bg-slate-800/75 ${indicatorClassName}`}
+        className={`hidden data-drag-over:flex pointer-events-none absolute -inset-2 rounded-lg border border-dashed box-border bg-plain-100/50 dark:bg-plain-800/75 ${indicatorClassName}`}
         aria-live="polite"
       >
-        <span className="m-auto font-medium text-slate-500 dark:text-slate-400">
+        <span className="m-auto font-medium text-plain-500 dark:text-plain-400">
           Drop to pin
         </span>
       </div>

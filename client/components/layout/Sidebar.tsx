@@ -206,7 +206,7 @@ const SectionWithHeading = ({
 
   return (
     <section>
-      <strong className="text-slate-500 text-xs uppercase tracking-wide select-none dark:text-slate-400">
+      <strong className="text-plain-500 text-xs uppercase tracking-wide select-none dark:text-plain-400">
         {headingComponent}
       </strong>
 
@@ -255,7 +255,7 @@ const ButtonWithIcon: ButtonWithIconComponent = forwardRef(
         }}
         {...otherProps}
       >
-        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-slate-500 dark:window-inactive:text-slate-400">
+        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-plain-500 dark:window-inactive:text-plain-400">
           <Icon size="1.25em" noAriaLabel />
         </span>
 

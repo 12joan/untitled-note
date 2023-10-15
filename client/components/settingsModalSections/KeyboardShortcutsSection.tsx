@@ -198,13 +198,13 @@ const KeyboardShortcutItem = ({
     >
       <button
         type="button"
-        className="text-left list-group-item bg-slate-50/90 dark:bg-slate-900/90 flex items-center gap-2 justify-between no-focus-ring cursor-pointer hover:bg-slate-100/90 dark:hover:bg-slate-850/90 stretch-target"
+        className="text-left list-group-item bg-plain-50/90 dark:bg-plain-900/90 flex items-center gap-2 justify-between no-focus-ring cursor-pointer hover:bg-plain-100/90 dark:hover:bg-plain-850/90 stretch-target"
         onClick={() => setIsRecording(!isRecording)}
         data-keyboard-shortcut-item
       >
         <div>
           <div>{label}</div>
-          <div className="text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-sm text-plain-500 dark:text-plain-400">
             {hint}
           </div>
         </div>
@@ -274,20 +274,20 @@ const KeyboardShortcutDropdown = ({
         })}
       >
         <div className="flex items-center justify-center my-1">
-          <div className="rounded-full bg-black/[0.03] dark:bg-white/5 text-slate-500 dark:text-slate-400 p-3">
+          <div className="rounded-full bg-black/[0.03] dark:bg-white/5 text-plain-500 dark:text-plain-400 p-3">
             <KeyboardShortcutsIcon noAriaLabel size="1.25em" />
           </div>
         </div>
 
         <h3 className="text-lg font-medium">Record shortcut</h3>
 
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-plain-500 dark:text-plain-400">
           Type a keyboard shortcut
         </p>
 
         {sequential && (
           <p className="mt-2">
-            <span className="text-xs bg-slate-200 dark:bg-slate-800 rounded px-2 py-1">
+            <span className="text-xs bg-plain-200 dark:bg-plain-800 rounded px-2 py-1">
               Must end in 1
             </span>
           </p>

@@ -12,7 +12,7 @@ export const Placeholder = ({
 }: PlaceholderProps) => {
   return (
     <Component
-      className={`bg-slate-200 dark:bg-slate-800 motion-safe:animate-pulse cursor-wait ${className}`}
+      className={`bg-plain-200 dark:bg-plain-800 motion-safe:animate-pulse cursor-wait ${className}`}
       {...otherProps}
     />
   );

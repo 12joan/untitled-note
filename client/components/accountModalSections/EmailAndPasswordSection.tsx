@@ -27,7 +27,7 @@ export const EmailAndPasswordSection = () => {
     <div className="space-y-2">
       <h3 className="h3 select-none">Reset password</h3>
 
-      <div className="text-sm text-slate-500 dark:text-slate-400">
+      <div className="text-sm text-plain-500 dark:text-plain-400">
         Click the button below to reset your password. You will receive an email
         with a link to reset your password.
       </div>

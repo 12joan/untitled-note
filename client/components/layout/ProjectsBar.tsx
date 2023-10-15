@@ -105,7 +105,7 @@ export const ProjectsBar = memo(
                 <Tooltip content="New project" placement="right" fixed>
                   <button
                     type="button"
-                    className="w-12 btn aspect-square flex items-center justify-center p-1 text-slate-400 dark:text-slate-500 hocus:text-slate-500 hocus:dark:text-slate-400"
+                    className="w-12 btn aspect-square flex items-center justify-center p-1 text-plain-400 dark:text-plain-500 hocus:text-plain-500 hocus:dark:text-plain-400"
                     onClick={openNewProjectModal}
                   >
                     <LargePlusIcon size="2em" ariaLabel="New project" />
@@ -149,7 +149,7 @@ const ProjectFolder = ({
     <div className="mb-3">
       <div
         className={`-m-1 rounded-xl p-1 ${
-          isExpanded ? 'bg-slate-200 dark:bg-black/75' : ''
+          isExpanded ? 'bg-plain-200 dark:bg-black/75' : ''
         }`}
       >
         <div className="-mb-3">
@@ -158,7 +158,7 @@ const ProjectFolder = ({
               {isExpanded ? (
                 <button
                   type="button"
-                  className="btn w-12 h-12 flex justify-center items-center text-slate-400 dark:text-slate-500"
+                  className="btn w-12 h-12 flex justify-center items-center text-plain-400 dark:text-plain-500"
                   {...buttonProps}
                 >
                   <ChevronUpIcon size="2em" noAriaLabel />
@@ -166,7 +166,7 @@ const ProjectFolder = ({
               ) : (
                 <button
                   type="button"
-                  className="btn w-12 h-12 border border-dashed p-1.5 grid gap-1 grid-cols-2 border-slate-400 dark:border-slate-500"
+                  className="btn w-12 h-12 border border-dashed p-1.5 grid gap-1 grid-cols-2 border-plain-400 dark:border-plain-500"
                   {...buttonProps}
                 >
                   {projects.slice(0, 4).map((project) => (
@@ -275,7 +275,7 @@ const ProjectListItem = ({
         <div {...containerProps} className="flex gap-2 -ml-3 mb-3">
           <div
             aria-hidden="true"
-            className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-slate-500 dark:window-inactive:bg-slate-400"
+            className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-plain-500 dark:window-inactive:bg-plain-400"
             data-active={isCurrentProject}
           />
 

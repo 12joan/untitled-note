@@ -106,7 +106,7 @@ const Toast = ({
   return (
     <div
       ref={ref}
-      className="pointer-events-auto bg-slate-100/75 backdrop-blur shadow-dialog rounded-2xl dark:bg-slate-800/75 flex gap-8 p-4 items-start max-w-full transition-[margin,transform]"
+      className="pointer-events-auto bg-plain-100/75 backdrop-blur shadow-dialog rounded-2xl dark:bg-plain-800/75 flex gap-8 p-4 items-start max-w-full transition-[margin,transform]"
       style={{
         position: toastHeight > 0 ? undefined : 'absolute',
         transitionProperty:
@@ -138,7 +138,7 @@ const Toast = ({
 
       <button
         type="button"
-        className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-slate-200/75 dark:hover:bg-slate-700/75 text-slate-400 dark:text-slate-500 hover:text-slate-500 dark:hover:text-slate-400"
+        className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-plain-200/75 dark:hover:bg-plain-700/75 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400"
         onClick={close}
       >
         <LargeCloseIcon size="1.25em" ariaLabel="Close" />

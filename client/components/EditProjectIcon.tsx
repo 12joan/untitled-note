@@ -190,7 +190,7 @@ const ImageForm = ({
         resolved: (remainingQuota) => (
           <button
             type="button"
-            className="text-sm text-slate-500 dark:text-slate-400 btn btn-link-subtle"
+            className="text-sm text-plain-500 dark:text-plain-400 btn btn-link-subtle"
             onClick={showFileStorage}
           >
             {filesize(remainingQuota)} available
@@ -358,7 +358,7 @@ const BackgroundColourForm = ({
       </div>
 
       {hasImage && (
-        <p className="text-slate-500 dark:text-slate-400">
+        <p className="text-plain-500 dark:text-plain-400">
           The background colour affects transparent areas of the image.
         </p>
       )}

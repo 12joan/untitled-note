@@ -20,7 +20,7 @@ export const GenericAttachment = ({
       <div className="grow">
         {filename}
 
-        <div className="text-sm text-slate-500 dark:text-slate-400">
+        <div className="text-sm text-plain-500 dark:text-plain-400">
           {friendlyMime(contentType)} &middot; {filesize(size)}
         </div>
       </div>
@@ -28,7 +28,7 @@ export const GenericAttachment = ({
       <Tooltip content="Download file">
         <button
           type="button"
-          className="block btn p-3 aspect-square text-slate-500 dark:text-slate-400 hocus:text-ui"
+          className="block btn p-3 aspect-square text-plain-500 dark:text-plain-400 hocus:text-ui"
           onClick={() => window.open(url, '_blank')}
         >
           <DownloadIcon size="1.25em" ariaLabel="Download file" />

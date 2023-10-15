@@ -131,7 +131,7 @@ const Action = ({
     <div className="flex flex-col sm:flex-row gap-3 p-3 sm:items-center">
       <div className="space-y-1 grow select-none">
         <strong className="font-medium">{name}</strong>
-        <p className="text-slate-500 dark:text-slate-400">{description}</p>
+        <p className="text-plain-500 dark:text-plain-400">{description}</p>
       </div>
 
       <button
@@ -190,7 +190,7 @@ const ConfirmDeletionModal = ({
         <label className="flex gap-2 items-start">
           <input
             type="checkbox"
-            className="ring-offset-slate-100 dark:ring-offset-slate-800"
+            className="ring-offset-plain-100 dark:ring-offset-plain-800"
             checked={areYouSure}
             onChange={(event) => setAreYouSure(event.target.checked)}
           />

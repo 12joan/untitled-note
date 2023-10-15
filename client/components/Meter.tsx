@@ -14,7 +14,7 @@ export const Meter = ({
 }: MeterProps) => {
   return (
     <div
-      className={`w-full rounded-full bg-slate-900/10 dark:bg-slate-50/10 relative overflow-hidden ${className}`}
+      className={`w-full rounded-full bg-plain-900/10 dark:bg-plain-50/10 relative overflow-hidden ${className}`}
       {...otherProps}
     >
       <div
