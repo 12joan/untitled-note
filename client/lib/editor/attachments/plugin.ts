@@ -13,6 +13,10 @@ const setDragCursorPosition = (position: number | null) =>
   setGlobalStore('dragCursorPosition', position);
 
 const getItemIsFile = (item: DataTransferItem): boolean => {
+  if (window.attachmentSkipFolderCheck) {
+    return true;
+  }
+
   if ('getAsEntry' in item) {
     return (item as any).getAsEntry()?.isFile;
   }
