@@ -15,10 +15,5 @@ export const deregisterUpload = (id: number) => {
 export const getUploadIsInProgress = (id: number) =>
   Boolean(uploadsInProgress[id]);
 
-export const forEachUpload = (
-  callback: ([id, data]: [number, UploadState]) => void
-) => {
-  Object.entries(uploadsInProgress).forEach(([id, data]) =>
-    callback([parseInt(id, 10), data])
-  );
-};
+export const abortUpload = (id: number) =>
+  uploadsInProgress[id]?.abortController.abort();

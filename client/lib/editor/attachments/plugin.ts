@@ -5,8 +5,6 @@ import { ELEMENT_ATTACHMENT } from './constants';
 import { findDragPath } from './findDragPath';
 import { insertAttachments } from './insertAttachments';
 import { AttachmentPlugin } from './types';
-import { forEachUpload } from './uploadsInProgressStore';
-import { attachmentNodeExists } from './utils';
 import { withAttachments } from './withAttachments';
 
 const setDragCursorPosition = (position: number | null) =>
@@ -35,14 +33,6 @@ const createAttachmentPlugin = createPluginFactory<AttachmentPlugin>({
   renderAfterEditable: DragCursor,
   withOverrides: withAttachments,
   handlers: {
-    onChange: (editor) => () => {
-      forEachUpload(([s3FileId, { abortController }]) => {
-        if (!attachmentNodeExists(editor, s3FileId)) {
-          abortController.abort();
-        }
-      });
-    },
-
     onDragOver: (editor) => (event) => {
       if (event.dataTransfer.types.includes('Files')) {
         event.preventDefault();
