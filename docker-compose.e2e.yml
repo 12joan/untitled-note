@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: 'yarn dev'
+    environment: &common-env
+      PORT: 3100
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres@db
+      REDIS_URL: redis://redis:6379
+      TYPESENSE_URL: http://typesense:8108
+      TYPESENSE_API_KEY: trust
+      S3_BUCKET: untitled-note-app-e2e
+    env_file: .env
+    ports:
+      - '3100:3100'
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+      - typesense
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata_e2e:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+
+  typesense:
+    image: typesense/typesense:0.23.1
+    command: '--data-dir /data --api-key=trust'
+    volumes:
+      - typesense_e2e:/data
+
+volumes:
+  pgdata_e2e:
+  typesense_e2e:
