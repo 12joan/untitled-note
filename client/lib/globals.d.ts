@@ -12,6 +12,9 @@ declare global {
       getNode: typeof getNode;
       toDOMNode: typeof toDOMNode;
     };
+
+    attachmentSkipFolderCheck?: boolean;
+    fileUploadInfinite?: boolean;
   }
 
   interface Document {

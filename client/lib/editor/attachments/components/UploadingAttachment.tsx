@@ -38,7 +38,11 @@ export const UploadingAttachment = ({
 
   return (
     <div {...attributes}>
-      <div contentEditable={false} className={className}>
+      <div
+        contentEditable={false}
+        className={className}
+        data-testid="uploading-attachment"
+      >
         <div>
           Uploading <span className="font-medium">{filename}</span>
         </div>

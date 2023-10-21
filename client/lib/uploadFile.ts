@@ -1,4 +1,4 @@
-import axios, { AxiosProgressEvent } from 'axios';
+import axios, { AxiosProgressEvent, CanceledError } from 'axios';
 import { allocateFile, deleteFile } from '~/lib/apis/file';
 import { S3File } from '~/lib/types';
 
@@ -48,6 +48,15 @@ export const uploadFile = async ({
       signal: abortSignal,
       onUploadProgress,
     });
+
+    // Simulate an indefinite upload duration
+    if (window.fileUploadInfinite) {
+      await new Promise((_resolve, reject) => {
+        abortSignal?.addEventListener('abort', () =>
+          reject(new CanceledError())
+        );
+      });
+    }
 
     if (!String(uploadResponse.status).match(/2\d{2}/)) {
       // eslint-disable-next-line no-console

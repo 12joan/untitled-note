@@ -14,10 +14,12 @@ import {
   withoutNormalizing,
 } from '@udecode/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
+import { AttachmentElement } from './types';
+import { abortUpload, getUploadIsInProgress } from './uploadsInProgressStore';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 
 export const withAttachments = (editor: PlateEditor) => {
-  const { deleteBackward, deleteForward, insertFragment } = editor;
+  const { deleteBackward, deleteForward, insertFragment, apply } = editor;
 
   type DeleteFn = typeof deleteBackward | typeof deleteForward;
 
@@ -95,6 +97,22 @@ export const withAttachments = (editor: PlateEditor) => {
 
       insertFragment(fragment);
     });
+  };
+
+  // Abort upload if attachment is removed during upload
+  editor.apply = (operation) => {
+    if (
+      operation.type === 'remove_node' &&
+      operation.node.type === ELEMENT_ATTACHMENT
+    ) {
+      const { s3FileId } = operation.node as AttachmentElement;
+
+      if (getUploadIsInProgress(s3FileId)) {
+        abortUpload(s3FileId);
+      }
+    }
+
+    apply(operation);
   };
 
   return editor;
