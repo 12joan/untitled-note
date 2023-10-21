@@ -45,7 +45,10 @@ test.describe('Attachments', () => {
     });
 
     await dragAndDropFile(paragraphHandle, dataTransfer, 'above');
-    await page.waitForTimeout(1000);
+
+    await expect(page.getByTestId('uploaded-attachment')).toContainText(
+      'plain-text.txt'
+    );
 
     expect(await getTypeAtPath(page, editorHandle, [2])).toEqual('attachment');
   });
@@ -63,7 +66,10 @@ test.describe('Attachments', () => {
     });
 
     await dragAndDropFile(paragraphHandle, dataTransfer, 'above');
-    await page.waitForTimeout(1000);
+
+    await expect(
+      page.getByTestId('uploaded-attachment').getByRole('img')
+    ).toBeVisible();
 
     expect(await getTypeAtPath(page, editorHandle, [2])).toEqual('attachment');
   });
@@ -85,9 +91,7 @@ test.describe('Attachments', () => {
     });
 
     await dragAndDropFile(paragraphHandle, dataTransfer, 'above');
-    await page.waitForTimeout(1000);
-
-    expect(await getTypeAtPath(page, editorHandle, [2])).toEqual('attachment');
+    await expect(page.getByTestId('uploading-attachment')).toBeVisible();
 
     await openFileStorageSection(page);
     await expect(page.getByText('Files (1)')).toBeVisible();

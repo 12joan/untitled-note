@@ -82,7 +82,7 @@ const UploadedAttachment = ({
 
   return (
     <div {...attributes}>
-      <div contentEditable={false}>
+      <div contentEditable={false} data-testid="uploaded-attachment">
         {unwrapFutureServiceResult(fsrFetchedData, {
           pending: <PendingAttachment {...commonProps} />,
           failure: () => <DeletedAttachment {...commonProps} />,
