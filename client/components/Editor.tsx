@@ -29,6 +29,7 @@ import {
   useSaveSelection,
 } from '~/lib/editor/restoreSelection';
 import { SelectionToolbar } from '~/lib/editor/SelectionToolbar';
+import { useSlatePlaywrightUtils } from '~/lib/editor/slate-playwright';
 import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useSyncDocument } from '~/lib/editor/useSyncDocument';
@@ -349,6 +350,8 @@ const WithEditorState = ({
   const useFormattingToolbar = useAppContext('useFormattingToolbar');
 
   useSaveSelection(initialDocument.id, editor);
+
+  useSlatePlaywrightUtils();
 
   const [forceUpdateBodyKey, forceUpdateBody] = useReducer((x) => x + 1, 0);
 

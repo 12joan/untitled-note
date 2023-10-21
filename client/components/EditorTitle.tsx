@@ -38,6 +38,7 @@ export const EditorTitle = forwardRef(
           }}
           defaultValue={initialTitle}
           placeholder="Untitled document"
+          aria-label="Document title"
           ignorePlaceholder
           onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
             onChange(event.target.value);

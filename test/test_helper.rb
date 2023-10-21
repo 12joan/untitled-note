@@ -15,6 +15,7 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
 
   def as_user(user)
+    user.update!(allow_stub_login: true) unless user.allow_stub_login
     post stub_login_url, params: { user_id: user.id }
   end
 

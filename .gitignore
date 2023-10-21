@@ -63,3 +63,9 @@ node_modules
 !/electron/.yarn/releases
 !/electron/.yarn/sdks
 !/electron/.yarn/versions
+/test-results/
+
+# Playwright
+/playwright-report/
+/playwright/.cache/
+/test-results/

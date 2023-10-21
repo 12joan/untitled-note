@@ -41,6 +41,8 @@ module.exports = {
     'no-use-before-define': 'off',
     'no-underscore-dangle': 'off',
     'no-case-declarations': 'off',
+    'no-restricted-syntax': 'off',
+    'no-await-in-loop': 'off',
     'import/prefer-default-export': 'off',
     'import/order': ['off', { 'newlines-between': 'always' }],
     'import/no-unresolved': 'off',

@@ -5,12 +5,13 @@
     "build": "tsc && bin/vite build",
     "start": "yarn rails",
     "dev": "concurrently \"yarn rails\" \"yarn dev:vite\"",
-    "rails": "bundle exec rails server -b 0.0.0.0 -p 3000",
+    "rails": "bundle exec rails server -b 0.0.0.0",
     "dev:vite": "bin/vite serve",
     "build-electron": "vite build -c vite.electron.config.js",
     "lint": "eslint client electron/src --max-warnings 0",
     "typecheck": "tsc --noEmit --incremental",
-    "typecheck:watch": "yarn typecheck --watch"
+    "typecheck:watch": "yarn typecheck --watch",
+    "e2e": "yarn playwright test"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
@@ -50,6 +51,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@playwright/test": "^1.39.0",
     "@types/node": "^18.17.14",
     "@types/rails__actioncable": "^6.1.8",
     "@types/react": "^18.0.35",

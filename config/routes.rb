@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
-  if Rails.env.test?
+  unless Rails.env.production?
     resource :stub_login, only: %i[create], controller: 'stub_login'
   end
 
