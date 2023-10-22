@@ -80,3 +80,13 @@ export const getSelection = async (
   editorHandle: JSHandle<PlateEditor>
 ): Promise<Range | null> =>
   page.evaluate((editor) => editor.selection, editorHandle);
+
+export const setSelection = async (
+  page: Page,
+  editorHandle: JSHandle<PlateEditor>,
+  range: Range
+) =>
+  page.evaluate(([editor, range]) => editor.setSelection(range), [
+    editorHandle,
+    range,
+  ] as const);
