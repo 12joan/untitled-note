@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { Path } from 'slate';
 import {
   clickAtPath,
   getDOMNodeByPath,
   getEditorHandle,
+  getSelection,
   getTypeAtPath,
 } from './slate';
 import {
@@ -104,5 +106,51 @@ test.describe('Attachments', () => {
 
     await openFileStorageSection(page);
     await expect(page.getByText('Files (0)')).toBeVisible();
+  });
+
+  test('tab into attachment', async ({ page }) => {
+    const editorHandle = await getEditorHandle(page);
+
+    // Insert an attachment between paragraphs 2 and 3
+    const paragraphHandle = await getDOMNodeByPath(page, editorHandle, [2]);
+
+    const dataTransfer = await createDataTransfer(page, {
+      filePath: './test-files/plain-text.txt',
+      fileName: 'plain-text.txt',
+      fileType: 'text/plain',
+    });
+
+    await dragAndDropFile(paragraphHandle, dataTransfer, 'above');
+
+    await expect(page.getByTestId('uploaded-attachment')).toContainText(
+      'plain-text.txt'
+    );
+
+    const expectTabbedIntoAttachment = async () => {
+      const activeElementTestId = await page.evaluate(() => {
+        return document.activeElement?.getAttribute('data-testid');
+      });
+
+      expect(activeElementTestId).toEqual('download-attachment');
+    };
+
+    const expectSelectionPath = async (path: Path) => {
+      const selection = await getSelection(page, editorHandle);
+      expect(selection?.anchor.path).toEqual(path);
+      expect(selection?.focus.path).toEqual(path);
+    };
+
+    await clickAtPath(page, editorHandle, [1]);
+    await page.keyboard.press('Tab');
+    await expectTabbedIntoAttachment();
+
+    await page.keyboard.press('Tab');
+    await expectSelectionPath([3, 0]);
+
+    await page.keyboard.press('Shift+Tab');
+    await expectTabbedIntoAttachment();
+
+    await page.keyboard.press('Shift+Tab');
+    await expectSelectionPath([2, 0]);
   });
 });
