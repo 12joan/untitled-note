@@ -90,7 +90,7 @@ test.describe('Links', () => {
     await expect(linkToolbar).not.toBeVisible();
 
     // Hover over link
-    await link.hover();
+    await link.dispatchEvent('mouseenter');
     await expect(linkToolbar).toBeVisible();
 
     // Hover elsewhere

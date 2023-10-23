@@ -23,19 +23,18 @@ export const SelectionToolbar = () => {
     <FloatingToolbar
       open={open}
       items={
-        <>
-          {formattingButtons.map(({ label, icon, active, onClick }) => (
-            <FloatingToolbarItem
-              key={label}
-              icon={icon}
-              label={label}
-              className={formattingButtonClassNames}
-              data-active={active}
-              onClick={onClick}
-              onMouseDown={(event: MouseEvent) => event.preventDefault()}
-            />
-          ))}
-        </>
+        open &&
+        formattingButtons.map(({ label, icon, active, onClick }) => (
+          <FloatingToolbarItem
+            key={label}
+            icon={icon}
+            label={label}
+            className={formattingButtonClassNames}
+            data-active={active}
+            onClick={onClick}
+            onMouseDown={(event: MouseEvent) => event.preventDefault()}
+          />
+        ))
       }
       tippyProps={{
         getReferenceClientRect: () => {
@@ -44,6 +43,11 @@ export const SelectionToolbar = () => {
           return range.getBoundingClientRect();
         },
       }}
+      containerProps={
+        {
+          'data-testid': 'selection-toolbar',
+        } as any
+      }
     />
   );
 };
