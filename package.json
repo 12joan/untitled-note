@@ -65,7 +65,7 @@
     "concurrently": "^7.6.0",
     "css-has-pseudo": "^4.0.2",
     "esbuild": "^0.17.19",
-    "eslint": "^8.52.0",
+    "eslint": "^8.53.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-import": "^2.29.0",
