@@ -1726,10 +1726,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/runes@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@types/runes@npm:0.4.2"
-  checksum: 1e64c0907fbcc94001f93caefc235ce7a1c6e17e3c5536505f508eec0dfddeff4f066608646084bbdf94aa07739ec265b3018fe329085bdb4b03063cb588dad0
+"@types/runes@npm:^0.4.3":
+  version: 0.4.3
+  resolution: "@types/runes@npm:0.4.3"
+  checksum: 93a26c7272ce4a3a7d6edc2617655a5cbada5719600f6263878fbd3f64c35835a4a250b3160b155e36b068d473789230ccf2639a999a6559585e77127cf2efb3
   languageName: node
   linkType: hard
 
@@ -6007,7 +6007,7 @@ __metadata:
     "@types/react": ^18.0.35
     "@types/react-beautiful-dnd": ^13.1.6
     "@types/react-dom": ^18.2.14
-    "@types/runes": ^0.4.2
+    "@types/runes": ^0.4.3
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
     "@udecode/plate": ^24.5.2
