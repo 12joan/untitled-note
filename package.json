@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.11.6",
     "@rails/actioncable": "^7.1.1",
     "@tippyjs/react": "^4.2.6",
-    "@types/js-cookie": "^3.0.5",
+    "@types/js-cookie": "^3.0.6",
     "@udecode/plate": "^24.5.2",
     "axios": "^1.6.0",
     "comlink": "^4.4.1",
