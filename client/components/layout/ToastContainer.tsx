@@ -140,8 +140,9 @@ const Toast = ({
         type="button"
         className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-plain-200/75 dark:hover:bg-plain-700/75 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400"
         onClick={close}
+        aria-label="Close"
       >
-        <LargeCloseIcon size="1.25em" ariaLabel="Close" />
+        <LargeCloseIcon size="1.25em" noAriaLabel />
       </button>
     </div>
   );

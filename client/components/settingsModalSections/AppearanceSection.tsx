@@ -49,8 +49,9 @@ export const AppearanceSection = () => {
             type="button"
             className="btn p-2 aspect-square btn-modal-secondary"
             onClick={decreaseEditorFontSize}
+            aria-label="Decrease font size"
           >
-            <MinusIcon size="1.25em" ariaLabel="Decrease font size" />
+            <MinusIcon size="1.25em" noAriaLabel />
           </button>
 
           <Tooltip content="Reset font size" placement="bottom">
@@ -68,8 +69,9 @@ export const AppearanceSection = () => {
             type="button"
             className="btn p-2 aspect-square btn-modal-secondary"
             onClick={increaseEditorFontSize}
+            aria-label="Increase font size"
           >
-            <PlusIcon size="1.25em" ariaLabel="Increase font size" />
+            <PlusIcon size="1.25em" noAriaLabel />
           </button>
         </div>
 

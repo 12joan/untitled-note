@@ -30,9 +30,10 @@ export const GenericAttachment = ({
           type="button"
           className="block btn p-3 aspect-square text-plain-500 dark:text-plain-400 hocus:text-ui"
           onClick={() => window.open(url, '_blank')}
+          aria-label="Download file"
           data-testid="download-attachment"
         >
-          <DownloadIcon size="1.25em" ariaLabel="Download file" />
+          <DownloadIcon size="1.25em" noAriaLabel />
         </button>
       </Tooltip>
     </div>
