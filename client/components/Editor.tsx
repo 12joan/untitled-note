@@ -279,14 +279,12 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
                       resumeLock();
                     }
                   }}
+                  aria-label={isReadOnly ? 'Locked' : 'Temporarily unlocked'}
                 >
                   {isReadOnly ? (
-                    <LockIcon size="1.25em" ariaLabel="Locked" />
+                    <LockIcon size="1.25em" noAriaLabel />
                   ) : (
-                    <UnlockIcon
-                      size="1.25em"
-                      ariaLabel="Temporarily unlocked"
-                    />
+                    <UnlockIcon size="1.25em" noAriaLabel />
                   )}
                 </button>
               </Tooltip>
@@ -301,15 +299,20 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
                     setTagsVisible(true);
                     tagsRef.current?.focus();
                   }}
+                  aria-label="Add tags"
                 >
-                  <TagsIcon size="1.25em" ariaLabel="Add tags" />
+                  <TagsIcon size="1.25em" noAriaLabel />
                 </button>
               </Tooltip>
             )}
 
             <Dropdown items={documentMenu} placement="bottom-end">
-              <button type="button" className="btn p-2 aspect-square shrink-0">
-                <OverflowMenuIcon size="1.25em" ariaLabel="Document menu" />
+              <button
+                type="button"
+                className="btn p-2 aspect-square shrink-0"
+                aria-label="Document menu"
+              >
+                <OverflowMenuIcon size="1.25em" noAriaLabel />
               </button>
             </Dropdown>
           </div>

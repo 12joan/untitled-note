@@ -2,25 +2,17 @@ import React, { ReactNode, SVGProps } from 'react';
 
 export interface IconProps extends SVGProps<SVGSVGElement> {
   size?: number | string;
-  ariaLabel?: string;
-  noAriaLabel?: boolean;
   className?: string;
+  // Required as a reminder to add an aria-label to the parent element
+  noAriaLabel: true;
 }
 
 export default (children: ReactNode) =>
   ({
     size = '1em',
-    ariaLabel,
-    noAriaLabel = false,
     className: userClassName = '',
     ...otherProps
   }: IconProps) => {
-    if (ariaLabel === undefined && !noAriaLabel) {
-      throw new Error(
-        'Icon component must have either an ariaLabel or noAriaLabel prop'
-      );
-    }
-
     const className = `pointer-events-none ${userClassName}`;
 
     return (
@@ -32,8 +24,7 @@ export default (children: ReactNode) =>
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="currentColor"
-        aria-label={ariaLabel}
-        aria-hidden={noAriaLabel}
+        aria-hidden
         className={className}
         {...otherProps}
       >

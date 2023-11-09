@@ -107,8 +107,9 @@ export const ProjectsBar = memo(
                     type="button"
                     className="w-12 btn aspect-square flex items-center justify-center p-1 text-plain-400 dark:text-plain-500 hocus:text-plain-500 hocus:dark:text-plain-400"
                     onClick={openNewProjectModal}
+                    aria-label="New project"
                   >
-                    <LargePlusIcon size="2em" ariaLabel="New project" />
+                    <LargePlusIcon size="2em" noAriaLabel />
                   </button>
                 </Tooltip>
               </div>

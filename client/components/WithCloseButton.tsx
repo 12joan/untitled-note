@@ -31,8 +31,9 @@ export const WithCloseButton = ({
         type="button"
         className="btn btn-no-rounded rounded-full p-2 aspect-square shrink-0"
         onClick={onClose}
+        aria-label="Close"
       >
-        <LargeCloseIcon size="1.25em" ariaLabel="Close" />
+        <LargeCloseIcon size="1.25em" noAriaLabel />
       </button>
     </div>
   );
