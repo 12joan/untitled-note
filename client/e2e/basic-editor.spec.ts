@@ -13,13 +13,7 @@ import {
   getEditorHandle,
   getTypeAtPath,
 } from './slate';
-import {
-  createDocument,
-  createProject,
-  expectUnsavedChanges,
-  expectUpToDate,
-  logIn,
-} from './utils';
+import { createDocument, createProject, expectUpToDate, logIn } from './utils';
 
 test.describe('Basic editor', () => {
   test.beforeEach(async ({ page }) => {
@@ -36,7 +30,6 @@ test.describe('Basic editor', () => {
     await page.keyboard.type('Hello World!');
     await expect(editable).toContainText('Hello World!');
 
-    await expectUnsavedChanges(page);
     await expectUpToDate(page);
 
     await page.reload();

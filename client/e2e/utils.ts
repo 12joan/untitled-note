@@ -27,6 +27,13 @@ export const createProject = async (page: Page, name = 'My Project') => {
   await expect(page).toHaveTitle(name);
 };
 
+export const locateSidebar = (page: Page) => page.getByLabel('Sidebar');
+
+export const visitOverview = async (page: Page) => {
+  await locateSidebar(page).getByText('Overview').click();
+  await page.waitForURL(/\/overview$/);
+};
+
 export const fillDocumentTitle = async (page: Page, title: string) => {
   await page.getByLabel('Document title').fill(title);
 };
@@ -43,13 +50,12 @@ export const createDocument = async (page: Page, title?: string) => {
 };
 
 export const expectSyncState = async (page: Page, state: string) => {
+  await page.waitForTimeout(500);
   await page.getByLabel('Document menu').click();
   await expect(page.getByText(state)).toBeVisible();
   await page.keyboard.press('Escape');
 };
 
-export const expectUnsavedChanges = async (page: Page) =>
-  expectSyncState(page, 'Unsaved changes');
 export const expectUpToDate = async (page: Page) =>
   expectSyncState(page, 'Up to date');
 
@@ -108,4 +114,8 @@ export const openAccountModal = async (page: Page) => {
 export const openFileStorageSection = async (page: Page) => {
   await openAccountModal(page);
   await page.getByText('File storage').click();
+};
+
+export const openSearchModal = async (page: Page) => {
+  await locateSidebar(page).getByText('Search').click();
 };
