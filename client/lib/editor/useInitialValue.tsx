@@ -31,7 +31,6 @@ export const useInitialValue = ({
 
       const initialValue = deserializeHtml(tempEditor, {
         element: initialDocument.body,
-        stripWhitespace: true,
       });
 
       return initialValue[0]?.type ? initialValue : emptyDocument;

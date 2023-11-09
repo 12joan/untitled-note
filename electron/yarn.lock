@@ -1416,16 +1416,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^22.2.0":
-  version: 22.2.0
-  resolution: "electron@npm:22.2.0"
+"electron@npm:^22.3.25":
+  version: 22.3.27
+  resolution: "electron@npm:22.3.27"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^16.11.26
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 096434fe95408928c86de4782e87fcad8b933043a9a7b5447e87964c6c597352584d413157cca43a9f1fd4bf669d2e344d6604ff5c499367e3ca6f1008e2fd5f
+  checksum: b9c5ad263c45065b42f612931de95e0e29f9e735d4f47f51298700788492e6a107d72f4982d421afc71f25364660579d5d15061f8198211ac9d507372ca8bbe1
   languageName: node
   linkType: hard
 
@@ -2878,7 +2878,7 @@ __metadata:
     "@electron-forge/maker-squirrel": ^6.0.5
     "@electron-forge/maker-zip": ^6.0.5
     "@electron-forge/publisher-github": ^6.0.5
-    electron: ^22.2.0
+    electron: ^22.3.25
     electron-context-menu: ^3.6.1
     electron-squirrel-startup: ^1.0.0
     update-electron-app: ^2.0.1
