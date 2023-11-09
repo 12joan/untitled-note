@@ -89,8 +89,9 @@ export const FileStorageSection = () => {
                 <button
                   type="button"
                   className="shrink-0 btn p-2 aspect-square"
+                  aria-label="File actions"
                 >
-                  <OverflowMenuIcon size="1.25em" ariaLabel="File actions" />
+                  <OverflowMenuIcon size="1.25em" noAriaLabel />
                 </button>
               </Dropdown>
             </div>

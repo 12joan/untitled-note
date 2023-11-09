@@ -84,9 +84,10 @@ export const FloatingToolbarItem = <C extends ElementType = 'button'>({
           },
           className
         )}
+        aria-label={label}
         {...otherProps}
       >
-        <Icon size="1.25em" ariaLabel={label} />
+        <Icon size="1.25em" noAriaLabel />
       </Component>
     </Tooltip>
   );

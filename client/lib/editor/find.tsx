@@ -316,8 +316,9 @@ const FindDialog = ({
           type="button"
           className="btn p-2 2xs:aspect-square max-2xs:grow flex justify-center"
           onClick={() => changeMatch(-1)}
+          aria-label="Previous match"
         >
-          <ChevronLeftIcon size="1.25em" ariaLabel="Previous match" />
+          <ChevronLeftIcon size="1.25em" noAriaLabel />
         </button>
 
         <span className="select-none" role="status">
@@ -328,8 +329,9 @@ const FindDialog = ({
           type="button"
           className="btn p-2 2xs:aspect-square max-2xs:grow flex justify-center"
           onClick={() => changeMatch(1)}
+          aria-label="Next match"
         >
-          <ChevronRightIcon size="1.25em" ariaLabel="Next match" />
+          <ChevronRightIcon size="1.25em" noAriaLabel />
         </button>
       </>
     ) : (
@@ -368,8 +370,9 @@ const FindDialog = ({
             type="button"
             className="btn p-2 aspect-square"
             onClick={onClose}
+            aria-label="Close"
           >
-            <LargeCloseIcon size="1.25em" ariaLabel="Close" />
+            <LargeCloseIcon size="1.25em" noAriaLabel />
           </button>
         </div>
 

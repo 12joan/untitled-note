@@ -236,8 +236,9 @@ export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
               onClick={onClick}
               onMouseDown={(event) => event.preventDefault()}
               aria-pressed={active}
+              aria-label={label}
             >
-              <Icon size="1.25em" ariaLabel={label} />
+              <Icon size="1.25em" noAriaLabel />
             </button>
           </Tooltip>
         )

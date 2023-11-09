@@ -153,8 +153,9 @@ export const EditorTags = forwardRef(
                 const remainingTags = removeTag(tag);
                 setVisible(remainingTags.length > 0);
               }}
+              aria-label="Remove tag"
             >
-              <CloseIcon size="1.5em" ariaLabel="Remove tag" />
+              <CloseIcon size="1.5em" noAriaLabel />
             </button>
           </div>
         ))}
@@ -166,8 +167,9 @@ export const EditorTags = forwardRef(
             display: inputVisible ? 'none' : undefined,
           }}
           onClick={focusInput}
+          aria-label="Add tag"
         >
-          <PlusIcon size="1.5em" ariaLabel="Add tag" />
+          <PlusIcon size="1.5em" noAriaLabel />
         </button>
 
         <div
