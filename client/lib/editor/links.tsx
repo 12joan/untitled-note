@@ -316,6 +316,11 @@ export const LinkComponent = ({
             </>
           )
         }
+        containerProps={
+          {
+            'data-testid': 'link-toolbar',
+          } as any
+        }
       >
         <a
           ref={linkRef}

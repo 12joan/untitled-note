@@ -1,6 +1,6 @@
 import { ElementHandle, JSHandle, Locator, Page } from '@playwright/test';
 import { PlateEditor, TNode } from '@udecode/plate';
-import { Path } from 'slate';
+import { Path, Range } from 'slate';
 
 import '../lib/globals.d';
 
@@ -74,3 +74,19 @@ export const getTypeAtPath = async (
   if ('text' in node) return 'text';
   return node.type as string;
 };
+
+export const getSelection = async (
+  page: Page,
+  editorHandle: JSHandle<PlateEditor>
+): Promise<Range | null> =>
+  page.evaluate((editor) => editor.selection, editorHandle);
+
+export const setSelection = async (
+  page: Page,
+  editorHandle: JSHandle<PlateEditor>,
+  range: Range
+) =>
+  page.evaluate(([editor, range]) => editor.setSelection(range), [
+    editorHandle,
+    range,
+  ] as const);

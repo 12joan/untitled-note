@@ -158,9 +158,10 @@ const NavButton = forwardRef(
         ref={ref}
         {...buttonProps}
         className="shrink-0 block btn btn-no-rounded transparent-blur rounded-full p-2 aspect-square pointer-events-auto"
+        aria-label={label}
         {...otherProps}
       >
-        <Icon size="1.25em" ariaLabel={label} />
+        <Icon size="1.25em" noAriaLabel />
       </Component>
     );
   }
