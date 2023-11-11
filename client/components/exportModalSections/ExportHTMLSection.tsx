@@ -1,14 +1,20 @@
-import React, { useMemo, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import {
   getEditorString,
   Plate,
   PlateContent,
   PlateEditor,
+  replaceNodeChildren,
+  useEditorRef,
+  useEditorState,
+  useEditorVersion,
   Value,
 } from '@udecode/plate';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { copyText } from '~/lib/copyText';
 import { getHtmlForExport } from '~/lib/editor/getHtmlForExport';
+import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
 import { ExportModalSectionProps } from './types';
@@ -18,13 +24,8 @@ export const ExportHTMLSection = ({
   getEditorChildren,
 }: ExportModalSectionProps) => {
   const [isModified, setIsModified] = useState(false);
-  const [resetKey, updateResetKey] = useReducer((x) => x + 1, 0);
+  const [resetKey, reset] = useReducer((x) => x + 1, 0);
   const editorRef = useRef<PlateEditor | null>(null);
-
-  const reset = () => {
-    updateResetKey();
-    setIsModified(false);
-  };
 
   const includeTitle = useLocalStorage('exportHtml:includeTitle', true);
   const setIncludeTitle = (value: boolean) => {
@@ -32,11 +33,19 @@ export const ExportHTMLSection = ({
     reset();
   };
 
-  const initialHtml = useMemo(
-    () =>
-      getHtmlForExport(getEditorChildren(), {
-        title: includeTitle ? doc.title || null : null,
-      }),
+  const initialValue: Value = useMemo(
+    () => [
+      {
+        type: 'content',
+        children: [
+          {
+            text: getHtmlForExport(getEditorChildren(), {
+              title: includeTitle ? doc.title || null : null,
+            }),
+          },
+        ],
+      },
+    ],
     [includeTitle]
   );
 
@@ -71,31 +80,15 @@ export const ExportHTMLSection = ({
       </label>
 
       <div className="relative">
-        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-plain-900 p-4 text-white text-sm/relaxed">
-          <Plate<Value>
-            editorRef={editorRef}
-            key={resetKey}
-            initialValue={[
-              {
-                type: 'content',
-                children: [
-                  {
-                    text: initialHtml,
-                  },
-                ],
-              },
-            ]}
-            onChange={() => {
-              if (
-                editorRef.current!.operations.some(
-                  (op) => op.type !== 'set_selection'
-                )
-              ) {
-                setIsModified(true);
-              }
-            }}
-          >
+        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-plain-900 p-4 text-white text-sm/relaxed overflow-y-auto">
+          <Plate<Value> editorRef={editorRef} initialValue={initialValue}>
             <PlateContent className="no-focus-ring min-h-full" />
+            <Resetter resetKey={resetKey} value={initialValue} />
+            <TrackModified
+              initialValue={initialValue}
+              setIsModified={setIsModified}
+            />
+            <SlatePlaywrightEffects />
           </Plate>
         </pre>
 
@@ -133,4 +126,37 @@ export const ExportHTMLSection = ({
       </div>
     </>
   );
+};
+
+interface ResetterProps {
+  resetKey: number;
+  value: Value;
+}
+
+const Resetter = ({ resetKey, value }: ResetterProps) => {
+  const editor = useEditorRef();
+
+  useEffectAfterFirst(() => {
+    replaceNodeChildren(editor, { at: [], nodes: value });
+  }, [resetKey]);
+
+  return null;
+};
+
+interface TrackModifiedProps {
+  initialValue: Value;
+  setIsModified: (value: boolean) => void;
+}
+
+const TrackModified = ({ initialValue, setIsModified }: TrackModifiedProps) => {
+  const editor = useEditorState();
+  const versionKey = useEditorVersion();
+
+  useEffect(() => {
+    setIsModified(
+      JSON.stringify(editor.children) !== JSON.stringify(initialValue)
+    );
+  }, [editor, versionKey]);
+
+  return null;
 };

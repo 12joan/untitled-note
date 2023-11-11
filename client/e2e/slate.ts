@@ -4,16 +4,14 @@ import { Path, Range } from 'slate';
 
 import '../lib/globals.d';
 
-export const getEditable = async (page: Page) =>
-  page.locator('[data-slate-editor]');
+export const getEditable = (context: Page | Locator) =>
+  context.locator('[data-slate-editor]');
 
 export const getEditorHandle = async (
   page: Page,
   editable?: Locator
 ): Promise<JSHandle<PlateEditor>> => {
-  const editableHandle = await (
-    editable || (await getEditable(page))
-  ).elementHandle();
+  const editableHandle = await (editable || getEditable(page)).elementHandle();
 
   return page.evaluateHandle((editable) => {
     const editor = window.playwrightUtils.EDITABLE_TO_EDITOR.get(
