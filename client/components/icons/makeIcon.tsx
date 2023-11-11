@@ -11,6 +11,8 @@ export default (children: ReactNode) =>
   ({
     size = '1em',
     className: userClassName = '',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    noAriaLabel,
     ...otherProps
   }: IconProps) => {
     const className = `pointer-events-none ${userClassName}`;
