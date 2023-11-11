@@ -71,7 +71,7 @@ export const ExportHTMLSection = ({
       </label>
 
       <div className="relative">
-        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-plain-900 p-4 text-white text-sm/relaxed">
+        <pre className="h-[400px] rounded-lg focus-within:focus-ring ring-offset-2 bg-plain-900 p-4 text-white text-sm/relaxed overflow-y-auto">
           <Plate<Value>
             editorRef={editorRef}
             key={resetKey}
