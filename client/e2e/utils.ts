@@ -45,19 +45,33 @@ export const createDocument = async (page: Page, title?: string) => {
     await fillDocumentTitle(page, title);
   }
 
-  const editable = await getEditable(page);
+  const editable = getEditable(page);
   await expect(editable).toHaveText('Write something...');
+};
+
+export const openDocumentMenu = async (page: Page) => {
+  await page.getByLabel('Document menu').click();
 };
 
 export const expectSyncState = async (page: Page, state: string) => {
   await page.waitForTimeout(500);
-  await page.getByLabel('Document menu').click();
+  await openDocumentMenu(page);
   await expect(page.getByText(state)).toBeVisible();
   await page.keyboard.press('Escape');
 };
 
 export const expectUpToDate = async (page: Page) =>
   expectSyncState(page, 'Up to date');
+
+export const openExportModal = async (page: Page) => {
+  await openDocumentMenu(page);
+  await page.getByText('Export document').click();
+};
+
+export const openExportHTMLSection = async (page: Page) => {
+  await openExportModal(page);
+  await page.getByRole('tab', { name: 'Export HTML' }).click();
+};
 
 export type CreateDataTransfer = {
   filePath: string;
@@ -106,6 +120,10 @@ export const dragAndDropFile = async (
   await target.dispatchEvent('drop', eventOptions);
 };
 
+export const openSearchModal = async (page: Page) => {
+  await locateSidebar(page).getByText('Search').click();
+};
+
 export const openAccountModal = async (page: Page) => {
   await page.getByLabel('Account').hover();
   await page.getByText('Account info').click();
@@ -114,8 +132,4 @@ export const openAccountModal = async (page: Page) => {
 export const openFileStorageSection = async (page: Page) => {
   await openAccountModal(page);
   await page.getByText('File storage').click();
-};
-
-export const openSearchModal = async (page: Page) => {
-  await locateSidebar(page).getByText('Search').click();
 };

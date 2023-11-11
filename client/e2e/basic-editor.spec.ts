@@ -23,7 +23,7 @@ test.describe('Basic editor', () => {
   });
 
   test('save document to server and reload', async ({ page }) => {
-    const editable = await getEditable(page);
+    const editable = getEditable(page);
     const editorHandle = await getEditorHandle(page, editable);
 
     await clickAtPath(page, editorHandle, [0]);
@@ -33,7 +33,7 @@ test.describe('Basic editor', () => {
     await expectUpToDate(page);
 
     await page.reload();
-    await expect(await getEditable(page)).toContainText('Hello World!');
+    await expect(getEditable(page)).toContainText('Hello World!');
   });
 
   test('create blocks with markdown and remove with backspace', async ({

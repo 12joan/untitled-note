@@ -13,6 +13,7 @@ import {
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { copyText } from '~/lib/copyText';
 import { getHtmlForExport } from '~/lib/editor/getHtmlForExport';
+import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
@@ -87,6 +88,7 @@ export const ExportHTMLSection = ({
               initialValue={initialValue}
               setIsModified={setIsModified}
             />
+            <SlatePlaywrightEffects />
           </Plate>
         </pre>
 
