@@ -5572,10 +5572,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"locale-includes@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "locale-includes@npm:1.0.5"
-  checksum: 524af4c87541a014ad9f8c9e0d9370f6f10c3109b598ef17113c6c81e851ca0ac6a91754ebbd48435bae07798886f60c6894397832f13ec17a9c66921468a9f2
+"locale-includes@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "locale-includes@npm:1.0.6"
+  checksum: e26d77324958b2259edd592c26eb89f5659916934eadd88595b0f7b655a6221e1a7a50fd6cda8ae73ffd198a047dadd8ae07e081d5f79e846824adf6a9b66a76
   languageName: node
   linkType: hard
 
@@ -6010,7 +6010,7 @@ __metadata:
     idb: ^7.1.1
     javascript-time-ago: ^2.5.9
     js-cookie: ^3.0.5
-    locale-includes: ^1.0.5
+    locale-includes: ^1.0.6
     postcss: ^8.4.31
     postcss-flexbugs-fixes: ^5.0.2
     postcss-import: ^15.1.0
