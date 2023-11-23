@@ -1678,10 +1678,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rails__actioncable@npm:^6.1.9":
-  version: 6.1.9
-  resolution: "@types/rails__actioncable@npm:6.1.9"
-  checksum: 2c9b8f071f717d54687584aaf9f734df90dfbc71bf8876fa31d6c747dc96496e20267b6f075cfbb861b1270bbf0e2ea6884e031e8db919a670762405bb008eee
+"@types/rails__actioncable@npm:^6.1.10":
+  version: 6.1.10
+  resolution: "@types/rails__actioncable@npm:6.1.10"
+  checksum: 10ef9ab9104d90f09db0954896393af56d3c76237af07a24f6561f179c7d70e971805655c678abf2207f36de6b4bf627b9b15d784b57c77bb3f797963b1f7fb8
   languageName: node
   linkType: hard
 
@@ -5980,7 +5980,7 @@ __metadata:
     "@tippyjs/react": ^4.2.6
     "@types/js-cookie": ^3.0.6
     "@types/node": ^18.17.14
-    "@types/rails__actioncable": ^6.1.9
+    "@types/rails__actioncable": ^6.1.10
     "@types/react": ^18.0.35
     "@types/react-beautiful-dnd": ^13.1.7
     "@types/react-dom": ^18.2.15
