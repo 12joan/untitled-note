@@ -5,6 +5,7 @@ import React, {
   useContext as _useContext,
   useMemo,
 } from 'react';
+import { transformValues } from './transformValues';
 
 type WrappedValue<T> = { data: T } | null;
 
@@ -15,12 +16,10 @@ export type ProviderProps<T> = Partial<T> & {
 export const createContext = <
   T extends Record<string, unknown>
 >(defaultValues: { [K in keyof T]: WrappedValue<T[K]> }) => {
-  const contexts = Object.fromEntries(
-    Object.entries(defaultValues).map(([key, value]) => [
-      key,
-      _createContext(value),
-    ])
-  ) as { [K in keyof T]: Context<WrappedValue<T[K]>> };
+  const contexts = transformValues<
+    { [K in keyof T]: WrappedValue<T[K]> },
+    { [K in keyof T]: Context<WrappedValue<T[K]>> }
+  >(defaultValues, _createContext);
 
   const useContext = <K extends keyof T>(key: K) => {
     const wrappedValue = _useContext(contexts[key]);
