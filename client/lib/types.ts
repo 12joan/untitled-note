@@ -78,6 +78,8 @@ export type S3File = {
   content_type: string;
   url: string;
   created_at: string;
+  became_unused_at: string | null;
+  do_not_delete_unused: boolean;
 };
 
 export type StorageQuotaUsage = {

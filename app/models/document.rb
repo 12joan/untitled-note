@@ -87,9 +87,16 @@ class Document < ApplicationRecord
       end
     end
 
-    self.s3_files = s3_file_ids.uniq.map do |s3_file_id|
-      owner.s3_files.find_by(id: s3_file_id)
-    end.compact
+    documents_s3_files.each do |documents_s3_file|
+      if s3_file_ids.exclude?(documents_s3_file.s3_file_id)
+        documents_s3_file.destroy
+      end
+    end
+
+    s3_file_ids.uniq.each do |s3_file_id|
+      s3_file = owner.s3_files.find_by(id: s3_file_id)
+      documents_s3_files.find_or_create_by(s3_file: s3_file) unless s3_file.nil?
+    end
   end
 
   def upsert_to_typesense(collection: self.class.typesense_collection)

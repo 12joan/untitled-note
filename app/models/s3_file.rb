@@ -12,7 +12,10 @@ class S3File < ApplicationRecord
   validates :size, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :content_type, presence: true
 
-  include Queryable.permit(*%i[id role filename size content_type url created_at])
+  scope :attachments, -> { where(role: 'attachment') }
+  scope :project_images, -> { where(role: 'project-image') }
+
+  include Queryable.permit(*%i[id role filename size content_type url created_at became_unused_at do_not_delete_unused])
   include Listenable
 
   INLINE_CONTENT_TYPES = %w[
@@ -73,6 +76,28 @@ class S3File < ApplicationRecord
 
   def uploaded?(update_cache: true)
     uploaded_cache? || check_uploaded(update_cache: update_cache)
+  end
+
+  def attachment?
+    role == 'attachment'
+  end
+
+  def project_image?
+    role == 'project-image'
+  end
+
+  def unused?
+    became_unused_at.present?
+  end
+
+  def update_unused
+    if attachment?
+      if documents_s3_files.empty?
+        update!(became_unused_at: Time.current)
+      else
+        update!(became_unused_at: nil)
+      end
+    end
   end
 
   private

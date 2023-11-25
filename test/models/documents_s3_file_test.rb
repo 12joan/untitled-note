@@ -42,6 +42,42 @@ class DocumentsS3FileTest < ActiveSupport::TestCase
     assert_empty document.s3_files
   end
 
+  test 'can delete document with linked s3_files' do
+    document = create_document_with_attachment_ids([@s3_file_1.id], project: @user_1_project)
+
+    assert_difference 'DocumentsS3File.count', -1 do
+      document.destroy!
+    end
+  end
+
+  test 'can delete s3_file with linked documents' do
+    document = create_document_with_attachment_ids([@s3_file_1.id], project: @user_1_project)
+
+    ignore_s3 do
+      assert_difference 'DocumentsS3File.count', -1 do
+        @s3_file_1.destroy!
+      end
+    end
+  end
+
+  test 'sets s3 file as unused if and only if no documents reference it' do
+    document_1 = create_document_with_attachment_ids([@s3_file_1.id], project: @user_1_project)
+    document_2 = create_document_with_attachment_ids([@s3_file_1.id], project: @user_1_project)
+    assert_nil @s3_file_1.reload.became_unused_at, 's3 file should not be unused'
+
+    document_1.update!(body: document_body_with_attachment_ids([@s3_file_2.id]))
+    assert_nil @s3_file_1.reload.became_unused_at, 's3 file should not be unused'
+
+    document_2.update!(body: document_body_with_attachment_ids([]))
+    assert_not_nil @s3_file_1.reload.became_unused_at, 's3 file should be unused'
+
+    document_3 = create_document_with_attachment_ids([@s3_file_1.id], project: @user_1_project)
+    assert_nil @s3_file_1.reload.became_unused_at, 's3 file should not be unused'
+
+    document_3.destroy!
+    assert_not_nil @s3_file_1.reload.became_unused_at, 's3 file should be unused'
+  end
+
   private
 
   def create_document_with_attachment_ids(s3_file_ids, **args)

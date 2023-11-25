@@ -22,7 +22,7 @@ FactoryBot.define do
   factory :s3_file do
     owner
     original_project
-    role { 'project-icon' }
+    role { 'attachment' }
     sequence(:s3_key) { |n| "uploads/#{n}.png" }
     sequence(:filename) { |n| "#{n}.png" }
     size { 100 }
