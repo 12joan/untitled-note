@@ -67,6 +67,10 @@ class ActiveSupport::TestCase
         end
       end
 
+      def attachment(s3_file_id:, filename:, &block)
+        add_child(type: 'attachment', s3FileId: s3_file_id, filename: filename, &block)
+      end
+
       private
 
       def add_child(**args, &block)

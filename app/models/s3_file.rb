@@ -3,6 +3,9 @@ class S3File < ApplicationRecord
   belongs_to :original_project, class_name: 'Project', inverse_of: :s3_files
   has_many :used_as_image_in_projects, class_name: 'Project', foreign_key: 'image_id', dependent: :nullify
 
+  has_many :documents_s3_files, dependent: :destroy
+  has_many :documents, through: :documents_s3_files
+
   validates :role, presence: true
   validates :s3_key, presence: true
   validates :filename, presence: true

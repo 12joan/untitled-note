@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_21_114812) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_25_151117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_21_114812) do
     t.string "updated_by", default: "server", null: false
     t.datetime "locked_at"
     t.index ["project_id"], name: "index_documents_on_project_id"
+  end
+
+  create_table "documents_s3_files", id: false, force: :cascade do |t|
+    t.bigint "document_id", null: false
+    t.bigint "s3_file_id", null: false
+    t.index ["document_id", "s3_file_id"], name: "index_documents_s3_files_on_document_id_and_s3_file_id"
+    t.index ["s3_file_id", "document_id"], name: "index_documents_s3_files_on_s3_file_id_and_document_id"
   end
 
   create_table "documents_tags", force: :cascade do |t|
