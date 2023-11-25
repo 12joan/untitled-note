@@ -6,7 +6,8 @@ module Clockwork
     ActiveRecord::Base.connection_pool.with_connection do
       case job
       when 'nightly'
-        isolate_errors { CleanUpS3Files.perform }
+        isolate_errors { CleanUpUnuploadedS3Files.perform }
+        isolate_errors { CleanUpUntrackedS3Objects.perform }
         isolate_errors { CleanUpBlankDocuments.perform }
       end
     end
