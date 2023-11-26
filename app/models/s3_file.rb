@@ -1,6 +1,6 @@
 class S3File < ApplicationRecord
   belongs_to :owner, class_name: 'User', inverse_of: :s3_files
-  belongs_to :original_project, class_name: 'Project', inverse_of: :s3_files
+  belongs_to :original_project, class_name: 'Project', inverse_of: :s3_files, optional: true
   has_many :used_as_image_in_projects, class_name: 'Project', foreign_key: 'image_id', dependent: :nullify
 
   has_many :documents_s3_files, dependent: :destroy

@@ -5,6 +5,8 @@ class AddBecameUnusedAtToS3Files < ActiveRecord::Migration[7.0]
 
     # Flag all existing files as "do not delete"
     S3File.attachments.update_all(do_not_delete_unused: true)
+
+    S3File.find_each(&:update_unused)
   end
 
   def down
