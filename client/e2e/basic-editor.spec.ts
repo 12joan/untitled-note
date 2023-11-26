@@ -22,6 +22,26 @@ test.describe('Basic editor', () => {
     await createDocument(page);
   });
 
+  test('no page scrollbars', async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1080 });
+
+    await page.waitForTimeout(1000);
+
+    const hasScrollbars = await page.evaluate(() => {
+      const html = document.querySelector('html')!;
+
+      return {
+        horizontal: html.scrollWidth > html.clientWidth,
+        vertical: html.scrollHeight > html.clientHeight,
+      };
+    });
+
+    expect(hasScrollbars).toEqual({
+      horizontal: false,
+      vertical: false,
+    });
+  });
+
   test('save document to server and reload', async ({ page }) => {
     const editable = getEditable(page);
     const editorHandle = await getEditorHandle(page, editable);
