@@ -59,7 +59,7 @@ body {
     @apply overflow-wrap-break-word;
   }
 
-  input::placeholder, textarea::placeholder, [-slate-placeholder] {
+  input::placeholder, textarea::placeholder, [data-slate-placeholder] {
     @apply text-plain-400 dark:text-plain-500;
   }
 
@@ -227,7 +227,7 @@ body {
   @apply select-none;
 }
 
-[-slate-placeholder] {
+[data-slate-placeholder] {
   // Fix editor placeholder causing body to scroll horizontally
   width: auto !important;
 
@@ -235,7 +235,7 @@ body {
   opacity: 1 !important;
 }
 
-[-slate-editor]:focus [-slate-placeholder] {
+[data-slate-editor]:focus [data-slate-placeholder] {
   // Hide placeholder when editor is focused
   opacity: 0 !important;
 }
