@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_151117) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_25_215025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_151117) do
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 
-  create_table "documents_s3_files", id: false, force: :cascade do |t|
+  create_table "documents_s3_files", force: :cascade do |t|
     t.bigint "document_id", null: false
     t.bigint "s3_file_id", null: false
     t.index ["document_id", "s3_file_id"], name: "index_documents_s3_files_on_document_id_and_s3_file_id"
@@ -79,6 +79,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_151117) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owner_id", null: false
+    t.datetime "became_unused_at", precision: nil
+    t.boolean "do_not_delete_unused", default: false, null: false
     t.index ["original_project_id"], name: "index_s3_files_on_original_project_id"
     t.index ["owner_id"], name: "index_s3_files_on_owner_id"
   end
