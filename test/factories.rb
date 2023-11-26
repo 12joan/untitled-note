@@ -29,6 +29,11 @@ FactoryBot.define do
     content_type { 'image/png' }
   end
 
+  factory :documents_s3_file do
+    document
+    s3_file
+  end
+
   factory :settings do
     user
     data { { hello: 'world' }.to_json }

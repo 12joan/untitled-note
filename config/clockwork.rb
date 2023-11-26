@@ -9,6 +9,7 @@ module Clockwork
         isolate_errors { CleanUpUnuploadedS3Files.perform }
         isolate_errors { CleanUpUntrackedS3Objects.perform }
         isolate_errors { CleanUpBlankDocuments.perform }
+        isolate_errors { CleanUpUnusedAttachments.perform }
       end
     end
   end
