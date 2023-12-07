@@ -82,7 +82,7 @@
     "sass": "^1.69.5",
     "scriptjs": "^2.5.9",
     "tailwindcss": "^3.3.6",
-    "typescript": "^5.0.4",
+    "typescript": "^5.3.3",
     "typescript-language-server": "^3.3.2",
     "vite": "^4.5.1",
     "vite-plugin-ruby": "^3.2.0"
