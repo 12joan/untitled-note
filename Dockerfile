@@ -1,6 +1,12 @@
+FROM node:20-alpine AS node
 FROM ruby:3.0.6-alpine
 
-RUN apk add --update --no-cache bash build-base nodejs tzdata postgresql-dev yarn curl gcompat
+COPY --from=node /usr/lib /usr/lib
+COPY --from=node /usr/local/lib /usr/local/lib
+COPY --from=node /usr/local/include /usr/local/include
+COPY --from=node /usr/local/bin /usr/local/bin
+
+RUN apk add --update --no-cache bash build-base tzdata postgresql-dev yarn curl gcompat
 
 WORKDIR /app
 
