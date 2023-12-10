@@ -1996,9 +1996,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-serializer-html@npm:26.0.0":
-  version: 26.0.0
-  resolution: "@udecode/plate-serializer-html@npm:26.0.0"
+"@udecode/plate-serializer-html@npm:26.0.6":
+  version: 26.0.6
+  resolution: "@udecode/plate-serializer-html@npm:26.0.6"
   dependencies:
     "@udecode/plate-common": 25.0.1
     html-entities: ^2.4.0
@@ -2009,7 +2009,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: 40339f51fdd0a688501e5e0fa0f38b2df5712ec769d81c7e3b09b41f9bbe25422483646452387bb341ca21d5a51ede9ae0dddc4314a5c33719bbfac8486e3932
+  checksum: d088c619278769af05986bf718ad5cfe5b79fd0914786bdfc0d7d302f8f944ce0856798249a26afe46694f339759ce39f67ccb9188a22385bb10feaf8231cf9e
   languageName: node
   linkType: hard
 
@@ -2129,9 +2129,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate@npm:^26.0.5":
-  version: 26.0.5
-  resolution: "@udecode/plate@npm:26.0.5"
+"@udecode/plate@npm:^26.0.6":
+  version: 26.0.6
+  resolution: "@udecode/plate@npm:26.0.6"
   dependencies:
     "@udecode/plate-alignment": 25.0.1
     "@udecode/plate-autoformat": 25.0.1
@@ -2165,7 +2165,7 @@ __metadata:
     "@udecode/plate-select": 25.0.1
     "@udecode/plate-serializer-csv": 26.0.5
     "@udecode/plate-serializer-docx": 26.0.5
-    "@udecode/plate-serializer-html": 26.0.0
+    "@udecode/plate-serializer-html": 26.0.6
     "@udecode/plate-serializer-md": 26.0.4
     "@udecode/plate-suggestion": 25.0.1
     "@udecode/plate-tabbable": 25.0.1
@@ -2178,7 +2178,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: 98027d5d9108685afdd3f38a54e2ec366da85293d27ec5dee3541a28170124b52b7d8fd65e0e43634cea7b218078036b4207809739163010a5eac26e60671d0b
+  checksum: 01f778659dad1d0415b723fc9202798bbc47a786bc2c306ceba2edd86e988d57769931213560a858d93a997478f270f2e25364fcf13837fee8d0554fca7d511e
   languageName: node
   linkType: hard
 
@@ -5508,7 +5508,7 @@ __metadata:
     "@types/runes": ^0.4.3
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
-    "@udecode/plate": ^26.0.5
+    "@udecode/plate": ^26.0.6
     "@vitejs/plugin-react": ^2.2.0
     autoprefixer: ^10.4.14
     axios: ^1.6.2
