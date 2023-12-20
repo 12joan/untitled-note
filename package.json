@@ -22,7 +22,7 @@
     "@rails/actioncable": "^7.1.2",
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.6",
-    "@udecode/plate": "^26.0.6",
+    "@udecode/plate": "^27.0.3",
     "axios": "^1.6.2",
     "comlink": "^4.4.1",
     "compressorjs": "^1.2.1",
@@ -84,7 +84,7 @@
     "tailwindcss": "^3.3.6",
     "typescript": "^5.3.3",
     "typescript-language-server": "^3.3.2",
-    "vite": "^5.0.10",
+    "vite": "^5.0.0",
     "vite-plugin-ruby": "^5.0.0"
   },
   "packageManager": "yarn@4.0.2",
