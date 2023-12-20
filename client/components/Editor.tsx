@@ -28,7 +28,6 @@ import {
   setSelection,
   useSaveSelection,
 } from '~/lib/editor/restoreSelection';
-import { SelectionToolbar } from '~/lib/editor/SelectionToolbar';
 import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
 import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
@@ -209,8 +208,6 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         />
 
         <SlatePlaywrightEffects />
-
-        {!isReadOnly && <SelectionToolbar />}
       </Plate>
     ),
     [plugins, isReadOnly, fontSize, lockedProps]

@@ -54,6 +54,7 @@ import { softBreakOptions } from '~/lib/editor/softBreak';
 import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
 import { tabbableOptions } from '~/lib/editor/tabbable';
 import { groupedClassNames } from '../groupedClassNames';
+import { createSelectionToolbarPlugin } from './selectionToolbar';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>
@@ -167,6 +168,7 @@ export const usePlugins = () => {
       createTrailingBlockPlugin(),
       createAutoformatPlugin(autoformatOptions),
       createSplitInsertedDataIntoParagraphsPlugin(),
+      createSelectionToolbarPlugin(),
     ],
     []
   );
