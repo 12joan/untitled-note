@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { retry } from '~/lib/retry';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
@@ -11,7 +11,7 @@ export const useEnqueuedPromises = () => {
   const [isDirty, setIsDirty] = useStateWhileMounted(false);
   const [isFailing, setIsFailing] = useStateWhileMounted(false);
 
-  const initiatePromise = (promiseProvider: TPromiseFn) => {
+  const initiatePromise = useCallback((promiseProvider: TPromiseFn) => {
     setIsDirty(true);
 
     inflightPromise.current = retry(promiseProvider, {
@@ -33,15 +33,18 @@ export const useEnqueuedPromises = () => {
           inflightPromise.current = null;
         }
       });
-  };
+  }, []);
 
-  const enqueuePromise = (promiseProvider: TPromiseFn) => {
-    if (inflightPromise.current === null) {
-      initiatePromise(promiseProvider);
-    } else {
-      enqueuedPromiseProvider.current = promiseProvider;
-    }
-  };
+  const enqueuePromise = useCallback(
+    (promiseProvider: TPromiseFn) => {
+      if (inflightPromise.current === null) {
+        initiatePromise(promiseProvider);
+      } else {
+        enqueuedPromiseProvider.current = promiseProvider;
+      }
+    },
+    [initiatePromise]
+  );
 
   return {
     enqueuePromise,

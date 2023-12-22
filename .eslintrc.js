@@ -75,6 +75,7 @@ module.exports = {
     'react/no-children-prop': 'off',
     'react/function-component-definition': 'off',
     'react/no-unstable-nested-components': 'off',
+    'react/prop-types': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
     'jsx-a11y/anchor-has-content': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',

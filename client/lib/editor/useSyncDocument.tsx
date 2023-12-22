@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
 import { pluralize } from '~/lib/pluralize';
@@ -17,6 +17,7 @@ export const useSyncDocument = ({
   clientId,
   initialDocument,
 }: UseSyncDocumentOptions) => {
+  const documentId = initialDocument.id;
   const projectId = useAppContext('projectId');
 
   const [lastSuccessfulUpdate, setLastSuccessfulUpdate] =
@@ -47,30 +48,33 @@ export const useSyncDocument = ({
 
   const { enqueuePromise, isDirty, isFailing } = useEnqueuedPromises();
 
-  const updateDocument = (delta: Partial<LocalDocument>) => {
-    setChangesSinceLastUpdate((count) => count + 1);
+  const updateDocument = useCallback(
+    (delta: Partial<LocalDocument>) => {
+      setChangesSinceLastUpdate((count) => count + 1);
 
-    setWorkingDocument((previousDocument) => {
-      const updatedDocument = {
-        ...previousDocument,
-        ...delta,
-        updated_by: clientId,
-      };
+      setWorkingDocument((previousDocument) => {
+        const updatedDocument = {
+          ...previousDocument,
+          ...delta,
+          updated_by: clientId,
+        };
 
-      enqueuePromise(async () => {
-        const updateResult = await updateDocumentAPI(
-          projectId,
-          initialDocument.id,
-          updatedDocument
-        );
-        extractServerDrivenData(updateResult);
-        setLastSuccessfulUpdate(new Date());
-        setChangesSinceLastUpdate(0);
+        enqueuePromise(async () => {
+          const updateResult = await updateDocumentAPI(
+            projectId,
+            documentId,
+            updatedDocument
+          );
+          extractServerDrivenData(updateResult);
+          setLastSuccessfulUpdate(new Date());
+          setChangesSinceLastUpdate(0);
+        });
+
+        return updatedDocument;
       });
-
-      return updatedDocument;
-    });
-  };
+    },
+    [enqueuePromise, clientId, projectId, documentId]
+  );
 
   useToast(
     isFailing

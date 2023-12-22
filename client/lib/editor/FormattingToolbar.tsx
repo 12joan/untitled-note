@@ -23,6 +23,8 @@ import {
   toggleMark,
   toggleNodeType,
   unindentListItems,
+  useEditorRef,
+  useEditorSelector,
 } from '@udecode/plate';
 import { isLinkInSelection, useToggleLink } from '~/lib/editor/links';
 import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
@@ -42,21 +44,25 @@ import { IconProps } from '~/components/icons/makeIcon';
 import { Tooltip } from '~/components/Tooltip';
 import { GroupedClassNames, groupedClassNames } from '../groupedClassNames';
 
-export interface FormattingButtonProps {
-  label: string;
-  icon: ElementType<IconProps>;
-  active?: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-}
+const usePluginType = (key: string) =>
+  useEditorSelector((editor) => getPluginType(editor, key), [key]);
 
-const toggleElementProps = (editor: PlateEditor, element: string) => {
-  const pluginType = getPluginType(editor, element);
+const useSomeNode = (pluginType: string) =>
+  useEditorSelector(
+    (editor) => someNode(editor, { match: { type: pluginType } }),
+    [pluginType]
+  );
 
-  return {
-    active: someNode(editor, { match: { type: pluginType } }),
-    onClick: () => toggleNodeType(editor, { activeType: pluginType }),
-  };
+const useMarkActive = (pluginType: string) =>
+  useEditorSelector((editor) => isMarkActive(editor, pluginType), [pluginType]);
+
+const useToggleElementProps = (element: string) => {
+  const pluginType = usePluginType(element);
+  const active = useSomeNode(pluginType);
+  const editorStatic = useEditorRef();
+  const onClick = () =>
+    toggleNodeType(editorStatic, { activeType: pluginType });
+  return { active, onClick };
 };
 
 /**
@@ -76,105 +82,114 @@ const markWorkaround = (editor: PlateEditor, callback: () => void) => {
   }
 };
 
-const toggleMarkProps = (editor: PlateEditor, mark: string) => {
-  const pluginType = getPluginType(editor, mark);
-
-  return {
-    active: isMarkActive(editor, pluginType),
-    onClick: () =>
-      markWorkaround(editor, () => toggleMark(editor, { key: pluginType })),
-  };
+const useToggleMarkProps = (mark: string) => {
+  const pluginType = usePluginType(mark);
+  const active = useMarkActive(pluginType);
+  const editorStatic = useEditorRef();
+  const onClick = () =>
+    markWorkaround(editorStatic, () =>
+      toggleMark(editorStatic, { key: pluginType })
+    );
+  return { active, onClick };
 };
 
-const toggleListProps = (editor: PlateEditor, listType: string) => {
-  const pluginType = getPluginType(editor, listType);
-
-  return {
-    active: someNode(editor, { match: { type: pluginType } }),
-    onClick: () => toggleList(editor, { type: pluginType }),
-  };
+const useToggleListProps = (listType: string) => {
+  const pluginType = usePluginType(listType);
+  const active = useSomeNode(pluginType);
+  const editorStatic = useEditorRef();
+  const onClick = () => toggleList(editorStatic, { type: pluginType });
+  return { active, onClick };
 };
 
-const toggleCodeBlockProps = (editor: PlateEditor) => {
-  const pluginType = getPluginType(editor, ELEMENT_CODE_BLOCK);
-
-  return {
-    active: someNode(editor, { match: { type: pluginType } }),
-    onClick: () => toggleCodeBlock(editor),
-  };
+const useToggleCodeBlockProps = () => {
+  const pluginType = usePluginType(ELEMENT_CODE_BLOCK);
+  const active = useSomeNode(pluginType);
+  const editorStatic = useEditorRef();
+  const onClick = () => toggleCodeBlock(editorStatic);
+  return { active, onClick };
 };
 
-export const useInlineFormattingButtons = (
-  editor: PlateEditor
-): FormattingButtonProps[] => {
-  const toggleLink = useToggleLink(editor);
-  const linkInSelection = isLinkInSelection(editor);
+export interface FormattingButtonProps {
+  label: string;
+  icon: ElementType<IconProps>;
+  active?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}
+
+export const useInlineFormattingButtons = (): FormattingButtonProps[] => {
+  const toggleLink = useToggleLink();
+  const linkInSelection = useEditorSelector(isLinkInSelection, []);
+  const rangeAccrossBlocks = useEditorSelector(
+    (editor) => isRangeAcrossBlocks(editor),
+    []
+  );
 
   return [
-    { label: 'Bold', icon: BoldIcon, ...toggleMarkProps(editor, MARK_BOLD) },
+    { label: 'Bold', icon: BoldIcon, ...useToggleMarkProps(MARK_BOLD) },
     {
       label: 'Italic',
       icon: ItalicIcon,
-      ...toggleMarkProps(editor, MARK_ITALIC),
+      ...useToggleMarkProps(MARK_ITALIC),
     },
     {
       label: 'Strikethrough',
       icon: StrikethroughIcon,
-      ...toggleMarkProps(editor, MARK_STRIKETHROUGH),
+      ...useToggleMarkProps(MARK_STRIKETHROUGH),
     },
     {
       label: 'Inline code',
       icon: CodeIcon,
-      ...toggleMarkProps(editor, MARK_CODE),
+      ...useToggleMarkProps(MARK_CODE),
     },
     {
       label: linkInSelection ? 'Remove link' : 'Add link',
       active: linkInSelection,
       icon: LinkIcon,
-      disabled: isRangeAcrossBlocks(editor, { at: editor.selection }),
+      disabled: rangeAccrossBlocks,
       onClick: toggleLink,
     },
   ];
 };
 
-export const useBlockFormattingButtons = (
-  editor: PlateEditor
-): FormattingButtonProps[] => {
+export const useBlockFormattingButtons = (): FormattingButtonProps[] => {
+  const editorStatic = useEditorRef();
+
   return [
     {
       label: 'Heading',
       icon: HeadingOneIcon,
-      ...toggleElementProps(editor, ELEMENT_H1),
+      ...useToggleElementProps(ELEMENT_H1),
     },
     {
       label: 'Quote',
       icon: QuoteIcon,
-      ...toggleElementProps(editor, ELEMENT_BLOCKQUOTE),
+      ...useToggleElementProps(ELEMENT_BLOCKQUOTE),
     },
     {
       label: 'Code block',
       icon: CodeBlockIcon,
-      ...toggleCodeBlockProps(editor),
+      ...useToggleCodeBlockProps(),
     },
     {
       label: 'Bulleted list',
       icon: BulletedListIcon,
-      ...toggleListProps(editor, ELEMENT_UL),
+      ...useToggleListProps(ELEMENT_UL),
     },
     {
       label: 'Numbered list',
       icon: NumberedListIcon,
-      ...toggleListProps(editor, ELEMENT_OL),
+      ...useToggleListProps(ELEMENT_OL),
     },
     {
       label: 'Indent',
       icon: IndentIcon,
-      onClick: () => indentListItems(editor),
+      onClick: () => indentListItems(editorStatic),
     },
     {
       label: 'Unindent',
       icon: UnindentIcon,
-      onClick: () => unindentListItems(editor),
+      onClick: () => unindentListItems(editorStatic),
     },
   ];
 };
@@ -184,12 +199,9 @@ export const formattingButtonClassNames: GroupedClassNames = {
   strokeWidth: 'data-active:stroke-[0.5] data-active:stroke-current',
 };
 
-export interface FormattingToolbarProps {
-  editor: PlateEditor;
-}
-
-export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
-  const toggleLink = useToggleLink(editor);
+export const FormattingToolbar = () => {
+  const editorStatic = useEditorRef();
+  const toggleLink = useToggleLink();
 
   // Meta+K toggles link only if there is a selection;
   // otherwise it opens the search modal
@@ -198,18 +210,18 @@ export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
     () => document.querySelector('[data-slate-editor]')!,
     ['MetaShiftU', 'MetaK'],
     (event, key) => {
-      const hasSelection = getSelectionText(editor).length > 0;
+      const hasSelection = getSelectionText(editorStatic).length > 0;
 
       if (key === 'MetaShiftU' || (key === 'MetaK' && hasSelection)) {
         event.preventDefault();
         toggleLink();
       }
     },
-    [editor]
+    []
   );
 
-  const inlineFormattingButtons = useInlineFormattingButtons(editor);
-  const blockFormattingButtons = useBlockFormattingButtons(editor);
+  const inlineFormattingButtons = useInlineFormattingButtons();
+  const blockFormattingButtons = useBlockFormattingButtons();
 
   const formattingButtons = [
     ...inlineFormattingButtons,

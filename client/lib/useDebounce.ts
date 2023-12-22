@@ -1,15 +1,16 @@
-import { useRef } from 'react';
+import { DependencyList, useCallback, useRef } from 'react';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
 export const useDebounce = <T extends unknown[]>(
   callback: (...args: T) => void,
-  delay: number
+  delay: number,
+  deps: DependencyList
 ) => {
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestArgs = useRef<T | null>(null);
   const [isDirty, setIsDirty] = useStateWhileMounted(false);
 
-  const debouncedFunction = (...args: T) => {
+  const debouncedFunction = useCallback((...args: T) => {
     latestArgs.current = args;
 
     if (timeout.current === null) {
@@ -21,7 +22,7 @@ export const useDebounce = <T extends unknown[]>(
         setIsDirty(false);
       }, delay);
     }
-  };
+  }, deps);
 
   return [debouncedFunction, isDirty] as const;
 };
