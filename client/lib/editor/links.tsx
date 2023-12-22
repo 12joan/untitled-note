@@ -23,6 +23,7 @@ import {
   TLinkElement,
   unwrapLink,
   useEditorReadOnly,
+  useEditorRef,
   usePlateSelectors,
   Value,
 } from '@udecode/plate';
@@ -168,16 +169,17 @@ const useOpenLinkModal = (): OpenLinkModalFn => {
   return openLinkModal;
 };
 
-export const useToggleLink = (editor: PlateEditor) => {
+export const useToggleLink = () => {
+  const editorStatic = useEditorRef();
   const openModal = useOpenLinkModal();
 
   const toggleLink = () => {
-    if (isLinkInSelection(editor)) {
-      unwrapLink(editor);
+    if (isLinkInSelection(editorStatic)) {
+      unwrapLink(editorStatic);
     } else {
       openModal({
-        initialText: getSelectionText(editor),
-        onConfirm: (args) => insertLink(editor, args),
+        initialText: getSelectionText(editorStatic),
+        onConfirm: (args) => insertLink(editorStatic, args),
       });
     }
   };

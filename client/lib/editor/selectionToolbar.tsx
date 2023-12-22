@@ -4,9 +4,9 @@ import {
   isRangeInSameBlock,
   isSelectionExpanded,
   useEditorReadOnly,
-  useEditorState,
+  useEditorSelector,
 } from '@udecode/plate';
-import { useSlateSelector } from 'slate-react';
+import { useFocused } from 'slate-react';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 import {
   formattingButtonClassNames,
@@ -14,17 +14,20 @@ import {
 } from './FormattingToolbar';
 
 const SelectionToolbar = () => {
-  const open = useSlateSelector(
+  const open: boolean = useEditorSelector(
     (editor) =>
-      isSelectionExpanded(editor as any) &&
-      (isRangeInSameBlock(editor as any) ?? false),
-    /**
-     * If open is true, we want to rerender every time the selection changes so
-     * that we keep the toolbar position up to date. If open is false, we only
-     * want to rerender when it becomes true.
-     */
-    (prevOpen, newOpen) => !prevOpen && !newOpen
+      isSelectionExpanded(editor) && (isRangeInSameBlock(editor) ?? false),
+    []
   );
+
+  /**
+   * If open is true, we want to re-render every time the selection changes so
+   * that we keep the toolbar position up to date.
+   */
+  useEditorSelector((editor) => open && editor.selection, [open]);
+
+  // Re-render when the editor regains focus
+  useFocused();
 
   const readOnly = useEditorReadOnly();
   if (readOnly) return null;
@@ -50,9 +53,7 @@ const SelectionToolbar = () => {
 };
 
 const SelectionToolbarInner = () => {
-  const editor = useEditorState();
-
-  const formattingButtons = useInlineFormattingButtons(editor).filter(
+  const formattingButtons = useInlineFormattingButtons().filter(
     ({ disabled }) => !disabled
   );
 
