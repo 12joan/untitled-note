@@ -1,14 +1,12 @@
 import { focusEditor, PlateEditor } from '@udecode/plate';
 import { Selection } from 'slate';
 import { normalizeRange } from '~/lib/editor/normalizeRange';
-import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 
 const selectionForDocument: Record<number, Selection> = {};
 
-export const useSaveSelection = (documentId: number, editor: PlateEditor) =>
-  useEffectAfterFirst(() => {
-    selectionForDocument[documentId] = editor.selection;
-  }, [editor.selection]);
+export const saveSelection = (documentId: number, editor: PlateEditor) => {
+  selectionForDocument[documentId] = editor.selection;
+};
 
 export const setSelection = (editor: PlateEditor, selection?: Selection) => {
   // Returns null if the selection is not valid

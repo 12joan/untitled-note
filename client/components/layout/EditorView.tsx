@@ -22,7 +22,6 @@ export interface EditorViewProps {
   documentId: number;
 }
 
-// eslint-disable-next-line react/prop-types
 export const EditorView = memo(({ documentId }: EditorViewProps) => {
   const projectId = useAppContext('projectId');
   const futurePartialDocuments = useAppContext('futurePartialDocuments');

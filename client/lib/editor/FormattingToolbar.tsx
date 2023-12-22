@@ -23,6 +23,7 @@ import {
   toggleMark,
   toggleNodeType,
   unindentListItems,
+  useEditorState,
 } from '@udecode/plate';
 import { isLinkInSelection, useToggleLink } from '~/lib/editor/links';
 import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
@@ -184,11 +185,8 @@ export const formattingButtonClassNames: GroupedClassNames = {
   strokeWidth: 'data-active:stroke-[0.5] data-active:stroke-current',
 };
 
-export interface FormattingToolbarProps {
-  editor: PlateEditor;
-}
-
-export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
+export const FormattingToolbar = () => {
+  const editor = useEditorState();
   const toggleLink = useToggleLink(editor);
 
   // Meta+K toggles link only if there is a selection;

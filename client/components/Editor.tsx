@@ -1,58 +1,18 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
-import {
-  isEditorFocused,
-  Plate,
-  PlateContent,
-  PlateEditor,
-  useEditorState,
-} from '@udecode/plate';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { isEditorFocused, PlateEditor } from '@udecode/plate';
 import { Range } from 'slate';
-import { AppContextProvider, useAppContext } from '~/lib/appContext';
-import {
-  editorDataForUpload,
-  getFilteredEditor,
-} from '~/lib/editor/editorDataForUpload';
+import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
-import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
-import { useLinkModalProvider } from '~/lib/editor/links';
-import { usePlugins } from '~/lib/editor/plugins';
-import {
-  restoreSelection,
-  setSelection,
-  useSaveSelection,
-} from '~/lib/editor/restoreSelection';
-import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
-import { useInitialValue } from '~/lib/editor/useInitialValue';
+import { restoreSelection, setSelection } from '~/lib/editor/restoreSelection';
+import { useDebouncedSyncDocument } from '~/lib/editor/useDebouncedSyncDocument';
+import { useLockedState } from '~/lib/editor/useLockedState';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
-import { useSyncDocument } from '~/lib/editor/useSyncDocument';
-import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
 import { useGlobalEvent } from '~/lib/globalEvents';
-import { groupedClassNames } from '~/lib/groupedClassNames';
-import { createToast } from '~/lib/toasts';
 import { Document } from '~/lib/types';
-import { useBeforeUnload } from '~/lib/useBeforeUnload';
-import { useDebounce } from '~/lib/useDebounce';
-import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
-import { useOverrideable } from '~/lib/useOverrideable';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
-import { DocumentMenu } from '~/components/DocumentMenu';
-import { DocumentStatusHeader } from '~/components/DocumentStatusHeader';
-import { Dropdown } from '~/components/Dropdown';
-import { EditorTags } from '~/components/EditorTags';
-import { EditorTitle } from '~/components/EditorTitle';
-import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
-import TagsIcon from '~/components/icons/TagsIcon';
-import { Tooltip } from '~/components/Tooltip';
-import LockIcon from './icons/LockIcon';
-import UnlockIcon from './icons/UnlockIcon';
+import { EditorBody } from './EditorBody';
+import { EditorHeader } from './EditorHeader';
 
 export interface EditorProps {
   clientId: string;
@@ -60,21 +20,19 @@ export interface EditorProps {
 }
 
 export const Editor = ({ clientId, initialDocument }: EditorProps) => {
-  useNavigateAwayOnDelete({ documentId: initialDocument.id });
+  const documentId = initialDocument.id;
+
+  useNavigateAwayOnDelete({ documentId });
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
-  const tagsRef = useRef<HTMLDivElement>();
   const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<PlateEditor>(null);
 
-  const fontSize = useEditorFontSizeCSSValue();
+  const [editor, setEditor] = useState<PlateEditor | null>(null);
 
-  const [tagsVisible, setTagsVisible] = useState(
-    initialDocument.tags.length > 0
+  const restoreSelectionForEditor = useCallback(
+    () => editor && restoreSelection(documentId, editor),
+    [editor, documentId]
   );
-
-  const restoreSelectionForEditor = () =>
-    restoreSelection(initialDocument.id, editorRef.current!);
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,79 +45,40 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   }, []);
 
   const {
+    setTitle,
+    onBodyChange,
+    isDirty,
     workingDocument,
     updateDocument,
-    isDirty: updateIsDirty,
-    isFailing: updateIsFailing,
+    isFailing,
     lastSuccessfulUpdate,
-  } = useSyncDocument({
+  } = useDebouncedSyncDocument({
+    editor,
     clientId,
     initialDocument,
   });
 
   useTitle(workingDocument.safe_title);
 
-  const [debouncedUpdateTitle, titleIsDirty] = useDebounce(
-    (title: string) => updateDocument({ title }),
-    750
-  );
-
-  const setTitle = (title: string) => {
-    const normalizedTitle = title.replace(/[\n\r]+/g, '');
-    debouncedUpdateTitle(normalizedTitle);
-  };
-
-  const [debouncedUpdateBody, bodyIsDirty] = useDebounce(
-    (editor: PlateEditor) => {
-      updateDocument(editorDataForUpload(editor));
-    },
-    750
-  );
-
-  const isDirty = updateIsDirty || titleIsDirty || bodyIsDirty;
-  useBeforeUnload(isDirty);
-
-  const isLocked = workingDocument.locked_at !== null;
-  const [isReadOnly, overrideReadOnly] = useOverrideable(isLocked);
-
-  const temporarilyUnlock = useCallback(() => {
-    overrideReadOnly(false);
-
-    createToast({
-      title: 'Temporarily unlocked document',
-      message: 'The document will remain locked when you leave this page',
-      autoClose: 'fast',
-    });
-  }, []);
-
-  const resumeLock = useCallback(() => overrideReadOnly(true), []);
-
-  const lockedProps = useMemo(() => {
-    if (!isReadOnly) return {};
-
-    return {
-      onDoubleClick: temporarilyUnlock,
-      title: 'Double click to edit',
-    };
-  }, [isReadOnly, temporarilyUnlock]);
+  const { isLocked, isReadOnly, temporarilyUnlock, resumeLock } =
+    useLockedState(workingDocument);
 
   const { findDialog, openFind } = useFind({
-    editor: editorRef.current || undefined,
+    editor: editor ?? undefined,
     restoreSelection: restoreSelectionForEditor,
     setSelection: (selection: Range) =>
-      setSelection(editorRef.current!, selection),
+      editor && setSelection(editor, selection),
   });
 
-  const withLinkModalProvider = useLinkModalProvider();
-
+  // Restore focus when closing modals
   const wasFocusedBeforeModalRef = useRef<boolean>(false);
 
   useGlobalEvent(
     'modal:open',
     () => {
-      wasFocusedBeforeModalRef.current = isEditorFocused(editorRef.current!);
+      wasFocusedBeforeModalRef.current = !!editor && isEditorFocused(editor);
     },
-    [editorRef]
+    [editor]
   );
 
   useGlobalEvent(
@@ -169,68 +88,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         restoreSelectionForEditor();
       }
     },
-    [editorRef]
-  );
-
-  const plugins = usePlugins();
-
-  const initialValue = useInitialValue({
-    initialDocument,
-    plugins,
-  });
-
-  const plateComponent = useMemo(
-    () => (
-      <Plate
-        editorRef={editorRef}
-        plugins={plugins}
-        initialValue={initialValue}
-        normalizeInitialValue
-        readOnly={isReadOnly}
-      >
-        <PlateContent
-          className={groupedClassNames({
-            sizing: 'grow max-w-none children:lg:narrow',
-            spacing: 'em:mt-3 em:space-y-3',
-            textColor: 'text-black dark:text-white',
-            focusRing: 'no-focus-ring',
-            baseFontSize:
-              'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
-          })}
-          placeholder="Write something..."
-          style={{ fontSize }}
-          {...lockedProps}
-        />
-
-        <WithEditorState
-          initialDocument={initialDocument}
-          debouncedUpdateBody={debouncedUpdateBody}
-        />
-
-        <SlatePlaywrightEffects />
-      </Plate>
-    ),
-    [plugins, isReadOnly, fontSize, lockedProps]
-  );
-
-  const documentMenu = (
-    <DocumentMenu
-      isEditor
-      statusHeader={
-        <DocumentStatusHeader
-          isDirty={isDirty}
-          isFailing={updateIsFailing}
-          lastSuccessfulUpdate={lastSuccessfulUpdate}
-        />
-      }
-      document={workingDocument}
-      updateDocument={updateDocument}
-      invalidateEditor={false}
-      openFind={openFind}
-      getEditorChildrenForExport={() =>
-        getFilteredEditor(editorRef.current!).children
-      }
-    />
+    [restoreSelectionForEditor]
   );
 
   return (
@@ -241,129 +99,37 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         <BackButton />
       </div>
 
-      <div className="cursor-text" onClick={() => titleRef.current?.focus()}>
-        <div className="lg:narrow flex gap-2 items-center">
-          <EditorTitle
-            ref={titleRef}
-            initialTitle={initialDocument.title || ''}
-            onChange={setTitle}
-            onEnter={() =>
-              setSelection(editorRef.current!, {
-                anchor: { path: [0, 0], offset: 0 },
-                focus: { path: [0, 0], offset: 0 },
-              })
-            }
-            textareaProps={{
-              readOnly: isReadOnly,
-              ...lockedProps,
-            }}
-          />
-
-          <div
-            className="contents"
-            onClick={(event) => event.stopPropagation()}
-          >
-            {isLocked && (
-              <Tooltip
-                content={isReadOnly ? 'Edit document' : 'Finish editing'}
-                placement="bottom"
-              >
-                <button
-                  type="button"
-                  className="btn p-2 aspect-square shrink-0"
-                  onClick={() => {
-                    if (isReadOnly) {
-                      temporarilyUnlock();
-                    } else {
-                      resumeLock();
-                    }
-                  }}
-                  aria-label={isReadOnly ? 'Locked' : 'Temporarily unlocked'}
-                >
-                  {isReadOnly ? (
-                    <LockIcon size="1.25em" noAriaLabel />
-                  ) : (
-                    <UnlockIcon size="1.25em" noAriaLabel />
-                  )}
-                </button>
-              </Tooltip>
-            )}
-
-            {!tagsVisible && (
-              <Tooltip content="Add tags" placement="bottom">
-                <button
-                  type="button"
-                  className="btn p-2 aspect-square shrink-0"
-                  onClick={() => {
-                    setTagsVisible(true);
-                    tagsRef.current?.focus();
-                  }}
-                  aria-label="Add tags"
-                >
-                  <TagsIcon size="1.25em" noAriaLabel />
-                </button>
-              </Tooltip>
-            )}
-
-            <Dropdown items={documentMenu} placement="bottom-end">
-              <button
-                type="button"
-                className="btn p-2 aspect-square shrink-0"
-                aria-label="Document menu"
-              >
-                <OverflowMenuIcon size="1.25em" noAriaLabel />
-              </button>
-            </Dropdown>
-          </div>
-        </div>
-      </div>
-
-      <EditorTags
-        ref={tagsRef}
+      <EditorHeader
+        editor={editor}
+        titleRef={titleRef}
         workingDocument={workingDocument}
         updateDocument={updateDocument}
-        visible={tagsVisible}
-        setVisible={setTagsVisible}
+        setTitle={setTitle}
+        isReadOnly={isReadOnly}
+        isLocked={isLocked}
+        temporarilyUnlock={temporarilyUnlock}
+        resumeLock={resumeLock}
+        isDirty={isDirty}
+        isFailing={isFailing}
+        lastSuccessfulUpdate={lastSuccessfulUpdate}
+        openFind={openFind}
       />
 
-      {withLinkModalProvider(
-        <AppContextProvider
-          mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
-          linkOriginator={workingDocument.safe_title}
-          children={plateComponent}
+      <AppContextProvider
+        mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
+        linkOriginator={workingDocument.safe_title}
+      >
+        <EditorBody
+          editor={editor}
+          setEditor={setEditor}
+          initialDocument={initialDocument}
+          isReadOnly={isReadOnly}
+          onBodyChange={onBodyChange}
+          onDoubleClick={temporarilyUnlock}
         />
-      )}
+      </AppContextProvider>
 
       <div ref={mentionSuggestionsContainerRef} />
     </div>
   );
-};
-
-interface WithEditorStateProps {
-  initialDocument: Document;
-  debouncedUpdateBody: (editor: PlateEditor) => void;
-}
-
-const WithEditorState = ({
-  initialDocument,
-  debouncedUpdateBody,
-}: WithEditorStateProps) => {
-  const editor = useEditorState();
-  const useFormattingToolbar = useAppContext('useFormattingToolbar');
-
-  useSaveSelection(initialDocument.id, editor);
-
-  const [forceUpdateBodyKey, forceUpdateBody] = useReducer((x) => x + 1, 0);
-
-  useGlobalEvent('s3File:uploadComplete', () => forceUpdateBody());
-
-  useEffectAfterFirst(() => {
-    debouncedUpdateBody(editor);
-  }, [editor.children, forceUpdateBodyKey]);
-
-  const formattingToolbar = useFormattingToolbar(
-    <FormattingToolbar editor={editor} />
-  );
-
-  return formattingToolbar;
 };
