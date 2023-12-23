@@ -147,6 +147,9 @@ test.describe('Attachments', () => {
     await page.keyboard.press('Tab');
     await expectSelectionPath([3, 0]);
 
+    // Fix flakiness
+    await page.waitForTimeout(100);
+
     await page.keyboard.press('Shift+Tab');
     await expectTabbedIntoAttachment();
 
