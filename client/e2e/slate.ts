@@ -88,3 +88,15 @@ export const setSelection = async (
     editorHandle,
     range,
   ] as const);
+
+export const addMark = async (
+  page: Page,
+  editorHandle: JSHandle<PlateEditor>,
+  key: string,
+  value: any
+) =>
+  page.evaluate(
+    ([editor, key, value]) =>
+      window.playwrightUtils.addMark(editor, key, value),
+    [editorHandle, key, value] as const
+  );

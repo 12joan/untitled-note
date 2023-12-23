@@ -1,4 +1,4 @@
-import type { getNode, PlateEditor, toDOMNode } from '@udecode/plate';
+import type { addMark, getNode, PlateEditor, toDOMNode } from '@udecode/plate';
 
 declare global {
   interface Window {
@@ -11,6 +11,7 @@ declare global {
       EDITABLE_TO_EDITOR: WeakMap<HTMLElement, PlateEditor>;
       getNode: typeof getNode;
       toDOMNode: typeof toDOMNode;
+      addMark: typeof addMark;
     };
 
     attachmentSkipFolderCheck?: boolean;

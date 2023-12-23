@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { getNode, PlateEditor, toDOMNode, useEditorRef } from '@udecode/plate';
+import {
+  addMark,
+  getNode,
+  PlateEditor,
+  toDOMNode,
+  useEditorRef,
+} from '@udecode/plate';
 
 const EDITABLE_TO_EDITOR = new WeakMap<HTMLElement, PlateEditor>();
 
@@ -22,4 +28,5 @@ window.playwrightUtils = {
   EDITABLE_TO_EDITOR,
   getNode,
   toDOMNode,
+  addMark,
 };

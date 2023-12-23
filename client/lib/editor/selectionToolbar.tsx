@@ -1,9 +1,11 @@
 import React, { MouseEvent } from 'react';
 import {
   createPluginFactory,
+  getBoundingClientRect,
   isRangeInSameBlock,
   isSelectionExpanded,
   useEditorReadOnly,
+  useEditorRef,
   useEditorSelector,
 } from '@udecode/plate';
 import { useFocused } from 'slate-react';
@@ -14,6 +16,8 @@ import {
 } from './FormattingToolbar';
 
 const SelectionToolbar = () => {
+  const editorStatic = useEditorRef();
+
   const open: boolean = useEditorSelector(
     (editor) =>
       isSelectionExpanded(editor) && (isRangeInSameBlock(editor) ?? false),
@@ -37,11 +41,8 @@ const SelectionToolbar = () => {
       open={open}
       items={open && <SelectionToolbarInner />}
       tippyProps={{
-        getReferenceClientRect: () => {
-          const selection = window.getSelection()!;
-          const range = selection.getRangeAt(0);
-          return range.getBoundingClientRect();
-        },
+        getReferenceClientRect: () =>
+          getBoundingClientRect(editorStatic) ?? new DOMRect(),
       }}
       containerProps={
         {

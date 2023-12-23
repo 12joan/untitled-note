@@ -34,6 +34,7 @@ import {
   MARK_STRIKETHROUGH,
   PlateRenderElementProps,
 } from '@udecode/plate';
+// import { createTabbablePlugin } from './tabbable';
 import {
   Attachment,
   ELEMENT_ATTACHMENT,
