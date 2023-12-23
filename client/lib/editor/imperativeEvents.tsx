@@ -1,12 +1,17 @@
 import React, {
-  createContext,
   DependencyList,
   KeyboardEvent,
-  useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
-import { createPluginFactory, PlatePlugin, Value } from '@udecode/plate';
+import {
+  createPluginFactory,
+  PlateEditor,
+  PlatePlugin,
+  useEditorRef,
+  Value,
+} from '@udecode/plate';
 import {
   createEventEmitter,
   dispatchEvent,
@@ -20,23 +25,27 @@ type ImperativeEventTypes = {
   keyDown: [KeyboardEvent];
 };
 
-type ImperativeEventsContext = EventEmitter<ImperativeEventTypes>;
+type ImerativeEventEmitter = EventEmitter<ImperativeEventTypes>;
 
-export const ImperativeEventsContext =
-  createContext<ImperativeEventsContext | null>(null);
+const editorEventEmitterMap = new WeakMap<PlateEditor, ImerativeEventEmitter>();
 
 export type ImperativeEventsPlugin = {
-  imperativeEventEmitter: ImperativeEventsContext;
+  imperativeEventEmitter: ImerativeEventEmitter;
 };
 
 const createImperativeEventsPlugin =
   createPluginFactory<ImperativeEventsPlugin>({
     key: 'imperativeEvents',
     then: (_editor, { options: { imperativeEventEmitter } }) => ({
-      renderAboveEditable: ({ children }) => (
-        <ImperativeEventsContext.Provider value={imperativeEventEmitter}>
-          {children}
-        </ImperativeEventsContext.Provider>
+      /**
+       * The old approach using renderAboveEditable and contexts was causing
+       * editor components to unmount and remount when the plugin options
+       * changed.
+       */
+      renderAfterEditable: () => (
+        <ImperativeEventsEffects
+          imperativeEventEmitter={imperativeEventEmitter}
+        />
       ),
       handlers: {
         onChange: () => (value) => {
@@ -48,6 +57,25 @@ const createImperativeEventsPlugin =
       },
     }),
   });
+
+interface ImperativeEventsEffectsProps {
+  imperativeEventEmitter: ImerativeEventEmitter;
+}
+
+const ImperativeEventsEffects = ({
+  imperativeEventEmitter,
+}: ImperativeEventsEffectsProps) => {
+  const staticEditor = useEditorRef();
+
+  useEffect(() => {
+    editorEventEmitterMap.set(staticEditor, imperativeEventEmitter);
+    return () => {
+      editorEventEmitterMap.delete(staticEditor);
+    };
+  }, [staticEditor, imperativeEventEmitter]);
+
+  return null;
+};
 
 export const useImperativeEventsPlugins = (): PlatePlugin[] => {
   const [imperativeEventEmitter] = useState(() =>
@@ -71,7 +99,8 @@ export const useEditorEvent = <K extends keyof ImperativeEventTypes>(
   handler: EventListener<ImperativeEventTypes[K]>,
   deps?: DependencyList
 ) => {
-  const imperativeEventEmitter = useContext(ImperativeEventsContext);
+  const staticEditor = useEditorRef();
+  const imperativeEventEmitter = editorEventEmitterMap.get(staticEditor);
 
   if (!imperativeEventEmitter) {
     throw new Error(

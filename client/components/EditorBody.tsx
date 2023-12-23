@@ -61,7 +61,7 @@ export const EditorBody = memo(
 
     return withLinkModalProvider(
       <Plate
-        editorRef={(editor) => setEditor(editor)}
+        editorRef={setEditor}
         plugins={plugins}
         initialValue={initialValue}
         normalizeInitialValue
