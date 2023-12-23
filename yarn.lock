@@ -5635,7 +5635,7 @@ __metadata:
     sass: "npm:^1.69.5"
     scheduler: "npm:^0.23.0"
     scriptjs: "npm:^2.5.9"
-    slate: "npm:^0.101.4"
+    slate: "npm:^0.101.5"
     slate-history: "npm:^0.100.0"
     slate-hyperscript: "npm:^0.100.0"
     slate-react: "npm:^0.101.3"
@@ -7136,14 +7136,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate@npm:^0.101.4":
-  version: 0.101.4
-  resolution: "slate@npm:0.101.4"
+"slate@npm:^0.101.5":
+  version: 0.101.5
+  resolution: "slate@npm:0.101.5"
   dependencies:
     immer: "npm:^10.0.3"
     is-plain-object: "npm:^5.0.0"
     tiny-warning: "npm:^1.0.3"
-  checksum: 068aec203b706ff8d4ac8494a3b9c9df06846a64334dfef45eb91daf6ee94717f7fa7d182c92410b71f682492cea7fef31331964b73ade8af47f4e0031c4b299
+  checksum: 11b8d39cca173809e8e41c729d8d78e3dcb52d0bc246ae95034d065a9d8069db0781000f463a2cae5844616427b1fb5de00563b3f132bb8c51fd3b137ec978e7
   languageName: node
   linkType: hard
 
