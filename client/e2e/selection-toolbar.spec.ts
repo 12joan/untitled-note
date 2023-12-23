@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { MARK_BOLD } from '@udecode/plate';
 import {
+  addMark,
   clickAtPath,
+  getEditable,
   getEditorHandle,
   getSlateNodeByPath,
   setSelection,
@@ -106,5 +109,53 @@ test.describe('Selection toolbar', () => {
     // Prevent regression: Tooltip remains visible after deleting selected text
     await page.keyboard.press('Backspace');
     await expect(page.getByRole('tooltip', { name: 'Bold' })).not.toBeVisible();
+  });
+
+  // Prevent regression of webkit crash
+  test('tab through buttons and back to editor', async ({ page }) => {
+    const editorHandle = await getEditorHandle(page);
+
+    // Select 'fox'
+    await setSelection(page, editorHandle, {
+      anchor: { path: [0, 0], offset: 16 },
+      focus: { path: [0, 0], offset: 19 },
+    });
+
+    // Make 'fox' bold
+    await addMark(page, editorHandle, MARK_BOLD, true);
+
+    {
+      const textNodeHandle = await getSlateNodeByPath(
+        page,
+        editorHandle,
+        [0, 1]
+      );
+
+      const textNode = await textNodeHandle.jsonValue();
+      expect(textNode).toMatchObject({ bold: true });
+    }
+
+    // Do this multiple times to catch intermittent crashes
+    for (let i = 0; i < 5; i++) {
+      // Select 'brown'
+      await setSelection(page, editorHandle, {
+        anchor: { path: [0, 0], offset: 10 },
+        focus: { path: [0, 0], offset: 15 },
+      });
+
+      // Tab through buttons
+      const buttonCount = 5;
+      const tabCount = buttonCount + 1;
+
+      for (let i = 0; i < tabCount; i++) {
+        await page.keyboard.press('Tab');
+      }
+
+      await page.waitForTimeout(100);
+
+      // Editor should be focused
+      const editable = getEditable(page);
+      await expect(editable).toBeFocused();
+    }
   });
 });
