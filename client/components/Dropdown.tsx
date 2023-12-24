@@ -1,4 +1,12 @@
-import React, { ElementType, MouseEvent, ReactNode, useRef } from 'react';
+import React, {
+  ElementType,
+  MouseEvent,
+  ReactNode,
+  useMemo,
+  useRef,
+} from 'react';
+import { Modifier } from '@popperjs/core';
+import maxSize from 'popper-max-size-modifier';
 import { followCursor } from 'tippy.js';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
@@ -8,11 +16,40 @@ import { useFocusOut } from '~/lib/useFocusOut';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
 
+const applyMaxSize: Modifier<any, any> = {
+  name: 'applyMaxSize',
+  enabled: true,
+  phase: 'beforeWrite',
+  requires: ['maxSize'],
+  fn({ state }) {
+    // The `maxSize` modifier provides this data
+    const { height } = state.modifiersData.maxSize;
+
+    state.styles.popper = {
+      ...state.styles.popper,
+      maxHeight: `calc(${height}px - 1rem)`,
+    };
+  },
+};
+
 export const dropdownClassNames: GroupedClassNames = {
   width: 'w-auto max-w-full',
+  backgroundColor: 'bg-plain-100/75 dark:bg-plain-700/75',
   backdropBlur: 'backdrop-blur-lg',
   shadow: 'shadow-dialog',
   rounded: 'rounded-lg',
+  overflow: 'overflow-y-auto max-h-[inherit]',
+};
+
+export const dropdownItemClassNames: GroupedClassNames = {
+  display: 'flex',
+  width: 'w-full',
+  textAlign: 'text-left',
+  padding: 'p-3',
+  hocusBackgroundColor: 'hocus:bg-plain-200/75 dark:hocus:bg-plain-800/75',
+  gap: 'gap-3',
+  alignItems: 'items-center',
+  rounded: 'first:rounded-t-lg last:rounded-b-lg',
 };
 
 export interface DropdownProps extends Omit<TippyProps, 'className'> {
@@ -22,6 +59,7 @@ export interface DropdownProps extends Omit<TippyProps, 'className'> {
 
 export const Dropdown = ({
   items,
+  popperOptions: propPopperOptions = {},
   className,
   ...otherProps
 }: DropdownProps) => {
@@ -35,6 +73,18 @@ export const Dropdown = ({
   });
 
   const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(close);
+
+  const popperOptions = useMemo(
+    () => ({
+      ...propPopperOptions,
+      modifiers: [
+        ...(propPopperOptions.modifiers || []),
+        maxSize,
+        applyMaxSize,
+      ],
+    }),
+    [propPopperOptions]
+  );
 
   return (
     <AppContextProvider closeDropdown={close}>
@@ -51,23 +101,12 @@ export const Dropdown = ({
           )}
           trigger="click"
           interactive
+          popperOptions={popperOptions}
           {...otherProps}
         />
       </div>
     </AppContextProvider>
   );
-};
-
-export const dropdownItemClassNames: GroupedClassNames = {
-  display: 'flex',
-  width: 'w-full',
-  textAlign: 'text-left',
-  padding: 'p-3',
-  backgroundColor: 'bg-plain-100/75 dark:bg-plain-700/75',
-  hocusBackgroundColor: 'hocus:bg-plain-200/75 dark:hocus:bg-plain-800/75',
-  gap: 'gap-3',
-  alignItems: 'items-center',
-  rounded: 'first:rounded-t-lg last:rounded-b-lg',
 };
 
 export type DropdownItemProps<C extends ElementType> = PolyProps<

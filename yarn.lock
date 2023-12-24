@@ -5618,6 +5618,7 @@ __metadata:
     javascript-time-ago: "npm:^2.5.9"
     js-cookie: "npm:^3.0.5"
     locale-includes: "npm:^1.0.6"
+    popper-max-size-modifier: "npm:^0.2.0"
     postcss: "npm:^8.4.31"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^15.1.0"
@@ -5927,6 +5928,15 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 95cf79f1574accbff18fac4b876aa3811640314ee74cf4cd1c249398cd49824e55dc664039342a18d2d2fa4f5ad460ce91a97cb15942ab5d71c8ab04f442dc32
+  languageName: node
+  linkType: hard
+
+"popper-max-size-modifier@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "popper-max-size-modifier@npm:0.2.0"
+  peerDependencies:
+    "@popperjs/core": ^2.2.0
+  checksum: dfff7f91bd584393ef4416399377f5e2e9f7ffd458e176e85dfffa0951dd01eb923c8afb178061833a6c9598c7f0c6fc4693b43daa61423e7eb33247bb94ceb1
   languageName: node
   linkType: hard
 
