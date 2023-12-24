@@ -100,13 +100,16 @@ export const useEditorEvent = <K extends keyof ImperativeEventTypes>(
   deps?: DependencyList
 ) => {
   const staticEditor = useEditorRef();
-  const imperativeEventEmitter = editorEventEmitterMap.get(staticEditor);
 
-  if (!imperativeEventEmitter) {
-    throw new Error(
-      'useEditorEvent must be used within a Plate editor using the imperative events plugin'
-    );
-  }
+  // Use a fallback event emitter if one hasn't been created yet
+  const imperativeEventEmitter =
+    editorEventEmitterMap.get(staticEditor) ??
+    createEventEmitter<ImperativeEventTypes>();
 
-  useEvent(imperativeEventEmitter, eventName, handler, deps);
+  useEvent(
+    imperativeEventEmitter,
+    eventName,
+    handler,
+    deps && [...deps, imperativeEventEmitter]
+  );
 };
