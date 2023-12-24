@@ -1,4 +1,4 @@
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory, isEditorReadOnly } from '@udecode/plate';
 import { setGlobalStore } from '~/lib/globalStore';
 import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';
@@ -34,6 +34,8 @@ const createAttachmentPlugin = createPluginFactory<AttachmentPlugin>({
   withOverrides: withAttachments,
   handlers: {
     onDragOver: (editor) => (event) => {
+      if (isEditorReadOnly(editor)) return;
+
       if (event.dataTransfer.types.includes('Files')) {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
@@ -43,11 +45,14 @@ const createAttachmentPlugin = createPluginFactory<AttachmentPlugin>({
       }
     },
 
-    onDragLeave: () => () => {
+    onDragLeave: (editor) => () => {
+      if (isEditorReadOnly(editor)) return;
       setDragCursorPosition(null);
     },
 
     onDrop: (editor) => (event) => {
+      if (isEditorReadOnly(editor)) return;
+
       event.preventDefault();
       setDragCursorPosition(null);
 
