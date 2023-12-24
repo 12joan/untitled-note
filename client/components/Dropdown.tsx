@@ -122,6 +122,7 @@ export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
       trigger="contextmenu"
       placement="bottom-start"
       offset={[0, 0]}
+      appendTo={document.body}
       {...dropdownProps}
     />
   );
