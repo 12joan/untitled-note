@@ -8,7 +8,7 @@ import {
   setSessionCookieStorage,
 } from '~/lib/browserStorage';
 import { handleCreateDocumentError } from '~/lib/handleErrors';
-import { documentPath } from '~/lib/routes';
+import { documentPath, overviewPath } from '~/lib/routes';
 import { Tag } from '~/lib/types';
 
 /**
@@ -30,19 +30,23 @@ export interface AwaitNewDocumentProps {
 }
 
 export const AwaitNewDocument = ({ tagId }: AwaitNewDocumentProps) => {
-  const { pathname: currentPath, hash } = useLocation();
+  const { hash } = useLocation();
   const projectId = useAppContext('projectId');
   const [awaitPath, setAwaitPath] = useState<string | null>(null);
+  const fallbackPath = overviewPath({ projectId });
 
   useLayoutEffect(() => {
     const hashToken = hash.slice(1);
 
     if (hashToken !== newDocumentToken) {
-      throw new Error(
+      // eslint-disable-next-line no-console
+      console.error(
         `Invalid token: expected ${JSON.stringify(
           newDocumentToken
         )}, got ${JSON.stringify(hashToken)}`
       );
+      setAwaitPath(fallbackPath);
+      return;
     }
 
     setAwaitPath(
@@ -51,7 +55,7 @@ export const AwaitNewDocument = ({ tagId }: AwaitNewDocumentProps) => {
         promisePath: handleCreateDocumentError(
           createBlankDocument(projectId, { tagId })
         ).then(({ id }) => documentPath({ projectId, documentId: id })),
-        fallbackPath: currentPath,
+        fallbackPath,
       })
     );
   }, []);
