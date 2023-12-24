@@ -43,6 +43,7 @@ export const DragCursor = () => {
         left,
         right,
         top,
+        marginTop: 0,
       }}
     />
   );
