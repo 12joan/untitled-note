@@ -23,6 +23,7 @@ import {
   toggleMark,
   toggleNodeType,
   unindentListItems,
+  useEditorReadOnly,
   useEditorRef,
   useEditorSelector,
 } from '@udecode/plate';
@@ -108,14 +109,6 @@ const useToggleCodeBlockProps = () => {
   const onClick = () => toggleCodeBlock(editorStatic);
   return { active, onClick };
 };
-
-export interface FormattingButtonProps {
-  label: string;
-  icon: ElementType<IconProps>;
-  active?: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-}
 
 export const useInlineFormattingButtons = (): FormattingButtonProps[] => {
   const toggleLink = useToggleLink();
@@ -230,31 +223,52 @@ export const FormattingToolbar = () => {
 
   return (
     <div className="my-auto space-y-2">
-      {formattingButtons.map(
-        (
-          { label, icon: Icon, active = false, onClick, disabled = false },
-          index
-        ) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Tooltip key={index} content={label} placement="left" fixed>
-            <button
-              type="button"
-              className={groupedClassNames(
-                'block btn p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed',
-                formattingButtonClassNames
-              )}
-              data-active={active}
-              disabled={disabled}
-              onClick={onClick}
-              onMouseDown={(event) => event.preventDefault()}
-              aria-pressed={active}
-              aria-label={label}
-            >
-              <Icon size="1.25em" noAriaLabel />
-            </button>
-          </Tooltip>
-        )
-      )}
+      {formattingButtons.map((props, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <FormattingButton key={index} {...props} />
+      ))}
     </div>
+  );
+};
+
+interface FormattingButtonProps {
+  label: string;
+  icon: ElementType<IconProps>;
+  active?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}
+
+const FormattingButton = ({
+  label,
+  icon: Icon,
+  active: propActive = false,
+  disabled: propDisabled = false,
+  onClick,
+}: FormattingButtonProps) => {
+  const isReadOnly = useEditorReadOnly();
+  const hasSelection = useEditorSelector((editor) => !!editor.selection, []);
+
+  const active = !isReadOnly && hasSelection && propActive;
+  const disabled = isReadOnly || propDisabled;
+
+  return (
+    <Tooltip content={label} placement="left" fixed>
+      <button
+        type="button"
+        className={groupedClassNames(
+          'block btn p-3 aspect-square text-center disabled:opacity-50 disabled:cursor-not-allowed',
+          formattingButtonClassNames
+        )}
+        data-active={active}
+        disabled={isReadOnly || disabled}
+        onClick={onClick}
+        onMouseDown={(event) => event.preventDefault()}
+        aria-pressed={active}
+        aria-label={label}
+      >
+        <Icon size="1.25em" noAriaLabel />
+      </button>
+    </Tooltip>
   );
 };
