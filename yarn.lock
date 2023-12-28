@@ -2047,12 +2047,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-serializer-csv@npm:28.0.0":
-  version: 28.0.0
-  resolution: "@udecode/plate-serializer-csv@npm:28.0.0"
+"@udecode/plate-serializer-csv@npm:28.1.2":
+  version: 28.1.2
+  resolution: "@udecode/plate-serializer-csv@npm:28.1.2"
   dependencies:
     "@udecode/plate-common": "npm:28.0.0"
-    "@udecode/plate-table": "npm:28.0.0"
+    "@udecode/plate-table": "npm:28.1.2"
     papaparse: "npm:^5.4.1"
   peerDependencies:
     react: ">=16.8.0"
@@ -2061,13 +2061,13 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: 5e81eeeca7fefa2ef6f85522e0b7314fa320fef8babbd38ad1800829ece1e580b4c0e62c689a12ac8cacb04e5c816b87e209db3fb83f60fffd70bef9ad9644cb
+  checksum: 8daa8372f1e67e81c1dd25be8823dd3b12533eab4e333cc3c06460808d6d4d195bcc280c7809c60c55e1ed70e6691bd7a175ca06454b6f241fe273c38b1d98a6
   languageName: node
   linkType: hard
 
-"@udecode/plate-serializer-docx@npm:28.0.0":
-  version: 28.0.0
-  resolution: "@udecode/plate-serializer-docx@npm:28.0.0"
+"@udecode/plate-serializer-docx@npm:28.1.2":
+  version: 28.1.2
+  resolution: "@udecode/plate-serializer-docx@npm:28.1.2"
   dependencies:
     "@udecode/plate-common": "npm:28.0.0"
     "@udecode/plate-heading": "npm:28.0.0"
@@ -2075,7 +2075,7 @@ __metadata:
     "@udecode/plate-indent-list": "npm:28.0.0"
     "@udecode/plate-media": "npm:28.0.0"
     "@udecode/plate-paragraph": "npm:28.0.0"
-    "@udecode/plate-table": "npm:28.0.0"
+    "@udecode/plate-table": "npm:28.1.2"
     validator: "npm:^13.9.0"
   peerDependencies:
     react: ">=16.8.0"
@@ -2084,7 +2084,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: 393d53a18aa1f20eaa6231ffd05f0cf9d42496eaf555d5cd45c319d294e3dbb9d44badd4cc71466ceb9ce55e6345a5923c248414cc2807c2fac6f8c69e797c7e
+  checksum: e3010410b9ff0414a8e37d95a5d5546823a3872297da9eeda08d2f89157a74f395c934f80d7d6233ed6fdcd5a3b79b258f94165de4e32f28481308f49f106007
   languageName: node
   linkType: hard
 
@@ -2165,9 +2165,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-table@npm:28.0.0":
-  version: 28.0.0
-  resolution: "@udecode/plate-table@npm:28.0.0"
+"@udecode/plate-table@npm:28.1.2":
+  version: 28.1.2
+  resolution: "@udecode/plate-table@npm:28.1.2"
   dependencies:
     "@udecode/plate-common": "npm:28.0.0"
     "@udecode/plate-resizable": "npm:28.0.0"
@@ -2178,7 +2178,7 @@ __metadata:
     slate: ">=0.94.0"
     slate-history: ">=0.93.0"
     slate-react: ">=0.99.0"
-  checksum: df134b599f61ae879d6411bfa0d9735ee4b755638393a905bdc3447536554c842b8798571a8d906271aafbcb220c2e108759d0a31fdd834ceca2fac645dffe60
+  checksum: 326b521f72ed9bc84b4847445e3aaf31b0d592c3993a6ad10040abd8dd45ad1d2da537e7fc378c87f53b13869d299cf7079a2f379ee9f2c9aa765d7b532970e8
   languageName: node
   linkType: hard
 
@@ -2221,9 +2221,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate@npm:^28.0.0":
-  version: 28.0.0
-  resolution: "@udecode/plate@npm:28.0.0"
+"@udecode/plate@npm:^28.1.2":
+  version: 28.1.2
+  resolution: "@udecode/plate@npm:28.1.2"
   dependencies:
     "@udecode/plate-alignment": "npm:28.0.0"
     "@udecode/plate-autoformat": "npm:28.0.0"
@@ -2255,13 +2255,13 @@ __metadata:
     "@udecode/plate-reset-node": "npm:28.0.0"
     "@udecode/plate-resizable": "npm:28.0.0"
     "@udecode/plate-select": "npm:28.0.0"
-    "@udecode/plate-serializer-csv": "npm:28.0.0"
-    "@udecode/plate-serializer-docx": "npm:28.0.0"
+    "@udecode/plate-serializer-csv": "npm:28.1.2"
+    "@udecode/plate-serializer-docx": "npm:28.1.2"
     "@udecode/plate-serializer-html": "npm:28.0.0"
     "@udecode/plate-serializer-md": "npm:28.0.0"
     "@udecode/plate-suggestion": "npm:28.0.0"
     "@udecode/plate-tabbable": "npm:28.0.0"
-    "@udecode/plate-table": "npm:28.0.0"
+    "@udecode/plate-table": "npm:28.1.2"
     "@udecode/plate-trailing-block": "npm:28.0.0"
   peerDependencies:
     react: ">=16.8.0"
@@ -2270,7 +2270,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: f2a53c6545c2eca6cf7f1c3371842986085f47c3a3126addf93d750295e8068e9bd23aacf3d483cfdd785acef8509567e60e9fc5ee6537b094c763c9339ce02b
+  checksum: 8c4e22ed6c8fe336041ab09827e29eee5c1369d48c39c949ecfcb50ebfc6bfca0540ccfa9bc56219b43be58192995370b111ba3d2c78add4fd957af42a2df24a
   languageName: node
   linkType: hard
 
@@ -5594,7 +5594,7 @@ __metadata:
     "@types/runes": "npm:^0.4.3"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
-    "@udecode/plate": "npm:^28.0.0"
+    "@udecode/plate": "npm:^28.1.2"
     "@vitejs/plugin-react": "npm:^2.2.0"
     autoprefixer: "npm:^10.4.14"
     axios: "npm:^1.6.3"
