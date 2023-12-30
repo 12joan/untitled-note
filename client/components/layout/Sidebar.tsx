@@ -69,6 +69,7 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
           <FutureDocumentsSection
             heading="Pinned documents"
             futureDocuments={futurePinnedDocuments}
+            testId="sidebar-pinned-documents"
           />
         </PinnedDragTarget>
 
@@ -79,6 +80,7 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
           futureDocuments={mapFuture(futureRecentlyViewedDocuments, (docs) =>
             docs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS)
           )}
+          testId="sidebar-recently-viewed-documents"
         />
 
         <FutureTagsSection
@@ -87,6 +89,7 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
           futureTags={mapFuture(futureTags, (tags) =>
             tags.slice(0, TOP_N_TAGS)
           )}
+          testId="sidebar-tags"
         />
       </div>
     </AppContextProvider>
@@ -184,12 +187,14 @@ const FutureSectionWithHeading = ({
 interface SectionWithHeadingProps {
   heading: string;
   headingLink?: ElementType;
+  testId?: string;
   children: ReactNode;
 }
 
 const SectionWithHeading = ({
   heading,
   headingLink: HeadingLink,
+  testId,
   children,
 }: SectionWithHeadingProps) => {
   const onButtonClick = useAppContext('onButtonClick');
@@ -205,7 +210,7 @@ const SectionWithHeading = ({
   );
 
   return (
-    <section>
+    <section data-testid={testId}>
       <strong className="text-plain-500 text-xs uppercase tracking-wide select-none dark:text-plain-400">
         {headingComponent}
       </strong>

@@ -29,6 +29,12 @@ export const createProject = async (page: Page, name = 'My Project') => {
 
 export const locateSidebar = (page: Page) => page.getByLabel('Sidebar');
 
+export const locateSidebarPinnedDocuments = (page: Page) =>
+  locateSidebar(page).getByTestId('sidebar-pinned-documents');
+
+export const locateSidebarRecentlyViewedDocuments = (page: Page) =>
+  locateSidebar(page).getByTestId('sidebar-recently-viewed-documents');
+
 export const visitOverview = async (page: Page) => {
   await locateSidebar(page).getByText('Overview').click();
   await page.waitForURL(/\/overview$/);

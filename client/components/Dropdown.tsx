@@ -153,7 +153,10 @@ export const DropdownItem = <C extends ElementType = 'button'>({
   );
 };
 
-export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
+export const ContextMenuDropdown = ({
+  popperOptions,
+  ...dropdownProps
+}: DropdownProps) => {
   return (
     <Dropdown
       plugins={[followCursor]}
@@ -161,7 +164,10 @@ export const ContextMenuDropdown = (dropdownProps: DropdownProps) => {
       trigger="contextmenu"
       placement="bottom-start"
       offset={[0, 0]}
-      appendTo={document.body}
+      popperOptions={{
+        ...popperOptions,
+        strategy: 'fixed',
+      }}
       {...dropdownProps}
     />
   );
