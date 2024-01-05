@@ -23,7 +23,7 @@
     "@tippyjs/react": "^4.2.6",
     "@types/js-cookie": "^3.0.6",
     "@udecode/plate": "^28.1.2",
-    "axios": "^1.6.3",
+    "axios": "^1.6.4",
     "comlink": "^4.4.1",
     "compressorjs": "^1.2.1",
     "emoji-mart": "^5.5.2",
