@@ -82,7 +82,7 @@
     "prettier": "^2.8.8",
     "sass": "^1.69.7",
     "scriptjs": "^2.5.9",
-    "tailwindcss": "^3.4.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "typescript-language-server": "^3.3.2",
     "vite": "^5.0.11",
