@@ -46,7 +46,7 @@
     "slate": "^0.101.5",
     "slate-history": "^0.100.0",
     "slate-hyperscript": "^0.100.0",
-    "slate-react": "^0.101.5",
+    "slate-react": "^0.101.6",
     "tailwind-merge": "^1.14.0",
     "tippy.js": "^6.3.7"
   },
