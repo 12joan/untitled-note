@@ -5659,7 +5659,7 @@ __metadata:
     slate: "npm:^0.101.5"
     slate-history: "npm:^0.100.0"
     slate-hyperscript: "npm:^0.100.0"
-    slate-react: "npm:^0.101.5"
+    slate-react: "npm:^0.101.6"
     tailwind-merge: "npm:^1.14.0"
     tailwindcss: "npm:^3.4.1"
     tippy.js: "npm:^6.3.7"
@@ -7145,9 +7145,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate-react@npm:^0.101.5":
-  version: 0.101.5
-  resolution: "slate-react@npm:0.101.5"
+"slate-react@npm:^0.101.6":
+  version: 0.101.6
+  resolution: "slate-react@npm:0.101.6"
   dependencies:
     "@juggle/resize-observer": "npm:^3.4.0"
     "@types/is-hotkey": "npm:^0.1.8"
@@ -7162,7 +7162,7 @@ __metadata:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
     slate: ">=0.99.0"
-  checksum: 5fb1ecd9f323e3c1eb8fdec138c108e3c79278be4337b38dd748427a25a96aa825ec046ef40303763b47b5fcb073130ef81bf12fb2f454f5ba2da7494da834af
+  checksum: bb2d390b671ad871fcdcebcbd559a8ee627572626a9b5aeadecafaee9a6eed1bff114791a9561d6f4304d11c482ad46ea21d92956f13b0128353cd6b61fceeaf
   languageName: node
   linkType: hard
 
