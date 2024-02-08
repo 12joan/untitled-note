@@ -2155,9 +2155,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-suggestion@npm:30.4.1":
-  version: 30.4.1
-  resolution: "@udecode/plate-suggestion@npm:30.4.1"
+"@udecode/plate-suggestion@npm:30.4.3":
+  version: 30.4.3
+  resolution: "@udecode/plate-suggestion@npm:30.4.3"
   dependencies:
     "@udecode/plate-common": "npm:30.1.2"
     lodash: "npm:^4.17.21"
@@ -2168,7 +2168,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: 4847be3ad4a3c38994aadc9b3c6d3f88b773ff5aed434e10e632624c10fae5b38add33fb3a598b352e3dc8bb035492d4336adac67dd49dc125defe9fbbcbea10
+  checksum: 4261794827b9ad9f9fef6a582806a3c3f749265aeb790c6ccecd102176df8bf00a348b33b6bae2a5b0eb33abe2e427a48f2c4b4bd7d54f868d3e4db2525eb7fb
   languageName: node
   linkType: hard
 
@@ -2264,9 +2264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate@npm:^30.4.1":
-  version: 30.4.1
-  resolution: "@udecode/plate@npm:30.4.1"
+"@udecode/plate@npm:^30.4.3":
+  version: 30.4.3
+  resolution: "@udecode/plate@npm:30.4.3"
   dependencies:
     "@udecode/plate-alignment": "npm:30.1.2"
     "@udecode/plate-autoformat": "npm:30.1.2"
@@ -2302,7 +2302,7 @@ __metadata:
     "@udecode/plate-serializer-docx": "npm:30.1.2"
     "@udecode/plate-serializer-html": "npm:30.1.2"
     "@udecode/plate-serializer-md": "npm:30.2.1"
-    "@udecode/plate-suggestion": "npm:30.4.1"
+    "@udecode/plate-suggestion": "npm:30.4.3"
     "@udecode/plate-tabbable": "npm:30.1.2"
     "@udecode/plate-table": "npm:30.1.2"
     "@udecode/plate-toggle": "npm:30.3.2"
@@ -2314,7 +2314,7 @@ __metadata:
     slate-history: ">=0.93.0"
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
-  checksum: e7e7722044f3049e1e39a1ef34aec7f9af95e7b0028225a8e105641376947a37a3c6e2c9f13428a5df2326e6f2981d49b4cd64480cbaa8fee8590bf953f62ad3
+  checksum: 3d64d003cc3621a86d5d253f168c70f9a57c5af121dcf021314b5b4e26373e005fc72fa4f07e6c7ccb8504c19c9da113164d431ce2b76c8dd0f9f537baf9414b
   languageName: node
   linkType: hard
 
@@ -5663,7 +5663,7 @@ __metadata:
     "@types/runes": "npm:^0.4.3"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
-    "@udecode/plate": "npm:^30.4.1"
+    "@udecode/plate": "npm:^30.4.3"
     "@vitejs/plugin-react": "npm:^2.2.0"
     autoprefixer: "npm:^10.4.14"
     axios: "npm:^1.6.7"
