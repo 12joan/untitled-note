@@ -123,13 +123,13 @@ const commands: Command[] = [
     action: liftToIIC(resetEditorFontSize),
   },
   {
-    id: 'toggle-focus-mode',
-    label: 'Toggle focus mode',
+    id: 'toggle-sidebar',
+    label: 'Toggle sidebar',
     keyboardShortcut: {
-      hint: "Hide everything except the document you're working on",
-      config: parseKeyboardShortcut('mod+shift+f'),
+      hint: 'Show or hide the sidebar',
+      config: parseKeyboardShortcut('mod+shift+s'),
     },
-    action: () => iic(() => useAppContext('toggleFocusMode')),
+    action: () => iic(() => useAppContext('toggleSidebar')),
   },
   {
     id: 'settings',

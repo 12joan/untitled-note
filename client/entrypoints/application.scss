@@ -131,14 +131,6 @@ body {
   .btn-link-hover {
     @apply brightness-75 dark:brightness-125;
   }
-
-  .hide-in-focus-mode {
-    @apply transition-opacity;
-
-    .focus-mode & {
-      @apply opacity-0;
-    }
-  }
 }
 
 @layer components {

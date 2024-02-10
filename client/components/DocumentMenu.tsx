@@ -23,7 +23,6 @@ import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
-import FocusModeIcon from '~/components/icons/FocusModeIcon';
 import LockIcon from '~/components/icons/LockIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
@@ -50,8 +49,6 @@ export const DocumentMenu = ({
   getEditorChildrenForExport,
 }: DocumentMenuProps) => {
   const projectId = useAppContext('projectId');
-  const focusModeEnabled = useAppContext('focusModeEnabled');
-  const toggleFocusMode = useAppContext('toggleFocusMode');
 
   const updateDocument =
     updateDocumentOverride ||
@@ -107,12 +104,6 @@ export const DocumentMenu = ({
       <DropdownItem icon={PinIcon} onClick={togglePinned}>
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
-
-      {isEditor && (
-        <DropdownItem icon={FocusModeIcon} onClick={toggleFocusMode}>
-          {focusModeEnabled ? 'Exit' : 'Enter'} focus mode
-        </DropdownItem>
-      )}
 
       {openFind && (
         <DropdownItem icon={SearchIcon} onClick={openFind}>
