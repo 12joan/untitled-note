@@ -129,7 +129,11 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         />
       </AppContextProvider>
 
-      <div ref={mentionSuggestionsContainerRef} />
+      <div
+        ref={mentionSuggestionsContainerRef}
+        // Override block spacing
+        style={{ margin: 0 }}
+      />
     </div>
   );
 };

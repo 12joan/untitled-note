@@ -7,7 +7,10 @@ import { usePlugins } from '~/lib/editor/plugins';
 import { saveSelection } from '~/lib/editor/restoreSelection';
 import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
 import { useInitialValue } from '~/lib/editor/useInitialValue';
-import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
+import {
+  useEditorFontSize,
+  useEditorFontSizeCSSValue,
+} from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { Document } from '~/lib/types';
 
@@ -52,7 +55,8 @@ export const EditorBody = memo(
       [documentId, editor, onBodyChange]
     );
 
-    const fontSize = useEditorFontSizeCSSValue();
+    const relativeFontSize = useEditorFontSize() / 100;
+    const cssFontSize = useEditorFontSizeCSSValue();
 
     const useFormattingToolbar = useAppContext('useFormattingToolbar');
     const formattingToolbar = useFormattingToolbar(<FormattingToolbar />);
@@ -71,14 +75,22 @@ export const EditorBody = memo(
         <PlateContent
           className={groupedClassNames({
             sizing: 'grow max-w-none children:lg:narrow',
-            spacing: 'em:mt-3 em:space-y-3',
+            spacing: 'em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:
               'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
           })}
           placeholder="Write something..."
-          style={{ fontSize }}
+          style={{
+            fontSize: cssFontSize,
+            /**
+             * Ensure the space below the last line scales with font size,
+             * and is included in the editor region.
+             */
+            paddingBottom: `${1.25 * relativeFontSize}rem`,
+            marginBottom: '-1.25rem',
+          }}
           onDoubleClick={onDoubleClick}
         />
 

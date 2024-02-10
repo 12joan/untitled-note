@@ -13,7 +13,13 @@ import {
   getEditorHandle,
   getTypeAtPath,
 } from './slate';
-import { createDocument, createProject, expectUpToDate, logIn } from './utils';
+import {
+  createDocument,
+  createProject,
+  expectUpToDate,
+  logIn,
+  openSettingsModal,
+} from './utils';
 
 test.describe('Basic editor', () => {
   test.beforeEach(async ({ page }) => {
@@ -40,6 +46,57 @@ test.describe('Basic editor', () => {
       horizontal: false,
       vertical: false,
     });
+  });
+
+  test('sufficient scroll padding', async ({ page }) => {
+    const expectScrolledToBottom = async () => {
+      const { scrollHeight, scrollTop, clientHeight } = await page.evaluate(
+        () => {
+          const html = document.querySelector('html')!;
+          return {
+            scrollHeight: html.scrollHeight,
+            scrollTop: html.scrollTop,
+            clientHeight: html.clientHeight,
+          };
+        }
+      );
+
+      expect(scrollTop + clientHeight).toBeGreaterThanOrEqual(scrollHeight - 1);
+    };
+
+    const testScrollPadding = async () => {
+      const editorHandle = await getEditorHandle(page);
+      await clickAtPath(page, editorHandle, [0]);
+
+      for (let i = 0; i < 30; i++) {
+        await page.keyboard.press('Enter');
+        await page.keyboard.type('a');
+        await page.waitForTimeout(50);
+      }
+
+      await expectScrolledToBottom();
+
+      for (let i = 0; i < 120; i++) {
+        await page.keyboard.type('a');
+        await page.waitForTimeout(20);
+      }
+
+      await expectScrolledToBottom();
+    };
+
+    await testScrollPadding();
+
+    await createDocument(page);
+
+    await openSettingsModal(page);
+    const increaseFontSizeButton = page.getByLabel('Increase font size');
+    await increaseFontSizeButton.click();
+    await increaseFontSizeButton.click();
+    await increaseFontSizeButton.click();
+    await increaseFontSizeButton.click();
+    await page.keyboard.press('Escape');
+
+    await testScrollPadding();
   });
 
   test('save document to server and reload', async ({ page }) => {
