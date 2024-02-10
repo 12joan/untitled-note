@@ -27,13 +27,17 @@ export const createProject = async (page: Page, name = 'My Project') => {
   await expect(page).toHaveTitle(name);
 };
 
-export const locateSidebar = (page: Page) => page.getByLabel('Sidebar');
+export const locateSidebar = (page: Page) =>
+  page.getByLabel('Sidebar', { exact: true });
 
 export const locateSidebarPinnedDocuments = (page: Page) =>
   locateSidebar(page).getByTestId('sidebar-pinned-documents');
 
 export const locateSidebarRecentlyViewedDocuments = (page: Page) =>
   locateSidebar(page).getByTestId('sidebar-recently-viewed-documents');
+
+export const locateSidebarTags = (page: Page) =>
+  locateSidebar(page).getByTestId('sidebar-tags');
 
 export const visitOverview = async (page: Page) => {
   await locateSidebar(page).getByText('Overview').click();
