@@ -3,7 +3,8 @@ import Cookies from 'js-cookie';
 
 type Callback = () => void;
 type Callbacks = Set<Callback>;
-
+type SetterFn<T> = (prev: T | null) => T;
+type Setter<T> = T | SetterFn<T>;
 type PartialStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
 const makeBrowserStorage = (
@@ -15,7 +16,16 @@ const makeBrowserStorage = (
   const notifyForKey = (key: string) =>
     subscribers.get(key)?.forEach((callback) => callback());
 
-  const setStorage = <T>(key: string, value: T) => {
+  const getStorage = <T>(key: string): T | null => {
+    const value = storage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  };
+
+  const setStorage = <T>(key: string, setter: Setter<T>) => {
+    const value =
+      typeof setter === 'function'
+        ? (setter as SetterFn<T>)(getStorage(key))
+        : setter;
     storage.setItem(key, JSON.stringify(value));
     notifyForKey(key);
   };
@@ -32,11 +42,6 @@ const makeBrowserStorage = (
       }
     });
   }
-
-  const getStorage = <T>(key: string): T | null => {
-    const value = storage.getItem(key);
-    return value ? JSON.parse(value) : null;
-  };
 
   const useStorage = <T>(key: string, defaultValue: T) => {
     const getValue = () => getStorage<T>(key) ?? defaultValue;
