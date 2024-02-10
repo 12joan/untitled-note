@@ -62,16 +62,6 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   const [mainBounds, mainBoundsRef] = useElementBounds();
   const [{ height: topBarHeight }, topBarSizeRef] = useElementSize();
 
-  useEffect(() => {
-    const html = document.documentElement;
-    const baseScrollPadding = '1.25rem';
-    html.style.setProperty(
-      'scroll-padding-top',
-      `max(${baseScrollPadding}, ${topBarHeight}px)`
-    );
-    html.style.setProperty('scroll-padding-bottom', baseScrollPadding);
-  }, [topBarHeight]);
-
   const staticSidebarPreference = useLocalStorage('staticSidebar', true);
   const toggleStaticSidebar = useCallback(
     () => setLocalStorage<boolean>('staticSidebar', (x) => x === false),
@@ -168,8 +158,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   const keyboardShortcutIICElements = useApplicationKeyboardShortcuts();
 
-  const editorFontSize = useEditorFontSize();
-  const narrowWidth = 640 * Math.max(editorFontSize / 100, 1);
+  const editorFontSize = useEditorFontSize() / 100;
+  const narrowWidth = 640 * Math.max(editorFontSize, 1);
 
   const narrowLeftMargin = useMemo(() => {
     const centerPosition = (viewportWidth - narrowWidth) / 2;
@@ -177,6 +167,24 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     const maxMargin = Math.max(0, mainBounds.width - narrowWidth);
     return Math.min(centerMargin, maxMargin);
   }, [narrowWidth, viewportWidth, mainBounds.left, mainBounds.width]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    /**
+     * 1.25rem from main, plus the additional padding from EditorBody, which
+     * makes it effectively 1.25em. Add to this the 0.75em from block spacing
+     * for a total of 2em.
+     */
+    const baseScrollPadding = `calc(${2 * editorFontSize}rem`;
+
+    html.style.setProperty(
+      'scroll-padding-top',
+      `max(${baseScrollPadding}, ${topBarHeight}px)`
+    );
+
+    html.style.setProperty('scroll-padding-bottom', baseScrollPadding);
+  }, [topBarHeight, editorFontSize]);
 
   return (
     <AppContextProvider

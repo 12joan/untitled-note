@@ -143,3 +143,7 @@ export const openFileStorageSection = async (page: Page) => {
   await openAccountModal(page);
   await page.getByText('File storage').click();
 };
+
+export const openSettingsModal = async (page: Page) => {
+  await page.getByLabel('Settings').click();
+};
