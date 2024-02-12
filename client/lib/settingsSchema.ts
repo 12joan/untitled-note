@@ -1,5 +1,5 @@
 import { BaseSchema, createMigrate, SetVersion } from '~/lib/schema';
-import {EditorStyle} from './types';
+import { EditorStyle } from './types';
 
 const migrations: Record<number, (settings: any) => any> = {};
 export const migrateSettings = createMigrate(migrations);

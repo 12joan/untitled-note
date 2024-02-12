@@ -5,6 +5,7 @@ import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
 import { restoreSelection, setSelection } from '~/lib/editor/restoreSelection';
 import { useDebouncedSyncDocument } from '~/lib/editor/useDebouncedSyncDocument';
+import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { useLockedState } from '~/lib/editor/useLockedState';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useGlobalEvent } from '~/lib/globalEvents';
@@ -13,7 +14,6 @@ import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { EditorBody } from './EditorBody';
 import { EditorHeader } from './EditorHeader';
-import {useEditorStyle} from '~/lib/editor/useEditorStyle';
 
 export interface EditorProps {
   clientId: string;

@@ -1,14 +1,17 @@
 import React, { useMemo } from 'react';
-import {EditorStyle} from '~/lib/types';
+import { EditorStyle } from '~/lib/types';
 
 const descriptions: Record<EditorStyle, string> = {
   casual: 'The casual style is designed for taking notes and casual writing.',
-  literary: 'The literary style is designed for writing long-form content. Paragraphs are indented and spaced closer together, text is justified, and a serif font is used.',
+  literary:
+    'The literary style is designed for writing long-form content. Paragraphs are indented and spaced closer together, text is justified, and a serif font is used.',
 };
 
 export interface EditorStyleInputProps<Nullable extends boolean> {
   value: Nullable extends true ? EditorStyle | null : EditorStyle;
-  onChange: (value: Nullable extends true ? EditorStyle | null : EditorStyle) => void;
+  onChange: (
+    value: Nullable extends true ? EditorStyle | null : EditorStyle
+  ) => void;
   syncWithOption: Nullable extends true ? string : null;
 }
 
@@ -20,17 +23,19 @@ export const EditorStyleInput = <Nullable extends boolean>({
   type T = Nullable extends true ? EditorStyle | null : EditorStyle;
 
   const options = useMemo(
-    () => syncWithOption
-      ? [null, 'casual', 'literary']
-      : ['casual', 'literary'],
+    () =>
+      syncWithOption ? [null, 'casual', 'literary'] : ['casual', 'literary'],
     [syncWithOption]
   ) as T[];
 
-  const labels: Record<EditorStyle | 'null', string> = useMemo(() => ({
-    null: `Sync with ${syncWithOption}`,
-    casual: 'Casual',
-    literary: 'Literary',
-  }), [syncWithOption]);
+  const labels: Record<EditorStyle | 'null', string> = useMemo(
+    () => ({
+      null: `Sync with ${syncWithOption}`,
+      casual: 'Casual',
+      literary: 'Literary',
+    }),
+    [syncWithOption]
+  );
 
   const description = value && descriptions[value];
 
@@ -51,9 +56,7 @@ export const EditorStyleInput = <Nullable extends boolean>({
               onChange={() => onChange(option)}
             />
 
-            <div
-              className="flex-shrink-0 w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat"
-            />
+            <div className="flex-shrink-0 w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat" />
 
             {labels[option ?? 'null']}
           </label>
@@ -61,9 +64,7 @@ export const EditorStyleInput = <Nullable extends boolean>({
       </div>
 
       {description && (
-        <p className="text-plain-500 dark:text-plain-400">
-          {description}
-        </p>
+        <p className="text-plain-500 dark:text-plain-400">{description}</p>
       )}
     </>
   );

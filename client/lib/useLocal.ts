@@ -1,6 +1,6 @@
-import {retry} from "./retry";
-import {useIsMounted} from "./useIsMounted";
-import {useOverrideable} from "./useOverrideable";
+import { retry } from './retry';
+import { useIsMounted } from './useIsMounted';
+import { useOverrideable } from './useOverrideable';
 
 export interface UseLocalOptions<T extends { id: unknown }> {
   update: (id: T['id'], params: Partial<T>) => Promise<unknown>;
@@ -9,10 +9,7 @@ export interface UseLocalOptions<T extends { id: unknown }> {
 
 export const useLocal = <T extends { id: unknown }>(
   initialRecord: T,
-  {
-    update: updateRemote,
-    handleUpdateError,
-  }: UseLocalOptions<T>
+  { update: updateRemote, handleUpdateError }: UseLocalOptions<T>
 ) => {
   const [localRecord, setLocalRecord] = useOverrideable(initialRecord);
   const isMounted = useIsMounted();

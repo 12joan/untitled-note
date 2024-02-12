@@ -18,9 +18,9 @@ import { Project } from '~/lib/types';
 import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
+import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
-import {useLocalProject} from '~/lib/useLocalProject';
 
 export const EditProjectIcon = () => {
   const [localProject, updateProject] = useLocalProject();

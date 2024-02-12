@@ -5,7 +5,7 @@ import { BackButton } from '~/components/BackButton';
 import { EditProjectIcon } from '~/components/EditProjectIcon';
 import { EditProjectName } from '~/components/EditProjectName';
 import { ProjectActions } from '~/components/ProjectActions';
-import {EditProjectEditorStyle} from '../EditProjectEditorStyle';
+import { EditProjectEditorStyle } from '../EditProjectEditorStyle';
 
 export const EditProjectView = memo(() => {
   const project = useAppContext('project');

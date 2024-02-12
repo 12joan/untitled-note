@@ -6,10 +6,10 @@ import React, {
   TextareaHTMLAttributes,
   useRef,
 } from 'react';
+import { useAppContext } from '~/lib/appContext';
 import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { TextareaAutosize } from '~/components/TextareaAutosize';
-import {groupedClassNames} from '~/lib/groupedClassNames';
-import {useAppContext} from '~/lib/appContext';
 
 export interface EditorTitleProps {
   initialTitle: string;
@@ -38,7 +38,8 @@ export const EditorTitle = forwardRef(
           ref={ref}
           className={groupedClassNames({
             sizing: 'min-w-0 grow',
-            textStyle: 'h1 em:text-2xl sm:em:text-3xl text-black dark:text-white',
+            textStyle:
+              'h1 em:text-2xl sm:em:text-3xl text-black dark:text-white',
             placeholder: 'placeholder:truncate',
             editorStyle: {
               casual: '',

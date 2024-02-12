@@ -77,7 +77,8 @@ const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent(
     'p',
     groupedClassNames({
-      indent: 'literary:em:indent-8 literary:first:indent-0 literary:[p:not(:has([data-slate-string]))+&]:indent-0 literary:[h1+&]:indent-0',
+      indent:
+        'literary:em:indent-8 literary:first:indent-0 literary:[p:not(:has([data-slate-string]))+&]:indent-0 literary:[h1+&]:indent-0',
       spacing: 'literary:[p+&]:paragraph-no-spacing',
     })
   ),
