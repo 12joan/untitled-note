@@ -99,6 +99,8 @@ module.exports = {
       addVariant('slate-string', ['& [data-slate-string]', '& [data-slate-zero-width]']);
       addVariant('slate-top-level', '[data-slate-editor] > &');
 
+      addVariant('literary', '.style-literary &');
+
       // https://github.com/tailwindlabs/tailwindcss/discussions/3105#discussioncomment-248885
       addVariant('em', ({ container }) => {
         container.walkRules(rule => {

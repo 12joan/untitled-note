@@ -207,6 +207,10 @@ body {
   .list-group-item {
     @apply w-full p-3 group-first:rounded-t-lg group-last:rounded-b-lg;
   }
+
+  .paragraph-no-spacing {
+    margin-top: 0 !important;
+  }
 }
 
 .tippy-box[data-theme~='custom'] {

@@ -32,7 +32,7 @@ export const EditorTitle = forwardRef(
       <div className="contents" style={{ fontSize }}>
         <TextareaAutosize
           ref={ref}
-          className="min-w-0 grow h1 em:text-2xl sm:em:text-3xl text-black dark:text-white placeholder:truncate"
+          className="min-w-0 grow h1 em:text-2xl sm:em:text-3xl text-black dark:text-white placeholder:truncate font-serif"
           style={{
             lineHeight: '1.2em',
           }}

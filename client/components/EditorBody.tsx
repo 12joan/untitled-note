@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef } from 'react';
+import React, { memo, useCallback, useRef, useState } from 'react';
 import { Plate, PlateContent, PlateEditor, Value } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
 import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
@@ -63,6 +63,8 @@ export const EditorBody = memo(
 
     const withLinkModalProvider = useLinkModalProvider();
 
+    const [literaryMode, setLiteraryMode] = useState(false);
+
     return withLinkModalProvider(
       <Plate
         editorRef={setEditor}
@@ -72,6 +74,12 @@ export const EditorBody = memo(
         readOnly={isReadOnly}
         onChange={handleChange}
       >
+        <button
+          type="button"
+          onClick={() => setLiteraryMode(!literaryMode)}
+        >
+          Toggle Literary Mode
+        </button>
         <PlateContent
           className={groupedClassNames({
             sizing: 'grow max-w-none children:lg:narrow',
@@ -80,6 +88,7 @@ export const EditorBody = memo(
             focusRing: 'no-focus-ring',
             baseFontSize:
               'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
+            literary: literaryMode && 'font-serif text-justify style-literary',
           })}
           placeholder="Write something..."
           style={{

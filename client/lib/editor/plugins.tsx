@@ -74,7 +74,13 @@ const listStyle =
 const codeStyle = 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm';
 
 const components = {
-  [ELEMENT_PARAGRAPH]: makeElementComponent('p'),
+  [ELEMENT_PARAGRAPH]: makeElementComponent(
+    'p',
+    groupedClassNames({
+      indent: 'literary:em:indent-8 literary:first:indent-0 literary:[p:not(:has([data-slate-string]))+&]:indent-0 literary:[h1+&]:indent-0',
+      spacing: 'literary:[p+&]:paragraph-no-spacing',
+    })
+  ),
   [MARK_BOLD]: makeElementComponent('strong', 'font-semibold'),
   [MARK_ITALIC]: makeElementComponent('em'),
   [MARK_STRIKETHROUGH]: makeElementComponent('del'),
