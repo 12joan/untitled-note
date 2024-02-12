@@ -13,7 +13,8 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include Queryable.permit(*%i[id title safe_title preview body body_type tags blank updated_by created_at updated_at pinned_at locked_at])
+  include EditorStylable
+  include Queryable.permit(*%i[id title safe_title preview body body_type tags editor_style blank updated_by created_at updated_at pinned_at locked_at])
   include Listenable
 
   after_create :update_linked_s3_files

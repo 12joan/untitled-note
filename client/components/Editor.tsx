@@ -13,6 +13,7 @@ import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { EditorBody } from './EditorBody';
 import { EditorHeader } from './EditorHeader';
+import {useEditorStyle} from '~/lib/editor/useEditorStyle';
 
 export interface EditorProps {
   clientId: string;
@@ -63,6 +64,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const { isLocked, isReadOnly, temporarilyUnlock, resumeLock } =
     useLockedState(workingDocument);
 
+  const editorStyle = useEditorStyle(workingDocument);
+
   const { findDialog, openFind } = useFind({
     editor: editor ?? undefined,
     restoreSelection: restoreSelectionForEditor,
@@ -94,6 +97,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   return (
     <div className="contents em:space-y-3">
       {findDialog}
+
+      {editorStyle}
 
       <div className="lg:narrow">
         <BackButton />
