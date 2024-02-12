@@ -98,32 +98,31 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     <div className="contents em:space-y-3">
       {findDialog}
 
-      {editorStyle}
-
       <div className="lg:narrow">
         <BackButton />
       </div>
 
-      <EditorHeader
-        editor={editor}
-        titleRef={titleRef}
-        workingDocument={workingDocument}
-        updateDocument={updateDocument}
-        setTitle={setTitle}
-        isReadOnly={isReadOnly}
-        isLocked={isLocked}
-        temporarilyUnlock={temporarilyUnlock}
-        resumeLock={resumeLock}
-        isDirty={isDirty}
-        isFailing={isFailing}
-        lastSuccessfulUpdate={lastSuccessfulUpdate}
-        openFind={openFind}
-      />
-
       <AppContextProvider
         mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
         linkOriginator={workingDocument.safe_title}
+        editorStyle={editorStyle}
       >
+        <EditorHeader
+          editor={editor}
+          titleRef={titleRef}
+          workingDocument={workingDocument}
+          updateDocument={updateDocument}
+          setTitle={setTitle}
+          isReadOnly={isReadOnly}
+          isLocked={isLocked}
+          temporarilyUnlock={temporarilyUnlock}
+          resumeLock={resumeLock}
+          isDirty={isDirty}
+          isFailing={isFailing}
+          lastSuccessfulUpdate={lastSuccessfulUpdate}
+          openFind={openFind}
+        />
+
         <EditorBody
           editor={editor}
           setEditor={setEditor}
