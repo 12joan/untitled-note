@@ -9,7 +9,8 @@ class Project < ApplicationRecord
   validates :background_colour, inclusion: { in: %w[auto light dark] }
   validates :emoji, presence: true, allow_nil: true
 
-  include Queryable.permit(*%i[id name image_url emoji background_colour created_at updated_at archived_at])
+  include EditorStylable
+  include Queryable.permit(*%i[id name image_url emoji background_colour editor_style created_at updated_at archived_at])
   include Listenable
 
   after_create do

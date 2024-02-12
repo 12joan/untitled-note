@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_215025) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_12_151645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_215025) do
     t.string "body_type", default: "empty", null: false
     t.string "updated_by", default: "server", null: false
     t.datetime "locked_at"
+    t.integer "editor_style"
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 
@@ -64,6 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_215025) do
     t.datetime "archived_at"
     t.string "background_colour", default: "auto", null: false
     t.string "emoji"
+    t.integer "editor_style"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["owner_id"], name: "index_projects_on_owner_id"
   end

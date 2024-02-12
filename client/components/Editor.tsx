@@ -5,6 +5,7 @@ import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
 import { restoreSelection, setSelection } from '~/lib/editor/restoreSelection';
 import { useDebouncedSyncDocument } from '~/lib/editor/useDebouncedSyncDocument';
+import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { useLockedState } from '~/lib/editor/useLockedState';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useGlobalEvent } from '~/lib/globalEvents';
@@ -63,6 +64,8 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const { isLocked, isReadOnly, temporarilyUnlock, resumeLock } =
     useLockedState(workingDocument);
 
+  const editorStyle = useEditorStyle(workingDocument);
+
   const { findDialog, openFind } = useFind({
     editor: editor ?? undefined,
     restoreSelection: restoreSelectionForEditor,
@@ -99,26 +102,27 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         <BackButton />
       </div>
 
-      <EditorHeader
-        editor={editor}
-        titleRef={titleRef}
-        workingDocument={workingDocument}
-        updateDocument={updateDocument}
-        setTitle={setTitle}
-        isReadOnly={isReadOnly}
-        isLocked={isLocked}
-        temporarilyUnlock={temporarilyUnlock}
-        resumeLock={resumeLock}
-        isDirty={isDirty}
-        isFailing={isFailing}
-        lastSuccessfulUpdate={lastSuccessfulUpdate}
-        openFind={openFind}
-      />
-
       <AppContextProvider
         mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}
         linkOriginator={workingDocument.safe_title}
+        editorStyle={editorStyle}
       >
+        <EditorHeader
+          editor={editor}
+          titleRef={titleRef}
+          workingDocument={workingDocument}
+          updateDocument={updateDocument}
+          setTitle={setTitle}
+          isReadOnly={isReadOnly}
+          isLocked={isLocked}
+          temporarilyUnlock={temporarilyUnlock}
+          resumeLock={resumeLock}
+          isDirty={isDirty}
+          isFailing={isFailing}
+          lastSuccessfulUpdate={lastSuccessfulUpdate}
+          openFind={openFind}
+        />
+
         <EditorBody
           editor={editor}
           setEditor={setEditor}

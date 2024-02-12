@@ -55,6 +55,8 @@ export const EditorBody = memo(
       [documentId, editor, onBodyChange]
     );
 
+    const editorStyle = useAppContext('editorStyle');
+
     const relativeFontSize = useEditorFontSize() / 100;
     const cssFontSize = useEditorFontSizeCSSValue();
 
@@ -80,6 +82,10 @@ export const EditorBody = memo(
             focusRing: 'no-focus-ring',
             baseFontSize:
               'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
+            editorStyle: {
+              casual: '',
+              literary: 'font-serif text-justify style-literary',
+            }[editorStyle],
           })}
           placeholder="Write something..."
           style={{

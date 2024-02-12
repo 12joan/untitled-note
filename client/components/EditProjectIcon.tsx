@@ -2,12 +2,10 @@ import React, { ChangeEvent, useRef, useState } from 'react';
 import emojiData from '@emoji-mart/data';
 import EmojiPicker from '@emoji-mart/react';
 import { offset, shift, useFloating } from '@floating-ui/react-dom';
-import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { filesize } from '~/lib/filesize';
 import {
   handleRemoveProjectImageError,
-  handleUpdateProjectError,
   handleUploadFileError,
 } from '~/lib/handleErrors';
 import { orDefaultFuture, unwrapFuture } from '~/lib/monads';
@@ -16,20 +14,17 @@ import {
   uploadProjectImage,
 } from '~/lib/projectImageActions';
 import { mergeRefs } from '~/lib/refUtils';
-import { retry } from '~/lib/retry';
 import { Project } from '~/lib/types';
 import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
-import { useIsMounted } from '~/lib/useIsMounted';
+import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EditProjectIcon = () => {
-  const project = useAppContext('project');
-  const isMounted = useIsMounted();
+  const [localProject, updateProject] = useLocalProject();
 
-  const [localProject, setLocalProject] = useOverrideable(project);
   const [hasImage, overrideHasImage] = useOverrideable(
     !!localProject.image_url
   );
@@ -37,23 +32,6 @@ export const EditProjectIcon = () => {
   const [imageFormState, setImageFormState] = useState<
     'idle' | 'uploading' | 'removing'
   >('idle');
-
-  const updateProject = (params: Partial<Project>) => {
-    setLocalProject({
-      ...localProject,
-      ...params,
-    });
-
-    handleUpdateProjectError(
-      retry(() => updateProjectAPI(project.id, params), {
-        shouldRetry: isMounted,
-      })
-    ).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setLocalProject(project);
-    });
-  };
 
   return (
     <div>

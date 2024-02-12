@@ -72,6 +72,7 @@ module.exports = {
       addVariant('window-inactive', 'body.inactive &');
 
       addVariant('hocus', ['&:hover', '&:focus-visible']);
+      addVariant('focus-visible-within', ['&:has(:focus-visible)']);
 
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &']);
       addVariant('group-focus-visible', ['.group:focus-visible &']);
@@ -98,6 +99,8 @@ module.exports = {
       addVariant('slate-void', '& [data-slate-void]');
       addVariant('slate-string', ['& [data-slate-string]', '& [data-slate-zero-width]']);
       addVariant('slate-top-level', '[data-slate-editor] > &');
+
+      addVariant('literary', '.style-literary &');
 
       // https://github.com/tailwindlabs/tailwindcss/discussions/3105#discussioncomment-248885
       addVariant('em', ({ container }) => {

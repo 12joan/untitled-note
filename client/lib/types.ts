@@ -1,9 +1,12 @@
+export type EditorStyle = 'casual' | 'literary';
+
 export type Project = {
   id: number;
   name: string;
   image_url: string | null;
   emoji: string | null;
   background_colour: string;
+  editor_style: EditorStyle | null;
   created_at: string;
   updated_at: string;
   archived_at: string | null;
@@ -31,6 +34,7 @@ export type Document = {
   body: string;
   body_type: string;
   tags: Tag[];
+  editor_style: EditorStyle | null;
   blank: boolean;
   updated_by: string;
   created_at: string;

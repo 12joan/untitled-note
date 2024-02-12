@@ -48,7 +48,7 @@ body {
 @layer base {
   *:focus-visible, .focus-ring {
     outline: none;
-    @apply ring-2 ring-inset ring-primary-500 dark:ring-primary-400 border-transparent relative z-5;
+    @apply ring-2 ring-primary-500 dark:ring-primary-400 border-transparent relative z-5;
   }
 
   *, ::before, ::after {
@@ -71,8 +71,7 @@ body {
     @apply w-5 h-5 shrink-0 appearance-none rounded border bg-page-bg-light dark:bg-page-bg-dark mt-[0.1875rem];
 
     &:checked {
-      @apply bg-primary-500 dark:bg-primary-400 text-white border-transparent ring-offset-2;
-      background-image: url('~/images/checkbox-tick.svg');
+      @apply bg-primary-500 dark:bg-primary-400 text-white border-transparent ring-offset-2 bg-tick;
     }
   }
 
@@ -130,6 +129,10 @@ body {
 
   .btn-link-hover {
     @apply brightness-75 dark:brightness-125;
+  }
+
+  .bg-tick {
+    background-image: url('~/images/checkbox-tick.svg');
   }
 }
 
@@ -206,6 +209,10 @@ body {
 
   .list-group-item {
     @apply w-full p-3 group-first:rounded-t-lg group-last:rounded-b-lg;
+  }
+
+  .paragraph-no-spacing {
+    margin-top: 0 !important;
   }
 }
 

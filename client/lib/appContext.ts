@@ -3,6 +3,7 @@ import { createContext, ProviderProps } from '~/lib/context';
 import { Future } from '~/lib/monads';
 import { SettingsSchema } from '~/lib/settingsSchema';
 import {
+  EditorStyle,
   PartialDocument,
   Project,
   S3File,
@@ -38,6 +39,7 @@ export type AppContext = {
   onButtonClick: () => void;
   closeDropdown: () => void;
   mentionSuggestionsContainerRef: MutableRefObject<HTMLDivElement | null>;
+  editorStyle: EditorStyle;
 };
 
 export const { Provider: AppContextProvider, useContext: useAppContext } =
@@ -68,6 +70,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     onButtonClick: null,
     closeDropdown: null,
     mentionSuggestionsContainerRef: null,
+    editorStyle: null,
   });
 
 export type AppContextProviderProps = ProviderProps<AppContext>;
