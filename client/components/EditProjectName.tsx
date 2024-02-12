@@ -1,15 +1,10 @@
 import React from 'react';
-import { updateProject } from '~/lib/apis/project';
-import { useAppContext } from '~/lib/appContext';
-import { handleUpdateProjectError } from '~/lib/handleErrors';
-import { retry } from '~/lib/retry';
-import { useIsMounted } from '~/lib/useIsMounted';
+import {useLocalProject} from '~/lib/useLocalProject';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 
 export const EditProjectName = () => {
-  const project = useAppContext('project');
-  const isMounted = useIsMounted();
+  const [localProject, updateProject] = useLocalProject();
 
   const {
     value: name,
@@ -17,7 +12,7 @@ export const EditProjectName = () => {
     isValid: nameIsValid,
     resetValue: resetName,
   } = useNormalizedInput({
-    initial: project.name,
+    initial: localProject.name,
     normalize: (name) => name.trim(),
     validate: (name) => name.trim().length > 0,
   });
@@ -27,11 +22,7 @@ export const EditProjectName = () => {
       return;
     }
 
-    handleUpdateProjectError(
-      retry(() => updateProject(project.id, { name }), {
-        shouldRetry: isMounted,
-      })
-    ).catch((error) => {
+    updateProject({ name }).catch((error) => {
       // eslint-disable-next-line no-console
       console.error(error);
       resetName();

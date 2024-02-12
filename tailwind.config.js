@@ -72,6 +72,7 @@ module.exports = {
       addVariant('window-inactive', 'body.inactive &');
 
       addVariant('hocus', ['&:hover', '&:focus-visible']);
+      addVariant('focus-visible-within', ['&:has(:focus-visible)']);
 
       addVariant('group-hocus', ['.group:hover &', '.group:focus-visible &']);
       addVariant('group-focus-visible', ['.group:focus-visible &']);
