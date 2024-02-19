@@ -12,8 +12,8 @@ import { useGlobalEvent } from '~/lib/globalEvents';
 import { Document } from '~/lib/types';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
-import { EditorBody } from './EditorBody';
-import { EditorHeader } from './EditorHeader';
+import { EditorBody } from '~/components/EditorBody';
+import { EditorHeader } from '~/components/EditorHeader';
 
 export interface EditorProps {
   clientId: string;

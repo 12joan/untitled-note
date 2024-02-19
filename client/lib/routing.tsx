@@ -163,6 +163,18 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
+      path: '/snapshots/:documentId',
+      element: forwardParams(({ documentId }: { documentId: string }) => (
+        <ProjectView
+          childView={{
+            type: 'snapshots',
+            key: `snapshots/${documentId}`,
+            props: { documentId: parseInt(documentId, 10) },
+          }}
+        />
+      )),
+    },
+    {
       path: '/',
       element: forwardParams(() => (
         <Navigate to={getLastView(project.id) || 'overview'} replace />

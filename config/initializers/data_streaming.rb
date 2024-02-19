@@ -16,8 +16,8 @@ Rails.application.reloader.to_prepare do
         api_controller: DocumentsAPI,
 
         actions: {
-          index: ->(params) { make_broadcasting('Document#index', %i[user_id project_id], params).tap { "listening on #{_1}" } },
-          show: ->(params) { make_broadcasting('Document#show', %i[user_id project_id id], params) },
+          index: ->(params) { make_broadcasting('Document#index', %i[user_id project_id], params) },
+          show: ->(params) { make_broadcasting('Document#show', %i[user_id id], params) },
         },
       },
 
@@ -45,6 +45,14 @@ Rails.application.reloader.to_prepare do
           files: ->(params) { make_broadcasting('FileStorage#files', %i[user_id], params) },
         },
       },
+
+      Snapshot: {
+        api_controller: SnapshotsAPI,
+
+        actions: {
+          index: ->(params) { make_broadcasting('Snapshot#index', %i[user_id document_id], params) },
+        },
+      },
     },
 
     listeners: {
@@ -57,7 +65,7 @@ Rails.application.reloader.to_prepare do
           }
 
           broadcast make_broadcasting('Document#index', %i[user_id project_id], params).tap { "broadcasting on #{_1}" }
-          broadcast make_broadcasting('Document#show', %i[user_id project_id id], params)
+          broadcast make_broadcasting('Document#show', %i[user_id id], params)
           broadcast make_broadcasting('Tag#index', %i[user_id project_id], params)
         end
       },
@@ -92,6 +100,13 @@ Rails.application.reloader.to_prepare do
         end
 
         broadcast_for s3_file.original_project if s3_file.role == 'project-image'
+      },
+
+      Snapshot: ->(snapshot) {
+        broadcast make_broadcasting('Snapshot#index', %i[user_id document_id], {
+          user_id: snapshot.owner.id,
+          document_id: snapshot.document_id,
+        })
       },
     },
   )

@@ -75,3 +75,17 @@ export const streamDocuments = (
     },
     callback
   );
+
+export const streamDocument = (
+  documentId: number,
+  callback: (document: Document | null) => void
+) =>
+  streamAction(
+    'Document',
+    'show',
+    {
+      id: documentId,
+      query: 'all',
+    },
+    callback
+  );

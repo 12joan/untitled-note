@@ -86,6 +86,15 @@ export type S3File = {
   do_not_delete_unused: boolean;
 };
 
+export type Snapshot = {
+  id: number;
+  name: string;
+  manual: boolean;
+  body: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type StorageQuotaUsage = {
   quota: number;
   used: number;
