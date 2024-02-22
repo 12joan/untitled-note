@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useMemo } from 'react';
 import { Value } from '@udecode/plate';
 import { AppContextProvider } from '~/lib/appContext';
+import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { Document, Snapshot } from '~/lib/types';
 import { DiffViewer } from '~/components/DiffViewer';
 
@@ -34,7 +35,7 @@ export const SnapshotExplorer = ({
   const viewingSnapshotBody: Value = useMemo(() => {
     const snapshot = snapshotsAndCurrent[viewingSnapshotIndex];
     return JSON.parse(snapshot === 'current' ? doc.body : snapshot.body);
-  }, [snapshotsAndCurrent, viewingSnapshotIndex]);
+  }, [snapshotsAndCurrent, viewingSnapshotIndex, doc]);
 
   const previousSnapshotBody: Value | null = useMemo(() => {
     if (viewingSnapshotIndex === snapshotsAndCurrent.length - 1) {
@@ -44,6 +45,8 @@ export const SnapshotExplorer = ({
     const snapshot = snapshotsAndCurrent[viewingSnapshotIndex + 1] as Snapshot;
     return JSON.parse(snapshot.body);
   }, [snapshotsAndCurrent, viewingSnapshotIndex]);
+
+  const editorStyle = useEditorStyle(doc);
 
   return (
     <div className="flex flex-wrap gap-5">
@@ -61,7 +64,7 @@ export const SnapshotExplorer = ({
         ))}
       </div>
 
-      <AppContextProvider documentId={doc.id}>
+      <AppContextProvider documentId={doc.id} editorStyle={editorStyle}>
         <DiffViewer
           previous={previousSnapshotBody}
           current={viewingSnapshotBody}

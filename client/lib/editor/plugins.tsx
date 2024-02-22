@@ -32,6 +32,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  PlatePlugin,
   PlateRenderElementProps,
 } from '@udecode/plate';
 // import { createTabbablePlugin } from './tabbable';
@@ -144,7 +145,18 @@ const components = {
   [ELEMENT_ATTACHMENT]: Attachment,
 };
 
-export const usePlugins = () => {
+export type PluginCategory = 'markup' | 'behaviour';
+
+export interface UsePluginsOptions {
+  enabledCategories?: Partial<Record<PluginCategory, boolean>>;
+}
+
+export const usePlugins = ({
+  enabledCategories: {
+    markup: markupEnabled = true,
+    behaviour: behaviourEnabled = true,
+  } = {},
+}: UsePluginsOptions = {}) => {
   /**
    * It's important that the plugins are memoized, otherwise the editor will
    * re-render at inopportune moments. This causes bugs such as selection
@@ -156,7 +168,7 @@ export const usePlugins = () => {
 
   const imperativeEventsPlugins = useImperativeEventsPlugins();
 
-  const staticPlugins = useMemo(
+  const staticMarkupPlugins: PlatePlugin[] = useMemo(
     () => [
       createParagraphPlugin(),
       createBoldPlugin(),
@@ -169,6 +181,12 @@ export const usePlugins = () => {
       createCodeBlockPlugin(codeBlockOptions),
       createListPlugin(),
       createMentionPlugin(mentionOptions),
+    ],
+    []
+  );
+
+  const staticBehaviourPlugins: PlatePlugin[] = useMemo(
+    () => [
       createSoftBreakPlugin(softBreakOptions),
       createResetNodePlugin(resetNodeOptions),
       createExitBreakPlugin(exitBreakOptions),
@@ -186,11 +204,21 @@ export const usePlugins = () => {
   return useMemo(
     () =>
       createPlugins(
-        [...imperativeEventsPlugins, ...staticPlugins, ...attachmentPlugins],
+        [
+          ...(behaviourEnabled ? imperativeEventsPlugins : []),
+          ...(markupEnabled ? staticMarkupPlugins : []),
+          ...(behaviourEnabled ? staticBehaviourPlugins : []),
+          ...(markupEnabled ? attachmentPlugins : []),
+        ],
         {
           components,
         }
       ),
-    [imperativeEventsPlugins, staticPlugins, attachmentPlugins]
+    [
+      imperativeEventsPlugins,
+      staticMarkupPlugins,
+      staticBehaviourPlugins,
+      attachmentPlugins,
+    ]
   );
 };

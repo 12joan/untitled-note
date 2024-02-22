@@ -3,9 +3,15 @@ import { isEditorFocused, PlateEditor } from '@udecode/plate';
 import { Range } from 'slate';
 import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
-import { restoreSelection, setSelection } from '~/lib/editor/restoreSelection';
+import { usePlugins } from '~/lib/editor/plugins';
+import {
+  restoreSelection,
+  saveSelection,
+  setSelection,
+} from '~/lib/editor/restoreSelection';
 import { useDebouncedSyncDocument } from '~/lib/editor/useDebouncedSyncDocument';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
+import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useLockedState } from '~/lib/editor/useLockedState';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useGlobalEvent } from '~/lib/globalEvents';
@@ -29,6 +35,11 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const mentionSuggestionsContainerRef = useRef<HTMLDivElement>(null);
 
   const [editor, setEditor] = useState<PlateEditor | null>(null);
+
+  const saveSelectionForEditor = useCallback(
+    () => editor && saveSelection(documentId, editor),
+    [documentId, editor]
+  );
 
   const restoreSelectionForEditor = useCallback(
     () => editor && restoreSelection(documentId, editor),
@@ -63,6 +74,13 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
   const { isLocked, isReadOnly, temporarilyUnlock, resumeLock } =
     useLockedState(workingDocument);
+
+  const plugins = usePlugins();
+
+  const initialValue = useInitialValue({
+    initialDocument,
+    plugins,
+  });
 
   const editorStyle = useEditorStyle(workingDocument);
 
@@ -124,11 +142,12 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
         />
 
         <EditorBody
-          editor={editor}
           setEditor={setEditor}
-          initialDocument={initialDocument}
+          initialValue={initialValue}
+          plugins={plugins}
           isReadOnly={isReadOnly}
           onBodyChange={onBodyChange}
+          onSelectionChange={saveSelectionForEditor}
           onDoubleClick={temporarilyUnlock}
         />
       </AppContextProvider>

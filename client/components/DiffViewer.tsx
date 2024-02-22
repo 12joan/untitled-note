@@ -1,17 +1,16 @@
-import React, { ElementType, useMemo } from 'react';
+import React, { ElementType, useMemo, useRef } from 'react';
 import {
   computeDiff,
   createPlateEditor,
   createPluginFactory,
   DiffOperation,
-  Plate,
-  PlateContent,
   PlateRenderLeafProps,
   Value,
 } from '@udecode/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { Tooltip } from '~/components/Tooltip';
+import { EditorBody } from './EditorBody';
 
 const diffTypeClassNames: Record<DiffOperation['type'], string> = {
   insert:
@@ -69,7 +68,7 @@ const createDiffPlugin = createPluginFactory({
         const className = groupedClassNames({
           block:
             !inline &&
-            'rounded-lg relative before:absolute before:inset-y-0 before:-left-2 before:w-1 before:rounded-full',
+            'rounded-md relative before:absolute before:inset-y-0 before:-left-2 before:w-1 before:rounded-full',
           blockColor: {
             insert: 'before:bg-green-500',
             delete: 'before:bg-red-500',
@@ -93,43 +92,45 @@ export interface DiffViewerProps {
 }
 
 export const DiffViewer = ({ previous, current }: DiffViewerProps) => {
-  const basePlugins = usePlugins();
+  const basePlugins = usePlugins({
+    enabledCategories: {
+      behaviour: false,
+    },
+  });
 
   const plugins = useMemo(
     () => [...basePlugins, createDiffPlugin()],
     [basePlugins]
   );
 
+  const versionRef = useRef(0);
+
   const diffValue = useMemo(() => {
+    versionRef.current++;
+
     if (!previous) return current;
 
     const tempEditor = createPlateEditor({
       plugins,
     });
 
-    return computeDiff(previous, current, {
-      isInline: tempEditor.isInline,
-      lineBreakChar: '¶',
-    }) as Value;
+    return JSON.parse(
+      JSON.stringify(
+        computeDiff(previous, current, {
+          isInline: tempEditor.isInline,
+          lineBreakChar: '¶',
+        })
+      )
+    ) as Value;
   }, [previous, current, plugins]);
 
   return (
-    <Plate
-      key={JSON.stringify(diffValue)}
+    <EditorBody
+      key={versionRef.current}
       initialValue={diffValue}
       plugins={plugins}
-      readOnly
-    >
-      <PlateContent
-        className={groupedClassNames({
-          sizing: 'grow max-w-none children:lg:narrow',
-          spacing: 'em:space-y-3',
-          textColor: 'text-black dark:text-white',
-          focusRing: 'no-focus-ring',
-          baseFontSize:
-            'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
-        })}
-      />
-    </Plate>
+      isReadOnly
+      showFormattingToolbar={false}
+    />
   );
 };
