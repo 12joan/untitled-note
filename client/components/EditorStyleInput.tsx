@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { EditorStyle } from '~/lib/types';
+import {RadioCard, RadioCardGroup} from './RadioCardGroup';
 
 const descriptions: Record<EditorStyle, string> = {
   casual: 'The casual style is designed for taking notes and casual writing.',
@@ -41,27 +42,18 @@ export const EditorStyleInput = <Nullable extends boolean>({
 
   return (
     <>
-      <div className="grid gap-2 md:grid-cols-3 focus-visible-within:focus-ring ring-offset-4 rounded-lg">
+      <RadioCardGroup className="md:grid-cols-3">
         {options.map((option) => (
-          <label
+          <RadioCard
             key={option}
-            className="btn border rounded-lg p-3 flex gap-2 items-center data-active:focus-ring data-active:border-transparent"
-            data-active={option === value}
+            name="editor-style"
+            checked={option === value}
+            onCheck={() => onChange(option)}
           >
-            <input
-              type="radio"
-              name="editor-style"
-              className="sr-only"
-              checked={option === value}
-              onChange={() => onChange(option)}
-            />
-
-            <div className="flex-shrink-0 w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat" />
-
             {labels[option ?? 'null']}
-          </label>
+          </RadioCard>
         ))}
-      </div>
+      </RadioCardGroup>
 
       {description && (
         <p className="text-plain-500 dark:text-plain-400">{description}</p>

@@ -146,6 +146,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
           initialValue={initialValue}
           plugins={plugins}
           isReadOnly={isReadOnly}
+          className="grow max-w-none children:lg:narrow"
           onBodyChange={onBodyChange}
           onSelectionChange={saveSelectionForEditor}
           onDoubleClick={temporarilyUnlock}

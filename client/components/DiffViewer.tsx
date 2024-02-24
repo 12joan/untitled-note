@@ -6,6 +6,7 @@ import {
   DiffOperation,
   PlateRenderLeafProps,
   Value,
+  withGetFragmentExcludeDiff,
 } from '@udecode/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import { groupedClassNames } from '~/lib/groupedClassNames';
@@ -52,6 +53,7 @@ const createDiffPlugin = createPluginFactory({
   key: 'diff',
   isLeaf: true,
   component: DiffLeaf,
+  withOverrides: withGetFragmentExcludeDiff,
   inject: {
     aboveComponent:
       () =>
@@ -89,9 +91,10 @@ const createDiffPlugin = createPluginFactory({
 export interface DiffViewerProps {
   previous: Value | null;
   current: Value;
+  className?: string;
 }
 
-export const DiffViewer = ({ previous, current }: DiffViewerProps) => {
+export const DiffViewer = ({ previous, current, className }: DiffViewerProps) => {
   const basePlugins = usePlugins({
     enabledCategories: {
       behaviour: false,
@@ -131,6 +134,7 @@ export const DiffViewer = ({ previous, current }: DiffViewerProps) => {
       plugins={plugins}
       isReadOnly
       showFormattingToolbar={false}
+      className={className}
     />
   );
 };

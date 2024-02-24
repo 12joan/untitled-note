@@ -22,6 +22,7 @@ export interface EditorBodyProps {
   plugins: PlatePlugin[];
   isReadOnly?: boolean;
   showFormattingToolbar?: boolean;
+  className?: string;
   onBodyChange?: () => void;
   onSelectionChange?: () => void;
   onDoubleClick?: () => void;
@@ -34,6 +35,7 @@ export const EditorBody = memo(
     plugins,
     isReadOnly = false,
     showFormattingToolbar = true,
+    className,
     onBodyChange,
     onSelectionChange,
     onDoubleClick,
@@ -73,7 +75,7 @@ export const EditorBody = memo(
       >
         <PlateContent
           className={groupedClassNames({
-            sizing: 'grow max-w-none children:lg:narrow',
+            className,
             spacing: 'em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',

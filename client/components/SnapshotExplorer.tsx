@@ -4,6 +4,7 @@ import { AppContextProvider } from '~/lib/appContext';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { Document, Snapshot } from '~/lib/types';
 import { DiffViewer } from '~/components/DiffViewer';
+import {RadioCard, RadioCardGroup} from './RadioCardGroup';
 
 export interface SnapshotExplorerProps {
   document: Document;
@@ -49,27 +50,30 @@ export const SnapshotExplorer = ({
   const editorStyle = useEditorStyle(doc);
 
   return (
-    <div className="flex flex-wrap gap-5">
-      <div className="space-y-3">
-        {snapshotsAndCurrent.map((snapshot, index) => (
-          <label key={snapshotKey(snapshot)} className="block">
-            <input
-              type="radio"
+    <div className="flex gap-5 max-xl:flex-col">
+      <div className="w-full xl:max-w-xs shrink-0">
+        <RadioCardGroup>
+          {snapshotsAndCurrent.map((snapshot, index) => (
+            <RadioCard
+              key={snapshotKey(snapshot)}
               name="snapshot"
               checked={index === viewingSnapshotIndex}
-              onChange={() => setViewingSnapshotIndex(index)}
-            />{' '}
-            {snapshotName(snapshot)}
-          </label>
-        ))}
+              onCheck={() => setViewingSnapshotIndex(index)}
+            >
+              {snapshotName(snapshot)}
+            </RadioCard>
+          ))}
+        </RadioCardGroup>
       </div>
 
-      <AppContextProvider documentId={doc.id} editorStyle={editorStyle}>
-        <DiffViewer
-          previous={previousSnapshotBody}
-          current={viewingSnapshotBody}
-        />
-      </AppContextProvider>
+      <div className="xl:w-narrow border rounded-lg p-5 overflow-x-hidden">
+        <AppContextProvider documentId={doc.id} editorStyle={editorStyle}>
+          <DiffViewer
+            previous={previousSnapshotBody}
+            current={viewingSnapshotBody}
+          />
+        </AppContextProvider>
+      </div>
     </div>
   );
 };
