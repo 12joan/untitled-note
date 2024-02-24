@@ -1,4 +1,10 @@
-import React, { ElementType, useMemo, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  ElementType,
+  SetStateAction,
+  useMemo,
+  useState,
+} from 'react';
 import {
   computeDiff,
   createPlateEditor,
@@ -17,7 +23,8 @@ import { groupedClassNames } from '~/lib/groupedClassNames';
 import { pluralize } from '~/lib/pluralize';
 import { Tooltip } from '~/components/Tooltip';
 import ExpandIcon from './icons/ExpandIcon';
-import { EditorBody } from './EditorBody';
+import { EditorBody, EditorBodyProps } from './EditorBody';
+import { useObjectVersion } from './useObjectVersion';
 
 const diffTypeClassNames: Record<DiffOperation['type'], string> = {
   insert:
@@ -122,11 +129,7 @@ export const DiffViewer = ({
     [basePlugins]
   );
 
-  const versionRef = useRef(0);
-
   const diffValue = useMemo(() => {
-    versionRef.current++;
-
     if (!previous) return current;
 
     const tempEditor = createPlateEditor({
@@ -152,77 +155,136 @@ export const DiffViewer = ({
     [diffValue]
   );
 
-  return (
-    <div className="space-y-3" key={versionRef.current}>
-      {diffChunks.map((chunk, i) => (
-        <DiffChunk key={i} chunk={chunk} />
-      ))}
-    </div>
-  );
-
-  // return (
-  //   <EditorBody
-  //     key={versionRef.current}
-  //     initialValue={diffValue}
-  //     plugins={plugins}
-  //     isReadOnly
-  //     showFormattingToolbar={false}
-  //     className={className}
-  //   />
-  // );
-};
-
-interface DiffChunkProps {
-  chunk: ElementChunk;
-}
-
-const DiffChunk = ({ chunk }: DiffChunkProps) => {
-  return chunk.hasDiff ? (
-    <Blocks blocks={chunk.blocks} />
-  ) : (
-    <CollapsibleBlocks blocks={chunk.blocks} />
-  );
-};
-
-interface BlocksProps {
-  blocks: TElement[];
-}
-
-const Blocks = ({ blocks }: BlocksProps) => {
-  const basePlugins = usePlugins({
-    enabledCategories: {
-      behaviour: false,
-    },
-  });
-
-  const plugins = useMemo(
-    () => [...basePlugins, createDiffPlugin()],
-    [basePlugins]
-  );
+  const key = useObjectVersion(diffValue);
 
   return (
-    <EditorBody
-      initialValue={blocks}
+    <ChunkedEditorBody
+      key={key}
+      chunks={diffChunks}
       plugins={plugins}
-      isReadOnly
-      showFormattingToolbar={false}
+      className={className}
     />
   );
 };
 
-const CollapsibleBlocks = ({ blocks }: BlocksProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChunkCollapsedProps {
+  chunkIndex: number;
+  blockCount: number;
+  showExpandButton: boolean;
+}
 
-  if (isOpen) return <Blocks blocks={blocks} />;
+interface ChunkPlugin {
+  setExpandedChunks: Dispatch<SetStateAction<number[]>>;
+}
 
+const createChunkPlugin = createPluginFactory<ChunkPlugin>({
+  key: 'chunk',
+  // TODO
+  // withOverrides: withGetFragmentExcludeChunk,
+  then: (_editor, { options: { setExpandedChunks } }) => ({
+    inject: {
+      aboveComponent:
+        () =>
+        ({ children, element }) => {
+          if (!element.chunkCollapsed) return children;
+          const { chunkIndex, blockCount, showExpandButton } =
+            element.chunkCollapsed as ChunkCollapsedProps;
+
+          const mappedChildren = React.Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+              return React.cloneElement(child, {
+                nodeProps: {
+                  className: 'hidden',
+                },
+              } as any);
+            }
+            return child;
+          });
+
+          return (
+            <>
+              {showExpandButton && (
+                <ExpandChunkButton
+                  blockCount={blockCount}
+                  onClick={() =>
+                    setExpandedChunks((prev) => [...prev, chunkIndex])
+                  }
+                />
+              )}
+              {mappedChildren}
+            </>
+          );
+        },
+    },
+  }),
+});
+
+interface ChunkedEditorBodyProps extends Omit<EditorBodyProps, 'initialValue'> {
+  chunks: ElementChunk[];
+}
+
+const ChunkedEditorBody = ({
+  chunks,
+  plugins: basePlugins,
+  ...props
+}: ChunkedEditorBodyProps) => {
+  const [expandedChunks, setExpandedChunks] = useState<number[]>([]);
+
+  const plugins = useMemo(
+    () => [
+      ...basePlugins,
+      createChunkPlugin({
+        options: { setExpandedChunks },
+      }),
+    ],
+    [basePlugins]
+  );
+
+  const value = useMemo(
+    () =>
+      chunks.flatMap(({ blocks, hasDiff }, chunkIndex) =>
+        hasDiff || expandedChunks.includes(chunkIndex)
+          ? blocks
+          : blocks.map((block, blockIndex) => ({
+              ...block,
+              chunkCollapsed: {
+                chunkIndex,
+                blockCount: blocks.length,
+                showExpandButton: blockIndex === 0,
+              } satisfies ChunkCollapsedProps,
+            }))
+      ),
+    [chunks, expandedChunks]
+  );
+
+  const key = useObjectVersion(value);
+
+  return (
+    <EditorBody
+      key={key}
+      plugins={plugins}
+      initialValue={value}
+      isReadOnly
+      showFormattingToolbar={false}
+      {...props}
+    />
+  );
+};
+
+interface ExpandChunkButtonProps {
+  blockCount: number;
+  onClick: () => void;
+}
+
+const ExpandChunkButton = ({ blockCount, onClick }: ExpandChunkButtonProps) => {
   return (
     <button
       type="button"
-      className="btn btn-rect btn-secondary w-full flex justify-center gap-2 items-center"
-      onClick={() => setIsOpen(true)}
+      className="btn btn-rect btn-secondary w-full flex justify-center gap-2 items-center font-sans"
+      onClick={onClick}
     >
       <ExpandIcon noAriaLabel />
-      Show {pluralize(blocks.length, 'unchanged block')}
+      Show {pluralize(blockCount, 'unchanged block')}
     </button>
   );
 };
