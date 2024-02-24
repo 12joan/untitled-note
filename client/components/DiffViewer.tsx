@@ -4,10 +4,13 @@ import {
   createPlateEditor,
   createPluginFactory,
   DiffOperation,
+  isElement,
   PlateRenderLeafProps,
+  TDescendant,
   Value,
   withGetFragmentExcludeDiff,
 } from '@udecode/plate';
+import { chunkDiffs } from '~/lib/chunkDiffs';
 import { usePlugins } from '~/lib/editor/plugins';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { Tooltip } from '~/components/Tooltip';
@@ -88,13 +91,21 @@ const createDiffPlugin = createPluginFactory({
   },
 });
 
+const hasDiff = (descendant: TDescendant): boolean =>
+  'diff' in descendant ||
+  (isElement(descendant) && descendant.children.some(hasDiff));
+
 export interface DiffViewerProps {
   previous: Value | null;
   current: Value;
   className?: string;
 }
 
-export const DiffViewer = ({ previous, current, className }: DiffViewerProps) => {
+export const DiffViewer = ({
+  previous,
+  current,
+  className,
+}: DiffViewerProps) => {
   const basePlugins = usePlugins({
     enabledCategories: {
       behaviour: false,
@@ -127,14 +138,26 @@ export const DiffViewer = ({ previous, current, className }: DiffViewerProps) =>
     ) as Value;
   }, [previous, current, plugins]);
 
+  const diffChunks = useMemo(
+    () =>
+      chunkDiffs(diffValue, {
+        hasDiff,
+        paddingBlocks: 1,
+      }),
+    [diffValue]
+  );
+
   return (
-    <EditorBody
-      key={versionRef.current}
-      initialValue={diffValue}
-      plugins={plugins}
-      isReadOnly
-      showFormattingToolbar={false}
-      className={className}
-    />
+    <>
+      <pre>{JSON.stringify(diffChunks, null, 2)}</pre>
+      <EditorBody
+        key={versionRef.current}
+        initialValue={diffValue}
+        plugins={plugins}
+        isReadOnly
+        showFormattingToolbar={false}
+        className={className}
+      />
+    </>
   );
 };

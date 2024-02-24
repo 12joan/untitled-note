@@ -1,10 +1,12 @@
-import React, {HTMLAttributes} from 'react';
-import {twMerge} from 'tailwind-merge';
+import React, { HTMLAttributes } from 'react';
+import { twMerge } from 'tailwind-merge';
 
-export interface RadioCardGroupProps extends HTMLAttributes<HTMLDivElement> {
-}
+export type RadioCardGroupProps = HTMLAttributes<HTMLDivElement>;
 
-export const RadioCardGroup = ({ className, ...props }: RadioCardGroupProps) => {
+export const RadioCardGroup = ({
+  className,
+  ...props
+}: RadioCardGroupProps) => {
   return (
     <div
       {...props}
@@ -22,7 +24,14 @@ export interface RadioCardProps extends HTMLAttributes<HTMLLabelElement> {
   onCheck: () => void;
 }
 
-export const RadioCard = ({ name, checked, onCheck, className, children, ...props }: RadioCardProps) => {
+export const RadioCard = ({
+  name,
+  checked,
+  onCheck,
+  className,
+  children,
+  ...props
+}: RadioCardProps) => {
   return (
     <label
       className={twMerge(

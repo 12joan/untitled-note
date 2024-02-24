@@ -4,7 +4,7 @@ import { AppContextProvider } from '~/lib/appContext';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { Document, Snapshot } from '~/lib/types';
 import { DiffViewer } from '~/components/DiffViewer';
-import {RadioCard, RadioCardGroup} from './RadioCardGroup';
+import { RadioCard, RadioCardGroup } from './RadioCardGroup';
 
 export interface SnapshotExplorerProps {
   document: Document;
