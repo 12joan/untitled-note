@@ -1,4 +1,4 @@
-import React, { ElementType, useMemo, useRef } from 'react';
+import React, { ElementType, useMemo, useRef, useState } from 'react';
 import {
   computeDiff,
   createPlateEditor,
@@ -7,13 +7,16 @@ import {
   isElement,
   PlateRenderLeafProps,
   TDescendant,
+  TElement,
   Value,
   withGetFragmentExcludeDiff,
 } from '@udecode/plate';
-import { chunkDiffs } from '~/lib/chunkDiffs';
+import { Chunk, chunkDiffs } from '~/lib/chunkDiffs';
 import { usePlugins } from '~/lib/editor/plugins';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { pluralize } from '~/lib/pluralize';
 import { Tooltip } from '~/components/Tooltip';
+import ExpandIcon from './icons/ExpandIcon';
 import { EditorBody } from './EditorBody';
 
 const diffTypeClassNames: Record<DiffOperation['type'], string> = {
@@ -95,6 +98,8 @@ const hasDiff = (descendant: TDescendant): boolean =>
   'diff' in descendant ||
   (isElement(descendant) && descendant.children.some(hasDiff));
 
+type ElementChunk = Chunk<TElement>;
+
 export interface DiffViewerProps {
   previous: Value | null;
   current: Value;
@@ -138,7 +143,7 @@ export const DiffViewer = ({
     ) as Value;
   }, [previous, current, plugins]);
 
-  const diffChunks = useMemo(
+  const diffChunks: ElementChunk[] = useMemo(
     () =>
       chunkDiffs(diffValue, {
         hasDiff,
@@ -148,16 +153,76 @@ export const DiffViewer = ({
   );
 
   return (
-    <>
-      <pre>{JSON.stringify(diffChunks, null, 2)}</pre>
-      <EditorBody
-        key={versionRef.current}
-        initialValue={diffValue}
-        plugins={plugins}
-        isReadOnly
-        showFormattingToolbar={false}
-        className={className}
-      />
-    </>
+    <div className="space-y-3" key={versionRef.current}>
+      {diffChunks.map((chunk, i) => (
+        <DiffChunk key={i} chunk={chunk} />
+      ))}
+    </div>
+  );
+
+  // return (
+  //   <EditorBody
+  //     key={versionRef.current}
+  //     initialValue={diffValue}
+  //     plugins={plugins}
+  //     isReadOnly
+  //     showFormattingToolbar={false}
+  //     className={className}
+  //   />
+  // );
+};
+
+interface DiffChunkProps {
+  chunk: ElementChunk;
+}
+
+const DiffChunk = ({ chunk }: DiffChunkProps) => {
+  return chunk.hasDiff ? (
+    <Blocks blocks={chunk.blocks} />
+  ) : (
+    <CollapsibleBlocks blocks={chunk.blocks} />
+  );
+};
+
+interface BlocksProps {
+  blocks: TElement[];
+}
+
+const Blocks = ({ blocks }: BlocksProps) => {
+  const basePlugins = usePlugins({
+    enabledCategories: {
+      behaviour: false,
+    },
+  });
+
+  const plugins = useMemo(
+    () => [...basePlugins, createDiffPlugin()],
+    [basePlugins]
+  );
+
+  return (
+    <EditorBody
+      initialValue={blocks}
+      plugins={plugins}
+      isReadOnly
+      showFormattingToolbar={false}
+    />
+  );
+};
+
+const CollapsibleBlocks = ({ blocks }: BlocksProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (isOpen) return <Blocks blocks={blocks} />;
+
+  return (
+    <button
+      type="button"
+      className="btn btn-rect btn-secondary w-full flex justify-center gap-2 items-center"
+      onClick={() => setIsOpen(true)}
+    >
+      <ExpandIcon noAriaLabel />
+      Show {pluralize(blocks.length, 'unchanged block')}
+    </button>
   );
 };
