@@ -5703,7 +5703,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-router-dom: "npm:6"
     react-textarea-autosize: "npm:^8.4.1"
-    react-time-ago: "npm:^7.2.1"
+    react-time-ago: "npm:^7.3.0"
     runes: "npm:^0.4.3"
     sass: "npm:^1.71.1"
     scheduler: "npm:^0.23.0"
@@ -6715,9 +6715,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-time-ago@npm:^7.2.1":
-  version: 7.2.1
-  resolution: "react-time-ago@npm:7.2.1"
+"react-time-ago@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "react-time-ago@npm:7.3.0"
   dependencies:
     memoize-one: "npm:^6.0.0"
     prop-types: "npm:^15.8.1"
@@ -6726,7 +6726,7 @@ __metadata:
     javascript-time-ago: ^2.3.7
     react: ">=0.16.8"
     react-dom: ">=0.16.8"
-  checksum: f06e826e5c9c35a0c5c48eda0589c8be90da2355276256d928a061830e17f22c3094bd6a785f33bd404dcc234d01439167a86b1a3dcf53ecf3e165f11e1c5a55
+  checksum: 9ec5bb10538b631929551a1c86e49c28283acd9ddda92cde3763b34d823efd3558f4cd86cc65af6ffd500dadae802fd705d3153cd354e199c34be9f4312c8a66
   languageName: node
   linkType: hard
 
