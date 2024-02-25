@@ -75,10 +75,7 @@ class DocumentsAPITest < APITestCase
 
   test 'DocumentsAPI#show does not show documents belonging to other users' do
     @user = create(:user)
-
-    assert_raises(ActiveRecord::RecordNotFound) do
-      show_result
-    end
+    assert_nil show_result
   end
 
   private
