@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInputModal } from '~/lib/useInputModal';
-import {useAppContext} from './appContext';
-import {createSnapshot} from './apis/snapshot';
-import {createToast} from './toasts';
-import {handleCreateSnapshotError} from './handleErrors';
-import {documentVersionHistoryPath} from './routes';
+import { createSnapshot } from './apis/snapshot';
+import { useAppContext } from './appContext';
+import { handleCreateSnapshotError } from './handleErrors';
+import { documentVersionHistoryPath } from './routes';
+import { createToast } from './toasts';
 
 export interface UseNewSnapshotModalProps {
   documentId: number;
@@ -32,10 +32,13 @@ export const useNewSnapshotModal = ({
         title: 'Snapshot created',
         message: 'The snapshot has been created successfully',
         autoClose: 'slow',
-        button: showVersionHistoryLinkOnSuccess ? {
-          label: 'Open version history',
-          onClick: () => navigate(documentVersionHistoryPath({ projectId, documentId })),
-        } : undefined,
+        button: showVersionHistoryLinkOnSuccess
+          ? {
+              label: 'Open version history',
+              onClick: () =>
+                navigate(documentVersionHistoryPath({ projectId, documentId })),
+            }
+          : undefined,
       })
     );
   };

@@ -11,13 +11,18 @@ import {
   handleDeleteDocumentError,
   handleUpdateDocumentError,
 } from '~/lib/handleErrors';
-import { DocumentLink, DocumentVersionHistoryLink, documentPath } from '~/lib/routes';
+import {
+  DocumentLink,
+  documentPath,
+  DocumentVersionHistoryLink,
+} from '~/lib/routes';
 import {
   toggleDocumentLocked,
   toggleDocumentPinned,
 } from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
 import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
+import { useNewSnapshotModal } from '~/lib/useNewSnapshotModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
 import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
@@ -28,9 +33,8 @@ import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
-import VersionHistoryIcon from './icons/VersionHistoryIcon';
 import NewSnapshotIcon from './icons/NewSnapshotIcon';
-import {useNewSnapshotModal} from '~/lib/useNewSnapshotModal';
+import VersionHistoryIcon from './icons/VersionHistoryIcon';
 
 export interface DocumentMenuProps {
   isEditor?: boolean;
@@ -70,9 +74,10 @@ export const DocumentMenu = ({
 
   const versionHistoryAvailable = doc.body_type === 'json/slate';
 
-  const { modal: newSnapshotModal, open: openNewSnapshotModal } = useNewSnapshotModal({
-    documentId: doc.id,
-  });
+  const { modal: newSnapshotModal, open: openNewSnapshotModal } =
+    useNewSnapshotModal({
+      documentId: doc.id,
+    });
 
   const isLocked = doc.locked_at !== null;
   const toggleLocked = () =>
@@ -124,10 +129,7 @@ export const DocumentMenu = ({
             Version history
           </DropdownItem>
 
-          <DropdownItem
-            icon={NewSnapshotIcon}
-            onClick={openNewSnapshotModal}
-          >
+          <DropdownItem icon={NewSnapshotIcon} onClick={openNewSnapshotModal}>
             New snapshot
           </DropdownItem>
         </>

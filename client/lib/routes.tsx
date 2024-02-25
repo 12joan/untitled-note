@@ -88,8 +88,10 @@ export const documentPath = ({ projectId, documentId }: ProjectDocumentRoute) =>
 export const recentlyViewedDocumentPath = (args: ProjectDocumentRoute) =>
   `${documentPath(args)}?recently_viewed`;
 
-export const documentVersionHistoryPath = ({ projectId, documentId }: ProjectDocumentRoute) =>
-  `/projects/${projectId}/snapshots/${documentId}`;
+export const documentVersionHistoryPath = ({
+  projectId,
+  documentId,
+}: ProjectDocumentRoute) => `/projects/${projectId}/snapshots/${documentId}`;
 
 export const newDocumentPath = ({
   projectId,
@@ -109,5 +111,7 @@ export const DocumentLink = createLinkComponent(documentPath);
 export const RecentlyViewedDocumentLink = createLinkComponent(
   recentlyViewedDocumentPath
 );
-export const DocumentVersionHistoryLink = createLinkComponent(documentVersionHistoryPath);
+export const DocumentVersionHistoryLink = createLinkComponent(
+  documentVersionHistoryPath
+);
 export const NewDocumentLink = createLinkComponent(newDocumentPath);

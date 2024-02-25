@@ -5,6 +5,7 @@ import { Future, sequenceFutures, unwrapFuture } from '~/lib/monads';
 import { DocumentLink, OverviewLink } from '~/lib/routes';
 import { Document, Snapshot } from '~/lib/types';
 import { useStream } from '~/lib/useStream';
+import { useTitle } from '~/lib/useTitle';
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
 import { LoadingView } from '~/components/LoadingView';
 import { InlinePlaceholder } from '~/components/Placeholder';
@@ -12,7 +13,6 @@ import {
   SnapshotExplorer,
   SnapshotExplorerProps,
 } from '~/components/SnapshotExplorer';
-import {useTitle} from '~/lib/useTitle';
 
 export interface SnapshotsViewProps {
   documentId: number;
@@ -30,7 +30,8 @@ export const SnapshotsView = memo(({ documentId }: SnapshotsViewProps) => {
   useTitle(
     unwrapFuture(futureDocument, {
       pending: 'Version history',
-      resolved: (doc) => doc ? `Version history for ${doc.safe_title}` : 'Version history',
+      resolved: (doc) =>
+        doc ? `Version history for ${doc.safe_title}` : 'Version history',
     })
   );
 
