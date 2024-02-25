@@ -54,6 +54,7 @@ export type PartialDocument = Pick<
   | 'safe_title'
   | 'preview'
   | 'blank'
+  | 'body_type'
   | 'updated_by'
   | 'updated_at'
   | 'pinned_at'
@@ -84,6 +85,15 @@ export type S3File = {
   created_at: string;
   became_unused_at: string | null;
   do_not_delete_unused: boolean;
+};
+
+export type Snapshot = {
+  id: number;
+  name: string;
+  manual: boolean;
+  body: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type StorageQuotaUsage = {

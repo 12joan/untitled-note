@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
-import { EditorStyleInput } from './EditorStyleInput';
+import { EditorStyleInput } from '~/components/EditorStyleInput';
 
 export const EditProjectEditorStyle = () => {
   const [localProject, updateProject] = useLocalProject();

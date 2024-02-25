@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import { useAppContext } from '~/lib/appContext';
 import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
+import { EditProjectEditorStyle } from '~/components/EditProjectEditorStyle';
 import { EditProjectIcon } from '~/components/EditProjectIcon';
 import { EditProjectName } from '~/components/EditProjectName';
 import { ProjectActions } from '~/components/ProjectActions';
-import { EditProjectEditorStyle } from '../EditProjectEditorStyle';
 
 export const EditProjectView = memo(() => {
   const project = useAppContext('project');

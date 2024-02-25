@@ -11,7 +11,15 @@ FactoryBot.define do
   end
 
   factory :document do
+    body_type { 'empty' }
+    body { body_type == 'empty' ? '' : '[{"type":"paragraph","children":[{"text":""}]}]' }
     project
+  end
+
+  factory :snapshot do
+    name { 'My snapshot' }
+    body { '[{"type":"paragraph","children":[{"text":""}]}' }
+    document { build(:document, body_type: 'json/slate') }
   end
 
   factory :tag do

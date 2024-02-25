@@ -1,58 +1,57 @@
 import React, { memo, useCallback, useRef } from 'react';
-import { Plate, PlateContent, PlateEditor, Value } from '@udecode/plate';
+import {
+  Plate,
+  PlateContent,
+  PlateEditor,
+  PlatePlugin,
+  Value,
+} from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
 import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
 import { useLinkModalProvider } from '~/lib/editor/links';
-import { usePlugins } from '~/lib/editor/plugins';
-import { saveSelection } from '~/lib/editor/restoreSelection';
 import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
-import { useInitialValue } from '~/lib/editor/useInitialValue';
 import {
   useEditorFontSize,
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { Document } from '~/lib/types';
 
 export interface EditorBodyProps {
-  editor: PlateEditor | null;
-  setEditor: (editor: PlateEditor | null) => void;
-  initialDocument: Document;
-  isReadOnly: boolean;
-  onBodyChange: () => void;
-  onDoubleClick: () => void;
+  setEditor?: (editor: PlateEditor | null) => void;
+  initialValue: Value;
+  plugins: PlatePlugin[];
+  isReadOnly?: boolean;
+  showFormattingToolbar?: boolean;
+  className?: string;
+  onBodyChange?: () => void;
+  onSelectionChange?: () => void;
+  onDoubleClick?: () => void;
 }
 
 export const EditorBody = memo(
   ({
-    editor,
     setEditor,
-    initialDocument,
-    isReadOnly,
+    initialValue,
+    plugins,
+    isReadOnly = false,
+    showFormattingToolbar = true,
+    className,
     onBodyChange,
+    onSelectionChange,
     onDoubleClick,
   }: EditorBodyProps) => {
-    const documentId = initialDocument.id;
-
-    const plugins = usePlugins();
-
-    const initialValue = useInitialValue({
-      initialDocument,
-      plugins,
-    });
-
     const lastValue = useRef<Value>(initialValue);
 
     const handleChange = useCallback(
       (value: Value) => {
-        if (editor) saveSelection(documentId, editor);
+        onSelectionChange?.();
 
         // Update the body if the value has changed
         if (value === lastValue.current) return;
-        onBodyChange();
+        onBodyChange?.();
         lastValue.current = value;
       },
-      [documentId, editor, onBodyChange]
+      [onSelectionChange, onBodyChange]
     );
 
     const editorStyle = useAppContext('editorStyle');
@@ -76,7 +75,7 @@ export const EditorBody = memo(
       >
         <PlateContent
           className={groupedClassNames({
-            sizing: 'grow max-w-none children:lg:narrow',
+            className,
             spacing: 'em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
@@ -100,7 +99,7 @@ export const EditorBody = memo(
           onDoubleClick={onDoubleClick}
         />
 
-        {formattingToolbar}
+        {showFormattingToolbar && formattingToolbar}
 
         <SlatePlaywrightEffects />
       </Plate>

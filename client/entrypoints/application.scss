@@ -112,9 +112,13 @@ body {
     @apply overflow-x-auto overflow-wrap-normal;
   }
 
-  .narrow {
-    @apply mr-auto w-full;
+  .w-narrow {
+    @apply w-full;
     max-width: var(--narrow-width, 640px);
+  }
+
+  .narrow {
+    @apply mr-auto w-narrow;
     margin-left: var(--narrow-margin-left, auto);
   }
 

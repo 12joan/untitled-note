@@ -1,7 +1,7 @@
 import React from 'react';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { dropdownItemClassNames } from '~/components/Dropdown';
 import { TimeAgo } from '~/components/TimeAgo';
-import { dropdownItemClassNames } from './Dropdown';
 
 export interface DocumentStatusHeaderProps {
   isDirty: boolean;

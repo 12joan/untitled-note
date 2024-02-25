@@ -103,10 +103,23 @@ const Toast = ({
   const resolvedMessage =
     typeof message === 'function' ? message() : <p>{message}</p>;
 
+  const buttonElement = button && (
+    <button
+      type="button"
+      className="btn btn-rect btn-modal-secondary text-sm max-w-48"
+      onClick={() => {
+        button.onClick();
+        close();
+      }}
+    >
+      {button.label}
+    </button>
+  );
+
   return (
     <div
       ref={ref}
-      className="pointer-events-auto bg-plain-100/75 backdrop-blur shadow-dialog rounded-2xl dark:bg-plain-800/75 flex gap-8 p-4 items-start max-w-full transition-[margin,transform]"
+      className="pointer-events-auto bg-plain-100/75 backdrop-blur shadow-dialog rounded-2xl dark:bg-plain-800/75 flex gap-8 p-4 items-start max-w-full transition-[margin,transform] w-[30rem]"
       style={{
         position: toastHeight > 0 ? undefined : 'absolute',
         transitionProperty:
@@ -117,33 +130,26 @@ const Toast = ({
       aria-live={ariaLive}
       aria-hidden="false"
     >
-      <div className="shrink-1 w-96 space-y-1 select-none">
-        <strong className="font-medium">{title}</strong>
+      <div className="grow shrink-1 space-y-1 select-none">
+        <strong className="font-medium text-lg">{title}</strong>
 
-        <div className="space-y-1 text-sm">{resolvedMessage}</div>
+        <div className="space-y-1">{resolvedMessage}</div>
 
-        {button && (
-          <button
-            type="button"
-            className="btn btn-link font-medium"
-            onClick={() => {
-              button.onClick();
-              close();
-            }}
-          >
-            {button.label}
-          </button>
-        )}
+        <div className="xs:hidden">{buttonElement}</div>
       </div>
 
-      <button
-        type="button"
-        className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-plain-200/75 dark:hover:bg-plain-700/75 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400"
-        onClick={close}
-        aria-label="Close"
-      >
-        <LargeCloseIcon size="1.25em" noAriaLabel />
-      </button>
+      <div className="flex flex-col items-end gap-2 shrink-0">
+        <button
+          type="button"
+          className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-plain-200/75 dark:hover:bg-plain-700/75 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400"
+          onClick={close}
+          aria-label="Close"
+        >
+          <LargeCloseIcon size="1.25em" noAriaLabel />
+        </button>
+
+        <div className="max-xs:hidden">{buttonElement}</div>
+      </div>
     </div>
   );
 };

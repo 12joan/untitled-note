@@ -31,8 +31,9 @@ class DocumentsAPI < ApplicationAPI
   end
 
   def show
-    set_project
-
-    @project.documents.find(params[:id]).query(params[:query])
+    set_document { params[:id] }
+    @document.query(params[:query])
+  rescue
+    nil
   end
 end

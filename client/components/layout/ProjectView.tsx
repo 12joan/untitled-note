@@ -34,6 +34,7 @@ import { OverviewView } from '~/components/layout/OverviewView';
 import { ProjectsBar } from '~/components/layout/ProjectsBar';
 import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
 import { Sidebar } from '~/components/layout/Sidebar';
+import { SnapshotsView } from '~/components/layout/SnapshotsView';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
 import { TopBar } from '~/components/layout/TopBar';
 
@@ -143,6 +144,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       showTag: TagDocumentsView,
       allTags: AllTagsView,
       editor: EditorView,
+      snapshots: SnapshotsView,
     } as Record<string, ComponentType<any>>
   )[childView.type];
 

@@ -1,23 +1,5 @@
-import React, { ElementType, useMemo } from 'react';
+import React, { ElementType } from 'react';
 import {
-  createAutoformatPlugin,
-  createBlockquotePlugin,
-  createBoldPlugin,
-  createCodeBlockPlugin,
-  createCodePlugin,
-  createExitBreakPlugin,
-  createHeadingPlugin,
-  createItalicPlugin,
-  createLinkPlugin,
-  createListPlugin,
-  createMentionPlugin,
-  createParagraphPlugin,
-  createPlugins,
-  createResetNodePlugin,
-  createSoftBreakPlugin,
-  createStrikethroughPlugin,
-  createTabbablePlugin,
-  createTrailingBlockPlugin,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
@@ -34,28 +16,11 @@ import {
   MARK_STRIKETHROUGH,
   PlateRenderElementProps,
 } from '@udecode/plate';
-// import { createTabbablePlugin } from './tabbable';
-import {
-  Attachment,
-  ELEMENT_ATTACHMENT,
-  useAttachmentPlugins,
-} from '~/lib/editor/attachments';
-import { autoformatOptions } from '~/lib/editor/autoformat';
-import { codeBlockOptions } from '~/lib/editor/codeBlock';
-import { exitBreakOptions } from '~/lib/editor/exitBreak';
-import { useImperativeEventsPlugins } from '~/lib/editor/imperativeEvents';
+import { twMerge } from 'tailwind-merge';
+import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
 import { LinkComponent } from '~/lib/editor/links';
-import {
-  MentionComponent,
-  MentionInputComponent,
-  mentionOptions,
-} from '~/lib/editor/mentions';
-import { resetNodeOptions } from '~/lib/editor/resetNode';
-import { softBreakOptions } from '~/lib/editor/softBreak';
-import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
-import { tabbableOptions } from '~/lib/editor/tabbable';
+import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
 import { groupedClassNames } from '../groupedClassNames';
-import { createSelectionToolbarPlugin } from './selectionToolbar';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>
@@ -64,7 +29,7 @@ const makeElementComponent =
       <Component
         {...nodeProps}
         {...attributes}
-        className={className}
+        className={twMerge(className, nodeProps.className)}
         children={children}
       />
     );
@@ -73,7 +38,7 @@ const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
 const codeStyle = 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm';
 
-const components = {
+export const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent(
     'p',
     groupedClassNames({
@@ -142,55 +107,4 @@ const components = {
   [ELEMENT_MENTION]: MentionComponent,
   [ELEMENT_MENTION_INPUT]: MentionInputComponent,
   [ELEMENT_ATTACHMENT]: Attachment,
-};
-
-export const usePlugins = () => {
-  /**
-   * It's important that the plugins are memoized, otherwise the editor will
-   * re-render at inopportune moments. This causes bugs such as selection
-   * jumping when blurring the find dialog.
-   *
-   * Known plugin order dependencies:
-   * - Imperative events before blockquote
-   */
-
-  const imperativeEventsPlugins = useImperativeEventsPlugins();
-
-  const staticPlugins = useMemo(
-    () => [
-      createParagraphPlugin(),
-      createBoldPlugin(),
-      createItalicPlugin(),
-      createStrikethroughPlugin(),
-      createCodePlugin(),
-      createLinkPlugin(),
-      createHeadingPlugin({ options: { levels: 1 } }),
-      createBlockquotePlugin(),
-      createCodeBlockPlugin(codeBlockOptions),
-      createListPlugin(),
-      createMentionPlugin(mentionOptions),
-      createSoftBreakPlugin(softBreakOptions),
-      createResetNodePlugin(resetNodeOptions),
-      createExitBreakPlugin(exitBreakOptions),
-      createTabbablePlugin(tabbableOptions),
-      createTrailingBlockPlugin(),
-      createAutoformatPlugin(autoformatOptions),
-      createSplitInsertedDataIntoParagraphsPlugin(),
-      createSelectionToolbarPlugin(),
-    ],
-    []
-  );
-
-  const attachmentPlugins = useAttachmentPlugins();
-
-  return useMemo(
-    () =>
-      createPlugins(
-        [...imperativeEventsPlugins, ...staticPlugins, ...attachmentPlugins],
-        {
-          components,
-        }
-      ),
-    [imperativeEventsPlugins, staticPlugins, attachmentPlugins]
-  );
 };

@@ -11,13 +11,18 @@ import {
   handleDeleteDocumentError,
   handleUpdateDocumentError,
 } from '~/lib/handleErrors';
-import { DocumentLink, documentPath } from '~/lib/routes';
+import {
+  DocumentLink,
+  documentPath,
+  DocumentVersionHistoryLink,
+} from '~/lib/routes';
 import {
   toggleDocumentLocked,
   toggleDocumentPinned,
 } from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
 import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
+import { useNewSnapshotModal } from '~/lib/useNewSnapshotModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
 import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
@@ -28,6 +33,8 @@ import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
+import NewSnapshotIcon from './icons/NewSnapshotIcon';
+import VersionHistoryIcon from './icons/VersionHistoryIcon';
 
 export interface DocumentMenuProps {
   isEditor?: boolean;
@@ -64,6 +71,13 @@ export const DocumentMenu = ({
   const isPinned = doc.pinned_at !== null;
   const togglePinned = () =>
     updateDocument(toggleDocumentPinned(doc, { invalidateEditor }));
+
+  const versionHistoryAvailable = doc.body_type === 'json/slate';
+
+  const { modal: newSnapshotModal, open: openNewSnapshotModal } =
+    useNewSnapshotModal({
+      documentId: doc.id,
+    });
 
   const isLocked = doc.locked_at !== null;
   const toggleLocked = () =>
@@ -105,6 +119,22 @@ export const DocumentMenu = ({
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
 
+      {versionHistoryAvailable && (
+        <>
+          <DropdownItem
+            icon={VersionHistoryIcon}
+            as={DocumentVersionHistoryLink}
+            to={{ documentId: doc.id }}
+          >
+            Version history
+          </DropdownItem>
+
+          <DropdownItem icon={NewSnapshotIcon} onClick={openNewSnapshotModal}>
+            New snapshot
+          </DropdownItem>
+        </>
+      )}
+
       {openFind && (
         <DropdownItem icon={SearchIcon} onClick={openFind}>
           Find in document
@@ -137,6 +167,7 @@ export const DocumentMenu = ({
 
       {replaceModal}
       {exportModal}
+      {newSnapshotModal}
     </>
   );
 };
