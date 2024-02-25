@@ -19,10 +19,9 @@ export const useNewSnapshotModal = ({
   const projectId = useAppContext('projectId');
   const navigate = useNavigate();
 
-  const [initialName] = useState(() => {
-    const date = new Date();
-    return `Snapshot ${date.toLocaleString()}`;
-  });
+  const [inputPlaceholder] = useState(
+    () => `Snapshot ${new Date().toLocaleString()}`
+  );
 
   const handleSubmit = (name: string) => {
     const createPromise = createSnapshot(projectId, documentId, { name });
@@ -45,10 +44,9 @@ export const useNewSnapshotModal = ({
 
   return useInputModal({
     title: 'New snapshot',
-    inputLabel: 'Snapshot name',
-    inputPlaceholder: initialName,
-    initialValue: initialName,
-    normalizeInput: (name) => name.trim() || initialName,
+    inputLabel: 'Snapshot name (optional)',
+    inputPlaceholder,
+    required: false,
     autoSelect: true,
     confirmLabel: 'Create snapshot',
     onConfirm: handleSubmit,
