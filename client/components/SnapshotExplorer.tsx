@@ -1,9 +1,10 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 import { Value } from '@udecode/plate';
 import { AppContextProvider } from '~/lib/appContext';
+import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
+import { DiffViewer } from '~/lib/editor/diffViewer';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { Document, Snapshot } from '~/lib/types';
-import { DiffViewer } from '~/components/DiffViewer';
 import { RadioCard, RadioCardGroup } from './RadioCardGroup';
 
 export interface SnapshotExplorerProps {
@@ -20,8 +21,7 @@ export const SnapshotExplorer = ({
     [snapshots]
   );
 
-  const [unsafeViewingSnapshotIndex, setViewingSnapshotIndex] =
-    React.useState(0);
+  const [unsafeViewingSnapshotIndex, setViewingSnapshotIndex] = useState(0);
   const viewingSnapshotIndex = Math.min(
     unsafeViewingSnapshotIndex,
     snapshotsAndCurrent.length - 1
@@ -49,32 +49,54 @@ export const SnapshotExplorer = ({
 
   const editorStyle = useEditorStyle(doc);
 
+  const showDiff = useLocalStorage('showDiff', true);
+  const setShowDiff = (showDiff: boolean) =>
+    setLocalStorage('showDiff', showDiff);
+
   return (
-    <div className="flex gap-5 max-xl:flex-col">
-      <div className="w-full xl:max-w-xs shrink-0">
-        <RadioCardGroup>
-          {snapshotsAndCurrent.map((snapshot, index) => (
-            <RadioCard
-              key={snapshotKey(snapshot)}
-              name="snapshot"
-              checked={index === viewingSnapshotIndex}
-              onCheck={() => setViewingSnapshotIndex(index)}
-            >
-              {snapshotName(snapshot)}
-            </RadioCard>
-          ))}
-        </RadioCardGroup>
+    <>
+      <div className="mb-5">
+        <label className="flex gap-2 items-start">
+          <input
+            type="checkbox"
+            className="ring-offset-plain-100 dark:ring-offset-plain-800"
+            checked={showDiff}
+            onChange={(e) => setShowDiff(e.target.checked)}
+          />
+
+          <span className="select-none">
+            Highlight changes since the previous snapshot
+          </span>
+        </label>
       </div>
 
-      <div className="xl:w-narrow border rounded-lg p-5 overflow-x-hidden">
-        <AppContextProvider documentId={doc.id} editorStyle={editorStyle}>
-          <DiffViewer
-            previous={previousSnapshotBody}
-            current={viewingSnapshotBody}
-          />
-        </AppContextProvider>
+      <div className="grow flex gap-5 max-xl:flex-col">
+        <div className="w-full xl:max-w-xs shrink-0">
+          <RadioCardGroup>
+            {snapshotsAndCurrent.map((snapshot, index) => (
+              <RadioCard
+                key={snapshotKey(snapshot)}
+                name="snapshot"
+                checked={index === viewingSnapshotIndex}
+                onCheck={() => setViewingSnapshotIndex(index)}
+              >
+                {snapshotName(snapshot)}
+              </RadioCard>
+            ))}
+          </RadioCardGroup>
+        </div>
+
+        <div className="xl:w-narrow border rounded-lg p-5 overflow-x-hidden">
+          <AppContextProvider documentId={doc.id} editorStyle={editorStyle}>
+            <DiffViewer
+              previous={previousSnapshotBody}
+              current={viewingSnapshotBody}
+              showDiff={showDiff}
+            />
+          </AppContextProvider>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
