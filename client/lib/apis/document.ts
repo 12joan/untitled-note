@@ -66,6 +66,7 @@ export const streamDocuments = (
         safe_title: true,
         preview: true,
         blank: true,
+        body_type: true,
         updated_by: true,
         updated_at: true,
         pinned_at: true,

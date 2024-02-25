@@ -54,6 +54,7 @@ export type PartialDocument = Pick<
   | 'safe_title'
   | 'preview'
   | 'blank'
+  | 'body_type'
   | 'updated_by'
   | 'updated_at'
   | 'pinned_at'

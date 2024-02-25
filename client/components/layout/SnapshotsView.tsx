@@ -12,6 +12,7 @@ import {
   SnapshotExplorer,
   SnapshotExplorerProps,
 } from '~/components/SnapshotExplorer';
+import {useTitle} from '~/lib/useTitle';
 
 export interface SnapshotsViewProps {
   documentId: number;
@@ -24,6 +25,13 @@ export const SnapshotsView = memo(({ documentId }: SnapshotsViewProps) => {
       cacheKey: `document-${documentId}`,
     },
     [documentId]
+  );
+
+  useTitle(
+    unwrapFuture(futureDocument, {
+      pending: 'Version history',
+      resolved: (doc) => doc ? `Version history for ${doc.safe_title}` : 'Version history',
+    })
   );
 
   const futureSnapshots = useStream<Snapshot[]>(
@@ -59,9 +67,9 @@ export const SnapshotsView = memo(({ documentId }: SnapshotsViewProps) => {
   if (isNonJson) {
     return (
       <div className="space-y-3">
-        <h1 className="h1">Snapshots not available</h1>
+        <h1 className="h1">Version history not available</h1>
         <p className="text-lg font-light">
-          Snapshots are not available for this document.
+          Version history is not available for this document.
         </p>
         <p>
           <DocumentLink to={{ documentId }} className="btn btn-link">
@@ -92,7 +100,7 @@ export const SnapshotsView = memo(({ documentId }: SnapshotsViewProps) => {
       </DocumentLink>
 
       <h1 className="mb-5 h1">
-        Snapshots for{' '}
+        Version history for{' '}
         {unwrapFuture(futureDocument, {
           pending: <InlinePlaceholder />,
           resolved: (doc) => <>{doc!.safe_title}</>,

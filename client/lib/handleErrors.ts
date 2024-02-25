@@ -90,6 +90,13 @@ export const handleDeleteDocumentError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
+export const handleCreateSnapshotError = handleErrors(() => ({
+  title: 'Failed to create snapshot',
+  message:
+    'An error occurred while creating the snapshot. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
 export const handleRenameTagError = handleErrors((error) => {
   if (error.response?.status === 422) {
     return {
