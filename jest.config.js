@@ -3,4 +3,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/client/e2e'],
+  moduleNameMapper: {
+    '^~/(.*)$': '<rootDir>/client/$1',
+  },
 };
