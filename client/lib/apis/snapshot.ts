@@ -18,6 +18,32 @@ export const createSnapshot = (
     },
   }).then((response) => response.json()) as Promise<Snapshot>;
 
+export const updateSnapshot = (
+  projectId: number,
+  documentId: number,
+  id: number,
+  { name }: { name: string }
+) =>
+  fetchAPIEndpoint({
+    method: 'PUT',
+    path: `/api/v1/projects/${projectId}/documents/${documentId}/snapshots/${id}`,
+    data: {
+      snapshot: {
+        name,
+      },
+    },
+  }).then((response) => response.json()) as Promise<Snapshot>;
+
+export const deleteSnapshot = (
+  projectId: number,
+  documentId: number,
+  id: number
+) =>
+  fetchAPIEndpoint({
+    method: 'DELETE',
+    path: `/api/v1/projects/${projectId}/documents/${documentId}/snapshots/${id}`,
+  });
+
 export const streamSnapshots = (
   documentId: number,
   callback: (snapshots: Snapshot[]) => void

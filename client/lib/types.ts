@@ -15,7 +15,7 @@ export type Project = {
 export type Tag = {
   id: number;
   text: string;
-  project_id: number;
+  project_id: Project['id'];
   documents_count: number;
   created_at: string;
   updated_at: string;
@@ -92,6 +92,7 @@ export type Snapshot = {
   name: string;
   manual: boolean;
   body: string;
+  document_id: Document['id'];
   created_at: string;
   updated_at: string;
 };

@@ -16,25 +16,25 @@ import {
   documentPath,
   DocumentVersionHistoryLink,
 } from '~/lib/routes';
+import { useNewSnapshotModal } from '~/lib/snapshotModals';
 import {
   toggleDocumentLocked,
   toggleDocumentPinned,
 } from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
 import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
-import { useNewSnapshotModal } from '~/lib/useNewSnapshotModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
 import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
 import LockIcon from '~/components/icons/LockIcon';
+import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
-import NewSnapshotIcon from './icons/NewSnapshotIcon';
-import VersionHistoryIcon from './icons/VersionHistoryIcon';
+import VersionHistoryIcon from '~/components/icons/VersionHistoryIcon';
 
 export interface DocumentMenuProps {
   isEditor?: boolean;
@@ -157,11 +157,7 @@ export const DocumentMenu = ({
         {isLocked ? 'Unlock' : 'Lock'} document
       </DropdownItem>
 
-      <DropdownItem
-        icon={DeleteIcon}
-        className="children:text-red-500 dark:children:text-red-400"
-        onClick={deleteDocument}
-      >
+      <DropdownItem icon={DeleteIcon} variant="danger" onClick={deleteDocument}>
         Delete document
       </DropdownItem>
 

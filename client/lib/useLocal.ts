@@ -1,6 +1,6 @@
-import { retry } from './retry';
-import { useIsMounted } from './useIsMounted';
-import { useOverrideable } from './useOverrideable';
+import { retry } from '~/lib/retry';
+import { useIsMounted } from '~/lib/useIsMounted';
+import { useOverrideable } from '~/lib/useOverrideable';
 
 export interface UseLocalOptions<T extends { id: unknown }> {
   update: (id: T['id'], params: Partial<T>) => Promise<unknown>;

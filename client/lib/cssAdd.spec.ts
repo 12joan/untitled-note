@@ -1,4 +1,4 @@
-import { cssAdd } from './cssAdd';
+import { cssAdd } from '~/lib/cssAdd';
 
 describe('cssAdd', () => {
   describe('with 1 argument', () => {

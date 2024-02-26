@@ -129,11 +129,7 @@ const FileEntry = ({
         Download file
       </DropdownItem>
 
-      <DropdownItem
-        icon={DeleteIcon}
-        className="children:text-red-500 dark:children:text-red-400"
-        onClick={performDelete}
-      >
+      <DropdownItem icon={DeleteIcon} variant="danger" onClick={performDelete}>
         Delete file
       </DropdownItem>
     </>

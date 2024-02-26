@@ -1,6 +1,6 @@
 import { MutableRefObject, RefCallback } from 'react';
 
-type Ref<T> = RefCallback<T> | MutableRefObject<T>;
+export type Ref<T> = RefCallback<T> | MutableRefObject<T>;
 
 export const mergeRefs =
   <T>(upstreamRefs: (Ref<T> | undefined)[]) =>
@@ -23,3 +23,11 @@ export const mapRef =
       upstreamRef.current = map(original);
     }
   };
+
+export const setRef = <T>(ref: Ref<T>, value: T) => {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+};
