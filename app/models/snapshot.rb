@@ -12,6 +12,6 @@ class Snapshot < ApplicationRecord
 
   validates_with SnapshotDocumentValidator
 
-  include Queryable.permit(*%i[id name manual body created_at updated_at])
+  include Queryable.permit(*%i[id name manual body document_id created_at updated_at])
   include Listenable
 end

@@ -8,11 +8,11 @@ import { DocumentStatusHeader } from '~/components/DocumentStatusHeader';
 import { Dropdown } from '~/components/Dropdown';
 import { EditorTags } from '~/components/EditorTags';
 import { EditorTitle } from '~/components/EditorTitle';
+import LockIcon from '~/components/icons/LockIcon';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
+import UnlockIcon from '~/components/icons/UnlockIcon';
 import { Tooltip } from '~/components/Tooltip';
-import LockIcon from './icons/LockIcon';
-import UnlockIcon from './icons/UnlockIcon';
 
 export interface EditorHeaderProps {
   editor: PlateEditor | null;

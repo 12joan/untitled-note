@@ -17,13 +17,13 @@ import { documentPath, projectPath, tagPath } from '~/lib/routes';
 import { DocumentSearchResult } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useModal } from '~/lib/useModal';
+import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 import DocumentIcon from '~/components/icons/DocumentIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
 import TagIcon from '~/components/icons/TagIcon';
 import { StyledModal, StyledModalProps } from '~/components/Modal';
 import { ProjectIcon } from '~/components/ProjectIcon';
-import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 type Suggestion = {
   key: string;

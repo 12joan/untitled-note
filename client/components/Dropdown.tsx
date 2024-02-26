@@ -120,6 +120,7 @@ export type DropdownItemProps<C extends ElementType> = PolyProps<
   C,
   {
     icon?: ElementType<IconProps>;
+    variant?: 'default' | 'danger';
     className?: GroupedClassNames;
     onClick?: (event: MouseEvent) => void;
     children: ReactNode;
@@ -129,6 +130,7 @@ export type DropdownItemProps<C extends ElementType> = PolyProps<
 export const DropdownItem = <C extends ElementType = 'button'>({
   as,
   icon: Icon,
+  variant = 'default',
   className,
   onClick = () => {},
   children,
@@ -150,12 +152,31 @@ export const DropdownItem = <C extends ElementType = 'button'>({
       {...otherProps}
     >
       {Icon && (
-        <span className="text-primary-500 dark:text-primary-400 window-inactive:text-plain-500 dark:window-inactive:text-plain-400">
+        <span
+          className={groupedClassNames({
+            variant: {
+              default: 'text-primary-500 dark:text-primary-400',
+              danger: 'text-red-500 dark:text-red-400',
+            }[variant],
+            inactive:
+              'window-inactive:text-plain-500 dark:window-inactive:text-plain-400',
+          })}
+        >
           <Icon size="1.25em" noAriaLabel />
         </span>
       )}
 
-      <span className="mr-2">{children}</span>
+      <span
+        className={groupedClassNames({
+          base: 'mr-2',
+          variant: {
+            default: '',
+            danger: 'text-red-500 dark:text-red-400',
+          }[variant],
+        })}
+      >
+        {children}
+      </span>
     </Component>
   );
 };

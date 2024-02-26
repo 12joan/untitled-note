@@ -1,7 +1,7 @@
-import { updateProject } from './apis/project';
-import { useAppContext } from './appContext';
-import { handleUpdateProjectError } from './handleErrors';
-import { useLocal } from './useLocal';
+import { updateProject } from '~/lib/apis/project';
+import { useAppContext } from '~/lib/appContext';
+import { handleUpdateProjectError } from '~/lib/handleErrors';
+import { useLocal } from '~/lib/useLocal';
 
 export const useLocalProject = () => {
   const project = useAppContext('project');
