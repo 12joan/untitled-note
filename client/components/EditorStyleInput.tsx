@@ -42,14 +42,13 @@ export const EditorStyleInput = <Nullable extends boolean>({
 
   return (
     <>
-      <RadioCardGroup className="md:grid-cols-3">
+      <RadioCardGroup
+        className="md:grid-cols-3"
+        value={value}
+        onValueChange={onChange}
+      >
         {options.map((option) => (
-          <RadioCard
-            key={option}
-            name="editor-style"
-            checked={option === value}
-            onCheck={() => onChange(option)}
-          >
+          <RadioCard key={option} value={option}>
             {labels[option ?? 'null']}
           </RadioCard>
         ))}

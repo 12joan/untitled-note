@@ -1,11 +1,20 @@
-import React, { useLayoutEffect, useMemo, useState } from 'react';
+import React, {
+  FocusEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Value } from '@udecode/plate';
 import { AppContextProvider } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { DiffViewer } from '~/lib/editor/diffViewer';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { Document, Snapshot } from '~/lib/types';
-import { RadioCard, RadioCardGroup } from './RadioCardGroup';
+import { Dropdown, DropdownItem } from '~/components/Dropdown';
+import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
+import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
+import { TippyInstance } from './Tippy';
 
 export interface SnapshotExplorerProps {
   document: Document;
@@ -71,17 +80,19 @@ export const SnapshotExplorer = ({
       </div>
 
       <div className="grow flex gap-5 max-xl:flex-col">
-        <div className="w-full xl:max-w-xs shrink-0">
-          <RadioCardGroup>
+        <div className="w-full xl:max-w-sm shrink-0">
+          <RadioCardGroup
+            value={viewingSnapshotIndex}
+            onValueChange={setViewingSnapshotIndex}
+          >
             {snapshotsAndCurrent.map((snapshot, index) => (
-              <RadioCard
-                key={snapshotKey(snapshot)}
-                name="snapshot"
-                checked={index === viewingSnapshotIndex}
-                onCheck={() => setViewingSnapshotIndex(index)}
-              >
-                {snapshotName(snapshot)}
-              </RadioCard>
+              <SnapshotRadioCard
+                key={
+                  snapshot === 'current' ? 'current' : snapshot.id.toString()
+                }
+                snapshot={snapshot}
+                index={index}
+              />
             ))}
           </RadioCardGroup>
         </div>
@@ -100,11 +111,72 @@ export const SnapshotExplorer = ({
   );
 };
 
-const snapshotKey = (snapshot: Snapshot | 'current'): string =>
-  snapshot === 'current' ? 'current' : snapshot.id.toString();
+interface SnapshotRadioCardProps {
+  snapshot: Snapshot | 'current';
+  index: number;
+}
 
-const snapshotName = (snapshot: Snapshot | 'current'): string =>
-  snapshot === 'current'
-    ? 'Current version'
-    : snapshot.name ||
-      `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;
+const SnapshotRadioCard = ({ snapshot, index }: SnapshotRadioCardProps) => {
+  const afterRef = useRef<HTMLButtonElement>(null);
+  const dropdownMenuContainer = useRef<HTMLDivElement>(null);
+  const tippyRef = useRef<TippyInstance>(null);
+
+  const snapshotName =
+    snapshot === 'current'
+      ? 'Current version'
+      : snapshot.name ||
+        `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;
+
+  const handleBlur = (event: FocusEvent<HTMLElement>) => {
+    const target = event.relatedTarget as Node;
+
+    const targetOutsideScope = [afterRef, dropdownMenuContainer].every(
+      (ref) => !ref.current!.contains(target)
+    );
+
+    if (targetOutsideScope) {
+      tippyRef.current?.hide();
+    }
+  };
+
+  const after = ({ checked }: { checked: boolean }) => (
+    <button
+      ref={afterRef}
+      type="button"
+      className="btn aspect-square p-2"
+      tabIndex={checked ? 0 : -1}
+      aria-label="Snapshot menu"
+      onBlur={handleBlur}
+    >
+      <OverflowMenuIcon noAriaLabel />
+    </button>
+  );
+
+  return (
+    <>
+      <RadioCard value={index} after={after}>
+        {snapshotName}
+      </RadioCard>
+
+      <Dropdown
+        tippyRef={tippyRef}
+        reference={afterRef}
+        items={
+          <div className="contents" onBlur={handleBlur}>
+            <DropdownItem>One</DropdownItem>
+            <DropdownItem>Two</DropdownItem>
+            <DropdownItem>Three</DropdownItem>
+            <DropdownItem>Four</DropdownItem>
+            <DropdownItem>Five</DropdownItem>
+            <DropdownItem>Six</DropdownItem>
+          </div>
+        }
+        appendTo={dropdownMenuContainer.current!}
+        placement="bottom-start"
+        closeOnFocusOut={false}
+      />
+
+      <div ref={dropdownMenuContainer} />
+    </>
+  );
+};

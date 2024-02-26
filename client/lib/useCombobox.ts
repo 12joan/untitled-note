@@ -8,8 +8,7 @@ import {
   useState,
 } from 'react';
 import { keyWithModifiers } from '~/lib/keyWithModifiers';
-
-const positiveMod = (a: number, b: number) => ((a % b) + b) % b;
+import { positiveMod } from '~/lib/positiveMod';
 
 export interface UseComboboxOptions<T> {
   query: string;

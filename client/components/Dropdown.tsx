@@ -11,6 +11,7 @@ import { followCursor } from 'tippy.js';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { PolyProps } from '~/lib/polymorphic';
+import { mergeRefs, Ref } from '~/lib/refUtils';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { IconProps } from '~/components/icons/makeIcon';
@@ -55,12 +56,16 @@ export const dropdownItemClassNames: GroupedClassNames = {
 export interface DropdownProps extends Omit<TippyProps, 'className'> {
   items: ReactNode;
   className?: GroupedClassNames;
+  tippyRef?: Ref<TippyInstance | null>;
+  closeOnFocusOut?: boolean;
 }
 
 export const Dropdown = ({
   items,
   popperOptions: propPopperOptions = {},
   className,
+  tippyRef: tippyRefProp,
+  closeOnFocusOut = true,
   ...otherProps
 }: DropdownProps) => {
   const tippyRef = useRef<TippyInstance>(null);
@@ -72,7 +77,9 @@ export const Dropdown = ({
     }
   });
 
-  const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(close);
+  const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(
+    closeOnFocusOut ? close : () => {}
+  );
 
   const popperOptions = useMemo(
     () => ({
@@ -90,7 +97,7 @@ export const Dropdown = ({
     <AppContextProvider closeDropdown={close}>
       <div ref={focusOutRef} {...focusOutProps} className="contents">
         <Tippy
-          ref={tippyRef}
+          ref={mergeRefs([tippyRef, tippyRefProp])}
           render={(attrs) => (
             <div
               className={groupedClassNames(dropdownClassNames, className)}
