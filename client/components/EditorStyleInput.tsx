@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { EditorStyle } from '~/lib/types';
-import { RadioCard, RadioCardGroup } from './RadioCardGroup';
+import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
 
 const descriptions: Record<EditorStyle, string> = {
   casual: 'The casual style is designed for taking notes and casual writing.',
@@ -42,14 +42,13 @@ export const EditorStyleInput = <Nullable extends boolean>({
 
   return (
     <>
-      <RadioCardGroup className="md:grid-cols-3">
+      <RadioCardGroup
+        className="md:grid-cols-3"
+        value={value}
+        onValueChange={onChange}
+      >
         {options.map((option) => (
-          <RadioCard
-            key={option}
-            name="editor-style"
-            checked={option === value}
-            onCheck={() => onChange(option)}
-          >
+          <RadioCard key={option} value={option}>
             {labels[option ?? 'null']}
           </RadioCard>
         ))}

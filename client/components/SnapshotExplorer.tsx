@@ -1,11 +1,30 @@
-import React, { useLayoutEffect, useMemo, useState } from 'react';
+import React, {
+  FocusEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Value } from '@udecode/plate';
-import { AppContextProvider } from '~/lib/appContext';
+import { deleteSnapshot } from '~/lib/apis/snapshot';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { DiffViewer } from '~/lib/editor/diffViewer';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
+import { getSnapshotDefaultName } from '~/lib/getSnapshotDefaultName';
+import { handleDeleteSnapshotError } from '~/lib/handleErrors';
+import {
+  useNewSnapshotModal,
+  useRenameSnapshotModal,
+} from '~/lib/snapshotModals';
 import { Document, Snapshot } from '~/lib/types';
-import { RadioCard, RadioCardGroup } from './RadioCardGroup';
+import { Dropdown, DropdownItem } from '~/components/Dropdown';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import EditIcon from '~/components/icons/EditIcon';
+import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
+import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
+import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
+import { TippyInstance } from '~/components/Tippy';
 
 export interface SnapshotExplorerProps {
   document: Document;
@@ -71,17 +90,20 @@ export const SnapshotExplorer = ({
       </div>
 
       <div className="grow flex gap-5 max-xl:flex-col">
-        <div className="w-full xl:max-w-xs shrink-0">
-          <RadioCardGroup>
+        <div className="w-full xl:max-w-sm shrink-0">
+          <RadioCardGroup
+            value={viewingSnapshotIndex}
+            onValueChange={setViewingSnapshotIndex}
+          >
             {snapshotsAndCurrent.map((snapshot, index) => (
-              <RadioCard
-                key={snapshotKey(snapshot)}
-                name="snapshot"
-                checked={index === viewingSnapshotIndex}
-                onCheck={() => setViewingSnapshotIndex(index)}
-              >
-                {snapshotName(snapshot)}
-              </RadioCard>
+              <SnapshotRadioCard
+                key={
+                  snapshot === 'current' ? 'current' : snapshot.id.toString()
+                }
+                document={doc}
+                snapshot={snapshot}
+                index={index}
+              />
             ))}
           </RadioCardGroup>
         </div>
@@ -100,11 +122,131 @@ export const SnapshotExplorer = ({
   );
 };
 
-const snapshotKey = (snapshot: Snapshot | 'current'): string =>
-  snapshot === 'current' ? 'current' : snapshot.id.toString();
+interface SnapshotRadioCardProps {
+  document: Document;
+  snapshot: Snapshot | 'current';
+  index: number;
+}
 
-const snapshotName = (snapshot: Snapshot | 'current'): string =>
-  snapshot === 'current'
-    ? 'Current version'
-    : snapshot.name ||
-      `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;
+const SnapshotRadioCard = ({
+  document: doc,
+  snapshot,
+  index,
+}: SnapshotRadioCardProps) => {
+  const afterRef = useRef<HTMLButtonElement>(null);
+  const dropdownMenuContainer = useRef<HTMLDivElement>(null);
+  const tippyRef = useRef<TippyInstance>(null);
+
+  const snapshotName =
+    snapshot === 'current'
+      ? 'Current version'
+      : snapshot.name || getSnapshotDefaultName(snapshot);
+
+  const handleBlur = (event: FocusEvent<HTMLElement>) => {
+    const target = event.relatedTarget as Node;
+
+    const targetOutsideScope = [afterRef, dropdownMenuContainer].every(
+      (ref) => !ref.current!.contains(target)
+    );
+
+    if (targetOutsideScope) {
+      tippyRef.current?.hide();
+    }
+  };
+
+  const after = ({ checked }: { checked: boolean }) => (
+    <button
+      ref={afterRef}
+      type="button"
+      className="btn aspect-square p-2"
+      tabIndex={checked ? 0 : -1}
+      aria-label="Snapshot menu"
+      onBlur={handleBlur}
+    >
+      <OverflowMenuIcon noAriaLabel />
+    </button>
+  );
+
+  return (
+    <>
+      <RadioCard value={index} after={after}>
+        {snapshotName}
+      </RadioCard>
+
+      <Dropdown
+        tippyRef={tippyRef}
+        reference={afterRef}
+        items={
+          <div className="contents" onBlur={handleBlur}>
+            {snapshot === 'current' ? (
+              <CurrentVersionMenu document={doc} />
+            ) : (
+              <SnapshotMenu snapshot={snapshot} />
+            )}
+          </div>
+        }
+        appendTo={dropdownMenuContainer.current!}
+        placement="bottom-start"
+        closeOnFocusOut={false}
+      />
+
+      <div ref={dropdownMenuContainer} />
+    </>
+  );
+};
+
+interface CurrentVersionMenuProps {
+  document: Document;
+}
+
+const CurrentVersionMenu = ({ document: doc }: CurrentVersionMenuProps) => {
+  const { modal, open: handleNewSnapshot } = useNewSnapshotModal({
+    documentId: doc.id,
+    showToastOnSuccess: false,
+  });
+
+  return (
+    <>
+      <DropdownItem icon={NewSnapshotIcon} onClick={handleNewSnapshot}>
+        New snapshot
+      </DropdownItem>
+
+      {modal}
+    </>
+  );
+};
+
+interface SnapshotMenuProps {
+  snapshot: Snapshot;
+}
+
+const SnapshotMenu = ({ snapshot }: SnapshotMenuProps) => {
+  const projectId = useAppContext('projectId');
+
+  const { modal, open: handleRenameSnapshot } = useRenameSnapshotModal({
+    snapshot,
+  });
+
+  const handleDeleteSnapshot = () =>
+    handleDeleteSnapshotError(
+      deleteSnapshot(projectId, snapshot.document_id, snapshot.id)
+    );
+
+  return (
+    <>
+      <DropdownItem icon={EditIcon} onClick={handleRenameSnapshot}>
+        Rename snapshot
+      </DropdownItem>
+
+      <DropdownItem
+        icon={DeleteIcon}
+        variant="danger"
+        onClick={handleDeleteSnapshot}
+      >
+        Delete snapshot
+      </DropdownItem>
+
+      {modal}
+    </>
+  );
+};

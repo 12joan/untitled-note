@@ -11,7 +11,7 @@ export const useRenameTag = (tag: Tag) => {
     title: 'Rename tag',
     inputLabel: 'Tag name',
     inputPlaceholder: 'Enter new tag name',
-    confirmLabel: 'Rename',
+    confirmLabel: 'Rename tag',
     initialValue: tag.text,
     autoSelect: true,
     onConfirm: (newText) =>

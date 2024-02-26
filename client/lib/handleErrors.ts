@@ -97,6 +97,20 @@ export const handleCreateSnapshotError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
+export const handleUpdateSnapshotError = handleErrors(() => ({
+  title: 'Failed to update snapshot',
+  message:
+    'An error occurred while deleting the snapshot. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
+export const handleDeleteSnapshotError = handleErrors(() => ({
+  title: 'Failed to delete snapshot',
+  message:
+    'An error occurred while updating the snapshot. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
 export const handleRenameTagError = handleErrors((error) => {
   if (error.response?.status === 422) {
     return {

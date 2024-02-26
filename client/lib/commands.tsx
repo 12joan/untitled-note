@@ -1,5 +1,10 @@
 import React, { ReactElement } from 'react';
 import { useAppContext } from '~/lib/appContext';
+import {
+  decreaseEditorFontSize,
+  increaseEditorFontSize,
+  resetEditorFontSize,
+} from '~/lib/editorFontSize';
 import { envSpecific } from '~/lib/environment';
 import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
@@ -13,18 +18,13 @@ import {
   tagsPath,
 } from '~/lib/routes';
 import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
+import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 import AccountIcon from '~/components/icons/AccountIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OverviewIcon from '~/components/icons/OverviewIcon';
 import RecentIcon from '~/components/icons/RecentIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
-import {
-  decreaseEditorFontSize,
-  increaseEditorFontSize,
-  resetEditorFontSize,
-} from './editorFontSize';
-import { useNavigateOrOpen } from './useNavigateOrOpen';
 
 export type BaseCommand = {
   id: string;

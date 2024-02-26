@@ -6,7 +6,7 @@ import {
   useLayoutEffect,
   useState,
 } from 'react';
-import { useTimeout } from './useTimer';
+import { useTimeout } from '~/lib/useTimer';
 
 export interface UseTemporaryStateOptions {
   resetAfter?: number;
