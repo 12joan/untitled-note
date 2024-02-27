@@ -131,14 +131,14 @@ const Toast = ({
       aria-hidden="false"
     >
       <div className="grow shrink-1 space-y-1 select-none">
-        <strong className="font-medium text-lg">{title}</strong>
+        <strong className="font-medium">{title}</strong>
 
-        <div className="space-y-1">{resolvedMessage}</div>
+        <div className="space-y-1 text-sm">{resolvedMessage}</div>
 
         <div className="xs:hidden">{buttonElement}</div>
       </div>
 
-      <div className="flex flex-col items-end gap-2 shrink-0">
+      <div className="flex flex-col items-end gap-1 shrink-0 -my-2 -mr-2 justify-between">
         <button
           type="button"
           className="btn btn-no-rounded rounded-full p-2 apsect-square hover:bg-plain-200/75 dark:hover:bg-plain-700/75 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400"

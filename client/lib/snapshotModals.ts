@@ -35,10 +35,10 @@ export const useNewSnapshotModal = ({
       if (showToastOnSuccess) {
         createToast({
           title: 'Snapshot created',
-          message: 'The snapshot has been created successfully',
-          autoClose: 'slow',
+          message: 'The current version of the document has been saved.',
+          autoClose: 'fast',
           button: {
-            label: 'Open version history',
+            label: 'Version history',
             onClick: () =>
               navigate(documentVersionHistoryPath({ projectId, documentId })),
           },

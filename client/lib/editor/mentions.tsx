@@ -34,6 +34,7 @@ export const MentionComponent = ({
   attributes,
   children,
   element,
+  nodeProps,
 }: PlateRenderElementProps<Value, TMentionElement>) => {
   const { documentId, fallbackText } = element as any as DocumentMention;
 
@@ -62,40 +63,48 @@ export const MentionComponent = ({
     [selectedAndFocused]
   );
 
-  const className = groupedClassNames({
-    main: 'btn btn-link btn-no-rounded rounded font-medium no-underline',
-    selected: selectedAndFocused && 'focus-ring',
-  });
-
   return (
     <span
       {...attributes}
-      contentEditable={false}
-      /**
-       * Chrome workaround: Ensure that clicking to the right of a mention
-       * selects the following empty text node, not the mention itself. Side
-       * effect: Mention text wraps independently of the rest of the text.
-       */
-      className="inline-block"
-    >
-      {unwrapFuture(futureDocument, {
-        pending: <InlinePlaceholder />,
-        resolved: (doc) => (
-          <DocumentLink
-            ref={linkRef}
-            className={className}
-            to={{ documentId }}
-            children={doc?.safe_title ?? `[Deleted document: ${fallbackText}]`}
-            onClick={(event) => {
-              if (documentId === currentDocumentId) {
-                event.preventDefault();
-              }
-            }}
-          />
-        ),
+      {...nodeProps}
+      className={groupedClassNames({
+        nodeProps: nodeProps?.className,
+        diff: 'no-default-diff-rounded',
       })}
+    >
+      <span contentEditable={false}>
+        {unwrapFuture(futureDocument, {
+          pending: <InlinePlaceholder />,
+          resolved: (doc) => (
+            <DocumentLink
+              ref={linkRef}
+              className={groupedClassNames({
+                main: 'btn btn-link btn-no-rounded rounded font-medium no-underline',
+                selected: selectedAndFocused && 'focus-ring',
+              })}
+              to={{ documentId }}
+              children={
+                doc?.safe_title ?? `[Deleted document: ${fallbackText}]`
+              }
+              onClick={(event) => {
+                if (documentId === currentDocumentId) {
+                  event.preventDefault();
+                }
+              }}
+            />
+          ),
+        })}
+      </span>
 
       {children}
+
+      {/*
+        Chrome workaround: Ensure that clicking to the right of a mention
+        selects the following empty text node, not the mention itself.
+      */}
+      <span style={{ fontSize: 1, visibility: 'hidden' }}>
+        {String.fromCodePoint(160)}
+      </span>
     </span>
   );
 };

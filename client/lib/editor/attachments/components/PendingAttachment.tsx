@@ -5,9 +5,9 @@ import { commonClassNames } from '../commonClassNames';
 import { BaseAttachmentProps } from '../types';
 
 export const PendingAttachment = ({
-  selectedClassNames,
+  className: classNameProp,
 }: BaseAttachmentProps) => {
-  const className = groupedClassNames(commonClassNames, selectedClassNames, {
+  const className = groupedClassNames(commonClassNames, classNameProp, {
     padding: 'p-5',
   });
 

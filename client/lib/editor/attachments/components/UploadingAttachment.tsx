@@ -11,6 +11,7 @@ export const UploadingAttachment = ({
   attributes,
   children,
   element,
+  nodeProps,
 }: AttachmentElementProps) => {
   const { s3FileId, filename } = element;
 
@@ -34,12 +35,14 @@ export const UploadingAttachment = ({
     display: null,
     spacing: 'space-y-2',
     focusRing: isSelected && 'focus-ring',
+    nodeProps: nodeProps?.className,
   });
 
   return (
     <div {...attributes}>
       <div
         contentEditable={false}
+        {...nodeProps}
         className={className}
         data-testid="uploading-attachment"
       >

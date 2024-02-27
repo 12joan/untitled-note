@@ -4,12 +4,13 @@ import { ExtantAttachmentProps } from '../types';
 
 export const ImageAttachment = ({
   s3File,
-  selectedClassNames,
+  className: classNameProp,
 }: ExtantAttachmentProps) => {
-  const className = groupedClassNames(selectedClassNames, {
+  const className = groupedClassNames(classNameProp, {
     rounded: 'rounded-lg',
     margin: 'mx-auto',
     ringOffset: 'ring-offset-2',
+    diff: 'diff:ring-diff-500 diff:ring-2',
   });
 
   const { url, filename } = s3File;

@@ -167,7 +167,7 @@ export const handleUploadFileError = handleErrors(({ reason, data = {} }) => {
       message: `${requiredSpace} is required to complete the upload. You have ${availableSpace} remaining.`,
       autoClose: 'slow',
       button: {
-        label: 'View storage usage',
+        label: 'Storage usage',
         onClick: data.showFileStorage,
       },
     };

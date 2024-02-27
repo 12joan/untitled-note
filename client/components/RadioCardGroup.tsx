@@ -113,7 +113,7 @@ export const RadioCard = <T,>({
   return (
     <div
       className={twMerge(
-        'relative stretch-hover:btn-hover border rounded-lg flex items-center data-active:focus-ring data-active:border-transparent',
+        'relative stretch-hover:btn-hover border rounded-lg flex items-center data-active:focus-ring data-active:border-transparent after:rounded-lg',
         className
       )}
       data-active={checked}

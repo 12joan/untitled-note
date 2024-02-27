@@ -10,7 +10,7 @@ export const useRenameTag = (tag: Tag) => {
   return useInputModal({
     title: 'Rename tag',
     inputLabel: 'Tag name',
-    inputPlaceholder: 'Enter new tag name',
+    inputPlaceholder: 'My tag',
     confirmLabel: 'Rename tag',
     initialValue: tag.text,
     autoSelect: true,

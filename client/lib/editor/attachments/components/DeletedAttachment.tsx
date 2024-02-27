@@ -4,10 +4,9 @@ import { commonClassNames } from '../commonClassNames';
 import { BaseAttachmentProps } from '../types';
 
 export const DeletedAttachment = ({
-  selectedClassNames,
+  className: classNameProp,
 }: BaseAttachmentProps) => {
-  const className = groupedClassNames(commonClassNames, selectedClassNames, {
-    reset: null,
+  const className = groupedClassNames(commonClassNames, classNameProp, {
     color: 'text-plain-500 dark:text-plain-400',
   });
 

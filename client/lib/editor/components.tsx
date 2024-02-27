@@ -36,7 +36,11 @@ const makeElementComponent =
 
 const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
-const codeStyle = 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm';
+
+const codeStyle = groupedClassNames({
+  base: 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm',
+  diff: 'diff-above:bg-diff-900 diff-above:text-diff-300 no-default-diff-text-color',
+});
 
 export const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent(
@@ -76,6 +80,7 @@ export const components = {
         'relative after:absolute after:left-0 after:inset-y-0 after:em:w-1',
       lineColor: 'after:bg-plain-200 after:dark:bg-plain-700',
       lineStyle: 'after:rounded-full',
+      diff: 'diff:after:bg-diff-500 diff:rounded-r-md',
     })
   ),
   [ELEMENT_CODE_BLOCK]: makeElementComponent(
@@ -92,7 +97,7 @@ export const components = {
     groupedClassNames({
       list: listStyle,
       unorderedList:
-        'list-disc marker:text-plain-300 dark:marker:text-plain-600',
+        'list-disc marker:text-plain-300 dark:marker:text-plain-600 marker:diff:text-diff-300 dark:marker:diff:text-diff-600',
     })
   ),
   [ELEMENT_OL]: makeElementComponent(
