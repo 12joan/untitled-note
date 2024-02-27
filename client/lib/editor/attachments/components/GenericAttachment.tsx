@@ -9,9 +9,9 @@ import { ExtantAttachmentProps } from '../types';
 
 export const GenericAttachment = ({
   s3File,
-  selectedClassNames,
+  className: classNameProp,
 }: ExtantAttachmentProps) => {
-  const className = groupedClassNames(commonClassNames, selectedClassNames);
+  const className = groupedClassNames(commonClassNames, classNameProp);
 
   const { filename, content_type: contentType, size, url } = s3File;
 

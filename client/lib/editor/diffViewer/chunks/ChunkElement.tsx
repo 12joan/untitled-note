@@ -1,5 +1,6 @@
 import React from 'react';
 import { PlateRenderElementProps } from '@udecode/plate';
+import { injectNodeProps } from '../../injectNodeProps';
 import { ExpandChunkButton } from './ExpandChunkButton';
 import { ChunkCollapsedProps, ChunkPlugin } from './types';
 
@@ -14,16 +15,7 @@ export const ChunkElement = ({
   const { chunkIndex, blockCount, showExpandButton } =
     element.chunkCollapsed as ChunkCollapsedProps;
 
-  const mappedChildren = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, {
-        nodeProps: {
-          className: 'hidden',
-        },
-      } as any);
-    }
-    return child;
-  });
+  const mappedChildren = injectNodeProps(children, { className: 'hidden' });
 
   return (
     <>

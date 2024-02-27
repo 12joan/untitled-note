@@ -37,6 +37,7 @@ import EditIcon from '~/components/icons/EditIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { TippyInstance } from '~/components/Tippy';
+import { groupedClassNames } from '../groupedClassNames';
 import { useElementSize } from '../useElementSize';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 
@@ -201,6 +202,8 @@ export const LinkComponent = ({
   const findPath = () => findNodePath(editor, element)!;
   const tippyRef = useRef<TippyInstance>(null);
 
+  const { href: unsafeHref = '', ...otherNodeProps } = nodeProps ?? {};
+
   /**
    * For narrow links, use zero open delay so that the link can be used as a
    * crossing-based trigger for the toolbar. For wider links that are
@@ -223,7 +226,6 @@ export const LinkComponent = ({
   }, [controlledOpen]);
 
   const safeHref = useMemo(() => {
-    const unsafeHref = nodeProps!.href;
     const url = new URL(unsafeHref);
 
     // eslint-disable-next-line no-script-url
@@ -232,7 +234,7 @@ export const LinkComponent = ({
     }
 
     return url.href;
-  }, [nodeProps!.href]);
+  }, [unsafeHref]);
 
   const linkProps = {
     href: safeHref,
@@ -327,7 +329,12 @@ export const LinkComponent = ({
         <a
           ref={linkRef}
           {...linkProps}
-          className="btn btn-link font-medium underline"
+          {...otherNodeProps}
+          className={groupedClassNames({
+            nodeProps: otherNodeProps.className,
+            base: 'btn btn-link btn-no-rounded font-medium underline',
+            diff: 'no-default-diff-rounded no-default-diff-text-color',
+          })}
           children={children}
         />
       </FloatingToolbar>

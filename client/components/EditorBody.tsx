@@ -80,13 +80,13 @@ export const EditorBody = memo(
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:
-              'slate-void:em:text-lg slate-string:em:text-lg/[1.555em]',
+              'slate-string:em:text-lg/[1.555em] slate-void:em:text-lg/[inherit]',
             editorStyle: {
               casual: '',
               literary: 'font-serif text-justify style-literary',
             }[editorStyle],
           })}
-          placeholder="Write something..."
+          placeholder={isReadOnly ? undefined : 'Write something...'}
           style={{
             fontSize: cssFontSize,
             /**

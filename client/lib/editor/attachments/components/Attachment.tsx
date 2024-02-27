@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFile } from '~/lib/apis/file';
 import { useGlobalEvent } from '~/lib/globalEvents';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
   failureFutureServiceResult,
   FutureServiceResult,
@@ -49,6 +50,7 @@ const UploadedAttachment = ({
   attributes,
   children,
   element,
+  nodeProps,
 }: AttachmentElementProps) => {
   const { s3FileId } = element;
 
@@ -75,13 +77,14 @@ const UploadedAttachment = ({
   const isSelected = useSelected();
 
   const commonProps: BaseAttachmentProps = {
-    selectedClassNames: {
+    className: groupedClassNames({
       focusRing: isSelected && 'focus-ring',
-    },
+      nodeProps: nodeProps?.className,
+    }),
   };
 
   return (
-    <div {...attributes}>
+    <div {...attributes} {...nodeProps} className="">
       <div contentEditable={false} data-testid="uploaded-attachment">
         {unwrapFutureServiceResult(fsrFetchedData, {
           pending: <PendingAttachment {...commonProps} />,

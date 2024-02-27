@@ -1,5 +1,4 @@
 import { PlateRenderElementProps, TElement, Value } from '@udecode/plate';
-import { GroupedClassNames } from '~/lib/groupedClassNames';
 import { S3File } from '~/lib/types';
 
 export interface AttachmentPlugin {
@@ -19,7 +18,7 @@ export type AttachmentElementProps = PlateRenderElementProps<
 >;
 
 export interface BaseAttachmentProps {
-  selectedClassNames: GroupedClassNames;
+  className?: string;
 }
 
 export interface ExtantAttachmentProps extends BaseAttachmentProps {

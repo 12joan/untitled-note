@@ -36,6 +36,19 @@ module.exports = {
         },
         'page-bg-light': colors.white,
         'page-bg-dark': 'rgb(var(--color-plain-900) / <alpha-value>)',
+        diff: {
+          50: 'rgb(var(--color-diff-50) / <alpha-value>)',
+          100: 'rgb(var(--color-diff-100) / <alpha-value>)',
+          200: 'rgb(var(--color-diff-200) / <alpha-value>)',
+          300: 'rgb(var(--color-diff-300) / <alpha-value>)',
+          400: 'rgb(var(--color-diff-400) / <alpha-value>)',
+          500: 'rgb(var(--color-diff-500) / <alpha-value>)',
+          600: 'rgb(var(--color-diff-600) / <alpha-value>)',
+          700: 'rgb(var(--color-diff-700) / <alpha-value>)',
+          800: 'rgb(var(--color-diff-800) / <alpha-value>)',
+          900: 'rgb(var(--color-diff-900) / <alpha-value>)',
+          950: 'rgb(var(--color-diff-950) / <alpha-value>)',
+        },
       },
       animation: {
         grow: 'grow 1s ease-in-out infinite',
@@ -101,6 +114,21 @@ module.exports = {
       addVariant('slate-top-level', '[data-slate-editor] > &');
 
       addVariant('literary', '.style-literary &');
+
+      addVariant('diff', [
+        '&.diff-insert',
+        '&.diff-delete',
+        '&.diff-update',
+      ]);
+
+      addVariant('diff-above', [
+        '.diff-insert &',
+        '&.diff-insert',
+        '.diff-delete &',
+        '&.diff-delete',
+        '.diff-update &',
+        '&.diff-update',
+      ]);
 
       // https://github.com/tailwindlabs/tailwindcss/discussions/3105#discussioncomment-248885
       addVariant('em', ({ container }) => {
