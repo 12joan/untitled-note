@@ -1,10 +1,4 @@
-import React, {
-  FocusEvent,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Value } from '@udecode/plate';
 import { deleteSnapshot } from '~/lib/apis/snapshot';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
@@ -24,7 +18,6 @@ import EditIcon from '~/components/icons/EditIcon';
 import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
-import { TippyInstance } from '~/components/Tippy';
 
 export interface SnapshotExplorerProps {
   document: Document;
@@ -134,64 +127,41 @@ const SnapshotRadioCard = ({
   index,
 }: SnapshotRadioCardProps) => {
   const afterRef = useRef<HTMLButtonElement>(null);
-  const dropdownMenuContainer = useRef<HTMLDivElement>(null);
-  const tippyRef = useRef<TippyInstance>(null);
 
   const snapshotName =
     snapshot === 'current'
       ? 'Current version'
       : snapshot.name || getSnapshotDefaultName(snapshot);
 
-  const handleBlur = (event: FocusEvent<HTMLElement>) => {
-    const target = event.relatedTarget as Node;
-
-    const targetOutsideScope = [afterRef, dropdownMenuContainer].every(
-      (ref) => !ref.current!.contains(target)
-    );
-
-    if (targetOutsideScope) {
-      tippyRef.current?.hide();
-    }
-  };
-
   const after = ({ checked }: { checked: boolean }) => (
-    <button
-      ref={afterRef}
-      type="button"
-      className="btn aspect-square p-2"
-      tabIndex={checked ? 0 : -1}
-      aria-label="Snapshot menu"
-      onBlur={handleBlur}
+    <Dropdown
+      items={
+        <div className="contents">
+          {snapshot === 'current' ? (
+            <CurrentVersionMenu document={doc} />
+          ) : (
+            <SnapshotMenu snapshot={snapshot} />
+          )}
+        </div>
+      }
+      placement="bottom-start"
     >
-      <OverflowMenuIcon noAriaLabel />
-    </button>
+      <button
+        ref={afterRef}
+        type="button"
+        className="btn aspect-square p-2"
+        tabIndex={checked ? 0 : -1}
+        aria-label="Snapshot menu"
+      >
+        <OverflowMenuIcon noAriaLabel />
+      </button>
+    </Dropdown>
   );
 
   return (
-    <>
-      <RadioCard value={index} after={after}>
-        {snapshotName}
-      </RadioCard>
-
-      <Dropdown
-        tippyRef={tippyRef}
-        reference={afterRef}
-        items={
-          <div className="contents" onBlur={handleBlur}>
-            {snapshot === 'current' ? (
-              <CurrentVersionMenu document={doc} />
-            ) : (
-              <SnapshotMenu snapshot={snapshot} />
-            )}
-          </div>
-        }
-        appendTo={dropdownMenuContainer.current!}
-        placement="bottom-start"
-        closeOnFocusOut={false}
-      />
-
-      <div ref={dropdownMenuContainer} />
-    </>
+    <RadioCard value={index} after={after}>
+      {snapshotName}
+    </RadioCard>
   );
 };
 
