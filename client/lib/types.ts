@@ -92,6 +92,11 @@ export type Snapshot = {
   name: string;
   manual: boolean;
   body: string;
+  before_restore: null | {
+    name: string;
+    created_at: string;
+    is_unrestore: boolean;
+  };
   document_id: Document['id'];
   created_at: string;
   updated_at: string;

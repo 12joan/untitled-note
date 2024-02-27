@@ -104,6 +104,13 @@ export const handleUpdateSnapshotError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
+export const handleRestoreSnapshotError = handleErrors(() => ({
+  title: 'Failed to restore snapshot',
+  message:
+    'An error occurred while restoring the snapshot. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
 export const handleDeleteSnapshotError = handleErrors(() => ({
   title: 'Failed to delete snapshot',
   message:

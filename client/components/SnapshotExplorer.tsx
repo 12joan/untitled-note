@@ -5,11 +5,12 @@ import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { DiffViewer } from '~/lib/editor/diffViewer';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
-import { getSnapshotDefaultName } from '~/lib/getSnapshotDefaultName';
+import { getSnapshotName } from '~/lib/getSnapshotName';
 import { handleDeleteSnapshotError } from '~/lib/handleErrors';
 import {
   useNewSnapshotModal,
   useRenameSnapshotModal,
+  useRestoreSnapshotModal,
 } from '~/lib/snapshotModals';
 import { Document, Snapshot } from '~/lib/types';
 import { Dropdown, DropdownItem } from '~/components/Dropdown';
@@ -17,6 +18,7 @@ import DeleteIcon from '~/components/icons/DeleteIcon';
 import EditIcon from '~/components/icons/EditIcon';
 import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
+import RestoreSnapshotIcon from '~/components/icons/RestoreSnapshotIcon';
 import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
 
 export interface SnapshotExplorerProps {
@@ -129,9 +131,7 @@ const SnapshotRadioCard = ({
   const afterRef = useRef<HTMLButtonElement>(null);
 
   const snapshotName =
-    snapshot === 'current'
-      ? 'Current version'
-      : snapshot.name || getSnapshotDefaultName(snapshot);
+    snapshot === 'current' ? 'Current version' : getSnapshotName(snapshot);
 
   const after = ({ checked }: { checked: boolean }) => (
     <Dropdown
@@ -193,9 +193,15 @@ interface SnapshotMenuProps {
 const SnapshotMenu = ({ snapshot }: SnapshotMenuProps) => {
   const projectId = useAppContext('projectId');
 
-  const { modal, open: handleRenameSnapshot } = useRenameSnapshotModal({
-    snapshot,
-  });
+  const { modal: renameModal, open: handleRenameSnapshot } =
+    useRenameSnapshotModal({
+      snapshot,
+    });
+
+  const { modal: restoreModal, open: handleRestoreSnapshot } =
+    useRestoreSnapshotModal({
+      snapshot,
+    });
 
   const handleDeleteSnapshot = () =>
     handleDeleteSnapshotError(
@@ -208,6 +214,10 @@ const SnapshotMenu = ({ snapshot }: SnapshotMenuProps) => {
         Rename snapshot
       </DropdownItem>
 
+      <DropdownItem icon={RestoreSnapshotIcon} onClick={handleRestoreSnapshot}>
+        Restore snapshot
+      </DropdownItem>
+
       <DropdownItem
         icon={DeleteIcon}
         variant="danger"
@@ -216,7 +226,8 @@ const SnapshotMenu = ({ snapshot }: SnapshotMenuProps) => {
         Delete snapshot
       </DropdownItem>
 
-      {modal}
+      {renameModal}
+      {restoreModal}
     </>
   );
 };

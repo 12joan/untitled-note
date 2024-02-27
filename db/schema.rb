@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_26_094246) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_27_193402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -102,6 +102,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_26_094246) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "before_restore_snapshot_id"
+    t.index ["before_restore_snapshot_id"], name: "index_snapshots_on_before_restore_snapshot_id"
     t.index ["document_id"], name: "index_snapshots_on_document_id"
   end
 
@@ -134,5 +136,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_26_094246) do
   add_foreign_key "s3_files", "users", column: "owner_id"
   add_foreign_key "settings", "users"
   add_foreign_key "snapshots", "documents"
+  add_foreign_key "snapshots", "snapshots", column: "before_restore_snapshot_id"
   add_foreign_key "tags", "projects"
 end
