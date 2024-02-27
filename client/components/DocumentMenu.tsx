@@ -119,6 +119,18 @@ export const DocumentMenu = ({
         {isPinned ? 'Unpin' : 'Pin'} document
       </DropdownItem>
 
+      {openFind && (
+        <DropdownItem icon={SearchIcon} onClick={openFind}>
+          Find in document
+        </DropdownItem>
+      )}
+
+      {isEditor && (
+        <DropdownItem icon={ReplaceIcon} onClick={openReplaceModal}>
+          Replace in document
+        </DropdownItem>
+      )}
+
       {versionHistoryAvailable && (
         <>
           <DropdownItem
@@ -133,18 +145,6 @@ export const DocumentMenu = ({
             New snapshot
           </DropdownItem>
         </>
-      )}
-
-      {openFind && (
-        <DropdownItem icon={SearchIcon} onClick={openFind}>
-          Find in document
-        </DropdownItem>
-      )}
-
-      {isEditor && (
-        <DropdownItem icon={ReplaceIcon} onClick={openReplaceModal}>
-          Replace in document
-        </DropdownItem>
       )}
 
       {getEditorChildrenForExport && (
