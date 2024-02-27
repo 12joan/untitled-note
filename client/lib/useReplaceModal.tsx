@@ -60,7 +60,7 @@ const ReplaceModal = ({
             message: `Replaced ${pluralize(
               occurrences,
               'occurrence'
-            )} in ${pluralize(documents, 'document')}`,
+            )} in ${pluralize(documents, 'document')}.`,
             autoClose: 'fast',
           });
 

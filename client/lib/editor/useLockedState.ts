@@ -14,7 +14,7 @@ export const useLockedState = (workingDocument: LocalDocument) => {
 
     createToast({
       title: 'Temporarily unlocked document',
-      message: 'The document will remain locked when you leave this page',
+      message: 'The document will remain locked when you leave this page.',
       autoClose: 'fast',
     });
   }, [isReadOnly]);
