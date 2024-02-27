@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :projects, only: %i[create update destroy] do
         resources :documents, only: %i[show create update destroy] do
           resource :replace, only: %i[create], controller: :document_replace
-          resources :snapshots, only: %i[create update destroy]
+          resources :snapshots, only: %i[create update destroy] do
+            resource :restore, only: %i[create], controller: :snapshot_restore
+          end
         end
 
         resources :tags, only: %i[update]

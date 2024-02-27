@@ -3,7 +3,10 @@ module API
     class SnapshotsController < APIController
       before_action :set_project
       before_action :set_document
-      before_action :set_snapshot, only: %i[ update destroy ]
+
+      before_action only: %i[ update destroy ] do
+        set_snapshot { params.fetch(:id) }
+      end
 
       def create
         @snapshot = @document.snapshots.build(snapshot_params)
@@ -31,10 +34,6 @@ module API
       end
 
       private
-
-      def set_snapshot
-        @snapshot = @document.snapshots.find(params[:id])
-      end
 
       def snapshot_params
         params.require(:snapshot).permit(:name)

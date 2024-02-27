@@ -44,6 +44,20 @@ export const deleteSnapshot = (
     path: `/api/v1/projects/${projectId}/documents/${documentId}/snapshots/${id}`,
   });
 
+export const restoreSnapshot = (
+  projectId: number,
+  documentId: number,
+  id: number,
+  { saveCurrent }: { saveCurrent: boolean }
+) =>
+  fetchAPIEndpoint({
+    method: 'POST',
+    path: `/api/v1/projects/${projectId}/documents/${documentId}/snapshots/${id}/restore`,
+    data: {
+      save_current: saveCurrent,
+    },
+  }).then(() => undefined) as Promise<void>;
+
 export const streamSnapshots = (
   documentId: number,
   callback: (snapshots: Snapshot[]) => void
