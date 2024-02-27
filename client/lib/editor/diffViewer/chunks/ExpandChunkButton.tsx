@@ -1,4 +1,5 @@
 import React from 'react';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { pluralize } from '~/lib/pluralize';
 import ExpandIcon from '~/components/icons/ExpandIcon';
 
@@ -14,7 +15,11 @@ export const ExpandChunkButton = ({
   return (
     <button
       type="button"
-      className="btn btn-rect btn-secondary w-full flex justify-center gap-2 items-center font-sans"
+      className={groupedClassNames({
+        btn: 'btn btn-rect btn-secondary w-full',
+        flex: 'flex justify-center gap-2 items-center',
+        reset: 'reset-editor-style',
+      })}
       onClick={onClick}
     >
       <ExpandIcon noAriaLabel />

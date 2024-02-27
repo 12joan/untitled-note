@@ -126,6 +126,10 @@ body {
     line-height: inherit !important;
   }
 
+  .reset-editor-style {
+    @apply text-base text-ui font-sans text-left;
+  }
+
   .btn-base {
     @apply cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative;
   }
