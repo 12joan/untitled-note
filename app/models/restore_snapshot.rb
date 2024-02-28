@@ -6,9 +6,14 @@ class RestoreSnapshot
       if save_current
         document.snapshots.create!(
           body: document.body,
-          before_restore_snapshot: snapshot,
+          manual: false,
         )
       end
+
+      document.snapshots.create!(
+        body: snapshot.body,
+        restores_snapshot: snapshot.restores_snapshot_or_self,
+      )
 
       document.was_updated_on_server
       document.body = snapshot.body

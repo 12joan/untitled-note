@@ -92,11 +92,7 @@ export type Snapshot = {
   name: string;
   manual: boolean;
   body: string;
-  before_restore: null | {
-    name: string;
-    created_at: string;
-    is_unrestore: boolean;
-  };
+  restores_snapshot: null | Omit<Snapshot, 'restores_snaphot'>;
   document_id: Document['id'];
   created_at: string;
   updated_at: string;
