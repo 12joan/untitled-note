@@ -1,30 +1,14 @@
 import { Snapshot } from '~/lib/types';
 
-const getSnapshotTimestampName = (
-  snapshot: Pick<Snapshot, 'created_at'>
-): string => `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;
+export const getSnapshotName = (snapshot: Snapshot): string =>
+  snapshot.name || getSnapshotDefaultName(snapshot);
 
-const getSnapshotBeforeRestoreName = (
-  beforeRestore: Exclude<Snapshot['before_restore'], null>
-): string => {
-  if (beforeRestore.name) return beforeRestore.name;
-  if (beforeRestore.is_unrestore) return 'Before restoring ...';
-  return getSnapshotTimestampName(beforeRestore);
-};
+export const getSnapshotDefaultName = (snapshot: Snapshot): string =>
+  getRestoresSnapshotName(snapshot) || getSnapshotTimestampName(snapshot);
 
-export const getSnapshotDefaultName = (
-  snapshot: Pick<Snapshot, 'created_at' | 'before_restore'>
-): string => {
-  if (snapshot.before_restore) {
-    const beforeRestoreName = getSnapshotBeforeRestoreName(
-      snapshot.before_restore
-    );
-    return `Before restoring "${beforeRestoreName}"`;
-  }
+const getRestoresSnapshotName = (snapshot: Snapshot): string | null =>
+  snapshot.restores_snapshot &&
+  `Restore "${getSnapshotName(snapshot.restores_snapshot)}"`;
 
-  return getSnapshotTimestampName(snapshot);
-};
-
-export const getSnapshotName = (
-  snapshot: Pick<Snapshot, 'name' | 'created_at' | 'before_restore'>
-): string => snapshot.name || getSnapshotDefaultName(snapshot);
+const getSnapshotTimestampName = (snapshot: Snapshot): string =>
+  `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;

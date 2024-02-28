@@ -13,4 +13,12 @@ class SnapshotTest < ActiveSupport::TestCase
     @snapshot.document = create(:document, body_type: 'empty')
     assert_predicate @snapshot, :invalid?
   end
+
+  test 'invalid with a nested restores_snapshot' do
+    @snapshot.restores_snapshot = create(:snapshot)
+    assert_predicate @snapshot, :valid?
+
+    @snapshot.restores_snapshot.restores_snapshot = create(:snapshot)
+    assert_predicate @snapshot, :invalid?
+  end
 end
