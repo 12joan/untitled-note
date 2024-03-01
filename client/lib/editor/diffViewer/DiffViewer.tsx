@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import {
   computeDiff,
   createPlateEditor,
+  getNodeString,
+  isText,
   PlatePlugin,
   Value,
 } from '@udecode/plate';
@@ -13,6 +15,7 @@ import { collapseBlocksWithoutDiff } from './chunks/collapseBlocksWithoutDiff';
 import { createChunkPlugin } from './chunks/createChunkPlugin';
 import { createDiffPlugin } from './diff/createDiffPlugins';
 import { hasDiff } from './diff/hasDiff';
+import { textsAreComparable } from './diff/textsAreComparable';
 
 export interface DiffViewerProps {
   previous: Value | null;
@@ -48,6 +51,12 @@ export const DiffViewer = ({
     return JSON.parse(
       JSON.stringify(
         computeDiff(previous, current, {
+          shouldDiffDescendants: (nodes, nextNodes) => {
+            if (!isText(nodes[0])) return true;
+            const text = nodes.map(getNodeString).join('');
+            const nextText = nextNodes.map(getNodeString).join('');
+            return textsAreComparable(text, nextText);
+          },
           isInline: tempEditor.isInline,
           lineBreakChar: '¶',
         })
