@@ -3,7 +3,6 @@ import {
   computeDiff,
   createPlateEditor,
   getNodeString,
-  isText,
   PlatePlugin,
   Value,
 } from '@udecode/plate';
@@ -51,12 +50,11 @@ export const DiffViewer = ({
     return JSON.parse(
       JSON.stringify(
         computeDiff(previous, current, {
-          shouldDiffDescendants: (nodes, nextNodes) => {
-            if (!isText(nodes[0])) return true;
-            const text = nodes.map(getNodeString).join('');
-            const nextText = nextNodes.map(getNodeString).join('');
-            return textsAreComparable(text, nextText);
-          },
+          elementsAreRelated: (element, nextElement) =>
+            textsAreComparable(
+              getNodeString(element),
+              getNodeString(nextElement)
+            ),
           isInline: tempEditor.isInline,
           lineBreakChar: '¶',
         })
