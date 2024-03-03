@@ -55,7 +55,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@playwright/test": "^1.42.0",
+    "@playwright/test": "^1.42.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^18.17.14",
     "@types/rails__actioncable": "^6.1.10",
