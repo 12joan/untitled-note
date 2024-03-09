@@ -53,6 +53,14 @@ Rails.application.reloader.to_prepare do
           index: ->(params) { make_broadcasting('Snapshot#index', %i[user_id document_id], params) },
         },
       },
+
+      Settings: {
+        api_controller: SettingsAPI,
+
+        actions: {
+          show: ->(params) { make_broadcasting('Settings#show', %i[user_id], params) },
+        },
+      },
     },
 
     listeners: {
@@ -106,6 +114,12 @@ Rails.application.reloader.to_prepare do
         broadcast make_broadcasting('Snapshot#index', %i[user_id document_id], {
           user_id: snapshot.owner.id,
           document_id: snapshot.document_id,
+        })
+      },
+
+      Settings: ->(settings) {
+        broadcast make_broadcasting('Settings#show', %i[user_id], {
+          user_id: settings.user.id,
         })
       },
     },

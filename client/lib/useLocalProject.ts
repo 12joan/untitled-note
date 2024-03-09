@@ -6,7 +6,7 @@ import { useLocal } from '~/lib/useLocal';
 export const useLocalProject = () => {
   const project = useAppContext('project');
   return useLocal(project, {
-    update: updateProject,
+    update: (params, { id }) => updateProject(id, params),
     handleUpdateError: handleUpdateProjectError,
   });
 };

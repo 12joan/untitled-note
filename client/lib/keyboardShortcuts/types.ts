@@ -1,5 +1,5 @@
 import { BaseCommand, KeyboardShortcutCommand } from '~/lib/commands';
-import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
+import { KeyboardShortcutConfig } from '~/lib/types';
 
 export type { KeyboardShortcutConfig };
 

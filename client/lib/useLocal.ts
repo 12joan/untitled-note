@@ -2,12 +2,12 @@ import { retry } from '~/lib/retry';
 import { useIsMounted } from '~/lib/useIsMounted';
 import { useOverrideable } from '~/lib/useOverrideable';
 
-export interface UseLocalOptions<T extends { id: unknown }> {
-  update: (id: T['id'], params: Partial<T>) => Promise<unknown>;
+export interface UseLocalOptions<T> {
+  update: (params: Partial<T>, initialRecord: T) => Promise<unknown>;
   handleUpdateError: (promise: Promise<unknown>) => Promise<unknown>;
 }
 
-export const useLocal = <T extends { id: unknown }>(
+export const useLocal = <T>(
   initialRecord: T,
   { update: updateRemote, handleUpdateError }: UseLocalOptions<T>
 ) => {
@@ -21,7 +21,7 @@ export const useLocal = <T extends { id: unknown }>(
     });
 
     await handleUpdateError(
-      retry(() => updateRemote(initialRecord.id, params), {
+      retry(() => updateRemote(params, initialRecord), {
         shouldRetry: isMounted,
       })
     ).catch((error) => {

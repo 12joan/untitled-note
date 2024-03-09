@@ -17,8 +17,8 @@ import { EditorStyleInput } from '../EditorStyleInput';
 export const AppearanceSection = () => {
   const editorFontSize = useEditorFontSize();
   const editorFontSizeCSSValue = useEditorFontSizeCSSValue();
-  const [deeperDarkMode, setDeeperDarkMode] = useSettings('deeperDarkMode');
-  const [editorStyle, setEditorStyle] = useSettings('editorStyle');
+  const [deeperDarkMode, setDeeperDarkMode] = useSettings('deeper_dark_mode');
+  const [editorStyle, setEditorStyle] = useSettings('editor_style');
 
   return (
     <>

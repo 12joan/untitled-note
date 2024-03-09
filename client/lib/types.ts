@@ -98,6 +98,27 @@ export type Snapshot = {
   updated_at: string;
 };
 
+export type KeyboardShortcutConfig = {
+  key: string;
+  keyLabel?: string;
+  customComparison?: {
+    property: keyof KeyboardEvent;
+    value: any;
+  };
+  altKey?: boolean;
+  ctrlKey?: boolean;
+  metaKey?: boolean;
+  shiftKey?: boolean;
+};
+
+export type Settings = {
+  keyboard_shortcut_overrides: {
+    [key: string]: KeyboardShortcutConfig | null;
+  };
+  deeper_dark_mode: boolean;
+  editor_style: EditorStyle;
+};
+
 export type StorageQuotaUsage = {
   quota: number;
   used: number;

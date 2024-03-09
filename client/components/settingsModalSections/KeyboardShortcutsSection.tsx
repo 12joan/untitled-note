@@ -36,7 +36,7 @@ export const KeyboardShortcutsSection = () => {
   const keyboardShortcuts = useKeyboardShortcuts();
 
   const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings(
-    'keyboardShortcutOverrides'
+    'keyboard_shortcut_overrides'
   );
 
   const [recordingId, setRecordingId] = useState<string | null>(null);
