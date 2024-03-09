@@ -4,6 +4,7 @@ import {
   ELEMENT_MENTION,
   findMentionInput,
   getMentionOnSelectItem,
+  getNodeString,
   MentionPlugin,
   PlateRenderElementProps,
   removeMentionInput,
@@ -13,7 +14,6 @@ import {
 } from '@udecode/plate';
 import { useFocused, useSelected } from 'slate-react';
 import { useAppContext } from '~/lib/appContext';
-import { getPlainBody } from '~/lib/editor/getPlainBody';
 import { useEditorEvent } from '~/lib/editor/imperativeEvents';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { includes } from '~/lib/includes';
@@ -132,7 +132,7 @@ export const MentionInputComponent = ({
       key: ELEMENT_MENTION,
     })(editor, item as any);
 
-  const query = getPlainBody(element);
+  const query = getNodeString(element);
   const [, path] = findMentionInput(editor)!;
 
   const matchingDocuments = useMemo(

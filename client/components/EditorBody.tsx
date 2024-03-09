@@ -7,6 +7,7 @@ import {
   Value,
 } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
+import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
 import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
 import { useLinkModalProvider } from '~/lib/editor/links';
 import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
@@ -81,10 +82,7 @@ export const EditorBody = memo(
             focusRing: 'no-focus-ring',
             baseFontSize:
               'slate-string:em:text-lg/[1.555em] slate-void:em:text-lg/[inherit]',
-            editorStyle: {
-              casual: '',
-              literary: 'font-serif text-justify style-literary',
-            }[editorStyle],
+            editorStyle: editorStyleClassNames[editorStyle],
           })}
           placeholder={isReadOnly ? undefined : 'Write something...'}
           style={{

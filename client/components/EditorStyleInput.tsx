@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { EditorStyle } from '~/lib/types';
 import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
 
@@ -14,12 +14,16 @@ export interface EditorStyleInputProps<Nullable extends boolean> {
     value: Nullable extends true ? EditorStyle | null : EditorStyle
   ) => void;
   syncWithOption: Nullable extends true ? string : null;
+  syncWithLink: Nullable extends true ? ReactNode : null;
+  className?: string;
 }
 
 export const EditorStyleInput = <Nullable extends boolean>({
   value,
   onChange,
   syncWithOption,
+  syncWithLink,
+  className,
 }: EditorStyleInputProps<Nullable>) => {
   type T = Nullable extends true ? EditorStyle | null : EditorStyle;
 
@@ -43,12 +47,16 @@ export const EditorStyleInput = <Nullable extends boolean>({
   return (
     <>
       <RadioCardGroup
-        className="md:grid-cols-3"
+        className={className}
         value={value}
         onValueChange={onChange}
       >
         {options.map((option) => (
-          <RadioCard key={option} value={option}>
+          <RadioCard
+            key={option}
+            value={option}
+            className="bg-page-bg-light dark:bg-page-bg-dark"
+          >
             {labels[option ?? 'null']}
           </RadioCard>
         ))}
@@ -57,6 +65,8 @@ export const EditorStyleInput = <Nullable extends boolean>({
       {description && (
         <p className="text-plain-500 dark:text-plain-400">{description}</p>
       )}
+
+      {!value && <p>{syncWithLink}</p>}
     </>
   );
 };

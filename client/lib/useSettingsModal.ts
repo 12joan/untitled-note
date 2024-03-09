@@ -9,21 +9,25 @@ import {
   KeyboardShortcutsSection,
 } from '~/components/settingsModalSections';
 
-export type SettingsModalOpenProps = SectionedModalOpenProps;
+const sections = {
+  appearance: {
+    title: 'Appearance',
+    icon: AppearanceIcon,
+    component: AppearanceSection,
+  },
+  keyboardShortcuts: {
+    title: 'Keyboard shortcuts',
+    icon: KeyboardShortcutsIcon,
+    component: KeyboardShortcutsSection,
+  },
+};
+
+export type SettingsModalOpenProps = SectionedModalOpenProps<
+  keyof typeof sections
+>;
 
 export const useSettingsModal = createSectionedModal(
   'settings-modal',
-  {
-    appearance: {
-      title: 'Appearance',
-      icon: AppearanceIcon,
-      component: AppearanceSection,
-    },
-    keyboardShortcuts: {
-      title: 'Keyboard shortcuts',
-      icon: KeyboardShortcutsIcon,
-      component: KeyboardShortcutsSection,
-    },
-  },
+  sections,
   {}
 );

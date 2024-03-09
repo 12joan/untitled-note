@@ -1,4 +1,5 @@
 import React from 'react';
+import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
 import {
   decreaseEditorFontSize,
   increaseEditorFontSize,
@@ -6,15 +7,18 @@ import {
   useEditorFontSize,
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useSettings } from '~/lib/settings';
 import MinusIcon from '~/components/icons/MinusIcon';
 import PlusIcon from '~/components/icons/PlusIcon';
 import { Tooltip } from '~/components/Tooltip';
+import { EditorStyleInput } from '../EditorStyleInput';
 
 export const AppearanceSection = () => {
   const editorFontSize = useEditorFontSize();
   const editorFontSizeCSSValue = useEditorFontSizeCSSValue();
   const [deeperDarkMode, setDeeperDarkMode] = useSettings('deeperDarkMode');
+  const [editorStyle, setEditorStyle] = useSettings('editorStyle');
 
   return (
     <>
@@ -42,7 +46,7 @@ export const AppearanceSection = () => {
       </div>
 
       <div className="space-y-2">
-        <h3 className="h3 select-none">Font size</h3>
+        <h3 className="h3 select-none">Editor font size</h3>
 
         <div className="flex gap-2 items-center">
           <button
@@ -74,20 +78,36 @@ export const AppearanceSection = () => {
             <PlusIcon size="1.25em" noAriaLabel />
           </button>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="h3 select-none">Editor style</h3>
+
+        <EditorStyleInput<false>
+          value={editorStyle}
+          onChange={setEditorStyle}
+          syncWithOption={null}
+          syncWithLink={null}
+          className="xs:grid-cols-2"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="h3 select-none">Preview</h3>
 
         <p
-          className="bg-page-bg-light dark:bg-page-bg-dark rounded-lg p-4 shadow-inner border dark:border-transparent truncate select-none min-h-[6.25rem] flex items-center"
+          className={groupedClassNames({
+            base: 'p-4 rounded-lg shadow-inner select-none',
+            bg: 'bg-page-bg-light dark:bg-page-bg-dark',
+            border: 'border dark:border-transparent',
+            editorStyle: editorStyleClassNames[editorStyle],
+          })}
           aria-label="Preview"
           style={{ fontSize: editorFontSizeCSSValue }}
         >
           <span className="em:text-lg">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </span>
         </p>
       </div>

@@ -11,6 +11,7 @@ import {
   handleDeleteDocumentError,
   handleUpdateDocumentError,
 } from '~/lib/handleErrors';
+import { isFullDocument } from '~/lib/isFullDocument';
 import {
   DocumentLink,
   documentPath,
@@ -22,28 +23,31 @@ import {
   toggleDocumentPinned,
 } from '~/lib/transformDocument';
 import { Document, PartialDocument } from '~/lib/types';
-import { useExportModal, UseExportModalOptions } from '~/lib/useExportModal';
+import {
+  useDocumentSettingsModal,
+  UseDocumentSettingsModalOptions,
+} from '~/lib/useDocumentSettingsModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
 import { DropdownItem } from '~/components/Dropdown';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
-import DownloadIcon from '~/components/icons/DownloadIcon';
 import LockIcon from '~/components/icons/LockIcon';
 import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import PinIcon from '~/components/icons/PinIcon';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
+import SettingsIcon from '~/components/icons/SettingsIcon';
 import VersionHistoryIcon from '~/components/icons/VersionHistoryIcon';
 
 export interface DocumentMenuProps {
   isEditor?: boolean;
   statusHeader?: React.ReactNode;
-  document: PartialDocument;
+  document: PartialDocument | Document;
   updateDocument?: (delta: Partial<Document>) => void;
   invalidateEditor?: boolean;
   openFind?: () => void;
-  getEditorChildrenForExport?: UseExportModalOptions['getEditorChildren'];
+  getChildrenForExport?: UseDocumentSettingsModalOptions['getChildrenForExport'];
 }
 
 export const DocumentMenu = ({
@@ -53,7 +57,7 @@ export const DocumentMenu = ({
   updateDocument: updateDocumentOverride,
   invalidateEditor = true,
   openFind,
-  getEditorChildrenForExport,
+  getChildrenForExport,
 }: DocumentMenuProps) => {
   const projectId = useAppContext('projectId');
 
@@ -85,11 +89,6 @@ export const DocumentMenu = ({
 
   const { modal: replaceModal, open: openReplaceModal } = useReplaceModal({
     documentId: doc.id,
-  });
-
-  const { modal: exportModal, open: openExportModal } = useExportModal({
-    document: doc,
-    getEditorChildren: getEditorChildrenForExport!,
   });
 
   const deleteDocument = () => {
@@ -147,23 +146,38 @@ export const DocumentMenu = ({
         </>
       )}
 
-      {getEditorChildrenForExport && (
-        <DropdownItem icon={DownloadIcon} onClick={() => openExportModal()}>
-          Export document
-        </DropdownItem>
-      )}
-
       <DropdownItem icon={LockIcon} onClick={toggleLocked}>
         {isLocked ? 'Unlock' : 'Lock'} document
       </DropdownItem>
+
+      {isFullDocument(doc) && updateDocument && getChildrenForExport && (
+        <DocumentSettingsMenuItem
+          document={doc}
+          updateDocument={updateDocument}
+          getChildrenForExport={getChildrenForExport}
+        />
+      )}
 
       <DropdownItem icon={DeleteIcon} variant="danger" onClick={deleteDocument}>
         Delete document
       </DropdownItem>
 
       {replaceModal}
-      {exportModal}
       {newSnapshotModal}
+    </>
+  );
+};
+
+const DocumentSettingsMenuItem = (options: UseDocumentSettingsModalOptions) => {
+  const { modal, open } = useDocumentSettingsModal(options);
+
+  return (
+    <>
+      <DropdownItem icon={SettingsIcon} onClick={() => open()}>
+        Document settings
+      </DropdownItem>
+
+      {modal}
     </>
   );
 };
