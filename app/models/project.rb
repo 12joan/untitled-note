@@ -10,7 +10,23 @@ class Project < ApplicationRecord
   validates :emoji, presence: true, allow_nil: true
 
   include EditorStylable
-  include Queryable.permit(*%i[id name image_url emoji background_colour editor_style created_at updated_at archived_at])
+  include AutoSnapshotsOptionable
+
+  include Queryable.permit(
+    *%i[
+      id
+      name
+      image_url
+      emoji
+      background_colour
+      editor_style
+      auto_snapshots_option
+      created_at
+      updated_at
+      archived_at
+    ]
+  )
+
   include Listenable
 
   after_create do
@@ -19,5 +35,9 @@ class Project < ApplicationRecord
 
   def image_url
     image&.url
+  end
+
+  def resolved_auto_snapshots_option
+    auto_snapshots_option || owner.auto_snapshots_option
   end
 end

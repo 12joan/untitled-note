@@ -16,7 +16,12 @@ module API
       private
 
       def settings_params
-        params.require(:settings).permit(:deeper_dark_mode, :editor_style, keyboard_shortcut_overrides: {})
+        params.require(:settings).permit(
+          :deeper_dark_mode,
+          :editor_style,
+          :auto_snapshots_option,
+          keyboard_shortcut_overrides: {},
+        )
       end
 
       def set_settings

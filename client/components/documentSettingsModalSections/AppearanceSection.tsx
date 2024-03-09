@@ -22,7 +22,6 @@ export const AppearanceSection = ({
             View project settings
           </EditProjectLink>
         }
-        className="lg:grid-cols-3"
       />
     </div>
   );

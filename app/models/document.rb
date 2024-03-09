@@ -16,7 +16,28 @@ class Document < ApplicationRecord
   scope :pinned, -> { where.not(pinned_at: nil) }
 
   include EditorStylable
-  include Queryable.permit(*%i[id title safe_title preview body body_type tags editor_style blank updated_by created_at updated_at pinned_at locked_at])
+  include AutoSnapshotsOptionable
+
+  include Queryable.permit(
+    *%i[
+      id
+      title
+      safe_title
+      preview
+      body
+      body_type
+      tags
+      editor_style
+      auto_snapshots_option
+      blank
+      updated_by
+      created_at
+      updated_at
+      pinned_at
+      locked_at
+    ]
+  )
+
   include Listenable
 
   after_create :update_linked_s3_files
@@ -43,6 +64,10 @@ class Document < ApplicationRecord
     end
 
     (preview.presence || plain_body.slice(0, 100)).strip
+  end
+
+  def resolved_auto_snapshots_option
+    auto_snapshots_option || project.resolved_auto_snapshots_option
   end
 
   def slate?

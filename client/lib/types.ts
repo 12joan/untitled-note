@@ -1,5 +1,15 @@
 export type EditorStyle = 'casual' | 'literary';
 
+export const automaticSnapshotsOptions = [
+  'disabled',
+  'hourly',
+  'daily',
+  'weekly',
+  'monthly',
+] as const;
+
+export type AutoSnapshotsOption = (typeof automaticSnapshotsOptions)[number];
+
 export type Project = {
   id: number;
   name: string;
@@ -7,6 +17,7 @@ export type Project = {
   emoji: string | null;
   background_colour: string;
   editor_style: EditorStyle | null;
+  auto_snapshots_option: AutoSnapshotsOption | null;
   created_at: string;
   updated_at: string;
   archived_at: string | null;
@@ -35,6 +46,7 @@ export type Document = {
   body_type: string;
   tags: Tag[];
   editor_style: EditorStyle | null;
+  auto_snapshots_option: AutoSnapshotsOption | null;
   blank: boolean;
   updated_by: string;
   created_at: string;
@@ -117,6 +129,7 @@ export type Settings = {
   };
   deeper_dark_mode: boolean;
   editor_style: EditorStyle;
+  auto_snapshots_option: AutoSnapshotsOption;
 };
 
 export type StorageQuotaUsage = {
