@@ -1,17 +1,22 @@
-import { TDescendant, TEditor, TElement, TNode } from '@udecode/plate';
+import { isElement, TDescendant, TElement, TNode } from '@udecode/plate';
 
-export const filterDescendants = <T extends TEditor | TElement>(
-  { children, ...restNode }: T,
+export const filterDescendants = <T extends TElement | TDescendant[]>(
+  arg: T,
   filter: (node: TNode) => boolean
 ): T => {
-  const filteredChildren: TDescendant[] = children
+  if (isElement(arg)) {
+    const { children, ...restNode } = arg;
+    return {
+      children: filterDescendants(children, filter),
+      ...restNode,
+    } as T;
+  }
+
+  const descendants: TDescendant[] = arg;
+
+  return descendants
     .filter(filter)
     .map((child) =>
-      'children' in child ? filterDescendants(child as TElement, filter) : child
-    );
-
-  return {
-    children: filteredChildren,
-    ...restNode,
-  } as T;
+      isElement(child) ? filterDescendants(child, filter) : child
+    ) as T;
 };

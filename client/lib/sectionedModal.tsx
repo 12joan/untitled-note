@@ -2,6 +2,7 @@ import React, { FC, ReactNode } from 'react';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useModal } from '~/lib/useModal';
 import { useOverrideable } from '~/lib/useOverrideable';
+import { SubscribableRef } from '~/lib/useSubscribableRef';
 import { IconProps } from '~/components/icons/makeIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { WithCloseButton } from '~/components/WithCloseButton';
@@ -12,16 +13,19 @@ export type Section<T extends object> = {
   component: FC<T>;
 };
 
-export interface SectionedModalOpenProps {
-  initialSection?: string;
+export interface SectionedModalOpenProps<SectionName extends string> {
+  initialSection?: SectionName;
 }
 
-export const createSectionedModal = <T extends object>(
+export const createSectionedModal = <
+  SectionName extends string,
+  T extends object
+>(
   sectionedModalId: string,
-  sections: { [key: string]: Section<T> },
-  sectionProps: T
+  sections: { [key in SectionName]: Section<T> },
+  sectionPropsProp: T | SubscribableRef<T>
 ) => {
-  const sectionKeys = Object.keys(sections);
+  const sectionKeys = Object.keys(sections) as SectionName[];
 
   const idForSectionKey = (key: string) => `${sectionedModalId}-${key}-section`;
 
@@ -29,7 +33,8 @@ export const createSectionedModal = <T extends object>(
     initialSection = sectionKeys[0],
     open,
     onClose,
-  }: SectionedModalOpenProps & Omit<StyledModalProps, 'children'>) => {
+  }: SectionedModalOpenProps<SectionName> &
+    Omit<StyledModalProps, 'children'>) => {
     const [activeSectionKey, setActiveSectionKey] =
       useOverrideable(initialSection);
 
@@ -56,6 +61,14 @@ export const createSectionedModal = <T extends object>(
       ? (children: ReactNode) => children
       : withCloseButton;
 
+    const sectionEntries = Object.entries(sections) as [
+      SectionName,
+      Section<T>
+    ][];
+
+    const sectionProps =
+      'use' in sectionPropsProp ? sectionPropsProp.use() : sectionPropsProp;
+
     return (
       <StyledModal
         open={open}
@@ -72,26 +85,24 @@ export const createSectionedModal = <T extends object>(
           <div className="shrink-0 bg-black/5 max-sm:border-b sm:border-r dark:border-transparent max-sm:rounded-t-2xl sm:rounded-l-2xl p-5 sm:px-2">
             {withCloseButtonVertical(
               <div className="grow space-y-2" role="tablist">
-                {Object.entries(sections).map(
-                  ([key, { title, icon: Icon }]) => (
-                    <button
-                      key={key}
-                      type="button"
-                      className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
-                      data-active={key === activeSectionKey}
-                      onClick={() => setActiveSectionKey(key)}
-                      role="tab"
-                      aria-selected={key === activeSectionKey}
-                      aria-controls={idForSectionKey(key)}
-                    >
-                      <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
-                        <Icon size="1.25em" noAriaLabel />
-                      </span>
+                {sectionEntries.map(([key, { title, icon: Icon }]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
+                    data-active={key === activeSectionKey}
+                    onClick={() => setActiveSectionKey(key)}
+                    role="tab"
+                    aria-selected={key === activeSectionKey}
+                    aria-controls={idForSectionKey(key)}
+                  >
+                    <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
+                      <Icon size="1.25em" noAriaLabel />
+                    </span>
 
-                      {title}
-                    </button>
-                  )
-                )}
+                    {title}
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -116,9 +127,11 @@ export const createSectionedModal = <T extends object>(
   };
 
   const useSectionedModal = () =>
-    useModal<SectionedModalOpenProps | undefined>((modalProps, openProps) => (
-      <ModalComponent {...modalProps} {...(openProps || {})} />
-    ));
+    useModal<SectionedModalOpenProps<SectionName> | undefined>(
+      (modalProps, openProps) => (
+        <ModalComponent {...modalProps} {...(openProps || {})} />
+      )
+    );
 
   return useSectionedModal;
 };

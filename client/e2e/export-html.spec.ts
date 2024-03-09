@@ -16,7 +16,7 @@ const getExportEditable = (page: Page) => getEditable(page.locator('pre'));
 const getUndoButton = (page: Page) =>
   page.getByRole('button', { name: 'Undo changes' });
 
-test.describe('Export HTML modal', () => {
+test.describe('Export HTML', () => {
   test.beforeEach(async ({ page }) => {
     await logIn(page);
     await createProject(page);
@@ -27,7 +27,7 @@ test.describe('Export HTML modal', () => {
     await page.keyboard.type('Hello World!');
 
     await openExportHTMLSection(page);
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(2000);
   });
 
   test('shows the HTML for the document', async ({ page }) => {

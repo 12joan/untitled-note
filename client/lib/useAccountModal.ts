@@ -9,21 +9,24 @@ import {
 import AccountIcon from '~/components/icons/AccountIcon';
 import StorageIcon from '~/components/icons/StorageIcon';
 
-export type AccountModalOpenProps = SectionedModalOpenProps;
+const sections = {
+  emailAndPassword: {
+    title: 'Email and password',
+    icon: AccountIcon,
+    component: EmailAndPasswordSection,
+  },
+  fileStorage: {
+    title: 'File storage',
+    icon: StorageIcon,
+    component: FileStorageSection,
+  },
+};
 
+export type AccountModalOpenProps = SectionedModalOpenProps<
+  keyof typeof sections
+>;
 export const useAccountModal = createSectionedModal(
   'account-modal',
-  {
-    emailAndPassword: {
-      title: 'Email and password',
-      icon: AccountIcon,
-      component: EmailAndPasswordSection,
-    },
-    fileStorage: {
-      title: 'File storage',
-      icon: StorageIcon,
-      component: FileStorageSection,
-    },
-  },
+  sections,
   {}
 );

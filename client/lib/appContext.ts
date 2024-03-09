@@ -11,6 +11,7 @@ import {
   Tag,
 } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
 export type AppContext = {
   settings: SettingsSchema;
@@ -31,7 +32,7 @@ export type AppContext = {
   topBarHeight: number;
   toggleSearchModal: () => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
-  toggleSettingsModal: () => void;
+  toggleSettingsModal: (...args: [] | [SettingsModalOpenProps]) => void;
   toggleSidebar: () => void;
   cycleFocus: () => void;
   linkOriginator?: string;

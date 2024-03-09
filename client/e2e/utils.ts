@@ -73,13 +73,13 @@ export const expectSyncState = async (page: Page, state: string) => {
 export const expectUpToDate = async (page: Page) =>
   expectSyncState(page, 'Up to date');
 
-export const openExportModal = async (page: Page) => {
+export const openDocumentSettingsModal = async (page: Page) => {
   await openDocumentMenu(page);
-  await page.getByText('Export document').click();
+  await page.getByText('Document settings').click();
 };
 
 export const openExportHTMLSection = async (page: Page) => {
-  await openExportModal(page);
+  await openDocumentSettingsModal(page);
   await page.getByRole('tab', { name: 'Export HTML' }).click();
 };
 

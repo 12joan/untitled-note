@@ -17,12 +17,12 @@ import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import CopyIcon from '~/components/icons/CopyIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
-import { ExportModalSectionProps } from './types';
+import { DocumentSettingsModalSectionProps } from './types';
 
 export const ExportHTMLSection = ({
   document: doc,
-  getEditorChildren,
-}: ExportModalSectionProps) => {
+  getChildrenForExport,
+}: DocumentSettingsModalSectionProps) => {
   const [isModified, setIsModified] = useState(false);
   const [resetKey, reset] = useReducer((x) => x + 1, 0);
   const editorRef = useRef<PlateEditor | null>(null);
@@ -30,7 +30,6 @@ export const ExportHTMLSection = ({
   const includeTitle = useLocalStorage('exportHtml:includeTitle', true);
   const setIncludeTitle = (value: boolean) => {
     setLocalStorage('exportHtml:includeTitle', value);
-    reset();
   };
 
   const initialValue: Value = useMemo(
@@ -39,15 +38,17 @@ export const ExportHTMLSection = ({
         type: 'content',
         children: [
           {
-            text: getHtmlForExport(getEditorChildren(), {
+            text: getHtmlForExport(getChildrenForExport(), {
               title: includeTitle ? doc.title || null : null,
             }),
           },
         ],
       },
     ],
-    [includeTitle]
+    [includeTitle, doc.title]
   );
+
+  useEffectAfterFirst(reset, [initialValue]);
 
   const getCurrentHtml = () => getEditorString(editorRef.current!, []);
 

@@ -71,7 +71,7 @@ export const streamDocuments = (
         updated_at: true,
         pinned_at: true,
         locked_at: true,
-      },
+      } satisfies { [k in keyof PartialDocument]: true },
       ...params,
     },
     callback

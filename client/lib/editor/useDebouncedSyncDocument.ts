@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { PlateEditor } from '@udecode/plate';
-import { editorDataForUpload } from '~/lib/editor/editorDataForUpload';
 import {
   useSyncDocument,
   UseSyncDocumentOptions,
@@ -8,6 +7,7 @@ import {
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { useBeforeUnload } from '~/lib/useBeforeUnload';
 import { useDebounce } from '~/lib/useDebounce';
+import { documentDataForUpload } from './documentDataForUpload';
 
 export interface UseDebouncedSyncDocumentOptions
   extends UseSyncDocumentOptions {
@@ -37,7 +37,7 @@ export const useDebouncedSyncDocument = ({
   );
 
   const [debouncedUpdateBody, bodyIsDirty] = useDebounce(
-    () => editor && updateDocument(editorDataForUpload(editor)),
+    () => editor && updateDocument(documentDataForUpload(editor)),
     750,
     [editor, updateDocument]
   );

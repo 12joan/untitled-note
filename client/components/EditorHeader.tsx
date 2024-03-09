@@ -1,6 +1,6 @@
 import React, { memo, RefObject, useRef, useState } from 'react';
 import { PlateEditor } from '@udecode/plate';
-import { getFilteredEditor } from '~/lib/editor/editorDataForUpload';
+import { getFilteredChildren } from '~/lib/editor/documentDataForUpload';
 import { setSelection } from '~/lib/editor/restoreSelection';
 import { LocalDocument } from '~/lib/types';
 import { DocumentMenu } from '~/components/DocumentMenu';
@@ -66,8 +66,8 @@ export const EditorHeader = memo(
         updateDocument={updateDocument}
         invalidateEditor={false}
         openFind={openFind}
-        getEditorChildrenForExport={
-          editor ? () => getFilteredEditor(editor).children : undefined
+        getChildrenForExport={
+          editor ? () => getFilteredChildren(editor.children) : undefined
         }
       />
     );

@@ -122,13 +122,13 @@ export const RadioCard = <T,>({
       <button
         type="button"
         role="radio"
-        className="stretch-target no-focus-ring grow flex items-center gap-2 p-3 pr-0 last-child:pr-3 text-left"
+        className="stretch-target no-focus-ring grow flex items-center gap-2 p-3 pr-0 last:pr-3 text-left"
         aria-checked={checked}
         tabIndex={checked ? 0 : -1}
         onClick={() => onValueChange(value)}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex-shrink-0 w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat" />
+        <div className="w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat" />
 
         {children}
       </button>
