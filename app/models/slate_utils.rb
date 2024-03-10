@@ -18,7 +18,7 @@ module SlateUtils
   class SlateNode
     SPECIAL_ATTRIBUTES = %i[type text children].freeze
 
-    attr_accessor :type, :text, :children, :attributes
+    attr_accessor :type, :text, :children, :attributes, :parent
 
     def initialize(type: nil, text: nil, attributes: {}, children: nil)
       @type = type
@@ -31,8 +31,21 @@ module SlateUtils
       !@type.nil?
     end
 
+    # In Slate, an inline children list must start with a text node
+    def inline_element?
+      element? && siblings&.first&.text?
+    end
+
+    def block_element?
+      element? && !inline_element?
+    end
+
     def text?
       !@text.nil?
+    end
+
+    def siblings
+      parent&.children
     end
 
     def traverse(&block)
@@ -46,7 +59,9 @@ module SlateUtils
         text: hash[:text],
         attributes: hash.reject { |k, _| SPECIAL_ATTRIBUTES.include?(k) },
         children: hash[:children]&.then { |children| SlateChildren.from_a(children) }
-      )
+      ).tap do |node|
+        node.children&.each { |child| child.parent = node }
+      end
     end
 
     def self.parse(json)

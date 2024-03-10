@@ -67,6 +67,10 @@ class ActiveSupport::TestCase
         end
       end
 
+      def mention(document_id:, fallback_text:, &block)
+        add_child(type: 'mention', documentId: document_id, fallbackText: fallback_text, &block)
+      end
+
       def attachment(s3_file_id:, filename:, &block)
         add_child(type: 'attachment', s3FileId: s3_file_id, filename: filename, &block)
       end

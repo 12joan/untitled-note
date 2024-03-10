@@ -34,7 +34,6 @@ module API
           :title,
           :body,
           :body_type,
-          :plain_body,
           :blank,
           :editor_style,
           :auto_snapshots_option,

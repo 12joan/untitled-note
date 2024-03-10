@@ -40,7 +40,10 @@ class Document < ApplicationRecord
 
   include Listenable
 
+  before_save :extract_plain_body
+
   after_create :update_linked_s3_files
+
   before_update :try_create_auto_snapshot
   after_update :update_linked_s3_files
 
@@ -49,6 +52,12 @@ class Document < ApplicationRecord
 
   def safe_title
     title.presence || 'Untitled document'
+  end
+
+  def extract_plain_body
+    return false unless slate?
+    self.plain_body = ExtractPlainBody.perform(body, project: project)
+    return true
   end
 
   def preview
