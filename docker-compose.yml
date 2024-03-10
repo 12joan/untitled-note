@@ -44,7 +44,7 @@ services:
     image: redis
 
   typesense:
-    image: typesense/typesense:0.23.1
+    image: typesense/typesense:0.25.2
     command: '--data-dir /data --api-key=trust'
     volumes:
       - typesense:/data
