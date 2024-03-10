@@ -1,18 +1,16 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { SettingsSchema } from '~/lib/settingsSchema';
+import { Settings } from '~/lib/types';
 
-export const fetchSettings = () =>
-  fetchAPIEndpoint({
-    path: `/api/v1/settings`,
-  }).then((response) => response.json()) as Promise<unknown>;
+import { streamAction } from '~/channels/dataChannel';
 
-export const updateSettings = (settings: SettingsSchema) =>
+export const streamSettings = (callback: (settings: Settings) => void) =>
+  streamAction('Settings', 'show', {}, callback);
+
+export const updateSettings = (settings: Partial<Settings>) =>
   fetchAPIEndpoint({
     method: 'PUT',
     path: `/api/v1/settings`,
     data: {
-      settings: {
-        data: JSON.stringify(settings),
-      },
+      settings,
     },
   });

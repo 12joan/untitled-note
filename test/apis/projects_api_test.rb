@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectAPITest < APITestCase
+class ProjectsAPITest < APITestCase
   setup do
     @user = create(:user)
 

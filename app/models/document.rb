@@ -1,4 +1,27 @@
 class Document < ApplicationRecord
+  include EditorStylable
+  include AutoSnapshotsOptionable
+  include Listenable
+  include Queryable.permit(
+    *%i[
+      id
+      title
+      safe_title
+      preview
+      body
+      body_type
+      tags
+      editor_style
+      auto_snapshots_option
+      blank
+      updated_by
+      created_at
+      updated_at
+      pinned_at
+      locked_at
+    ]
+  )
+
   belongs_to :project
   has_one :owner, through: :project
 
@@ -15,11 +38,11 @@ class Document < ApplicationRecord
   scope :not_blank, -> { where(blank: false) }
   scope :pinned, -> { where.not(pinned_at: nil) }
 
-  include EditorStylable
-  include Queryable.permit(*%i[id title safe_title preview body body_type tags editor_style blank updated_by created_at updated_at pinned_at locked_at])
-  include Listenable
+  before_save :extract_plain_body
 
   after_create :update_linked_s3_files
+
+  before_update :try_create_auto_snapshot
   after_update :update_linked_s3_files
 
   after_commit :upsert_to_typesense, on: %i[create update]
@@ -27,6 +50,12 @@ class Document < ApplicationRecord
 
   def safe_title
     title.presence || 'Untitled document'
+  end
+
+  def extract_plain_body
+    return false unless slate?
+    self.plain_body = ExtractPlainBody.perform(body, project: project)
+    return true
   end
 
   def preview
@@ -43,6 +72,16 @@ class Document < ApplicationRecord
     end
 
     (preview.presence || plain_body.slice(0, 100)).strip
+  end
+
+  def resolved_auto_snapshots_option
+    auto_snapshots_option || project.resolved_auto_snapshots_option
+  end
+
+  def try_create_auto_snapshot
+    if body_changed?
+      TryCreateAutoSnapshot.perform(Document.find(id))
+    end
   end
 
   def slate?

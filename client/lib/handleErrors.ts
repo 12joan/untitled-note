@@ -187,3 +187,10 @@ export const handleUploadFileError = handleErrors(({ reason, data = {} }) => {
     autoClose: 'slow',
   };
 });
+
+export const handleUpdateSettingsError = handleErrors(() => ({
+  title: 'Failed to update settings',
+  message:
+    'An error occurred while updating the settings. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));

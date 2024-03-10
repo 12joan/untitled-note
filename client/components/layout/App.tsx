@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
+import { streamSettings } from '~/lib/apis/settings';
 import { AppContextProvider } from '~/lib/appContext';
 import { mapFuture, unwrapFuture } from '~/lib/monads';
 import { ApplicationRoutes } from '~/lib/routing';
@@ -42,13 +43,21 @@ export const App = () => {
     []
   );
 
+  const futureSettings = useStream(
+    {
+      getStream: streamSettings,
+      cacheKey: 'settings',
+    },
+    []
+  );
+
   const futureRemainingQuota = mapFuture(
     futureQuotaUsage,
     ({ quota, used }) => quota - used
   );
 
-  const { settings, setSettings } = useSettingsProvider();
-  const { deeperDarkMode } = settings;
+  const [settings, setSettings] = useSettingsProvider(futureSettings);
+  const { deeper_dark_mode: deeperDarkMode } = settings;
 
   useEffect(() => {
     if (deeperDarkMode) {

@@ -228,9 +228,61 @@ class DocumentTest < ActiveSupport::TestCase
     end
   end
 
+  test 'updating calls TryCreateAutoSnapshot if body was modified' do
+    document = create(:document, body: 'old body')
+
+    perform = proc do |d|
+      assert_equal d.body, 'old body'
+    end
+
+    called = stub_try_create_auto_snapshot(perform) do
+      document.update!(body: 'new body')
+    end
+
+    assert called, 'TryCreateAutoSnapshot was not called'
+    assert_equal 'new body', document.body
+
+    document.reload
+    assert_equal 'new body', document.body
+  end
+
+  test 'updating does not call TryCreateAutoSnapshot if body was not modified' do
+    document = create(:document, body: 'old body')
+
+    called = stub_try_create_auto_snapshot do
+      document.update!(title: 'new title')
+    end
+
+    refute called, 'TryCreateAutoSnapshot was called'
+  end
+
+  test 'can delete document with snapshots' do
+    document = create(:document, body_type: 'json/slate')
+    create(:snapshot, document: document)
+
+    assert_difference 'Document.count', -1 do
+      document.destroy
+    end
+  end
+
   private
 
   def search_ids(project:, query:)
     Document.search(project: project, query: query).map { |hit| hit.dig('document', 'id').to_i }
+  end
+
+  def stub_try_create_auto_snapshot(perform = nil, &block)
+    called = false
+
+    TryCreateAutoSnapshot.stub(
+      :perform,
+      ->(document) {
+        called = true
+        perform&.call(document)
+      },
+      &block
+    )
+
+    called
   end
 end

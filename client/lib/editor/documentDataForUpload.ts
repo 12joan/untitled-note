@@ -9,7 +9,6 @@ import {
   getAttachmentIsUploading,
 } from '~/lib/editor/attachments';
 import { filterDescendants } from '~/lib/editor/filterDescendants';
-import { getPlainBody } from '~/lib/editor/getPlainBody';
 import { AttachmentElement } from './attachments/types';
 
 const excludedTypes = [ELEMENT_MENTION_INPUT];
@@ -29,12 +28,7 @@ export const getFilteredChildren = (children: TDescendant[]) =>
     return true;
   });
 
-export const documentDataForUpload = (editor: PlateEditor) => {
-  const filteredChildren = getFilteredChildren(editor.children);
-
-  return {
-    body: JSON.stringify(filteredChildren),
-    body_type: 'json/slate',
-    plain_body: getPlainBody({ type: '', children: filteredChildren }),
-  };
-};
+export const documentDataForUpload = (editor: PlateEditor) => ({
+  body: JSON.stringify(getFilteredChildren(editor.children)),
+  body_type: 'json/slate',
+});

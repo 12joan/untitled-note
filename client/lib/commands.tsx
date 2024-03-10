@@ -17,7 +17,7 @@ import {
   recentlyViewedPath,
   tagsPath,
 } from '~/lib/routes';
-import { KeyboardShortcutConfig } from '~/lib/settingsSchema';
+import { KeyboardShortcutConfig } from '~/lib/types';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 import AccountIcon from '~/components/icons/AccountIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';

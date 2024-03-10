@@ -1,4 +1,20 @@
 class S3File < ApplicationRecord
+  include Listenable
+
+  include Queryable.permit(
+    *%i[
+      id
+      role
+      filename
+      size
+      content_type
+      url
+      created_at
+      became_unused_at
+      do_not_delete_unused
+    ]
+  )
+
   belongs_to :owner, class_name: 'User', inverse_of: :s3_files
   belongs_to :original_project, class_name: 'Project', inverse_of: :s3_files, optional: true
   has_many :used_as_image_in_projects, class_name: 'Project', foreign_key: 'image_id', dependent: :nullify
@@ -14,9 +30,6 @@ class S3File < ApplicationRecord
 
   scope :attachments, -> { where(role: 'attachment') }
   scope :project_images, -> { where(role: 'project-image') }
-
-  include Queryable.permit(*%i[id role filename size content_type url created_at became_unused_at do_not_delete_unused])
-  include Listenable
 
   INLINE_CONTENT_TYPES = %w[
     application/pdf

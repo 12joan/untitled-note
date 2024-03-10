@@ -11,7 +11,9 @@ const keyboardShortcuts: KeyboardShortcut[] = keyboardShortcutCommands.map(
 );
 
 export const useKeyboardShortcuts = (): KeyboardShortcut[] => {
-  const [keyboardShortcutOverrides] = useSettings('keyboardShortcutOverrides');
+  const [keyboardShortcutOverrides] = useSettings(
+    'keyboard_shortcut_overrides'
+  );
 
   return useMemo(
     () =>

@@ -15,4 +15,8 @@ class User < ApplicationRecord
     raise 'Storage used cannot be negative' if storage_used + difference < 0
     User.update_counters(id, storage_used: difference, touch: true)
   end
+
+  def auto_snapshots_option
+    settings&.auto_snapshots_option || 'disabled'
+  end
 end

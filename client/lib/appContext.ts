@@ -1,12 +1,12 @@
 import { MutableRefObject, ReactNode } from 'react';
 import { createContext, ProviderProps } from '~/lib/context';
 import { Future } from '~/lib/monads';
-import { SettingsSchema } from '~/lib/settingsSchema';
 import {
   EditorStyle,
   PartialDocument,
   Project,
   S3File,
+  Settings,
   StorageQuotaUsage,
   Tag,
 } from '~/lib/types';
@@ -14,8 +14,8 @@ import { AccountModalOpenProps } from '~/lib/useAccountModal';
 import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
 export type AppContext = {
-  settings: SettingsSchema;
-  setSettings: (settings: SettingsSchema) => void;
+  settings: Settings;
+  setSettings: (delta: Partial<Settings>) => void;
   futureQuotaUsage: Future<StorageQuotaUsage>;
   futureRemainingQuota: Future<number>;
   futureFiles: Future<S3File[]>;

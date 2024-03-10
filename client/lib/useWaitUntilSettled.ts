@@ -1,28 +1,37 @@
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useStableGetter } from '~/lib/useStableGetter';
 import { useTimeout } from '~/lib/useTimer';
 
 export interface UseWaitUntilSettledOptions {
   debounceTime?: number;
+  fireOnUnmount?: boolean;
 }
 
 export const useWaitUntilSettled = <T>(
   value: T,
   handleChange: (value: T) => void,
-  { debounceTime = 500 }: UseWaitUntilSettledOptions = {}
+  { debounceTime = 500, fireOnUnmount = false }: UseWaitUntilSettledOptions = {}
 ) => {
-  const afterFirst = useRef(false);
-  const initialValue = useRef(value);
+  const getCurrentValue = useStableGetter(value);
+  const previousValue = useRef(value);
+  const getHandleChange = useStableGetter(handleChange);
 
-  useTimeout(
-    () => {
-      if (!afterFirst.current) {
-        afterFirst.current = true;
-        if (value === initialValue.current) return;
+  const fireIfChanged = useCallback(() => {
+    const currentValue = getCurrentValue();
+    if (currentValue !== previousValue.current) {
+      previousValue.current = currentValue;
+      getHandleChange()(currentValue);
+    }
+  }, []);
+
+  useTimeout(fireIfChanged, debounceTime, [value]);
+
+  useEffect(
+    () => () => {
+      if (fireOnUnmount) {
+        fireIfChanged();
       }
-
-      handleChange(value);
     },
-    debounceTime,
-    [value]
+    []
   );
 };

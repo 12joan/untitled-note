@@ -3,10 +3,6 @@ module API
     class SettingsController < APIController
       before_action :set_settings
 
-      def show
-        render json: @settings&.data
-      end
-
       def update
         @settings ||= current_user.build_settings
 
@@ -20,7 +16,12 @@ module API
       private
 
       def settings_params
-        params.require(:settings).permit(:data)
+        params.require(:settings).permit(
+          :deeper_dark_mode,
+          :editor_style,
+          :auto_snapshots_option,
+          keyboard_shortcut_overrides: {},
+        )
       end
 
       def set_settings

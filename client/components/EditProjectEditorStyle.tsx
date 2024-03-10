@@ -13,9 +13,13 @@ export const EditProjectEditorStyle = () => {
     localProject.editor_style
   );
 
-  useWaitUntilSettled(editorStyle, () => {
-    updateProject({ editor_style: editorStyle });
-  });
+  useWaitUntilSettled(
+    editorStyle,
+    () => {
+      updateProject({ editor_style: editorStyle });
+    },
+    { fireOnUnmount: true }
+  );
 
   return (
     <div className="space-y-2">

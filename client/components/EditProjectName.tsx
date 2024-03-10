@@ -17,17 +17,21 @@ export const EditProjectName = () => {
     validate: (name) => name.trim().length > 0,
   });
 
-  useWaitUntilSettled(name, () => {
-    if (!nameIsValid) {
-      return;
-    }
+  useWaitUntilSettled(
+    name,
+    () => {
+      if (!nameIsValid) {
+        return;
+      }
 
-    updateProject({ name }).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      resetName();
-    });
-  });
+      updateProject({ name }).catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        resetName();
+      });
+    },
+    { fireOnUnmount: true }
+  );
 
   return (
     <label className="block space-y-2">

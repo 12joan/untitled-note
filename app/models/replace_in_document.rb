@@ -22,7 +22,6 @@ class ReplaceInDocument
 
     if replace_count > 0
       document.body = document_root.to_json
-      document.plain_body.gsub!(find, replace)
       document.was_updated_on_server
       document.save!
     end

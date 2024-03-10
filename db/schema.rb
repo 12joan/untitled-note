@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_28_090028) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_10_112321) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_28_090028) do
     t.string "updated_by", default: "server", null: false
     t.datetime "locked_at"
     t.integer "editor_style"
+    t.integer "auto_snapshots_option"
     t.index ["project_id"], name: "index_documents_on_project_id"
   end
 
@@ -66,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_28_090028) do
     t.string "background_colour", default: "auto", null: false
     t.string "emoji"
     t.integer "editor_style"
+    t.integer "auto_snapshots_option"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["owner_id"], name: "index_projects_on_owner_id"
   end
@@ -89,9 +91,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_28_090028) do
 
   create_table "settings", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.text "data"
+    t.text "legacy_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "keyboard_shortcut_overrides", default: {}, null: false
+    t.boolean "deeper_dark_mode", default: false, null: false
+    t.integer "editor_style", default: 0, null: false
+    t.integer "auto_snapshots_option", default: 0, null: false
     t.index ["user_id"], name: "index_settings_on_user_id"
   end
 

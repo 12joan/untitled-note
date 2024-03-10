@@ -11,6 +11,21 @@ class SnapshotValidator < ActiveModel::Validator
 end
 
 class Snapshot < ApplicationRecord
+  include Listenable
+
+  include Queryable.permit(
+    *%i[
+      id 
+      name 
+      manual 
+      body 
+      restores_snapshot 
+      document_id 
+      created_at 
+      updated_at
+    ]
+  )
+
   belongs_to :document
   has_one :owner, through: :document
 
@@ -26,9 +41,6 @@ class Snapshot < ApplicationRecord
     dependent: :nullify
 
   validates_with SnapshotValidator
-
-  include Queryable.permit(*%i[id name manual body restores_snapshot document_id created_at updated_at])
-  include Listenable
 
   def restores_snapshot_or_self
     restores_snapshot || self

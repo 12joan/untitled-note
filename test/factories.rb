@@ -44,6 +44,5 @@ FactoryBot.define do
 
   factory :settings do
     user
-    data { { hello: 'world' }.to_json }
   end
 end
