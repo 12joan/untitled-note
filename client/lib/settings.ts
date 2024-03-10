@@ -10,6 +10,7 @@ const defaultSettings: Settings = {
   keyboard_shortcut_overrides: {},
   deeper_dark_mode: false,
   editor_style: 'casual',
+  auto_snapshots_option: 'disabled',
 };
 
 export const useSettingsProvider = (futureSettings: Future<Settings>) => {

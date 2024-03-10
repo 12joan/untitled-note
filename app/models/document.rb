@@ -41,6 +41,7 @@ class Document < ApplicationRecord
   include Listenable
 
   after_create :update_linked_s3_files
+  before_update :try_create_auto_snapshot
   after_update :update_linked_s3_files
 
   after_commit :upsert_to_typesense, on: %i[create update]
@@ -68,6 +69,12 @@ class Document < ApplicationRecord
 
   def resolved_auto_snapshots_option
     auto_snapshots_option || project.resolved_auto_snapshots_option
+  end
+
+  def try_create_auto_snapshot
+    if body_changed?
+      TryCreateAutoSnapshot.perform(Document.find(id))
+    end
   end
 
   def slate?
