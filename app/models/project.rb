@@ -1,16 +1,7 @@
 class Project < ApplicationRecord
-  belongs_to :owner, class_name: 'User', inverse_of: :projects
-  has_many :documents, dependent: :destroy
-  has_many :tags, dependent: :destroy
-  belongs_to :image, class_name: 'S3File', optional: true
-  has_many :s3_files, foreign_key: 'original_project_id', dependent: :nullify
-
-  validates :name, presence: true
-  validates :background_colour, inclusion: { in: %w[auto light dark] }
-  validates :emoji, presence: true, allow_nil: true
-
   include EditorStylable
   include AutoSnapshotsOptionable
+  include Listenable
 
   include Queryable.permit(
     *%i[
@@ -27,7 +18,15 @@ class Project < ApplicationRecord
     ]
   )
 
-  include Listenable
+  belongs_to :owner, class_name: 'User', inverse_of: :projects
+  has_many :documents, dependent: :destroy
+  has_many :tags, dependent: :destroy
+  belongs_to :image, class_name: 'S3File', optional: true
+  has_many :s3_files, foreign_key: 'original_project_id', dependent: :nullify
+
+  validates :name, presence: true
+  validates :background_colour, inclusion: { in: %w[auto light dark] }
+  validates :emoji, presence: true, allow_nil: true
 
   after_create do
     update!(list_index: id)

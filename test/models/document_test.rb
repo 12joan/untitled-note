@@ -256,6 +256,15 @@ class DocumentTest < ActiveSupport::TestCase
     refute called, 'TryCreateAutoSnapshot was called'
   end
 
+  test 'can delete document with snapshots' do
+    document = create(:document, body_type: 'json/slate')
+    create(:snapshot, document: document)
+
+    assert_difference 'Document.count', -1 do
+      document.destroy
+    end
+  end
+
   private
 
   def search_ids(project:, query:)

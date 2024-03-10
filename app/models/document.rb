@@ -1,23 +1,7 @@
 class Document < ApplicationRecord
-  belongs_to :project
-  has_one :owner, through: :project
-
-  has_many :documents_tags, dependent: :destroy
-  has_many :tags, through: :documents_tags
-  accepts_nested_attributes_for :tags
-
-  has_many :documents_s3_files, dependent: :destroy
-  has_many :s3_files, through: :documents_s3_files
-
-  has_many :snapshots, dependent: :destroy
-
-  scope :blank, -> { where(blank: true) }
-  scope :not_blank, -> { where(blank: false) }
-  scope :pinned, -> { where.not(pinned_at: nil) }
-
   include EditorStylable
   include AutoSnapshotsOptionable
-
+  include Listenable
   include Queryable.permit(
     *%i[
       id
@@ -38,7 +22,21 @@ class Document < ApplicationRecord
     ]
   )
 
-  include Listenable
+  belongs_to :project
+  has_one :owner, through: :project
+
+  has_many :documents_tags, dependent: :destroy
+  has_many :tags, through: :documents_tags
+  accepts_nested_attributes_for :tags
+
+  has_many :documents_s3_files, dependent: :destroy
+  has_many :s3_files, through: :documents_s3_files
+
+  has_many :snapshots, dependent: :destroy
+
+  scope :blank, -> { where(blank: true) }
+  scope :not_blank, -> { where(blank: false) }
+  scope :pinned, -> { where.not(pinned_at: nil) }
 
   before_save :extract_plain_body
 

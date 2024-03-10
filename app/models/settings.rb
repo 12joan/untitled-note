@@ -1,8 +1,7 @@
 class Settings < ApplicationRecord
-  belongs_to :user
-
   include EditorStylable
   include AutoSnapshotsOptionable
+  include Listenable
 
   include Queryable.permit(
     *%i[
@@ -13,5 +12,5 @@ class Settings < ApplicationRecord
     ]
   )
 
-  include Listenable
+  belongs_to :user
 end
