@@ -10,5 +10,8 @@ const getRestoresSnapshotName = (snapshot: Snapshot): string | null =>
   snapshot.restores_snapshot &&
   `Restore "${getSnapshotName(snapshot.restores_snapshot)}"`;
 
-const getSnapshotTimestampName = (snapshot: Snapshot): string =>
-  `Snapshot ${new Date(snapshot.created_at).toLocaleString()}`;
+const getSnapshotTimestampName = (snapshot: Snapshot): string => {
+  const noun = snapshot.manual ? 'Snapshot' : 'Auto-snapshot';
+  const date = new Date(snapshot.created_at).toLocaleString();
+  return `${noun} ${date}`;
+};

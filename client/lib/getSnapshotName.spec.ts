@@ -11,9 +11,11 @@ describe('getSnapshotName', () => {
 
   const baseSnapshot = {
     name: 'Alice',
+    manual: true,
     created_at: snapshotDate.toISOString(),
     restores_snapshot: {
       name: 'Bob',
+      manual: true,
       created_at: restoresSnapshotDate.toISOString(),
     } satisfies Partial<Snapshot> as any as Snapshot,
   } satisfies Partial<Snapshot> as any as Snapshot;
@@ -62,11 +64,27 @@ describe('getSnapshotName', () => {
           restores_snapshot: null,
         };
 
-        it('returns the snapshot date', () => {
-          const snapshot = noRestoreSnapshot;
-          expect(getSnapshotName(snapshot)).toBe(
-            `Snapshot ${snapshotDateLocaleString}`
-          );
+        describe('when snapshot is manual', () => {
+          it('returns the snapshot date prefixed with Snapshot', () => {
+            const snapshot = noRestoreSnapshot;
+            expect(getSnapshotName(snapshot)).toBe(
+              `Snapshot ${snapshotDateLocaleString}`
+            );
+          });
+
+          describe('when snapshot is not manual', () => {
+            const autoSnapshot = {
+              ...noRestoreSnapshot,
+              manual: false,
+            };
+
+            it('returns the snapshot date prefixed with Auto-snapshot', () => {
+              const snapshot = autoSnapshot;
+              expect(getSnapshotName(snapshot)).toBe(
+                `Auto-snapshot ${snapshotDateLocaleString}`
+              );
+            });
+          });
         });
       });
     });
