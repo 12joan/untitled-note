@@ -2,23 +2,17 @@ import {
   createPluginFactory,
   isSelectionExpanded,
   MARK_CODE,
-  TText,
 } from '@udecode/plate';
-import { NodeEntry } from 'slate';
 import { getMarkBoundary } from './getMarkBoundary';
 import { getMarkBoundaryAffinity } from './getMarkBoundaryAffinity';
 import { setMarkBoundaryAffinity } from './setMarkBoundaryAffinity';
 import { MarkBoundary } from './types';
 
-const applicableMarks = [MARK_CODE];
-
-const markBoundaryIsApplicable = (markBoundary: MarkBoundary) => {
+const markBoundaryHasMark = (markBoundary: MarkBoundary, mark: string) => {
   const [backwardLeafEntry, forwardLeafEntry] = markBoundary;
-  const leafEntryIsApplicable = (leafEntry: NodeEntry<TText>) =>
-    applicableMarks.some((mark) => leafEntry[0][mark]);
   return (
-    (backwardLeafEntry && leafEntryIsApplicable(backwardLeafEntry)) ||
-    (forwardLeafEntry && leafEntryIsApplicable(forwardLeafEntry))
+    (backwardLeafEntry && backwardLeafEntry[0][mark]) ||
+    (forwardLeafEntry && forwardLeafEntry[0][mark])
   );
 };
 
@@ -40,19 +34,19 @@ export const createMarkAffinityPlugin = createPluginFactory({
         editor.selection &&
         !isSelectionExpanded(editor)
       ) {
-        const markBoundaryBefore = getMarkBoundary(editor);
-        const hadMarkBoundaryBefore =
-          markBoundaryBefore && markBoundaryIsApplicable(markBoundaryBefore);
+        const [leftMarkEntryBefore] = getMarkBoundary(editor) ?? [null];
+        const removingFromLeftMark =
+          leftMarkEntryBefore && leftMarkEntryBefore[0].text.length > 1;
 
         deleteBackward(unit);
 
         const afterMarkBoundary = getMarkBoundary(editor);
 
-        if (afterMarkBoundary && markBoundaryIsApplicable(afterMarkBoundary)) {
+        if (afterMarkBoundary) {
           setMarkBoundaryAffinity(
             editor,
             afterMarkBoundary,
-            hadMarkBoundaryBefore ? 'backward' : 'forward'
+            removingFromLeftMark ? 'backward' : 'forward'
           );
         }
         return;
@@ -77,12 +71,12 @@ export const createMarkAffinityPlugin = createPluginFactory({
 
         /**
          * If the cursor is at the start or end of a list of text nodes and
-         * inside a mark, then moving outside the mark should set the affinity
-         * accordingly.
+         * inside a code mark, then moving outside the mark should set the
+         * affinity accordingly.
          */
         if (
           beforeMarkBoundary &&
-          markBoundaryIsApplicable(beforeMarkBoundary) &&
+          markBoundaryHasMark(beforeMarkBoundary, MARK_CODE) &&
           beforeMarkBoundary[reverse ? 0 : 1] === null &&
           getMarkBoundaryAffinity(editor, beforeMarkBoundary) ===
             (reverse ? 'forward' : 'backward')
@@ -103,7 +97,7 @@ export const createMarkAffinityPlugin = createPluginFactory({
          * If the move places the cursor at a mark boundary, then the affinity
          * should be set to the direction the cursor came from.
          */
-        if (afterMarkBoundary && markBoundaryIsApplicable(afterMarkBoundary)) {
+        if (afterMarkBoundary) {
           setMarkBoundaryAffinity(
             editor,
             afterMarkBoundary,
