@@ -4,13 +4,15 @@ import { Path, Range } from 'slate';
 
 import '../lib/globals.d';
 
+export type EditorHandle = JSHandle<PlateEditor>;
+
 export const getEditable = (context: Page | Locator) =>
   context.locator('[data-slate-editor]');
 
 export const getEditorHandle = async (
   page: Page,
   editable?: Locator
-): Promise<JSHandle<PlateEditor>> => {
+): Promise<EditorHandle> => {
   const editableHandle = await (editable || getEditable(page)).elementHandle();
 
   return page.evaluateHandle((editable) => {
@@ -24,7 +26,7 @@ export const getEditorHandle = async (
 
 export const getSlateNodeByPath = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   path: Path
 ): Promise<JSHandle<TNode>> =>
   page.evaluateHandle(
@@ -38,7 +40,7 @@ export const getSlateNodeByPath = async (
 
 export const getDOMNodeByPath = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   path: Path
 ): Promise<ElementHandle> => {
   const nodeHandle = await getSlateNodeByPath(page, editorHandle, path);
@@ -55,7 +57,7 @@ export const getDOMNodeByPath = async (
 
 export const clickAtPath = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   path: Path
 ) => {
   const domNode = await getDOMNodeByPath(page, editorHandle, path);
@@ -64,7 +66,7 @@ export const clickAtPath = async (
 
 export const getTypeAtPath = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   path: Path
 ): Promise<string> => {
   const nodeHandle = await getSlateNodeByPath(page, editorHandle, path);
@@ -75,13 +77,13 @@ export const getTypeAtPath = async (
 
 export const getSelection = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>
+  editorHandle: EditorHandle
 ): Promise<Range | null> =>
   page.evaluate((editor) => editor.selection, editorHandle);
 
 export const setSelection = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   range: Range
 ) =>
   page.evaluate(([editor, range]) => editor.setSelection(range), [
@@ -91,7 +93,7 @@ export const setSelection = async (
 
 export const addMark = async (
   page: Page,
-  editorHandle: JSHandle<PlateEditor>,
+  editorHandle: EditorHandle,
   key: string,
   value: any
 ) =>
