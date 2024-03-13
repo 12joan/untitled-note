@@ -34,6 +34,7 @@
     "javascript-time-ago": "^2.5.9",
     "js-cookie": "^3.0.5",
     "locale-includes": "^1.0.6",
+    "lodash": "^4.17.21",
     "popper-max-size-modifier": "^0.2.0",
     "pretty": "^2.0.0",
     "prop-types": "^15.8.1",
@@ -57,6 +58,7 @@
   "devDependencies": {
     "@playwright/test": "^1.42.1",
     "@types/jest": "^29.5.12",
+    "@types/lodash": "^4",
     "@types/node": "^18.17.14",
     "@types/rails__actioncable": "^6.1.10",
     "@types/react": "^18.0.35",

@@ -1802,6 +1802,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4":
+  version: 4.17.0
+  resolution: "@types/lodash@npm:4.17.0"
+  checksum: 2053203292b5af99352d108656ceb15d39da5922fc3fb8186e1552d65c82d6e545372cc97f36c95873aa7186404d59d9305e9d49254d4ae55e77df1e27ab7b5d
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:^4.14.200":
   version: 4.14.201
   resolution: "@types/lodash@npm:4.14.201"
@@ -7211,6 +7218,7 @@ __metadata:
     "@tippyjs/react": "npm:^4.2.6"
     "@types/jest": "npm:^29.5.12"
     "@types/js-cookie": "npm:^3.0.6"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:^18.17.14"
     "@types/rails__actioncable": "npm:^6.1.10"
     "@types/react": "npm:^18.0.35"
@@ -7244,6 +7252,7 @@ __metadata:
     jest: "npm:^29.7.0"
     js-cookie: "npm:^3.0.5"
     locale-includes: "npm:^1.0.6"
+    lodash: "npm:^4.17.21"
     popper-max-size-modifier: "npm:^0.2.0"
     postcss: "npm:^8.4.31"
     postcss-flexbugs-fixes: "npm:^5.0.2"

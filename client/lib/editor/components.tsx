@@ -37,11 +37,6 @@ const makeElementComponent =
 const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
 
-const codeStyle = groupedClassNames({
-  base: 'bg-plain-800 dark:bg-plain-950 text-white em:text-sm',
-  diff: 'diff-above:bg-diff-900 diff-above:text-diff-300 no-default-diff-text-color',
-});
-
 export const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent(
     'p',
@@ -57,9 +52,8 @@ export const components = {
   [MARK_CODE]: makeElementComponent(
     'code',
     groupedClassNames({
-      code: codeStyle,
-      rounded: 'rounded',
-      padding: 'em:px-1.5 em:py-1',
+      base: 'text-pink-600 dark:text-pink-400',
+      diff: 'diff-above:text-diff-700 diff-above:dark:text-diff-300',
     })
   ),
   [ELEMENT_LINK]: LinkComponent,
@@ -86,10 +80,12 @@ export const components = {
   [ELEMENT_CODE_BLOCK]: makeElementComponent(
     'pre',
     groupedClassNames({
-      code: codeStyle,
+      bg: 'bg-plain-800 dark:bg-plain-950',
+      text: 'text-white em:text-sm',
       rounded: 'rounded-md',
       padding: 'em:px-5 em:py-4',
       overflow: 'overflow-x-auto',
+      diff: 'diff-above:bg-diff-900 diff-above:text-diff-300 no-default-diff-text-color',
     })
   ),
   [ELEMENT_UL]: makeElementComponent(

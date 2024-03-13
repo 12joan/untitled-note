@@ -39,6 +39,12 @@ export const locateSidebarRecentlyViewedDocuments = (page: Page) =>
 export const locateSidebarTags = (page: Page) =>
   locateSidebar(page).getByTestId('sidebar-tags');
 
+export const locateFormattingToolbar = (page: Page) =>
+  page.getByLabel('Formatting toolbar', { exact: true });
+
+export const clickFormattingToolbarButton = async (page: Page, label: string) =>
+  locateFormattingToolbar(page).getByLabel(label).click();
+
 export const visitOverview = async (page: Page) => {
   await locateSidebar(page).getByText('Overview').click();
   await page.waitForURL(/\/overview$/);
