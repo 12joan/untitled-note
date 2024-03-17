@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useAppContext } from '~/lib/appContext';
-import { includes } from '~/lib/includes';
+import { filterPredicate } from '~/lib/filterPredicate';
 import { orDefaultFuture } from '~/lib/monads';
 import { TagLink } from '~/lib/routes';
 import { LocalDocument, LocalTag } from '~/lib/types';
@@ -79,7 +79,10 @@ export const EditorTags = forwardRef(
     const trimmedInputValue = inputValue.replace(/\s+/g, ' ').trim();
 
     const filteredUnusedTags = useMemo(
-      () => unusedTags.filter((tag) => includes(tag.text, trimmedInputValue)),
+      () =>
+        unusedTags.filter((tag) =>
+          filterPredicate(tag.text, trimmedInputValue)
+        ),
       [unusedTags, trimmedInputValue]
     );
 

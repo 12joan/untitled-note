@@ -93,10 +93,7 @@ export const TagDocumentsView = memo(({ tagId }: TagDocumentsViewProps) => {
               >
                 <h1 className="h1">Tag: {tag!.text}</h1>
 
-                <CaretDownIcon
-                  noAriaLabel
-                  className="ml-1 translate-y-1 shrink-0"
-                />
+                <CaretDownIcon noAriaLabel className="ml-1 translate-y-1" />
               </button>
             </Dropdown>
           ),

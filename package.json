@@ -33,7 +33,6 @@
     "idb": "^7.1.1",
     "javascript-time-ago": "^2.5.9",
     "js-cookie": "^3.0.5",
-    "locale-includes": "^1.0.6",
     "lodash": "^4.17.21",
     "popper-max-size-modifier": "^0.2.0",
     "pretty": "^2.0.0",

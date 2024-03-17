@@ -2,8 +2,8 @@ import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSearchResults } from '~/lib/apis/search';
 import { useAppContext } from '~/lib/appContext';
 import { searchCommands } from '~/lib/commands';
+import { filterPredicate } from '~/lib/filterPredicate';
 import { IIC, liftToIIC, mergeIICs, useDeployIICs } from '~/lib/iic';
-import { includes } from '~/lib/includes';
 import {
   FutureServiceResult,
   orDefaultFuture,
@@ -88,15 +88,19 @@ interface MakeFilteredListSourceOptions<T> extends MakeListSourceOptions<T> {
 }
 
 const makeFilteredListSource = <T,>({
+  list,
   include = () => true,
   getFilterable,
   ...rest
 }: MakeFilteredListSourceOptions<T>): SuggestionSource =>
   makeListSource({
+    list: list.sort(
+      (a, b) => getFilterable(a).length - getFilterable(b).length
+    ),
     include: (item, searchQuery) => {
       if (!include(item, searchQuery)) return false;
       const filterable = getFilterable(item);
-      return Boolean(filterable && includes(filterable, searchQuery));
+      return Boolean(filterable && filterPredicate(filterable, searchQuery));
     },
     ...rest,
   });
@@ -111,7 +115,19 @@ const commandsSource = makeFilteredListSource({
   action: ({ action }, altBehaviour) => action(altBehaviour),
 });
 
-const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
+export interface SearchModalOpenProps {
+  initialSearchQuery?: string;
+}
+
+interface SearchModalProps
+  extends SearchModalOpenProps,
+    Omit<StyledModalProps, 'children'> {}
+
+const SearchModal = ({
+  initialSearchQuery,
+  open,
+  onClose,
+}: SearchModalProps) => {
   const [iicElements, deployIIC] = useDeployIICs();
 
   const navigateOrOpen = useNavigateOrOpen();
@@ -125,7 +141,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
   const tags = orDefaultFuture(futureTags, []);
   const partialDocuments = orDefaultFuture(futurePartialDocuments, []);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery || '');
   const trimmedSearchQuery = searchQuery.trim();
   const isEmpty = trimmedSearchQuery === '';
 
@@ -159,14 +175,21 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
     setFsrSearchResults(pendingFutureServiceResult());
   }, [trimmedSearchQuery]);
 
-  useWaitUntilSettled(trimmedSearchQuery, () => {
-    if (!isEmpty) {
-      promiseToFutureServiceResult(
-        fetchSearchResults(currentProject.id, trimmedSearchQuery),
-        setFsrSearchResults
-      );
+  useWaitUntilSettled(
+    trimmedSearchQuery,
+    () => {
+      if (!isEmpty) {
+        promiseToFutureServiceResult(
+          fetchSearchResults(currentProject.id, trimmedSearchQuery),
+          setFsrSearchResults
+        );
+      }
+    },
+    {
+      fireOnMount: true,
+      fireEvenIfUnchanged: true,
     }
-  });
+  );
 
   const suggestions: Suggestion[] = useMemo(() => {
     const suggestionSources: SuggestionSource[] = [
@@ -196,7 +219,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         getFilterable: ({ text }) => text,
         getKey: ({ id }) => `tag-${id}`,
         getLabel: ({ text }) => text,
-        icon: <TagIcon size="1.25em" noAriaLabel />,
+        icon: <TagIcon size="1.25em" aria-label="Tag" />,
         action: ({ id }, newTab) =>
           openIIC(tagPath({ projectId: currentProject.id, tagId: id }), newTab),
         description: 'Jump to tag',
@@ -205,12 +228,12 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
       // Document titles
       makeFilteredListSource({
         list: partialDocuments.filter(
-          ({ id }) => !searchResultDocumentIds.includes(id)
+          ({ id, title }) => !!title && !searchResultDocumentIds.includes(id)
         ),
-        getFilterable: ({ title }) => title,
+        getFilterable: ({ title }) => title!,
         getKey: ({ id }) => `document-${id}`,
-        getLabel: ({ title }) => title,
-        icon: <DocumentIcon size="1.25em" noAriaLabel />,
+        getLabel: ({ title }) => title!,
+        icon: <DocumentIcon size="1.25em" aria-label="Document" />,
         description: 'Open document',
         action: ({ id }, newTab) =>
           openIIC(
@@ -224,7 +247,7 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
         list: searchResults,
         getKey: ({ document: { id } }) => `document-${id}`, // ` <- Fix syntax highlighting
         getLabel: ({ document }) => document.safe_title,
-        icon: <DocumentIcon size="1.25em" noAriaLabel />,
+        icon: <DocumentIcon size="1.25em" aria-label="Document" />,
         getDescription: ({ highlights }) => {
           const snippet = highlights
             .filter(({ field }) => field === 'plain_body')
@@ -380,4 +403,6 @@ const SearchModal = ({ open, onClose }: Omit<StyledModalProps, 'children'>) => {
 };
 
 export const useSearchModal = () =>
-  useModal((modalProps) => <SearchModal {...modalProps} />);
+  useModal<SearchModalOpenProps | undefined>((modalProps, openProps = {}) => (
+    <SearchModal {...modalProps} {...openProps} />
+  ));

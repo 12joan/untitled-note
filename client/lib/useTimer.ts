@@ -1,4 +1,9 @@
 import { DependencyList, useEffect } from 'react';
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
+
+export interface UseTimerOptions {
+  includeFirst?: boolean;
+}
 
 const useTimerFactory =
   (
@@ -8,9 +13,12 @@ const useTimerFactory =
   (
     callback: () => void,
     delay: number | null,
-    dependencies: DependencyList = []
+    dependencies: DependencyList = [],
+    { includeFirst = true }: UseTimerOptions = {}
   ) => {
-    useEffect(() => {
+    const effectHook = includeFirst ? useEffect : useEffectAfterFirst;
+
+    effectHook(() => {
       if (delay !== null) {
         const timer = setTimer(callback, delay);
         return () => clearTimer(timer);

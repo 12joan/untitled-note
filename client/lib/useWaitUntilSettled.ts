@@ -4,34 +4,44 @@ import { useTimeout } from '~/lib/useTimer';
 
 export interface UseWaitUntilSettledOptions {
   debounceTime?: number;
+  fireEvenIfUnchanged?: boolean;
+  fireOnMount?: boolean;
   fireOnUnmount?: boolean;
 }
 
 export const useWaitUntilSettled = <T>(
   value: T,
   handleChange: (value: T) => void,
-  { debounceTime = 500, fireOnUnmount = false }: UseWaitUntilSettledOptions = {}
+  {
+    debounceTime = 500,
+    fireEvenIfUnchanged = false,
+    fireOnMount = false,
+    fireOnUnmount = false,
+  }: UseWaitUntilSettledOptions = {}
 ) => {
   const getCurrentValue = useStableGetter(value);
   const previousValue = useRef(value);
   const getHandleChange = useStableGetter(handleChange);
 
-  const fireIfChanged = useCallback(() => {
+  const maybeFire = useCallback(() => {
     const currentValue = getCurrentValue();
-    if (currentValue !== previousValue.current) {
+    if (fireEvenIfUnchanged || currentValue !== previousValue.current) {
       previousValue.current = currentValue;
       getHandleChange()(currentValue);
     }
-  }, []);
+  }, [fireEvenIfUnchanged]);
 
-  useTimeout(fireIfChanged, debounceTime, [value]);
+  useTimeout(maybeFire, debounceTime, [value], { includeFirst: false });
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    if (fireOnMount) {
+      getHandleChange()(value);
+    }
+
+    return () => {
       if (fireOnUnmount) {
-        fireIfChanged();
+        maybeFire();
       }
-    },
-    []
-  );
+    };
+  }, []);
 };

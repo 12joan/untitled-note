@@ -11,6 +11,7 @@ import {
   Tag,
 } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { SearchModalOpenProps } from '~/lib/useSearchModal';
 import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
 export type AppContext = {
@@ -30,7 +31,7 @@ export type AppContext = {
   futureRecentlyViewedDocuments: Future<PartialDocument[]>;
   useFormattingToolbar: (children: ReactNode) => JSX.Element;
   topBarHeight: number;
-  toggleSearchModal: () => void;
+  toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
   toggleSettingsModal: (...args: [] | [SettingsModalOpenProps]) => void;
   toggleSidebar: () => void;

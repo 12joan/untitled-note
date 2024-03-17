@@ -12,9 +12,11 @@ import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { DocumentIndex } from '~/components/DocumentIndex';
 import { LoadingView } from '~/components/LoadingView';
+import { NewDocumentRectButton } from '~/components/NewDocumentRectButton';
 import { NoDocumentsView } from '~/components/NoDocumentsView';
 import { PinnedDragTarget } from '~/components/PinnedDragTarget';
-import { PopOutLink } from '~/components/PopOutLink';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { QuickFind } from '~/components/QuickFind';
 import { TagIndex } from '~/components/TagIndex';
 
 export const OverviewView = memo(() => {
@@ -37,11 +39,37 @@ export const OverviewView = memo(() => {
     tags: futureTags,
   });
 
+  const projectIcon = (
+    <ProjectIcon
+      project={project}
+      className="size-12 sm:size-[5.25rem] text-xl sm:text-4xl border dark:border-transparent rounded-lg sm:rounded-2xl select-none"
+    />
+  );
+
   return (
     <div ref={viewRef} className="grow flex flex-col gap-5">
-      <PopOutLink as={EditProjectLink} label="Edit project">
-        <h1 className="h1">{project.name}</h1>
-      </PopOutLink>
+      <div className="flex gap-3">
+        <div className="max-sm:hidden" aria-hidden>
+          {projectIcon}
+        </div>
+
+        <div className="space-y-2">
+          <h1 className="h1 flex items-center gap-2">
+            <div className="sm:hidden" aria-hidden>
+              {projectIcon}
+            </div>
+            {project.name}
+          </h1>
+          <div className="flex gap-2 flex-wrap">
+            <NewDocumentRectButton />
+            <EditProjectLink className="btn btn-rect btn-secondary">
+              Edit project
+            </EditProjectLink>
+          </div>
+        </div>
+      </div>
+
+      <QuickFind />
 
       {unwrapFuture(futures, {
         pending: <LoadingView />,

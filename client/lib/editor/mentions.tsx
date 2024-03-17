@@ -15,8 +15,8 @@ import {
 import { useFocused, useSelected } from 'slate-react';
 import { useAppContext } from '~/lib/appContext';
 import { useEditorEvent } from '~/lib/editor/imperativeEvents';
+import { filterPredicate } from '~/lib/filterPredicate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { includes } from '~/lib/includes';
 import { mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import { DocumentLink } from '~/lib/routes';
 import { useCombobox } from '~/lib/useCombobox';
@@ -137,9 +137,9 @@ export const MentionInputComponent = ({
 
   const matchingDocuments = useMemo(
     () =>
-      orDefaultFuture(futurePartialDocuments, []).filter(
-        (doc) => doc.title && includes(doc.title, query)
-      ),
+      orDefaultFuture(futurePartialDocuments, [])
+        .filter((doc) => doc.title && filterPredicate(doc.title, query))
+        .sort((a, b) => a.title!.length - b.title!.length),
     [futurePartialDocuments, query]
   );
 
@@ -147,7 +147,7 @@ export const MentionInputComponent = ({
     () => [
       ...matchingDocuments.map((doc) => ({
         key: doc.id,
-        label: doc.title,
+        label: doc.title!,
         icon: (
           <DocumentIcon
             size="1.25em"
@@ -202,7 +202,6 @@ export const MentionInputComponent = ({
 
   const comboboxFloating = useComboboxFloating({
     flip: true,
-    autoUpdate: true,
   });
 
   const suggestionsContainer = showSuggestions && (

@@ -61,7 +61,7 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
           <ButtonWithIcon
             icon={SearchIcon}
             label="Search"
-            onClick={toggleSearchModal}
+            onClick={() => toggleSearchModal()}
           />
         </section>
 
