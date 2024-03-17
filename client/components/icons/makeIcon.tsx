@@ -1,5 +1,5 @@
-import {omit} from 'lodash';
 import React, { ReactNode, SVGProps } from 'react';
+import { omit } from 'lodash';
 
 type AriaProps = { noAriaLabel: true } | { 'aria-label': string };
 
