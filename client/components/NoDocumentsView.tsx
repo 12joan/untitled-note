@@ -1,6 +1,5 @@
 import React from 'react';
-import { NewDocumentLink } from '~/lib/routes';
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
+import { NewDocumentRectButton } from '~/components/NewDocumentRectButton';
 
 export const NoDocumentsView = () => {
   return (
@@ -12,10 +11,7 @@ export const NoDocumentsView = () => {
       </p>
 
       <p>
-        <NewDocumentLink className="btn btn-rect btn-primary ring-offset-plain-100 dark:ring-offset-plain-800 inline-flex gap-2 items-center">
-          <NewDocumentIcon size="1.25em" noAriaLabel />
-          New document
-        </NewDocumentLink>
+        <NewDocumentRectButton className="ring-offset-plain-100 dark:ring-offset-plain-800" />
       </p>
     </div>
   );

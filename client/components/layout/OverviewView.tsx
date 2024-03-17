@@ -14,8 +14,9 @@ import { DocumentIndex } from '~/components/DocumentIndex';
 import { LoadingView } from '~/components/LoadingView';
 import { NoDocumentsView } from '~/components/NoDocumentsView';
 import { PinnedDragTarget } from '~/components/PinnedDragTarget';
-import { PopOutLink } from '~/components/PopOutLink';
 import { TagIndex } from '~/components/TagIndex';
+import { NewDocumentRectButton } from '../NewDocumentRectButton';
+import { ProjectIcon } from '../ProjectIcon';
 
 export const OverviewView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
@@ -37,11 +38,45 @@ export const OverviewView = memo(() => {
     tags: futureTags,
   });
 
+  const projectIcon = (
+    <ProjectIcon
+      project={project}
+      className="size-12 sm:size-[5.25rem] text-xl sm:text-4xl border dark:border-transparent rounded-lg sm:rounded-2xl select-none"
+    />
+  );
+
   return (
     <div ref={viewRef} className="grow flex flex-col gap-5">
-      <PopOutLink as={EditProjectLink} label="Edit project">
-        <h1 className="h1">{project.name}</h1>
-      </PopOutLink>
+      <div className="flex gap-3">
+        <div className="max-sm:hidden" aria-hidden>
+          {projectIcon}
+        </div>
+
+        <div className="space-y-2">
+          <h1 className="h1 flex items-center gap-2">
+            <div className="sm:hidden" aria-hidden>
+              {projectIcon}
+            </div>
+            {project.name}
+          </h1>
+          <div className="flex gap-2 flex-wrap">
+            <NewDocumentRectButton />
+            <EditProjectLink className="btn btn-rect btn-secondary">
+              Edit project
+            </EditProjectLink>
+          </div>
+        </div>
+      </div>
+
+      <label className="block space-y-2">
+        <h2 className="font-medium select-none">Quick search</h2>
+
+        <input
+          type="text"
+          className="block w-full sm:max-w-lg border rounded-lg px-3 py-2 bg-page-bg-light dark:border-transparent dark:bg-plain-800 dark:focus:bg-page-bg-dark"
+          placeholder="Find a document or tag"
+        />
+      </label>
 
       {unwrapFuture(futures, {
         pending: <LoadingView />,

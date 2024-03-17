@@ -15,7 +15,7 @@ export default (children: ReactNode) =>
     noAriaLabel,
     ...otherProps
   }: IconProps) => {
-    const className = `pointer-events-none ${userClassName}`;
+    const className = `pointer-events-none shrink-0 ${userClassName}`;
 
     return (
       <svg
