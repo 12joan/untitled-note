@@ -33,9 +33,10 @@ export const QuickFind = () => {
 
   const items: QuickFindItem[] = useMemo(() => {
     const documentItems = partialDocuments
+      .filter(({ title }) => title)
       .map((partialDocument) => ({
         key: `document-${partialDocument.id}`,
-        text: partialDocument.safe_title,
+        text: partialDocument.title!,
         icon: <DocumentIcon size="1.25em" aria-label="Document" />,
         onClick: (newTab: boolean) =>
           navigateOrOpen(
