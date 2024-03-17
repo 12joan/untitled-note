@@ -1,18 +1,19 @@
+import {omit} from 'lodash';
 import React, { ReactNode, SVGProps } from 'react';
 
-export interface IconProps extends SVGProps<SVGSVGElement> {
-  size?: number | string;
-  className?: string;
-  // Required as a reminder to add an aria-label to the parent element
-  noAriaLabel: true;
-}
+type AriaProps = { noAriaLabel: true } | { 'aria-label': string };
+
+export type IconProps = SVGProps<SVGSVGElement> &
+  AriaProps & {
+    size?: number | string;
+    className?: string;
+  };
 
 export default (children: ReactNode) =>
   ({
     size = '1em',
     className: userClassName = '',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    noAriaLabel,
+    'aria-label': ariaLabel,
     ...otherProps
   }: IconProps) => {
     const className = `pointer-events-none shrink-0 ${userClassName}`;
@@ -26,9 +27,10 @@ export default (children: ReactNode) =>
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="currentColor"
-        aria-hidden
+        aria-hidden={ariaLabel ? undefined : true}
+        aria-label={ariaLabel}
         className={className}
-        {...otherProps}
+        {...omit(otherProps, 'noAriaLabel')}
       >
         {children}
       </svg>

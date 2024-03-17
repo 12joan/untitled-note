@@ -12,11 +12,12 @@ import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { DocumentIndex } from '~/components/DocumentIndex';
 import { LoadingView } from '~/components/LoadingView';
+import { NewDocumentRectButton } from '~/components/NewDocumentRectButton';
 import { NoDocumentsView } from '~/components/NoDocumentsView';
 import { PinnedDragTarget } from '~/components/PinnedDragTarget';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { QuickFind } from '~/components/QuickFind';
 import { TagIndex } from '~/components/TagIndex';
-import { NewDocumentRectButton } from '../NewDocumentRectButton';
-import { ProjectIcon } from '../ProjectIcon';
 
 export const OverviewView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
@@ -68,15 +69,7 @@ export const OverviewView = memo(() => {
         </div>
       </div>
 
-      <label className="block space-y-2">
-        <h2 className="font-medium select-none">Quick search</h2>
-
-        <input
-          type="text"
-          className="block w-full sm:max-w-lg border rounded-lg px-3 py-2 bg-page-bg-light dark:border-transparent dark:bg-plain-800 dark:focus:bg-page-bg-dark"
-          placeholder="Find a document or tag"
-        />
-      </label>
+      <QuickFind />
 
       {unwrapFuture(futures, {
         pending: <LoadingView />,

@@ -6732,13 +6732,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"locale-includes@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "locale-includes@npm:1.0.6"
-  checksum: e7592aea742c3e6019e71c404a892ede58aee183693e85592bf048f35909973e472e26aec71ab2487bce4361d94031919facda493471f24242ba8f986fac3605
-  languageName: node
-  linkType: hard
-
 "locate-path@npm:^5.0.0":
   version: 5.0.0
   resolution: "locate-path@npm:5.0.0"
@@ -7244,7 +7237,6 @@ __metadata:
     javascript-time-ago: "npm:^2.5.9"
     jest: "npm:^29.7.0"
     js-cookie: "npm:^3.0.5"
-    locale-includes: "npm:^1.0.6"
     lodash: "npm:^4.17.21"
     popper-max-size-modifier: "npm:^0.2.0"
     postcss: "npm:^8.4.31"

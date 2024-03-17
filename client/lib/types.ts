@@ -39,7 +39,7 @@ export type LocalTag = Partial<Tag> & {
 
 export type Document = {
   id: number;
-  title: string;
+  title: string | null;
   safe_title: string;
   preview: string;
   body: string;
