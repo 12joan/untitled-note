@@ -15,13 +15,20 @@ import {
   useInlineFormattingButtons,
 } from './FormattingToolbar';
 
+const activeElementIsInToolbar = () =>
+  document.activeElement?.closest('[data-selection-toolbar]') !== null;
+
 const SelectionToolbar = () => {
   const editorStatic = useEditorRef();
+  const focused = useFocused();
 
   const open: boolean = useEditorSelector(
-    (editor) =>
-      isSelectionExpanded(editor) && (isRangeInSameBlock(editor) ?? false),
-    []
+    (editor) => {
+      if (!focused && !activeElementIsInToolbar()) return false;
+      if (!isSelectionExpanded(editor)) return false;
+      return isRangeInSameBlock(editor) ?? false;
+    },
+    [focused]
   );
 
   /**
@@ -29,9 +36,6 @@ const SelectionToolbar = () => {
    * that we keep the toolbar position up to date.
    */
   useEditorSelector((editor) => open && editor.selection, [open]);
-
-  // Re-render when the editor regains focus
-  useFocused();
 
   const readOnly = useEditorReadOnly();
   if (readOnly) return null;
@@ -47,6 +51,7 @@ const SelectionToolbar = () => {
       containerProps={
         {
           'data-testid': 'selection-toolbar',
+          'data-selection-toolbar': true,
         } as any
       }
     />
