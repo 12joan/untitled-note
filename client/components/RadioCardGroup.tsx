@@ -128,7 +128,7 @@ export const RadioCard = <T,>({
         onClick={() => onValueChange(value)}
         onKeyDown={handleKeyDown}
       >
-        <div className="w-5 h-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat" />
+        <div className="size-5 border rounded-full data-active:bg-primary-500 data-active:dark:bg-primary-400 data-active:border-0 data-active:bg-tick bg-[length:90%] bg-center bg-no-repeat shrink-0" />
 
         {children}
       </button>

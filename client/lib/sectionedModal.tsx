@@ -83,7 +83,7 @@ export const createSectionedModal = <
         </div>
 
         <div className="grow flex flex-col sm:flex-row sm:h-0">
-          <div className="shrink-0 max-sm:border-b sm:border-r border-black/10 dark:border-white/10 p-2 overflow-y-auto">
+          <div className="shrink-0 max-sm:border-b sm:border-r border-black/10 dark:border-white/10 p-2 overflow-y-auto sm:min-w-48">
             <div className="grow space-y-2" role="tablist">
               {sectionEntries.map(([key, { title, icon: Icon }]) => (
                 <button

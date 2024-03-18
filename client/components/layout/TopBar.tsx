@@ -40,7 +40,11 @@ export const TopBar = memo(({ sidebarButton }: TopBar) => {
   const mainActions: Action[] = [
     { icon: NewDocumentIcon, label: 'New document', as: NewDocumentLink },
     { icon: SearchIcon, label: 'Search', onClick: toggleSearchModal },
-    { icon: SettingsIcon, label: 'Settings', onClick: toggleSettingsModal },
+    {
+      icon: SettingsIcon,
+      label: 'User preferences',
+      onClick: toggleSettingsModal,
+    },
   ];
 
   const accountActions: Action[] = [

@@ -28,7 +28,7 @@ export type SettingsModalOpenProps = SectionedModalOpenProps<
 
 export const useSettingsModal = createSectionedModal({
   id: 'settings-modal',
-  title: 'Settings',
+  title: 'User preferences',
   sections,
   sectionProps: {},
 });

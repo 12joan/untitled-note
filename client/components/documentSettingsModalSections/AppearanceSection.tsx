@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditProjectLink } from '~/lib/routes';
+import { useAppContext } from '~/lib/appContext';
 import { EditorStyleInput } from '~/components/EditorStyleInput';
 import { DocumentSettingsModalSectionProps } from './types';
 
@@ -7,9 +7,13 @@ export const AppearanceSection = ({
   document: doc,
   updateDocument,
 }: DocumentSettingsModalSectionProps) => {
+  const toggleProjectSettingsModal = useAppContext(
+    'toggleProjectSettingsModal'
+  );
+
   return (
     <div className="space-y-2">
-      <h3 className="h3 select-none">Editor style</h3>
+      <h4 className="h3 select-none">Editor style</h4>
 
       <EditorStyleInput
         value={doc.editor_style}
@@ -18,9 +22,15 @@ export const AppearanceSection = ({
         }
         syncWithOption="project"
         syncWithLink={
-          <EditProjectLink className="btn btn-link">
-            View project settings
-          </EditProjectLink>
+          <button
+            type="button"
+            className="btn btn-link"
+            onClick={() =>
+              toggleProjectSettingsModal({ initialSection: 'appearance' })
+            }
+          >
+            Open project settings
+          </button>
         }
       />
     </div>

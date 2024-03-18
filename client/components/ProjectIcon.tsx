@@ -47,7 +47,7 @@ export const ProjectIcon: ProjectIconComponent = forwardRef(
     return (
       <Component
         ref={ref}
-        className={`flex items-center justify-center p-1 ${bgClassName} ${className}`}
+        className={`relative flex items-center justify-center p-1 ${bgClassName} ${className}`}
         style={
           {
             '--bg-url': hasImage ? `url(${project.image_url})` : undefined,

@@ -13,7 +13,7 @@ import DownloadIcon from '~/components/icons/DownloadIcon';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import { LoadingView } from '~/components/LoadingView';
 import { Meter } from '~/components/Meter';
-import { Tooltip } from '../Tooltip';
+import { Tooltip } from '~/components/Tooltip';
 
 export const FileStorageSection = () => {
   const futureQuotaUsage = useAppContext('futureQuotaUsage');
@@ -33,22 +33,22 @@ export const FileStorageSection = () => {
     resolved: ({ quotaUsage, files }) => (
       <>
         <div className="space-y-2">
-          <h3 className="h3 select-none">
+          <h4 className="h3 select-none">
             Storage used (
             {Math.round((100 * quotaUsage.used) / quotaUsage.quota)}%)
-          </h3>
+          </h4>
 
           <Meter max={quotaUsage.quota} value={quotaUsage.used} />
 
-          <div className="text-sm text-plain-500 dark:text-plain-400">
+          <p>
             {filesize(quotaUsage.used)} of {filesize(quotaUsage.quota)} used
             <br />
             {filesize(quotaUsage.quota - quotaUsage.used)} remaining
-          </div>
+          </p>
         </div>
 
         <div className="space-y-2">
-          <h3 className="h3 select-none">Files ({files.length})</h3>
+          <h4 className="h3 select-none">Files ({files.length})</h4>
           <FileList files={files} />
         </div>
       </>
@@ -67,11 +67,7 @@ const FileList = ({ files }: FileListProps) => {
         <FileEntry key={file.id} {...file} />
       ))}
 
-      {files.length === 0 && (
-        <div className="text-sm text-plain-500 dark:text-plain-400">
-          No files uploaded yet
-        </div>
-      )}
+      {files.length === 0 && <p>No files uploaded yet</p>}
     </>
   );
 };

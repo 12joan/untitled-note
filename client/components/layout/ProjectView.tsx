@@ -22,13 +22,13 @@ import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardSho
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useElementBounds } from '~/lib/useElementBounds';
 import { useElementSize } from '~/lib/useElementSize';
+import { useProjectSettingsModal } from '~/lib/useProjectSettingsModal';
 import { useSearchModal } from '~/lib/useSearchModal';
 import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useViewportSize } from '~/lib/useViewportSize';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { AllTagsView } from '~/components/layout/AllTagsView';
 import { EditorView } from '~/components/layout/EditorView';
-import { EditProjectView } from '~/components/layout/EditProjectView';
 import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar';
 import { OverviewView } from '~/components/layout/OverviewView';
 import { ProjectsBar } from '~/components/layout/ProjectsBar';
@@ -114,10 +114,17 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     close: hideSettingsModal,
   } = useSettingsModal();
 
+  const {
+    modal: projectSettingsModal,
+    toggle: toggleProjectSettingsModal,
+    close: hideProjectSettingsModal,
+  } = useProjectSettingsModal();
+
   useEffect(() => {
     hideSearchModal();
     hideAccountModal();
     hideSettingsModal();
+    hideProjectSettingsModal();
   }, [childView.key, projectId]);
 
   const useFormattingToolbar = useCallback(
@@ -139,7 +146,6 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     {
       awaitRedirect: AwaitRedirect,
       overview: OverviewView,
-      editProject: EditProjectView,
       recentlyViewed: RecentlyViewedView,
       showTag: TagDocumentsView,
       allTags: AllTagsView,
@@ -195,6 +201,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       toggleSearchModal={toggleSearchModal}
       toggleAccountModal={toggleAccountModal}
       toggleSettingsModal={toggleSettingsModal}
+      toggleProjectSettingsModal={toggleProjectSettingsModal}
       toggleSidebar={toggleSidebar}
       cycleFocus={useCallback(
         () =>
@@ -302,6 +309,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       {searchModal}
       {accountModal}
       {settingsModal}
+      {projectSettingsModal}
       {keyboardShortcutIICElements}
     </AppContextProvider>
   );

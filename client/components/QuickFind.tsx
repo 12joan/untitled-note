@@ -108,7 +108,7 @@ export const QuickFind = () => {
       >
         <input
           type="text"
-          className="w-full border rounded-lg px-3 py-2 bg-page-bg-light dark:border-transparent dark:bg-plain-800 dark:focus:bg-page-bg-dark"
+          className="text-input w-full"
           placeholder="Find a document or tag"
           {...inputProps}
           value={query}

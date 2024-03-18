@@ -11,6 +11,7 @@ import {
   Tag,
 } from '~/lib/types';
 import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { ProjectSettingsModalOpenProps } from '~/lib/useProjectSettingsModal';
 import { SearchModalOpenProps } from '~/lib/useSearchModal';
 import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
@@ -34,6 +35,9 @@ export type AppContext = {
   toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
   toggleSettingsModal: (...args: [] | [SettingsModalOpenProps]) => void;
+  toggleProjectSettingsModal: (
+    ...args: [] | [ProjectSettingsModalOpenProps]
+  ) => void;
   toggleSidebar: () => void;
   cycleFocus: () => void;
   linkOriginator?: string;
@@ -67,6 +71,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     toggleSearchModal: null,
     toggleAccountModal: null,
     toggleSettingsModal: null,
+    toggleProjectSettingsModal: null,
     toggleSidebar: null,
     cycleFocus: null,
     onButtonClick: null,

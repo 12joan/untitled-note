@@ -10,7 +10,6 @@ import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
-  editProjectPath,
   newDocumentPath,
   overviewPath,
   projectPath,
@@ -34,6 +33,7 @@ export type BaseCommand = {
 
 export type SearchCommand = BaseCommand & {
   search: {
+    aliases?: string[];
     description: string;
     icon: ReactElement;
   };
@@ -133,13 +133,14 @@ const commands: Command[] = [
   },
   {
     id: 'settings',
-    label: 'Settings',
+    label: 'User preferences',
     search: {
-      description: 'Open settings',
+      aliases: ['settings'],
+      description: 'Open user preferences',
       icon: <SettingsIcon size="1.25em" noAriaLabel />,
     },
     keyboardShortcut: {
-      hint: 'Open settings',
+      hint: 'Open user preferences',
       config: envSpecific({
         byOS: {
           default: undefined,
@@ -153,6 +154,7 @@ const commands: Command[] = [
     id: 'account-info',
     label: 'Account info',
     search: {
+      aliases: ['email', 'password'],
       description: 'Open account info',
       icon: <AccountIcon size="1.25em" noAriaLabel />,
     },
@@ -160,6 +162,18 @@ const commands: Command[] = [
       hint: 'Open account info',
     },
     action: () => iic(() => useAppContext('toggleAccountModal')),
+  },
+  {
+    id: 'edit-project',
+    label: 'Project settings',
+    search: {
+      description: 'Open project settings',
+      icon: <SettingsIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Open project settings',
+    },
+    action: () => iic(() => useAppContext('toggleProjectSettingsModal')),
   },
   {
     id: 'cycle-focus',
@@ -210,6 +224,7 @@ const commands: Command[] = [
     id: 'overview',
     label: 'Overview',
     search: {
+      aliases: ['home'],
       description: 'Jump to overview',
       icon: <OverviewIcon size="1.25em" noAriaLabel />,
     },
@@ -217,18 +232,6 @@ const commands: Command[] = [
       hint: 'Jump to overview',
     },
     action: (newTab = false) => openInProjectIIC(overviewPath, newTab),
-  },
-  {
-    id: 'edit-project',
-    label: 'Edit project',
-    search: {
-      description: 'Jump to edit project',
-      icon: <SettingsIcon size="1.25em" noAriaLabel />,
-    },
-    keyboardShortcut: {
-      hint: 'Jump to edit project',
-    },
-    action: (newTab = false) => openInProjectIIC(editProjectPath, newTab),
   },
   {
     id: 'recently-viewed',

@@ -107,7 +107,8 @@ const makeFilteredListSource = <T,>({
 
 const commandsSource = makeFilteredListSource({
   list: searchCommands,
-  getFilterable: ({ label }) => label,
+  getFilterable: ({ label, search: { aliases = [] } }) =>
+    [label, ...aliases].join(' '),
   getKey: ({ id }) => `command-${id}`,
   getLabel: ({ label }) => label,
   getDescription: ({ search: { description } }) => description,

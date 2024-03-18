@@ -52,7 +52,7 @@ export const AutomaticSnapshotsSection = ({
 
   return (
     <div className="space-y-2">
-      <h3 className="h3 select-none">Frequency</h3>
+      <h4 className="h3 select-none">Frequency</h4>
 
       <div className="space-y-1">
         {[null, ...automaticSnapshotsOptions].map((option) => (
@@ -69,9 +69,7 @@ export const AutomaticSnapshotsSection = ({
         ))}
       </div>
 
-      {description && (
-        <p className="text-plain-500 dark:text-plain-400">{description}</p>
-      )}
+      {description && <p>{description}</p>}
     </div>
   );
 };

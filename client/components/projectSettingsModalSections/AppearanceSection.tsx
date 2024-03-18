@@ -5,7 +5,7 @@ import { useOverrideable } from '~/lib/useOverrideable';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 import { EditorStyleInput } from '~/components/EditorStyleInput';
 
-export const EditProjectEditorStyle = () => {
+export const AppearanceSection = () => {
   const toggleSettingsModal = useAppContext('toggleSettingsModal');
 
   const [localProject, updateProject] = useLocalProject();
@@ -23,12 +23,12 @@ export const EditProjectEditorStyle = () => {
 
   return (
     <div className="space-y-2">
-      <h2 className="font-medium select-none">Editor style</h2>
+      <h4 className="h3 select-none">Editor style</h4>
 
       <EditorStyleInput
         value={editorStyle}
         onChange={setEditorStyle}
-        syncWithOption="settings"
+        syncWithOption="user preferences"
         syncWithLink={
           <button
             type="button"
@@ -37,10 +37,9 @@ export const EditProjectEditorStyle = () => {
               toggleSettingsModal({ initialSection: 'appearance' })
             }
           >
-            Open settings
+            Open user preferences
           </button>
         }
-        className="md:grid-cols-3"
       />
     </div>
   );

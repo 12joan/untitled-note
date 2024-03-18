@@ -28,6 +28,7 @@ import {
   useEditorSelector,
 } from '@udecode/plate';
 import { isLinkInSelection, useToggleLink } from '~/lib/editor/links';
+import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';
 import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
@@ -43,7 +44,6 @@ import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon';
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tooltip } from '~/components/Tooltip';
-import { GroupedClassNames, groupedClassNames } from '../groupedClassNames';
 
 const usePluginType = (key: string) =>
   useEditorSelector((editor) => getPluginType(editor, key), [key]);

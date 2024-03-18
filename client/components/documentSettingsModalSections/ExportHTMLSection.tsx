@@ -53,7 +53,7 @@ export const ExportHTMLSection = ({
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          className="btn btn-rect btn-primary flex items-center gap-2"
+          className="btn btn-rect btn-modal-secondary flex items-center gap-2"
           onClick={performCopy}
         >
           <CopyIcon size="1.25em" noAriaLabel />
@@ -62,7 +62,7 @@ export const ExportHTMLSection = ({
 
         <button
           type="button"
-          className="btn btn-rect btn-primary flex items-center gap-2"
+          className="btn btn-rect btn-modal-secondary flex items-center gap-2"
           onClick={performDownload}
         >
           <DownloadIcon size="1.25em" noAriaLabel />

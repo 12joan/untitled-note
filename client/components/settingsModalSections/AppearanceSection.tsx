@@ -9,10 +9,10 @@ import {
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useSettings } from '~/lib/settings';
+import { EditorStyleInput } from '~/components/EditorStyleInput';
 import MinusIcon from '~/components/icons/MinusIcon';
 import PlusIcon from '~/components/icons/PlusIcon';
 import { Tooltip } from '~/components/Tooltip';
-import { EditorStyleInput } from '../EditorStyleInput';
 
 export const AppearanceSection = () => {
   const editorFontSize = useEditorFontSize();
@@ -23,7 +23,7 @@ export const AppearanceSection = () => {
   return (
     <>
       <div className="space-y-2">
-        <h3 className="h3 select-none">Theme</h3>
+        <h4 className="h3 select-none">Theme</h4>
 
         <label className="flex gap-2 items-start">
           <input
@@ -31,22 +31,16 @@ export const AppearanceSection = () => {
             className="ring-offset-plain-100 dark:ring-offset-plain-800"
             checked={deeperDarkMode}
             onChange={(event) => setDeeperDarkMode(event.target.checked)}
-            aria-describedby="deeper-dark-mode-description"
           />
 
-          <span className="select-none">Deeper dark mode</span>
+          <span className="select-none">
+            Use pure black instead of midnight blue for the system dark mode
+          </span>
         </label>
-
-        <p
-          id="deeper-dark-mode-description"
-          className="text-sm text-plain-500 dark:text-plain-400"
-        >
-          Use pure black instead of midnight blue for the system dark mode.
-        </p>
       </div>
 
       <div className="space-y-2">
-        <h3 className="h3 select-none">Editor font size</h3>
+        <h4 className="h3 select-none">Editor font size</h4>
 
         <div className="flex gap-2 items-center">
           <button
@@ -81,7 +75,7 @@ export const AppearanceSection = () => {
       </div>
 
       <div className="space-y-2">
-        <h3 className="h3 select-none">Editor style</h3>
+        <h4 className="h3 select-none">Editor style</h4>
 
         <EditorStyleInput<false>
           value={editorStyle}
@@ -93,7 +87,7 @@ export const AppearanceSection = () => {
       </div>
 
       <div className="space-y-2">
-        <h3 className="h3 select-none">Preview</h3>
+        <h4 className="h3 select-none">Preview</h4>
 
         <p
           className={groupedClassNames({

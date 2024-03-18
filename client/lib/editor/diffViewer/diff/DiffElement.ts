@@ -1,6 +1,6 @@
 import { DiffOperation, PlateRenderElementProps } from '@udecode/plate';
+import { injectNodeProps } from '~/lib/editor/injectNodeProps';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { injectNodeProps } from '../../injectNodeProps';
 
 export const DiffElement = ({ children, element }: PlateRenderElementProps) => {
   if (!element.diff) return children;
