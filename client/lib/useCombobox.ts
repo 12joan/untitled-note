@@ -148,6 +148,8 @@ export const useCombobox = <T>({
     suggestionContainerProps: {
       role: 'listbox',
       'aria-activedescendant': idForSuggestion(activeSuggestionKey),
+      // Prevent blur when clicking scrollbar
+      onMouseDown: (event) => event.preventDefault(),
     },
 
     mapSuggestions: (renderSuggestion) =>
