@@ -1,7 +1,13 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import emojiData from '@emoji-mart/data';
 import EmojiPicker from '@emoji-mart/react';
-import { offset, shift, useFloating } from '@floating-ui/react-dom';
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
 import { useAppContext } from '~/lib/appContext';
 import { filesize } from '~/lib/filesize';
 import {
@@ -20,6 +26,7 @@ import { useFocusOut } from '~/lib/useFocusOut';
 import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
+import { ProjectIcon } from '~/components/ProjectIcon';
 import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EditProjectIcon = () => {
@@ -34,25 +41,44 @@ export const EditProjectIcon = () => {
   >('idle');
 
   return (
-    <div>
-      <h2 className="font-medium select-none mb-2">Project icon</h2>
+    <div className="space-y-2">
+      <h4 className="select-none h3">Project icon</h4>
 
-      <div className="border rounded-lg p-3 space-y-5">
+      <div className="space-y-2">
+        <h5 className="select-none h4">Image</h5>
+
         <ImageForm
           hasImage={hasImage}
           overrideHasImage={overrideHasImage}
           state={imageFormState}
           setState={setImageFormState}
         />
+      </div>
 
-        {!hasImage && imageFormState === 'idle' && (
+      {!hasImage && imageFormState === 'idle' && (
+        <div className="space-y-2">
+          <h5 className="select-none h4">Emoji</h5>
+
           <EmojiForm project={localProject} updateProject={updateProject} />
-        )}
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <h5 className="select-none h4">Background colour</h5>
 
         <BackgroundColourForm
           project={localProject}
           updateProject={updateProject}
           hasImage={hasImage}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h5 className="select-none h4">Preview</h5>
+
+        <ProjectIcon
+          project={localProject}
+          className="size-12 rounded-lg shadow text-xl select-none"
         />
       </div>
     </div>
@@ -120,7 +146,7 @@ const ImageForm = ({
   };
 
   return (
-    <div>
+    <>
       <input
         ref={fileInputRef}
         type="file"
@@ -129,12 +155,10 @@ const ImageForm = ({
         onChange={handleFileSelected}
       />
 
-      <h3 className="font-medium select-none mb-2">Image</h3>
-
-      <div className="flex flex-wrap gap-2 mb-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          className="btn btn-rect btn-secondary relative"
+          className="btn btn-rect btn-modal-secondary relative"
           onClick={showFileSelector}
           disabled={isBusy}
         >
@@ -149,7 +173,7 @@ const ImageForm = ({
         {hasImage && (
           <button
             type="button"
-            className="btn btn-rect btn-secondary text-red-500 dark:text-red-400"
+            className="btn btn-rect btn-modal-secondary text-red-500 dark:text-red-400"
             onClick={handleRemoveImage}
             disabled={isBusy}
           >
@@ -166,16 +190,18 @@ const ImageForm = ({
       {unwrapFuture(futureRemainingQuota, {
         pending: null,
         resolved: (remainingQuota) => (
-          <button
-            type="button"
-            className="text-sm text-plain-500 dark:text-plain-400 btn btn-link-subtle"
-            onClick={showFileStorage}
-          >
-            {filesize(remainingQuota)} available
-          </button>
+          <div>
+            <button
+              type="button"
+              className="text-sm btn btn-link-subtle"
+              onClick={showFileStorage}
+            >
+              {filesize(remainingQuota)} available
+            </button>
+          </div>
         ),
       })}
-    </div>
+    </>
   );
 };
 
@@ -227,71 +253,75 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     strategy: pickerPosition,
   } = useFloating({
     placement: 'bottom-start',
-    middleware: [offset(10), shift()],
+    middleware: [
+      offset(10),
+      shift({ padding: 12 }),
+      flip({
+        fallbackPlacements: ['right'],
+        fallbackStrategy: 'initialPlacement',
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
   });
 
   const nonce = useCSPNonce();
 
   return (
-    <div className="space-y-2">
-      <h3 className="font-medium select-none">Emoji</h3>
+    <>
+      <div className="flex flex-wrap gap-2">
+        <button
+          ref={mergeRefs([buttonRef, floatingReferenceRef])}
+          type="button"
+          className="btn btn-rect btn-modal-secondary"
+          onClick={(event) => {
+            // Prevent the picker from registering a click outside
+            event.stopPropagation();
+            setPickerVisible(true);
+          }}
+        >
+          {hasEmoji ? `${emoji} Change emoji` : 'Choose emoji'}
+        </button>
 
-      <div>
-        <div className="flex flex-wrap gap-2">
+        {hasEmoji && (
           <button
-            ref={mergeRefs([buttonRef, floatingReferenceRef])}
             type="button"
-            className="btn btn-rect btn-secondary"
-            onClick={(event) => {
-              // Prevent the picker from registering a click outside
-              event.stopPropagation();
-              setPickerVisible(true);
-            }}
+            className="btn btn-rect btn-modal-secondary text-red-700 dark:text-red-400"
+            onClick={() => setEmoji(null)}
           >
-            {hasEmoji ? `${emoji} Change emoji` : 'Choose emoji'}
+            Remove emoji
           </button>
-
-          {hasEmoji && (
-            <button
-              type="button"
-              className="btn btn-rect btn-secondary text-red-500 dark:text-red-400"
-              onClick={() => setEmoji(null)}
-            >
-              Remove emoji
-            </button>
-          )}
-        </div>
-
-        {pickerVisible && (
-          <div
-            ref={mergeRefs([pickerRef, focusOutRef])}
-            {...focusOutProps}
-            className="z-20 pb-5"
-            style={{
-              position: pickerPosition,
-              left: pickerX ?? 0,
-              top: pickerY ?? 0,
-            }}
-            onMouseDown={(event) => {
-              // Prevent blur when clicking inside picker (WebKit)
-              event.preventDefault();
-            }}
-          >
-            <EmojiPicker
-              data={emojiData}
-              autoFocus
-              onEmojiSelect={({ native: emoji }: { native: string }) => {
-                closePicker();
-                setEmoji(emoji);
-              }}
-              styleProps={{
-                nonce,
-              }}
-            />
-          </div>
         )}
       </div>
-    </div>
+
+      {pickerVisible && (
+        <div
+          ref={mergeRefs([pickerRef, focusOutRef])}
+          {...focusOutProps}
+          className="z-20 pb-5"
+          style={{
+            position: pickerPosition,
+            left: pickerX ?? 0,
+            top: pickerY ?? 0,
+          }}
+          onMouseDown={(event) => {
+            // Prevent blur when clicking inside picker (WebKit)
+            event.preventDefault();
+          }}
+        >
+          <EmojiPicker
+            data={emojiData}
+            autoFocus
+            onEmojiSelect={({ native: emoji }: { native: string }) => {
+              closePicker();
+              setEmoji(emoji);
+            }}
+            styleProps={{
+              nonce,
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
@@ -312,9 +342,7 @@ const BackgroundColourForm = ({
     updateProject({ background_colour: colour });
 
   return (
-    <div className="space-y-2">
-      <h3 className="font-medium select-none">Background colour</h3>
-
+    <>
       <div className="flex flex-wrap gap-2 items-center">
         {[
           ['auto', 'Auto'],
@@ -336,10 +364,8 @@ const BackgroundColourForm = ({
       </div>
 
       {hasImage && (
-        <p className="text-plain-500 dark:text-plain-400">
-          The background colour affects transparent areas of the image.
-        </p>
+        <p>The background colour affects transparent areas of the image.</p>
       )}
-    </div>
+    </>
   );
 };

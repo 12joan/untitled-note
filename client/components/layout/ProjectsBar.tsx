@@ -288,7 +288,7 @@ const ProjectListItem = ({
             as={isCurrentProject ? OverviewLink : ProjectLink}
             to={{ projectId: project.id }}
             // HTML attributes
-            className="w-12 h-12 btn text-xl shadow"
+            className="size-12 btn text-xl shadow"
             style={{ cursor: 'pointer' }}
             onClick={(event: MouseEvent) => {
               hideTooltip();

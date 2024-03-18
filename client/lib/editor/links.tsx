@@ -29,6 +29,7 @@ import {
 } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { copyText } from '~/lib/copyText';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
 import CopyIcon from '~/components/icons/CopyIcon';
@@ -37,7 +38,6 @@ import EditIcon from '~/components/icons/EditIcon';
 import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { TippyInstance } from '~/components/Tippy';
-import { groupedClassNames } from '../groupedClassNames';
 import { useElementSize } from '../useElementSize';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 
@@ -102,7 +102,7 @@ const LinkModal = ({
             type="text"
             value={text}
             onChange={(event) => setText(event.target.value)}
-            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-plain-400 dark:placeholder:text-plain-500 dark:focus:bg-plain-900"
+            className="text-input text-input-modal"
             placeholder="Optional"
           />
         </label>
@@ -117,7 +117,7 @@ const LinkModal = ({
             required
             data-test="hello"
             pattern="(https?|mailto|tel|web\+):.*"
-            className="block w-full rounded-lg bg-black/5 focus:bg-white p-2 dark:bg-white/5 placeholder:text-plain-400 dark:placeholder:text-plain-500 dark:focus:bg-plain-900"
+            className="text-input text-input-modal"
             placeholder="https://example.com/"
           />
         </label>

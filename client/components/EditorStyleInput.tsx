@@ -62,9 +62,7 @@ export const EditorStyleInput = <Nullable extends boolean>({
         ))}
       </RadioCardGroup>
 
-      {description && (
-        <p className="text-plain-500 dark:text-plain-400">{description}</p>
-      )}
+      {description && <p>{description}</p>}
 
       {!value && <p>{syncWithLink}</p>}
     </>

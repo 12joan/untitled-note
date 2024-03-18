@@ -1,5 +1,5 @@
-import { fetchAPIEndpoint } from '../fetchAPIEndpoint';
-import { Snapshot } from '../types';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import { Snapshot } from '~/lib/types';
 
 import { streamAction } from '~/channels/dataChannel';
 

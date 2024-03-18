@@ -1,4 +1,4 @@
-import { EditorStyle } from '../types';
+import { EditorStyle } from '~/lib/types';
 
 export const editorStyleClassNames: Record<EditorStyle, string> = {
   casual: '',

@@ -3,7 +3,6 @@ import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
 import { sequenceFutures, unwrapFuture } from '~/lib/monads';
 import {
-  EditProjectLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
   TagsLink,
@@ -29,6 +28,9 @@ export const OverviewView = memo(() => {
     'futureRecentlyViewedDocuments'
   );
   const futureTags = useAppContext('futureTags');
+  const toggleProjectSettingsModal = useAppContext(
+    'toggleProjectSettingsModal'
+  );
 
   useTitle(project.name);
 
@@ -62,9 +64,13 @@ export const OverviewView = memo(() => {
           </h1>
           <div className="flex gap-2 flex-wrap">
             <NewDocumentRectButton />
-            <EditProjectLink className="btn btn-rect btn-secondary">
-              Edit project
-            </EditProjectLink>
+            <button
+              type="button"
+              className="btn btn-rect btn-secondary"
+              onClick={() => toggleProjectSettingsModal()}
+            >
+              Project settings
+            </button>
           </div>
         </div>
       </div>

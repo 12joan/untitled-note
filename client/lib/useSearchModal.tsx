@@ -107,7 +107,8 @@ const makeFilteredListSource = <T,>({
 
 const commandsSource = makeFilteredListSource({
   list: searchCommands,
-  getFilterable: ({ label }) => label,
+  getFilterable: ({ label, search: { aliases = [] } }) =>
+    [label, ...aliases].join(' '),
   getKey: ({ id }) => `command-${id}`,
   getLabel: ({ label }) => label,
   getDescription: ({ search: { description } }) => description,
@@ -305,7 +306,7 @@ const SearchModal = ({
           bg: null,
         }}
         customPanelClassNames={{
-          margin: 'mt-[20vh] mb-auto',
+          margin: 'm-auto mt-0 sm:mt-[20vh]',
           width: 'narrow',
           shadow: 'before:shadow-dialog-heavy',
           rounded: 'before:rounded-xl',

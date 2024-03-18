@@ -36,11 +36,23 @@ export const ModalRoot = ({
 };
 
 export interface ModalTitleProps {
+  className?: GroupedClassNames;
   children: ReactNode;
 }
 
-export const ModalTitle = ({ children }: ModalTitleProps) => {
-  return <Dialog.Title className="h2 select-none" children={children} />;
+export const ModalTitle = ({ className, children }: ModalTitleProps) => {
+  return (
+    <Dialog.Title
+      className={groupedClassNames(
+        {
+          heading: 'h2',
+          select: 'select-none',
+        },
+        className
+      )}
+      children={children}
+    />
+  );
 };
 
 export interface ModalTitleWithCloseButtonProps extends ModalTitleProps {

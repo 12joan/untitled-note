@@ -35,13 +35,13 @@ export const EditProjectName = () => {
 
   return (
     <label className="block space-y-2">
-      <h2 className="font-medium select-none">Project name</h2>
+      <h4 className="select-none h3">Project name</h4>
 
       <input
         type="text"
         {...nameProps}
         required
-        className="block w-full border rounded-lg px-3 py-2 bg-page-bg-light dark:bg-page-bg-dark"
+        className="text-input text-input-modal"
         placeholder="My Project"
       />
     </label>

@@ -20,7 +20,7 @@ import { twMerge } from 'tailwind-merge';
 import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
 import { LinkComponent } from '~/lib/editor/links';
 import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
-import { groupedClassNames } from '../groupedClassNames';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>

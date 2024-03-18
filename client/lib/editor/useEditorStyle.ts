@@ -1,5 +1,5 @@
-import { useAppContext } from '../appContext';
-import { useSettings } from '../settings';
+import { useAppContext } from '~/lib/appContext';
+import { useSettings } from '~/lib/settings';
 import { EditorStyle, LocalDocument } from '../types';
 
 export const useEditorStyle = (doc: LocalDocument): EditorStyle => {

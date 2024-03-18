@@ -262,7 +262,19 @@ body {
     }
   }
 
-  .h1, .h2, .h3 {
+  .text-input {
+    @apply rounded-lg px-3 py-2 block w-full;
+
+    &:not(.text-input-modal) {
+      @apply border dark:border-transparent bg-page-bg-light dark:bg-plain-800 dark:focus:bg-page-bg-dark;
+    }
+
+    &.text-input-modal {
+      @apply bg-black/5 focus:bg-white dark:bg-white/5 dark:focus:bg-plain-900;
+    }
+  }
+
+  .h1, .h2, .h3, .h4 {
     @apply font-medium;
   }
 
@@ -276,6 +288,10 @@ body {
 
   .h3 {
     @apply text-lg sm:text-xl;
+  }
+
+  .h4 {
+    @apply sm:text-lg;
   }
 
   .list-group {

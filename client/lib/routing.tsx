@@ -111,14 +111,6 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
-      path: '/edit',
-      element: forwardParams(() => (
-        <ProjectView
-          childView={{ type: 'editProject', key: 'editProject', props: {} }}
-        />
-      )),
-    },
-    {
       path: '/recently_viewed',
       element: forwardParams(() => (
         <ProjectView

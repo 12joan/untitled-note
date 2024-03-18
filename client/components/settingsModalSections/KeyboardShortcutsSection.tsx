@@ -156,13 +156,15 @@ export const KeyboardShortcutsSection = () => {
         })}
       </ul>
 
-      <button
-        type="button"
-        className="btn btn-link"
-        onClick={() => setKeyboardShortcutOverrides({})}
-      >
-        Reset to defaults
-      </button>
+      <div>
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={() => setKeyboardShortcutOverrides({})}
+        >
+          Reset to defaults
+        </button>
+      </div>
     </>
   );
 };

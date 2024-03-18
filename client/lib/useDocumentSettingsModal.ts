@@ -47,7 +47,12 @@ export const useDocumentSettingsModal = (
       createSectionedModal<
         keyof typeof sections,
         DocumentSettingsModalSectionProps
-      >('document-settings-modal', sections, optionsRef),
+      >({
+        id: 'document-settings-modal',
+        title: 'Document settings',
+        sections,
+        sectionProps: optionsRef,
+      }),
     []
   );
 
