@@ -305,7 +305,7 @@ const SearchModal = ({
           bg: null,
         }}
         customPanelClassNames={{
-          margin: 'mt-[20vh] mb-auto',
+          margin: 'm-auto mt-0 sm:mt-[20vh]',
           width: 'narrow',
           shadow: 'before:shadow-dialog-heavy',
           rounded: 'before:rounded-xl',

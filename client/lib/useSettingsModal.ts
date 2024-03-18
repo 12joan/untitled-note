@@ -26,8 +26,9 @@ export type SettingsModalOpenProps = SectionedModalOpenProps<
   keyof typeof sections
 >;
 
-export const useSettingsModal = createSectionedModal(
-  'settings-modal',
+export const useSettingsModal = createSectionedModal({
+  id: 'settings-modal',
+  title: 'Settings',
   sections,
-  {}
-);
+  sectionProps: {},
+});

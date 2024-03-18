@@ -25,8 +25,9 @@ const sections = {
 export type AccountModalOpenProps = SectionedModalOpenProps<
   keyof typeof sections
 >;
-export const useAccountModal = createSectionedModal(
-  'account-modal',
+export const useAccountModal = createSectionedModal({
+  id: 'account-modal',
+  title: 'Account info',
   sections,
-  {}
-);
+  sectionProps: {},
+});
