@@ -73,12 +73,12 @@ export const TopBar = memo(({ sidebarButton }: TopBar) => {
           Connection lost
         </div>
       ) : (
-        <div className="font-medium px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate">
+        <div className="font-medium px-3 py-1 rounded-full transparent-blur pointer-events-auto truncate grow w-0 max-w-fit">
           {project.name}
         </div>
       )}
 
-      <div className="grow" />
+      <div className="ml-auto" />
 
       {isXs ? (
         <>
