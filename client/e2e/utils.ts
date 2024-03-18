@@ -27,6 +27,9 @@ export const createProject = async (page: Page, name = 'My Project') => {
   await expect(page).toHaveTitle(name);
 };
 
+export const locateTopBar = (page: Page) =>
+  page.getByLabel('Top bar', { exact: true });
+
 export const locateSidebar = (page: Page) =>
   page.getByLabel('Sidebar', { exact: true });
 
