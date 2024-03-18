@@ -106,7 +106,11 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     'modal:close',
     () => {
       if (wasFocusedBeforeModalRef.current) {
-        restoreSelectionForEditor();
+        /**
+         * Without setTimeout, the selection sometimes jumps to the top of the
+         * document. Not clear why.
+         */
+        setTimeout(restoreSelectionForEditor);
       }
     },
     [restoreSelectionForEditor]
