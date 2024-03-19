@@ -3,7 +3,7 @@
   <%= vite_javascript_tag 'unauthenticated' %>
 <% end %>
 
-<div id="application" class="prevent-fouc min-h-screen flex flex-col p-5">
+<div id="application" class="prevent-fouc min-h-dvh flex flex-col p-5">
   <%= form_tag @login_path, method: :post, class: 'm-auto lg:narrow space-y-3' do %>
     <h1 class="h1">You need to log in to access this page</h1>
 
