@@ -89,7 +89,7 @@ export const EditorView = memo(({ documentId }: EditorViewProps) => {
       // Hack to make React Router scroll restoration work
       <div className="relative" style={{ minHeight: '1000000vh' }}>
         <div
-          className="flex sticky min-h-screen"
+          className="flex sticky min-h-dvh"
           style={{
             top: topBarHeight,
             paddingBottom: topBarHeight,
