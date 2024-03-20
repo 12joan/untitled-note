@@ -8,22 +8,19 @@ import {
 } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
 import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
-import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
-import { useLinkModalProvider } from '~/lib/editor/links';
+import { useLinkModal } from '~/lib/editor/links/LinkModal';
 import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
 import {
   useEditorFontSize,
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { FormattingToolbarContainer } from '~/components/layout/FormattingToolbarContainer';
 
 export interface EditorBodyProps {
   setEditor?: (editor: PlateEditor | null) => void;
   initialValue: Value;
   plugins: PlatePlugin[];
   isReadOnly?: boolean;
-  showFormattingToolbar?: boolean;
   className?: string;
   onBodyChange?: () => void;
   onSelectionChange?: () => void;
@@ -36,7 +33,6 @@ export const EditorBody = memo(
     initialValue,
     plugins,
     isReadOnly = false,
-    showFormattingToolbar = true,
     className,
     onBodyChange,
     onSelectionChange,
@@ -61,9 +57,9 @@ export const EditorBody = memo(
     const relativeFontSize = useEditorFontSize() / 100;
     const cssFontSize = useEditorFontSizeCSSValue();
 
-    const withLinkModalProvider = useLinkModalProvider();
+    const linkModal = useLinkModal();
 
-    return withLinkModalProvider(
+    return (
       <Plate
         editorRef={setEditor}
         plugins={plugins}
@@ -95,11 +91,7 @@ export const EditorBody = memo(
           onDoubleClick={onDoubleClick}
         />
 
-        {showFormattingToolbar && (
-          <FormattingToolbarContainer>
-            <FormattingToolbar />
-          </FormattingToolbarContainer>
-        )}
+        {linkModal}
 
         <SlatePlaywrightEffects />
       </Plate>

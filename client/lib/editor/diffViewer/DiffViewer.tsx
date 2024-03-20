@@ -108,7 +108,6 @@ export const DiffViewer = ({
       initialValue={value}
       plugins={collapsedDiffPlugins}
       isReadOnly
-      showFormattingToolbar={false}
     />
   );
 };

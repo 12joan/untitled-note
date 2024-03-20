@@ -19,10 +19,12 @@ import {
   EventListener,
   useEvent,
 } from '~/lib/customEvents';
+import { LinkModalProps } from './links/types';
 
 type ImperativeEventTypes = {
   change: [Value];
   keyDown: [KeyboardEvent];
+  'linkModal:open': [LinkModalProps];
 };
 
 type ImerativeEventEmitter = EventEmitter<ImperativeEventTypes>;
@@ -33,10 +35,24 @@ export type ImperativeEventsPlugin = {
   imperativeEventEmitter: ImerativeEventEmitter;
 };
 
+export const dispatchEditorEvent = <K extends keyof ImperativeEventTypes>(
+  editor: PlateEditor,
+  type: K,
+  ...args: ImperativeEventTypes[K]
+) => {
+  const imperativeEventEmitter = editorEventEmitterMap.get(editor);
+  if (imperativeEventEmitter) {
+    dispatchEvent(imperativeEventEmitter, type, ...args);
+  } else {
+    // eslint-disable-next-line no-console
+    console.warn('No imperativeEventEmitter found for editor');
+  }
+};
+
 const createImperativeEventsPlugin =
   createPluginFactory<ImperativeEventsPlugin>({
     key: 'imperativeEvents',
-    then: (_editor, { options: { imperativeEventEmitter } }) => ({
+    then: (editor, { options: { imperativeEventEmitter } }) => ({
       /**
        * The old approach using renderAboveEditable and contexts was causing
        * editor components to unmount and remount when the plugin options
@@ -49,10 +65,10 @@ const createImperativeEventsPlugin =
       ),
       handlers: {
         onChange: () => (value) => {
-          dispatchEvent(imperativeEventEmitter, 'change', value);
+          dispatchEditorEvent(editor, 'change', value);
         },
         onKeyDown: () => (event) => {
-          dispatchEvent(imperativeEventEmitter, 'keyDown', event);
+          dispatchEditorEvent(editor, 'keyDown', event);
         },
       },
     }),

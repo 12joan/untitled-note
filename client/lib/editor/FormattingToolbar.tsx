@@ -23,13 +23,14 @@ import {
   toggleMark,
   toggleNodeType,
   unindentListItems,
+  useEditorMounted,
   useEditorReadOnly,
   useEditorRef,
   useEditorSelector,
 } from '@udecode/plate';
-import { isLinkInSelection, useToggleLink } from '~/lib/editor/links';
+import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { useKeyboardShortcut } from '~/lib/useKeyboardShortcut';
+import { keyWithModifiers } from '~/lib/keyWithModifiers';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';
 import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
 import CodeBlockIcon from '~/components/icons/formatting/CodeBlockIcon';
@@ -44,6 +45,8 @@ import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon';
 import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tooltip } from '~/components/Tooltip';
+import { useToggleLink } from './links/useToggleLink';
+import { useEditorEvent } from './imperativeEvents';
 
 const usePluginType = (key: string) =>
   useEditorSelector((editor) => getPluginType(editor, key), [key]);
@@ -196,18 +199,20 @@ export const FormattingToolbar = () => {
   const editorStatic = useEditorRef();
   const toggleLink = useToggleLink();
 
-  // Meta+K toggles link only if there is a selection;
-  // otherwise it opens the search modal
-  // TODO: Deprecate useKeyboardShortcut
-  useKeyboardShortcut(
-    () => document.querySelector('[data-slate-editor]')!,
-    ['MetaShiftU', 'MetaK'],
-    (event, key) => {
-      const hasSelection = getSelectionText(editorStatic).length > 0;
+  useEditorEvent(
+    'keyDown',
+    (event) => {
+      if (event.defaultPrevented) return;
+      const key = keyWithModifiers(event);
+      const isMetaShiftU = key === 'MetaShiftU';
+      const isMetaK = key === 'MetaK';
+      if (isMetaShiftU || isMetaK) {
+        const hasSelection = getSelectionText(editorStatic).length > 0;
 
-      if (key === 'MetaShiftU' || (key === 'MetaK' && hasSelection)) {
-        event.preventDefault();
-        toggleLink();
+        if (isMetaShiftU || (isMetaK && hasSelection)) {
+          event.preventDefault();
+          toggleLink();
+        }
       }
     },
     []
@@ -247,10 +252,11 @@ const FormattingButton = ({
   onClick,
 }: FormattingButtonProps) => {
   const isReadOnly = useEditorReadOnly();
+  const isMounted = useEditorMounted();
   const hasSelection = useEditorSelector((editor) => !!editor.selection, []);
 
   const active = !isReadOnly && hasSelection && propActive;
-  const disabled = isReadOnly || propDisabled;
+  const disabled = !isMounted || isReadOnly || propDisabled;
 
   return (
     <Tooltip content={label} placement="left" fixed>
