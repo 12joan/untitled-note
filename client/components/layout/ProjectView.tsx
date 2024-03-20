@@ -1,14 +1,12 @@
 import React, {
   ComponentType,
   CSSProperties,
-  ReactNode,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
@@ -47,6 +45,25 @@ export interface ProjectViewProps {
 }
 
 export const ProjectView = ({ childView }: ProjectViewProps) => {
+  const ChildView = (
+    {
+      awaitRedirect: AwaitRedirect,
+      overview: OverviewView,
+      recentlyViewed: RecentlyViewedView,
+      showTag: TagDocumentsView,
+      allTags: AllTagsView,
+      editor: EditorView,
+      snapshots: SnapshotsView,
+    } as Record<string, ComponentType<any>>
+  )[childView.type];
+
+  if (!ChildView) {
+    throw new Error(`Unknown child view type: ${childView.type}`);
+  }
+
+  const isAwaitRedirect = childView.type === 'awaitRedirect';
+  const isEditor = childView.type === 'editor';
+
   const projectId = useAppContext('projectId');
   const { pathname: viewPath } = useLocation();
 
@@ -56,8 +73,10 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   const topBarRef = useRef<HTMLDivElement>(null);
   const sideBarRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
-  const formattingToolbarContainerRef = useRef<HTMLDivElement>(null);
   const formattingToolbarRef = useRef<HTMLDivElement>(null);
+
+  const [formattingToolbarContainer, setFormattingToolbarContainer] =
+    useState<HTMLDivElement | null>(null);
 
   const { width: viewportWidth } = useViewportSize();
   const [mainBounds, mainBoundsRef] = useElementBounds();
@@ -69,7 +88,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     []
   );
 
-  const { isLg: staticSidebarAvailable } = useBreakpoints();
+  const { isXs: staticFormattingToolbar, isLg: staticSidebarAvailable } =
+    useBreakpoints();
   const staticSidebar = staticSidebarAvailable && staticSidebarPreference;
 
   const [offcanvasSidebar, setOffcanvasSidebar] = useState(false);
@@ -95,6 +115,23 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       hideOffcanvasSidebar();
     }
   }, [staticSidebarAvailable]);
+
+  const [offcanvasFormattingToolbar, setOffcanvasFormattingToolbar] =
+    useState(false);
+  const hideOffcanvasFormattingToolbar = useCallback(
+    () => setOffcanvasFormattingToolbar(false),
+    []
+  );
+  const toggleOffcanvasFormattingToolbar = useCallback(
+    () => setOffcanvasFormattingToolbar((x) => !x),
+    []
+  );
+
+  useEffect(() => {
+    if (staticFormattingToolbar || !isEditor) {
+      hideOffcanvasFormattingToolbar();
+    }
+  }, [staticFormattingToolbar, isEditor]);
 
   const {
     modal: searchModal,
@@ -127,39 +164,8 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     hideProjectSettingsModal();
   }, [childView.key, projectId]);
 
-  const useFormattingToolbar = useCallback(
-    (formattingToolbar: ReactNode) =>
-      createPortal(
-        <aside
-          ref={formattingToolbarRef}
-          className="pointer-events-auto pr-5 pb-5 pt-1 pl-1 overflow-y-auto flex"
-          tabIndex={0}
-          aria-label="Formatting toolbar"
-          children={formattingToolbar}
-        />,
-        formattingToolbarContainerRef.current!
-      ),
-    []
-  );
-
-  const ChildView = (
-    {
-      awaitRedirect: AwaitRedirect,
-      overview: OverviewView,
-      recentlyViewed: RecentlyViewedView,
-      showTag: TagDocumentsView,
-      allTags: AllTagsView,
-      editor: EditorView,
-      snapshots: SnapshotsView,
-    } as Record<string, ComponentType<any>>
-  )[childView.type];
-
-  if (!ChildView) {
-    throw new Error(`Unknown child view type: ${childView.type}`);
-  }
-
   useEffect(() => {
-    if (childView.type !== 'awaitRedirect') {
+    if (!isAwaitRedirect) {
       setLastView(projectId, viewPath);
     }
   }, [projectId, viewPath]);
@@ -196,7 +202,14 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   return (
     <AppContextProvider
-      useFormattingToolbar={useFormattingToolbar}
+      formattingToolbarContainer={formattingToolbarContainer}
+      formattingToolbarRef={formattingToolbarRef}
+      formattingToolbarDisplay={(() => {
+        if (staticFormattingToolbar) return 'static';
+        if (offcanvasFormattingToolbar) return 'offcanvas';
+        return 'hidden';
+      })()}
+      toggleFormattingToolbar={toggleOffcanvasFormattingToolbar}
       topBarHeight={topBarHeight}
       toggleSearchModal={toggleSearchModal}
       toggleAccountModal={toggleAccountModal}
@@ -280,6 +293,16 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
                 label: staticSidebar ? 'Hide sidebar' : 'Show sidebar',
                 onClick: toggleSidebar,
               }}
+              formattingButton={
+                isEditor && !staticFormattingToolbar
+                  ? {
+                      label: offcanvasFormattingToolbar
+                        ? 'Hide formatting'
+                        : 'Show formatting',
+                      onClick: toggleOffcanvasFormattingToolbar,
+                    }
+                  : undefined
+              }
             />
           </nav>
 
@@ -296,7 +319,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
             <div ref={mainBoundsRef} className="grow mt-1 mx-5" />
 
-            <div ref={formattingToolbarContainerRef} className="contents" />
+            <div ref={setFormattingToolbarContainer} className="contents" />
           </div>
         </div>
       </div>

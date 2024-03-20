@@ -16,6 +16,7 @@ import {
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { FormattingToolbarContainer } from '~/components/layout/FormattingToolbarContainer';
 
 export interface EditorBodyProps {
   setEditor?: (editor: PlateEditor | null) => void;
@@ -60,9 +61,6 @@ export const EditorBody = memo(
     const relativeFontSize = useEditorFontSize() / 100;
     const cssFontSize = useEditorFontSizeCSSValue();
 
-    const useFormattingToolbar = useAppContext('useFormattingToolbar');
-    const formattingToolbar = useFormattingToolbar(<FormattingToolbar />);
-
     const withLinkModalProvider = useLinkModalProvider();
 
     return withLinkModalProvider(
@@ -97,7 +95,11 @@ export const EditorBody = memo(
           onDoubleClick={onDoubleClick}
         />
 
-        {showFormattingToolbar && formattingToolbar}
+        {showFormattingToolbar && (
+          <FormattingToolbarContainer>
+            <FormattingToolbar />
+          </FormattingToolbarContainer>
+        )}
 
         <SlatePlaywrightEffects />
       </Plate>

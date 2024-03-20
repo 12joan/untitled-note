@@ -24,6 +24,7 @@ export type GlobalEventTypes = BaseEventTypes & {
   'toast:reopen': [string];
   'modal:open': [string];
   'modal:close': [string];
+  'formattingToolbar:toggle': [];
   connectionStatusChanged: [ConnectionStatus];
 } & {
   [K in keyof GlobalStoreTypes as `store:${K}`]: [GlobalStoreTypes[K]];

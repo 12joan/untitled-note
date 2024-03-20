@@ -3,6 +3,26 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { getEditable } from './slate';
 
+// Mitigate flakiness
+const waitForReady = async (page: Page) => {
+  let success = false;
+
+  for (let currentTry = 0; currentTry < 8; currentTry++) {
+    if (await page.getByText('New project').isVisible()) {
+      success = true;
+      break;
+    }
+
+    if (currentTry > 0) {
+      await page.reload();
+    }
+
+    await page.waitForTimeout((currentTry + 1) * 1000);
+  }
+
+  expect(success, 'New project button should be visible').toBeTruthy();
+};
+
 export const logIn = async (page: Page) => {
   await page.goto('/');
 
@@ -18,12 +38,14 @@ export const logIn = async (page: Page) => {
   // Wait for response with login cookie
   await page.waitForTimeout(200);
   await page.goto('/');
+
+  await waitForReady(page);
 };
 
 export const createProject = async (page: Page, name = 'My Project') => {
-  await page.getByText('New Project').click();
-  await page.getByLabel('Project Name').fill(name);
-  await page.getByText('Create Project').click();
+  await page.getByText('New project').click();
+  await page.getByLabel('Project name').fill(name);
+  await page.getByText('Create project').click();
   await expect(page).toHaveTitle(name);
 };
 
