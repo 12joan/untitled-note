@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactNode } from 'react';
+import { MutableRefObject } from 'react';
 import { createContext, ProviderProps } from '~/lib/context';
 import { Future } from '~/lib/monads';
 import {
@@ -30,7 +30,10 @@ export type AppContext = {
   futurePartialDocuments: Future<PartialDocument[]>;
   futurePinnedDocuments: Future<PartialDocument[]>;
   futureRecentlyViewedDocuments: Future<PartialDocument[]>;
-  useFormattingToolbar: (children: ReactNode) => JSX.Element;
+  formattingToolbarContainer: HTMLElement | null;
+  formattingToolbarRef: MutableRefObject<HTMLDivElement | null>;
+  formattingToolbarDisplay: 'hidden' | 'static' | 'offcanvas';
+  toggleFormattingToolbar: () => void;
   topBarHeight: number;
   toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
@@ -53,6 +56,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     topBarHeight: { data: 0 },
     linkOriginator: { data: undefined },
     inModal: { data: false },
+    formattingToolbarDisplay: { data: 'hidden' },
     settings: null,
     setSettings: null,
     futureQuotaUsage: null,
@@ -67,7 +71,9 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     futurePartialDocuments: null,
     futurePinnedDocuments: null,
     futureRecentlyViewedDocuments: null,
-    useFormattingToolbar: null,
+    formattingToolbarContainer: null,
+    formattingToolbarRef: null,
+    toggleFormattingToolbar: null,
     toggleSearchModal: null,
     toggleAccountModal: null,
     toggleSettingsModal: null,

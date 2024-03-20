@@ -222,12 +222,12 @@ export const FormattingToolbar = () => {
   ];
 
   return (
-    <div className="my-auto space-y-2">
+    <>
       {formattingButtons.map((props, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <FormattingButton key={index} {...props} />
       ))}
-    </div>
+    </>
   );
 };
 

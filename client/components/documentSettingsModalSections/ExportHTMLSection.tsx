@@ -56,7 +56,11 @@ export const ExportHTMLSection = ({
           className="btn btn-rect btn-modal-secondary flex items-center gap-2"
           onClick={performCopy}
         >
-          <CopyIcon size="1.25em" noAriaLabel />
+          <CopyIcon
+            size="1.25em"
+            noAriaLabel
+            className="text-primary-500 dark:text-primary-400"
+          />
           Copy HTML
         </button>
 
@@ -65,7 +69,11 @@ export const ExportHTMLSection = ({
           className="btn btn-rect btn-modal-secondary flex items-center gap-2"
           onClick={performDownload}
         >
-          <DownloadIcon size="1.25em" noAriaLabel />
+          <DownloadIcon
+            size="1.25em"
+            noAriaLabel
+            className="text-primary-500 dark:text-primary-400"
+          />
           Download HTML
         </button>
       </div>

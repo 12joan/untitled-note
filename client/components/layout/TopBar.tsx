@@ -1,9 +1,10 @@
-import React, { ElementType, forwardRef, memo } from 'react';
+import React, { ElementType, forwardRef, HTMLAttributes, memo } from 'react';
 import { useAppContext } from '~/lib/appContext';
 import { NewDocumentLink } from '~/lib/routes';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
 import AccountIcon from '~/components/icons/AccountIcon';
+import FormattingIcon from '~/components/icons/FormattingIcon';
 import LogoutIcon from '~/components/icons/LogoutIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import MenuIcon from '~/components/icons/MenuIcon';
@@ -27,9 +28,13 @@ export interface TopBar {
     label: string;
     onClick: () => void;
   };
+  formattingButton?: {
+    label: string;
+    onClick: () => void;
+  };
 }
 
-export const TopBar = memo(({ sidebarButton }: TopBar) => {
+export const TopBar = memo(({ sidebarButton, formattingButton }: TopBar) => {
   const project = useAppContext('project');
   const toggleSearchModal = useAppContext('toggleSearchModal');
   const toggleSettingsModal = useAppContext('toggleSettingsModal');
@@ -79,6 +84,17 @@ export const TopBar = memo(({ sidebarButton }: TopBar) => {
       )}
 
       <div className="ml-auto" />
+
+      {formattingButton && (
+        <Tooltip content={formattingButton.label} fixed>
+          <NavButton
+            icon={FormattingIcon}
+            label={formattingButton.label}
+            onClick={formattingButton.onClick}
+            onMouseDown={(event) => event.preventDefault()}
+          />
+        </Tooltip>
+      )}
 
       {isXs ? (
         <>
@@ -133,7 +149,7 @@ const NavDropdown = ({
   );
 };
 
-interface NavButtonProps extends Record<string, any> {
+interface NavButtonProps extends HTMLAttributes<HTMLButtonElement> {
   as?: ElementType;
   label: string;
   icon: ElementType;
