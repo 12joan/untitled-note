@@ -18,7 +18,7 @@ import {
 } from '@udecode/plate';
 import { twMerge } from 'tailwind-merge';
 import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
-import { LinkComponent } from '~/lib/editor/links';
+import { LinkComponent } from '~/lib/editor/links/LinkComponent';
 import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 

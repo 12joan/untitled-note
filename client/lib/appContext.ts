@@ -30,10 +30,6 @@ export type AppContext = {
   futurePartialDocuments: Future<PartialDocument[]>;
   futurePinnedDocuments: Future<PartialDocument[]>;
   futureRecentlyViewedDocuments: Future<PartialDocument[]>;
-  formattingToolbarContainer: HTMLElement | null;
-  formattingToolbarRef: MutableRefObject<HTMLDivElement | null>;
-  formattingToolbarDisplay: 'hidden' | 'static' | 'offcanvas';
-  toggleFormattingToolbar: () => void;
   topBarHeight: number;
   toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
@@ -42,6 +38,7 @@ export type AppContext = {
     ...args: [] | [ProjectSettingsModalOpenProps]
   ) => void;
   toggleSidebar: () => void;
+  toggleFormattingToolbar: () => void;
   cycleFocus: () => void;
   linkOriginator?: string;
   inModal?: boolean;
@@ -56,7 +53,6 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     topBarHeight: { data: 0 },
     linkOriginator: { data: undefined },
     inModal: { data: false },
-    formattingToolbarDisplay: { data: 'hidden' },
     settings: null,
     setSettings: null,
     futureQuotaUsage: null,
@@ -71,14 +67,12 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     futurePartialDocuments: null,
     futurePinnedDocuments: null,
     futureRecentlyViewedDocuments: null,
-    formattingToolbarContainer: null,
-    formattingToolbarRef: null,
-    toggleFormattingToolbar: null,
     toggleSearchModal: null,
     toggleAccountModal: null,
     toggleSettingsModal: null,
     toggleProjectSettingsModal: null,
     toggleSidebar: null,
+    toggleFormattingToolbar: null,
     cycleFocus: null,
     onButtonClick: null,
     closeDropdown: null,

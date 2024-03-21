@@ -8,9 +8,11 @@ import React, {
   useState,
 } from 'react';
 import { useLocation } from 'react-router-dom';
+import { PlateController } from '@udecode/plate';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { cycleFocus } from '~/lib/cycleFocus';
+import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
 import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
@@ -35,6 +37,7 @@ import { Sidebar } from '~/components/layout/Sidebar';
 import { SnapshotsView } from '~/components/layout/SnapshotsView';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
 import { TopBar } from '~/components/layout/TopBar';
+import { FormattingToolbarContainer } from './FormattingToolbarContainer';
 
 export interface ProjectViewProps {
   childView: {
@@ -74,9 +77,6 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   const sideBarRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const formattingToolbarRef = useRef<HTMLDivElement>(null);
-
-  const [formattingToolbarContainer, setFormattingToolbarContainer] =
-    useState<HTMLDivElement | null>(null);
 
   const { width: viewportWidth } = useViewportSize();
   const [mainBounds, mainBoundsRef] = useElementBounds();
@@ -202,13 +202,6 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   return (
     <AppContextProvider
-      formattingToolbarContainer={formattingToolbarContainer}
-      formattingToolbarRef={formattingToolbarRef}
-      formattingToolbarDisplay={(() => {
-        if (staticFormattingToolbar) return 'static';
-        if (offcanvasFormattingToolbar) return 'offcanvas';
-        return 'hidden';
-      })()}
       toggleFormattingToolbar={toggleOffcanvasFormattingToolbar}
       topBarHeight={topBarHeight}
       toggleSearchModal={toggleSearchModal}
@@ -230,110 +223,123 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
         []
       )}
     >
-      <div className="contents">
-        <div
-          className="grow flex flex-col"
-          style={
-            {
-              marginTop: mainBounds.top,
-              marginLeft: mainBounds.left,
-              width: mainBounds.width,
-              '--narrow-width': `${narrowWidth}px`,
-              '--narrow-margin-left': `${narrowLeftMargin}px`,
-              paddingBottom: 'env(safe-area-inset-bottom)',
-            } as CSSProperties
-          }
-        >
-          <main
-            ref={mainRef}
-            className="grow flex flex-col pb-5"
-            tabIndex={0}
-            aria-label="Main"
+      <PlateController>
+        <div className="contents">
+          <div
+            className="grow flex flex-col"
+            style={
+              {
+                marginTop: mainBounds.top,
+                marginLeft: mainBounds.left,
+                width: mainBounds.width,
+                '--narrow-width': `${narrowWidth}px`,
+                '--narrow-margin-left': `${narrowLeftMargin}px`,
+                paddingBottom: 'env(safe-area-inset-bottom)',
+              } as CSSProperties
+            }
           >
-            <ChildView
-              key={`${projectId}/${childView.key}`}
-              {...childView.props}
-            />
-          </main>
-        </div>
-      </div>
-
-      <div
-        className="fixed inset-0 flex pointer-events-none z-10"
-        style={{
-          paddingTop: 'env(safe-area-inset-top)',
-          paddingRight: 'env(safe-area-inset-right)',
-          paddingBottom: 'env(safe-area-inset-bottom)',
-          paddingLeft: 'env(safe-area-inset-left)',
-        }}
-      >
-        {staticSidebar && (
-          <nav
-            ref={projectsBarRef}
-            className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent"
-            style={{
-              marginLeft: 'calc(-1 * env(safe-area-inset-left))',
-              paddingLeft: 'env(safe-area-inset-left)',
-            }}
-            tabIndex={0}
-            aria-label="Projects bar"
-            children={<ProjectsBar />}
-          />
-        )}
-
-        <div className="grow flex flex-col">
-          <nav
-            ref={mergeRefs([topBarRef, topBarSizeRef])}
-            className="p-5 flex items-center gap-2"
-            tabIndex={0}
-            aria-label="Top bar"
-          >
-            <TopBar
-              sidebarButton={{
-                label: staticSidebar ? 'Hide sidebar' : 'Show sidebar',
-                onClick: toggleSidebar,
-              }}
-              formattingButton={
-                isEditor && !staticFormattingToolbar
-                  ? {
-                      label: offcanvasFormattingToolbar
-                        ? 'Hide formatting'
-                        : 'Show formatting',
-                      onClick: toggleOffcanvasFormattingToolbar,
-                    }
-                  : undefined
-              }
-            />
-          </nav>
-
-          <div className="grow flex h-0">
-            {staticSidebar && (
-              <nav
-                ref={sideBarRef}
-                className="pointer-events-auto overflow-y-auto p-5 pt-1 pr-1"
-                tabIndex={0}
-                aria-label="Sidebar"
-                children={<Sidebar />}
+            <main
+              ref={mainRef}
+              className="grow flex flex-col pb-5"
+              tabIndex={0}
+              aria-label="Main"
+            >
+              <ChildView
+                key={`${projectId}/${childView.key}`}
+                {...childView.props}
               />
-            )}
-
-            <div ref={mainBoundsRef} className="grow mt-1 mx-5" />
-
-            <div ref={setFormattingToolbarContainer} className="contents" />
+            </main>
           </div>
         </div>
-      </div>
 
-      <OffcanavasSidebar
-        visible={offcanvasSidebar}
-        onClose={hideOffcanvasSidebar}
-      />
+        <div
+          className="fixed inset-0 flex pointer-events-none z-10"
+          style={{
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingRight: 'env(safe-area-inset-right)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+            paddingLeft: 'env(safe-area-inset-left)',
+          }}
+        >
+          {staticSidebar && (
+            <nav
+              ref={projectsBarRef}
+              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent"
+              style={{
+                marginLeft: 'calc(-1 * env(safe-area-inset-left))',
+                paddingLeft: 'env(safe-area-inset-left)',
+              }}
+              tabIndex={0}
+              aria-label="Projects bar"
+              children={<ProjectsBar />}
+            />
+          )}
 
-      {searchModal}
-      {accountModal}
-      {settingsModal}
-      {projectSettingsModal}
-      {keyboardShortcutIICElements}
+          <div className="grow flex flex-col">
+            <nav
+              ref={mergeRefs([topBarRef, topBarSizeRef])}
+              className="p-5 flex items-center gap-2"
+              tabIndex={0}
+              aria-label="Top bar"
+            >
+              <TopBar
+                sidebarButton={{
+                  label: staticSidebar ? 'Hide sidebar' : 'Show sidebar',
+                  onClick: toggleSidebar,
+                }}
+                formattingButton={
+                  isEditor && !staticFormattingToolbar
+                    ? {
+                        label: offcanvasFormattingToolbar
+                          ? 'Hide formatting'
+                          : 'Show formatting',
+                        onClick: toggleOffcanvasFormattingToolbar,
+                      }
+                    : undefined
+                }
+              />
+            </nav>
+
+            <div className="grow flex h-0">
+              {staticSidebar && (
+                <nav
+                  ref={sideBarRef}
+                  className="pointer-events-auto overflow-y-auto p-5 pt-1 pr-1"
+                  tabIndex={0}
+                  aria-label="Sidebar"
+                  children={<Sidebar />}
+                />
+              )}
+
+              <div ref={mainBoundsRef} className="grow mt-1 mx-5" />
+
+              {isEditor && (
+                <FormattingToolbarContainer
+                  ref={formattingToolbarRef}
+                  displayMode={(() => {
+                    if (staticFormattingToolbar) return 'static';
+                    if (offcanvasFormattingToolbar) return 'offcanvas';
+                    return 'hidden';
+                  })()}
+                >
+                  <FormattingToolbar />
+                </FormattingToolbarContainer>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <OffcanavasSidebar
+          visible={offcanvasSidebar}
+          onClose={hideOffcanvasSidebar}
+        />
+
+        {searchModal}
+        {accountModal}
+        {settingsModal}
+        {projectSettingsModal}
+        {keyboardShortcutIICElements}
+      </PlateController>
     </AppContextProvider>
   );
 };
