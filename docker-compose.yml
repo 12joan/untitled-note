@@ -1,5 +1,9 @@
 version: '3'
 
+x-healthcheck: &healthcheck
+  interval: 1s
+  retries: 40
+
 services:
   web:
     build: .
@@ -18,9 +22,15 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
-      - redis
-      - typesense
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      typesense:
+        condition: service_healthy
+    healthcheck:
+      <<: *healthcheck
+      test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/3000"'
 
   clockwork:
     build: .
@@ -31,7 +41,8 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres
@@ -39,15 +50,24 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      <<: *healthcheck
+      test: '/usr/bin/pg_isready -U postgres'
 
   redis:
     image: redis
+    healthcheck:
+      <<: *healthcheck
+      test: 'redis-cli --raw incr ping'
 
   typesense:
     image: typesense/typesense:0.25.2
     command: '--data-dir /data --api-key=trust'
     volumes:
       - typesense:/data
+    healthcheck:
+      <<: *healthcheck
+      test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/8108"'
 
 volumes:
   pgdata:
