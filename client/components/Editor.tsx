@@ -20,6 +20,7 @@ import { useTitle } from '~/lib/useTitle';
 import { BackButton } from '~/components/BackButton';
 import { EditorBody } from '~/components/EditorBody';
 import { EditorHeader } from '~/components/EditorHeader';
+import { SequenceBeforeAndAfter } from '~/components/SequenceBeforeAndAfter';
 
 export interface EditorProps {
   clientId: string;
@@ -123,6 +124,10 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
       <div className="lg:narrow">
         <BackButton />
       </div>
+
+      {workingDocument.sequence_tag_id && (
+        <SequenceBeforeAndAfter workingDocument={workingDocument as any} />
+      )}
 
       <AppContextProvider
         mentionSuggestionsContainerRef={mentionSuggestionsContainerRef}

@@ -11,6 +11,8 @@ class Document < ApplicationRecord
       body
       body_type
       tags
+      sequence_tag_id
+      sequence_before_and_after
       editor_style
       auto_snapshots_option
       blank
@@ -95,6 +97,19 @@ class Document < ApplicationRecord
   def was_updated_on_server!
     was_updated_on_server
     save!
+  end
+
+  def sequence_tag
+    tags.find_by(sequence: true)
+  end
+
+  def sequence_tag_id
+    sequence_tag&.id
+  end
+
+  # Used only to preload the before and after
+  def sequence_before_and_after
+    sequence_tag&.sequence_before_and_after(self)
   end
 
   def tags_attributes=(tags_attributes)
