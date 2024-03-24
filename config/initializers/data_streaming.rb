@@ -26,6 +26,7 @@ Rails.application.reloader.to_prepare do
 
         actions: {
           index: ->(params) { make_broadcasting('Tag#index', %i[user_id project_id], params) },
+          sequence: ->(params) { make_broadcasting('Tag#sequence', %i[user_id project_id id], params) },
         },
       },
 
@@ -75,6 +76,14 @@ Rails.application.reloader.to_prepare do
           broadcast make_broadcasting('Document#index', %i[user_id project_id], params).tap { "broadcasting on #{_1}" }
           broadcast make_broadcasting('Document#show', %i[user_id id], params)
           broadcast make_broadcasting('Tag#index', %i[user_id project_id], params)
+
+          if document.sequence_tag_id
+            broadcast make_broadcasting('Tag#sequence', %i[user_id project_id id], {
+              user_id: document.project.owner_id,
+              project_id: document.project_id,
+              id: document.sequence_tag_id,
+            })
+          end
         end
       },
 
@@ -84,6 +93,12 @@ Rails.application.reloader.to_prepare do
           broadcast make_broadcasting('Tag#index', %i[user_id project_id], {
             user_id: tag.project.owner_id,
             project_id: tag.project_id,
+          })
+
+          broadcast make_broadcasting('Tag#sequence', %i[user_id project_id id], {
+            user_id: tag.project.owner_id,
+            project_id: tag.project_id,
+            id: tag.id,
           })
 
           tag.documents.each { |document| broadcast_for document }

@@ -33,6 +33,7 @@ export const useSyncDocument = ({
     setWorkingDocument((localDocument) => ({
       ...localDocument,
       safe_title: remoteDocument.safe_title,
+      blank: remoteDocument.blank,
       tags: localDocument.tags.map((localTag) => {
         if (localTag.id) {
           return localTag;
@@ -44,6 +45,7 @@ export const useSyncDocument = ({
 
         return remoteTag || localTag;
       }),
+      sequence_tag_id: remoteDocument.sequence_tag_id,
     }));
 
   const { enqueuePromise, isDirty, isFailing } = useEnqueuedPromises();

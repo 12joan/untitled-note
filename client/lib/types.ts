@@ -37,6 +37,11 @@ export type LocalTag = Partial<Tag> & {
   text: string;
 };
 
+export type SequenceBeforeAndAfter = [
+  Pick<Document, 'id' | 'safe_title'> | null,
+  Pick<Document, 'id' | 'safe_title'> | null
+];
+
 export type Document = {
   id: number;
   title: string | null;
@@ -45,6 +50,8 @@ export type Document = {
   body: string;
   body_type: string;
   tags: Tag[];
+  sequence_tag_id: Tag['id'] | null;
+  sequence_before_and_after: SequenceBeforeAndAfter | null;
   editor_style: EditorStyle | null;
   auto_snapshots_option: AutoSnapshotsOption | null;
   blank: boolean;

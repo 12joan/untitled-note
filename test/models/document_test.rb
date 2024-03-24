@@ -97,6 +97,26 @@ class DocumentTest < ActiveSupport::TestCase
     assert_empty document.tags
   end
 
+  test 'sequence_tag is null when no sequence tag is present' do
+    document = create(:document, tags: [
+      build(:tag, sequence: false),
+      build(:tag, sequence: false),
+      build(:tag, sequence: false),
+    ])
+
+    assert_nil document.sequence_tag
+  end
+
+  test 'sequence_tag is the first sequence tag' do
+    document = create(:document, tags: [
+      build(:tag, sequence: false),
+      build(:tag, sequence: true),
+      build(:tag, sequence: true),
+    ])
+
+    assert_equal document.tags[1], document.sequence_tag
+  end
+
   test 'pinned scope contains all pinned documents' do
     document1 = create(:document, pinned_at: nil)
     document2 = create(:document, pinned_at: nil)

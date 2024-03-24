@@ -1,5 +1,5 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { Tag } from '~/lib/types';
+import { SequenceBeforeAndAfter, Tag } from '~/lib/types';
 
 import { streamAction } from '~/channels/dataChannel';
 
@@ -20,6 +20,23 @@ export const streamTags = (
     {
       project_id: projectId,
       query: 'all',
+    },
+    callback
+  );
+
+export const streamSequenceBeforeAndAfter = (
+  projectId: number,
+  sequenceTagId: number,
+  documentId: number,
+  callback: (result: SequenceBeforeAndAfter) => void
+) =>
+  streamAction(
+    'Tag',
+    'sequence',
+    {
+      project_id: projectId,
+      id: sequenceTagId,
+      document_id: documentId,
     },
     callback
   );

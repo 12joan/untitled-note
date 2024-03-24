@@ -35,7 +35,7 @@ class DocumentsTagTest < ActiveSupport::TestCase
     assert_equal 1, tag.documents.count, 'tag should have 1 document'
 
     assert_no_difference('Document.count') do
-      tag.documents.destroy_all
+      tag.destroy
     end
   end
 end
