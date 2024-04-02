@@ -6,4 +6,7 @@ module.exports = {
   moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/client/$1',
   },
+  transform: {
+    '^.+\\.tsx?$': '@swc/jest',
+  },
 };
