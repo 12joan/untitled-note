@@ -6066,12 +6066,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"javascript-time-ago@npm:^2.5.9":
-  version: 2.5.9
-  resolution: "javascript-time-ago@npm:2.5.9"
+"javascript-time-ago@npm:^2.5.10":
+  version: 2.5.10
+  resolution: "javascript-time-ago@npm:2.5.10"
   dependencies:
     relative-time-format: "npm:^1.1.6"
-  checksum: 10/59fe93ff6e91122216b448ae04d253fff64070f0d1bb9e11085acdc2d0edfa4e0202ec5a7c0c67463d314b204efdff009eea5a2a01203e983d67ad4bb85e2549
+  checksum: 10/6bec246c826bd19440182b3b172d5dd7bcdbc74f028228a6ee95d6751a07f7d77346ba8db716f4804c07100a126db73c7ce3064bbd86f5530d1ed77cdb317b3f
   languageName: node
   linkType: hard
 
@@ -7251,7 +7251,7 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^10.0.0"
     human-readable: "npm:^0.2.1"
     idb: "npm:^7.1.1"
-    javascript-time-ago: "npm:^2.5.9"
+    javascript-time-ago: "npm:^2.5.10"
     jest: "npm:^29.7.0"
     js-cookie: "npm:^3.0.5"
     lodash: "npm:^4.17.21"
