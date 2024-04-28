@@ -7271,7 +7271,7 @@ __metadata:
     react-time-ago: "npm:^7.3.1"
     runes: "npm:^0.4.3"
     sass: "npm:^1.75.0"
-    scheduler: "npm:^0.23.0"
+    scheduler: "npm:^0.23.2"
     scriptjs: "npm:^2.5.9"
     slate: "npm:^0.102.0"
     slate-history: "npm:^0.100.0"
@@ -8762,12 +8762,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
+"scheduler@npm:^0.23.0, scheduler@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "scheduler@npm:0.23.2"
   dependencies:
     loose-envify: "npm:^1.1.0"
-  checksum: 10/0c4557aa37bafca44ff21dc0ea7c92e2dbcb298bc62eae92b29a39b029134f02fb23917d6ebc8b1fa536b4184934314c20d8864d156a9f6357f3398aaf7bfda8
+  checksum: 10/e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
   languageName: node
   linkType: hard
 
