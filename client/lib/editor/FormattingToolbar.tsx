@@ -7,7 +7,6 @@ import {
   ELEMENT_UL,
   focusEditor,
   getPluginType,
-  getSelectionText,
   indentListItems,
   isMarkActive,
   isRangeAcrossBlocks,
@@ -30,7 +29,6 @@ import {
 } from '@udecode/plate';
 import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { keyWithModifiers } from '~/lib/keyWithModifiers';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';
 import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
 import CodeBlockIcon from '~/components/icons/formatting/CodeBlockIcon';
@@ -46,7 +44,6 @@ import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tooltip } from '~/components/Tooltip';
 import { useToggleLink } from './links/useToggleLink';
-import { useEditorEvent } from './imperativeEvents';
 
 const usePluginType = (key: string) =>
   useEditorSelector((editor) => getPluginType(editor, key), [key]);
@@ -196,28 +193,6 @@ export const formattingButtonClassNames: GroupedClassNames = {
 };
 
 export const FormattingToolbar = () => {
-  const editorStatic = useEditorRef();
-  const toggleLink = useToggleLink();
-
-  useEditorEvent(
-    'keyDown',
-    (event) => {
-      if (event.defaultPrevented) return;
-      const key = keyWithModifiers(event);
-      const isMetaShiftU = key === 'MetaShiftU';
-      const isMetaK = key === 'MetaK';
-      if (isMetaShiftU || isMetaK) {
-        const hasSelection = getSelectionText(editorStatic).length > 0;
-
-        if (isMetaShiftU || (isMetaK && hasSelection)) {
-          event.preventDefault();
-          toggleLink();
-        }
-      }
-    },
-    []
-  );
-
   const inlineFormattingButtons = useInlineFormattingButtons();
   const blockFormattingButtons = useBlockFormattingButtons();
 

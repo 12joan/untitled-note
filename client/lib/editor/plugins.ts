@@ -40,6 +40,8 @@ export interface UsePluginsOptions {
   enabledCategories?: Partial<Record<PluginCategory, boolean>>;
 }
 
+const disableHotkey = { hotkey: '' };
+
 export const usePlugins = ({
   enabledCategories: {
     markup: markupEnabled = true,
@@ -60,14 +62,14 @@ export const usePlugins = ({
   const staticMarkupPlugins: PlatePlugin[] = useMemo(
     () => [
       createParagraphPlugin(),
-      createBoldPlugin(),
-      createItalicPlugin(),
-      createStrikethroughPlugin(),
-      createCodePlugin(),
+      createBoldPlugin({ options: disableHotkey }),
+      createItalicPlugin({ options: disableHotkey }),
+      createStrikethroughPlugin({ options: disableHotkey }),
+      createCodePlugin({ options: disableHotkey }),
       createLinkPlugin(),
-      createHeadingPlugin({ options: { levels: 1 } }),
-      createBlockquotePlugin(),
-      createCodeBlockPlugin(codeBlockOptions),
+      createHeadingPlugin({ options: { levels: 1, ...disableHotkey } }),
+      createBlockquotePlugin({ options: disableHotkey }),
+      createCodeBlockPlugin({ ...codeBlockOptions, options: disableHotkey }),
       createListPlugin(),
       createMentionPlugin(mentionOptions),
     ],

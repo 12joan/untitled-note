@@ -1,5 +1,5 @@
 import { IS_APPLE } from '~/lib/environment';
-import { KeyboardShortcutConfig } from './types';
+import { KeyboardShortcutConfig } from '~/lib/types';
 
 export const parseKeyboardShortcut = (
   string: string,

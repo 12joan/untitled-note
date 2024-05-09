@@ -8,6 +8,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { isHotkey } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
 import { filesize } from '~/lib/filesize';
 import {
@@ -22,8 +23,8 @@ import {
 import { mergeRefs } from '~/lib/refUtils';
 import { Project } from '~/lib/types';
 import { useCSPNonce } from '~/lib/useCSPNonce';
+import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
-import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { ProjectIcon } from '~/components/ProjectIcon';
@@ -227,13 +228,15 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
     }
   };
 
-  // TODO: Deprecate useGlobalKeyboardShortcut
-  useGlobalKeyboardShortcut(
-    'Escape',
+  useEventListener(
+    document,
+    'keydown',
     (event) => {
-      if (pickerVisible) {
-        event.preventDefault();
-        closePicker();
+      if (isHotkey('escape', event)) {
+        if (pickerVisible) {
+          event.preventDefault();
+          closePicker();
+        }
       }
     },
     [pickerVisible]

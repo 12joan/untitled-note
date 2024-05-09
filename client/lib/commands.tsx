@@ -5,7 +5,7 @@ import {
   increaseEditorFontSize,
   resetEditorFontSize,
 } from '~/lib/editorFontSize';
-import { envSpecific } from '~/lib/environment';
+import { envSpecific, FIND_SUPPORTED } from '~/lib/environment';
 import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
@@ -27,11 +27,15 @@ import TagsIcon from '~/components/icons/TagsIcon';
 
 export type BaseCommand = {
   id: string;
+  enabled?: boolean;
   label: string;
+};
+
+export type BaseActionCommand = BaseCommand & {
   action: (altBehaviour?: boolean) => IIC;
 };
 
-export type SearchCommand = BaseCommand & {
+export type SearchCommand = BaseActionCommand & {
   search: {
     aliases?: string[];
     description: string;
@@ -44,11 +48,15 @@ export type KeyboardShortcutCommand = BaseCommand & {
     hint: string;
     sequential?: boolean;
     config?: KeyboardShortcutConfig;
+    allowConflictOutsideGroup?: string;
     overrideAction?: (event: KeyboardEvent) => IIC;
   };
 };
 
 export type Command = SearchCommand | KeyboardShortcutCommand;
+export type ActionCommand = Command & BaseActionCommand;
+export type ActionKeyboardShortcutCommand = KeyboardShortcutCommand &
+  BaseActionCommand;
 
 const noopIIC = liftToIIC(() => {})();
 
@@ -67,7 +75,7 @@ const openInProjectIIC = (
   );
 
 // TODO: Change default configs based on platform and browser
-const commands: Command[] = [
+const globalCommands: ActionCommand[] = [
   {
     id: 'search',
     label: 'Search project',
@@ -259,12 +267,134 @@ const commands: Command[] = [
   },
 ];
 
-export const searchCommands: SearchCommand[] = commands.filter(
+const _localKeyboardShortcutCommands = {
+  find: {
+    id: 'find',
+    enabled: FIND_SUPPORTED,
+    label: 'Find',
+    keyboardShortcut: {
+      hint: 'Search for text in the current document',
+      config: parseKeyboardShortcut('mod+f'),
+    },
+  },
+  bold: {
+    id: 'bold',
+    label: 'Bold',
+    keyboardShortcut: {
+      hint: 'Make text bold',
+      config: parseKeyboardShortcut('mod+b'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  italic: {
+    id: 'italic',
+    label: 'Italic',
+    keyboardShortcut: {
+      hint: 'Make text italic',
+      config: parseKeyboardShortcut('mod+i'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  strikethrough: {
+    id: 'strikethrough',
+    label: 'Strikethrough',
+    keyboardShortcut: {
+      hint: 'Strikethrough text',
+      config: parseKeyboardShortcut('mod+shift+x'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  code: {
+    id: 'code',
+    label: 'Inline code',
+    keyboardShortcut: {
+      hint: 'Make text inline code',
+      config: parseKeyboardShortcut('mod+e'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  heading: {
+    id: 'heading',
+    label: 'Heading',
+    keyboardShortcut: {
+      hint: 'Convert text to a heading',
+      config: parseKeyboardShortcut('mod+alt+1'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  alwaysLink: {
+    id: 'alwaysLink',
+    label: 'Insert link',
+    keyboardShortcut: {
+      hint: 'Insert a link',
+      config: parseKeyboardShortcut('mod+shift+u'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  linkSelection: {
+    id: 'linkSelection',
+    label: 'Add link to selection',
+    keyboardShortcut: {
+      hint: 'Add a link to the selected text',
+      config: parseKeyboardShortcut('mod+k'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  blockquote: {
+    id: 'blockquote',
+    label: 'Blockquote',
+    keyboardShortcut: {
+      hint: 'Convert text to a blockquote',
+      config: parseKeyboardShortcut('mod+shift+.'),
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  codeBlock: {
+    id: 'codeBlock',
+    label: 'Code block',
+    keyboardShortcut: {
+      hint: 'Convert text to a code block',
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  bulletedList: {
+    id: 'bulletedList',
+    label: 'Bulleted list',
+    keyboardShortcut: {
+      hint: 'Convert text to a bulleted list',
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+  numberedList: {
+    id: 'numberedList',
+    label: 'Numbered list',
+    keyboardShortcut: {
+      hint: 'Convert text to a numbered list',
+      allowConflictOutsideGroup: 'editor',
+    },
+  },
+} satisfies Record<string, KeyboardShortcutCommand>;
+
+export type LocalKeyboardShortcutCommandId =
+  keyof typeof _localKeyboardShortcutCommands;
+
+export const localKeyboardShortcutCommands =
+  _localKeyboardShortcutCommands as Record<
+    LocalKeyboardShortcutCommandId,
+    KeyboardShortcutCommand
+  >;
+
+export const searchCommands: SearchCommand[] = globalCommands.filter(
   (command): command is SearchCommand => 'search' in command
 );
 
-export const keyboardShortcutCommands: KeyboardShortcutCommand[] =
-  commands.filter(
-    (command): command is KeyboardShortcutCommand =>
+export const globalKeyboardShortcutCommands: ActionKeyboardShortcutCommand[] =
+  globalCommands.filter(
+    (command): command is ActionKeyboardShortcutCommand =>
       'keyboardShortcut' in command
   );
+
+export const keyboardShortcutCommands: KeyboardShortcutCommand[] = [
+  ...globalKeyboardShortcutCommands,
+  ...Object.values(localKeyboardShortcutCommands),
+];

@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
+import { isHotkey } from '@udecode/plate';
 import { twMerge } from 'tailwind-merge';
 import { positiveMod } from '~/lib/positiveMod';
 
@@ -96,17 +97,12 @@ export const RadioCard = <T,>({
   const checked = value === currentValue;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    switch (event.key) {
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        moveSelection('up');
-        event.preventDefault();
-        break;
-      case 'ArrowDown':
-      case 'ArrowRight':
-        moveSelection('down');
-        event.preventDefault();
-        break;
+    const isUpOrLeft = isHotkey('up', event) || isHotkey('left', event);
+    const isDownOrRight = isHotkey('down', event) || isHotkey('right', event);
+
+    if (isUpOrLeft || isDownOrRight) {
+      moveSelection(isUpOrLeft ? 'up' : 'down');
+      event.preventDefault();
     }
   };
 

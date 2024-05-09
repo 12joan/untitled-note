@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { keyWithModifiers } from '~/lib/keyWithModifiers';
+import { isHotkey } from '@udecode/plate';
 import { positiveMod } from '~/lib/positiveMod';
 
 export interface UseComboboxOptions<T> {
@@ -97,38 +97,34 @@ export const useCombobox = <T>({
     };
 
     if (showSuggestions) {
-      switch (keyWithModifiers(event)) {
-        case 'ArrowUp':
-          event.preventDefault();
-          step(-1);
-          break;
+      if (isHotkey('up', event)) {
+        event.preventDefault();
+        step(-1);
+      }
 
-        case 'ArrowDown':
-          event.preventDefault();
+      if (isHotkey('down', event)) {
+        event.preventDefault();
+        step(1);
+      }
+
+      if (isHotkey('mod?+enter', event)) {
+        event.preventDefault();
+        onCommit(activeSuggestion, isAltBehaviour(event));
+      }
+
+      if (isHotkey('tab', event)) {
+        event.preventDefault();
+
+        if (completeOnTab) {
+          onCommit(activeSuggestion, false);
+        } else {
           step(1);
-          break;
+        }
+      }
 
-        case 'Enter':
-        case 'MetaEnter':
-          event.preventDefault();
-          onCommit(activeSuggestion, isAltBehaviour(event));
-          break;
-
-        case 'Tab':
-          event.preventDefault();
-          if (completeOnTab) {
-            onCommit(activeSuggestion, false);
-          } else {
-            step(1);
-          }
-          break;
-
-        case 'ShiftTab':
-          if (!completeOnTab) {
-            event.preventDefault();
-            step(-1);
-          }
-          break;
+      if (isHotkey('shift+tab', event) && !completeOnTab) {
+        event.preventDefault();
+        step(-1);
       }
     }
   };

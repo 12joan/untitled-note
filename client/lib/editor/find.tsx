@@ -18,7 +18,7 @@ import {
 import { Path, Range as SlateRange } from 'slate';
 import { useAppContext } from '~/lib/appContext';
 import { FIND_SUPPORTED } from '~/lib/environment';
-import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
+import { useLocalKeyboardShortcut } from '~/lib/useLocalKeyboardShortcut';
 import { useStateWhenSettled } from '~/lib/useStateWhenSettled';
 import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon';
 import ChevronRightIcon from '~/components/icons/ChevronRightIcon';
@@ -130,8 +130,7 @@ export const useFind = ({
    * When the user presses Meta+F, open the find dialog. If the find dialog was
    * already open, close it and let the browser handle the keyboad shortcut.
    */
-  // TODO: Deprecate useGlobalKeyboardShortcut
-  useGlobalKeyboardShortcut('MetaF', (event) => {
+  useLocalKeyboardShortcut(document, 'find', (event) => {
     if (event.target === inputRef.current) {
       close();
     } else {
