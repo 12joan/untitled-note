@@ -7,9 +7,7 @@ import {
   ELEMENT_UL,
   focusEditor,
   getPluginType,
-  getSelectionText,
   indentListItems,
-  isHotkey,
   isMarkActive,
   isRangeAcrossBlocks,
   MARK_BOLD,
@@ -46,7 +44,6 @@ import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import { Tooltip } from '~/components/Tooltip';
 import { useToggleLink } from './links/useToggleLink';
-import { useEditorEvent } from './imperativeEvents';
 
 const usePluginType = (key: string) =>
   useEditorSelector((editor) => getPluginType(editor, key), [key]);
@@ -196,29 +193,6 @@ export const formattingButtonClassNames: GroupedClassNames = {
 };
 
 export const FormattingToolbar = () => {
-  const editorStatic = useEditorRef();
-  const toggleLink = useToggleLink();
-
-  useEditorEvent(
-    'keyDown',
-    (event) => {
-      if (event.defaultPrevented) return;
-
-      const isMetaShiftU = isHotkey('mod+shift+u', event);
-      const isMetaK = isHotkey('mod+k', event);
-
-      if (isMetaShiftU || isMetaK) {
-        const hasSelection = getSelectionText(editorStatic).length > 0;
-
-        if (isMetaShiftU || (isMetaK && hasSelection)) {
-          event.preventDefault();
-          toggleLink();
-        }
-      }
-    },
-    []
-  );
-
   const inlineFormattingButtons = useInlineFormattingButtons();
   const blockFormattingButtons = useBlockFormattingButtons();
 

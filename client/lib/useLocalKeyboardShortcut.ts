@@ -4,8 +4,10 @@ import { useLocalKeyboardShortcutCommand } from '~/lib/keyboardShortcuts/overrid
 import { useEventListener } from '~/lib/useEventListener';
 
 export const useLocalKeyboardShortcut = (
+  target: EventTarget | null,
   id: LocalKeyboardShortcutCommandId,
-  callback: (event: KeyboardEvent) => void
+  callback: (event: KeyboardEvent) => void,
+  useCapture = false
 ) => {
   const {
     enabled = true,
@@ -13,9 +15,9 @@ export const useLocalKeyboardShortcut = (
   } = useLocalKeyboardShortcutCommand(id);
 
   useEventListener(
-    document,
+    target,
     'keydown',
-    (event: KeyboardEvent) => {
+    (event) => {
       if (
         enabled &&
         !event.defaultPrevented &&
@@ -25,6 +27,7 @@ export const useLocalKeyboardShortcut = (
         callback(event);
       }
     },
-    [enabled, config, sequential]
+    [enabled, config, sequential, callback],
+    useCapture
   );
 };

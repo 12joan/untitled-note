@@ -8,8 +8,9 @@ import {
 } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
 import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
+import { EditorKeyboardShortcuts } from '~/lib/editor/keyboardShortcuts';
 import { useLinkModal } from '~/lib/editor/links/LinkModal';
-import { SlatePlaywrightEffects } from '~/lib/editor/slate-playwright';
+import { SlatePlaywrightEffects } from '~/lib/editor/SlatePlaywrightEffects';
 import {
   useEditorFontSize,
   useEditorFontSizeCSSValue,
@@ -93,6 +94,7 @@ export const EditorBody = memo(
 
         {linkModal}
 
+        <EditorKeyboardShortcuts />
         <SlatePlaywrightEffects />
       </Plate>
     );

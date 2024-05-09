@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { isHotkey } from '@udecode/plate';
 import { KeyboardShortcutCommand } from '~/lib/commands';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
@@ -22,9 +23,14 @@ import DeleteIcon from '~/components/icons/DeleteIcon';
 import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
-type RecordShortcutError = 'duplicate' | 'notSequential' | 'invalid';
+type RecordShortcutError =
+  | 'noModifier'
+  | 'duplicate'
+  | 'notSequential'
+  | 'invalid';
 
 const recordShortcutErrorMessages: Record<RecordShortcutError, string> = {
+  noModifier: 'The shortcut must include a modifier key.',
   duplicate: 'This shortcut is already in use.',
   notSequential: 'The shortcut must end in 1.',
   invalid: 'This shortcut cannot be used.',
@@ -58,48 +64,54 @@ export const KeyboardShortcutsSection = () => {
     'keydown',
     (event: KeyboardEvent) => {
       if (recordingId === null) return;
+
       if (['Tab', 'Shift', 'Control', 'Alt', 'Meta'].includes(event.key))
         return;
+
       if (
         !(event.target as HTMLElement).dataset.keyboardShortcutItem &&
         ['Enter', ' '].includes(event.key)
       )
         return;
 
+      const recordingCommand = commands.find(
+        (command) => command.id === recordingId
+      );
+      if (!recordingCommand) return;
+
       event.preventDefault();
 
-      const isModified =
-        event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
+      if (isHotkey('backspace', event)) {
+        setRecordingKeyboardShortcut!(null);
+        setRecordingId(null);
+        return;
+      }
 
-      if (!isModified) {
-        if (event.key === 'Backspace') {
-          setRecordingKeyboardShortcut!(null);
-          setRecordingId(null);
-          return;
-        }
-
-        if (event.key === 'Escape') {
-          setRecordingId(null);
-          return;
-        }
+      if (isHotkey('escape', event)) {
+        setRecordingId(null);
+        return;
       }
 
       const error: RecordShortcutError | null = (() => {
+        const isModified =
+          event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
+        if (!isModified) return 'noModifier';
+
         const isDuplicate = commands.some(
-          ({ id, keyboardShortcut: { config } }) =>
+          ({ id, keyboardShortcut: { config, allowConflictOutsideGroup } }) =>
             id !== recordingId &&
+            allowConflictOutsideGroup ===
+              recordingCommand.keyboardShortcut.allowConflictOutsideGroup &&
             config &&
             compareKeyboardShortcut(config, event)
         );
-
         if (isDuplicate) return 'duplicate';
 
-        const isSequential = commands.some(
-          ({ id, keyboardShortcut: { sequential } }) =>
-            id === recordingId && sequential
-        );
-
-        if (isSequential && event.code !== 'Digit1') return 'notSequential';
+        if (
+          recordingCommand.keyboardShortcut.sequential &&
+          event.code !== 'Digit1'
+        )
+          return 'notSequential';
 
         if (!isUsableShortcut(event)) return 'invalid';
 

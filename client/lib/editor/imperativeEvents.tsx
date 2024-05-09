@@ -81,14 +81,14 @@ interface ImperativeEventsEffectsProps {
 const ImperativeEventsEffects = ({
   imperativeEventEmitter,
 }: ImperativeEventsEffectsProps) => {
-  const staticEditor = useEditorRef();
+  const editorStatic = useEditorRef();
 
   useEffect(() => {
-    editorEventEmitterMap.set(staticEditor, imperativeEventEmitter);
+    editorEventEmitterMap.set(editorStatic, imperativeEventEmitter);
     return () => {
-      editorEventEmitterMap.delete(staticEditor);
+      editorEventEmitterMap.delete(editorStatic);
     };
-  }, [staticEditor, imperativeEventEmitter]);
+  }, [editorStatic, imperativeEventEmitter]);
 
   return null;
 };
