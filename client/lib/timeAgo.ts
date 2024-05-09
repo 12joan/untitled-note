@@ -1,4 +1,4 @@
-import { pluralize } from './pluralize';
+import { pluralize } from '~/lib/pluralize';
 
 export type TimeAgoFormat = 'long' | 'short';
 
