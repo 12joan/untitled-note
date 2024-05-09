@@ -5,7 +5,7 @@ import {
   increaseEditorFontSize,
   resetEditorFontSize,
 } from '~/lib/editorFontSize';
-import { envSpecific } from '~/lib/environment';
+import { envSpecific, FIND_SUPPORTED } from '~/lib/environment';
 import { IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
@@ -27,11 +27,15 @@ import TagsIcon from '~/components/icons/TagsIcon';
 
 export type BaseCommand = {
   id: string;
+  enabled?: boolean;
   label: string;
+};
+
+export type BaseActionCommand = BaseCommand & {
   action: (altBehaviour?: boolean) => IIC;
 };
 
-export type SearchCommand = BaseCommand & {
+export type SearchCommand = BaseActionCommand & {
   search: {
     aliases?: string[];
     description: string;
@@ -49,6 +53,9 @@ export type KeyboardShortcutCommand = BaseCommand & {
 };
 
 export type Command = SearchCommand | KeyboardShortcutCommand;
+export type ActionCommand = Command & BaseActionCommand;
+export type ActionKeyboardShortcutCommand = KeyboardShortcutCommand &
+  BaseActionCommand;
 
 const noopIIC = liftToIIC(() => {})();
 
@@ -67,7 +74,7 @@ const openInProjectIIC = (
   );
 
 // TODO: Change default configs based on platform and browser
-const commands: Command[] = [
+const globalCommands: ActionCommand[] = [
   {
     id: 'search',
     label: 'Search project',
@@ -259,12 +266,38 @@ const commands: Command[] = [
   },
 ];
 
-export const searchCommands: SearchCommand[] = commands.filter(
+const _localKeyboardShortcutCommands = {
+  find: {
+    id: 'find',
+    enabled: FIND_SUPPORTED,
+    label: 'Find',
+    keyboardShortcut: {
+      hint: 'Search for text in the current document',
+      config: parseKeyboardShortcut('mod+f'),
+    },
+  },
+} satisfies Record<string, KeyboardShortcutCommand>;
+
+export type LocalKeyboardShortcutCommandId =
+  keyof typeof _localKeyboardShortcutCommands;
+
+export const localKeyboardShortcutCommands =
+  _localKeyboardShortcutCommands as Record<
+    LocalKeyboardShortcutCommandId,
+    KeyboardShortcutCommand
+  >;
+
+export const searchCommands: SearchCommand[] = globalCommands.filter(
   (command): command is SearchCommand => 'search' in command
 );
 
-export const keyboardShortcutCommands: KeyboardShortcutCommand[] =
-  commands.filter(
-    (command): command is KeyboardShortcutCommand =>
+export const globalKeyboardShortcutCommands: ActionKeyboardShortcutCommand[] =
+  globalCommands.filter(
+    (command): command is ActionKeyboardShortcutCommand =>
       'keyboardShortcut' in command
   );
+
+export const keyboardShortcutCommands: KeyboardShortcutCommand[] = [
+  ...globalKeyboardShortcutCommands,
+  ...Object.values(localKeyboardShortcutCommands),
+];

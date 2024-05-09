@@ -9,6 +9,7 @@ import {
   getPluginType,
   getSelectionText,
   indentListItems,
+  isHotkey,
   isMarkActive,
   isRangeAcrossBlocks,
   MARK_BOLD,
@@ -30,7 +31,6 @@ import {
 } from '@udecode/plate';
 import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { keyWithModifiers } from '~/lib/keyWithModifiers';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';
 import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
 import CodeBlockIcon from '~/components/icons/formatting/CodeBlockIcon';
@@ -203,9 +203,10 @@ export const FormattingToolbar = () => {
     'keyDown',
     (event) => {
       if (event.defaultPrevented) return;
-      const key = keyWithModifiers(event);
-      const isMetaShiftU = key === 'MetaShiftU';
-      const isMetaK = key === 'MetaK';
+
+      const isMetaShiftU = isHotkey('mod+shift+u', event);
+      const isMetaK = isHotkey('mod+k', event);
+
       if (isMetaShiftU || isMetaK) {
         const hasSelection = getSelectionText(editorStatic).length > 0;
 

@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { OverviewLink } from '~/lib/routes';
-import { useGlobalKeyboardShortcut } from '~/lib/useGlobalKeyboardShortcut';
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
 
 export interface BackButtonProps extends Record<string, any> {
@@ -30,13 +29,6 @@ export const BackButton = ({
       </>
     ),
   };
-
-  // TODO: Deprecate useGlobalKeyboardShortcut
-  useGlobalKeyboardShortcut('MetaAltArrowUp', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    linkRef.current?.click();
-  });
 
   return linkOriginator ? (
     <button

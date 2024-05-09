@@ -1,17 +1,15 @@
 import React, { useRef, useState } from 'react';
+import { KeyboardShortcutCommand } from '~/lib/commands';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
 import { getKeyboardShortcutLabel } from '~/lib/keyboardShortcuts/getKeyboardShortcutLabel';
 import { getKeyLabel } from '~/lib/keyboardShortcuts/getKeyLabel';
 import { isUsableShortcut } from '~/lib/keyboardShortcuts/isUsableShortcut';
-import {
-  KeyboardShortcut,
-  KeyboardShortcutConfig,
-} from '~/lib/keyboardShortcuts/types';
-import { useKeyboardShortcuts } from '~/lib/keyboardShortcuts/useKeyboardShortcuts';
+import { useAllKeyboardShortcutCommands } from '~/lib/keyboardShortcuts/overridden';
 import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';
 import { createToast } from '~/lib/toasts';
+import { KeyboardShortcutConfig } from '~/lib/types';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useTemporaryState } from '~/lib/useTemporaryState';
@@ -33,7 +31,7 @@ const recordShortcutErrorMessages: Record<RecordShortcutError, string> = {
 };
 
 export const KeyboardShortcutsSection = () => {
-  const keyboardShortcuts = useKeyboardShortcuts();
+  const commands = useAllKeyboardShortcutCommands();
 
   const [keyboardShortcutOverrides, setKeyboardShortcutOverrides] = useSettings(
     'keyboard_shortcut_overrides'
@@ -87,8 +85,8 @@ export const KeyboardShortcutsSection = () => {
       }
 
       const error: RecordShortcutError | null = (() => {
-        const isDuplicate = keyboardShortcuts.some(
-          ({ id, config }) =>
+        const isDuplicate = commands.some(
+          ({ id, keyboardShortcut: { config } }) =>
             id !== recordingId &&
             config &&
             compareKeyboardShortcut(config, event)
@@ -96,8 +94,9 @@ export const KeyboardShortcutsSection = () => {
 
         if (isDuplicate) return 'duplicate';
 
-        const isSequential = keyboardShortcuts.some(
-          ({ id, sequential }) => id === recordingId && sequential
+        const isSequential = commands.some(
+          ({ id, keyboardShortcut: { sequential } }) =>
+            id === recordingId && sequential
         );
 
         if (isSequential && event.code !== 'Digit1') return 'notSequential';
@@ -138,14 +137,14 @@ export const KeyboardShortcutsSection = () => {
   return (
     <>
       <ul className="list-group">
-        {keyboardShortcuts.map((keyboardShortcut) => {
+        {commands.map((command) => {
           return (
             <KeyboardShortcutItem
-              key={keyboardShortcut.id}
-              keyboardShortcut={keyboardShortcut}
-              isRecording={recordingId === keyboardShortcut.id}
+              key={command.id}
+              keyboardShortcutCommand={command}
+              isRecording={recordingId === command.id}
               setIsRecording={(isRecording) =>
-                setRecordingId(isRecording ? keyboardShortcut.id : null)
+                setRecordingId(isRecording ? command.id : null)
               }
               isShaking={isShaking}
               removeKeyboardShortcut={() =>
@@ -170,7 +169,7 @@ export const KeyboardShortcutsSection = () => {
 };
 
 interface KeyboardShortcutItemProps {
-  keyboardShortcut: KeyboardShortcut;
+  keyboardShortcutCommand: KeyboardShortcutCommand;
   isRecording: boolean;
   setIsRecording: (isRecording: boolean) => void;
   isShaking: boolean;
@@ -178,7 +177,10 @@ interface KeyboardShortcutItemProps {
 }
 
 const KeyboardShortcutItem = ({
-  keyboardShortcut: { id, label, config, hint, sequential = false },
+  keyboardShortcutCommand: {
+    label,
+    keyboardShortcut: { config, hint, sequential = false },
+  },
   isRecording,
   setIsRecording,
   isShaking,
@@ -193,7 +195,6 @@ const KeyboardShortcutItem = ({
 
   return (
     <div
-      key={id}
       ref={mergeRefs([containerRef, focusOutRef])}
       className="group flex"
       {...focusOutProps}
