@@ -57,6 +57,7 @@ export const EditorHeader = memo(
         isEditor
         statusHeader={
           <DocumentStatusHeader
+            createdAt={new Date(workingDocument.created_at)}
             isDirty={isDirty}
             isFailing={isFailing}
             lastSuccessfulUpdate={lastSuccessfulUpdate}
