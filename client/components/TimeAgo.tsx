@@ -1,10 +1,41 @@
-import React from 'react';
-import ReactTimeAgo from 'react-time-ago';
-import TimeAgoLib from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
+import React, { useCallback, useEffect } from 'react';
+import { timeAgo, TimeAgoOptions } from '~/lib/timeAgo';
 
-TimeAgoLib.addDefaultLocale(en);
+export const TimeAgo = (options: TimeAgoOptions) => {
+  const { date } = options;
+  const ref = React.useRef<HTMLTimeElement>(null);
 
-export const TimeAgo: typeof ReactTimeAgo = (props) => (
-  <ReactTimeAgo timeStyle="round" {...props} />
-);
+  const getDateTime = useCallback(() => date.toISOString(), [date]);
+  const getTooltip = useCallback(() => date.toLocaleString(), [date]);
+  const getTimeAgo = useCallback(() => timeAgo(options), [options]);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const scheduleNextTick = () => {
+      const timeToNextSecond = 1000 - (Date.now() % 1000);
+      timeout = setTimeout(() => {
+        if (ref.current) {
+          ref.current.dateTime = getDateTime();
+          ref.current.title = getTooltip();
+          ref.current.textContent = getTimeAgo();
+        }
+        scheduleNextTick();
+      }, timeToNextSecond);
+    };
+
+    scheduleNextTick();
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [getDateTime, getTooltip, getTimeAgo]);
+
+  return (
+    <time ref={ref} dateTime={getDateTime()} title={getTooltip()}>
+      {getTimeAgo()}
+    </time>
+  );
+};

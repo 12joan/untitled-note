@@ -6909,13 +6909,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoize-one@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "memoize-one@npm:6.0.0"
-  checksum: 10/28feaf7e9a870efef1187df110b876ce42deaf86c955f4111d72d23b96e44eed573469316e6ad0d2cc7fa3b1526978215617b126158015f957242c7493babca9
-  languageName: node
-  linkType: hard
-
 "merge-stream@npm:^2.0.0":
   version: 2.0.0
   resolution: "merge-stream@npm:2.0.0"
@@ -7268,7 +7261,6 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-router-dom: "npm:6"
     react-textarea-autosize: "npm:^8.4.1"
-    react-time-ago: "npm:^7.3.3"
     runes: "npm:^0.4.3"
     sass: "npm:^1.76.0"
     scheduler: "npm:^0.23.2"
@@ -7570,13 +7562,6 @@ __metadata:
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
   checksum: 10/5b1e2daa247062061325b8fdbfd1fb56dde0a448fb1455453276ea18c60685bdad23a445dc148cf87bc216be1573357509b7d4060494a6fd768c7efad833ee45
-  languageName: node
-  linkType: hard
-
-"performance-now@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "performance-now@npm:2.1.0"
-  checksum: 10/534e641aa8f7cba160f0afec0599b6cecefbb516a2e837b512be0adbe6c1da5550e89c78059c7fabc5c9ffdf6627edabe23eb7c518c4500067a898fa65c2b550
   languageName: node
   linkType: hard
 
@@ -8240,15 +8225,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raf@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "raf@npm:3.4.1"
-  dependencies:
-    performance-now: "npm:^2.1.0"
-  checksum: 10/4c4b4c826b09d2aec6ca809f1a3c3c12136e7ec8d13fbb91f495dd2c99cd43345240e003da3bfd16036a432e635049fc6d9f69f9187f5f22ea88bb146ec75881
-  languageName: node
-  linkType: hard
-
 "react-beautiful-dnd@npm:^13.1.1":
   version: 13.1.1
   resolution: "react-beautiful-dnd@npm:13.1.1"
@@ -8385,21 +8361,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/7e2bd222887e9eec5f42733f88f28bca04b109a6fbcf2df70fa33df1919882154de0bf5d4ae42f9f3a3eb97f0f7478cdeb92e9ec3dc43800a230b76049428526
-  languageName: node
-  linkType: hard
-
-"react-time-ago@npm:^7.3.3":
-  version: 7.3.3
-  resolution: "react-time-ago@npm:7.3.3"
-  dependencies:
-    memoize-one: "npm:^6.0.0"
-    prop-types: "npm:^15.8.1"
-    raf: "npm:^3.4.1"
-  peerDependencies:
-    javascript-time-ago: ^2.3.7
-    react: ">=0.16.8"
-    react-dom: ">=0.16.8"
-  checksum: 10/f5cfd19743fb5b072772ea60b1ad42c441b930165cdd10e616ba9b5fa92be7959141b04cd13889ea3f21962f90166984729c94bf20c3f8b0ab1081c3ddcf8952
   languageName: node
   linkType: hard
 

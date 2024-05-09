@@ -4,12 +4,14 @@ import { dropdownItemClassNames } from '~/components/Dropdown';
 import { TimeAgo } from '~/components/TimeAgo';
 
 export interface DocumentStatusHeaderProps {
+  createdAt: Date;
   isDirty: boolean;
   isFailing: boolean;
   lastSuccessfulUpdate: Date;
 }
 
 export const DocumentStatusHeader = ({
+  createdAt,
   isDirty,
   isFailing,
   lastSuccessfulUpdate,
@@ -43,20 +45,11 @@ export const DocumentStatusHeader = ({
         </div>
 
         <p className="text-sm text-plain-500 dark:text-plain-400">
-          Last saved{' '}
-          <TimeAgo
-            date={lastSuccessfulUpdate}
-            timeStyle={{
-              steps: [
-                { formatAs: 'second' },
-                { formatAs: 'minute' },
-                { formatAs: 'hour' },
-                { formatAs: 'day' },
-              ],
-              labels: ['mini', 'short'],
-            }}
-          />{' '}
-          ago
+          Saved <TimeAgo date={lastSuccessfulUpdate} />
+        </p>
+
+        <p className="text-sm text-plain-500 dark:text-plain-400">
+          Created <TimeAgo date={createdAt} />
         </p>
       </div>
     </div>
