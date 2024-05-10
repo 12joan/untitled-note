@@ -78,6 +78,7 @@ export const streamDocuments = (
         blank: true,
         body_type: true,
         updated_by: true,
+        created_at: true,
         updated_at: true,
         pinned_at: true,
         locked_at: true,

@@ -11,6 +11,7 @@ const defaultSettings: Settings = {
   deeper_dark_mode: false,
   editor_style: 'casual',
   auto_snapshots_option: 'disabled',
+  recents_type: 'viewed',
 };
 
 export const useSettingsProvider = (futureSettings: Future<Settings>) => {

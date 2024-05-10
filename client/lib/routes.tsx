@@ -73,6 +73,9 @@ export const overviewPath = ({ projectId }: ProjectRoute) =>
 export const recentlyViewedPath = ({ projectId }: ProjectRoute) =>
   `/projects/${projectId}/recently_viewed`;
 
+export const recentlyModifiedPath = ({ projectId }: ProjectRoute) =>
+  `/projects/${projectId}/recently_modified`;
+
 export const tagPath = ({ projectId, tagId }: ProjectTagRoute) =>
   `/projects/${projectId}/tags/${tagId}`;
 
@@ -101,6 +104,7 @@ export const newDocumentPath = ({
 export const OverviewLink = createLinkComponent(overviewPath);
 export const ProjectLink = createLinkComponent(projectPath);
 export const RecentlyViewedLink = createLinkComponent(recentlyViewedPath);
+export const RecentlyModifiedLink = createLinkComponent(recentlyModifiedPath);
 export const TagLink = createLinkComponent(tagPath);
 export const TagsLink = createLinkComponent(tagsPath);
 export const DocumentLink = createLinkComponent(documentPath);

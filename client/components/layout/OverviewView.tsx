@@ -1,12 +1,13 @@
 import React, { memo } from 'react';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
-import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
 import { sequenceFutures, unwrapFuture } from '~/lib/monads';
 import {
+  RecentlyModifiedLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
   TagsLink,
 } from '~/lib/routes';
+import { useSettings } from '~/lib/settings';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
 import { DocumentIndex } from '~/components/DocumentIndex';
@@ -21,11 +22,15 @@ import { TagIndex } from '~/components/TagIndex';
 export const OverviewView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();
 
+  const [recentsType] = useSettings('recents_type');
   const project = useAppContext('project');
   const futurePartialDocuments = useAppContext('futurePartialDocuments');
   const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
   const futureRecentlyViewedDocuments = useAppContext(
     'futureRecentlyViewedDocuments'
+  );
+  const futureRecentlyModifiedDocuments = useAppContext(
+    'futureRecentlyModifiedDocuments'
   );
   const futureTags = useAppContext('futureTags');
   const toggleProjectSettingsModal = useAppContext(
@@ -38,6 +43,7 @@ export const OverviewView = memo(() => {
     documents: futurePartialDocuments,
     pinnedDocuments: futurePinnedDocuments,
     recentlyViewedDocuments: futureRecentlyViewedDocuments,
+    recentlyModifiedDocuments: futureRecentlyModifiedDocuments,
     tags: futureTags,
   });
 
@@ -83,6 +89,7 @@ export const OverviewView = memo(() => {
           documents,
           pinnedDocuments,
           recentlyViewedDocuments,
+          recentlyModifiedDocuments,
           tags,
         }) => (
           <AppContextProvider linkOriginator="Overview">
@@ -95,22 +102,28 @@ export const OverviewView = memo(() => {
               )}
             />
 
-            <DocumentIndex
-              viewWidth={viewWidth}
-              title="Recently viewed"
-              showAllLink={RecentlyViewedLink}
-              documents={recentlyViewedDocuments.slice(
-                0,
-                TOP_N_RECENTLY_VIEWED_DOCUMENTS
-              )}
-              linkComponent={RecentlyViewedDocumentLink}
-            />
+            {recentsType === 'viewed' ? (
+              <DocumentIndex
+                viewWidth={viewWidth}
+                title="Recently viewed"
+                showAllLink={RecentlyViewedLink}
+                documents={recentlyViewedDocuments.slice(0, 5)}
+                linkComponent={RecentlyViewedDocumentLink}
+              />
+            ) : (
+              <DocumentIndex
+                viewWidth={viewWidth}
+                title="Recently modified"
+                showAllLink={RecentlyModifiedLink}
+                documents={recentlyModifiedDocuments.slice(0, 5)}
+              />
+            )}
 
             <TagIndex
               viewWidth={viewWidth}
               title="Tags"
               showAllLink={TagsLink}
-              tags={tags.slice(0, TOP_N_TAGS)}
+              tags={tags.slice(0, 5)}
             />
 
             <DocumentIndex

@@ -14,6 +14,7 @@ class SettingsAPITest < APITestCase
     assert_equal({}, result[:keyboard_shortcut_overrides])
     assert_equal(false, result[:deeper_dark_mode])
     assert_equal('casual', result[:editor_style])
+    assert_equal('viewed', result[:recents_type])
   end
 
   test 'returns settings when settings exists' do

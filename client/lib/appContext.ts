@@ -30,6 +30,7 @@ export type AppContext = {
   futurePartialDocuments: Future<PartialDocument[]>;
   futurePinnedDocuments: Future<PartialDocument[]>;
   futureRecentlyViewedDocuments: Future<PartialDocument[]>;
+  futureRecentlyModifiedDocuments: Future<PartialDocument[]>;
   topBarHeight: number;
   toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
   toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
@@ -67,6 +68,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     futurePartialDocuments: null,
     futurePinnedDocuments: null,
     futureRecentlyViewedDocuments: null,
+    futureRecentlyModifiedDocuments: null,
     toggleSearchModal: null,
     toggleAccountModal: null,
     toggleSettingsModal: null,
