@@ -79,7 +79,7 @@ export const EditProjectIcon = () => {
 
         <ProjectIcon
           project={localProject}
-          className="size-12 rounded-lg shadow text-xl select-none"
+          className="size-12 rounded-lg shadow text-xl select-none dark:border"
         />
       </div>
     </div>
