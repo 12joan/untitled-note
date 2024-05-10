@@ -24,6 +24,16 @@ type DocumentRequestData = Partial<
   }
 >;
 
+export const createDocument = (
+  projectId: number,
+  data: DocumentRequestData
+): Promise<Document> =>
+  fetchAPIEndpoint({
+    method: 'POST',
+    path: `/api/v1/projects/${projectId}/documents`,
+    data,
+  }).then((response) => response.json()) as Promise<Document>;
+
 export const updateDocument = (
   projectId: number,
   id: number,
