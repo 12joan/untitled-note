@@ -1,18 +1,27 @@
-import React, { ReactNode, useMemo, useRef } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   ELEMENT_MENTION,
   findMentionInput,
+  findNodePath,
   getMentionOnSelectItem,
   getNodeString,
   MentionPlugin,
   PlateRenderElementProps,
   removeMentionInput,
+  setNodes,
   TMentionElement,
   TMentionInputElement,
   Value,
 } from '@udecode/plate';
 import { useFocused, useSelected } from 'slate-react';
+import { createDocument } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
 import { useEditorEvent } from '~/lib/editor/imperativeEvents';
 import { filterPredicate } from '~/lib/filterPredicate';
@@ -23,7 +32,11 @@ import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DocumentIcon from '~/components/icons/DocumentIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import { InlinePlaceholder } from '~/components/Placeholder';
+import { handleCreateDocumentError } from '../handleErrors';
+
+const justCreatedIds = new Set<number>();
 
 type DocumentMention = {
   documentId: number;
@@ -35,6 +48,7 @@ export const MentionComponent = ({
   children,
   element,
   nodeProps,
+  editor,
 }: PlateRenderElementProps<Value, TMentionElement>) => {
   const { documentId, fallbackText } = element as any as DocumentMention;
 
@@ -50,6 +64,23 @@ export const MentionComponent = ({
   const selected = useSelected();
   const focused = useFocused();
   const selectedAndFocused = selected && focused;
+
+  useEffect(() => {
+    const doc = orDefaultFuture(futureDocument, undefined);
+    if (!doc) return;
+
+    // Once the document exists, it is no longer "just created"
+    justCreatedIds.delete(documentId);
+
+    // Keep fallback text up to date
+    if (fallbackText !== doc.safe_title) {
+      setNodes(
+        editor,
+        { fallbackText: doc.safe_title },
+        { at: findNodePath(editor, element) }
+      );
+    }
+  }, [documentId, futureDocument]);
 
   useEditorEvent(
     'keyDown',
@@ -84,7 +115,10 @@ export const MentionComponent = ({
               })}
               to={{ documentId }}
               children={
-                doc?.safe_title ?? `[Deleted document: ${fallbackText}]`
+                doc?.safe_title ??
+                (justCreatedIds.has(documentId)
+                  ? fallbackText
+                  : `[Deleted document: ${fallbackText}]`)
               }
               onClick={(event) => {
                 if (documentId === currentDocumentId) {
@@ -122,18 +156,34 @@ export const MentionInputComponent = ({
   children,
   element,
 }: PlateRenderElementProps<Value, TMentionInputElement>) => {
+  const projectId = useAppContext('projectId');
   const futurePartialDocuments = useAppContext('futurePartialDocuments');
   const mentionSuggestionsContainerRef = useAppContext(
     'mentionSuggestionsContainerRef'
   );
 
-  const handleSelectItem = (item: DocumentMention) =>
-    getMentionOnSelectItem({
-      key: ELEMENT_MENTION,
-    })(editor, item as any);
-
-  const query = getNodeString(element);
+  const query = getNodeString(element).trim();
   const [, path] = findMentionInput(editor)!;
+
+  const handleSelectItem = useCallback(
+    (item: DocumentMention) =>
+      getMentionOnSelectItem({
+        key: ELEMENT_MENTION,
+      })(editor, item as any),
+    [editor]
+  );
+
+  const handleCreateDocument = useCallback(async () => {
+    const { id } = await handleCreateDocumentError(
+      createDocument(projectId, {
+        title: query,
+      })
+    );
+
+    justCreatedIds.add(id);
+
+    handleSelectItem({ documentId: id, fallbackText: query });
+  }, [projectId, query]);
 
   const matchingDocuments = useMemo(
     () =>
@@ -144,38 +194,62 @@ export const MentionInputComponent = ({
   );
 
   const suggestions: MentionSuggestion[] = useMemo(
-    () => [
-      ...matchingDocuments.map((doc) => ({
-        key: doc.id,
-        label: doc.title!,
-        icon: (
-          <DocumentIcon
-            size="1.25em"
-            noAriaLabel
-            className="text-primary-500 dark:text-primary-400 data-active:text-white"
-          />
-        ),
-        onCommit: () =>
-          handleSelectItem({
-            documentId: doc.id,
-            fallbackText: doc.safe_title,
-          }),
-      })),
+    () =>
+      [
+        ...matchingDocuments.map((doc) => ({
+          enabled: true,
+          key: doc.id,
+          label: doc.title!,
+          icon: (
+            <DocumentIcon
+              size="1.25em"
+              noAriaLabel
+              className="text-primary-500 dark:text-primary-400 data-active:text-white"
+            />
+          ),
+          onCommit: () =>
+            handleSelectItem({
+              documentId: doc.id,
+              fallbackText: doc.safe_title,
+            }),
+        })),
 
-      {
-        key: 'cancel',
-        icon: (
-          <DeleteIcon
-            size="1.25em"
-            noAriaLabel
-            className="text-red-500 dark:text-red-400 data-active:text-white"
-          />
-        ),
-        label: 'Cancel mention',
-        onCommit: () => removeMentionInput(editor, path),
-      },
-    ],
-    [matchingDocuments, path]
+        {
+          enabled: query.length > 0,
+          key: 'create',
+          icon: (
+            <NewDocumentIcon
+              size="1.25em"
+              noAriaLabel
+              className="text-primary-500 dark:text-primary-400 data-active:text-white"
+            />
+          ),
+          label: `Create "${query}"`,
+          onCommit: handleCreateDocument,
+        },
+
+        {
+          enabled: true,
+          key: 'cancel',
+          icon: (
+            <DeleteIcon
+              size="1.25em"
+              noAriaLabel
+              className="text-red-500 dark:text-red-400 data-active:text-white"
+            />
+          ),
+          label: 'Cancel mention',
+          onCommit: () => removeMentionInput(editor, path),
+        },
+      ].filter((s) => s.enabled),
+    [
+      matchingDocuments,
+      query,
+      handleSelectItem,
+      handleCreateDocument,
+      editor,
+      path,
+    ]
   );
 
   const {
