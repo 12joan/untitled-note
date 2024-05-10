@@ -7,7 +7,6 @@ import React, {
   ReactNode,
 } from 'react';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
-import { TOP_N_RECENTLY_VIEWED_DOCUMENTS, TOP_N_TAGS } from '~/lib/config';
 import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
 import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
 import { PolyProps, PolyRef } from '~/lib/polymorphic';
@@ -15,11 +14,13 @@ import {
   DocumentLink,
   NewDocumentLink,
   OverviewLink,
+  RecentlyModifiedLink,
   RecentlyViewedDocumentLink,
   RecentlyViewedLink,
   TagLink,
   TagsLink,
 } from '~/lib/routes';
+import { useSettings } from '~/lib/settings';
 import { PartialDocument, Tag } from '~/lib/types';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { ContextMenuDropdown } from '~/components/Dropdown';
@@ -36,9 +37,13 @@ export interface SidebarProps {
 }
 
 export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
+  const [recentsType] = useSettings('recents_type');
   const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
   const futureRecentlyViewedDocuments = useAppContext(
     'futureRecentlyViewedDocuments'
+  );
+  const futureRecentlyModifiedDocuments = useAppContext(
+    'futureRecentlyModifiedDocuments'
   );
   const futureTags = useAppContext('futureTags');
   const toggleSearchModal = useAppContext('toggleSearchModal');
@@ -73,22 +78,32 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
           />
         </PinnedDragTarget>
 
-        <FutureDocumentsSection
-          buttonAs={RecentlyViewedDocumentLink}
-          heading="Recently viewed"
-          headingLink={RecentlyViewedLink}
-          futureDocuments={mapFuture(futureRecentlyViewedDocuments, (docs) =>
-            docs.slice(0, TOP_N_RECENTLY_VIEWED_DOCUMENTS)
-          )}
-          testId="sidebar-recently-viewed-documents"
-        />
+        {recentsType === 'viewed' ? (
+          <FutureDocumentsSection
+            buttonAs={RecentlyViewedDocumentLink}
+            heading="Recently viewed"
+            headingLink={RecentlyViewedLink}
+            futureDocuments={mapFuture(futureRecentlyViewedDocuments, (docs) =>
+              docs.slice(0, 5)
+            )}
+            testId="sidebar-recently-viewed-documents"
+          />
+        ) : (
+          <FutureDocumentsSection
+            heading="Recently modified"
+            headingLink={RecentlyModifiedLink}
+            futureDocuments={mapFuture(
+              futureRecentlyModifiedDocuments,
+              (docs) => docs.slice(0, 5)
+            )}
+            testId="sidebar-recently-modified-documents"
+          />
+        )}
 
         <FutureTagsSection
           heading="Tags"
           headingLink={TagsLink}
-          futureTags={mapFuture(futureTags, (tags) =>
-            tags.slice(0, TOP_N_TAGS)
-          )}
+          futureTags={mapFuture(futureTags, (tags) => tags.slice(0, 5))}
           testId="sidebar-tags"
         />
       </div>

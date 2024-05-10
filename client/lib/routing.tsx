@@ -123,6 +123,18 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
       )),
     },
     {
+      path: '/recently_modified',
+      element: forwardParams(() => (
+        <ProjectView
+          childView={{
+            type: 'recentlyModified',
+            key: 'recentlyModified',
+            props: {},
+          }}
+        />
+      )),
+    },
+    {
       path: '/tags/:tagId',
       element: forwardParams(({ tagId }: { tagId: string }) => (
         <ProjectView

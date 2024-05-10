@@ -29,15 +29,16 @@ import { useViewportSize } from '~/lib/useViewportSize';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { AllTagsView } from '~/components/layout/AllTagsView';
 import { EditorView } from '~/components/layout/EditorView';
+import { FormattingToolbarContainer } from '~/components/layout/FormattingToolbarContainer';
 import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar';
 import { OverviewView } from '~/components/layout/OverviewView';
 import { ProjectsBar } from '~/components/layout/ProjectsBar';
+import { RecentlyModifiedView } from '~/components/layout/RecentlyModifiedView';
 import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
 import { Sidebar } from '~/components/layout/Sidebar';
 import { SnapshotsView } from '~/components/layout/SnapshotsView';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
 import { TopBar } from '~/components/layout/TopBar';
-import { FormattingToolbarContainer } from './FormattingToolbarContainer';
 
 export interface ProjectViewProps {
   childView: {
@@ -53,6 +54,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       awaitRedirect: AwaitRedirect,
       overview: OverviewView,
       recentlyViewed: RecentlyViewedView,
+      recentlyModified: RecentlyModifiedView,
       showTag: TagDocumentsView,
       allTags: AllTagsView,
       editor: EditorView,

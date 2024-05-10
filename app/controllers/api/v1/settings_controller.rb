@@ -20,6 +20,7 @@ module API
           :deeper_dark_mode,
           :editor_style,
           :auto_snapshots_option,
+          :recents_type,
           keyboard_shortcut_overrides: {},
         )
       end

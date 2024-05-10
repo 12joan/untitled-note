@@ -13,6 +13,7 @@ import {
   newDocumentPath,
   overviewPath,
   projectPath,
+  recentlyModifiedPath,
   recentlyViewedPath,
   tagsPath,
 } from '~/lib/routes';
@@ -252,6 +253,18 @@ const globalCommands: ActionCommand[] = [
       hint: 'Jump to recently viewed',
     },
     action: (newTab = false) => openInProjectIIC(recentlyViewedPath, newTab),
+  },
+  {
+    id: 'recently-modified',
+    label: 'Recently modified',
+    search: {
+      description: 'Jump to recently modified',
+      icon: <RecentIcon size="1.25em" noAriaLabel />,
+    },
+    keyboardShortcut: {
+      hint: 'Jump to recently modified',
+    },
+    action: (newTab = false) => openInProjectIIC(recentlyModifiedPath, newTab),
   },
   {
     id: 'all-tags',

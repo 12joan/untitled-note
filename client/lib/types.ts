@@ -75,6 +75,7 @@ export type PartialDocument = Pick<
   | 'blank'
   | 'body_type'
   | 'updated_by'
+  | 'created_at'
   | 'updated_at'
   | 'pinned_at'
   | 'locked_at'
@@ -137,6 +138,7 @@ export type Settings = {
   deeper_dark_mode: boolean;
   editor_style: EditorStyle;
   auto_snapshots_option: AutoSnapshotsOption;
+  recents_type: 'viewed' | 'modified';
 };
 
 export type StorageQuotaUsage = {

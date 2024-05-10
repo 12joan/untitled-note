@@ -88,12 +88,8 @@ interface IndexProps {
 const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => {
   return (
     <div className="flex flex-wrap gap-5">
-      {items.map((item) => (
-        <CardItem
-          key={item.key}
-          item={item}
-          cardPreviewHeight={cardPreviewHeight}
-        />
+      {items.map(({ key, ...item }) => (
+        <CardItem key={key} item={item} cardPreviewHeight={cardPreviewHeight} />
       ))}
     </div>
   );
@@ -110,7 +106,7 @@ const ListIndex = ({ items }: IndexProps) => {
 };
 
 interface ItemProps extends Record<string, any> {
-  item: Item;
+  item: Omit<Item, 'key'>;
   cardPreviewHeight?: string | number;
 }
 

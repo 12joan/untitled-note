@@ -115,6 +115,20 @@ export const StreamProjectData = ({
     [futurePartialDocuments, recentlyViewedDocuments]
   );
 
+  const futureRecentlyModifiedDocuments = useMemo(
+    () =>
+      mapFuture(futurePartialDocuments, (documents) =>
+        documents
+          .filter((doc) => doc.pinned_at === null)
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at).getTime() -
+              new Date(a.updated_at).getTime()
+          )
+      ),
+    [futurePartialDocuments]
+  );
+
   return (
     <AppContextProvider
       projectId={projectId}
@@ -123,6 +137,7 @@ export const StreamProjectData = ({
       futurePartialDocuments={futurePartialDocuments}
       futurePinnedDocuments={futurePinnedDocuments}
       futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}
+      futureRecentlyModifiedDocuments={futureRecentlyModifiedDocuments}
       children={children}
     />
   );

@@ -16,19 +16,26 @@ export const DocumentIndex = ({
   linkComponent = DocumentLink,
   ...otherProps
 }: DocumentIndexProps) => {
-  const itemForDocument = (doc: PartialDocument): Item => ({
-    key: doc.id,
-    label: doc.safe_title,
-    preview: doc.preview,
-    as: linkComponent,
-    buttonProps: {
-      to: {
-        documentId: doc.id,
+  const itemForDocument = (doc: PartialDocument): Item => {
+    const formatDate = (date: string) => new Date(date).toLocaleString();
+
+    return {
+      key: doc.id,
+      label: doc.safe_title,
+      preview: doc.preview,
+      as: linkComponent,
+      buttonProps: {
+        to: {
+          documentId: doc.id,
+        },
+        title: `Modified ${formatDate(doc.updated_at)}\nCreated ${formatDate(
+          doc.created_at
+        )}`,
       },
-    },
-    contextMenu: <DocumentMenu document={doc} />,
-    dragData: makeDocumentDragData(doc),
-  });
+      contextMenu: <DocumentMenu document={doc} />,
+      dragData: makeDocumentDragData(doc),
+    };
+  };
 
   return (
     <ItemIndex

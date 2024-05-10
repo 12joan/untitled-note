@@ -9,8 +9,14 @@ class Settings < ApplicationRecord
       deeper_dark_mode
       editor_style
       auto_snapshots_option
+      recents_type
     ]
   )
 
   belongs_to :user
+
+  enum recents_type: {
+    viewed: 0,
+    modified: 1,
+  }
 end
