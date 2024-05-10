@@ -347,7 +347,7 @@ const SearchModal = ({
         {showSuggestions && (
           <div
             {...suggestionContainerProps}
-            className="px-3 py-3 border-t border-black/10 select-none max-h-[50vh] overflow-y-auto"
+            className="px-3 py-3 border-t border-black/10 dark:border-white/10 select-none max-h-[50vh] overflow-y-auto"
           >
             {mapSuggestions(
               ({
