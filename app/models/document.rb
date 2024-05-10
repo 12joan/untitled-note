@@ -28,7 +28,7 @@ class Document < ApplicationRecord
   has_one :owner, through: :project
 
   has_many :documents_tags, dependent: :destroy
-  has_many :tags, through: :documents_tags
+  has_many :tags, -> {  order('documents_tags.created_at') }, through: :documents_tags
   accepts_nested_attributes_for :tags
 
   has_many :documents_s3_files, dependent: :destroy
