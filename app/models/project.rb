@@ -12,6 +12,7 @@ class Project < ApplicationRecord
       background_colour
       editor_style
       auto_snapshots_option
+      list_index
       created_at
       updated_at
       archived_at

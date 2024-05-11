@@ -34,6 +34,13 @@ export const handleUpdateProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
+export const handleBatchUpdateProjectError = handleErrors(() => ({
+  title: 'Failed to update projects',
+  message:
+    'An error occurred while updating the projects. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
 export const handleRemoveProjectImageError = handleErrors(() => ({
   title: 'Failed to remove project image',
   message:
@@ -59,13 +66,6 @@ export const handleDeleteProjectError = handleErrors(() => ({
   title: 'Failed to delete project',
   message:
     'An error occurred while deleting the project. Make sure you are connected to the internet and try again.',
-  autoClose: 'slow',
-}));
-
-export const handleReorderProjectsError = handleErrors(() => ({
-  title: 'Failed to reorder projects',
-  message:
-    'An error occurred while reordering the projects. Make sure you are connected to the internet and try again.',
   autoClose: 'slow',
 }));
 

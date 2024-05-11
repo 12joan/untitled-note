@@ -1,34 +1,57 @@
 import React, {
-  ButtonHTMLAttributes,
   KeyboardEvent,
   memo,
   MouseEvent,
-  ReactElement,
-  useId,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  OnDragEndResponder,
-} from 'react-beautiful-dnd';
-import { updateProjectOrder } from '~/lib/apis/project';
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  KeyboardCoordinateGetter,
+  KeyboardSensor,
+  PointerSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import { Portal } from '@headlessui/react';
+import { batchUpdateProjects } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { groupList } from '~/lib/groupList';
-import { handleReorderProjectsError } from '~/lib/handleErrors';
+import { handleBatchUpdateProjectError } from '~/lib/handleErrors';
+import { mergeRefs } from '~/lib/refUtils';
 import { OverviewLink, ProjectLink } from '~/lib/routes';
+import { setProjectArchivedAt } from '~/lib/transformProject';
 import { Project } from '~/lib/types';
-import { useCSPNonce } from '~/lib/useCSPNonce';
-import { useElementSize } from '~/lib/useElementSize';
 import { useNewProject } from '~/lib/useNewProject';
 import { useOverrideable } from '~/lib/useOverrideable';
-import ChevronUpIcon from '~/components/icons/ChevronUpIcon';
+import { Dropdown } from '~/components/Dropdown';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
+
+type DraggableData = { type: 'project'; project: Project };
+
+type DroppableData =
+  | {
+      type: 'project-position';
+      projectId: number;
+      side: 'before' | 'after';
+      isArchived: boolean;
+    }
+  | {
+      type: 'project-archived';
+      isArchived: boolean;
+    };
 
 export interface ProjectsBarProps {
   onButtonClick?: (event: MouseEvent) => void;
@@ -36,13 +59,13 @@ export interface ProjectsBarProps {
 
 export const ProjectsBar = memo(
   ({ onButtonClick = () => {} }: ProjectsBarProps) => {
-    const projectId = useAppContext('projectId');
     const projects = useAppContext('projects');
 
     const { modal: newProjectModal, open: openNewProjectModal } =
       useNewProject();
 
     const [localProjects, setLocalProjects] = useOverrideable(projects);
+    const [isDirty, setIsDirty] = useState(false);
 
     const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
       () =>
@@ -52,178 +75,304 @@ export const ProjectsBar = memo(
       [localProjects]
     );
 
-    const handleDragEnd: OnDragEndResponder = ({ source, destination }) => {
-      if (!destination) return;
+    // TODO: Finish
+    const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
+      event,
+      { context }
+    ) => {
+      if (event.key === 'ArrowDown') {
+        const overData = context.over?.data.current as
+          | DroppableData
+          | undefined;
+        console.log('overData', overData);
+        if (overData?.type !== 'project-position') return;
 
-      const newProjects = [...unarchivedProjects, ...archivedProjects];
-      const [removed] = newProjects.splice(source.index, 1);
-      newProjects.splice(destination.index, 0, removed);
-      setLocalProjects(newProjects);
+        const { projectId: overProjectId } = overData;
+        const overProjectIndex = localProjects.findIndex(
+          (project) => project.id === overProjectId
+        );
+        const nextProject = localProjects[overProjectIndex + 1];
+        const nextRect = context.droppableRects.get(
+          `project-drop-line-${nextProject.id}-after`
+        );
+        console.log('nextRect', nextRect);
+        if (!nextRect) return;
 
-      handleReorderProjectsError(
-        updateProjectOrder(newProjects.map(({ id }) => id))
-      ).catch(() => setLocalProjects(localProjects));
+        return {
+          x: nextRect.left + nextRect.width / 2,
+          y: nextRect.top + nextRect.height / 2,
+        };
+      }
     };
 
-    const nonce = useCSPNonce();
+    const sensors = useSensors(
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          // Ensures that draggables are clickable
+          distance: 10,
+        },
+      }),
+      useSensor(KeyboardSensor, {
+        coordinateGetter: keyboardCoordinateGetter,
+        keyboardCodes: {
+          start: ['Space'],
+          cancel: ['Escape'],
+          end: ['Space'],
+        },
+      })
+    );
+
+    const [draggingId, setDraggingId] = useState<number | null>(null);
+    const draggingProject = useMemo(
+      () => localProjects.find((p) => p.id === draggingId),
+      [localProjects, draggingId]
+    );
+
+    // Update the order on the server when dragging ends
+    useEffect(() => {
+      if (draggingId || !isDirty) return;
+
+      const batchUpdate: Parameters<typeof batchUpdateProjects>[0] =
+        localProjects.map((project, index) => ({
+          id: project.id,
+          archived_at: project.archived_at,
+          list_index: index,
+        }));
+
+      handleBatchUpdateProjectError(batchUpdateProjects(batchUpdate)).catch(
+        () => setLocalProjects(projects)
+      );
+
+      setIsDirty(false);
+    }, [draggingId, isDirty]);
+
+    const handleDragStart = (event: DragStartEvent) => {
+      setDraggingId(event.active.id as number);
+    };
+
+    const handleDragEnd = ({ active, over }: DragEndEvent) => {
+      setDraggingId(null);
+      if (!over) return;
+
+      const moveProjectAndSetArchived = (
+        project: Project,
+        newIndex: number,
+        isArchived: boolean
+      ) => {
+        const oldIndex = localProjects.findIndex((p) => p.id === project.id);
+
+        /**
+         * If the old index is before the new index, subtract 1 from the new
+         * index to account for the old index being removed.
+         */
+        if (oldIndex < newIndex) {
+          newIndex--;
+        }
+
+        const projectWithArchived: Project = {
+          ...project,
+          archived_at: setProjectArchivedAt(project.archived_at, isArchived),
+        };
+
+        const newProjects = arrayMove(projects, oldIndex, newIndex).map((p) =>
+          p.id === project.id ? projectWithArchived : p
+        );
+
+        setLocalProjects(newProjects);
+        setIsDirty(true);
+      };
+
+      const activeData = active.data.current as DraggableData;
+      const overData = over.data.current as DroppableData;
+
+      if (
+        activeData.type === 'project' &&
+        overData.type === 'project-position'
+      ) {
+        const { project } = activeData;
+        const { projectId: overProjectId, side, isArchived } = overData;
+        const newIndex =
+          localProjects.findIndex((p) => p.id === overProjectId) +
+          (side === 'after' ? 1 : 0);
+        moveProjectAndSetArchived(project, newIndex, isArchived);
+      }
+
+      if (
+        activeData.type === 'project' &&
+        overData.type === 'project-archived'
+      ) {
+        const { project } = activeData;
+        const { isArchived } = overData;
+        const newIndex = localProjects.length;
+        moveProjectAndSetArchived(project, newIndex, isArchived);
+      }
+    };
 
     return (
-      <>
+      <div className="p-3 flex flex-col gap-3">
         {newProjectModal}
 
-        <DragDropContext onDragEnd={handleDragEnd} nonce={nonce}>
-          <Droppable droppableId="projects" direction="vertical">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="p-3"
-              >
-                {unarchivedProjects.map((project, index) => (
-                  <ProjectListItem
-                    key={project.id}
-                    project={project}
-                    index={index}
-                    draggable
-                    onButtonClick={onButtonClick}
-                  />
-                ))}
-
-                {provided.placeholder}
-
-                {archivedProjects.length > 0 && (
-                  <ProjectFolder
-                    name="Archived projects"
-                    projects={archivedProjects}
-                    initialExpanded={archivedProjects.some(
-                      ({ id }) => id === projectId
-                    )}
-                    onButtonClick={onButtonClick}
-                  />
+        <DndContext
+          // TODO: Configure https://docs.dndkit.com/guides/accessibility#screen-reader-instructions
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <Portal>
+            <div className="pointer-events-none">
+              <DragOverlay>
+                {draggingProject && (
+                  <div>
+                    <ProjectIcon
+                      project={draggingProject}
+                      className="size-12 text-xl shadow-lg rounded-lg translate-x-1/3 translate-y-1/3 -rotate-12 opacity-75"
+                    />
+                  </div>
                 )}
+              </DragOverlay>
+            </div>
+          </Portal>
 
-                <Tooltip content="New project" placement="right" fixed>
-                  <button
-                    type="button"
-                    className="w-12 btn aspect-square flex items-center justify-center p-1 text-plain-400 dark:text-plain-500 hocus:text-plain-500 hocus:dark:text-plain-400"
-                    onClick={openNewProjectModal}
-                    aria-label="New project"
-                  >
-                    <LargePlusIcon size="2em" noAriaLabel />
-                  </button>
-                </Tooltip>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </>
+          {unarchivedProjects.map((project) => (
+            <div key={project.id}>
+              <ProjectPositionDropLine projectId={project.id} side="before" />
+
+              <ProjectListItem
+                project={project}
+                onButtonClick={onButtonClick}
+              />
+
+              <ProjectPositionDropLine projectId={project.id} side="after" />
+            </div>
+          ))}
+
+          {unarchivedProjects.length === 0 && (
+            <div className="-mt-3">
+              <ProjectArchivedDropLine isArchived={false} side="after" />
+            </div>
+          )}
+
+          {archivedProjects.length > 0 && (
+            <PrototypeFolder projects={archivedProjects} />
+          )}
+
+          <Tooltip content="New project" placement="right" fixed>
+            <button
+              type="button"
+              className="size-12 btn flex items-center justify-center p-1 text-plain-400 dark:text-plain-500 hocus:text-plain-500 hocus:dark:text-plain-400"
+              onClick={openNewProjectModal}
+              aria-label="New project"
+            >
+              <LargePlusIcon size="2em" noAriaLabel />
+            </button>
+          </Tooltip>
+        </DndContext>
+      </div>
     );
   }
 );
 
-interface ProjectFolderProps {
-  name: string;
-  projects: Project[];
-  initialExpanded?: boolean;
-  onButtonClick: (event: MouseEvent) => void;
+interface DropLineProps {
+  id: string;
+  data: DroppableData;
+  side?: 'before' | 'after';
+  orientation?: 'vertical' | 'horizontal';
 }
 
-const ProjectFolder = ({
-  name,
-  projects,
-  initialExpanded = false,
-  onButtonClick,
-}: ProjectFolderProps) => {
-  const [isExpanded, setIsExpanded] = useOverrideable(initialExpanded);
-  const id = useId();
-
-  const [{ height: collapsibleHeight }, collapsibleRef] = useElementSize();
-
-  const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = {
-    onClick: () => setIsExpanded(!isExpanded),
-    'aria-controls': id,
-    'aria-expanded': isExpanded,
-    'aria-label': `${isExpanded ? 'Collapse' : 'Expand'} ${name}`,
-  };
+const DropLine = ({
+  id,
+  data,
+  side,
+  orientation = 'horizontal',
+}: DropLineProps) => {
+  const { isOver, setNodeRef } = useDroppable({ id, data });
 
   return (
-    <div className="mb-3">
+    <div className="relative">
       <div
-        className={`-m-1 rounded-xl p-1 ${
-          isExpanded ? 'bg-plain-200 dark:bg-black/75' : ''
-        }`}
-      >
-        <div className="-mb-3">
-          <div className="mb-3">
-            <Tooltip content="Archived projects" placement="right" fixed>
-              {isExpanded ? (
-                <button
-                  type="button"
-                  className="btn w-12 h-12 flex justify-center items-center text-plain-400 dark:text-plain-500"
-                  {...buttonProps}
-                >
-                  <ChevronUpIcon size="2em" noAriaLabel />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="btn w-12 h-12 border border-dashed p-1.5 grid gap-1 grid-cols-2 border-plain-400 dark:border-plain-500"
-                  {...buttonProps}
-                >
-                  {projects.slice(0, 4).map((project) => (
-                    <ProjectIcon
-                      key={project.id}
-                      project={project}
-                      className="aspect-square rounded shadow-sm"
-                      textScale={0.5}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </button>
-              )}
-            </Tooltip>
-          </div>
-
-          <div
-            id={id}
-            className="transition-[max-height,opacity]"
-            style={{
-              overflow: isExpanded ? undefined : 'hidden',
-              maxHeight: isExpanded ? collapsibleHeight : 0,
-              opacity: isExpanded ? 1 : 0,
-            }}
-            aria-hidden={!isExpanded}
-          >
-            <div ref={collapsibleRef}>
-              {projects.map((project, index) => (
-                <ProjectListItem
-                  key={project.id}
-                  project={project}
-                  index={index}
-                  onButtonClick={onButtonClick}
-                  tabIndex={isExpanded ? 0 : -1}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+        ref={setNodeRef}
+        className={groupedClassNames({
+          base: 'absolute rounded-full',
+          orientation:
+            orientation === 'horizontal'
+              ? 'h-0.5 w-12 -translate-y-1/2'
+              : 'w-0.5 h-12 -translate-x-1/2',
+          over: isOver && 'bg-primary-500 dark:bg-primary-400',
+        })}
+        style={{
+          [orientation === 'horizontal' ? 'top' : 'left']: {
+            before: '-0.375rem',
+            after: '0.375rem',
+            center: '',
+          }[side ?? 'center'],
+        }}
+      />
     </div>
+  );
+};
+
+interface ProjectPositionDropLineProps
+  extends Omit<DropLineProps, 'id' | 'data'> {
+  projectId: number;
+  side: 'before' | 'after';
+  isArchived?: boolean;
+}
+
+const ProjectPositionDropLine = ({
+  projectId,
+  side,
+  isArchived = false,
+  ...props
+}: ProjectPositionDropLineProps) => {
+  return (
+    <DropLine
+      id={`project-drop-line-${projectId}-${side}`}
+      data={{
+        type: 'project-position',
+        projectId,
+        side,
+        isArchived,
+      }}
+      side={side}
+      {...props}
+    />
+  );
+};
+
+interface ProjectArchivedDropLineProps
+  extends Omit<DropLineProps, 'id' | 'data'> {
+  isArchived: boolean;
+}
+
+const ProjectArchivedDropLine = ({
+  isArchived,
+  ...props
+}: ProjectArchivedDropLineProps) => {
+  return (
+    <DropLine
+      id={`project-archived-drop-line-${
+        isArchived ? 'archived' : 'unarchived'
+      }`}
+      data={{
+        type: 'project-archived',
+        isArchived,
+      }}
+      {...props}
+    />
   );
 };
 
 interface ProjectListItemProps {
   project: Project;
-  index: number;
-  draggable?: boolean;
-  onButtonClick: (event: MouseEvent) => void;
+  inListType?: 'vertical' | 'grid';
+  onButtonClick?: (event: MouseEvent) => void;
   tabIndex?: number;
 }
 
 const ProjectListItem = ({
   project,
-  index,
-  draggable = false,
+  inListType = 'vertical',
   onButtonClick,
   tabIndex = 0,
 }: ProjectListItemProps) => {
@@ -236,74 +385,170 @@ const ProjectListItem = ({
   const tippyRef = useRef<TippyInstance>(null);
   const hideTooltip = () => tippyRef.current?.hide();
 
-  const withDraggable = (
-    renderFunc: (props: {
-      containerProps: Record<string, any>;
-      handleProps: Record<string, any>;
-    }) => ReactElement
-  ) => {
-    if (draggable) {
-      return (
-        <Draggable draggableId={project.id.toString()} index={index}>
-          {(provided) =>
-            renderFunc({
-              containerProps: {
-                ref: provided.innerRef,
-                ...(provided.draggableProps || {}),
-              },
-              handleProps: provided.dragHandleProps || {},
-            })
-          }
-        </Draggable>
-      );
-    }
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: project.id,
+    data: {
+      type: 'project',
+      project,
+    } satisfies DraggableData,
+  });
 
-    return renderFunc({
-      containerProps: {},
-      handleProps: {},
-    });
-  };
+  return (
+    <div
+      className={groupedClassNames({
+        base: 'flex gap-2',
+        dragging: isDragging && 'opacity-50',
+      })}
+    >
+      {inListType === 'vertical' && isCurrentProject && (
+        <VerticalListActiveIndicator />
+      )}
 
-  return withDraggable(({ containerProps, handleProps }) => {
-    return (
       <Tooltip
+        // Key: Fixes disconnected tooltip during and after dragging
+        key={isDragging ? 'dragging' : 'not-dragging'}
         ref={tippyRef}
-        content={project.name}
-        placement="right"
+        content={isDragging ? null : project.name}
+        placement={inListType === 'vertical' ? 'right' : 'bottom'}
         fixed
         triggerTarget={tippyTriggerTarget}
       >
-        <div {...containerProps} className="flex gap-2 -ml-3 mb-3">
-          <div
-            aria-hidden="true"
-            className="opacity-0 data-active:opacity-100 -ml-1 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-plain-500 dark:window-inactive:bg-plain-400"
-            data-active={isCurrentProject}
-          />
-
-          <ProjectIcon
-            ref={setTippyTriggerTarget}
-            project={project}
-            {...handleProps}
-            // Link props
-            as={isCurrentProject ? OverviewLink : ProjectLink}
-            to={{ projectId: project.id }}
-            // HTML attributes
-            className="size-12 btn text-xl shadow"
-            style={{ cursor: 'pointer' }}
-            onClick={(event: MouseEvent) => {
+        <ProjectIcon
+          ref={mergeRefs([setNodeRef, setTippyTriggerTarget as any])}
+          {...attributes}
+          {...listeners}
+          project={project}
+          // Link props
+          as={isCurrentProject ? OverviewLink : ProjectLink}
+          to={{ projectId: project.id }}
+          // HTML attributes
+          className={groupedClassNames({
+            base: 'size-12 btn text-xl shadow',
+            current:
+              inListType === 'grid' &&
+              isCurrentProject &&
+              'focus-ring ring-offset-2 focus-visible:ring-4',
+          })}
+          style={{ cursor: 'pointer' }}
+          onClick={(event: MouseEvent) => {
+            hideTooltip();
+            onButtonClick?.(event);
+          }}
+          onKeyDown={(event: KeyboardEvent) => {
+            listeners?.onKeyDown(event);
+            if (event.key === ' ') {
               hideTooltip();
-              onButtonClick(event);
-            }}
-            onKeyDown={(event: KeyboardEvent) => {
-              if (event.key === ' ') {
-                hideTooltip();
-              }
-            }}
-            aria-current={isCurrentProject ? 'page' : undefined}
-            tabIndex={tabIndex}
-          />
-        </div>
+            }
+          }}
+          aria-current={isCurrentProject ? 'page' : undefined}
+          tabIndex={tabIndex}
+        />
       </Tooltip>
-    );
+    </div>
+  );
+};
+
+const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
+  const projectId = useAppContext('projectId');
+  const containsCurrentProject = projects.some(
+    (project) => project.id === projectId
+  );
+
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'archived-folder',
+    data: {
+      type: 'project-archived',
+      isArchived: true,
+    } satisfies DroppableData,
   });
+
+  const tippyRef = useRef<TippyInstance>(null);
+
+  // useEffectAfterFirst(() => {
+  //   if (isOver) {
+  //     tippyRef.current?.show();
+  //   } else {
+  //     tippyRef.current?.hide();
+  //   }
+  // }, [isOver]);
+
+  const colCount = Math.max(4, Math.ceil(Math.sqrt(projects.length)));
+  const cellWidth = 12;
+  const cellSpacing = 3;
+  const totalWidth = colCount * cellWidth + (colCount - 1) * cellSpacing;
+  const totalWidthRem = totalWidth / 4;
+
+  return (
+    <div className="flex gap-2">
+      {containsCurrentProject && <VerticalListActiveIndicator />}
+
+      <Dropdown
+        tippyRef={tippyRef}
+        trigger="mouseenter click"
+        placement="right"
+        className={{
+          backgroundColor: 'bg-plain-100/75 dark:bg-plain-800/75',
+          padding: 'p-4',
+          border: 'border border-transparent dark:border-white/10',
+          ringInset: null,
+          ringOffset: 'ring-offset-plain-100 dark:ring-offset-plain-800',
+        }}
+        items={
+          // TODO: Max width
+          <div style={{ width: `${totalWidthRem}rem` }}>
+            <h1 className="h3 mb-3">Archived projects</h1>
+
+            <div className="flex flex-wrap gap-3">
+              {projects.map((project) => {
+                return (
+                  <div className="flex" key={project.id}>
+                    <ProjectPositionDropLine
+                      projectId={project.id}
+                      side="before"
+                      isArchived
+                      orientation="vertical"
+                    />
+
+                    <ProjectListItem project={project} inListType="grid" />
+
+                    <ProjectPositionDropLine
+                      projectId={project.id}
+                      side="after"
+                      isArchived
+                      orientation="vertical"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        }
+      >
+        <button
+          ref={setNodeRef}
+          type="button"
+          className={groupedClassNames({
+            base: 'size-12 btn border border-dashed p-1.5 grid gap-1 grid-cols-2 border-plain-400 dark:border-plain-500',
+            over: isOver && 'focus-ring ring-offset-2',
+          })}
+        >
+          {projects.slice(0, 4).map((project) => (
+            <ProjectIcon
+              key={project.id}
+              project={project}
+              className="aspect-square rounded shadow-sm"
+              textScale={0.5}
+              aria-hidden="true"
+            />
+          ))}
+        </button>
+      </Dropdown>
+    </div>
+  );
+};
+
+const VerticalListActiveIndicator = () => {
+  return (
+    <div className="-ml-4 my-2 w-2 h-8 rounded-full bg-primary-500 dark:bg-primary-400 window-inactive:bg-plain-500 dark:window-inactive:bg-plain-400" />
+  );
 };

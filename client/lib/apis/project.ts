@@ -27,11 +27,13 @@ export const deleteProject = (projectId: number) =>
     path: `/api/v1/projects/${projectId}`,
   });
 
-export const updateProjectOrder = (order: Project['id'][]) =>
+export const batchUpdateProjects = (
+  projects: (Partial<Project> & Pick<Project, 'id'>)[]
+) =>
   fetchAPIEndpoint({
-    method: 'PUT',
-    path: '/api/v1/project_order',
-    data: { order },
+    method: 'POST',
+    path: '/api/v1/projects/batch_update',
+    data: { projects },
   });
 
 export const updateProjectImage = (projectId: number, fileId: number | null) =>

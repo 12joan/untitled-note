@@ -98,8 +98,8 @@ const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => {
 const ListIndex = ({ items }: IndexProps) => {
   return (
     <div className="list-group">
-      {items.map((item) => (
-        <ListItem key={item.key} item={item} />
+      {items.map(({ key, ...item }) => (
+        <ListItem key={key} item={item} />
       ))}
     </div>
   );
