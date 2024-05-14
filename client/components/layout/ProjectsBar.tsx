@@ -9,12 +9,15 @@ import React, {
   useState,
 } from 'react';
 import {
+  Active,
+  Announcements,
   closestCenter,
   DndContext,
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
+  Over,
   PointerSensor,
   useDndContext,
   useDraggable,
@@ -40,22 +43,108 @@ import LargePlusIcon from '~/components/icons/LargePlusIcon';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
 
-type DraggableData = { type: 'project'; project: Project };
+type DraggableData = {
+  type: 'project';
+  project: Project;
+  description: string;
+};
 
 type DroppableData =
   | {
       type: 'project-position';
-      projectId: number;
+      project: Project;
       side: 'before' | 'after';
       isArchived: boolean;
+      description: string;
     }
   | {
       type: 'project-archived';
       isArchived: boolean;
+      description: string;
     };
 
 const getProjectDropLineId = (projectId: number, side: 'before' | 'after') =>
   `project-drop-line-${projectId}-${side}`;
+
+const getDraggableData = <T extends Active | undefined | null>(
+  active: T
+): T extends Active ? DraggableData : DraggableData | null => {
+  if (!active) return null as any;
+  return active.data.current as any;
+};
+
+const getDroppableData = <T extends Over | undefined | null>(
+  over: T
+): T extends Over ? DroppableData : DroppableData | null => {
+  if (!over) return null as any;
+  return over.data.current as any;
+};
+
+const mapWithBeforeAndAfter = <T, U>(
+  items: T[],
+  fn: (item: T, before: T | null, after: T | null) => U
+): U[] => {
+  return items.map((item, i) => {
+    const before = i > 0 ? items[i - 1] : null;
+    const after = i < items.length - 1 ? items[i + 1] : null;
+    return fn(item, before, after);
+  });
+};
+
+const describeProject = ({ name }: Project) => `project "${name}"`;
+
+const describeProjectPosition = (
+  before: Project | null,
+  after: Project | null
+) => {
+  if (before && after) {
+    return `between projects "${before.name}" and "${after.name}"`;
+  }
+
+  if (before) {
+    return `after ${describeProject(before)}`;
+  }
+
+  if (after) {
+    return `before ${describeProject(after)}`;
+  }
+
+  throw new Error('Invalid project position');
+};
+
+const announcements: Announcements = {
+  onDragStart: ({ active }) => {
+    const draggable = getDraggableData(active).description;
+    return `Picked up ${draggable}`;
+  },
+
+  onDragOver: ({ active, over }) => {
+    const draggable = getDraggableData(active).description;
+
+    if (over) {
+      const droppable = getDroppableData(over).description;
+      return `Moved ${draggable} ${droppable}`;
+    }
+
+    return `${draggable} is no longer over a droppable area`;
+  },
+
+  onDragEnd: ({ active, over }) => {
+    const draggable = getDraggableData(active).description;
+
+    if (over) {
+      const droppable = getDroppableData(over).description;
+      return `Dropped ${draggable} ${droppable}`;
+    }
+
+    return `Dropped ${draggable}`;
+  },
+
+  onDragCancel: ({ active }) => {
+    const draggable = getDraggableData(active).description;
+    return `Cancelled dragging ${draggable}`;
+  },
+};
 
 export interface ProjectsBarProps {
   onButtonClick?: (event: MouseEvent) => void;
@@ -155,19 +244,19 @@ export const ProjectsBar = memo(
         setIsDirty(true);
       };
 
-      const activeData = active.data.current as DraggableData;
-      const overData = over.data.current as DroppableData;
+      const activeData = getDraggableData(active);
+      const overData = getDroppableData(over);
 
       if (
         activeData.type === 'project' &&
         overData.type === 'project-position'
       ) {
-        const { project } = activeData;
-        const { projectId: overProjectId, side, isArchived } = overData;
+        const { project: activeProject } = activeData;
+        const { project: overProject, side, isArchived } = overData;
         const newIndex =
-          localProjects.findIndex((p) => p.id === overProjectId) +
+          localProjects.findIndex((p) => p.id === overProject.id) +
           (side === 'after' ? 1 : 0);
-        moveProjectAndSetArchived(project, newIndex, isArchived);
+        moveProjectAndSetArchived(activeProject, newIndex, isArchived);
       }
 
       if (
@@ -186,11 +275,17 @@ export const ProjectsBar = memo(
         {newProjectModal}
 
         <DndContext
-          // TODO: Configure https://docs.dndkit.com/guides/accessibility#screen-reader-instructions
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          accessibility={{
+            screenReaderInstructions: {
+              draggable:
+                'To pick up a project, press the space bar. While dragging, use the arrow keys to move the project to its new position or over a folder. Press space again to drop the project in its new position, or press escape to cancel.',
+            },
+            announcements,
+          }}
         >
           <Portal>
             <div className="pointer-events-none">
@@ -207,22 +302,41 @@ export const ProjectsBar = memo(
             </div>
           </Portal>
 
-          {unarchivedProjects.map((project) => (
-            <div key={project.id}>
-              <ProjectPositionDropLine projectId={project.id} side="before" />
+          {mapWithBeforeAndAfter(
+            unarchivedProjects,
+            (project, beforeProject, afterProject) => (
+              <div key={project.id}>
+                <ProjectPositionDropLine
+                  project={project}
+                  side="before"
+                  description={describeProjectPosition(beforeProject, project)}
+                />
 
-              <ProjectListItem
-                project={project}
-                onButtonClick={onButtonClick}
-              />
+                <ProjectListItem
+                  project={project}
+                  onButtonClick={onButtonClick}
+                />
 
-              <ProjectPositionDropLine projectId={project.id} side="after" />
-            </div>
-          ))}
+                <ProjectPositionDropLine
+                  project={project}
+                  side="after"
+                  description={describeProjectPosition(project, afterProject)}
+                />
+              </div>
+            )
+          )}
 
           {unarchivedProjects.length === 0 && (
             <div className="-mt-3">
-              <ProjectArchivedDropLine isArchived={false} side="after" />
+              <DropLine
+                id="unarchive-project-drop-line"
+                side="after"
+                data={{
+                  type: 'project-archived',
+                  isArchived: false,
+                  description: 'onto the list of projects',
+                }}
+              />
             </div>
           )}
 
@@ -287,50 +401,30 @@ const DropLine = ({
 
 interface ProjectPositionDropLineProps
   extends Omit<DropLineProps, 'id' | 'data'> {
-  projectId: number;
+  project: Project;
   side: 'before' | 'after';
+  description: string;
   isArchived?: boolean;
 }
 
 const ProjectPositionDropLine = ({
-  projectId,
+  project,
   side,
+  description,
   isArchived = false,
   ...props
 }: ProjectPositionDropLineProps) => {
   return (
     <DropLine
-      id={getProjectDropLineId(projectId, side)}
+      id={getProjectDropLineId(project.id, side)}
       data={{
         type: 'project-position',
-        projectId,
+        project,
         side,
         isArchived,
+        description,
       }}
       side={side}
-      {...props}
-    />
-  );
-};
-
-interface ProjectArchivedDropLineProps
-  extends Omit<DropLineProps, 'id' | 'data'> {
-  isArchived: boolean;
-}
-
-const ProjectArchivedDropLine = ({
-  isArchived,
-  ...props
-}: ProjectArchivedDropLineProps) => {
-  return (
-    <DropLine
-      id={`project-archived-drop-line-${
-        isArchived ? 'archived' : 'unarchived'
-      }`}
-      data={{
-        type: 'project-archived',
-        isArchived,
-      }}
       {...props}
     />
   );
@@ -362,9 +456,14 @@ const ProjectListItem = ({
 
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: project.id,
+    attributes: {
+      role: 'link',
+      roleDescription: 'sortable project',
+    },
     data: {
       type: 'project',
       project,
+      description: describeProject(project),
     } satisfies DraggableData,
   });
 
@@ -445,6 +544,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
     data: {
       type: 'project-archived',
       isArchived: true,
+      description: 'onto the archived projects folder',
     } satisfies DroppableData,
   });
 
@@ -456,7 +556,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
    * conditional prevents the folder from closing when the user drops the
    * project inside the folder or initiates a drag from within the folder.
    */
-  const overData = useDndContext().over?.data.current as DroppableData | null;
+  const overData = getDroppableData(useDndContext().over);
   const isDragInside =
     overData?.type === 'project-position' && overData.isArchived;
   const isDragOverOrInside = isOver || isDragInside;
@@ -503,15 +603,20 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
             <h1 className="h3 mb-3">Archived projects</h1>
 
             <div className="flex flex-wrap gap-3">
-              {projects.map((project) => {
-                return (
+              {mapWithBeforeAndAfter(
+                projects,
+                (project, beforeProject, afterProject) => (
                   <div className="flex" key={project.id}>
                     {isVisible && (
                       <ProjectPositionDropLine
-                        projectId={project.id}
+                        project={project}
                         side="before"
                         isArchived
                         orientation="vertical"
+                        description={describeProjectPosition(
+                          beforeProject,
+                          project
+                        )}
                       />
                     )}
 
@@ -523,15 +628,19 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
 
                     {isVisible && (
                       <ProjectPositionDropLine
-                        projectId={project.id}
+                        project={project}
                         side="after"
                         isArchived
                         orientation="vertical"
+                        description={describeProjectPosition(
+                          project,
+                          afterProject
+                        )}
                       />
                     )}
                   </div>
-                );
-              })}
+                )
+              )}
             </div>
           </div>
         }
