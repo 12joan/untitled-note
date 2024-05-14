@@ -2,6 +2,7 @@ import React, {
   KeyboardEvent,
   memo,
   MouseEvent,
+  ReactElement,
   useEffect,
   useMemo,
   useRef,
@@ -9,14 +10,13 @@ import React, {
 } from 'react';
 import {
   closestCenter,
-  defaultKeyboardCoordinateGetter,
   DndContext,
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
-  KeyboardCoordinateGetter,
   KeyboardSensor,
   PointerSensor,
+  useDndContext,
   useDraggable,
   useDroppable,
   useSensor,
@@ -24,7 +24,6 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { Portal } from '@headlessui/react';
-import { isHotkey } from '@udecode/plate';
 import { batchUpdateProjects } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { groupedClassNames } from '~/lib/groupedClassNames';
@@ -80,58 +79,6 @@ export const ProjectsBar = memo(
       [localProjects]
     );
 
-    const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
-      event,
-      options
-    ) => {
-      const { context } = options;
-
-      const isBefore = isHotkey('shift+tab', event);
-      const isAfter = isHotkey('tab', event);
-
-      if (isBefore || isAfter) {
-        event.preventDefault();
-
-        const overData = context.over?.data.current as
-          | DroppableData
-          | undefined;
-
-        if (overData?.type !== 'project-position') return;
-
-        const { projectId, side, isArchived } = overData;
-        const projectsInGroup = isArchived
-          ? archivedProjects
-          : unarchivedProjects;
-        const currentIndex = projectsInGroup.findIndex(
-          (project) => project.id === projectId
-        );
-
-        const [nextIndex, nextSide] = ((): [number, 'before' | 'after'] => {
-          if (isBefore) {
-            if (side === 'after') return [currentIndex, 'before'];
-            return [currentIndex - 1, 'before'];
-          }
-
-          if (side === 'before') return [currentIndex, 'after'];
-          return [currentIndex + 1, 'after'];
-        })();
-
-        const nextProjectId = projectsInGroup[nextIndex]?.id;
-        if (!nextProjectId) return;
-
-        const nextDropLineId = getProjectDropLineId(nextProjectId, nextSide);
-        const nextRect = context.droppableRects.get(nextDropLineId);
-        if (!nextRect) return;
-
-        return {
-          x: nextRect.left + nextRect.width / 2,
-          y: nextRect.top + nextRect.height / 2,
-        };
-      }
-
-      return defaultKeyboardCoordinateGetter(event, options);
-    };
-
     const sensors = useSensors(
       useSensor(PointerSensor, {
         activationConstraint: {
@@ -140,11 +87,10 @@ export const ProjectsBar = memo(
         },
       }),
       useSensor(KeyboardSensor, {
-        coordinateGetter: keyboardCoordinateGetter,
         keyboardCodes: {
           start: ['Space'],
-          cancel: ['Escape'],
-          end: ['Space'],
+          cancel: ['Escape', 'Tab'],
+          end: ['Space', 'Enter'],
         },
       })
     );
@@ -393,15 +339,17 @@ const ProjectArchivedDropLine = ({
 interface ProjectListItemProps {
   project: Project;
   inListType?: 'vertical' | 'grid';
-  onButtonClick?: (event: MouseEvent) => void;
   tabIndex?: number;
+  disableTooltip?: boolean;
+  onButtonClick?: (event: MouseEvent) => void;
 }
 
 const ProjectListItem = ({
   project,
   inListType = 'vertical',
-  onButtonClick,
   tabIndex = 0,
+  disableTooltip: disableTooltipProp = false,
+  onButtonClick,
 }: ProjectListItemProps) => {
   const currentProjectId = useAppContext('projectId');
   const isCurrentProject = project.id === currentProjectId;
@@ -420,6 +368,25 @@ const ProjectListItem = ({
     } satisfies DraggableData,
   });
 
+  // Keeping tooltips enabled during a drag can result in orphaned tooltips
+  const isDraggingSomething = !!useDndContext().active;
+  const disableTooltip = disableTooltipProp || isDraggingSomething;
+
+  const withTooltip = (element: ReactElement) =>
+    disableTooltip ? (
+      element
+    ) : (
+      <Tooltip
+        ref={tippyRef}
+        content={project.name}
+        placement={inListType === 'vertical' ? 'right' : 'bottom'}
+        fixed
+        triggerTarget={tippyTriggerTarget}
+      >
+        {element}
+      </Tooltip>
+    );
+
   return (
     <div
       className={groupedClassNames({
@@ -431,15 +398,7 @@ const ProjectListItem = ({
         <VerticalListActiveIndicator />
       )}
 
-      <Tooltip
-        // Key: Fixes disconnected tooltip during and after dragging
-        key={isDragging ? 'dragging' : 'not-dragging'}
-        ref={tippyRef}
-        content={isDragging ? null : project.name}
-        placement={inListType === 'vertical' ? 'right' : 'bottom'}
-        fixed
-        triggerTarget={tippyTriggerTarget}
-      >
+      {withTooltip(
         <ProjectIcon
           ref={mergeRefs([setNodeRef, setTippyTriggerTarget as any])}
           {...attributes}
@@ -470,7 +429,7 @@ const ProjectListItem = ({
           aria-current={isCurrentProject ? 'page' : undefined}
           tabIndex={tabIndex}
         />
-      </Tooltip>
+      )}
     </div>
   );
 };
@@ -491,13 +450,29 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
 
   const tippyRef = useRef<TippyInstance>(null);
 
-  // useEffectAfterFirst(() => {
-  //   if (isOver) {
-  //     tippyRef.current?.show();
-  //   } else {
-  //     tippyRef.current?.hide();
-  //   }
-  // }, [isOver]);
+  /**
+   * Open the folder when the user drags a project over it, and close it again
+   * if the dragged project is moved away. The `isDraggingSomething`
+   * conditional prevents the folder from closing when the user drops the
+   * project inside the folder or initiates a drag from within the folder.
+   */
+  const overData = useDndContext().over?.data.current as DroppableData | null;
+  const isDragInside =
+    overData?.type === 'project-position' && overData.isArchived;
+  const isDragOverOrInside = isOver || isDragInside;
+  const isDraggingSomething = !!useDndContext().active;
+
+  useEffect(() => {
+    if (isDraggingSomething) {
+      if (isDragOverOrInside) {
+        tippyRef.current?.show();
+      } else {
+        tippyRef.current?.hide();
+      }
+    }
+  }, [isDragOverOrInside]);
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const colCount = Math.max(4, Math.ceil(Math.sqrt(projects.length)));
   const cellWidth = 12;
@@ -520,6 +495,8 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
           ringInset: null,
           ringOffset: 'ring-offset-plain-100 dark:ring-offset-plain-800',
         }}
+        onShow={() => setIsVisible(true)}
+        onHide={() => setIsVisible(false)}
         items={
           // TODO: Max width
           <div style={{ width: `${totalWidthRem}rem` }}>
@@ -529,21 +506,29 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
               {projects.map((project) => {
                 return (
                   <div className="flex" key={project.id}>
-                    <ProjectPositionDropLine
-                      projectId={project.id}
-                      side="before"
-                      isArchived
-                      orientation="vertical"
+                    {isVisible && (
+                      <ProjectPositionDropLine
+                        projectId={project.id}
+                        side="before"
+                        isArchived
+                        orientation="vertical"
+                      />
+                    )}
+
+                    <ProjectListItem
+                      project={project}
+                      inListType="grid"
+                      disableTooltip={!isVisible}
                     />
 
-                    <ProjectListItem project={project} inListType="grid" />
-
-                    <ProjectPositionDropLine
-                      projectId={project.id}
-                      side="after"
-                      isArchived
-                      orientation="vertical"
-                    />
+                    {isVisible && (
+                      <ProjectPositionDropLine
+                        projectId={project.id}
+                        side="after"
+                        isArchived
+                        orientation="vertical"
+                      />
+                    )}
                   </div>
                 );
               })}
