@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
   closestCenter,
+  defaultKeyboardCoordinateGetter,
   DndContext,
   DragEndEvent,
   DragOverlay,
@@ -23,6 +24,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { Portal } from '@headlessui/react';
+import { isHotkey } from '@udecode/plate';
 import { batchUpdateProjects } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { groupedClassNames } from '~/lib/groupedClassNames';
@@ -53,6 +55,9 @@ type DroppableData =
       isArchived: boolean;
     };
 
+const getProjectDropLineId = (projectId: number, side: 'before' | 'after') =>
+  `project-drop-line-${projectId}-${side}`;
+
 export interface ProjectsBarProps {
   onButtonClick?: (event: MouseEvent) => void;
 }
@@ -75,27 +80,47 @@ export const ProjectsBar = memo(
       [localProjects]
     );
 
-    // TODO: Finish
     const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
       event,
-      { context }
+      options
     ) => {
-      if (event.key === 'ArrowDown') {
+      const { context } = options;
+
+      const isBefore = isHotkey('shift+tab', event);
+      const isAfter = isHotkey('tab', event);
+
+      if (isBefore || isAfter) {
+        event.preventDefault();
+
         const overData = context.over?.data.current as
           | DroppableData
           | undefined;
-        console.log('overData', overData);
+
         if (overData?.type !== 'project-position') return;
 
-        const { projectId: overProjectId } = overData;
-        const overProjectIndex = localProjects.findIndex(
-          (project) => project.id === overProjectId
+        const { projectId, side, isArchived } = overData;
+        const projectsInGroup = isArchived
+          ? archivedProjects
+          : unarchivedProjects;
+        const currentIndex = projectsInGroup.findIndex(
+          (project) => project.id === projectId
         );
-        const nextProject = localProjects[overProjectIndex + 1];
-        const nextRect = context.droppableRects.get(
-          `project-drop-line-${nextProject.id}-after`
-        );
-        console.log('nextRect', nextRect);
+
+        const [nextIndex, nextSide] = ((): [number, 'before' | 'after'] => {
+          if (isBefore) {
+            if (side === 'after') return [currentIndex, 'before'];
+            return [currentIndex - 1, 'before'];
+          }
+
+          if (side === 'before') return [currentIndex, 'after'];
+          return [currentIndex + 1, 'after'];
+        })();
+
+        const nextProjectId = projectsInGroup[nextIndex]?.id;
+        if (!nextProjectId) return;
+
+        const nextDropLineId = getProjectDropLineId(nextProjectId, nextSide);
+        const nextRect = context.droppableRects.get(nextDropLineId);
         if (!nextRect) return;
 
         return {
@@ -103,6 +128,8 @@ export const ProjectsBar = memo(
           y: nextRect.top + nextRect.height / 2,
         };
       }
+
+      return defaultKeyboardCoordinateGetter(event, options);
     };
 
     const sensors = useSensors(
@@ -327,7 +354,7 @@ const ProjectPositionDropLine = ({
 }: ProjectPositionDropLineProps) => {
   return (
     <DropLine
-      id={`project-drop-line-${projectId}-${side}`}
+      id={getProjectDropLineId(projectId, side)}
       data={{
         type: 'project-position',
         projectId,

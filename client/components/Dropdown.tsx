@@ -39,7 +39,8 @@ export const dropdownClassNames: GroupedClassNames = {
   backdropBlur: 'backdrop-blur-lg',
   shadow: 'shadow-dialog',
   rounded: 'rounded-lg',
-  overflow: 'overflow-y-auto max-h-[inherit] [&_*]:ring-inset',
+  overflow: 'overflow-y-auto max-h-[inherit]',
+  ringInset: '[&_*]:ring-inset',
 };
 
 export const dropdownItemClassNames: GroupedClassNames = {
