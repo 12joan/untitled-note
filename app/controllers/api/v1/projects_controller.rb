@@ -23,22 +23,6 @@ module API
         end
       end
 
-      def batch_update
-        Project.transaction do
-          batch_project_params.each do |p|
-            id = p.delete(:id) # Returns the deleted value
-            project = current_user.projects.find(id)
-
-            unless project.update(p)
-              render json: project.errors, status: :unprocessable_entity
-              raise ActiveRecord::Rollback
-            end
-          end
-
-          head 200
-        end
-      end
-
       def destroy
         @project.destroy
         head :no_content
@@ -47,18 +31,16 @@ module API
       private
 
       # Only allow a list of trusted parameters through.
-      def allowed_project_params
-        %i[name emoji background_colour archived_at editor_style auto_snapshots_option list_index]
-      end
-
       def project_params
-        params.require(:project).permit(*allowed_project_params)
-      end
-
-      def batch_project_params
-        params.require(:projects).map do |p|
-          p.permit(:id, *allowed_project_params)
-        end
+        params.require(:project).permit(
+          :name,
+          :emoji,
+          :background_colour,
+          :archived_at,
+          :editor_style,
+          :auto_snapshots_option,
+          :order_string,
+        )
       end
     end
   end

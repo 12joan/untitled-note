@@ -33,54 +33,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_predicate @project.archived_at, :present?
   end
 
-  test 'should batch update projects' do
-    project1 = @project
-    project2 = create(:project, owner: @project.owner)
-    project3 = create(:project, owner: @project.owner)
-
-    post api_v1_batch_update_projects_url, params: {
-      projects: [
-        { id: project1.id, name: 'Renamed project 1' },
-        { id: project2.id, name: 'Renamed project 2' },
-        { id: project3.id, name: 'Renamed project 3' },
-      ]
-    }
-
-    assert_response :success
-
-    project1.reload
-    project2.reload
-    project3.reload
-
-    assert_equal 'Renamed project 1', project1.name
-    assert_equal 'Renamed project 2', project2.name
-    assert_equal 'Renamed project 3', project3.name
-  end
-
-  test 'should rollback batch update if one project fails' do
-    project1 = @project
-    project2 = create(:project, owner: @project.owner)
-    project3 = create(:project, owner: @project.owner)
-
-    post api_v1_batch_update_projects_url, params: {
-      projects: [
-        { id: project1.id, name: 'Renamed project 1' },
-        { id: project2.id, name: 'Renamed project 2' },
-        { id: project3.id, name: '' },
-      ]
-    }
-
-    assert_response :unprocessable_entity
-
-    project1.reload
-    project2.reload
-    project3.reload
-
-    refute_equal 'Renamed project 1', project1.name
-    refute_equal 'Renamed project 2', project2.name
-    refute_equal '', project3.name
-  end
-
   test 'should destroy project' do
     assert_difference('Project.count', -1) do
       delete api_v1_project_url(@project)

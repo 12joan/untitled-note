@@ -17,8 +17,6 @@ Rails.application.routes.draw do
         resource :replace, only: %i[create], controller: :project_replace
       end
 
-      post 'projects/batch_update', to: 'projects#batch_update', as: :batch_update_projects
-
       resources :s3_files, only: %i[create destroy show]
       resource :settings, only: %i[update]
     end

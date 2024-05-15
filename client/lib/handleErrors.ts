@@ -34,13 +34,6 @@ export const handleUpdateProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
-export const handleBatchUpdateProjectError = handleErrors(() => ({
-  title: 'Failed to update projects',
-  message:
-    'An error occurred while updating the projects. Make sure you are connected to the internet and try again.',
-  autoClose: 'slow',
-}));
-
 export const handleRemoveProjectImageError = handleErrors(() => ({
   title: 'Failed to remove project image',
   message:

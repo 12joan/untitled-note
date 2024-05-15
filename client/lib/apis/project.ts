@@ -27,15 +27,6 @@ export const deleteProject = (projectId: number) =>
     path: `/api/v1/projects/${projectId}`,
   });
 
-export const batchUpdateProjects = (
-  projects: (Partial<Project> & Pick<Project, 'id'>)[]
-) =>
-  fetchAPIEndpoint({
-    method: 'POST',
-    path: '/api/v1/projects/batch_update',
-    data: { projects },
-  });
-
 export const updateProjectImage = (projectId: number, fileId: number | null) =>
   fetchAPIEndpoint({
     method: 'PUT',

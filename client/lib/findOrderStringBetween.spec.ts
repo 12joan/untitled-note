@@ -58,48 +58,33 @@ describe('findOrderStringBetween', () => {
 
   it('should work for sorting large numbers of items', () => {
     const debug = false;
-    type Item = { expectedOrder: number, actualOrder: string };
-
-    const items: Item[] = [];
-
-    const seen: Set<string> = new Set();
+    const items: string[] = [];
 
     const insertAtPosition = (position: number) => {
-      const before: Item | null = items[position - 1] ?? null;
-      const after: Item | null = items[position] ?? null;
+      const before: string | null = items[position - 1] ?? null;
+      const after: string | null = items[position] ?? null;
 
-      const actualOrder = findOrderStringBetween(
-        before?.actualOrder ?? null,
-        after?.actualOrder ?? null,
-      );
+      const orderString = findOrderStringBetween(before, after);
 
-      const rangeDescription = `[${before?.actualOrder ?? 'null'}, ${after?.actualOrder ?? 'null'}]`;
+      const rangeDescription = `[${before ?? 'null'}, ${after ?? 'null'}]`;
 
       if (debug) {
-        console.log(`Inserting at position ${position} in range ${rangeDescription}: ${actualOrder}`);
+        console.log(`Inserting at position ${position} in range ${rangeDescription}: ${orderString}`);
       }
 
-      expect(seen.has(actualOrder)).toBe(false);
-
-      seen.add(actualOrder);
+      expect(items).not.toContain(orderString);
 
       if (before) {
-        expect(actualOrder > before.actualOrder).toBe(true);
+        expect(orderString > before).toBe(true);
       }
 
       if (after) {
-        expect(actualOrder < after.actualOrder).toBe(true);
+        expect(orderString < after).toBe(true);
       }
 
-      expect(actualOrder).not.toMatch(/0$/);
+      expect(orderString).not.toMatch(/0$/);
 
-      const newItem: Item = { expectedOrder: position, actualOrder };
-      items.splice(position, 0, newItem);
-
-      // Increment expectedOrder for all items after the new item
-      for (let i = position + 1; i < items.length; i++) {
-        items[i].expectedOrder++;
-      }
+      items.splice(position, 0, orderString);
     };
 
     const removeAtPosition = (position: number) => {
@@ -107,14 +92,7 @@ describe('findOrderStringBetween', () => {
         console.log(`Removing at position ${position}`);
       }
 
-      const item = items[position];
       items.splice(position, 1);
-      seen.delete(item.actualOrder);
-
-      // Decrement expectedOrder for all items after the removed item
-      for (let i = position; i < items.length; i++) {
-        items[i].expectedOrder--;
-      }
     };
 
     const startTime = performance.now();
@@ -135,6 +113,7 @@ describe('findOrderStringBetween', () => {
           if (x > 0.9) return items.length;
           return Math.floor(Math.random() * (items.length + 1));
         })();
+
         insertAtPosition(randomPosition);
       }
     }

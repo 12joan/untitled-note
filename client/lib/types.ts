@@ -18,7 +18,7 @@ export type Project = {
   background_colour: string;
   editor_style: EditorStyle | null;
   auto_snapshots_option: AutoSnapshotsOption | null;
-  list_index: number;
+  order_string: string;
   created_at: string;
   updated_at: string;
   archived_at: string | null;

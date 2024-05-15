@@ -25,13 +25,12 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
 import { Portal } from '@headlessui/react';
-import { batchUpdateProjects } from '~/lib/apis/project';
+import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { groupList } from '~/lib/groupList';
-import { handleBatchUpdateProjectError } from '~/lib/handleErrors';
+import { handleUpdateProjectError } from '~/lib/handleErrors';
 import { mergeRefs } from '~/lib/refUtils';
 import { OverviewLink, ProjectLink } from '~/lib/routes';
 import { setProjectArchivedAt } from '~/lib/transformProject';
@@ -42,6 +41,7 @@ import { Dropdown } from '~/components/Dropdown';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
+import {findOrderStringBetween} from '~/lib/findOrderStringBetween';
 
 type DraggableData = {
   type: 'project';
@@ -62,9 +62,6 @@ type DroppableData =
       isArchived: boolean;
       description: string;
     };
-
-const getProjectDropLineId = (projectId: number, side: 'before' | 'after') =>
-  `project-drop-line-${projectId}-${side}`;
 
 const getDraggableData = <T extends Active | undefined | null>(
   active: T
@@ -157,8 +154,41 @@ export const ProjectsBar = memo(
     const { modal: newProjectModal, open: openNewProjectModal } =
       useNewProject();
 
-    const [localProjects, setLocalProjects] = useOverrideable(projects);
-    const [isDirty, setIsDirty] = useState(false);
+    const [unsortedLocalProjects, setLocalProjects] = useOverrideable(projects);
+
+    const localProjects = useMemo(
+      () => unsortedLocalProjects.sort((a, b) => a.order_string < b.order_string ? -1 : 1),
+      [unsortedLocalProjects]
+    );
+
+    const updateProject = (
+      project: Project,
+      isArchived: boolean,
+      beforeProject: Project | null,
+      afterProject: Project | null
+    ) => {
+      const delta = {
+        archived_at: setProjectArchivedAt(project.archived_at, isArchived),
+        order_string: findOrderStringBetween(
+          beforeProject?.order_string ?? null,
+          afterProject?.order_string ?? null
+        ),
+      };
+
+      setLocalProjects((projects) => {
+        const updatedProject = { ...project, ...delta };
+        return projects.map((p) =>
+          p.id === updatedProject.id ? updatedProject : p
+        );
+      });
+
+      handleUpdateProjectError(
+        updateProjectAPI(project.id, delta),
+      ).catch((error) => {
+        setLocalProjects(projects);
+        throw error;
+      });
+    };
 
     const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
       () =>
@@ -190,24 +220,6 @@ export const ProjectsBar = memo(
       [localProjects, draggingId]
     );
 
-    // Update the order on the server when dragging ends
-    useEffect(() => {
-      if (draggingId || !isDirty) return;
-
-      const batchUpdate: Parameters<typeof batchUpdateProjects>[0] =
-        localProjects.map((project, index) => ({
-          id: project.id,
-          archived_at: project.archived_at,
-          list_index: index,
-        }));
-
-      handleBatchUpdateProjectError(batchUpdateProjects(batchUpdate)).catch(
-        () => setLocalProjects(projects)
-      );
-
-      setIsDirty(false);
-    }, [draggingId, isDirty]);
-
     const handleDragStart = (event: DragStartEvent) => {
       setDraggingId(event.active.id as number);
     };
@@ -215,34 +227,6 @@ export const ProjectsBar = memo(
     const handleDragEnd = ({ active, over }: DragEndEvent) => {
       setDraggingId(null);
       if (!over) return;
-
-      const moveProjectAndSetArchived = (
-        project: Project,
-        newIndex: number,
-        isArchived: boolean
-      ) => {
-        const oldIndex = localProjects.findIndex((p) => p.id === project.id);
-
-        /**
-         * If the old index is before the new index, subtract 1 from the new
-         * index to account for the old index being removed.
-         */
-        if (oldIndex < newIndex) {
-          newIndex--;
-        }
-
-        const projectWithArchived: Project = {
-          ...project,
-          archived_at: setProjectArchivedAt(project.archived_at, isArchived),
-        };
-
-        const newProjects = arrayMove(projects, oldIndex, newIndex).map((p) =>
-          p.id === project.id ? projectWithArchived : p
-        );
-
-        setLocalProjects(newProjects);
-        setIsDirty(true);
-      };
 
       const activeData = getDraggableData(active);
       const overData = getDroppableData(over);
@@ -252,11 +236,16 @@ export const ProjectsBar = memo(
         overData.type === 'project-position'
       ) {
         const { project: activeProject } = activeData;
-        const { project: overProject, side, isArchived } = overData;
-        const newIndex =
-          localProjects.findIndex((p) => p.id === overProject.id) +
-          (side === 'after' ? 1 : 0);
-        moveProjectAndSetArchived(activeProject, newIndex, isArchived);
+        const { isArchived, project, side } = overData;
+        const referenceProjectIndex = localProjects.findIndex(
+          (p) => p.id === project.id
+        );
+        const offset = side === 'before' ? -1 : 1;
+        const otherProjectIndex = referenceProjectIndex + offset;
+        const otherProject = localProjects[otherProjectIndex] ?? null;
+        const beforeProject = side === 'before' ? otherProject : project;
+        const afterProject = side === 'after' ? otherProject : project;
+        updateProject(activeProject, isArchived, beforeProject, afterProject);
       }
 
       if (
@@ -265,8 +254,8 @@ export const ProjectsBar = memo(
       ) {
         const { project } = activeData;
         const { isArchived } = overData;
-        const newIndex = localProjects.length;
-        moveProjectAndSetArchived(project, newIndex, isArchived);
+        const beforeProject = localProjects[localProjects.length - 1];
+        updateProject(project, isArchived, beforeProject, null);
       }
     };
 
@@ -416,7 +405,7 @@ const ProjectPositionDropLine = ({
 }: ProjectPositionDropLineProps) => {
   return (
     <DropLine
-      id={getProjectDropLineId(project.id, side)}
+      id={`project-drop-line-${project.id}-${side}`}
       data={{
         type: 'project-position',
         project,
@@ -577,8 +566,11 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
   const colCount = Math.max(4, Math.ceil(Math.sqrt(projects.length)));
   const cellWidth = 12;
   const cellSpacing = 3;
-  const totalWidth = colCount * cellWidth + (colCount - 1) * cellSpacing;
+  const padding = 4;
+  const totalWidth = colCount * cellWidth + (colCount - 1) * cellSpacing + 2 * padding;
   const totalWidthRem = totalWidth / 4;
+  const borderPixels = 2;
+  const width = `calc(${totalWidthRem}rem + ${borderPixels}px)`;
 
   return (
     <div className="flex gap-2">
@@ -595,11 +587,11 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
           ringInset: null,
           ringOffset: 'ring-offset-plain-100 dark:ring-offset-plain-800',
         }}
+        style={{ width }}
         onShow={() => setIsVisible(true)}
         onHide={() => setIsVisible(false)}
         items={
-          // TODO: Max width
-          <div style={{ width: `${totalWidthRem}rem` }}>
+          <>
             <h1 className="h3 mb-3">Archived projects</h1>
 
             <div className="flex flex-wrap gap-3">
@@ -642,7 +634,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
                 )
               )}
             </div>
-          </div>
+          </>
         }
       >
         <button
@@ -652,6 +644,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
             base: 'size-12 btn border border-dashed p-1.5 grid gap-1 grid-cols-2 border-plain-400 dark:border-plain-500',
             over: isOver && 'focus-ring ring-offset-2',
           })}
+          aria-label="Archived projects"
         >
           {projects.slice(0, 4).map((project) => (
             <ProjectIcon
