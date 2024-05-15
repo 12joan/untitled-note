@@ -25,7 +25,6 @@ Rails.application.configure do
     # policy.report_uri "/csp-violation-report-endpoint"
   end
 
-  # react-beautiful-dnd
   unless Rails.env.development?
     # Generate session nonces for permitted importmap and inline scripts
     config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
