@@ -34,10 +34,28 @@ class ProjectTest < ActiveSupport::TestCase
     project.destroy!
   end
 
-  test 'new projects have list_index equal to their id' do
-    3.times do
-      project = create(:project)
-      assert_equal project.id, project.list_index
-    end
+  test 'new project has order_string 8 if no other projects exist' do
+    owner = create(:user)
+    project = create(:project, owner: owner)
+    assert_equal '8', project.order_string
+  end
+
+  test 'new project has a maximal order_string if other projects exist' do
+    owner = create(:user)
+    create(:project, owner: owner, order_string: 'f5')
+    create(:project, owner: owner, order_string: 'f3')
+    create(:project, owner: owner, order_string: 'fe')
+    create(:project, owner: owner, order_string: 'f4')
+    project_1 = create(:project, owner: owner)
+    assert_equal 'ff', project_1.order_string
+    project_2 = create(:project, owner: owner)
+    assert_equal 'ff1', project_2.order_string
+  end
+
+  test 'order_string cannot end in a zero' do
+    project = build(:project, order_string: '8')
+    assert_predicate project, :valid?
+    project.order_string = '80'
+    refute_predicate project, :valid?
   end
 end

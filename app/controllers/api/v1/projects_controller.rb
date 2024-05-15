@@ -39,6 +39,7 @@ module API
           :archived_at,
           :editor_style,
           :auto_snapshots_option,
+          :order_string,
         )
       end
     end

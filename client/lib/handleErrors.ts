@@ -62,13 +62,6 @@ export const handleDeleteProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
-export const handleReorderProjectsError = handleErrors(() => ({
-  title: 'Failed to reorder projects',
-  message:
-    'An error occurred while reordering the projects. Make sure you are connected to the internet and try again.',
-  autoClose: 'slow',
-}));
-
 export const handleCreateDocumentError = handleErrors(() => ({
   title: 'Failed to create document',
   message:

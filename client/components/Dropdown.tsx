@@ -1,4 +1,5 @@
 import React, {
+  CSSProperties,
   ElementType,
   MouseEvent,
   ReactNode,
@@ -24,10 +25,11 @@ const applyMaxSize: Modifier<any, any> = {
   requires: ['maxSize'],
   fn({ state }) {
     // The `maxSize` modifier provides this data
-    const { height } = state.modifiersData.maxSize;
+    const { width, height } = state.modifiersData.maxSize;
 
     state.styles.popper = {
       ...state.styles.popper,
+      maxWidth: `calc(${width}px - 1rem)`,
       maxHeight: `calc(${height}px - 1rem)`,
     };
   },
@@ -39,7 +41,8 @@ export const dropdownClassNames: GroupedClassNames = {
   backdropBlur: 'backdrop-blur-lg',
   shadow: 'shadow-dialog',
   rounded: 'rounded-lg',
-  overflow: 'overflow-y-auto max-h-[inherit] [&_*]:ring-inset',
+  overflow: 'overflow-y-auto max-h-[inherit]',
+  ringInset: '[&_*]:ring-inset',
 };
 
 export const dropdownItemClassNames: GroupedClassNames = {
@@ -56,6 +59,7 @@ export const dropdownItemClassNames: GroupedClassNames = {
 export interface DropdownProps extends Omit<TippyProps, 'className'> {
   items: ReactNode;
   className?: GroupedClassNames;
+  style?: CSSProperties;
   tippyRef?: Ref<TippyInstance | null>;
   closeOnFocusOut?: boolean;
 }
@@ -64,6 +68,7 @@ export const Dropdown = ({
   items,
   popperOptions: propPopperOptions = {},
   className,
+  style,
   tippyRef: tippyRefProp,
   closeOnFocusOut = true,
   ...otherProps
@@ -101,6 +106,7 @@ export const Dropdown = ({
           render={(attrs) => (
             <div
               className={groupedClassNames(dropdownClassNames, className)}
+              style={style}
               tabIndex={-1}
               children={items}
               {...attrs}

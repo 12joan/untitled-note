@@ -27,13 +27,6 @@ export const deleteProject = (projectId: number) =>
     path: `/api/v1/projects/${projectId}`,
   });
 
-export const updateProjectOrder = (order: Project['id'][]) =>
-  fetchAPIEndpoint({
-    method: 'PUT',
-    path: '/api/v1/project_order',
-    data: { order },
-  });
-
 export const updateProjectImage = (projectId: number, fileId: number | null) =>
   fetchAPIEndpoint({
     method: 'PUT',
