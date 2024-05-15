@@ -14,17 +14,20 @@ const hexToBigInt = (hex: string | null, length: number): bigint | null => {
   }
 
   return BigInt(`0x${hex.padEnd(length, '0')}`);
-}
+};
 
 const bigIntToHex = (n: bigint, length: number): string =>
   n.toString(16).padStart(length, '0');
 
-export const findOrderStringBetween = (before: string | null, after: string | null): string => {
+export const findOrderStringBetween = (
+  before: string | null,
+  after: string | null
+): string => {
   // Pad hex strings to the same length and convert to BigInt
   let length = Math.max(before?.length ?? 0, after?.length ?? 0);
 
   const beforeInt = hexToBigInt(before, length) ?? BigInt(0);
-  const afterInt = hexToBigInt(after, length) ?? (BigInt(16) ** BigInt(length));
+  const afterInt = hexToBigInt(after, length) ?? BigInt(16) ** BigInt(length);
 
   // Get the numeric midpoint, rounding down
   let midpointInt = beforeInt + (afterInt - beforeInt) / BigInt(2);

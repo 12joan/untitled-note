@@ -28,6 +28,7 @@ import {
 import { Portal } from '@headlessui/react';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
+import { findOrderStringBetween } from '~/lib/findOrderStringBetween';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { groupList } from '~/lib/groupList';
 import { handleUpdateProjectError } from '~/lib/handleErrors';
@@ -41,7 +42,6 @@ import { Dropdown } from '~/components/Dropdown';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
-import {findOrderStringBetween} from '~/lib/findOrderStringBetween';
 
 type DraggableData = {
   type: 'project';
@@ -157,7 +157,10 @@ export const ProjectsBar = memo(
     const [unsortedLocalProjects, setLocalProjects] = useOverrideable(projects);
 
     const localProjects = useMemo(
-      () => unsortedLocalProjects.sort((a, b) => a.order_string < b.order_string ? -1 : 1),
+      () =>
+        unsortedLocalProjects.sort((a, b) =>
+          a.order_string < b.order_string ? -1 : 1
+        ),
       [unsortedLocalProjects]
     );
 
@@ -182,12 +185,12 @@ export const ProjectsBar = memo(
         );
       });
 
-      handleUpdateProjectError(
-        updateProjectAPI(project.id, delta),
-      ).catch((error) => {
-        setLocalProjects(projects);
-        throw error;
-      });
+      handleUpdateProjectError(updateProjectAPI(project.id, delta)).catch(
+        (error) => {
+          setLocalProjects(projects);
+          throw error;
+        }
+      );
     };
 
     const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
@@ -567,7 +570,8 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
   const cellWidth = 12;
   const cellSpacing = 3;
   const padding = 4;
-  const totalWidth = colCount * cellWidth + (colCount - 1) * cellSpacing + 2 * padding;
+  const totalWidth =
+    colCount * cellWidth + (colCount - 1) * cellSpacing + 2 * padding;
   const totalWidthRem = totalWidth / 4;
   const borderPixels = 2;
   const width = `calc(${totalWidthRem}rem + ${borderPixels}px)`;

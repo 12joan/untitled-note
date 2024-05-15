@@ -69,7 +69,10 @@ describe('findOrderStringBetween', () => {
       const rangeDescription = `[${before ?? 'null'}, ${after ?? 'null'}]`;
 
       if (debug) {
-        console.log(`Inserting at position ${position} in range ${rangeDescription}: ${orderString}`);
+        // eslint-disable-next-line no-console
+        console.log(
+          `Inserting at position ${position} in range ${rangeDescription}: ${orderString}`
+        );
       }
 
       expect(items).not.toContain(orderString);
@@ -89,6 +92,7 @@ describe('findOrderStringBetween', () => {
 
     const removeAtPosition = (position: number) => {
       if (debug) {
+        // eslint-disable-next-line no-console
         console.log(`Removing at position ${position}`);
       }
 
@@ -100,6 +104,7 @@ describe('findOrderStringBetween', () => {
 
     while (performance.now() < endTime) {
       if (debug) {
+        // eslint-disable-next-line no-console
         console.log(items);
       }
 
