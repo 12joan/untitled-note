@@ -10,6 +10,11 @@ FactoryBot.define do
     name { 'My project' }
   end
 
+  factory :project_folder do
+    owner
+    name { 'Favourite projects' }
+  end
+
   factory :document do
     body_type { 'empty' }
     body { body_type == 'empty' ? '' : '[{"type":"paragraph","children":[{"text":""}]}]' }

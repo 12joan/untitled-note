@@ -30,12 +30,11 @@ import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { findOrderStringBetween } from '~/lib/findOrderStringBetween';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { groupList } from '~/lib/groupList';
 import { handleUpdateProjectError } from '~/lib/handleErrors';
+import { unwrapFuture } from '~/lib/monads';
 import { mergeRefs } from '~/lib/refUtils';
 import { OverviewLink, ProjectLink } from '~/lib/routes';
-import { setProjectArchivedAt } from '~/lib/transformProject';
-import { Project } from '~/lib/types';
+import { Project, type ProjectFolder } from '~/lib/types';
 import { useNewProject } from '~/lib/useNewProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { Dropdown } from '~/components/Dropdown';
@@ -54,12 +53,12 @@ type DroppableData =
       type: 'project-position';
       project: Project;
       side: 'before' | 'after';
-      isArchived: boolean;
+      folder: ProjectFolder | null;
       description: string;
     }
   | {
-      type: 'project-archived';
-      isArchived: boolean;
+      type: 'project-folder';
+      folder: ProjectFolder | null;
       description: string;
     };
 
@@ -89,6 +88,7 @@ const mapWithBeforeAndAfter = <T, U>(
 };
 
 const describeProject = ({ name }: Project) => `project "${name}"`;
+// const describeProjectFolder = ({ name }: ProjectFolder) => `folder "${name}"`;
 
 const describeProjectPosition = (
   before: Project | null,
@@ -150,6 +150,7 @@ export interface ProjectsBarProps {
 export const ProjectsBar = memo(
   ({ onButtonClick = () => {} }: ProjectsBarProps) => {
     const projects = useAppContext('projects');
+    const futureProjectFolders = useAppContext('futureProjectFolders');
 
     const { modal: newProjectModal, open: openNewProjectModal } =
       useNewProject();
@@ -166,12 +167,12 @@ export const ProjectsBar = memo(
 
     const updateProject = (
       project: Project,
-      isArchived: boolean,
+      folder: ProjectFolder | null,
       beforeProject: Project | null,
       afterProject: Project | null
     ) => {
       const delta = {
-        archived_at: setProjectArchivedAt(project.archived_at, isArchived),
+        folder_id: folder ? folder.id : null,
         order_string: findOrderStringBetween(
           beforeProject?.order_string ?? null,
           afterProject?.order_string ?? null
@@ -193,12 +194,8 @@ export const ProjectsBar = memo(
       );
     };
 
-    const { archivedProjects = [], unarchivedProjects = [] } = useMemo(
-      () =>
-        groupList(localProjects, (project) =>
-          project.archived_at ? 'archivedProjects' : 'unarchivedProjects'
-        ),
-      [localProjects]
+    const unfolderedProjects = localProjects.filter(
+      (project) => !project.folder_id
     );
 
     const sensors = useSensors(
@@ -239,7 +236,7 @@ export const ProjectsBar = memo(
         overData.type === 'project-position'
       ) {
         const { project: activeProject } = activeData;
-        const { isArchived, project, side } = overData;
+        const { project, side, folder } = overData;
         const referenceProjectIndex = localProjects.findIndex(
           (p) => p.id === project.id
         );
@@ -248,17 +245,14 @@ export const ProjectsBar = memo(
         const otherProject = localProjects[otherProjectIndex] ?? null;
         const beforeProject = side === 'before' ? otherProject : project;
         const afterProject = side === 'after' ? otherProject : project;
-        updateProject(activeProject, isArchived, beforeProject, afterProject);
+        updateProject(activeProject, folder, beforeProject, afterProject);
       }
 
-      if (
-        activeData.type === 'project' &&
-        overData.type === 'project-archived'
-      ) {
+      if (activeData.type === 'project' && overData.type === 'project-folder') {
         const { project } = activeData;
-        const { isArchived } = overData;
+        const { folder } = overData;
         const beforeProject = localProjects[localProjects.length - 1];
-        updateProject(project, isArchived, beforeProject, null);
+        updateProject(project, folder, beforeProject, null);
       }
     };
 
@@ -295,12 +289,13 @@ export const ProjectsBar = memo(
           </Portal>
 
           {mapWithBeforeAndAfter(
-            unarchivedProjects,
+            unfolderedProjects,
             (project, beforeProject, afterProject) => (
               <div key={project.id}>
                 <ProjectPositionDropLine
                   project={project}
                   side="before"
+                  folder={null}
                   description={describeProjectPosition(beforeProject, project)}
                 />
 
@@ -312,29 +307,41 @@ export const ProjectsBar = memo(
                 <ProjectPositionDropLine
                   project={project}
                   side="after"
+                  folder={null}
                   description={describeProjectPosition(project, afterProject)}
                 />
               </div>
             )
           )}
 
-          {unarchivedProjects.length === 0 && (
+          {unfolderedProjects.length === 0 && (
             <div className="-mt-3">
               <DropLine
-                id="unarchive-project-drop-line"
+                id="empty-projects-drop-line"
                 side="after"
                 data={{
-                  type: 'project-archived',
-                  isArchived: false,
+                  type: 'project-folder',
+                  folder: null,
                   description: 'onto the list of projects',
                 }}
               />
             </div>
           )}
 
-          {archivedProjects.length > 0 && (
-            <PrototypeFolder projects={archivedProjects} />
-          )}
+          {unwrapFuture(futureProjectFolders, {
+            pending: <p>Loading folders...</p>,
+            resolved: (folders) => (
+              <>
+                {folders.map((folder) => (
+                  <ProjectFolder
+                    key={folder.id}
+                    folder={folder}
+                    allProjects={localProjects}
+                  />
+                ))}
+              </>
+            ),
+          })}
 
           <Tooltip content="New project" placement="right" fixed>
             <button
@@ -395,15 +402,15 @@ interface ProjectPositionDropLineProps
   extends Omit<DropLineProps, 'id' | 'data'> {
   project: Project;
   side: 'before' | 'after';
+  folder: ProjectFolder | null;
   description: string;
-  isArchived?: boolean;
 }
 
 const ProjectPositionDropLine = ({
   project,
   side,
+  folder,
   description,
-  isArchived = false,
   ...props
 }: ProjectPositionDropLineProps) => {
   return (
@@ -413,7 +420,7 @@ const ProjectPositionDropLine = ({
         type: 'project-position',
         project,
         side,
-        isArchived,
+        folder,
         description,
       }}
       side={side}
@@ -525,18 +532,29 @@ const ProjectListItem = ({
   );
 };
 
-const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
-  const projectId = useAppContext('projectId');
+interface ProjectFolderProps {
+  folder: ProjectFolder;
+  allProjects: Project[];
+}
+
+const ProjectFolder = ({ folder, allProjects }: ProjectFolderProps) => {
+  const currentProjectId = useAppContext('projectId');
+
+  const projects = useMemo(
+    () => allProjects.filter((project) => project.folder_id === folder.id),
+    [allProjects, folder.id]
+  );
+
   const containsCurrentProject = projects.some(
-    (project) => project.id === projectId
+    (project) => project.id === currentProjectId
   );
 
   const { isOver, setNodeRef } = useDroppable({
-    id: 'archived-folder',
+    id: `folder-${folder.id}`,
     data: {
-      type: 'project-archived',
-      isArchived: true,
-      description: 'onto the archived projects folder',
+      type: 'project-folder',
+      folder,
+      description: `onto ${folder.name}`,
     } satisfies DroppableData,
   });
 
@@ -550,7 +568,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
    */
   const overData = getDroppableData(useDndContext().over);
   const isDragInside =
-    overData?.type === 'project-position' && overData.isArchived;
+    overData?.type === 'project-position' && overData.folder === folder;
   const isDragOverOrInside = isOver || isDragInside;
   const isDraggingSomething = !!useDndContext().active;
 
@@ -596,7 +614,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
         onHide={() => setIsVisible(false)}
         items={
           <>
-            <h1 className="h3 mb-3">Archived projects</h1>
+            <h1 className="h3 mb-3">{folder.name}</h1>
 
             <div className="flex flex-wrap gap-3">
               {mapWithBeforeAndAfter(
@@ -607,7 +625,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
                       <ProjectPositionDropLine
                         project={project}
                         side="before"
-                        isArchived
+                        folder={folder}
                         orientation="vertical"
                         description={describeProjectPosition(
                           beforeProject,
@@ -626,7 +644,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
                       <ProjectPositionDropLine
                         project={project}
                         side="after"
-                        isArchived
+                        folder={folder}
                         orientation="vertical"
                         description={describeProjectPosition(
                           project,
@@ -648,7 +666,7 @@ const PrototypeFolder = ({ projects }: { projects: Project[] }) => {
             base: 'size-12 btn border border-dashed p-1.5 grid gap-1 grid-cols-2 border-plain-400 dark:border-plain-500',
             over: isOver && 'focus-ring ring-offset-2',
           })}
-          aria-label="Archived projects"
+          aria-label={folder.name}
         >
           {projects.slice(0, 4).map((project) => (
             <ProjectIcon

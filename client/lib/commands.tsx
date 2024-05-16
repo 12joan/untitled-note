@@ -214,7 +214,7 @@ const globalCommands: ActionCommand[] = [
             const navigateOrOpen = useNavigateOrOpen();
 
             const n = getSequential(event);
-            const project = projects.filter((project) => !project.archived_at)[
+            const project = projects.filter((project) => !project.folder_id)[
               n - 1
             ];
 

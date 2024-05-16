@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { deleteProject, updateProject } from '~/lib/apis/project';
+import { deleteProject /* updateProject */ } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
 import {
-  handleArchiveProjectError,
+  // handleArchiveProjectError,
   handleDeleteProjectError,
-  handleUnarchiveProjectError,
+  // handleUnarchiveProjectError,
 } from '~/lib/handleErrors';
 import { mapFuture, unwrapFuture } from '~/lib/monads';
 import { pluralize } from '~/lib/pluralize';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
-import { useOverrideable } from '~/lib/useOverrideable';
+// import { useOverrideable } from '~/lib/useOverrideable';
 import { InlinePlaceholder } from '~/components/Placeholder';
-import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
+// import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const ActionsSection = () => {
   const project = useAppContext('project');
@@ -23,29 +23,31 @@ export const ActionsSection = () => {
     futurePartialDocuments,
     (xs) => xs.length
   );
-  const [isArchived, overrideIsArchived] = useOverrideable(
-    project.archived_at !== null
-  );
+
+  // TODO: Remove or replace with folder UI
+  // const [isArchived, overrideIsArchived] = useOverrideable(
+  //   project.archived_at !== null
+  // );
 
   const navigate = useNavigate();
   const { pathname: currentPath } = useLocation();
 
-  const [isTogglingArchived, setIsTogglingArchived] = useState(false);
+  // const [isTogglingArchived, setIsTogglingArchived] = useState(false);
   const [areYouSureDelete, setAreYouSureDelete] = useState(false);
 
-  const toggleArchived = () => {
-    setIsTogglingArchived(true);
+  // const toggleArchived = () => {
+  //   setIsTogglingArchived(true);
 
-    const handleErrors = isArchived
-      ? handleUnarchiveProjectError
-      : handleArchiveProjectError;
+  //   const handleErrors = isArchived
+  //     ? handleUnarchiveProjectError
+  //     : handleArchiveProjectError;
 
-    handleErrors(
-      updateProject(project.id, {
-        archived_at: isArchived ? null : new Date().toISOString(),
-      }).then(() => overrideIsArchived(!isArchived))
-    ).finally(() => setIsTogglingArchived(false));
-  };
+  //   handleErrors(
+  //     updateProject(project.id, {
+  //       archived_at: isArchived ? null : new Date().toISOString(),
+  //     }).then(() => overrideIsArchived(!isArchived))
+  //   ).finally(() => setIsTogglingArchived(false));
+  // };
 
   const performDelete = () =>
     awaitRedirect({
@@ -61,7 +63,7 @@ export const ActionsSection = () => {
 
   return (
     <>
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <h4 className="h3 select-none">
           {isArchived ? 'Unarchive' : 'Archive'} project
         </h4>
@@ -83,7 +85,7 @@ export const ActionsSection = () => {
             {isArchived ? 'Unarchive' : 'Archive'} project
           </ReplaceWithSpinner>
         </button>
-      </div>
+      </div> */}
 
       <div className="space-y-2">
         <h4 className="h3 select-none">Delete project</h4>

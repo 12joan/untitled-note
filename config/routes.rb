@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         resource :replace, only: %i[create], controller: :project_replace
       end
 
+      resources :project_folders, only: %i[create update destroy]
       resources :s3_files, only: %i[create destroy show]
       resource :settings, only: %i[update]
     end

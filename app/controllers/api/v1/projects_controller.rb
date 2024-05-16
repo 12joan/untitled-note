@@ -36,11 +36,22 @@ module API
           :name,
           :emoji,
           :background_colour,
-          :archived_at,
           :editor_style,
           :auto_snapshots_option,
           :order_string,
-        )
+        ).tap do |p|
+          # Distinguish between folder_id being nil and not being present
+          if params[:project].has_key?(:folder_id)
+            folder_id = params[:project][:folder_id]
+
+            p[:folder] =
+              if folder_id.nil?
+                nil
+              else
+                current_user.project_folders.find(folder_id)
+              end
+          end
+        end
       end
     end
   end
