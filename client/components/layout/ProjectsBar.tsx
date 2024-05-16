@@ -39,6 +39,7 @@ import { useNewProject } from '~/lib/useNewProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { Dropdown } from '~/components/Dropdown';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
+import { Placeholder } from '~/components/Placeholder';
 import { ProjectIcon } from '~/components/ProjectIcon';
 import { TippyInstance, Tooltip } from '~/components/Tooltip';
 
@@ -329,7 +330,13 @@ export const ProjectsBar = memo(
           )}
 
           {unwrapFuture(futureProjectFolders, {
-            pending: <p>Loading folders...</p>,
+            pending: (
+              <>
+                <Placeholder className="size-12 rounded-lg" />
+                <Placeholder className="size-12 rounded-lg" />
+                <Placeholder className="size-12 rounded-lg" />
+              </>
+            ),
             resolved: (folders) => (
               <>
                 {folders.map((folder) => (
