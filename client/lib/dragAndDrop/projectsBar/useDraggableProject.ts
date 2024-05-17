@@ -5,7 +5,7 @@ import { describeProject } from './accessibility';
 
 export const useDraggableProject = (project: Project) =>
   useDraggable({
-    id: project.id,
+    id: `project-${project.id}`,
     attributes: {
       role: 'link',
       roleDescription: 'sortable project',

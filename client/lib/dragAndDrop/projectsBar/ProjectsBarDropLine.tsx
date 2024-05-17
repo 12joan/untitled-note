@@ -73,3 +73,31 @@ export const ProjectPositionDropLine = ({
     />
   );
 };
+
+export interface ProjectFolderPositionDropLineProps
+  extends Omit<ProjectsBarDropLineProps, 'id' | 'data'> {
+  folder: ProjectFolder;
+  side: 'before' | 'after';
+  description: string;
+}
+
+export const ProjectFolderPositionDropLine = ({
+  folder,
+  side,
+  description,
+  ...props
+}: ProjectFolderPositionDropLineProps) => {
+  return (
+    <ProjectsBarDropLine
+      id={`project-folder-drop-line-${folder.id}-${side}`}
+      data={{
+        type: 'project-folder-position',
+        folder,
+        side,
+        description,
+      }}
+      side={side}
+      {...props}
+    />
+  );
+};

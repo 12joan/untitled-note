@@ -17,6 +17,8 @@ import { ProjectsBarActiveIndicator } from '~/components/ProjectsBarActiveIndica
 import { TippyInstance } from '~/components/Tippy';
 import { Tooltip } from '~/components/Tooltip';
 
+export const projectListItemClassName = 'size-12 btn text-xl shadow';
+
 export interface ProjectListItemProps {
   project: Project;
   inListType?: 'vertical' | 'grid';
@@ -85,7 +87,7 @@ export const ProjectListItem = ({
           to={{ projectId: project.id }}
           // HTML attributes
           className={groupedClassNames({
-            base: 'size-12 btn text-xl shadow',
+            base: projectListItemClassName,
             current:
               inListType === 'grid' &&
               isCurrentProject &&

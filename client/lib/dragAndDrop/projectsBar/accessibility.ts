@@ -25,6 +25,25 @@ export const describeProjectPosition = (
   throw new Error('Invalid project position');
 };
 
+export const describeProjectFolderPosition = (
+  before: ProjectFolder | null,
+  after: ProjectFolder | null
+) => {
+  if (before && after) {
+    return `between folders "${before.name}" and "${after.name}"`;
+  }
+
+  if (before) {
+    return `after ${describeProjectFolder(before)}`;
+  }
+
+  if (after) {
+    return `before ${describeProjectFolder(after)}`;
+  }
+
+  throw new Error('Invalid project folder position');
+};
+
 export const announcements: Announcements = {
   onDragStart: ({ active }) => {
     const draggable = getDraggableData(active).description;

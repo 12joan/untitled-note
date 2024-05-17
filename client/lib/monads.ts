@@ -57,6 +57,14 @@ export const mapFuture = <T, R>(
     resolved: (data) => resolvedFuture(f(data)),
   });
 
+export const assertFuture = <T>(future: Future<T>): T => {
+  if (future.type === 'pending') {
+    throw new Error('Expected future to be resolved');
+  }
+
+  return future.data;
+};
+
 export const bindFuture = <T, R>(
   future: Future<T>,
   f: (data: T) => Future<R>

@@ -10,7 +10,12 @@ export type ProjectDraggableData = BaseDraggableData & {
   project: Project;
 };
 
-export type DraggableData = ProjectDraggableData;
+export type ProjectFolderDraggableData = BaseDraggableData & {
+  type: 'project-folder';
+  folder: ProjectFolder;
+};
+
+export type DraggableData = ProjectDraggableData | ProjectFolderDraggableData;
 
 export type BaseDroppableData = {
   type: string;
@@ -29,6 +34,16 @@ export type ProjectFolderDroppableData = BaseDroppableData & {
   folder: ProjectFolder | null;
 };
 
+export type ProjectFolderPositionDroppableData = BaseDroppableData & {
+  type: 'project-folder-position';
+  folder: ProjectFolder;
+  side: 'before' | 'after';
+};
+
 export type DroppableData =
   | ProjectPositionDroppableData
-  | ProjectFolderDroppableData;
+  | ProjectFolderDroppableData
+  | ProjectFolderPositionDroppableData;
+
+export type DraggableType = DraggableData['type'];
+export type DroppableType = DroppableData['type'];

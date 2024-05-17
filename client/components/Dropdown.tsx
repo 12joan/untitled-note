@@ -62,6 +62,7 @@ export interface DropdownProps extends Omit<TippyProps, 'className'> {
   style?: CSSProperties;
   tippyRef?: Ref<TippyInstance | null>;
   closeOnFocusOut?: boolean;
+  autoMaxSize?: boolean;
 }
 
 export const Dropdown = ({
@@ -71,6 +72,7 @@ export const Dropdown = ({
   style,
   tippyRef: tippyRefProp,
   closeOnFocusOut = true,
+  autoMaxSize = true,
   ...otherProps
 }: DropdownProps) => {
   const tippyRef = useRef<TippyInstance>(null);
@@ -91,8 +93,7 @@ export const Dropdown = ({
       ...propPopperOptions,
       modifiers: [
         ...(propPopperOptions.modifiers || []),
-        maxSize,
-        applyMaxSize,
+        ...(autoMaxSize ? [maxSize, applyMaxSize] : []),
       ],
     }),
     [propPopperOptions]
@@ -110,6 +111,7 @@ export const Dropdown = ({
               tabIndex={-1}
               children={items}
               {...attrs}
+              data-delete-me-dropdown
             />
           )}
           trigger="click"

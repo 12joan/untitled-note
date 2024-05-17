@@ -2,26 +2,46 @@ import React, { memo, MouseEvent, useMemo } from 'react';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { Portal } from '@headlessui/react';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
+import { updateProjectFolder as updateProjectFolderAPI } from '~/lib/apis/projectFolder';
 import { useAppContext } from '~/lib/appContext';
-import { describeProjectPosition } from '~/lib/dragAndDrop/projectsBar/accessibility';
 import {
+  describeProjectFolderPosition,
+  describeProjectPosition,
+} from '~/lib/dragAndDrop/projectsBar/accessibility';
+import {
+  ProjectFolderPositionDropLine,
   ProjectPositionDropLine,
   ProjectsBarDropLine,
 } from '~/lib/dragAndDrop/projectsBar/ProjectsBarDropLine';
 import { useProjectsBarDnd } from '~/lib/dragAndDrop/projectsBar/useProjectsBarDnd';
 import { findOrderStringBetween } from '~/lib/findOrderStringBetween';
-import { handleUpdateProjectError } from '~/lib/handleErrors';
+import {
+  handleUpdateProjectError,
+  handleUpdateProjectFolderError,
+} from '~/lib/handleErrors';
 import { mapWithBeforeAndAfter } from '~/lib/mapWithBeforeAndAfter';
-import { unwrapFuture } from '~/lib/monads';
+import {
+  assertFuture,
+  mapFuture,
+  orDefaultFuture,
+  resolvedFuture,
+  unwrapFuture,
+} from '~/lib/monads';
 import { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
 import { useNewProject } from '~/lib/useNewProject';
+import { useNewProjectFolder } from '~/lib/useNewProjectFolder';
 import { useOverrideable } from '~/lib/useOverrideable';
+import { Dropdown, DropdownItem } from '~/components/Dropdown';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
+import NewProjectFolderIcon from '~/components/icons/NewProjectFolderIcon';
 import { Placeholder } from '~/components/Placeholder';
-import { ProjectFolder } from '~/components/ProjectFolder';
+import {
+  ProjectFolder,
+  ProjectFolderTrigger,
+} from '~/components/ProjectFolder';
 import { ProjectIcon } from '~/components/ProjectIcon';
-import { Tooltip } from '~/components/Tooltip';
-import { ProjectListItem } from '../ProjectListItem';
+import { ProjectListItem } from '~/components/ProjectListItem';
+import { ProjectsBarSubtleButton } from '~/components/ProjectsBarSubtleButton';
 
 export interface ProjectsBarProps {
   onButtonClick?: (event: MouseEvent) => void;
@@ -35,7 +55,12 @@ export const ProjectsBar = memo(
     const { modal: newProjectModal, open: openNewProjectModal } =
       useNewProject();
 
+    const { modal: newFolderModal, open: openNewFolderModal } =
+      useNewProjectFolder();
+
     const [unsortedLocalProjects, setLocalProjects] = useOverrideable(projects);
+    const [unsortedLocalFutureFolders, setLocalFutureFolders] =
+      useOverrideable(futureProjectFolders);
 
     const localProjects = useMemo(
       () =>
@@ -43,6 +68,14 @@ export const ProjectsBar = memo(
           a.order_string < b.order_string ? -1 : 1
         ),
       [unsortedLocalProjects]
+    );
+
+    const localFutureFolders = useMemo(
+      () =>
+        mapFuture(unsortedLocalFutureFolders, (folders) =>
+          folders.sort((a, b) => (a.order_string < b.order_string ? -1 : 1))
+        ),
+      [unsortedLocalFutureFolders]
     );
 
     const updateProject = (
@@ -74,18 +107,50 @@ export const ProjectsBar = memo(
       );
     };
 
+    const updateProjectFolder = (
+      folder: TProjectFolder,
+      beforeFolder: TProjectFolder | null,
+      afterFolder: TProjectFolder | null
+    ) => {
+      const delta = {
+        order_string: findOrderStringBetween(
+          beforeFolder?.order_string ?? null,
+          afterFolder?.order_string ?? null
+        ),
+      };
+
+      setLocalFutureFolders((localFutureFolders) => {
+        const folders = assertFuture(localFutureFolders);
+        const updatedFolder = { ...folder, ...delta };
+        return resolvedFuture(
+          folders.map((f) => (f.id === updatedFolder.id ? updatedFolder : f))
+        );
+      });
+
+      handleUpdateProjectFolderError(
+        updateProjectFolderAPI(folder.id, delta)
+      ).catch((error) => {
+        setLocalFutureFolders(futureProjectFolders);
+        throw error;
+      });
+    };
+
     const unfolderedProjects = localProjects.filter(
       (project) => !project.folder_id
     );
 
-    const { dndContextProps, draggingProject } = useProjectsBarDnd({
-      projects: localProjects,
-      updateProject,
-    });
+    const { dndContextProps, draggingProject, draggingFolder } =
+      useProjectsBarDnd({
+        projects: localProjects,
+        folders: orDefaultFuture(localFutureFolders, []),
+        updateProject,
+        updateProjectFolder,
+      });
 
     return (
       <div className="p-3 flex flex-col gap-3">
         {newProjectModal}
+        {newFolderModal}
 
         <DndContext {...dndContextProps}>
           <Portal>
@@ -96,6 +161,23 @@ export const ProjectsBar = memo(
                     <ProjectIcon
                       project={draggingProject}
                       className="size-12 text-xl shadow-lg rounded-lg translate-x-1/3 translate-y-1/3 -rotate-12 opacity-75"
+                    />
+                  </div>
+                )}
+
+                {draggingFolder && (
+                  <div>
+                    <ProjectFolderTrigger
+                      folder={draggingFolder}
+                      projects={localProjects.filter(
+                        (project) => project.folder_id === draggingFolder.id
+                      )}
+                      className={{
+                        btn: '',
+                        rounded: 'rounded-lg',
+                        dragOverlay:
+                          'translate-x-1/3 translate-y-1/3 -rotate-12 opacity-75',
+                      }}
                     />
                   </div>
                 )}
@@ -143,7 +225,7 @@ export const ProjectsBar = memo(
             </div>
           )}
 
-          {unwrapFuture(futureProjectFolders, {
+          {unwrapFuture(localFutureFolders, {
             pending: (
               <>
                 <Placeholder className="size-12 rounded-lg" />
@@ -153,27 +235,66 @@ export const ProjectsBar = memo(
             ),
             resolved: (folders) => (
               <>
-                {folders.map((folder) => (
-                  <ProjectFolder
-                    key={folder.id}
-                    folder={folder}
-                    allProjects={localProjects}
-                  />
-                ))}
+                {mapWithBeforeAndAfter(
+                  folders,
+                  (folder, beforeFolder, afterFolder) => (
+                    <div key={folder.id}>
+                      <ProjectFolderPositionDropLine
+                        folder={folder}
+                        side="before"
+                        description={describeProjectFolderPosition(
+                          beforeFolder,
+                          folder
+                        )}
+                      />
+
+                      <ProjectFolder
+                        folder={folder}
+                        allProjects={localProjects}
+                        updateProject={updateProject}
+                      />
+
+                      <ProjectFolderPositionDropLine
+                        folder={folder}
+                        side="after"
+                        description={describeProjectFolderPosition(
+                          folder,
+                          afterFolder
+                        )}
+                      />
+                    </div>
+                  )
+                )}
               </>
             ),
           })}
 
-          <Tooltip content="New project" placement="right" fixed>
-            <button
-              type="button"
-              className="size-12 btn flex items-center justify-center p-1 text-plain-400 dark:text-plain-500 hocus:text-plain-500 hocus:dark:text-plain-400"
-              onClick={openNewProjectModal}
-              aria-label="New project"
-            >
-              <LargePlusIcon size="2em" noAriaLabel />
-            </button>
-          </Tooltip>
+          <Dropdown
+            items={
+              <>
+                <DropdownItem
+                  icon={LargePlusIcon}
+                  onClick={openNewProjectModal}
+                >
+                  New project
+                </DropdownItem>
+                <DropdownItem
+                  icon={NewProjectFolderIcon}
+                  onClick={openNewFolderModal}
+                >
+                  New folder
+                </DropdownItem>
+              </>
+            }
+            placement="right"
+            autoMaxSize={false}
+          >
+            <ProjectsBarSubtleButton
+              icon={LargePlusIcon}
+              iconSize="2em"
+              aria-label="New project or folder"
+            />
+          </Dropdown>
         </DndContext>
       </div>
     );

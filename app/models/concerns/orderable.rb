@@ -10,8 +10,12 @@ module Orderable
           format: { with: /\A[a-f0-9]*[a-f1-9]\z/ }
 
         before_validation do
-          self.order_string ||= get_next_order_string
+          move_to_end if self.order_string.nil?
         end
+      end
+
+      define_method :move_to_end do
+        self.order_string = get_next_order_string
       end
 
       define_method :get_next_order_string do

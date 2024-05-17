@@ -48,6 +48,27 @@ export const handleDeleteProjectError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
+export const handleCreateProjectFolderError = handleErrors(() => ({
+  title: 'Failed to create folder',
+  message:
+    'An error occurred while creating a new folder. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
+export const handleUpdateProjectFolderError = handleErrors(() => ({
+  title: 'Failed to update folder',
+  message:
+    'An error occurred while updating the folder. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
+export const handleDeleteProjectFolderError = handleErrors(() => ({
+  title: 'Failed to delete folder',
+  message:
+    'An error occurred while deleting the folder. Make sure you are connected to the internet and try again.',
+  autoClose: 'slow',
+}));
+
 export const handleCreateDocumentError = handleErrors(() => ({
   title: 'Failed to create document',
   message:

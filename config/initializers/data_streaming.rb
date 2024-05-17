@@ -127,6 +127,10 @@ Rails.application.reloader.to_prepare do
         broadcast make_broadcasting('ProjectFolder#index', %i[user_id], {
           user_id: project_folder.owner_id,
         })
+
+        broadcast make_broadcasting('Project#index', %i[user_id], {
+          user_id: project_folder.owner_id,
+        })
       },
 
       S3File: ->(s3_file) {
