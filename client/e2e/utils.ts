@@ -172,9 +172,14 @@ export const openAccountModal = async (page: Page) => {
 
 export const openFileStorageSection = async (page: Page) => {
   await openAccountModal(page);
-  await page.getByText('File storage').click();
+  await page.getByRole('tab', { name: 'File storage' }).click();
 };
 
 export const openSettingsModal = async (page: Page) => {
   await page.getByLabel('User preferences').click();
+};
+
+export const openSettingsAppearanceSection = async (page: Page) => {
+  await openSettingsModal(page);
+  await page.getByRole('tab', { name: 'Appearance' }).click();
 };

@@ -34,17 +34,27 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Required for keyboard shortcuts to be correct
+        userAgent: 'Mac OS X, Chrome',
+      },
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        userAgent: 'Mac OS X, Firefox',
+      },
     },
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Safari'],
+        userAgent: 'Mac OS X, Safari',
+      },
     },
 
     /* Test against mobile viewports. */
