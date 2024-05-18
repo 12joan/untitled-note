@@ -1,4 +1,10 @@
-import { ElementHandle, expect, JSHandle, Page } from '@playwright/test';
+import {
+  ElementHandle,
+  expect,
+  JSHandle,
+  Locator,
+  Page,
+} from '@playwright/test';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { getEditable } from './slate';
@@ -42,15 +48,35 @@ export const logIn = async (page: Page) => {
   await waitForReady(page);
 };
 
-export const createProject = async (page: Page, name = 'My Project') => {
-  await page.getByText('New project').click();
-  await page.getByLabel('Project name').fill(name);
-  await page.getByText('Create project').click();
-  await expect(page).toHaveTitle(name);
-};
-
 export const locateTopBar = (page: Page) =>
   page.getByLabel('Top bar', { exact: true });
+
+export const locateProjectsBar = (page: Page) =>
+  page.getByLabel('Projects bar', { exact: true });
+
+export const locateProject = (page: Page, name: string) =>
+  locateProjectsBar(page).getByTestId(`project-list-item-${name}`);
+
+export const locateProjectFolder = (page: Page, name: string) =>
+  locateProjectsBar(page).getByTestId(`project-folder-${name}`);
+
+export const locateProjectDropLine = (
+  page: Page,
+  name: string,
+  side: 'before' | 'after'
+) => locateProjectsBar(page).getByTestId(`project-drop-line-${side}-${name}`);
+
+export const locateProjectFolderDropLine = (
+  page: Page,
+  name: string,
+  side: 'before' | 'after'
+) =>
+  locateProjectsBar(page).getByTestId(
+    `project-folder-drop-line-${side}-${name}`
+  );
+
+export const locateEmptyProjectsBarDropLine = (page: Page) =>
+  locateProjectsBar(page).getByTestId('empty-projects-drop-line');
 
 export const locateSidebar = (page: Page) =>
   page.getByLabel('Sidebar', { exact: true });
@@ -66,6 +92,125 @@ export const locateSidebarTags = (page: Page) =>
 
 export const locateFormattingToolbar = (page: Page) =>
   page.getByLabel('Formatting toolbar', { exact: true });
+
+export const expectCurrentProject = (page: Page, name: string) =>
+  expect(page.getByTestId('current-project')).toHaveText(name);
+
+export const clickNewProjectOrFolder = (page: Page) =>
+  locateProjectsBar(page).getByLabel('New project or folder').click();
+
+export const createProject = async (page: Page, name = 'My Project') => {
+  const noProjectsViewButton = page.getByText('New project');
+
+  if (await noProjectsViewButton.isVisible()) {
+    await noProjectsViewButton.click();
+  } else {
+    await clickNewProjectOrFolder(page);
+    await page.getByText('New project').click();
+  }
+
+  await page.getByLabel('Project name').fill(name);
+  await page.getByText('Create project').click();
+  await expectCurrentProject(page, name);
+};
+
+export const createProjectFolder = async (page: Page, name = 'My Folder') => {
+  await clickNewProjectOrFolder(page);
+  await page.getByText('New folder').click();
+  await page.getByLabel('Folder name').fill(name);
+  await page.getByText('Create folder').click();
+};
+
+export const openProjectFolderActions = async (
+  page: Page,
+  folderName: string
+) => {
+  await locateProjectFolder(page, folderName).hover();
+
+  const emptyFolderButton = page.getByText('Folder actions');
+
+  if (await emptyFolderButton.isVisible()) {
+    await emptyFolderButton.click();
+  } else {
+    await page.getByLabel('Folder actions').click();
+  }
+};
+
+export const createProjectInFolder = async (
+  page: Page,
+  folderName: string,
+  projectName: string
+) => {
+  await openProjectFolderActions(page, folderName);
+  await page.getByText('New project').click();
+  await page.getByLabel('Project name').fill(projectName);
+  await page.getByText('Create project').click();
+  await expectCurrentProject(page, projectName);
+};
+
+export type DragFn = (
+  page: Page,
+  item: Locator,
+  ...destinations: Locator[]
+) => Promise<void>;
+
+export const dragWithMouse: DragFn = async (page, item, ...destinations) => {
+  await item.hover();
+  await page.mouse.down();
+
+  for (const destination of destinations) {
+    await destination.hover({ force: true });
+    await destination.hover({ force: true });
+  }
+
+  await page.mouse.up();
+};
+
+export const dragWithKeyboard: DragFn = async (page, item, ...destinations) => {
+  type Position = { x: number; y: number };
+
+  const getPosition = async (locator: Locator): Promise<Position> => {
+    const box = await locator.boundingBox();
+    if (!box) throw new Error('Element not found');
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+
+  let currentPosition = await getPosition(item);
+  const dragIncrement = 25;
+
+  const dragTo = async (position: Position) => {
+    const xDirection = position.x > currentPosition.x ? 1 : -1;
+    const yDirection = position.y > currentPosition.y ? 1 : -1;
+    const stepsX = Math.abs(
+      Math.round((position.x - currentPosition.x) / dragIncrement)
+    );
+    const stepsY = Math.abs(
+      Math.round((position.y - currentPosition.y) / dragIncrement)
+    );
+
+    for (let i = 0; i < stepsX; i++) {
+      await page.keyboard.press(xDirection === 1 ? 'ArrowRight' : 'ArrowLeft');
+    }
+
+    for (let i = 0; i < stepsY; i++) {
+      await page.keyboard.press(yDirection === 1 ? 'ArrowDown' : 'ArrowUp');
+    }
+
+    const finalX = currentPosition.x + stepsX * dragIncrement * xDirection;
+    const finalY = currentPosition.y + stepsY * dragIncrement * yDirection;
+    currentPosition = { x: finalX, y: finalY };
+  };
+
+  await item.focus();
+  await page.keyboard.press('Space');
+
+  for (const destination of destinations) {
+    const position = await getPosition(destination);
+    await dragTo(position);
+  }
+
+  await page.keyboard.press('Space');
+};
 
 export const clickFormattingToolbarButton = async (page: Page, label: string) =>
   locateFormattingToolbar(page).getByLabel(label).click();

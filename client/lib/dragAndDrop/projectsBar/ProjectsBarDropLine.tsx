@@ -9,6 +9,7 @@ export interface ProjectsBarDropLineProps {
   data: DroppableData;
   side?: 'before' | 'after';
   orientation?: 'vertical' | 'horizontal';
+  testId?: string;
 }
 
 export const ProjectsBarDropLine = ({
@@ -16,6 +17,7 @@ export const ProjectsBarDropLine = ({
   data,
   side,
   orientation = 'horizontal',
+  testId,
 }: ProjectsBarDropLineProps) => {
   const { isOver, setNodeRef } = useDroppable({ id, data });
 
@@ -38,13 +40,14 @@ export const ProjectsBarDropLine = ({
             center: '',
           }[side ?? 'center'],
         }}
+        data-testid={testId}
       />
     </div>
   );
 };
 
 export interface ProjectPositionDropLineProps
-  extends Omit<ProjectsBarDropLineProps, 'id' | 'data'> {
+  extends Omit<ProjectsBarDropLineProps, 'id' | 'data' | 'testId'> {
   project: Project;
   side: 'before' | 'after';
   folder: ProjectFolder | null;
@@ -69,6 +72,7 @@ export const ProjectPositionDropLine = ({
         description,
       }}
       side={side}
+      testId={`project-drop-line-${side}-${project.name}`}
       {...props}
     />
   );
@@ -97,6 +101,7 @@ export const ProjectFolderPositionDropLine = ({
         description,
       }}
       side={side}
+      testId={`project-folder-drop-line-${side}-${folder.name}`}
       {...props}
     />
   );

@@ -24,6 +24,7 @@ export interface ProjectListItemProps {
   inListType?: 'vertical' | 'grid';
   tabIndex?: number;
   disableTooltip?: boolean;
+  testingListIndex?: number;
   onButtonClick?: (event: MouseEvent) => void;
 }
 
@@ -32,6 +33,7 @@ export const ProjectListItem = ({
   inListType = 'vertical',
   tabIndex = 0,
   disableTooltip: disableTooltipProp = false,
+  testingListIndex,
   onButtonClick,
 }: ProjectListItemProps) => {
   const currentProjectId = useAppContext('projectId');
@@ -106,6 +108,8 @@ export const ProjectListItem = ({
           }}
           aria-current={isCurrentProject ? 'page' : undefined}
           tabIndex={tabIndex}
+          data-testid={`project-list-item-${project.name}`}
+          data-test-list-index={testingListIndex}
         />
       )}
     </div>

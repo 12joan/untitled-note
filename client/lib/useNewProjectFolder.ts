@@ -7,7 +7,7 @@ export const useNewProjectFolder = () =>
     title: 'New folder',
     inputLabel: 'Folder name',
     inputPlaceholder: 'My folder',
-    confirmLabel: 'Rename folder',
+    confirmLabel: 'Create folder',
     onConfirm: (name) =>
       handleCreateProjectFolderError(
         createProjectFolder({

@@ -187,7 +187,7 @@ export const ProjectsBar = memo(
 
           {mapWithBeforeAndAfter(
             unfolderedProjects,
-            (project, beforeProject, afterProject) => (
+            (project, beforeProject, afterProject, index) => (
               <div key={project.id}>
                 <ProjectPositionDropLine
                   project={project}
@@ -198,6 +198,7 @@ export const ProjectsBar = memo(
 
                 <ProjectListItem
                   project={project}
+                  testingListIndex={index}
                   onButtonClick={onButtonClick}
                 />
 
@@ -221,6 +222,7 @@ export const ProjectsBar = memo(
                   folder: null,
                   description: 'onto the list of projects',
                 }}
+                testId="empty-projects-drop-line"
               />
             </div>
           )}
@@ -237,7 +239,7 @@ export const ProjectsBar = memo(
               <>
                 {mapWithBeforeAndAfter(
                   folders,
-                  (folder, beforeFolder, afterFolder) => (
+                  (folder, beforeFolder, afterFolder, index) => (
                     <div key={folder.id}>
                       <ProjectFolderPositionDropLine
                         folder={folder}
@@ -252,6 +254,7 @@ export const ProjectsBar = memo(
                         folder={folder}
                         allProjects={localProjects}
                         updateProject={updateProject}
+                        testingListIndex={index}
                       />
 
                       <ProjectFolderPositionDropLine

@@ -54,12 +54,14 @@ export interface ProjectFolderProps {
     beforeProject: Project | null,
     afterProject: Project | null
   ) => void;
+  testingListIndex?: number;
 }
 
 export const ProjectFolder = ({
   folder,
   allProjects,
   updateProject,
+  testingListIndex,
 }: ProjectFolderProps) => {
   const currentProjectId = useAppContext('projectId');
 
@@ -157,6 +159,7 @@ export const ProjectFolder = ({
           isDragging={isDragging}
           {...attributes}
           {...listeners}
+          data-test-list-index={testingListIndex}
         />
       </Dropdown>
     </div>
@@ -205,6 +208,7 @@ export const ProjectFolderTrigger = forwardRef<
           className
         )}
         aria-label={folder.name}
+        data-testid={`project-folder-${folder.name}`}
         {...props}
       >
         {projects.slice(0, 4).map((project) => (
@@ -372,7 +376,7 @@ const ProjectFolderContent = ({
     <GridView
       label={folder.name}
       items={projects}
-      renderItem={(project, beforeProject, afterProject) => (
+      renderItem={(project, beforeProject, afterProject, index) => (
         <div className="flex" key={project.id}>
           {isVisible && (
             <ProjectPositionDropLine
@@ -388,6 +392,7 @@ const ProjectFolderContent = ({
             project={project}
             inListType="grid"
             disableTooltip={!isVisible}
+            testingListIndex={index}
           />
 
           {isVisible && (
@@ -437,7 +442,12 @@ const ProjectFolderContent = ({
 interface GridView<T> {
   label: string;
   items: T[];
-  renderItem: (item: T, beforeItem: T | null, afterItem: T | null) => ReactNode;
+  renderItem: (
+    item: T,
+    beforeItem: T | null,
+    afterItem: T | null,
+    index: number
+  ) => ReactNode;
   renderAfter?: ReactNode[];
   renderWhenEmpty?: ReactNode;
   onCloseButton?: () => void;
