@@ -1,6 +1,7 @@
 import React, {
   CSSProperties,
   ElementType,
+  forwardRef,
   MouseEvent,
   ReactNode,
   useMemo,
@@ -65,64 +66,69 @@ export interface DropdownProps extends Omit<TippyProps, 'className'> {
   autoMaxSize?: boolean;
 }
 
-export const Dropdown = ({
-  items,
-  popperOptions: propPopperOptions = {},
-  className,
-  style,
-  tippyRef: tippyRefProp,
-  closeOnFocusOut = true,
-  autoMaxSize = true,
-  ...otherProps
-}: DropdownProps) => {
-  const tippyRef = useRef<TippyInstance>(null);
-  const close = () => tippyRef.current?.hide();
+export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
+  (
+    {
+      items,
+      popperOptions: propPopperOptions = {},
+      className,
+      style,
+      tippyRef: tippyRefProp,
+      closeOnFocusOut = true,
+      autoMaxSize = true,
+      ...otherProps
+    },
+    ref
+  ) => {
+    const tippyRef = useRef<TippyInstance>(null);
+    const close = () => tippyRef.current?.hide();
 
-  useEventListener(window, 'keydown', (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && tippyRef.current?.state?.isVisible) {
-      close();
-    }
-  });
+    useEventListener(window, 'keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && tippyRef.current?.state?.isVisible) {
+        close();
+      }
+    });
 
-  const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(
-    closeOnFocusOut ? close : () => {}
-  );
+    const [focusOutRef, focusOutProps] = useFocusOut<HTMLDivElement>(
+      closeOnFocusOut ? close : () => {}
+    );
 
-  const popperOptions = useMemo(
-    () => ({
-      ...propPopperOptions,
-      modifiers: [
-        ...(propPopperOptions.modifiers || []),
-        ...(autoMaxSize ? [maxSize, applyMaxSize] : []),
-      ],
-    }),
-    [propPopperOptions]
-  );
+    const popperOptions = useMemo(
+      () => ({
+        ...propPopperOptions,
+        modifiers: [
+          ...(propPopperOptions.modifiers || []),
+          ...(autoMaxSize ? [maxSize, applyMaxSize] : []),
+        ],
+      }),
+      [propPopperOptions]
+    );
 
-  return (
-    <AppContextProvider closeDropdown={close}>
-      <div ref={focusOutRef} {...focusOutProps} className="contents">
-        <Tippy
-          ref={mergeRefs([tippyRef, tippyRefProp])}
-          render={(attrs) => (
-            <div
-              className={groupedClassNames(dropdownClassNames, className)}
-              style={style}
-              tabIndex={-1}
-              children={items}
-              {...attrs}
-              data-delete-me-dropdown
-            />
-          )}
-          trigger="click"
-          interactive
-          popperOptions={popperOptions}
-          {...otherProps}
-        />
-      </div>
-    </AppContextProvider>
-  );
-};
+    return (
+      <AppContextProvider closeDropdown={close}>
+        <div ref={focusOutRef} {...focusOutProps} className="contents">
+          <Tippy
+            ref={mergeRefs([tippyRef, tippyRefProp])}
+            render={(attrs) => (
+              <div
+                ref={ref}
+                className={groupedClassNames(dropdownClassNames, className)}
+                style={style}
+                tabIndex={-1}
+                children={items}
+                {...attrs}
+              />
+            )}
+            trigger="click"
+            interactive
+            popperOptions={popperOptions}
+            {...otherProps}
+          />
+        </div>
+      </AppContextProvider>
+    );
+  }
+);
 
 export type DropdownItemProps<C extends ElementType> = PolyProps<
   C,

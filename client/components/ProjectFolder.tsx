@@ -73,6 +73,9 @@ export const ProjectFolder = ({
   );
 
   const tippyRef = useRef<TippyInstance>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const focusDropdown = () => dropdownRef.current?.focus();
 
   const {
     setNodeRef: droppableRef,
@@ -121,6 +124,7 @@ export const ProjectFolder = ({
       {containsCurrentProject && <ProjectsBarActiveIndicator />}
 
       <Dropdown
+        ref={dropdownRef}
         tippyRef={tippyRef}
         trigger="mouseenter click"
         placement="right"
@@ -141,6 +145,7 @@ export const ProjectFolder = ({
             updateProject={updateProject}
             isVisible={isVisible}
             keepOpen={keepOpen}
+            focusDropdown={focusDropdown}
           />
         }
       >
@@ -223,6 +228,7 @@ interface ProjectFolderContentProps {
   updateProject: ProjectFolderProps['updateProject'];
   isVisible: boolean;
   keepOpen: () => void;
+  focusDropdown: () => void;
 }
 
 const ProjectFolderContent = ({
@@ -232,6 +238,7 @@ const ProjectFolderContent = ({
   updateProject,
   isVisible,
   keepOpen,
+  focusDropdown,
 }: ProjectFolderContentProps) => {
   const [view, rawSetView] = useState<'default' | 'menu' | 'add' | 'remove'>(
     'default'
@@ -240,8 +247,7 @@ const ProjectFolderContent = ({
   const setView: typeof rawSetView = (arg) => {
     keepOpen();
     rawSetView(arg);
-    // @ts-ignore
-    document.querySelector('[data-delete-me-dropdown]')?.focus();
+    focusDropdown();
   };
 
   useEffectAfterFirst(() => {
