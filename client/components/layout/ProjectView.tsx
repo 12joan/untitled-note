@@ -267,9 +267,12 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
             <nav
               ref={projectsBarRef}
               className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent"
+              // Make sure that the projects bar overlaps the safe area
               style={{
                 marginLeft: 'calc(-1 * env(safe-area-inset-left))',
                 paddingLeft: 'env(safe-area-inset-left)',
+                marginBottom: 'calc(-1 * env(safe-area-inset-bottom)',
+                paddingBottom: 'env(safe-area-inset-bottom)',
               }}
               tabIndex={0}
               aria-label="Projects bar"
