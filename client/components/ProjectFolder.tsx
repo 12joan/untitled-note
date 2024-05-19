@@ -208,6 +208,7 @@ export const ProjectFolderTrigger = forwardRef<
               'border border-dashed border-plain-400 dark:border-plain-500',
             padding: 'p-1.5',
             grid: 'grid gap-1 grid-cols-2',
+            touchNoDrag: 'touch-none',
             over: isDragOver && 'focus-ring ring-offset-2',
             dragging: isDragging && 'opacity-50',
           },
