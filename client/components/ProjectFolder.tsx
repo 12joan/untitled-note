@@ -54,6 +54,7 @@ export interface ProjectFolderProps {
     beforeProject: Project | null,
     afterProject: Project | null
   ) => void;
+  projectsBarWidth: number;
   testingListIndex?: number;
 }
 
@@ -61,6 +62,7 @@ export const ProjectFolder = ({
   folder,
   allProjects,
   updateProject,
+  projectsBarWidth,
   testingListIndex,
 }: ProjectFolderProps) => {
   const currentProjectId = useAppContext('projectId');
@@ -135,6 +137,10 @@ export const ProjectFolder = ({
           border: 'border border-transparent dark:border-white/10',
           ringInset: null,
           ringOffset: 'ring-offset-plain-100 dark:ring-offset-plain-800',
+          maxHeight: 'max-h-dvh',
+        }}
+        style={{
+          maxWidth: `calc(100dvw - ${projectsBarWidth}px)`,
         }}
         autoMaxSize={false}
         onShow={() => setIsVisible(true)}
@@ -461,7 +467,7 @@ const GridView = <T,>({
   renderWhenEmpty,
   onCloseButton,
 }: GridView<T>) => {
-  const width = useMemo(() => {
+  const maxWidth = useMemo(() => {
     const colCount = Math.max(
       4,
       Math.ceil(Math.sqrt(items.length + renderAfter.length))
@@ -479,7 +485,7 @@ const GridView = <T,>({
   const labelElement = <h1 className="h3">{label}</h1>;
 
   return (
-    <div className="p-4 space-y-3" style={{ width }}>
+    <div className="p-4 space-y-3" style={{ maxWidth }}>
       {onCloseButton ? (
         <WithCloseButton
           buttonClassName={{

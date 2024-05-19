@@ -28,6 +28,7 @@ import {
   unwrapFuture,
 } from '~/lib/monads';
 import { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
+import { useElementSize } from '~/lib/useElementSize';
 import { useNewProject } from '~/lib/useNewProject';
 import { useNewProjectFolder } from '~/lib/useNewProjectFolder';
 import { useOverrideable } from '~/lib/useOverrideable';
@@ -51,6 +52,8 @@ export const ProjectsBar = memo(
   ({ onButtonClick = () => {} }: ProjectsBarProps) => {
     const projects = useAppContext('projects');
     const futureProjectFolders = useAppContext('futureProjectFolders');
+
+    const [{ width: projectsBarWidth }, projectsBarWidthRef] = useElementSize();
 
     const { modal: newProjectModal, open: openNewProjectModal } =
       useNewProject();
@@ -148,7 +151,7 @@ export const ProjectsBar = memo(
       });
 
     return (
-      <div className="p-3 flex flex-col gap-3">
+      <div ref={projectsBarWidthRef} className="p-3 flex flex-col gap-3">
         {newProjectModal}
         {newFolderModal}
 
@@ -254,6 +257,7 @@ export const ProjectsBar = memo(
                         folder={folder}
                         allProjects={localProjects}
                         updateProject={updateProject}
+                        projectsBarWidth={projectsBarWidth}
                         testingListIndex={index}
                       />
 
