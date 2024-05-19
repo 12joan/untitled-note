@@ -95,7 +95,14 @@ export const ProjectListItem = ({
               isCurrentProject &&
               'focus-ring ring-offset-2 focus-visible:ring-4',
           })}
-          style={{ cursor: 'pointer' }}
+          style={
+            {
+              cursor: 'pointer',
+              // Ensure dragging works on iOS
+              '-webkit-touch-callout': 'none',
+              '-webkit-user-select': 'none',
+            } as any
+          }
           onClick={(event: MouseEvent) => {
             hideTooltip();
             onButtonClick?.(event);
