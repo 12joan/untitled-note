@@ -90,6 +90,7 @@ export const ProjectListItem = ({
           // HTML attributes
           className={groupedClassNames({
             base: projectListItemClassName,
+            touchNoScroll: 'touch-none',
             current:
               inListType === 'grid' &&
               isCurrentProject &&
