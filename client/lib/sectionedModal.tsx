@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useModal } from '~/lib/useModal';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { SubscribableRef } from '~/lib/useSubscribableRef';
@@ -13,6 +14,7 @@ export type Section<T extends object> = {
   title: string;
   icon: FC<IconProps>;
   component: FC<T>;
+  variant?: 'default' | 'danger';
 };
 
 export interface SectionedModalOpenProps<SectionName extends string> {
@@ -85,24 +87,40 @@ export const createSectionedModal = <
         <div className="grow flex flex-col sm:flex-row sm:h-0">
           <div className="shrink-0 max-sm:border-b sm:border-r border-black/10 dark:border-white/10 p-2 overflow-y-auto sm:min-w-48">
             <div className="grow space-y-2" role="tablist">
-              {sectionEntries.map(([key, { title, icon: Icon }]) => (
-                <button
-                  key={key}
-                  type="button"
-                  className="w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center"
-                  data-active={key === activeSectionKey}
-                  onClick={() => setActiveSectionKey(key)}
-                  role="tab"
-                  aria-selected={key === activeSectionKey}
-                  aria-controls={idForSectionKey(key)}
-                >
-                  <span className="text-primary-500 dark:text-primary-400 data-active:text-white data-active:dark:text-white">
-                    <Icon size="1.25em" noAriaLabel />
-                  </span>
+              {sectionEntries.map(
+                ([key, { title, icon: Icon, variant = 'default' }]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={groupedClassNames({
+                      base: 'w-full btn btn-rect data-active:btn-primary text-left flex gap-2 items-center',
+                      variant: {
+                        default: '',
+                        danger: 'text-red-500 dark:text-red-400',
+                      }[variant],
+                    })}
+                    data-active={key === activeSectionKey}
+                    onClick={() => setActiveSectionKey(key)}
+                    role="tab"
+                    aria-selected={key === activeSectionKey}
+                    aria-controls={idForSectionKey(key)}
+                  >
+                    <span
+                      className={groupedClassNames({
+                        base: 'data-active:text-white data-active:dark:text-white',
+                        variant: {
+                          default: 'text-primary-500 dark:text-primary-400',
+                          danger: 'text-red-500 dark:text-red-400',
+                        }[variant],
+                      })}
+                    >
+                      <Icon size="1.25em" noAriaLabel />
+                    </span>
 
-                  {title}
-                </button>
-              ))}
+                    {title}
+                  </button>
+                )
+              )}
             </div>
           </div>
 

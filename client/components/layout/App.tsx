@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
+import { streamProjectFolders } from '~/lib/apis/projectFolder';
 import { streamSettings } from '~/lib/apis/settings';
 import { AppContextProvider } from '~/lib/appContext';
 import { mapFuture, unwrapFuture } from '~/lib/monads';
@@ -22,6 +23,15 @@ export const App = () => {
     {
       getStream: streamProjects,
       cacheKey: 'projects',
+      disableCacheLoad: projectsCacheKey > 0,
+    },
+    [projectsCacheKey]
+  );
+
+  const futureProjectFolders = useStream(
+    {
+      getStream: streamProjectFolders,
+      cacheKey: 'project-folders',
       disableCacheLoad: projectsCacheKey > 0,
     },
     [projectsCacheKey]
@@ -86,6 +96,7 @@ export const App = () => {
   return (
     <AppContextProvider
       invalidateProjectsCache={invalidateProjectsCache}
+      futureProjectFolders={futureProjectFolders}
       futureQuotaUsage={futureQuotaUsage}
       futureFiles={futureFiles}
       futureRemainingQuota={futureRemainingQuota}

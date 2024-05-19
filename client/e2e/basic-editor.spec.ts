@@ -18,7 +18,7 @@ import {
   createProject,
   expectUpToDate,
   logIn,
-  openSettingsModal,
+  openSettingsAppearanceSection,
 } from './utils';
 
 test.describe('Basic editor', () => {
@@ -88,7 +88,7 @@ test.describe('Basic editor', () => {
 
     await createDocument(page);
 
-    await openSettingsModal(page);
+    await openSettingsAppearanceSection(page);
     const increaseFontSizeButton = page.getByLabel('Increase font size');
     await increaseFontSizeButton.click();
     await increaseFontSizeButton.click();

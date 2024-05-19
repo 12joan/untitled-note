@@ -3,11 +3,11 @@ import {
   SectionedModalOpenProps,
 } from '~/lib/sectionedModal';
 import AppearanceIcon from '~/components/icons/AppearanceIcon';
+import DeleteIcon from '~/components/icons/DeleteIcon';
 import ProjectDetailsIcon from '~/components/icons/ProjectDetailsIcon';
-import SettingsIcon from '~/components/icons/SettingsIcon';
 import {
-  ActionsSection,
   AppearanceSection,
+  DeleteSection,
   ProjectDetailsSection,
 } from '~/components/projectSettingsModalSections';
 
@@ -23,11 +23,12 @@ const sections = {
     component: AppearanceSection,
   },
   actions: {
-    title: 'Actions',
-    icon: SettingsIcon,
-    component: ActionsSection,
+    title: 'Delete project',
+    icon: DeleteIcon,
+    component: DeleteSection,
+    variant: 'danger',
   },
-};
+} as const;
 
 export type ProjectSettingsModalOpenProps = SectionedModalOpenProps<
   keyof typeof sections

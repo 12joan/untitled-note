@@ -38,6 +38,14 @@ Rails.application.reloader.to_prepare do
         },
       },
 
+      ProjectFolder: {
+        api_controller: ProjectFoldersAPI,
+
+        actions: {
+          index: ->(params) { make_broadcasting('ProjectFolder#index', %i[user_id], params) },
+        },
+      },
+
       FileStorage: {
         api_controller: FileStorageAPI,
 
@@ -112,6 +120,16 @@ Rails.application.reloader.to_prepare do
       Project: ->(project) {
         broadcast make_broadcasting('Project#index', %i[user_id], {
           user_id: project.owner_id,
+        })
+      },
+
+      ProjectFolder: ->(project_folder) {
+        broadcast make_broadcasting('ProjectFolder#index', %i[user_id], {
+          user_id: project_folder.owner_id,
+        })
+
+        broadcast make_broadcasting('Project#index', %i[user_id], {
+          user_id: project_folder.owner_id,
         })
       },
 

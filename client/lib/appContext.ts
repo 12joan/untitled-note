@@ -5,6 +5,7 @@ import {
   EditorStyle,
   PartialDocument,
   Project,
+  ProjectFolder,
   S3File,
   Settings,
   StorageQuotaUsage,
@@ -26,6 +27,7 @@ export type AppContext = {
   invalidateProjectsCache: () => void;
   projects: Project[];
   project: Project;
+  futureProjectFolders: Future<ProjectFolder[]>;
   futureTags: Future<Tag[]>;
   futurePartialDocuments: Future<PartialDocument[]>;
   futurePinnedDocuments: Future<PartialDocument[]>;
@@ -64,6 +66,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     invalidateProjectsCache: null,
     projects: null,
     project: null,
+    futureProjectFolders: null,
     futureTags: null,
     futurePartialDocuments: null,
     futurePinnedDocuments: null,

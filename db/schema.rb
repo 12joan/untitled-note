@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_15_090314) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,18 +56,29 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_15_090314) do
     t.index ["user_id"], name: "index_login_sessions_on_user_id"
   end
 
+  create_table "project_folders", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "order_string", null: false
+    t.boolean "was_archived", default: false, null: false
+    t.bigint "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_project_folders_on_owner_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owner_id", default: 1, null: false
     t.bigint "image_id"
-    t.datetime "archived_at"
     t.string "background_colour", default: "auto", null: false
     t.string "emoji"
     t.integer "editor_style"
     t.integer "auto_snapshots_option"
     t.string "order_string", null: false
+    t.bigint "folder_id"
+    t.index ["folder_id"], name: "index_projects_on_folder_id"
     t.index ["image_id"], name: "index_projects_on_image_id"
     t.index ["owner_id"], name: "index_projects_on_owner_id"
   end
@@ -138,6 +149,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_15_090314) do
   add_foreign_key "documents_tags", "documents"
   add_foreign_key "documents_tags", "tags"
   add_foreign_key "login_sessions", "users"
+  add_foreign_key "project_folders", "users", column: "owner_id"
+  add_foreign_key "projects", "project_folders", column: "folder_id"
   add_foreign_key "projects", "s3_files", column: "image_id"
   add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "s3_files", "projects", column: "original_project_id"

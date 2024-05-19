@@ -13,7 +13,7 @@ export const compareKeyboardShortcut = (
       );
     }
 
-    return event.key === shortcut.key;
+    return event.key.toLowerCase() === shortcut.key.toLowerCase();
   })();
 
   const matchesSequential = sequential && /Digit[^0]/.test(event.code);

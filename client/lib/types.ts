@@ -19,9 +19,17 @@ export type Project = {
   editor_style: EditorStyle | null;
   auto_snapshots_option: AutoSnapshotsOption | null;
   order_string: string;
+  folder_id: number | null;
   created_at: string;
   updated_at: string;
-  archived_at: string | null;
+};
+
+export type ProjectFolder = {
+  id: number;
+  name: string;
+  order_string: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Tag = {
