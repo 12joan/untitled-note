@@ -3345,14 +3345,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "axios@npm:1.7.0"
+"axios@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "axios@npm:1.7.1"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/fc97719eb1024626cf3ae716eed136964faea712cd750642c2693c8bf3843d342a9e373704d08319a851931b39ca318d2004f0ab4ca67f434f095754dc4aecee
+  checksum: 10/38de04929014eca46c04fddb916f8f8cfdf3b62f05f85f87a181898587a8e23478737bc6e9ba211fb8fe137a494032e4575741bb598bec9049159de6a5ad8edf
   languageName: node
   linkType: hard
 
@@ -7235,7 +7235,7 @@ __metadata:
     "@udecode/plate": "npm:^30.9.4"
     "@vitejs/plugin-react": "npm:^2.2.0"
     autoprefixer: "npm:^10.4.14"
-    axios: "npm:^1.7.0"
+    axios: "npm:^1.7.1"
     comlink: "npm:^4.4.1"
     compressorjs: "npm:^1.2.1"
     concurrently: "npm:^7.6.0"
