@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   get '/auth/auth0/callback', to: 'auth0#callback'
   get '/auth/failure', to: 'auth0#failure'
-  delete '/auth/logout', to: 'auth0#logout'
+  delete '/auth/logout', to: 'auth0#logout', as: :logout
   post '/auth/reset_password', to: 'auth0#reset_password'
 
   get '/welcome', to: 'welcome#index', as: :welcome

@@ -54,7 +54,7 @@ export const TopBar = memo(({ sidebarButton, formattingButton }: TopBar) => {
 
   const accountActions: Action[] = [
     { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
-    { icon: LogoutIcon, label: 'Log out', as: LogoutButton },
+    { icon: LogoutIcon, label: 'Sign out', as: LogoutButton },
   ];
 
   const isDisconnected = useDisconnected();

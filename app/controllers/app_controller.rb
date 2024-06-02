@@ -1,5 +1,6 @@
 class AppController < ApplicationController
   include LoginSessions
+  layout 'app'
 
   def index
     unless logged_in?

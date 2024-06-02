@@ -75,7 +75,7 @@ module.exports = {
     screens: {
       '4xs': '128px',
       '3xs': '256px',
-      '2xs': '384px',
+      '2xs': '370px',
       xs: '512px',
       ...defaultTheme.screens,
     },

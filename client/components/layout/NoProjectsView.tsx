@@ -28,7 +28,7 @@ export const NoProjectsView = () => {
         </button>
 
         <LogoutButton className="btn btn-link font-medium">
-          Log out
+          Sign out
         </LogoutButton>
       </div>
     </div>

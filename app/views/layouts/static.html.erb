@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/meta' %>
+    <%= yield :head %>
+  </head>
+
+  <body class="flex flex-col">
+    <%= render 'shared/navbar' %>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<nav class="narrow-lg pt-5 px-5 flex flex-wrap gap-5">
+  <%= link_to welcome_path, class: 'animated-word-mark mr-auto' do %>
+    <span class="sr-only">Untitled</span>
+    <%= render 'shared/word_mark_without_bar' %>
+    <span class="word-mark-bar"></span>
+  <% end %>
+
+  <% if @logged_in %>
+    <%= link_to 'Open app', '/', class: 'btn btn-link font-medium' %>
+
+    <%= form_tag logout_path, method: :delete do %>
+      <button type="submit" class="btn btn-link font-medium">
+        Sign out
+      </button>
+    <% end %>
+  <% else %>
+    <%= form_tag @login_path, method: :post do %>
+      <button type="submit" class="btn btn-link font-medium">
+        Create account
+      </button>
+    <% end %>
+
+    <%= form_tag @login_path, method: :post do %>
+      <button type="submit" class="btn btn-link font-medium">
+        Sign in
+      </button>
+    <% end %>
+  <% end %>
+</nav>

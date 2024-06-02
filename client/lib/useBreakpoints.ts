@@ -6,7 +6,7 @@ export const useBreakpoints = () => {
   return {
     is4xs: width >= 128,
     is3xs: width >= 256,
-    is2xs: width >= 384,
+    is2xs: width >= 370,
     isXs: width >= 512,
     isSm: width >= 640,
     isMd: width >= 768,
