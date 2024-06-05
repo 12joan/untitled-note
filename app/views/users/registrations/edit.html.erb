@@ -56,9 +56,9 @@
   <h2 class="h2">Delete account</h2>
 
   <ul class="space-y-2">
-    <li><strong><%= resource.projects.count %> projects</strong> will be deleted</li>
-    <li><strong><%= resource.documents.count %> documents</strong> will be deleted</li>
-    <li><strong><%= resource.s3_files.count %> files</strong> will be deleted</li>
+    <li><strong><%= pluralize resource.projects.count, 'project' %></strong> will be deleted</li>
+    <li><strong><%= pluralize resource.documents.count, 'document' %></strong> will be deleted</li>
+    <li><strong><%= pluralize resource.s3_files.count, 'file' %></strong> will be deleted</li>
   </ul>
 
   <%= form_tag registration_path(resource_name), method: :delete, class: 'contents auth-form' do %>
