@@ -47,6 +47,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'pry'
+
+  gem 'faker'
 end
 
 group :development do
@@ -68,7 +70,6 @@ group :test do
   gem 'webdrivers'
 
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker'
 
   gem 'minitest-stub_any_instance'
   gem 'minitest-stub-const'

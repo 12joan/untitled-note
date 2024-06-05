@@ -4,18 +4,11 @@ class StubLoginController < ApplicationController
   def create
     raise 'Not available in production' if Rails.env.production?
 
-    user =
-      if params[:user_id]
-        User.find(params[:user_id])
-      else
-        User.create!(
-          email: Faker::Internet.email,
-          password: SecureRandom.hex,
-          allow_stub_login: true,
-        )
-      end
-
-    raise 'User does not allow stub login' unless user.allow_stub_login
+    user = User.create!(
+      email: Faker::Internet.email,
+      password: 'password',
+      confirmed_at: Time.now,
+    )
 
     sign_in user
 

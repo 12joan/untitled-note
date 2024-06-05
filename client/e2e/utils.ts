@@ -9,43 +9,40 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { getEditable } from './slate';
 
-// Mitigate flakiness
-const waitForReady = async (page: Page) => {
+export const logIn = async (page: Page) => {
+  const tryLogIn = async (currentTry: number) => {
+    await page.goto('/welcome');
+
+    // Stub login
+    await page.evaluate(() => {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/stub_login';
+      document.body.appendChild(form);
+      form.submit();
+    });
+
+    // Wait for response with login cookie
+    await page.waitForTimeout(750 + (currentTry * 1000));
+    await page.goto('/');
+  }
+
   let success = false;
 
+  // Try multiple times to mitigate flakiness
   for (let currentTry = 0; currentTry < 8; currentTry++) {
+    await tryLogIn(currentTry);
+
+    // Wait for app to load
+    await page.waitForTimeout(500 + (currentTry * 1000));
+
     if (await page.getByText('New project').isVisible()) {
       success = true;
       break;
     }
-
-    if (currentTry > 0) {
-      await page.reload();
-    }
-
-    await page.waitForTimeout((currentTry + 1) * 1000);
   }
 
   expect(success, 'New project button should be visible').toBeTruthy();
-};
-
-export const logIn = async (page: Page) => {
-  await page.goto('/');
-
-  // Stub login
-  await page.evaluate(() => {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/stub_login';
-    document.body.appendChild(form);
-    form.submit();
-  });
-
-  // Wait for response with login cookie
-  await page.waitForTimeout(200);
-  await page.goto('/');
-
-  await waitForReady(page);
 };
 
 export const locateTopBar = (page: Page) =>
@@ -310,14 +307,9 @@ export const openSearchModal = async (page: Page) => {
   await locateSidebar(page).getByText('Search').click();
 };
 
-export const openAccountModal = async (page: Page) => {
+export const openFileStorageModal = async (page: Page) => {
   await page.getByLabel('Account').hover();
-  await page.getByText('Account info').click();
-};
-
-export const openFileStorageSection = async (page: Page) => {
-  await openAccountModal(page);
-  await page.getByRole('tab', { name: 'File storage' }).click();
+  await page.getByText('File storage').click();
 };
 
 export const openSettingsModal = async (page: Page) => {
