@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ApplicationCable::ConnectionTest < ActionCable::Connection::TestCase
-  include LoginSessions
-
   test 'connects when user is logged in' do
     user = create(:user)
     create_login_session(user)

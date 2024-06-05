@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNewProject } from '~/lib/useNewProject';
 import { useTitle } from '~/lib/useTitle';
-import { LogoutButton } from '~/components/LogoutButton';
+import { SignOutButton } from '~/components/SignOutButton';
 
 export const NoProjectsView = () => {
   useTitle('Create a project');
@@ -27,9 +27,9 @@ export const NoProjectsView = () => {
           New project
         </button>
 
-        <LogoutButton className="btn btn-link font-medium">
+        <SignOutButton className="btn btn-link font-medium">
           Sign out
-        </LogoutButton>
+        </SignOutButton>
       </div>
     </div>
   );

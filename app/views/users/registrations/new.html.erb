@@ -1,0 +1,21 @@
+<h1 class="h1">Create account</h1>
+
+<%= form_for(
+  resource,
+  as: resource_name,
+  url: registration_path(resource_name),
+  html: { class: 'contents auth-form' },
+) do |f| %>
+  <%= render 'users/shared/error_messages', resource: resource %>
+
+  <%= render 'users/shared/email_field', f: f %>
+  <%= render 'users/shared/new_password_fields', f: f %>
+
+  <div class="actions">
+    <%= f.submit 'Create account', class: 'btn btn-rect btn-primary w-full' %>
+  </div>
+<% end %>
+
+<% content_for :auth_links do %>
+  <%= render 'users/shared/links', links: %i[sign_in confirm_email] %>
+<% end %>

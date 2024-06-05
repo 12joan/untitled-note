@@ -111,14 +111,13 @@ export const App = () => {
               {projects.length === 0 ? (
                 <NoProjectsView />
               ) : (
-                <>
-                  <ApplicationRoutes />
-                  <ToastContainer />
-                </>
+                <ApplicationRoutes />
               )}
             </AppContextProvider>
           ),
         })}
+
+        <ToastContainer />
       </ErrorBoundary>
     </AppContextProvider>
   );

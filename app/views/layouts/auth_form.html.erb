@@ -1,0 +1,15 @@
+<% content_for :content do %>
+  <main class="my-5 px-5 mx-auto <%= content_for?(:max_w) ? yield(:max_w) : 'max-w-md' %> w-full space-y-5">
+    <div class="p-5 rounded-lg bg-plain-100 dark:bg-transparent dark:border flex flex-col gap-5">
+      <%= yield %>
+    </div>
+
+    <% if content_for?(:auth_links) %>
+      <div class="flex justify-center flex-wrap gap-3">
+        <%= yield :auth_links %>
+      </div>
+    <% end %>
+  </main>
+<% end %>
+
+<%= render template: 'layouts/static' %>

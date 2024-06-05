@@ -7,7 +7,7 @@ export type LogoutButtonProps = Omit<
   'type' | 'onClick'
 >;
 
-export const LogoutButton = (props: LogoutButtonProps) => {
+export const SignOutButton = (props: LogoutButtonProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleClick = async (event: MouseEvent) => {
@@ -21,7 +21,7 @@ export const LogoutButton = (props: LogoutButtonProps) => {
   };
 
   return (
-    <form ref={formRef} action="/auth/logout" method="post">
+    <form ref={formRef} action="/users/sign_out" method="POST">
       <input type="hidden" name="_method" value="DELETE" />
       <input type="hidden" name="authenticity_token" value={csrfToken} />
       <button {...props} type="submit" onClick={handleClick} />

@@ -5,25 +5,18 @@
     <span class="word-mark-bar"></span>
   <% end %>
 
-  <% if @logged_in %>
-    <%= link_to 'Open app', '/', class: 'btn btn-link font-medium' %>
+  <% if user_signed_in? %>
+    <%= styled_link_to 'Open app', '/' %>
 
-    <%= form_tag logout_path, method: :delete do %>
-      <button type="submit" class="btn btn-link font-medium">
-        Sign out
-      </button>
-    <% end %>
+    <%#
+      Make sure users use the sign out button in the React app to ensure that
+      cache data is cleared.
+    %>
+    <%#= form_tag destroy_user_session_path, method: :delete do %>
+      <%#= styled_submit_link 'Sign out' %>
+    <%# end %>
   <% else %>
-    <%= form_tag @login_path, method: :post do %>
-      <button type="submit" class="btn btn-link font-medium">
-        Create account
-      </button>
-    <% end %>
-
-    <%= form_tag @login_path, method: :post do %>
-      <button type="submit" class="btn btn-link font-medium">
-        Sign in
-      </button>
-    <% end %>
+    <%= styled_link_to 'Create account', new_user_registration_path %>
+    <%= styled_link_to 'Sign in', new_user_session_path %>
   <% end %>
 </nav>

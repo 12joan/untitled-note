@@ -1,14 +1,12 @@
 class AppController < ApplicationController
-  include LoginSessions
   layout 'app'
 
   def index
-    unless logged_in?
+    unless user_signed_in?
       if request.path == '/'
         redirect_to welcome_path
       else
-        @login_path = login_path(request.path)
-        render 'unauthenticated'
+        authenticate_user!
       end
     end
   end

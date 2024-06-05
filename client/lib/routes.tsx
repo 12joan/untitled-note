@@ -1,7 +1,13 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React, { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
 import { useAppContext } from '~/lib/appContext';
 import { newDocumentToken } from '~/components/AwaitNewDocument';
 import { Link, LinkProps } from '~/components/Link';
+
+export const EditAccountLink = (
+  props: Omit<HTMLAttributes<HTMLAnchorElement>, 'href'>
+) => {
+  return <a href="/users/edit" target="_blank" {...props} />;
+};
 
 type HasRequiredKeys<T> = Exclude<
   keyof T,

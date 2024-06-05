@@ -359,6 +359,30 @@ body {
     opacity: 0;
     animation: demo-video-fade-in 0.6s linear forwards;
   }
+
+  .auth-form {
+    .field {
+      label:not(input[type="checkbox"] + *) {
+        @apply block font-medium mb-2;
+      }
+
+      input[type="email"], input[type="password"] {
+        @apply text-input;
+      }
+
+      &:has(input[type="checkbox"]) {
+        @apply flex items-start gap-2;
+      }
+    }
+
+    .hint {
+      @apply mt-2;
+    }
+  }
+
+  .auth-form-section {
+    @apply bg-white dark:bg-transparent p-5 rounded-lg border flex flex-col gap-5;
+  }
 }
 
 .tippy-box[data-theme~='custom'] {

@@ -1,5 +1,5 @@
 <title>Untitled Note App</title>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1<%= content_for?(:viewport_fit) ? ",viewport-fit=#{yield(:viewport_fit)}" : '' %>">
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
 

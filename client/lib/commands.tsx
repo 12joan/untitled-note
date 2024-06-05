@@ -160,17 +160,17 @@ const globalCommands: ActionCommand[] = [
     action: () => iic(() => useAppContext('toggleSettingsModal')),
   },
   {
-    id: 'account-info',
-    label: 'Account info',
+    id: 'file-storage',
+    label: 'File storage',
     search: {
-      aliases: ['email', 'password'],
-      description: 'Open account info',
+      aliases: ['files'],
+      description: 'Open file storage',
       icon: <AccountIcon size="1.25em" noAriaLabel />,
     },
     keyboardShortcut: {
-      hint: 'Open account info',
+      hint: 'Open file storage',
     },
-    action: () => iic(() => useAppContext('toggleAccountModal')),
+    action: () => iic(() => useAppContext('toggleFilesModal')),
   },
   {
     id: 'edit-project',

@@ -2,11 +2,13 @@
 <html>
   <head>
     <%= render 'shared/meta' %>
+    <%= vite_typescript_tag 'toasts.tsx' %>
     <%= yield :head %>
   </head>
 
   <body class="flex flex-col">
     <%= render 'shared/navbar' %>
-    <%= yield %>
+    <%= content_for?(:content) ? yield(:content) : yield %>
+    <%= render 'shared/flash' %>
   </body>
 </html>

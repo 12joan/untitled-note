@@ -143,13 +143,6 @@ export const handleDeleteFileError = handleErrors(() => ({
   autoClose: 'slow',
 }));
 
-export const handleResetPasswordError = handleErrors(() => ({
-  title: 'Failed to reset password',
-  message:
-    'An error occurred while resetting your password. Make sure you are connected to the internet and try again.',
-  autoClose: 'slow',
-}));
-
 export const handleReplaceError = handleErrors(() => ({
   title: 'Failed to replace text',
   message:

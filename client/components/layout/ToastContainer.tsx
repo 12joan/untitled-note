@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Portal } from '@headlessui/react';
+import React, { useEffect, useState } from 'react';
 import { useGlobalEvent } from '~/lib/globalEvents';
+import { createToast } from '~/lib/toasts';
 import { Toast as ToastData } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTimeout } from '~/lib/useTimer';
@@ -31,14 +31,31 @@ export const ToastContainer = () => {
     [toasts]
   );
 
+  // Convert flash messages from server to toasts
+  useEffect(() => {
+    const flashMessages = Array.from(
+      document.querySelectorAll<HTMLDivElement>('.flash-message')
+    );
+
+    flashMessages.forEach((el) => {
+      const [message, title, autoClose] = el.innerText
+        .split('/')
+        .map((x) => x.trim());
+      createToast({
+        title,
+        message,
+        autoClose: (autoClose ?? 'fast') as any,
+      });
+      el.remove();
+    });
+  }, []);
+
   return (
-    <Portal>
-      <div className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">
-        {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} />
-        ))}
-      </div>
-    </Portal>
+    <div className="fixed inset-0 flex flex-col items-end justify-start p-5 pointer-events-none z-50 gap-5 overflow-y-auto overflow-x-hidden">
+      {toasts.map((toast) => (
+        <Toast key={toast.id} {...toast} />
+      ))}
+    </div>
   );
 };
 

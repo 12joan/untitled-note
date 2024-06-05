@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_05_070655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,15 +45,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_documents_tags_on_document_id"
     t.index ["tag_id"], name: "index_documents_tags_on_tag_id"
-  end
-
-  create_table "login_sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "token", null: false
-    t.string "user_agent", default: "", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_login_sessions_on_user_id"
   end
 
   create_table "project_folders", force: :cascade do |t|
@@ -143,12 +134,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
     t.integer "storage_used", default: 0, null: false
     t.integer "storage_quota", default: 10485760, null: false
     t.boolean "allow_stub_login", default: false, null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "documents", "projects"
   add_foreign_key "documents_tags", "documents"
   add_foreign_key "documents_tags", "tags"
-  add_foreign_key "login_sessions", "users"
   add_foreign_key "project_folders", "users", column: "owner_id"
   add_foreign_key "projects", "project_folders", column: "folder_id"
   add_foreign_key "projects", "s3_files", column: "image_id"

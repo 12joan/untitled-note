@@ -1,6 +1,4 @@
 class APIController < ApplicationController
-  include LoginSessions
-
   private
 
   def set_project

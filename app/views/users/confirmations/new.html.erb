@@ -1,0 +1,20 @@
+<h1 class="h1">Confirm email address</h1>
+
+<%= form_for(
+  resource,
+  as: resource_name,
+  url: confirmation_path(resource_name),
+  html: { method: :post, class: 'contents auth-form' },
+) do |f| %>
+  <%= render 'users/shared/error_messages', resource: resource %>
+
+  <%= render 'users/shared/email_field', f: f %>
+
+  <div class="actions">
+    <%= f.submit 'Resend confirmation email', class: 'btn btn-rect btn-primary w-full' %>
+  </div>
+<% end %>
+
+<% content_for :auth_links do %>
+  <%= render 'users/shared/links', links: %i[sign_in sign_up forgot_password] %>
+<% end %>
