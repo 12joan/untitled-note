@@ -6,7 +6,7 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.0]
       ## Database authenticatable
       t.string :email, null: true, default: ""
       User.find_each do |user|
-        if user.name == 'Stub User'
+        if user.name.empty? || user.name == 'Stub User'
           user.destroy
         else 
           user.update_column(:email, user.name) # Migrate from Auth0
@@ -35,6 +35,10 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.0]
       t.datetime :confirmation_sent_at
       t.string   :unconfirmed_email # Only if using reconfirmable
 
+      User.find_each do |user|
+        user.update_column(:confirmed_at, Time.now)
+      end
+
       ## Lockable
       # t.integer  :failed_attempts, default: 0, null: false # Only if lock strategy is :failed_attempts
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
@@ -43,6 +47,10 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.0]
 
       # Uncomment below if timestamps were not included in your original model.
       # t.timestamps null: false
+
+      t.remove :name
+      t.remove :auth0_id
+      t.remove :allow_stub_login
     end
 
     add_index :users, :email,                unique: true
@@ -52,6 +60,14 @@ class AddDeviseToUsers < ActiveRecord::Migration[7.0]
   end
 
   def down
+    add_column :users, :auth0_id, :string
+    add_column :users, :name, :string, null: false, default: ''
+    add_column :users, :allow_stub_login, :boolean, default: false, null: false
+
+    User.find_each do |user|
+      user.update_column(:name, user.email)
+    end
+
     remove_columns :users, *%i[
       email
       encrypted_password

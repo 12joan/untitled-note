@@ -13,10 +13,10 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   include FactoryBot::Syntax::Methods
+  include Devise::Test::IntegrationHelpers
 
   def as_user(user)
-    user.update!(allow_stub_login: true) unless user.allow_stub_login
-    post stub_login_url, params: { user_id: user.id }
+    sign_in(user)
   end
 
   def stub_s3_bucket(return_value, &block)

@@ -68,6 +68,7 @@ group :test do
   gem 'webdrivers'
 
   gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker'
 
   gem 'minitest-stub_any_instance'
   gem 'minitest-stub-const'

@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :user, aliases: [:owner] do
-    name { 'Jane Doe' }
-    auth0_id { '123456789' }
+    email { Faker::Internet.email }
+    password { 'password' }
+    confirmed_at { Time.now }
     storage_used { 100 * 50 }
   end
 

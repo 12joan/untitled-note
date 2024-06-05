@@ -127,13 +127,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_05_070655) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "auth0_id"
-    t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "storage_used", default: 0, null: false
     t.integer "storage_quota", default: 10485760, null: false
-    t.boolean "allow_stub_login", default: false, null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

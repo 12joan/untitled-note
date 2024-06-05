@@ -3,7 +3,6 @@ class User < ApplicationRecord
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
 
-  has_many :login_sessions, dependent: :destroy
   has_many :projects, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_many :project_folders, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_many :documents, through: :projects
