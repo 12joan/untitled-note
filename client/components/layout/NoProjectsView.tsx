@@ -2,6 +2,7 @@ import React from 'react';
 import { useNewProject } from '~/lib/useNewProject';
 import { useTitle } from '~/lib/useTitle';
 import { SignOutButton } from '~/components/SignOutButton';
+import {EditAccountLink} from '~/lib/routes';
 
 export const NoProjectsView = () => {
   useTitle('Create a project');
@@ -27,9 +28,15 @@ export const NoProjectsView = () => {
           New project
         </button>
 
-        <SignOutButton className="btn btn-link font-medium">
-          Sign out
-        </SignOutButton>
+        <p className="space-x-3">
+          <EditAccountLink className="btn btn-link font-medium">
+            Edit account
+          </EditAccountLink>
+
+          <SignOutButton className="btn btn-link font-medium">
+            Sign out
+          </SignOutButton>
+        </p>
       </div>
     </div>
   );

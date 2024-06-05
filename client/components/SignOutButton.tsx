@@ -21,7 +21,7 @@ export const SignOutButton = (props: LogoutButtonProps) => {
   };
 
   return (
-    <form ref={formRef} action="/users/sign_out" method="POST">
+    <form ref={formRef} action="/users/sign_out" method="POST" className="inline">
       <input type="hidden" name="_method" value="DELETE" />
       <input type="hidden" name="authenticity_token" value={csrfToken} />
       <button {...props} type="submit" onClick={handleClick} />
