@@ -1,0 +1,16 @@
+<p>
+  <strong>To:</strong>
+  <%= email_preview.to %>
+</p>
+
+<p>
+  <strong>Subject:</strong>
+  <%= email_preview.subject %>
+</p>
+
+<p>
+  <strong>Sent:</strong>
+  <%= email_preview.created_at %>
+</p>
+
+<%= email_preview.body.html_safe %>

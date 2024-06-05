@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   unless Rails.env.production?
     resource :stub_login, only: %i[create], controller: 'stub_login'
+    resources :email_previews, only: %i[index show]
   end
 
   get '/welcome', to: 'welcome#index', as: :welcome

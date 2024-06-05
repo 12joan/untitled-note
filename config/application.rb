@@ -37,16 +37,23 @@ module Note
     # read and re-writes them in the JSON format.
     Rails.application.config.action_dispatch.cookies_serializer = :hybrid
 
-    config.action_mailer.smtp_settings = {
-      address: ENV.fetch('SMTP_ADDRESS'),
-      port: ENV.fetch('SMTP_PORT', 25),
-      domain: ENV.fetch('SMTP_DOMAIN', nil),
-      user_name: ENV.fetch('SMTP_USERNAME'),
-      password: ENV.fetch('SMTP_PASSWORD'),
-      authentication: ENV.fetch('SMTP_AUTHENTICATION', nil),
-      enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', true),
-      openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
-      ssl: ENV.fetch('SMTP_SSL', true),
-    }
+    config.after_initialize do
+      ActionMailer::Base.add_delivery_method :application, ApplicationDeliveryMethod
+
+      ActionMailer::Base.delivery_method = :application
+
+      ActionMailer::Base.application_settings = {
+        address: ENV.fetch('SMTP_ADDRESS'),
+        port: ENV.fetch('SMTP_PORT', 25),
+        domain: ENV.fetch('SMTP_DOMAIN', nil),
+        user_name: ENV.fetch('SMTP_USERNAME'),
+        password: ENV.fetch('SMTP_PASSWORD'),
+        authentication: ENV.fetch('SMTP_AUTHENTICATION', nil),
+        enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', true),
+        openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
+        ssl: ENV.fetch('SMTP_SSL', true),
+      }
+    end
   end
 end
+
