@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
 import { streamProjectFolders } from '~/lib/apis/projectFolder';
@@ -67,15 +67,6 @@ export const App = () => {
   );
 
   const [settings, setSettings] = useSettingsProvider(futureSettings);
-  const { deeper_dark_mode: deeperDarkMode } = settings;
-
-  useEffect(() => {
-    if (deeperDarkMode) {
-      document.body.classList.add('deeper-dark-mode');
-    } else {
-      document.body.classList.remove('deeper-dark-mode');
-    }
-  }, [deeperDarkMode]);
 
   const fallback = (
     <div className="p-5 space-y-3">

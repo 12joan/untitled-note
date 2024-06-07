@@ -144,7 +144,6 @@ export type Settings = {
   keyboard_shortcut_overrides: {
     [key: string]: KeyboardShortcutConfig | null;
   };
-  deeper_dark_mode: boolean;
   editor_style: EditorStyle;
   auto_snapshots_option: AutoSnapshotsOption;
   recents_type: 'viewed' | 'modified';

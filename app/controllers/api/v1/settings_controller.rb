@@ -17,7 +17,6 @@ module API
 
       def settings_params
         params.require(:settings).permit(
-          :deeper_dark_mode,
           :editor_style,
           :auto_snapshots_option,
           :recents_type,

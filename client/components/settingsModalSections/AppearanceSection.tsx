@@ -17,28 +17,10 @@ import { Tooltip } from '~/components/Tooltip';
 export const AppearanceSection = () => {
   const editorFontSize = useEditorFontSize();
   const editorFontSizeCSSValue = useEditorFontSizeCSSValue();
-  const [deeperDarkMode, setDeeperDarkMode] = useSettings('deeper_dark_mode');
   const [editorStyle, setEditorStyle] = useSettings('editor_style');
 
   return (
     <>
-      <div className="space-y-2">
-        <h4 className="h3 select-none">Theme</h4>
-
-        <label className="flex gap-2 items-start">
-          <input
-            type="checkbox"
-            className="ring-offset-plain-100 dark:ring-offset-plain-800"
-            checked={deeperDarkMode}
-            onChange={(event) => setDeeperDarkMode(event.target.checked)}
-          />
-
-          <span className="select-none">
-            Use pure black instead of midnight blue for the system dark mode
-          </span>
-        </label>
-      </div>
-
       <div className="space-y-2">
         <h4 className="h3 select-none">Editor font size</h4>
 

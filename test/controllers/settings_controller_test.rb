@@ -5,7 +5,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     @user_without_settings = create(:user)
     assert_nil @user_without_settings.settings
 
-    @user_with_settings = create(:user, settings: build(:settings, deeper_dark_mode: true))
+    @user_with_settings = create(:user, settings: build(:settings))
     refute_nil @user_with_settings.settings
   end
 
@@ -25,7 +25,6 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     @user_without_settings.reload
     assert_equal({ 'a' => 'b' }, @user_without_settings.settings.keyboard_shortcut_overrides)
     assert_equal 'casual', @user_without_settings.settings.editor_style
-    assert_equal false, @user_without_settings.settings.deeper_dark_mode
   end
 
   test 'update should update settings when they exist' do
@@ -44,6 +43,5 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     @user_with_settings.reload
     assert_equal({}, @user_with_settings.settings.keyboard_shortcut_overrides)
     assert_equal 'literary', @user_with_settings.settings.editor_style
-    assert_equal true, @user_with_settings.settings.deeper_dark_mode
   end
 end

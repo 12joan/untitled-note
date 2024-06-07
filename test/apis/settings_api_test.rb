@@ -12,7 +12,6 @@ class SettingsAPITest < APITestCase
   test 'returns default values when settings does not exist' do
     result = SettingsAPI.new(user: @user_without_settings, params: {}).show
     assert_equal({}, result[:keyboard_shortcut_overrides])
-    assert_equal(false, result[:deeper_dark_mode])
     assert_equal('casual', result[:editor_style])
     assert_equal('viewed', result[:recents_type])
   end
@@ -20,7 +19,6 @@ class SettingsAPITest < APITestCase
   test 'returns settings when settings exists' do
     result = SettingsAPI.new(user: @user_with_settings, params: {}).show
     assert_equal({}, result[:keyboard_shortcut_overrides])
-    assert_equal(false, result[:deeper_dark_mode])
     assert_equal('literary', result[:editor_style])
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_07_102600) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_07_174655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,7 +105,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_07_102600) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "keyboard_shortcut_overrides", default: {}, null: false
-    t.boolean "deeper_dark_mode", default: false, null: false
     t.integer "editor_style", default: 0, null: false
     t.integer "auto_snapshots_option", default: 0, null: false
     t.integer "recents_type", default: 0, null: false
