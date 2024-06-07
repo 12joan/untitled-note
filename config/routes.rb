@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   get '/welcome', to: 'welcome#index', as: :welcome
 
+  get '/docs/*page', to: 'docs#show'
+
   root 'app#index', as: :app
   get '*path', to: 'app#index'
 end

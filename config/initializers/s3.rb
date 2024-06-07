@@ -16,7 +16,7 @@ if Rails.env.test?
   end.new
 else
   client = Aws::S3::Client.new(
-    endpoint: ENV.fetch('S3_ENDPOINT'),
+    endpoint: ENV.fetch('S3_ENDPOINT', nil),
     region: ENV.fetch('AWS_REGION'),
     force_path_style: true,
   )

@@ -383,6 +383,43 @@ body {
   .static-form-section {
     @apply bg-white dark:bg-transparent p-5 rounded-lg border flex flex-col gap-5;
   }
+
+  .docs {
+    @apply text-lg space-y-3;
+
+    h1 { @apply h1 };
+    h2 { @apply h2 };
+    h3 { @apply h3 };
+    h4 { @apply h4 };
+
+    ul, ol {
+      @apply pl-8 space-y-1;
+    }
+
+    ul {
+      @apply list-disc marker:text-plain-300 dark:marker:text-plain-600;
+    }
+
+    ol {
+      @apply list-decimal marker:text-plain-300 dark:marker:text-plain-400;
+    }
+
+    li {
+      @apply pl-1.5;
+    }
+
+    pre {
+      @apply bg-plain-800 dark:bg-plain-950 text-white em:text-sm rounded-md px-5 py-4 w-full overflow-x-auto;
+    }
+
+    :not(pre) > code {
+      @apply text-pink-600 dark:text-pink-400;
+    }
+
+    a {
+      @apply text-primary-500 dark:text-primary-400 font-medium underline;
+    }
+  }
 }
 
 .tippy-box[data-theme~='custom'] {

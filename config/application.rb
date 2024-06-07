@@ -44,14 +44,14 @@ module Note
 
       ActionMailer::Base.application_settings = {
         address: ENV.fetch('SMTP_ADDRESS'),
-        port: ENV.fetch('SMTP_PORT', 25),
+        port: ENV.fetch('SMTP_PORT', '25').to_i,
         domain: ENV.fetch('SMTP_DOMAIN', nil),
         user_name: ENV.fetch('SMTP_USERNAME'),
         password: ENV.fetch('SMTP_PASSWORD'),
         authentication: ENV.fetch('SMTP_AUTHENTICATION', nil),
-        enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', true),
+        enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', 'true') == 'true',
         openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
-        ssl: ENV.fetch('SMTP_SSL', true),
+        ssl: ENV.fetch('SMTP_SSL', 'true') == 'true',
       }
     end
   end

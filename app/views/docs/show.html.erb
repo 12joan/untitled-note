@@ -1,0 +1,29 @@
+<div class="flex max-lg:flex-col gap-5 narrow-lg p-5">
+  <nav class="lg:max-w-[10rem] w-full">
+    <ul class="space-y-2">
+      <% @pages.each_key do |page| %>
+        <% current = page == @page %>
+        <li>
+        <%=
+          link_to(
+            page.humanize,
+            "/docs/#{page}",
+            class: '
+              block px-2 py-1 rounded-lg btn
+              data-active:bg-primary-500 data-active:dark:bg-primary-400
+              data-active:text-white
+              data-active:ring-offset-2
+              data-inactive:btn-link data-inactive:font-medium
+            ',
+            'data-active': current,
+          )
+          %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <main class="docs lg:w-0 grow">
+    <%= @content %>
+  </main>
+</div>
