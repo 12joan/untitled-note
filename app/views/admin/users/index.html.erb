@@ -1,0 +1,40 @@
+<div class="flex flex-wrap items-end justify-between gap-5">
+  <h2 class="h2">Users</h2>
+  <p><%= styled_link_to 'New user', new_admin_user_path %></p>
+</div>
+
+<div class="border rounded-lg [&_th]:p-3 [&_td]:p-3 overflow-x-auto whitespace-nowrap">
+  <table class="w-full">
+    <thead class="border-b">
+      <tr class="text-left">
+        <th>ID</th>
+        <th>Email</th>
+        <th>Type</th>
+        <th>Storage used</th>
+        <th>Registered</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y">
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.email %></td>
+          <td><%= user.admin ? 'Admin' : 'Regular user' %></td>
+          <td>
+            <%=
+              user.storage_quota > 0 \
+                ? (100 * user.storage_used / user.storage_quota).round.to_s + '%' \
+                : 'N/A'
+            %>
+          </td>
+          <td><%= user.created_at %></td>
+          <td>
+            <%= styled_link_to 'View', admin_user_path(user) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

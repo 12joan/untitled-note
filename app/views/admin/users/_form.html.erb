@@ -1,0 +1,36 @@
+<%=
+  form_with(
+    model: user,
+    url: user.persisted? ? admin_user_path(user) : admin_users_path,
+    html: { class: 'contents static-form' }
+  ) do |f|
+%>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <ul class="space-y-3">
+        <% user.errors.full_messages.each do |message| %>
+          <li class="text-red-700 dark:text-red-400 font-medium"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email, placeholder: 'Email', autofocus: user.new_record? %>
+  </div>
+
+  <div class="field">
+    <%= f.label :storage_quota_override, 'Storage quota (leave blank for default)' %>
+    <%= f.number_field :storage_quota_override, placeholder: user.default_storage_quota %>
+  </div>
+
+  <div class="field">
+    <%= f.check_box :admin %>
+    <%= f.label :admin, 'User is administrator' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: 'btn btn-rect btn-primary' %>
+  </div>
+<% end %>

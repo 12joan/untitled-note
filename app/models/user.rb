@@ -9,8 +9,14 @@ class User < ApplicationRecord
   has_many :s3_files, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one :settings, dependent: :destroy
 
+  attr_writer :creating_through_admin_page
+
+  def default_storage_quota
+    ENV.fetch('DEFAULT_STORAGE_QUOTA', 10 * 1024 * 1024)
+  end
+
   def storage_quota
-    storage_quota_override || ENV.fetch('DEFAULT_STORAGE_QUOTA', 10 * 1024 * 1024)
+    storage_quota_override || default_storage_quota
   end
 
   def update_storage_used(difference)
@@ -20,5 +26,13 @@ class User < ApplicationRecord
 
   def auto_snapshots_option
     settings&.auto_snapshots_option || 'disabled'
+  end
+
+  def password_required?
+    if @creating_through_admin_page
+      false
+    else
+      super
+    end
   end
 end

@@ -4,7 +4,7 @@
   resource,
   as: resource_name,
   url: password_path(resource_name),
-  html: { method: :put, class: 'contents auth-form' },
+  html: { method: :put, class: 'contents static-form' },
 ) do |f| %>
   <%= render 'users/shared/error_messages', resource: resource %>
   <%= f.hidden_field :reset_password_token %>

@@ -6,15 +6,11 @@
   <% end %>
 
   <% if user_signed_in? %>
-    <%= styled_link_to 'Open app', '/' %>
+    <% if current_user.admin? %>
+      <%= styled_link_to 'Admin', admin_users_path %>
+    <% end %>
 
-    <%#
-      Make sure users use the sign out button in the React app to ensure that
-      cache data is cleared.
-    %>
-    <%#= form_tag destroy_user_session_path, method: :delete do %>
-      <%#= styled_submit_link 'Sign out' %>
-    <%# end %>
+    <%= styled_link_to 'Open app', '/' %>
   <% else %>
     <%= styled_link_to 'Create account', new_user_registration_path %>
     <%= styled_link_to 'Sign in', new_user_session_path %>

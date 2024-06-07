@@ -10,14 +10,14 @@
 
 <div class="grid lg:grid-cols-2 gap-5">
 
-<div class="auth-form-section" data-testid="change-email-address">
+<div class="static-form-section" data-testid="change-email-address">
   <h2 class="h2">Email address</h2>
 
   <%= form_for(
     resource,
     as: resource_name,
     url: registration_path(resource_name),
-    html: { method: :put, class: 'contents auth-form' },
+    html: { method: :put, class: 'contents static-form' },
   ) do |f| %>
     <%= render 'users/shared/email_field', f: f, label: 'New email address', autofocus: false %>
 
@@ -33,14 +33,14 @@
   <% end %>
 </div>
 
-<div class="auth-form-section" data-testid="change-password">
+<div class="static-form-section" data-testid="change-password">
   <h2 class="h2">Password</h2>
 
   <%= form_for(
     resource,
     as: resource_name,
     url: registration_path(resource_name),
-    html: { method: :put, class: 'contents auth-form' },
+    html: { method: :put, class: 'contents static-form' },
   ) do |f| %>
     <%= render 'users/shared/password_field', f: f, field: :current_password, label: 'Current password', id: 'change_password_current_password' %>
 
@@ -52,7 +52,7 @@
   <% end %>
 </div>
 
-<div class="auth-form-section lg:col-span-2" data-testid="delete-account">
+<div class="static-form-section lg:col-span-2" data-testid="delete-account">
   <h2 class="h2">Delete account</h2>
 
   <ul class="space-y-2">
@@ -61,7 +61,7 @@
     <li><strong><%= pluralize resource.s3_files.count, 'file' %></strong> will be deleted</li>
   </ul>
 
-  <%= form_tag registration_path(resource_name), method: :delete, class: 'contents auth-form' do %>
+  <%= form_tag registration_path(resource_name), method: :delete, class: 'contents static-form' do %>
     <div class="field">
       <%= check_box_tag :are_you_sure %>
       <%= label_tag :are_you_sure, 'I understand that this action is permanent and cannot be undone.' %>

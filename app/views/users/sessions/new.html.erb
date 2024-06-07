@@ -4,7 +4,7 @@
   resource,
   as: resource_name,
   url: session_path(resource_name),
-  html: { class: 'contents auth-form' },
+  html: { class: 'contents static-form' },
 ) do |f| %>
   <%= render 'users/shared/email_field', f: f %>
   <%= render 'users/shared/password_field', f: f %>

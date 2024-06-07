@@ -360,13 +360,13 @@ body {
     animation: demo-video-fade-in 0.6s linear forwards;
   }
 
-  .auth-form {
+  .static-form {
     .field {
       label:not(input[type="checkbox"] + *) {
         @apply block font-medium mb-2;
       }
 
-      input[type="email"], input[type="password"] {
+      input[type="email"], input[type="password"], input[type="number"] {
         @apply text-input;
       }
 
@@ -380,7 +380,7 @@ body {
     }
   }
 
-  .auth-form-section {
+  .static-form-section {
     @apply bg-white dark:bg-transparent p-5 rounded-lg border flex flex-col gap-5;
   }
 }

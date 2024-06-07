@@ -4,7 +4,7 @@
   resource,
   as: resource_name,
   url: password_path(resource_name),
-  html: { method: :post, class: 'contents auth-form' },
+  html: { method: :post, class: 'contents static-form' },
 ) do |f| %>
   <%= render 'users/shared/error_messages', resource: resource %>
 

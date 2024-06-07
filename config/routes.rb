@@ -35,6 +35,10 @@ Rails.application.routes.draw do
     resources :email_previews, only: %i[index show]
   end
 
+  namespace :admin do
+    resources :users
+  end
+
   get '/welcome', to: 'welcome#index', as: :welcome
 
   root 'app#index', as: :app
