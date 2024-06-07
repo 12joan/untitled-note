@@ -9,6 +9,10 @@ class User < ApplicationRecord
   has_many :s3_files, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one :settings, dependent: :destroy
 
+  def storage_quota
+    storage_quota_override || ENV.fetch('DEFAULT_STORAGE_QUOTA', 10 * 1024 * 1024)
+  end
+
   def update_storage_used(difference)
     raise 'Storage used cannot be negative' if storage_used + difference < 0
     User.update_counters(id, storage_used: difference, touch: true)

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FileStorageAPITest < APITestCase
   setup do
-    @user = create(:user, storage_quota: 200, storage_used: 0)
+    @user = create(:user, storage_quota_override: 200, storage_used: 0)
     @project = create(:project, owner: @user)
     create_list(:s3_file, 3, owner: @user, original_project: @project, size: 50)
   end
@@ -14,7 +14,7 @@ class FileStorageAPITest < APITestCase
   end
 
   test 'FileStorage#quota_usage reloads user' do
-    @user.storage_quota = 300
+    @user.storage_quota_override = 300
     result = api.quota_usage
     assert_equal 200, result[:quota]
   end

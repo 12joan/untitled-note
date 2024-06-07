@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_05_193721) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_07_102600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_05_193721) do
     t.string "role"
     t.string "s3_key"
     t.string "filename"
-    t.integer "size"
+    t.bigint "size"
     t.string "content_type"
     t.boolean "uploaded_cache", default: false, null: false
     t.datetime "created_at", null: false
@@ -137,8 +137,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_05_193721) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "storage_used", default: 0, null: false
-    t.integer "storage_quota", default: 10485760, null: false
+    t.bigint "storage_used", default: 0, null: false
+    t.bigint "storage_quota_override"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -148,6 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_05_193721) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.boolean "admin"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

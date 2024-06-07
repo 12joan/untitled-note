@@ -35,7 +35,10 @@ export const FileStorageSection = () => {
         <div className="space-y-2">
           <h4 className="h3 select-none">
             Storage used (
-            {Math.round((100 * quotaUsage.used) / quotaUsage.quota)}%)
+            {quotaUsage.quota > 0
+              ? Math.round((100 * quotaUsage.used) / quotaUsage.quota)
+              : 100}
+            %)
           </h4>
 
           <Meter max={quotaUsage.quota} value={quotaUsage.used} />
