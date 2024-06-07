@@ -1,5 +1,5 @@
 <ul>
-  <% @email_previews.reverse.each do |email_preview| %>
+  <% @email_previews.each do |email_preview| %>
     <li>
       <%= link_to email_preview.subject, email_preview, class: 'email-preview' %>
     </li>

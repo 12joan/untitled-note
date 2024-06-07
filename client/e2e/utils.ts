@@ -23,9 +23,9 @@ export const logIn = async (page: Page) => {
     });
 
     // Wait for response with login cookie
-    await page.waitForTimeout(750 + (currentTry * 1000));
+    await page.waitForTimeout(750 + currentTry * 1000);
     await page.goto('/');
-  }
+  };
 
   let success = false;
 
@@ -34,7 +34,7 @@ export const logIn = async (page: Page) => {
     await tryLogIn(currentTry);
 
     // Wait for app to load
-    await page.waitForTimeout(500 + (currentTry * 1000));
+    await page.waitForTimeout(500 + currentTry * 1000);
 
     if (await page.getByText('New project').isVisible()) {
       success = true;

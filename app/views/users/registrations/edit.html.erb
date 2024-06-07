@@ -10,7 +10,7 @@
 
 <div class="grid lg:grid-cols-2 gap-5">
 
-<div class="auth-form-section">
+<div class="auth-form-section" data-testid="change-email-address">
   <h2 class="h2">Email address</h2>
 
   <%= form_for(
@@ -25,7 +25,7 @@
       <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
     <% end %>
 
-    <%= render 'users/shared/password_field', f: f, field: :current_password, label: 'Current password' %>
+    <%= render 'users/shared/password_field', f: f, field: :current_password, label: 'Current password', id: 'change_email_current_password' %>
 
     <div class="actions">
       <%= f.submit 'Change email address', class: 'btn btn-rect btn-primary w-full' %>
@@ -33,7 +33,7 @@
   <% end %>
 </div>
 
-<div class="auth-form-section">
+<div class="auth-form-section" data-testid="change-password">
   <h2 class="h2">Password</h2>
 
   <%= form_for(
@@ -42,7 +42,7 @@
     url: registration_path(resource_name),
     html: { method: :put, class: 'contents auth-form' },
   ) do |f| %>
-    <%= render 'users/shared/password_field', f: f, field: :current_password, label: 'Current password' %>
+    <%= render 'users/shared/password_field', f: f, field: :current_password, label: 'Current password', id: 'change_password_current_password' %>
 
     <%= render 'users/shared/new_password_fields', f: f, label: 'New password', confirm_label: 'Confirm new password' %>
 
@@ -52,7 +52,7 @@
   <% end %>
 </div>
 
-<div class="auth-form-section lg:col-span-2">
+<div class="auth-form-section lg:col-span-2" data-testid="delete-account">
   <h2 class="h2">Delete account</h2>
 
   <ul class="space-y-2">

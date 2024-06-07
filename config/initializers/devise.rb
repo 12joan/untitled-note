@@ -27,10 +27,10 @@ Devise.setup do |config|
   # config.mailer_sender = ENV.fetch('SMTP_FROM')
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  config.mailer = 'UserMailer'
 
   # Configure the parent class responsible to send e-mails.
-  config.parent_mailer = 'ApplicationMailer'
+  # config.parent_mailer = 'ApplicationMailer'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
@@ -123,7 +123,7 @@ Devise.setup do |config|
   # a value less than 10 in other environments. Note that, for bcrypt (the default
   # algorithm), the cost increases exponentially with the number of stretches (e.g.
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
-  config.stretches = Rails.env.test? ? 1 : 12
+  config.stretches = Rails.env.production? ? 12 : 1
 
   # Set up a pepper to generate the hashed password.
   # config.pepper = '5223f9fcd3d14cb5b4d38bb92a04e2bea8f98e46673d4dd6cfe1affb9db0015e000b12f09b6edc6d731e16f8fb7cb08d527a9c2bedb449001d7138bd04c21890'

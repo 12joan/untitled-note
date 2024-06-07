@@ -3,7 +3,7 @@ class EmailPreviewsController < ApplicationController
 
   # GET /email_previews
   def index
-    @email_previews = EmailPreview.where(to: params.fetch(:to))
+    @email_previews = EmailPreview.where(to: params.fetch(:to)).order(created_at: :desc)
   end
 
   # GET /email_previews/1
