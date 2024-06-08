@@ -20,7 +20,9 @@ class ActiveSupport::TestCase
   end
 
   def stub_s3_bucket(return_value, &block)
-    Rails.application.config.stub(:s3_bucket, return_value, &block)
+    Rails.application.config.stub(:s3_bucket, return_value) do
+      Rails.application.config.stub(:external_s3_bucket, return_value, &block)
+    end
   end
 
   def ignore_s3
