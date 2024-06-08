@@ -268,18 +268,27 @@ export const createDataTransfer = async (
   { filePath, fileName, fileType }: CreateDataTransfer
 ): Promise<JSHandle<DataTransfer>> => {
   const fileBuffer = readFileSync(resolve(__dirname, filePath));
+  const encodedFile = fileBuffer.toString('hex');
 
   return page.evaluateHandle(
-    ([data, name, type]) => {
+    ([encodedFile, name, type]) => {
       window.attachmentSkipFolderCheck = true;
 
+      const byteCount = encodedFile.length / 2;
+      const byteArray = new Uint8Array(byteCount);
+
+      for (let i = 0; i < byteCount; i++) {
+        const offset = i * 2;
+        byteArray[i] = parseInt(encodedFile.slice(offset, offset + 2), 16);
+      }
+
       const dataTransfer = new DataTransfer();
-      const file = new File([data.toString('hex')], name, { type });
+      const file = new File([byteArray], name, { type });
       dataTransfer.items.add(file);
 
       return dataTransfer;
     },
-    [fileBuffer, fileName, fileType] as const
+    [encodedFile, fileName, fileType] as const
   );
 };
 
