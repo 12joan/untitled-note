@@ -8,14 +8,13 @@ You will need:
 
 - An environment suitable for running Docker containers
 - Credentials for an SMTP server
-- Credentials for an S3 bucket (or an S3-compatible service such as MinIO)
 - A reverse proxy capable of forwarding WebSocket traffic
 - A domain name and SSL certificate
 - Knowledge of Docker Compose
 
 ## Docker Compose
 
-Create a `docker-compose.yml` file using the following config as a starting point. If you're using MinIO, you can add it as an additional container here.
+Create a `docker-compose.yml` file using the following config as a starting point.
 
 ```
 version: '3'
@@ -34,6 +33,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      # If using MinIO:
+      # minio:
+      #   condition: service_healthy
       redis:
         condition: service_healthy
       typesense:
@@ -51,6 +53,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      # If using MinIO:
+      # minio:
+      #   condition: service_healthy
 
   # Database
   db:
@@ -62,6 +67,19 @@ services:
     healthcheck:
       <<: *healthcheck
       test: '/usr/bin/pg_isready -U postgres'
+
+  # Optional: Use MinIO for file storage
+  # minio:
+  #   image: minio/minio
+  #   command: 'server /data'
+  #   env_file: .env
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - minio:/data
+  #   healthcheck:
+  #     <<: *healthcheck
+  #     test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/9000"'
 
   # Used for handing WebSocket connections
   redis:
@@ -85,11 +103,16 @@ volumes:
   typesense:
 ```
 
+## Environment variables
+
 In the same directory, create a `.env` file containing your environment variables.
 
 ```
 # Application
+SECRET_KEY_BASE="" # See below
 RAILS_ENV="production"
+RAILS_LOG_TO_STDOUT="true"
+RAILS_SERVE_STATIC_FILES="true"
 # DEFAULT_STORAGE_QUOTA="" # Optional (defaults to 10485760 bytes)
 
 # Services
@@ -98,12 +121,12 @@ REDIS_URL="redis://redis:6379"
 TYPESENSE_URL="http://typesense:8108"
 TYPESENSE_API_KEY="trust"
 
-# File storage
+# File storage (See docs)
+# S3_BUCKET="untitled-note-app"
 # S3_ENDPOINT="https://minio.example.com/" # Optional (defaults to AWS)
-S3_BUCKET="untitled-note-app" # This will be created automatically
-AWS_REGION="us-east-1"
-AWS_ACCESS_KEY_ID=""
-AWS_SECRET_ACCESS_KEY=""
+# AWS_REGION="" # Optional (defaults to us-east-1)
+# AWS_ACCESS_KEY_ID=""
+# AWS_SECRET_ACCESS_KEY=""
 
 # Email
 SMTP_FROM="hello@example.com"
@@ -117,6 +140,67 @@ SMTP_PASSWORD=""
 # SMTP_OPENSSL_VERIFY_MODE="" # Optional
 # SMTP_SSL="" # Optional (defaults to true)
 ```
+
+### Secret key
+
+The `SECRET_KEY_BASE` environment variable is a 64-character hex string used by Rails to generate various encryption keys. Disclosing or using an insecure value for this key will allow attackers to sign in as other users by forging session cookies. You must use a unique key for each instance of the application.
+
+Generate `SECRET_KEY_BASE` using a cryptographically secure random number generator such as `openssl`.
+
+```
+$ openssl rand -hex 64
+```
+
+## File storage
+
+To support file uploads, Untitled Note App needs access to an S3 bucket or an S3-compatible service such as MinIO.
+
+Regardless of which method you use for this, the S3 bucket will be created automatically if it doesn't already exist. Do not enable public read or public write permissions on the S3 bucket.
+
+### Method 1: Amazon S3
+
+Sign up for Amazon Web Services, create an access key, and add the following environment variables to your `.env` file:
+
+```
+S3_BUCKET="untitled-note-app"
+AWS_REGION="us-east-1"
+AWS_ACCESS_KEY_ID="****************"
+AWS_SECRET_ACCESS_KEY="********************************"
+```
+
+### Method 2: Externally hosted S3-compatible service
+
+Deploy some S3-compatible service such as MinIO separately from Untitled Note App and add the following environment variables to your `.env` file:
+
+```
+S3_BUCKET="untitled-note-app"
+S3_ENDPOINT="https://minio.example.com/"
+AWS_ACCESS_KEY_ID="****************"
+AWS_SECRET_ACCESS_KEY="********************************"
+```
+
+The `S3_ENDPOINT` should be the publicly accessible URL of the S3 API. In the case of MinIO, the access key can be created using MinIO's web interface, or you can use the root username and password.
+
+### Method 3: Add MinIO to Docker Compose
+
+Uncomment the parts of `docker-compose.yml` relating to MinIO and add the following environment variables to your `.env` file:
+
+```
+S3_BUCKET="untitled-note-app"
+S3_ENDPOINT="http://minio:9000"
+S3_EXTERNAL_ENDPOINT="https://minio.example.com/"
+AWS_ACCESS_KEY_ID="root"
+AWS_SECRET_ACCESS_KEY="********************************"
+
+MINIO_ROOT_USER="root"
+MINIO_ROOT_PASSWORD="********************************"
+```
+
+`AWS_SECRET_ACCESS_KEY` should be the same as `MINIO_ROOT_PASSWORD`, and should be generated using a cryptographically secure random number generator such as `openssl`. Anyone with the key will be able to perform arbitrary read and write operations on your MinIO server.
+
+For this method, you will need to configure your reverse proxy to host MinIO's API (localhost:9000) on a separate domain or subdomain. `S3_EXTERNAL_ENDPOINT` should be the publicly accessible URL of your MinIO instance.
+
+## Start the server
 
 You should now be ready to start the application.
 
@@ -158,7 +242,7 @@ server {
   server_name example.com;
   include /etc/nginx/ssl.conf;
   include /etc/nginx/common.conf;
-  
+
   location /cable {
     proxy_pass                          http://127.0.0.1:3000;
     proxy_set_header  Host              $http_host;
@@ -180,4 +264,24 @@ server {
     proxy_read_timeout                  900;
   }
 }
+
+# If using MinIO:
+# server {
+#   listen 443 ssl;
+#   server_name minio.example.com;
+#   include /etc/nginx/ssl.conf;
+#   include /etc/nginx/common.conf;
+#
+#   # Optional: Allow large file uploads
+#   # client_max_body_size 12000M;
+#
+#   location / {
+#     proxy_pass                          http://127.0.0.1:9000;
+#     proxy_set_header  Host              $http_host;   # required for docker client's sake
+#     proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+#     proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+#     proxy_set_header  X-Forwarded-Proto $scheme;
+#     proxy_read_timeout                  900;
+#   }
+# }
 ```

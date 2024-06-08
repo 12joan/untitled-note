@@ -7,16 +7,16 @@
 Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
-    policy.connect_src :self, 'https://*.osbert.me'
+    policy.connect_src '*'
     policy.font_src    :self
-    policy.img_src     :self, 'https://*.osbert.me', :blob, :data
+    policy.img_src     '*'
     policy.object_src  :none
     policy.script_src  :self
     policy.style_src   :self
 
     # @vite/client
     if Rails.env.development?
-      policy.connect_src *policy.connect_src, '*'
+      # policy.connect_src *policy.connect_src, '*'
       policy.script_src *policy.script_src, :unsafe_eval, :unsafe_inline
       policy.style_src *policy.style_src, :unsafe_inline
     end

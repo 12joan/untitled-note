@@ -69,7 +69,7 @@ class S3File < ApplicationRecord
   end
 
   def presigned_post
-    s3_object.presigned_post(
+    external_s3_object.presigned_post(
       key: s3_key,
       success_action_status: '201',
       content_type: content_type,
@@ -118,7 +118,7 @@ class S3File < ApplicationRecord
   def generate_url
     inline_safe = INLINE_CONTENT_TYPES.include?(content_type)
 
-    s3_object.presigned_url(
+    external_s3_object.presigned_url(
       :get,
       expires_in: 7.days.to_i,
       response_content_type: inline_safe ? content_type : 'application/octet-stream',
@@ -134,5 +134,9 @@ class S3File < ApplicationRecord
 
   def s3_object
     Rails.application.config.s3_bucket.object(s3_key)
+  end
+
+  def external_s3_object
+    Rails.application.config.external_s3_bucket.object(s3_key)
   end
 end
