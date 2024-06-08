@@ -1,5 +1,3 @@
-version: '3'
-
 x-healthcheck: &healthcheck
   interval: 1s
   retries: 40

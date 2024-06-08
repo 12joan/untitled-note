@@ -17,8 +17,6 @@ You will need:
 Create a `docker-compose.yml` file using the following config as a starting point.
 
 ```
-version: '3'
-
 x-healthcheck: &healthcheck
   interval: 1s
   retries: 40
