@@ -43,11 +43,11 @@ module Note
       ActionMailer::Base.delivery_method = :application
 
       ActionMailer::Base.application_settings = {
-        address: ENV.fetch('SMTP_ADDRESS'),
+        address: ENV.fetch('SMTP_ADDRESS', nil),
         port: ENV.fetch('SMTP_PORT', '25').to_i,
         domain: ENV.fetch('SMTP_DOMAIN', nil),
-        user_name: ENV.fetch('SMTP_USERNAME'),
-        password: ENV.fetch('SMTP_PASSWORD'),
+        user_name: ENV.fetch('SMTP_USERNAME', nil),
+        password: ENV.fetch('SMTP_PASSWORD', nil),
         authentication: ENV.fetch('SMTP_AUTHENTICATION', nil),
         enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', 'true') == 'true',
         openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
