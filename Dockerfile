@@ -20,7 +20,7 @@ RUN yarn install --immutable
 
 COPY . .
 
-RUN ASSETS_PRECOMPILE=true rails assets:precompile
+RUN bin/precompile.sh
 
 COPY docker/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
