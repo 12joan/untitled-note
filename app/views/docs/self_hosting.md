@@ -101,6 +101,8 @@ services:
 volumes:
   pgdata:
   typesense:
+  # If using MinIO:
+  # minio:
 ```
 
 ## Environment variables
@@ -109,7 +111,8 @@ In the same directory, create a `.env` file containing your environment variable
 
 ```
 # Application
-SECRET_KEY_BASE="" # See below
+SECRET_KEY_BASE="" # See docs
+MAILER_HOST="example.com"
 RAILS_ENV="production"
 RAILS_LOG_TO_STDOUT="true"
 RAILS_SERVE_STATIC_FILES="true"
@@ -138,7 +141,7 @@ SMTP_PASSWORD=""
 # SMTP_AUTHENTICATION="" # Optional
 # SMTP_ENABLE_STARTTLS_AUTO="" # Optional (defaults to true)
 # SMTP_OPENSSL_VERIFY_MODE="" # Optional
-# SMTP_SSL="" # Optional (defaults to true)
+# SMTP_SSL="" # Optional (defaults to false)
 ```
 
 ### Secret key
@@ -150,6 +153,14 @@ Generate `SECRET_KEY_BASE` using a cryptographically secure random number genera
 ```
 $ openssl rand -hex 64
 ```
+
+### Mailer host
+
+The `MAILER_HOST` environment variable specifies the host that will be used for links in emails. If the application is available at https://example.com/, you should set `MAILER_HOST` to `example.com`.
+
+### SMTP
+
+SMTP credentials are required for the application to send emails relating to user accounts. At minimum, you must provide `SMTP_FROM`, `SMTP_ADDRESS`, `SMTP_USERNAME` and `SMTP_PASSWORD`.
 
 ## File storage
 
@@ -183,7 +194,7 @@ The `S3_ENDPOINT` should be the publicly accessible URL of the S3 API. In the ca
 
 ### Method 3: Add MinIO to Docker Compose
 
-Uncomment the parts of `docker-compose.yml` relating to MinIO and add the following environment variables to your `.env` file:
+Uncomment the parts of `docker-compose.yml` relating to MinIO and add the following environment variables to your `.env` file, replacing the `build` path of `web` and `clockwork` with the path to the directory containing Untitled Note App's `Dockerfile`:
 
 ```
 S3_BUCKET="untitled-note-app"
@@ -209,6 +220,8 @@ $ docker compose up -d
 ```
 
 If all goes well, the application should be available at http://0.0.0.0:3000/. If something went wrong, check the logs using `docker compose logs -f` or start the server again without the `-d` flag. `docker compose ps` may also be useful to tell you which (if any) containers failed to start.
+
+If you get an error when trying to submit a form and the message "Can't verify CSRF token authenticity" appears in the logs, this may be because you're accessing the application over HTTP rather than HTTPS. In production mode, the application's session cookie is configured to be secure, so it doesn't get sent when accessing the site insecurely. To fix this, see the instructions below to configure a reverse proxy.
 
 ## Create an admin user (optional)
 

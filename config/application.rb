@@ -51,7 +51,7 @@ module Note
         authentication: ENV.fetch('SMTP_AUTHENTICATION', nil),
         enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', 'true') == 'true',
         openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
-        ssl: ENV.fetch('SMTP_SSL', 'true') == 'true',
+        ssl: ENV.fetch('SMTP_SSL', 'false') == 'true',
       }
     end
   end
