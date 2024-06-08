@@ -1,4 +1,4 @@
-if Rails.env.test?
+if Rails.env.test? || ENV['ASSETS_PRECOMPILE']
   class NotImplementedBucket
     def objects
       not_implemented
