@@ -3,7 +3,7 @@ name: Backend tests
 on: push
 
 jobs:
-  test:
+  backend:
     runs-on: ubuntu-latest
 
     steps:
