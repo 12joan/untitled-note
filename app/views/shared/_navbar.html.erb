@@ -1,0 +1,21 @@
+<nav class="narrow-lg pt-5 px-5 flex flex-wrap gap-5">
+  <%= link_to welcome_path, class: 'animated-word-mark mr-auto' do %>
+    <span class="sr-only">Untitled</span>
+    <%= render 'shared/word_mark_without_bar' %>
+    <span class="word-mark-bar"></span>
+  <% end %>
+
+  <% if user_signed_in? %>
+    <% if current_user.admin? %>
+      <%= styled_link_to 'Admin', admin_users_path %>
+    <% end %>
+
+    <%= styled_link_to 'Open app', '/' %>
+  <% else %>
+    <% if Rails.application.config.sign_up_enabled %>
+      <%= styled_link_to 'Create account', new_user_registration_path %>
+    <% end %>
+
+    <%= styled_link_to 'Sign in', new_user_session_path %>
+  <% end %>
+</nav>

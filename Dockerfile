@@ -20,7 +20,7 @@ RUN yarn install --immutable
 
 COPY . .
 
-RUN yarn build
+RUN bin/precompile.sh
 
 COPY docker/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh

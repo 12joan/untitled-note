@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_07_174655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,13 +47,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
     t.index ["tag_id"], name: "index_documents_tags_on_tag_id"
   end
 
-  create_table "login_sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "token", null: false
-    t.string "user_agent", default: "", null: false
+  create_table "email_previews", force: :cascade do |t|
+    t.string "to", null: false
+    t.string "subject", null: false
+    t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_login_sessions_on_user_id"
   end
 
   create_table "project_folders", force: :cascade do |t|
@@ -88,7 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
     t.string "role"
     t.string "s3_key"
     t.string "filename"
-    t.integer "size"
+    t.bigint "size"
     t.string "content_type"
     t.boolean "uploaded_cache", default: false, null: false
     t.datetime "created_at", null: false
@@ -106,7 +105,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "keyboard_shortcut_overrides", default: {}, null: false
-    t.boolean "deeper_dark_mode", default: false, null: false
     t.integer "editor_style", default: 0, null: false
     t.integer "auto_snapshots_option", default: 0, null: false
     t.integer "recents_type", default: 0, null: false
@@ -136,19 +134,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_074230) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "auth0_id"
-    t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "storage_used", default: 0, null: false
-    t.integer "storage_quota", default: 10485760, null: false
-    t.boolean "allow_stub_login", default: false, null: false
+    t.bigint "storage_used", default: 0, null: false
+    t.bigint "storage_quota_override"
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.boolean "admin", default: false, null: false
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "documents", "projects"
   add_foreign_key "documents_tags", "documents"
   add_foreign_key "documents_tags", "tags"
-  add_foreign_key "login_sessions", "users"
   add_foreign_key "project_folders", "users", column: "owner_id"
   add_foreign_key "projects", "project_folders", column: "folder_id"
   add_foreign_key "projects", "s3_files", column: "image_id"

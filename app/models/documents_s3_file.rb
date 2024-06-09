@@ -5,6 +5,8 @@ class DocumentsS3File < ApplicationRecord
   after_commit :update_s3_file_unused
 
   def update_s3_file_unused
-    s3_file.update_unused unless s3_file.destroyed?
+    if s3_file && !s3_file.destroyed?
+      s3_file.update_unused
+    end
   end
 end

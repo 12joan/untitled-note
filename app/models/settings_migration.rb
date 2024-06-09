@@ -7,10 +7,6 @@ module SettingsMigration
         settings.keyboard_shortcut_overrides = data['keyboardShortcutOverrides']
       end
 
-      unless data['deeperDarkMode'].nil?
-        settings.deeper_dark_mode = data['deeperDarkMode']
-      end
-
       unless data['editorStyle'].nil?
         settings.editor_style = data['editorStyle']
       end

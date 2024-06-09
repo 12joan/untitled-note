@@ -1,5 +1,5 @@
 class APIController < ApplicationController
-  include LoginSessions
+  before_action :authenticate_user!
 
   private
 

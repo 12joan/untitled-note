@@ -17,11 +17,11 @@ import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';
 import { setLastView } from '~/lib/restoreProjectView';
-import { useAccountModal } from '~/lib/useAccountModal';
 import { useApplicationKeyboardShortcuts } from '~/lib/useApplicationKeyboardShortcuts';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { useElementBounds } from '~/lib/useElementBounds';
 import { useElementSize } from '~/lib/useElementSize';
+import { useFilesModal } from '~/lib/useFilesModal';
 import { useProjectSettingsModal } from '~/lib/useProjectSettingsModal';
 import { useSearchModal } from '~/lib/useSearchModal';
 import { useSettingsModal } from '~/lib/useSettingsModal';
@@ -142,10 +142,10 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
   } = useSearchModal();
 
   const {
-    modal: accountModal,
-    toggle: toggleAccountModal,
-    close: hideAccountModal,
-  } = useAccountModal();
+    modal: filesModal,
+    toggle: toggleFilesModal,
+    close: hideFilesModal,
+  } = useFilesModal();
 
   const {
     modal: settingsModal,
@@ -161,7 +161,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
 
   useEffect(() => {
     hideSearchModal();
-    hideAccountModal();
+    hideFilesModal();
     hideSettingsModal();
     hideProjectSettingsModal();
   }, [childView.key, projectId]);
@@ -207,7 +207,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
       toggleFormattingToolbar={toggleOffcanvasFormattingToolbar}
       topBarHeight={topBarHeight}
       toggleSearchModal={toggleSearchModal}
-      toggleAccountModal={toggleAccountModal}
+      toggleFilesModal={toggleFilesModal}
       toggleSettingsModal={toggleSettingsModal}
       toggleProjectSettingsModal={toggleProjectSettingsModal}
       toggleSidebar={toggleSidebar}
@@ -340,7 +340,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
         />
 
         {searchModal}
-        {accountModal}
+        {filesModal}
         {settingsModal}
         {projectSettingsModal}
         {keyboardShortcutIICElements}

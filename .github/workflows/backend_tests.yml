@@ -1,0 +1,11 @@
+name: Backend tests
+
+on: push
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: docker compose -f docker-compose.test.yml run web sh -c 'rails test'

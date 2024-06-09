@@ -39,6 +39,11 @@ export const Attachment = (props: AttachmentElementProps) => {
     [s3FileId]
   );
 
+  // Handle race condition where upload completes during render
+  useEffect(() => {
+    setIsUploading(getUploadIsInProgress(s3FileId));
+  }, [s3FileId]);
+
   return isUploading ? (
     <UploadingAttachment {...props} />
   ) : (

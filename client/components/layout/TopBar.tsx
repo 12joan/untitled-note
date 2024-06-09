@@ -1,11 +1,10 @@
 import React, { ElementType, forwardRef, HTMLAttributes, memo } from 'react';
 import { useAppContext } from '~/lib/appContext';
-import { NewDocumentLink } from '~/lib/routes';
+import { EditAccountLink, NewDocumentLink } from '~/lib/routes';
 import { useBreakpoints } from '~/lib/useBreakpoints';
 import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
 import AccountIcon from '~/components/icons/AccountIcon';
 import FormattingIcon from '~/components/icons/FormattingIcon';
-import LogoutIcon from '~/components/icons/LogoutIcon';
 import { IconProps } from '~/components/icons/makeIcon';
 import MenuIcon from '~/components/icons/MenuIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
@@ -13,8 +12,10 @@ import OfflineIcon from '~/components/icons/OfflineIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
 import SidebarIcon from '~/components/icons/SidebarIcon';
-import { LogoutButton } from '~/components/LogoutButton';
+import SignOutIcon from '~/components/icons/SignOutIcon';
+import { SignOutButton } from '~/components/SignOutButton';
 import { Tooltip } from '~/components/Tooltip';
+import StorageIcon from '../icons/StorageIcon';
 
 import { useDisconnected } from '~/channels/connectionStatus';
 
@@ -38,7 +39,7 @@ export const TopBar = memo(({ sidebarButton, formattingButton }: TopBar) => {
   const project = useAppContext('project');
   const toggleSearchModal = useAppContext('toggleSearchModal');
   const toggleSettingsModal = useAppContext('toggleSettingsModal');
-  const toggleAccountModal = useAppContext('toggleAccountModal');
+  const toggleFilesModal = useAppContext('toggleFilesModal');
 
   const { isXs } = useBreakpoints();
 
@@ -53,8 +54,9 @@ export const TopBar = memo(({ sidebarButton, formattingButton }: TopBar) => {
   ];
 
   const accountActions: Action[] = [
-    { icon: AccountIcon, label: 'Account info', onClick: toggleAccountModal },
-    { icon: LogoutIcon, label: 'Log out', as: LogoutButton },
+    { icon: AccountIcon, label: 'Edit account', as: EditAccountLink },
+    { icon: StorageIcon, label: 'File storage', onClick: toggleFilesModal },
+    { icon: SignOutIcon, label: 'Sign out', as: SignOutButton },
   ];
 
   const isDisconnected = useDisconnected();

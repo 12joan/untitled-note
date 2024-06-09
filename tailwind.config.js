@@ -75,7 +75,7 @@ module.exports = {
     screens: {
       '4xs': '128px',
       '3xs': '256px',
-      '2xs': '384px',
+      '2xs': '370px',
       xs: '512px',
       ...defaultTheme.screens,
     },
@@ -104,10 +104,9 @@ module.exports = {
 
       addVariant('children', '& > *');
 
-      ['data-active', 'data-drag-over'].forEach((dataAttribute) => {
-        const selector = `[${dataAttribute}=true]`;
-        addVariant(dataAttribute, [`&${selector}`, `${selector} &`]);
-      });
+      addVariant('data-active', [`&[data-active=true]`, `[data-active=true] &`]);
+      addVariant('data-inactive', [`&[data-active=false]`, `[data-active=false] &`]);
+      addVariant('data-drag-over', [`&[data-drag-over=true]`, `[data-drag-over=true] &`]);
 
       addVariant('slate-void', '& [data-slate-void]');
       addVariant('slate-string', ['& [data-slate-string]', '& [data-slate-zero-width]']);

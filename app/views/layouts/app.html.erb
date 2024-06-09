@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/meta' %>
+    <%= yield :head %>
+  </head>
+
+  <body class="min-h-dvh">
+    <%= yield %>
+    <%= render 'shared/flash' %>
+  </body>
+</html>

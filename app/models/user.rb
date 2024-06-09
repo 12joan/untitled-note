@@ -1,15 +1,22 @@
 class User < ApplicationRecord
-  has_many :login_sessions, dependent: :destroy
+  # Include default devise modules. Others available are:
+  # :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
+
   has_many :projects, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_many :project_folders, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_many :documents, through: :projects
   has_many :s3_files, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one :settings, dependent: :destroy
 
-  # Auth0 supplies the user's email address in the 'name' field. This may break
-  # in the future if Auth0 changes this behaviour.
-  def email
-    name
+  attr_writer :creating_through_admin_page
+
+  def default_storage_quota
+    ENV.fetch('DEFAULT_STORAGE_QUOTA', 10 * 1024 * 1024)
+  end
+
+  def storage_quota
+    storage_quota_override || default_storage_quota
   end
 
   def update_storage_used(difference)
@@ -19,5 +26,13 @@ class User < ApplicationRecord
 
   def auto_snapshots_option
     settings&.auto_snapshots_option || 'disabled'
+  end
+
+  def password_required?
+    if @creating_through_admin_page
+      false
+    else
+      super
+    end
   end
 end

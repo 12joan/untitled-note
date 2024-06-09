@@ -13,7 +13,7 @@ import {
   createProject,
   dragAndDropFile,
   logIn,
-  openFileStorageSection,
+  openFileStorageModal,
 } from './utils';
 
 test.describe('Attachments', () => {
@@ -95,7 +95,7 @@ test.describe('Attachments', () => {
     await dragAndDropFile(paragraphHandle, dataTransfer, 'above');
     await expect(page.getByTestId('uploading-attachment')).toBeVisible();
 
-    await openFileStorageSection(page);
+    await openFileStorageModal(page);
     await expect(page.getByText('Files (1)')).toBeVisible();
     await page.keyboard.press('Escape');
 
@@ -104,7 +104,7 @@ test.describe('Attachments', () => {
 
     expect(await getTypeAtPath(page, editorHandle, [2])).toEqual('p');
 
-    await openFileStorageSection(page);
+    await openFileStorageModal(page);
     await expect(page.getByText('Files (0)')).toBeVisible();
   });
 

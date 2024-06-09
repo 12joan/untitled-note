@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations',
+    passwords: 'users/passwords',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+  }
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
@@ -25,14 +32,16 @@ Rails.application.routes.draw do
 
   unless Rails.env.production?
     resource :stub_login, only: %i[create], controller: 'stub_login'
+    resources :email_previews, only: %i[index show]
   end
 
-  get '/auth/auth0/callback', to: 'auth0#callback'
-  get '/auth/failure', to: 'auth0#failure'
-  delete '/auth/logout', to: 'auth0#logout'
-  post '/auth/reset_password', to: 'auth0#reset_password'
+  namespace :admin do
+    resources :users
+  end
 
   get '/welcome', to: 'welcome#index', as: :welcome
+
+  get '/docs/*page', to: 'docs#show'
 
   root 'app#index', as: :app
   get '*path', to: 'app#index'

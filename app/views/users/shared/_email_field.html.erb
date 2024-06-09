@@ -1,0 +1,6 @@
+<% label = local_assigns.fetch(:label, 'Email address') %>
+
+<div class="field">
+  <%= f.label :email, label %>
+  <%= f.email_field :email, autofocus: local_assigns.fetch(:autofocus, true), autocomplete: 'email', placeholder: label %>
+</div>

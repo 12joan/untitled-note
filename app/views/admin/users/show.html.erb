@@ -1,0 +1,68 @@
+<p><%= styled_link_to '< All users', admin_users_path %></p>
+
+<h2 class="h2">User <%= @user.id %> <%= styled_link_to '(Edit)', edit_admin_user_path(@user) %></h2>
+
+<div>
+  <table class="[&_th]:text-left border-separate border-spacing-3 -m-3">
+    <tbody>
+      <tr>
+        <th>Email</th>
+        <td><%= @user.email %></td>
+      </tr>
+
+      <% if @user.unconfirmed_email? %>
+        <tr>
+          <th>Unconfirmed email</th>
+          <td>
+            <%= @user.unconfirmed_email %><br />
+            This user's email address will be updated when they confirm their email address.
+          </td>
+        </tr>
+      <% end %>
+
+      <tr>
+        <th>Type</th>
+        <td><%= @user.admin? ? 'Admin' : 'Regular user' %></td>
+      </tr>
+
+      <tr>
+        <th>Registered</th>
+        <td><%= @user.created_at %></td>
+      </tr>
+
+      <tr>
+        <th>Storage quota</th>
+        <td><%= @user.storage_quota %></td>
+      </tr>
+
+      <tr>
+        <th>Storage used</th>
+        <td>
+          <%= @user.storage_used %>
+          <%=
+            @user.storage_quota > 0 \
+              ? "(#{(100 * @user.storage_used / @user.storage_quota).round}%)" \
+              : ''
+          %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>Projects</th>
+        <td><%= @user.projects.count %></td>
+      </tr>
+
+      <tr>
+        <th>Documents</th>
+        <td><%= @user.documents.count %></td>
+      </tr>
+
+      <tr>
+        <th>Files</th>
+        <td><%= @user.s3_files.count %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<%= button_to 'Permanently delete user', admin_user_path(@user), method: :delete, class: 'btn btn-rect btn-danger' %>

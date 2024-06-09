@@ -101,14 +101,9 @@ const ImageForm = ({
 }: ImageFormProps) => {
   const projectId = useAppContext('projectId');
   const futureRemainingQuota = useAppContext('futureRemainingQuota');
-  const toggleAccountModal = useAppContext('toggleAccountModal');
+  const toggleFilesModal = useAppContext('toggleFilesModal');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const showFileStorage = () =>
-    toggleAccountModal({
-      initialSection: 'fileStorage',
-    });
 
   const isUploading = state === 'uploading';
   const isRemoving = state === 'removing';
@@ -133,7 +128,7 @@ const ImageForm = ({
         projectId,
         file: originalFile,
         availableSpace: orDefaultFuture(futureRemainingQuota, Infinity),
-        showFileStorage,
+        showFileStorage: toggleFilesModal,
       }).then(() => overrideHasImage(true))
     ).finally(() => setState('idle'));
   };
@@ -195,7 +190,7 @@ const ImageForm = ({
             <button
               type="button"
               className="text-sm btn btn-link-subtle"
-              onClick={showFileStorage}
+              onClick={() => toggleFilesModal()}
             >
               {filesize(remainingQuota)} available
             </button>

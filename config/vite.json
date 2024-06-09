@@ -1,7 +1,7 @@
 {
   "all": {
     "sourceCodeDir": "client",
-    "watchAdditionalPaths": []
+    "watchAdditionalPaths": ["app"]
   },
   "development": {
     "autoBuild": true,

@@ -1,0 +1,20 @@
+# Not currently working
+#
+# name: Playwright
+# 
+# on: push
+# 
+# jobs:
+#   e2e:
+#     runs-on: ubuntu-latest
+# 
+#     steps:
+#     - uses: actions/checkout@v2
+#     - run: touch .env
+#     - run: yarn install
+#     - run: docker compose up -d
+#     - run: yarn playwright install
+#     - run: docker compose logs
+#     - run: docker compose ps
+#     - run: CI=true yarn e2e
+#     - run: docker compose down

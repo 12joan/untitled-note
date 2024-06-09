@@ -11,7 +11,7 @@ import {
   StorageQuotaUsage,
   Tag,
 } from '~/lib/types';
-import { AccountModalOpenProps } from '~/lib/useAccountModal';
+import { FilesModalOpenProps } from '~/lib/useFilesModal';
 import { ProjectSettingsModalOpenProps } from '~/lib/useProjectSettingsModal';
 import { SearchModalOpenProps } from '~/lib/useSearchModal';
 import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
@@ -35,7 +35,7 @@ export type AppContext = {
   futureRecentlyModifiedDocuments: Future<PartialDocument[]>;
   topBarHeight: number;
   toggleSearchModal: (...args: [] | [SearchModalOpenProps]) => void;
-  toggleAccountModal: (...args: [] | [AccountModalOpenProps]) => void;
+  toggleFilesModal: (...args: [] | [FilesModalOpenProps]) => void;
   toggleSettingsModal: (...args: [] | [SettingsModalOpenProps]) => void;
   toggleProjectSettingsModal: (
     ...args: [] | [ProjectSettingsModalOpenProps]
@@ -73,7 +73,7 @@ export const { Provider: AppContextProvider, useContext: useAppContext } =
     futureRecentlyViewedDocuments: null,
     futureRecentlyModifiedDocuments: null,
     toggleSearchModal: null,
-    toggleAccountModal: null,
+    toggleFilesModal: null,
     toggleSettingsModal: null,
     toggleProjectSettingsModal: null,
     toggleSidebar: null,

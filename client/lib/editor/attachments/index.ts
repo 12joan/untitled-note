@@ -10,7 +10,7 @@ import { getUploadIsInProgress } from './uploadsInProgressStore';
 export const useAttachmentPlugins = (): PlatePlugin[] => {
   const projectId = useAppContext('projectId');
   const futureRemainingQuota = useAppContext('futureRemainingQuota');
-  const toggleAccountModal = useAppContext('toggleAccountModal');
+  const toggleFilesModal = useAppContext('toggleFilesModal');
 
   return useMemo(
     () => [
@@ -18,8 +18,7 @@ export const useAttachmentPlugins = (): PlatePlugin[] => {
         options: {
           projectId,
           availableSpace: orDefaultFuture(futureRemainingQuota, Infinity),
-          showFileStorage: () =>
-            toggleAccountModal({ initialSection: 'fileStorage' }),
+          showFileStorage: () => toggleFilesModal(),
         },
       }) as PlatePlugin,
     ],

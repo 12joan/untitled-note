@@ -1,0 +1,20 @@
+<h1 class="h1">Forgot your password?</h1>
+
+<%= form_for(
+  resource,
+  as: resource_name,
+  url: password_path(resource_name),
+  html: { method: :post, class: 'contents static-form' },
+) do |f| %>
+  <%= render 'users/shared/error_messages', resource: resource %>
+
+  <%= render 'users/shared/email_field', f: f %>
+
+  <div class="actions">
+    <%= f.submit 'Send reset password email', class: 'btn btn-rect btn-primary w-full' %>
+  </div>
+<% end %>
+
+<% content_for :auth_links do %>
+  <%= render 'users/shared/links', links: %i[sign_in sign_up confirm_email] %>
+<% end %>

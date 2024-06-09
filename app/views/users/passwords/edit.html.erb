@@ -1,0 +1,21 @@
+<h1 class="h1">Change your password</h1>
+
+<%= form_for(
+  resource,
+  as: resource_name,
+  url: password_path(resource_name),
+  html: { method: :put, class: 'contents static-form' },
+) do |f| %>
+  <%= render 'users/shared/error_messages', resource: resource %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <%= render 'users/shared/new_password_fields', f: f %>
+
+  <div class="actions">
+    <%= f.submit 'Change my password', class: 'btn btn-rect btn-primary w-full' %>
+  </div>
+<% end %>
+
+<% content_for :auth_links do %>
+  <%= render 'users/shared/links', links: %i[sign_in sign_up confirm_email] %>
+<% end %>

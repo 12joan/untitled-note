@@ -30,10 +30,6 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'rexml', '~> 3.2'
 
-# Auth0
-gem 'omniauth-auth0', '~> 3.0'
-gem 'omniauth-rails_csrf_protection', '~> 1.0'
-
 # Use S3 for file storage
 gem 'aws-sdk-s3', '~> 1'
 
@@ -51,6 +47,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'pry'
+
+  gem 'faker'
 end
 
 group :development do
@@ -79,3 +77,7 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem "devise", "~> 4.9"
+
+gem "redcarpet", "~> 3.6"

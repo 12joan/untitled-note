@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UploadAllowedTest < ActiveSupport::TestCase
   setup do
-    @user = create(:user, storage_quota: 1 * 1024 * 1024, storage_used: 0)
+    @user = create(:user, storage_quota_override: 1 * 1024 * 1024, storage_used: 0)
   end
 
   test 'not allowed without valid role' do
