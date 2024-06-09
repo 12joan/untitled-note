@@ -9,8 +9,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: touch .env
-    - run: docker compose up -d
     - run: yarn install
+    - run: docker compose up -d
     - run: yarn playwright install
     - run: yarn e2e
     - run: docker compose down
