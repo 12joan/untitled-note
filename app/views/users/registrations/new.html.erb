@@ -1,3 +1,26 @@
+<% if Rails.application.config.demo_instance %>
+  <% content_for :before do %>
+    <div class="mt-5 narrow-lg px-5">
+      <aside class="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 p-5 space-y-3 rounded-lg" role="alert">
+        <h1 class="h2">Demo instance</h1>
+
+        <p>The version of Untitled Note App you are currently viewing is for demonstrational purposes only at this time.</p>
+        <p>Please do not use it to store:</p>
+
+        <ul class="list-disc list-inside space-y-2">
+          <li>Personal information (e.g. your name, address or phone number)</li>
+          <li>Confidential information (e.g. your bank account details or passwords)</li>
+          <li>The sole copy of any important documents</li>
+        </ul>
+
+        <p>This app is provided "as is", without warranty of any kind. Access may be revoked at any time.</p>
+
+        <p>Consider hosting your own instance using the <%= styled_link_to 'self-hosting guide', '/docs/self-hosting' %>.</p>
+      </aside>
+    </div>
+  <% end %>
+<% end %>
+
 <h1 class="h1">Create account</h1>
 
 <%= form_for(

@@ -8,6 +8,7 @@ services:
     command: 'yarn dev'
     environment: &common-env
       RAILS_ENV: development
+      DEMO_INSTANCE: true
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
       TYPESENSE_URL: http://typesense:8108

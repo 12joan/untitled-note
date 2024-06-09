@@ -115,6 +115,8 @@ RAILS_ENV="production"
 RAILS_LOG_TO_STDOUT="true"
 RAILS_SERVE_STATIC_FILES="true"
 # DEFAULT_STORAGE_QUOTA="" # Optional (defaults to 10485760 bytes)
+# DEMO_INSTANCE="true" # Optional (defaults to false)
+# SIGN_UP_ENABLED="false" # Optional (defaults to true)
 
 # Services
 DATABASE_URL="postgres://postgres@db"

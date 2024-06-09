@@ -2,7 +2,7 @@
   <%= styled_link_to 'Sign in', new_session_path(resource_name) %>
 <% end %>
 
-<%- if links.include?(:sign_up) %>
+<%- if Rails.application.config.sign_up_enabled && links.include?(:sign_up) %>
   <%= styled_link_to 'Create account', new_registration_path(resource_name) %>
 <% end %>
 

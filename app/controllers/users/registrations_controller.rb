@@ -7,17 +7,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   def create
-    super
+    if sign_up_enabled?
+      super
 
-    if resource.persisted?
-      resource.projects.create!(name: 'My project')
+      if resource.persisted?
+        resource.projects.create!(name: 'My project')
+      end
+    else
+      raise 'Sign up disabled'
     end
   end
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    if sign_up_enabled?
+      super
+    else
+      redirect_to '/', notice: 'The administrator for this instance has disabled account creation./Sign up disabled'
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -43,7 +51,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
+
+  def sign_up_enabled?
+    Rails.application.config.sign_up_enabled
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_up_params

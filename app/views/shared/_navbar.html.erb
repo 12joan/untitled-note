@@ -12,7 +12,10 @@
 
     <%= styled_link_to 'Open app', '/' %>
   <% else %>
-    <%= styled_link_to 'Create account', new_user_registration_path %>
+    <% if Rails.application.config.sign_up_enabled %>
+      <%= styled_link_to 'Create account', new_user_registration_path %>
+    <% end %>
+
     <%= styled_link_to 'Sign in', new_user_session_path %>
   <% end %>
 </nav>

@@ -19,6 +19,10 @@ class ActiveSupport::TestCase
     sign_in(user)
   end
 
+  def with_sign_up_enabled(enabled, &block)
+    Rails.application.config.stub(:sign_up_enabled, enabled, &block)
+  end
+
   def stub_s3_bucket(return_value, &block)
     Rails.application.config.stub(:s3_bucket, return_value) do
       Rails.application.config.stub(:external_s3_bucket, return_value, &block)

@@ -1,4 +1,8 @@
 <% content_for :content do %>
+  <% if content_for?(:before) %>
+    <%= yield :before %>
+  <% end %>
+
   <main class="my-5 px-5 mx-auto <%= content_for?(:max_w) ? yield(:max_w) : 'max-w-md' %> w-full space-y-5">
     <div class="p-5 rounded-lg bg-plain-100 dark:bg-transparent dark:border flex flex-col gap-5">
       <%= yield %>

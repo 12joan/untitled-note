@@ -35,7 +35,10 @@ module Note
 
     # Rails transparently deserializes existing (Marshal-serialized) cookies on
     # read and re-writes them in the JSON format.
-    Rails.application.config.action_dispatch.cookies_serializer = :hybrid
+    config.action_dispatch.cookies_serializer = :hybrid
+
+    config.demo_instance = ENV.fetch('DEMO_INSTANCE', 'false') == 'true'
+    config.sign_up_enabled = ENV.fetch('SIGN_UP_ENABLED', 'true') == 'true'
 
     config.after_initialize do
       ActionMailer::Base.add_delivery_method :application, ApplicationDeliveryMethod
