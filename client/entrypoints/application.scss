@@ -358,6 +358,8 @@ body {
 
     opacity: 0;
     animation: demo-video-fade-in 0.6s linear forwards;
+    width: 100%;
+    aspect-ratio: 3024 / 1964;
   }
 
   .static-form {
