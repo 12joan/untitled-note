@@ -89,6 +89,6 @@ export default defineConfig({
     command: 'docker-compose up',
     url: 'http://127.0.0.1:3000',
     timeout: 3 * 60 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 });
