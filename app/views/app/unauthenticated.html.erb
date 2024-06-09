@@ -1,9 +1,8 @@
 <% content_for :head do %>
-  <%= prevent_fouc_tags %>
   <%= vite_javascript_tag 'unauthenticated' %>
 <% end %>
 
-<div id="application" class="prevent-fouc min-h-dvh flex flex-col p-5">
+<div class="min-h-dvh flex flex-col p-5">
   <%= form_tag @login_path, method: :post, class: 'm-auto lg:narrow space-y-3' do %>
     <h1 class="h1">You need to sign in to access this page</h1>
 
