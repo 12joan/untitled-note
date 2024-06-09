@@ -1,4 +1,4 @@
-name: Frontend tests
+name: Playwright
 
 on: push
 
@@ -8,6 +8,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: touch .env
     - run: docker compose up -d
     - run: yarn playwright install
     - run: yarn e2e
