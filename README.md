@@ -27,7 +27,7 @@ To convert your user to an admin:
 
 ```
 $ docker compose exec web rails c
-irb(main):001:0> User.find_by(email: 'admin@example.com).update(admin: true)
+irb(main):001:0> User.find_by(email: 'user@example.com).update(admin: true)
 ```
 
 To run the tests:
