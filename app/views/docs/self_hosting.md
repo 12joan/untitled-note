@@ -12,9 +12,17 @@ You will need:
 - A domain name and SSL certificate
 - Knowledge of Docker Compose
 
+## Clone the repo
+
+If you want to customise Untitled Note App before deploying it, you may want to [fork the repo](https://github.com/12joan/untitled-note/fork) first.
+
+```
+git clone https://github.com/12joan/untitled-note.git
+```
+
 ## Docker Compose
 
-Create a `docker-compose.yml` file using the following config as a starting point.
+Create a `docker-compose.yml` file in the parent directory of the repo, using the following config as a starting point. The `build` path of `web` and `clockwork` should point to the directory containing Untitled Note App's `Dockerfile`.
 
 ```
 x-healthcheck: &healthcheck
@@ -24,7 +32,7 @@ x-healthcheck: &healthcheck
 services:
   # The main Rails application
   web:
-    build: ./path/to/source/code
+    build: ./untitled-note
     env_file: .env
     ports:
       - '3000:3000'
@@ -44,7 +52,7 @@ services:
 
   # Schedule recurring jobs. Uses the same Docker image as web.
   clockwork:
-    build: ./path/to/source/code
+    build: ./untitled-note
     entrypoint: ''
     command: 'clockwork config/clockwork.rb'
     env_file: .env
@@ -194,7 +202,7 @@ The `S3_ENDPOINT` should be the publicly accessible URL of the S3 API. In the ca
 
 ### Method 3: Add MinIO to Docker Compose
 
-Uncomment the parts of `docker-compose.yml` relating to MinIO and add the following environment variables to your `.env` file, replacing the `build` path of `web` and `clockwork` with the path to the directory containing Untitled Note App's `Dockerfile`:
+Uncomment the parts of `docker-compose.yml` relating to MinIO and add the following environment variables to your `.env` file:
 
 ```
 S3_BUCKET="untitled-note-app"

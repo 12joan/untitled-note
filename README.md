@@ -23,6 +23,13 @@ To run the app:
 7. Create an account with email address `user@example.com`
 8. (If SMTP is disabled) Confirm your email address at http://localhost:3000/email_previews?to=user%40example.com
 
+To convert your user to an admin:
+
+```
+$ docker compose exec web rails c
+irb(main):001:0> User.find_by(email: 'admin@example.com).update(admin: true)
+```
+
 To run the tests:
 
 ```bash
