@@ -346,20 +346,37 @@ body {
   }
 
   .demo-video {
-    @keyframes demo-video-fade-in {
-      0% {
-        opacity: 0;
-      }
+    @apply relative drop-shadow-lg;
 
-      100% {
-        opacity: 1;
+    .video-container {
+      @apply absolute bg-black;
+      top: 2.395470383%;
+      bottom: 12.06445993%;
+      left: 10.25506179%;
+      right: 10.22876676%;
+      z-index: -1;
+
+      video {
+        @keyframes demo-video-fade-in {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
+        }
+
+        @apply opacity-0 w-full;
+        animation: demo-video-fade-in 0.6s linear forwards;
+        aspect-ratio: 3024 / 1964;
       }
     }
 
-    opacity: 0;
-    animation: demo-video-fade-in 0.6s linear forwards;
-    width: 100%;
-    aspect-ratio: 3024 / 1964;
+    img {
+      @apply w-full pointer-events-none;
+      aspect-ratio: 1901 / 1148;
+    }
   }
 
   .static-form {

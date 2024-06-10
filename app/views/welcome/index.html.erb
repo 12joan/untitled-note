@@ -3,18 +3,17 @@
     An open-source app for taking notes that feels <span class="underline underline-offset-[0.125em] decoration-primary-500 dark:decoration-primary-400 window-inactive:decoration-plain-500 dark:window-inactive:decoration-plain-400 decoration-[0.125em]">awesome</span> to use
   </h1>
 
-  <div class="relative drop-shadow-lg">
-    <div class="absolute top-[2.395470383%] bottom-[12.06445993%] left-[10.25506179%] right-[10.22876676%] z-[-1] bg-black">
+  <div class="demo-video">
+    <div class="video-container">
       <%=
-        video_tag 'demo.mp4',
+        video_tag ['demo.mp4', 'demo.webm'],
           controls: true,
           autoplay: true,
           loop: true,
-          'aria-label': 'Demo video showing Untitled Note App in use',
-          class: 'demo-video'
+          'aria-label': 'Demo video showing Untitled Note App in use'
         %>
     </div>
-    <%= image_tag 'mac_frame.png', 'aria-hidden': true, class: 'pointer-events-none' %>
+    <%= image_tag 'mac_frame.png', 'aria-hidden': true %>
   </div>
 
   <div class="bg-plain-100 dark:bg-plain-800 p-5 rounded-lg space-y-3">
