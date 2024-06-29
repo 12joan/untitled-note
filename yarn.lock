@@ -1907,10 +1907,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rails__actioncable@npm:^6.1.10":
-  version: 6.1.10
-  resolution: "@types/rails__actioncable@npm:6.1.10"
-  checksum: 10/10ef9ab9104d90f09db0954896393af56d3c76237af07a24f6561f179c7d70e971805655c678abf2207f36de6b4bf627b9b15d784b57c77bb3f797963b1f7fb8
+"@types/rails__actioncable@npm:^6.1.11":
+  version: 6.1.11
+  resolution: "@types/rails__actioncable@npm:6.1.11"
+  checksum: 10/1941d7572f29d97b667b804a2d2f8f41b23eb6a3df1564ed818e8634440b7478d2c1405f57ccf0d28b0a8e0157276963ba47c9fb1dac9bb8e47d25eb5c67b425
   languageName: node
   linkType: hard
 
@@ -7320,7 +7320,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^18.17.14"
-    "@types/rails__actioncable": "npm:^6.1.10"
+    "@types/rails__actioncable": "npm:^6.1.11"
     "@types/react": "npm:^18.0.35"
     "@types/react-dom": "npm:^18.3.0"
     "@types/runes": "npm:^0.4.3"
