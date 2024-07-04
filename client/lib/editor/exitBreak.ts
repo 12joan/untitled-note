@@ -1,4 +1,4 @@
-import { ExitBreakPlugin, KEYS_HEADING } from '@udecode/plate';
+import { ExitBreakPlugin, KEYS_HEADING } from '~/lib/editor/plate';
 
 export const exitBreakOptions: {
   options: ExitBreakPlugin;

@@ -1,5 +1,5 @@
-import { getNodeProps, PlateEditor, TText } from '@udecode/plate';
 import { isEqual } from 'lodash';
+import { getNodeProps, PlateEditor, TText } from '~/lib/editor/plate';
 import { IS_FIREFOX } from '~/lib/environment';
 import { MarkBoundary } from './types';
 

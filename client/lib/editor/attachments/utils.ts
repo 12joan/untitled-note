@@ -1,3 +1,8 @@
+import { Path } from 'slate';
+import {
+  useFocused as useSlateFocused,
+  useSelected as useSlateSelected,
+} from 'slate-react';
 import {
   ELEMENT_PARAGRAPH,
   getEditorString,
@@ -6,12 +11,7 @@ import {
   removeNodes,
   someNode,
   TNode,
-} from '@udecode/plate';
-import { Path } from 'slate';
-import {
-  useFocused as useSlateFocused,
-  useSelected as useSlateSelected,
-} from 'slate-react';
+} from '~/lib/editor/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
 
 export const matchAttachmentNode = (id: number) => (node: TNode) =>

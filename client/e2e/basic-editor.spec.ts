@@ -6,7 +6,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import {
   clickAtPath,
   getEditable,

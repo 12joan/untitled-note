@@ -2,7 +2,7 @@ import {
   createPluginFactory,
   isSelectionExpanded,
   MARK_CODE,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import { getMarkBoundary } from './getMarkBoundary';
 import { getMarkBoundaryAffinity } from './getMarkBoundaryAffinity';
 import { setMarkBoundaryAffinity } from './setMarkBoundaryAffinity';

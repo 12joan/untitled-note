@@ -8,15 +8,15 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Path, Range as SlateRange } from 'slate';
+import { useAppContext } from '~/lib/appContext';
 import {
   PlateEditor,
   TEditor,
   TElement,
   toDOMRange,
   TText,
-} from '@udecode/plate';
-import { Path, Range as SlateRange } from 'slate';
-import { useAppContext } from '~/lib/appContext';
+} from '~/lib/editor/plate';
 import { FIND_SUPPORTED } from '~/lib/environment';
 import { useLocalKeyboardShortcut } from '~/lib/useLocalKeyboardShortcut';
 import { useStateWhenSettled } from '~/lib/useStateWhenSettled';

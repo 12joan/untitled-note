@@ -7,7 +7,7 @@ import {
   isSelectionAtCodeBlockStart,
   ResetNodePlugin,
   unwrapCodeBlock,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 
 const commonRule = {
   defaultType: ELEMENT_PARAGRAPH,

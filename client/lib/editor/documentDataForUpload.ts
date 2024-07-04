@@ -1,14 +1,14 @@
 import {
-  ELEMENT_MENTION_INPUT,
-  isElement,
-  PlateEditor,
-  TDescendant,
-} from '@udecode/plate';
-import {
   ELEMENT_ATTACHMENT,
   getAttachmentIsUploading,
 } from '~/lib/editor/attachments';
 import { filterDescendants } from '~/lib/editor/filterDescendants';
+import {
+  ELEMENT_MENTION_INPUT,
+  isElement,
+  PlateEditor,
+  TDescendant,
+} from '~/lib/editor/plate';
 import { AttachmentElement } from './attachments/types';
 
 const excludedTypes = [ELEMENT_MENTION_INPUT];

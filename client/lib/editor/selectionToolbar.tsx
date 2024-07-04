@@ -1,4 +1,5 @@
 import React, { MouseEvent } from 'react';
+import { useFocused } from 'slate-react';
 import {
   createPluginFactory,
   getBoundingClientRect,
@@ -7,8 +8,7 @@ import {
   useEditorReadOnly,
   useEditorRef,
   useEditorSelector,
-} from '@udecode/plate';
-import { useFocused } from 'slate-react';
+} from '~/lib/editor/plate';
 import { FloatingToolbar, FloatingToolbarItem } from './FloatingToolbar';
 import {
   formattingButtonClassNames,

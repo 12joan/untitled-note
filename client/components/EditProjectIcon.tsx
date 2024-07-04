@@ -8,8 +8,8 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
-import { isHotkey } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
+import { isHotkey } from '~/lib/editor/plate';
 import { filesize } from '~/lib/filesize';
 import {
   handleRemoveProjectImageError,

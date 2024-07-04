@@ -12,9 +12,9 @@
  */
 
 import { DragEvent } from 'react';
-import { PlateEditor } from '@udecode/plate';
 import { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { PlateEditor } from '~/lib/editor/plate';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 
 export const findDragPath = (editor: PlateEditor, rawEvent: DragEvent) => {

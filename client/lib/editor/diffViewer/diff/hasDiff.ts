@@ -1,4 +1,4 @@
-import { isElement, TDescendant } from '@udecode/plate';
+import { isElement, TDescendant } from '~/lib/editor/plate';
 
 export const hasDiff = (descendant: TDescendant): boolean =>
   'diff' in descendant ||

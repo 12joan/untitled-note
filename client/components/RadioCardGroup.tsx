@@ -7,8 +7,8 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { isHotkey } from '@udecode/plate';
 import { twMerge } from 'tailwind-merge';
+import { isHotkey } from '~/lib/editor/plate';
 import { positiveMod } from '~/lib/positiveMod';
 
 interface RadioCardGroupContext<T> {

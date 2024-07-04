@@ -1,4 +1,4 @@
-import { isText, TDescendant } from '@udecode/plate';
+import { isText, TDescendant } from '~/lib/editor/plate';
 
 const rawGetPlainBody = (node: TDescendant): string => {
   if (isText(node)) return node.text;

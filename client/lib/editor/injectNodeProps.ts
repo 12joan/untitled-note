@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, ReactNode } from 'react';
-import { PlateRenderElementProps } from '@udecode/plate';
 import { twMerge } from 'tailwind-merge';
+import { PlateRenderElementProps } from '~/lib/editor/plate';
 
 const mergeableProps: (keyof HTMLAttributes<HTMLElement>)[] = ['className'];
 

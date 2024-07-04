@@ -1,6 +1,6 @@
 import React, { memo, RefObject, useRef, useState } from 'react';
-import { PlateEditor } from '@udecode/plate';
 import { getFilteredChildren } from '~/lib/editor/documentDataForUpload';
+import { PlateEditor } from '~/lib/editor/plate';
 import { setSelection } from '~/lib/editor/restoreSelection';
 import { LocalDocument } from '~/lib/types';
 import { DocumentMenu } from '~/components/DocumentMenu';

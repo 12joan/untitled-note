@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlateRenderElementProps } from '@udecode/plate';
+import { PlateRenderElementProps } from '~/lib/editor/plate';
 import { injectNodeProps } from '../../injectNodeProps';
 import { ExpandChunkButton } from './ExpandChunkButton';
 import { ChunkCollapsedProps, ChunkPlugin } from './types';

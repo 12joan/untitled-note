@@ -1,3 +1,4 @@
+import { LocalKeyboardShortcutCommandId } from '~/lib/commands';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
@@ -16,8 +17,7 @@ import {
   toggleMark,
   toggleNodeType,
   useEditorRef,
-} from '@udecode/plate';
-import { LocalKeyboardShortcutCommandId } from '~/lib/commands';
+} from '~/lib/editor/plate';
 import { useLocalKeyboardShortcut } from '../useLocalKeyboardShortcut';
 import { useToggleLink } from './links/useToggleLink';
 
