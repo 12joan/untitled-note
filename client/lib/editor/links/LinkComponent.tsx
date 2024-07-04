@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { useSelected } from 'slate-react';
+import { copyText } from '~/lib/copyText';
 import {
   findNodePath,
   focusEditor,
@@ -12,9 +14,7 @@ import {
   useEditorReadOnly,
   usePlateSelectors,
   Value,
-} from '@udecode/plate';
-import { useSelected } from 'slate-react';
-import { copyText } from '~/lib/copyText';
+} from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useElementSize } from '~/lib/useElementSize';
 import CopyIcon from '~/components/icons/CopyIcon';

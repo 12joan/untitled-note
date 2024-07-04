@@ -1,3 +1,4 @@
+import { NodeEntry, Path } from 'slate';
 import {
   getNodeEntry,
   getRange,
@@ -7,8 +8,7 @@ import {
   isText,
   PlateEditor,
   TText,
-} from '@udecode/plate';
-import { NodeEntry, Path } from 'slate';
+} from '~/lib/editor/plate';
 import { MarkBoundary } from './types';
 
 export const getMarkBoundary = (editor: PlateEditor): MarkBoundary | null => {

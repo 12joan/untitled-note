@@ -1,4 +1,4 @@
-import { DeserializeHtml } from '@udecode/plate';
+import { DeserializeHtml } from '~/lib/editor/plate';
 
 export const codeBlockOptions: {
   deserializeHtml: DeserializeHtml;

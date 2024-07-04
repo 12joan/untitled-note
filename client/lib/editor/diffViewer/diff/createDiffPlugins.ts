@@ -1,4 +1,4 @@
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory } from '~/lib/editor/plate';
 import { withGetFragmentExcludeProps } from '../withGetFragmentExcludeProps';
 import { DiffElement } from './DiffElement';
 import { DiffLeaf } from './DiffLeaf';

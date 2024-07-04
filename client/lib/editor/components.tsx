@@ -1,4 +1,8 @@
 import React, { ElementType } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
+import { LinkComponent } from '~/lib/editor/links/LinkComponent';
+import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -15,11 +19,7 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   PlateRenderElementProps,
-} from '@udecode/plate';
-import { twMerge } from 'tailwind-merge';
-import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
-import { LinkComponent } from '~/lib/editor/links/LinkComponent';
-import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
+} from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 
 const makeElementComponent =

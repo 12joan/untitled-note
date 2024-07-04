@@ -1,6 +1,6 @@
-import { focusEditor, PlateEditor } from '@udecode/plate';
 import { Selection } from 'slate';
 import { normalizeRange } from '~/lib/editor/normalizeRange';
+import { focusEditor, PlateEditor } from '~/lib/editor/plate';
 
 const selectionForDocument: Record<number, Selection> = {};
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory } from '~/lib/editor/plate';
 import { withGetFragmentExcludeProps } from '../withGetFragmentExcludeProps';
 import { ChunkElement } from './ChunkElement';
 import { ChunkPlugin } from './types';

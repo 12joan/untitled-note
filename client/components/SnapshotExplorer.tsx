@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Value } from '@udecode/plate';
 import { deleteSnapshot } from '~/lib/apis/snapshot';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { DiffViewer } from '~/lib/editor/diffViewer';
+import { Value } from '~/lib/editor/plate';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { getSnapshotName } from '~/lib/getSnapshotName';
 import { handleDeleteSnapshotError } from '~/lib/handleErrors';

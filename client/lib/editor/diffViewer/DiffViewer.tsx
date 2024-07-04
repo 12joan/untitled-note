@@ -5,7 +5,7 @@ import {
   getNodeString,
   PlatePlugin,
   Value,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import { useLayoutEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useObjectVersion } from '~/lib/useObjectVersion';

@@ -12,7 +12,7 @@ import {
   select,
   unwrapList,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { AttachmentElement } from './types';
 import { abortUpload, getUploadIsInProgress } from './uploadsInProgressStore';

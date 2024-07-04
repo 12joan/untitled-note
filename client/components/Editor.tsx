@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { isEditorFocused, PlateEditor } from '@udecode/plate';
 import { Range } from 'slate';
 import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
+import { isEditorFocused, PlateEditor } from '~/lib/editor/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import {
   restoreSelection,

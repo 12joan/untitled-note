@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { PlatePlugin } from '@udecode/plate';
 import { useAppContext } from '~/lib/appContext';
+import { PlatePlugin } from '~/lib/editor/plate';
 import { orDefaultFuture } from '~/lib/monads';
 import { Attachment } from './components/Attachment';
 import { ELEMENT_ATTACHMENT } from './constants';

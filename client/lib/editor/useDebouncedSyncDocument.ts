@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { PlateEditor } from '@udecode/plate';
+import { PlateEditor } from '~/lib/editor/plate';
 import {
   useSyncDocument,
   UseSyncDocumentOptions,

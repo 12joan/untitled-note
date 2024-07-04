@@ -1,4 +1,4 @@
-import { TNode } from '@udecode/plate';
+import { TNode } from '~/lib/editor/plate';
 import { filterDescendants } from './filterDescendants';
 
 describe('filterDescendants', () => {

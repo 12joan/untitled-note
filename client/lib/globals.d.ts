@@ -1,4 +1,9 @@
-import type { addMark, getNode, PlateEditor, toDOMNode } from '@udecode/plate';
+import type {
+  addMark,
+  getNode,
+  PlateEditor,
+  toDOMNode,
+} from '~/lib/editor/plate';
 
 declare global {
   interface Window {

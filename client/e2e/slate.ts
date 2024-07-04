@@ -1,6 +1,6 @@
 import { ElementHandle, JSHandle, Locator, Page } from '@playwright/test';
-import { PlateEditor, TNode } from '@udecode/plate';
 import { Path, Range } from 'slate';
+import { PlateEditor, TNode } from '~/lib/editor/plate';
 
 import '../lib/globals.d';
 

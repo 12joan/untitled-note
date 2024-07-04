@@ -1,4 +1,12 @@
 import { useMemo } from 'react';
+import { useAttachmentPlugins } from '~/lib/editor/attachments';
+import { autoformatOptions } from '~/lib/editor/autoformat';
+import { codeBlockOptions } from '~/lib/editor/codeBlock';
+import { components } from '~/lib/editor/components';
+import { exitBreakOptions } from '~/lib/editor/exitBreak';
+import { useImperativeEventsPlugins } from '~/lib/editor/imperativeEvents';
+import { createMarkAffinityPlugin } from '~/lib/editor/markAffinity';
+import { mentionOptions } from '~/lib/editor/mentions';
 import {
   createAutoformatPlugin,
   createBlockquotePlugin,
@@ -19,15 +27,7 @@ import {
   createTabbablePlugin,
   createTrailingBlockPlugin,
   PlatePlugin,
-} from '@udecode/plate';
-import { useAttachmentPlugins } from '~/lib/editor/attachments';
-import { autoformatOptions } from '~/lib/editor/autoformat';
-import { codeBlockOptions } from '~/lib/editor/codeBlock';
-import { components } from '~/lib/editor/components';
-import { exitBreakOptions } from '~/lib/editor/exitBreak';
-import { useImperativeEventsPlugins } from '~/lib/editor/imperativeEvents';
-import { createMarkAffinityPlugin } from '~/lib/editor/markAffinity';
-import { mentionOptions } from '~/lib/editor/mentions';
+} from '~/lib/editor/plate';
 import { resetNodeOptions } from '~/lib/editor/resetNode';
 import { createSelectionToolbarPlugin } from '~/lib/editor/selectionToolbar';
 import { softBreakOptions } from '~/lib/editor/softBreak';

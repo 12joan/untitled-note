@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { isHotkey } from '@udecode/plate';
+import { isHotkey } from '~/lib/editor/plate';
 import { positiveMod } from '~/lib/positiveMod';
 
 export interface UseComboboxOptions<T> {

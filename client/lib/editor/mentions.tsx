@@ -6,6 +6,10 @@ import React, {
   useRef,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useFocused, useSelected } from 'slate-react';
+import { createDocument } from '~/lib/apis/document';
+import { useAppContext } from '~/lib/appContext';
+import { useEditorEvent } from '~/lib/editor/imperativeEvents';
 import {
   ELEMENT_MENTION,
   findMentionInput,
@@ -19,11 +23,7 @@ import {
   TMentionElement,
   TMentionInputElement,
   Value,
-} from '@udecode/plate';
-import { useFocused, useSelected } from 'slate-react';
-import { createDocument } from '~/lib/apis/document';
-import { useAppContext } from '~/lib/appContext';
-import { useEditorEvent } from '~/lib/editor/imperativeEvents';
+} from '~/lib/editor/plate';
 import { filterPredicate } from '~/lib/filterPredicate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
