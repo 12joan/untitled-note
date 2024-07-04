@@ -1,3 +1,10 @@
+/**
+ * If TypeScript suddenly starts complaining about literally every import, try
+ * upgrading Vite and Yarn.
+ *
+ *  yarn add -D vite vite-plugin-ruby @vitejs/plugin-react
+ *  yarn set version latest
+ */
 {
   "compilerOptions": {
     "target": "ESNext",

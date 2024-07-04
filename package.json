@@ -67,7 +67,7 @@
     "@types/runes": "^0.4.3",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "@vitejs/plugin-react": "^2.2.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.14",
     "concurrently": "^7.6.0",
     "css-has-pseudo": "^4.0.2",
@@ -93,10 +93,10 @@
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.3",
     "typescript-language-server": "^3.3.2",
-    "vite": "^5.3.2",
+    "vite": "^5.3.3",
     "vite-plugin-ruby": "^5.0.0"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.3.1",
   "resolutions": {
     "react-textarea-autosize@^8.4.1": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
     "react-textarea-autosize@^8.3.3": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
