@@ -1,4 +1,4 @@
-import { createPluginFactory, isEditorReadOnly } from '@udecode/plate';
+import { createPluginFactory, isEditorReadOnly } from '~/lib/editor/plate';
 import { setGlobalStore } from '~/lib/globalStore';
 import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';

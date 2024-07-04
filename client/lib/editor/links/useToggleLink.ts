@@ -3,7 +3,7 @@ import {
   insertLink,
   unwrapLink,
   useEditorRef,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import { isLinkInSelection } from './isLinkInSelection';
 import { openLinkModal } from './LinkModal';
 

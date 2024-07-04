@@ -5,7 +5,7 @@ import {
   PlateEditor,
   toDOMNode,
   useEditorRef,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 
 const EDITABLE_TO_EDITOR = new WeakMap<HTMLElement, PlateEditor>();
 

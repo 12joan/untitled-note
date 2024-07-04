@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { MARK_BOLD } from '@udecode/plate';
+import { MARK_BOLD } from '~/lib/editor/plate';
 import {
   addMark,
   clickAtPath,

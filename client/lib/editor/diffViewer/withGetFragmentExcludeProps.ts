@@ -1,4 +1,4 @@
-import { isElement, PlateEditor, TDescendant } from '@udecode/plate';
+import { isElement, PlateEditor, TDescendant } from '~/lib/editor/plate';
 
 export const withGetFragmentExcludeProps =
   (...propNames: string[]) =>

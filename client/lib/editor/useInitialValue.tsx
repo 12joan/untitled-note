@@ -4,7 +4,7 @@ import {
   deserializeHtml,
   ELEMENT_PARAGRAPH,
   PlatePlugin,
-} from '@udecode/plate';
+} from '~/lib/editor/plate';
 import { Document } from '~/lib/types';
 
 export type UseInitialValueOptions = {

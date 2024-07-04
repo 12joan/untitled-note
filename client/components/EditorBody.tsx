@@ -1,15 +1,15 @@
 import React, { memo, useCallback, useRef } from 'react';
+import { useAppContext } from '~/lib/appContext';
+import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
+import { EditorKeyboardShortcuts } from '~/lib/editor/keyboardShortcuts';
+import { useLinkModal } from '~/lib/editor/links/LinkModal';
 import {
   Plate,
   PlateContent,
   PlateEditor,
   PlatePlugin,
   Value,
-} from '@udecode/plate';
-import { useAppContext } from '~/lib/appContext';
-import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
-import { EditorKeyboardShortcuts } from '~/lib/editor/keyboardShortcuts';
-import { useLinkModal } from '~/lib/editor/links/LinkModal';
+} from '~/lib/editor/plate';
 import { SlatePlaywrightEffects } from '~/lib/editor/SlatePlaywrightEffects';
 import {
   useEditorFontSize,

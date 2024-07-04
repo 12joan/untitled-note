@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate';
+import { ELEMENT_PARAGRAPH } from '~/lib/editor/plate';
 import {
   clickAtPath,
   EditorHandle,

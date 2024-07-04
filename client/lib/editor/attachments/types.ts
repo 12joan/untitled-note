@@ -1,4 +1,4 @@
-import { PlateRenderElementProps, TElement, Value } from '@udecode/plate';
+import { PlateRenderElementProps, TElement, Value } from '~/lib/editor/plate';
 import { S3File } from '~/lib/types';
 
 export interface AttachmentPlugin {

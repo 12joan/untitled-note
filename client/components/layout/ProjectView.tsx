@@ -8,11 +8,11 @@ import React, {
   useState,
 } from 'react';
 import { useLocation } from 'react-router-dom';
-import { PlateController } from '@udecode/plate';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { cycleFocus } from '~/lib/cycleFocus';
 import { FormattingToolbar } from '~/lib/editor/FormattingToolbar';
+import { PlateController } from '~/lib/editor/plate';
 import { useEditorFontSize } from '~/lib/editorFontSize';
 import { projectWasOpened } from '~/lib/projectHistory';
 import { mergeRefs } from '~/lib/refUtils';

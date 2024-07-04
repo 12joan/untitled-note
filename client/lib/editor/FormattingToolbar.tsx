@@ -1,4 +1,5 @@
 import React, { ElementType } from 'react';
+import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -26,8 +27,7 @@ import {
   useEditorReadOnly,
   useEditorRef,
   useEditorSelector,
-} from '@udecode/plate';
-import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
+} from '~/lib/editor/plate';
 import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
 import BoldIcon from '~/components/icons/formatting/BoldIcon';
 import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';

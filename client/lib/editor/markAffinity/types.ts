@@ -1,5 +1,5 @@
-import { TText } from '@udecode/plate';
 import { NodeEntry } from 'slate';
+import { TText } from '~/lib/editor/plate';
 
 export type MarkBoundary =
   | [NodeEntry<TText>, NodeEntry<TText>]

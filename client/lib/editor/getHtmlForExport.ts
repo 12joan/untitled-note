@@ -1,5 +1,5 @@
-import { TDescendant, TElement, TText } from '@udecode/plate';
 import pretty from 'pretty';
+import { TDescendant, TElement, TText } from '~/lib/editor/plate';
 
 export type GetHTMLForExportOptions = {
   title: string | null;

@@ -1,4 +1,4 @@
-import { Value } from '@udecode/plate';
+import { Value } from '~/lib/editor/plate';
 import { hasDiff } from '../diff/hasDiff';
 import { chunkDiffs } from './chunkDiffs';
 import { ChunkCollapsedProps } from './types';

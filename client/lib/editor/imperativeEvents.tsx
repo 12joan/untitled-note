@@ -6,19 +6,19 @@ import React, {
   useState,
 } from 'react';
 import {
-  createPluginFactory,
-  PlateEditor,
-  PlatePlugin,
-  useEditorRef,
-  Value,
-} from '@udecode/plate';
-import {
   createEventEmitter,
   dispatchEvent,
   EventEmitter,
   EventListener,
   useEvent,
 } from '~/lib/customEvents';
+import {
+  createPluginFactory,
+  PlateEditor,
+  PlatePlugin,
+  useEditorRef,
+  Value,
+} from '~/lib/editor/plate';
 import { LinkModalProps } from './links/types';
 
 type ImperativeEventTypes = {

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { isHotkey } from '@udecode/plate';
 import { KeyboardShortcutCommand } from '~/lib/commands';
+import { isHotkey } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
 import { getKeyboardShortcutLabel } from '~/lib/keyboardShortcuts/getKeyboardShortcutLabel';

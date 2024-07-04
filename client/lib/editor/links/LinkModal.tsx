@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { PlateEditor } from '@udecode/plate';
+import { PlateEditor } from '~/lib/editor/plate';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
 import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
