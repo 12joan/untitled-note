@@ -6,7 +6,7 @@ import { components } from '~/lib/editor/components';
 import { exitBreakOptions } from '~/lib/editor/exitBreak';
 import { useImperativeEventsPlugins } from '~/lib/editor/imperativeEvents';
 import { createMarkAffinityPlugin } from '~/lib/editor/markAffinity';
-import { mentionOptions } from '~/lib/editor/mentions';
+import { createMentionPlugin } from '~/lib/editor/mentions';
 import {
   createAutoformatPlugin,
   createBlockquotePlugin,
@@ -18,7 +18,6 @@ import {
   createItalicPlugin,
   createLinkPlugin,
   createListPlugin,
-  createMentionPlugin,
   createParagraphPlugin,
   createPlugins,
   createResetNodePlugin,
@@ -71,7 +70,7 @@ export const usePlugins = ({
       createBlockquotePlugin({ options: disableHotkey }),
       createCodeBlockPlugin({ ...codeBlockOptions, options: disableHotkey }),
       createListPlugin(),
-      createMentionPlugin(mentionOptions),
+      createMentionPlugin(),
     ],
     []
   );

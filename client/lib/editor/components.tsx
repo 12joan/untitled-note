@@ -2,15 +2,12 @@ import React, { ElementType } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
 import { LinkComponent } from '~/lib/editor/links/LinkComponent';
-import { MentionComponent, MentionInputComponent } from '~/lib/editor/mentions';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
   ELEMENT_LI,
   ELEMENT_LINK,
-  ELEMENT_MENTION,
-  ELEMENT_MENTION_INPUT,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -21,6 +18,9 @@ import {
   PlateRenderElementProps,
 } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { Mention } from './mentions/Mention';
+import { MentionInput } from './mentions/MentionInput';
+import { ELEMENT_MENTION, ELEMENT_MENTION_INPUT } from './mentions';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>
@@ -105,7 +105,7 @@ export const components = {
     })
   ),
   [ELEMENT_LI]: makeElementComponent('li', 'em:pl-1.5'),
-  [ELEMENT_MENTION]: MentionComponent,
-  [ELEMENT_MENTION_INPUT]: MentionInputComponent,
+  [ELEMENT_MENTION]: Mention,
+  [ELEMENT_MENTION_INPUT]: MentionInput,
   [ELEMENT_ATTACHMENT]: Attachment,
 };

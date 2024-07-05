@@ -28,7 +28,12 @@ type RenderSuggestionOptions<T> = {
 };
 
 type UseComboboxResult<T> = {
-  inputProps: InputHTMLAttributes<HTMLInputElement>;
+  inputProps: Required<
+    Pick<
+      InputHTMLAttributes<HTMLInputElement>,
+      'onChange' | 'onKeyDown' | 'onFocus' | 'onBlur' | 'role' | 'aria-expanded'
+    >
+  >;
   showSuggestions: boolean;
   suggestionContainerProps: HTMLProps<HTMLDivElement>;
   mapSuggestions: (
