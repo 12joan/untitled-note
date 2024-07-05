@@ -76,7 +76,7 @@ export const EditorBody = memo(
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:
-              'slate-string:em:text-lg/[1.555em] slate-void:em:text-lg/[inherit]',
+              'slate-string:em:text-lg slate-void:em:text-lg/[inherit]',
             editorStyle: editorStyleClassNames[editorStyle],
           })}
           placeholder={isReadOnly ? undefined : 'Write something...'}
