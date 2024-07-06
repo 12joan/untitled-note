@@ -168,7 +168,7 @@ const Badge = ({ text, hint, color }: Badge) => {
     <Tooltip content={hint}>
       <span
         className={groupedClassNames({
-          base: 'text-xs rounded-sm px-1 py-0.5 select-none',
+          base: 'text-xs rounded-sm px-1 py-0.5 select-none shrink-0',
           color: {
             neutral: 'bg-plain-200 dark:bg-plain-600',
             danger: 'bg-red-600 text-white',
