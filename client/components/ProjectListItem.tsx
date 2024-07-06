@@ -100,9 +100,8 @@ export const ProjectListItem = ({
             {
               cursor: 'pointer',
               // Ensure dragging works on iOS
-              '-webkit-touch-callout': 'none',
-              '-webkit-user-select': 'none',
-            } as any
+              WebkitTouchCallout: 'none',
+            }
           }
           onClick={(event: MouseEvent) => {
             hideTooltip();
