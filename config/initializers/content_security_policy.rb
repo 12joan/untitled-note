@@ -9,7 +9,7 @@ Rails.application.configure do
     policy.default_src :self
     policy.connect_src '*'
     policy.font_src    :self
-    policy.img_src     '*'
+    policy.img_src     '*', :blob, :data
     policy.object_src  :none
     policy.script_src  :self
     policy.style_src   :self
