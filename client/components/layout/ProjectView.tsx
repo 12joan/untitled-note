@@ -243,7 +243,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
             <main
               ref={mainRef}
               className="grow flex flex-col pb-5"
-              tabIndex={0}
+              tabIndex={-1}
               aria-label="Main"
             >
               <ChildView
@@ -266,7 +266,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
           {staticSidebar && (
             <nav
               ref={projectsBarRef}
-              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent"
+              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent focus-ring-no-relative"
               // Make sure that the projects bar overlaps the safe area
               style={{
                 marginLeft: 'calc(-1 * env(safe-area-inset-left))',
@@ -274,7 +274,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
                 marginBottom: 'calc(-1 * env(safe-area-inset-bottom)',
                 paddingBottom: 'env(safe-area-inset-bottom)',
               }}
-              tabIndex={0}
+              tabIndex={-1}
               aria-label="Projects bar"
               children={<ProjectsBar />}
             />
@@ -284,7 +284,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
             <nav
               ref={mergeRefs([topBarRef, topBarSizeRef])}
               className="p-5 flex items-center gap-2"
-              tabIndex={0}
+              tabIndex={-1}
               aria-label="Top bar"
             >
               <TopBar
@@ -310,7 +310,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
                 <nav
                   ref={sideBarRef}
                   className="pointer-events-auto overflow-y-auto p-5 pt-1 pr-1"
-                  tabIndex={0}
+                  tabIndex={-1}
                   aria-label="Sidebar"
                   children={<Sidebar />}
                 />

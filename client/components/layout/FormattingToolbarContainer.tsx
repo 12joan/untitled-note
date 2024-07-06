@@ -38,7 +38,7 @@ export const FormattingToolbarContainer = forwardRef<
             isOffcanvas &&
             'bg-plain-100/75 dark:bg-plain-700/75 backdrop-blur-lg p-1 rounded-l-lg shadow-dialog overflow-y-auto',
         })}
-        tabIndex={0}
+        tabIndex={-1}
         aria-label="Formatting toolbar"
         onMouseDown={(event) => event.preventDefault()}
       >
