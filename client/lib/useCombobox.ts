@@ -31,11 +31,23 @@ type UseComboboxResult<T> = {
   inputProps: Required<
     Pick<
       InputHTMLAttributes<HTMLInputElement>,
-      'onChange' | 'onKeyDown' | 'onFocus' | 'onBlur' | 'role' | 'aria-expanded'
+      | 'onChange'
+      | 'onKeyDown'
+      | 'onFocus'
+      | 'onBlur'
+      | 'role'
+      | 'aria-expanded'
+      | 'aria-controls'
+      | 'aria-autocomplete'
     >
   >;
   showSuggestions: boolean;
-  suggestionContainerProps: HTMLProps<HTMLDivElement>;
+  suggestionContainerProps: Required<
+    Pick<
+      HTMLProps<HTMLDivElement>,
+      'id' | 'role' | 'aria-activedescendant' | 'onMouseDown'
+    >
+  >;
   mapSuggestions: (
     renderSuggestion: (options: RenderSuggestionOptions<T>) => ReactNode
   ) => ReactNode;
@@ -55,6 +67,7 @@ export const useCombobox = <T>({
     () => `combobox-${Math.random().toString(36).slice(2)}-`,
     []
   );
+  const suggestionContainerId = `${idPrefix}listbox`;
   const idForSuggestion = (key: string) => `${idPrefix}${key}`;
 
   const [inputFocused, setInputFocused] = useState(false);
@@ -142,11 +155,14 @@ export const useCombobox = <T>({
       onBlur: () => setInputFocused(false),
       role: 'combobox',
       'aria-expanded': showSuggestions,
+      'aria-controls': suggestionContainerId,
+      'aria-autocomplete': 'list',
     },
 
     showSuggestions,
 
     suggestionContainerProps: {
+      id: suggestionContainerId,
       role: 'listbox',
       'aria-activedescendant': idForSuggestion(activeSuggestionKey),
       // Prevent blur when clicking scrollbar
