@@ -93,6 +93,7 @@ export const QuickFind = () => {
       setQuery('');
       onClick(newTab);
     },
+    // hideOnBlur: true,
     hideWhenNoSuggestions: false,
   });
 
