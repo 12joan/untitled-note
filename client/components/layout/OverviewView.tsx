@@ -27,10 +27,10 @@ export const OverviewView = memo(() => {
   const futurePartialDocuments = useAppContext('futurePartialDocuments');
   const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
   const futureRecentlyViewedDocuments = useAppContext(
-    'futureRecentlyViewedDocuments'
+    'futureRecentlyViewedDocumentsExcludingPinned'
   );
   const futureRecentlyModifiedDocuments = useAppContext(
-    'futureRecentlyModifiedDocuments'
+    'futureRecentlyModifiedDocumentsExcludingPinned'
   );
   const futureTags = useAppContext('futureTags');
   const toggleProjectSettingsModal = useAppContext(
