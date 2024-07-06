@@ -40,10 +40,10 @@ export const Sidebar = memo(({ onButtonClick = () => {} }: SidebarProps) => {
   const [recentsType] = useSettings('recents_type');
   const futurePinnedDocuments = useAppContext('futurePinnedDocuments');
   const futureRecentlyViewedDocuments = useAppContext(
-    'futureRecentlyViewedDocuments'
+    'futureRecentlyViewedDocumentsExcludingPinned'
   );
   const futureRecentlyModifiedDocuments = useAppContext(
-    'futureRecentlyModifiedDocuments'
+    'futureRecentlyModifiedDocumentsExcludingPinned'
   );
   const futureTags = useAppContext('futureTags');
   const toggleSearchModal = useAppContext('toggleSearchModal');

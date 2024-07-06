@@ -3,7 +3,7 @@ import { streamDocuments } from '~/lib/apis/document';
 import { streamTags } from '~/lib/apis/tag';
 import { AppContextProvider } from '~/lib/appContext';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
-import { mapFuture, thenFuture } from '~/lib/monads';
+import { Future, mapFuture, thenFuture } from '~/lib/monads';
 import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments';
 import { PartialDocument, Project, Tag } from '~/lib/types';
 import { useStream } from '~/lib/useStream';
@@ -108,9 +108,7 @@ export const StreamProjectData = ({
                 (partialDocument) => partialDocument.id === documentId
               )
             )
-            .filter(
-              (doc) => doc !== undefined && doc.pinned_at === null
-            ) as PartialDocument[]
+            .filter((doc) => doc !== undefined) as PartialDocument[]
       ),
     [futurePartialDocuments, recentlyViewedDocuments]
   );
@@ -118,15 +116,29 @@ export const StreamProjectData = ({
   const futureRecentlyModifiedDocuments = useMemo(
     () =>
       mapFuture(futurePartialDocuments, (documents) =>
-        documents
-          .filter((doc) => doc.pinned_at === null)
-          .sort(
-            (a, b) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime()
-          )
+        documents.sort(
+          (a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        )
       ),
     [futurePartialDocuments]
+  );
+
+  const excludePinned = (futureDocs: Future<PartialDocument[]>) =>
+    useMemo(
+      () =>
+        mapFuture(futureDocs, (docs) =>
+          docs.filter((doc) => doc.pinned_at === null)
+        ),
+      [futureDocs]
+    );
+
+  const futureRecentlyViewedDocumentsExcludingPinned = excludePinned(
+    futureRecentlyViewedDocuments
+  );
+
+  const futureRecentlyModifiedDocumentsExcludingPinned = excludePinned(
+    futureRecentlyModifiedDocuments
   );
 
   return (
@@ -138,6 +150,12 @@ export const StreamProjectData = ({
       futurePinnedDocuments={futurePinnedDocuments}
       futureRecentlyViewedDocuments={futureRecentlyViewedDocuments}
       futureRecentlyModifiedDocuments={futureRecentlyModifiedDocuments}
+      futureRecentlyViewedDocumentsExcludingPinned={
+        futureRecentlyViewedDocumentsExcludingPinned
+      }
+      futureRecentlyModifiedDocumentsExcludingPinned={
+        futureRecentlyModifiedDocumentsExcludingPinned
+      }
       children={children}
     />
   );
