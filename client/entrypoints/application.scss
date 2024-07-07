@@ -47,11 +47,7 @@ body {
 
 @layer base {
   *:focus-visible, .focus-ring {
-    @apply ring-2 ring-primary-500 dark:ring-primary-400 border-transparent z-5 outline-none;
-
-    &:not(.focus-ring-no-relative) {
-      @apply relative;
-    }
+    @apply ring-2 ring-primary-500 dark:ring-primary-400 border-transparent z-5 relative outline-none;
   }
 
   *, ::before, ::after {

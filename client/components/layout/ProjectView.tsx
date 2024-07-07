@@ -266,7 +266,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
           {staticSidebar && (
             <nav
               ref={projectsBarRef}
-              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent focus-ring-no-relative"
+              className="pointer-events-auto overflow-y-auto border-r bg-plain-50 dark:bg-plain-950/50 dark:border-transparent static"
               // Make sure that the projects bar overlaps the safe area
               style={{
                 marginLeft: 'calc(-1 * env(safe-area-inset-left))',
