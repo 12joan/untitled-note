@@ -80,7 +80,8 @@ const LinkModal = ({
             {...urlProps}
             required
             data-test="hello"
-            pattern="(https?|mailto|tel|web\+):.*"
+            // Keep in sync with LinkComponent
+            pattern="(https?|mailto|tel):.*"
             className="text-input text-input-modal"
             placeholder="https://example.com/"
           />

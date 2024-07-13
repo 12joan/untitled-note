@@ -66,12 +66,12 @@ export const LinkComponent = ({
   const safeHref = useMemo(() => {
     const url = new URL(unsafeHref);
 
-    // eslint-disable-next-line no-script-url
-    if (url.protocol === 'javascript:') {
-      return 'about:blank';
+    // Keep in sync with LinkModal
+    if (['http:', 'https:', 'mailto:', 'tel:'].includes(url.protocol)) {
+      return url.href;
     }
 
-    return url.href;
+    return 'about:blank';
   }, [unsafeHref]);
 
   const linkProps = {
