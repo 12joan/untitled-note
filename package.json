@@ -108,7 +108,7 @@
     "ts-jest": "^29.2.3",
     "typescript": "^5.5.4",
     "typescript-language-server": "^3.3.2",
-    "vite": "^5.3.4",
+    "vite": "^5.3.5",
     "vite-plugin-ruby": "^5.0.0"
   },
   "packageManager": "yarn@4.3.1",
