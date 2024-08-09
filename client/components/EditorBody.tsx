@@ -16,6 +16,7 @@ import {
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { useObjectVersion } from '~/lib/useObjectVersion';
 
 export interface EditorBodyProps {
   setEditor?: (editor: PlateEditor | null) => void;
@@ -60,8 +61,11 @@ export const EditorBody = memo(
 
     const linkModal = useLinkModal();
 
+    const pluginsVersion = useObjectVersion(plugins);
+
     return (
       <Plate
+        key={pluginsVersion}
         editorRef={setEditor}
         plugins={plugins}
         initialValue={initialValue}
@@ -72,7 +76,6 @@ export const EditorBody = memo(
         <PlateContent
           className={groupedClassNames({
             className,
-            spacing: 'em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:

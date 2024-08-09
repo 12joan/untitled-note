@@ -64,7 +64,6 @@ export const AppearanceSection = () => {
           onChange={setEditorStyle}
           syncWithOption={null}
           syncWithLink={null}
-          className="xs:grid-cols-2"
         />
       </div>
 

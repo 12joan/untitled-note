@@ -32,11 +32,13 @@ import { createSelectionToolbarPlugin } from '~/lib/editor/selectionToolbar';
 import { softBreakOptions } from '~/lib/editor/softBreak';
 import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
 import { tabbableOptions } from '~/lib/editor/tabbable';
+import { EditorStyle } from '../types';
 
 export type PluginCategory = 'markup' | 'behaviour';
 
 export interface UsePluginsOptions {
   enabledCategories?: Partial<Record<PluginCategory, boolean>>;
+  editorStyle?: EditorStyle;
 }
 
 const disableHotkey = { hotkey: '' };
@@ -46,6 +48,7 @@ export const usePlugins = ({
     markup: markupEnabled = true,
     behaviour: behaviourEnabled = true,
   } = {},
+  editorStyle = 'casual',
 }: UsePluginsOptions = {}) => {
   /**
    * It's important that the plugins are memoized, otherwise the editor will
@@ -76,18 +79,19 @@ export const usePlugins = ({
   );
 
   const staticBehaviourPlugins: PlatePlugin[] = useMemo(
-    () => [
-      createSoftBreakPlugin(softBreakOptions),
-      createResetNodePlugin(resetNodeOptions),
-      createExitBreakPlugin(exitBreakOptions),
-      createTabbablePlugin(tabbableOptions),
-      createTrailingBlockPlugin(),
-      createAutoformatPlugin(autoformatOptions),
-      createSplitInsertedDataIntoParagraphsPlugin(),
-      createSelectionToolbarPlugin(),
-      createMarkAffinityPlugin(),
-    ],
-    []
+    () =>
+      [
+        createSoftBreakPlugin(softBreakOptions),
+        createResetNodePlugin(resetNodeOptions),
+        createExitBreakPlugin(exitBreakOptions),
+        createTabbablePlugin(tabbableOptions),
+        createTrailingBlockPlugin(),
+        editorStyle !== 'mono' && createAutoformatPlugin(autoformatOptions),
+        createSplitInsertedDataIntoParagraphsPlugin(),
+        createSelectionToolbarPlugin(),
+        createMarkAffinityPlugin(),
+      ].filter((plugin) => !!plugin),
+    [editorStyle]
   );
 
   const attachmentPlugins = useAttachmentPlugins();
