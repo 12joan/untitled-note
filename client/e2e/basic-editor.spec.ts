@@ -144,7 +144,7 @@ test.describe('Basic editor', () => {
     }
   });
 
-  test.only('does not autoformat when style is mono', async ({ page }) => {
+  test('does not autoformat when style is mono', async ({ page }) => {
     await openDocumentAppearanceSection(page);
     await page.getByRole('radio', { name: 'Monospaced' }).click();
     await page.keyboard.press('Escape');
