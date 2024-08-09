@@ -6,6 +6,7 @@ const descriptions: Record<EditorStyle, string> = {
   casual: 'The casual style is designed for taking notes and casual writing.',
   literary:
     'The literary style is designed for writing long-form content. Paragraphs are indented and spaced closer together, text is justified, and a serif font is used.',
+  mono: 'The monospaced style is designed for writing plain text.',
 };
 
 export interface EditorStyleInputProps<Nullable extends boolean> {
@@ -29,7 +30,9 @@ export const EditorStyleInput = <Nullable extends boolean>({
 
   const options = useMemo(
     () =>
-      syncWithOption ? [null, 'casual', 'literary'] : ['casual', 'literary'],
+      syncWithOption
+        ? [null, 'casual', 'literary', 'mono']
+        : ['casual', 'literary', 'mono'],
     [syncWithOption]
   ) as T[];
 
@@ -38,6 +41,7 @@ export const EditorStyleInput = <Nullable extends boolean>({
       null: `Sync with ${syncWithOption}`,
       casual: 'Casual',
       literary: 'Literary',
+      mono: 'Monospaced',
     }),
     [syncWithOption]
   );

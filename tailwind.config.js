@@ -113,6 +113,7 @@ module.exports = {
       addVariant('slate-top-level', '[data-slate-editor] > &');
 
       addVariant('literary', '.style-literary &');
+      addVariant('mono', '.style-mono &');
 
       addVariant('diff', [
         '&.diff-insert',

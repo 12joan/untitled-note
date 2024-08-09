@@ -76,14 +76,20 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   const { isLocked, isReadOnly, temporarilyUnlock, resumeLock } =
     useLockedState(workingDocument);
 
+  const editorStyle = useEditorStyle(workingDocument);
+
+  useEffect(() => {
+    if (editor) {
+      editor.style = editorStyle;
+    }
+  }, [editor, editorStyle]);
+
   const plugins = usePlugins();
 
   const initialValue = useInitialValue({
     initialDocument,
     plugins,
   });
-
-  const editorStyle = useEditorStyle(workingDocument);
 
   const { findDialog, openFind } = useFind({
     editor: editor ?? undefined,

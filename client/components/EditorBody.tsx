@@ -72,7 +72,6 @@ export const EditorBody = memo(
         <PlateContent
           className={groupedClassNames({
             className,
-            spacing: 'em:space-y-3',
             textColor: 'text-black dark:text-white',
             focusRing: 'no-focus-ring',
             baseFontSize:

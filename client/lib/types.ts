@@ -1,4 +1,4 @@
-export type EditorStyle = 'casual' | 'literary';
+export type EditorStyle = 'casual' | 'literary' | 'mono';
 
 export const automaticSnapshotsOptions = [
   'disabled',

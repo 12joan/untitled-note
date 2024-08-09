@@ -44,6 +44,7 @@ export const EditorTitle = forwardRef(
             editorStyle: {
               casual: '',
               literary: 'font-serif',
+              mono: 'font-mono',
             }[editorStyle],
           })}
           style={{
