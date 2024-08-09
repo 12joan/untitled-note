@@ -31,7 +31,7 @@ const blockRule = (
   type,
   match,
   preFormat: unwrapList,
-  query: (editor) => !isSelectionInCodeBlock(editor),
+  query: (editor) => editor.style !== 'mono' && !isSelectionInCodeBlock(editor),
   ...otherProps,
 });
 
@@ -43,7 +43,7 @@ const markRule = (
   mode: 'mark',
   type,
   match,
-  query: (editor) => !isSelectionInCodeBlock(editor),
+  query: (editor) => editor.style !== 'mono' && !isSelectionInCodeBlock(editor),
   ...otherProps,
 });
 

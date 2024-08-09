@@ -251,6 +251,11 @@ export const openDocumentSettingsModal = async (page: Page) => {
   await page.getByText('Document settings').click();
 };
 
+export const openDocumentAppearanceSection = async (page: Page) => {
+  await openDocumentSettingsModal(page);
+  await page.getByRole('tab', { name: 'Appearance' }).click();
+};
+
 export const openExportHTMLSection = async (page: Page) => {
   await openDocumentSettingsModal(page);
   await page.getByRole('tab', { name: 'Export HTML' }).click();

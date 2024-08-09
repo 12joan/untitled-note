@@ -16,7 +16,6 @@ import {
   useEditorFontSizeCSSValue,
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { useObjectVersion } from '~/lib/useObjectVersion';
 
 export interface EditorBodyProps {
   setEditor?: (editor: PlateEditor | null) => void;
@@ -61,11 +60,8 @@ export const EditorBody = memo(
 
     const linkModal = useLinkModal();
 
-    const pluginsVersion = useObjectVersion(plugins);
-
     return (
       <Plate
-        key={pluginsVersion}
         editorRef={setEditor}
         plugins={plugins}
         initialValue={initialValue}

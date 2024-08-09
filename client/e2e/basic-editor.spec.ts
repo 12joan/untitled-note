@@ -18,6 +18,7 @@ import {
   createProject,
   expectUpToDate,
   logIn,
+  openDocumentAppearanceSection,
   openSettingsAppearanceSection,
 } from './utils';
 
@@ -141,5 +142,19 @@ test.describe('Basic editor', () => {
       await page.keyboard.press('Backspace');
       await expectType(ELEMENT_PARAGRAPH);
     }
+  });
+
+  test.only('does not autoformat when style is mono', async ({ page }) => {
+    await openDocumentAppearanceSection(page);
+    await page.getByRole('radio', { name: 'Monospaced' }).click();
+    await page.keyboard.press('Escape');
+
+    const editorHandle = await getEditorHandle(page);
+    await clickAtPath(page, editorHandle, [0]);
+
+    await page.keyboard.type('# ');
+    expect(await getTypeAtPath(page, editorHandle, [0])).toEqual(
+      ELEMENT_PARAGRAPH
+    );
   });
 });

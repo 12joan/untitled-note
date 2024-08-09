@@ -78,7 +78,13 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
 
   const editorStyle = useEditorStyle(workingDocument);
 
-  const plugins = usePlugins({ editorStyle });
+  useEffect(() => {
+    if (editor) {
+      editor.style = editorStyle;
+    }
+  }, [editor, editorStyle]);
+
+  const plugins = usePlugins();
 
   const initialValue = useInitialValue({
     initialDocument,
