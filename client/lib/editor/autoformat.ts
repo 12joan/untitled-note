@@ -63,6 +63,9 @@ export const autoformatOptions: {
       blockRule(ELEMENT_LI, ['1. ', '1) '], {
         format: (editor) => toggleList(editor, { type: ELEMENT_OL }),
       }),
+      blockRule('todo', '[] ', {
+        format: (editor) => toggleList(editor, { type: 'todo' }),
+      }),
       markRule([MARK_BOLD, MARK_ITALIC], '***'),
       markRule(MARK_BOLD, '**'),
       markRule(MARK_ITALIC, ['*', '_']),

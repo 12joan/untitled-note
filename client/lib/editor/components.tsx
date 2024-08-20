@@ -1,4 +1,4 @@
-import React, { ElementType } from 'react';
+import React, { createContext, ElementType, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
 import { LinkComponent } from '~/lib/editor/links/LinkComponent';
@@ -7,15 +7,19 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
   ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
+  findNodePath,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   PlateRenderElementProps,
+  setNodes,
+  useEditorReadOnly,
 } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { Mention } from './mentions/Mention';
@@ -36,6 +40,8 @@ const makeElementComponent =
 
 const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';
+
+const TodoContext = createContext(false);
 
 export const components = {
   [ELEMENT_PARAGRAPH]: makeElementComponent(
@@ -104,6 +110,40 @@ export const components = {
         'list-decimal marker:text-plain-500 dark:marker:text-plain-400',
     })
   ),
+  'todo': (props: PlateRenderElementProps) => {
+    const Ul = makeElementComponent(
+      'ul',
+      groupedClassNames({
+        list: listStyle,
+      })
+    )
+
+    return (
+      <TodoContext.Provider value={true}>
+        <Ul {...props} />
+      </TodoContext.Provider>
+    );
+  },
+  [ELEMENT_LIC]: ({ children, attributes, element, editor }: PlateRenderElementProps) => {
+    const isTodo = useContext(TodoContext);
+    const checked: boolean = (element.checked as any) ?? false;
+    const readOnly = useEditorReadOnly();
+    const setChecked = (checked: boolean) => {
+      setNodes(editor, { checked }, { at: findNodePath(editor, element) });
+    };
+    return (
+      <div {...attributes}>
+        {isTodo && (
+          <span contentEditable={false} className="ml-[calc(-0.75em-0.5ch)] -translate-x-1/2 absolute">
+            <input type="checkbox" checked={checked} onChange={(event) => setChecked(event.target.checked)} disabled={readOnly} />
+          </span>
+        )}
+        <span className={checked ? 'opacity-75 line-through' : ''}>
+          {children}
+        </span>
+      </div>
+    );
+  },
   [ELEMENT_LI]: makeElementComponent('li', 'em:pl-1.5'),
   [ELEMENT_MENTION]: Mention,
   [ELEMENT_MENTION_INPUT]: MentionInput,

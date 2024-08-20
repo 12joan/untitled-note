@@ -2284,7 +2284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-list@npm:^34.0.0":
+"@udecode/plate-list@npm:34.0.0":
   version: 34.0.0
   resolution: "@udecode/plate-list@npm:34.0.0"
   dependencies:
@@ -2299,6 +2299,24 @@ __metadata:
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
   checksum: 10/cbdb7e5b7ced1778fdb55f261260cf80f2d1953c31f52b01bd743176f300c7da3a217710ec09172b3f0fba02c11fd8d29d54f290ec7e78d1d2b8e353760dc763
+  languageName: node
+  linkType: hard
+
+"@udecode/plate-list@patch:@udecode/plate-list@npm%3A34.0.0#~/.yarn/patches/@udecode-plate-list-npm-34.0.0-1244bdf82f.patch":
+  version: 34.0.0
+  resolution: "@udecode/plate-list@patch:@udecode/plate-list@npm%3A34.0.0#~/.yarn/patches/@udecode-plate-list-npm-34.0.0-1244bdf82f.patch::version=34.0.0&hash=17d71f"
+  dependencies:
+    "@udecode/plate-reset-node": "npm:34.0.0"
+    lodash: "npm:^4.17.21"
+  peerDependencies:
+    "@udecode/plate-common": ">=34.0.0"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+    slate: ">=0.94.0"
+    slate-history: ">=0.93.0"
+    slate-hyperscript: ">=0.66.0"
+    slate-react: ">=0.99.0"
+  checksum: 10/e9bd1b2af0280720341a0ec06c6fc9d181b0bd6428feaf45e8181a9bcab1b5a68426dc1b11e6cef2440916f54b2a378eac42f36053dae69dd3b246058b803e45
   languageName: node
   linkType: hard
 
@@ -6753,7 +6771,7 @@ __metadata:
     "@udecode/plate-floating": "npm:^34.1.1"
     "@udecode/plate-heading": "npm:^34.0.7"
     "@udecode/plate-link": "npm:^35.2.0"
-    "@udecode/plate-list": "npm:^34.0.0"
+    "@udecode/plate-list": "patch:@udecode/plate-list@npm%3A34.0.0#~/.yarn/patches/@udecode-plate-list-npm-34.0.0-1244bdf82f.patch"
     "@udecode/plate-paragraph": "npm:^34.0.0"
     "@udecode/plate-reset-node": "npm:^34.0.0"
     "@udecode/plate-tabbable": "npm:^34.0.0"

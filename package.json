@@ -39,7 +39,7 @@
     "@udecode/plate-floating": "^34.1.1",
     "@udecode/plate-heading": "^34.0.7",
     "@udecode/plate-link": "^35.2.0",
-    "@udecode/plate-list": "^34.0.0",
+    "@udecode/plate-list": "patch:@udecode/plate-list@npm%3A34.0.0#~/.yarn/patches/@udecode-plate-list-npm-34.0.0-1244bdf82f.patch",
     "@udecode/plate-paragraph": "^34.0.0",
     "@udecode/plate-reset-node": "^34.0.0",
     "@udecode/plate-tabbable": "^34.0.0",

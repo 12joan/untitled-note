@@ -1,0 +1,82 @@
+diff --git a/dist/index.js b/dist/index.js
+index 014d712e0a67675b030d2282e4bca55d8be4a1b2..4f210a26d7a1bf10d10c0d60c568dd04fae7c850 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -141,7 +141,7 @@ var getOrderedListType = (editor) => {
+   return (0, import_server2.getPluginType)(editor, ELEMENT_OL);
+ };
+ var getListTypes = (editor) => {
+-  return [getOrderedListType(editor), getUnorderedListType(editor)];
++  return [getOrderedListType(editor), getUnorderedListType(editor), 'todo'];
+ };
+ var getListItemType = (editor) => {
+   return (0, import_server2.getPluginType)(editor, ELEMENT_LI);
+@@ -215,7 +215,8 @@ var getListRoot = (editor, at = editor.selection) => {
+     match: {
+       type: [
+         (0, import_server5.getPluginType)(editor, ELEMENT_UL),
+-        (0, import_server5.getPluginType)(editor, ELEMENT_OL)
++        (0, import_server5.getPluginType)(editor, ELEMENT_OL),
++        'todo'
+       ]
+     }
+   });
+@@ -527,7 +528,8 @@ var unwrapList = (editor, { at } = {}) => {
+         match: {
+           type: [
+             (0, import_server14.getPluginType)(editor, ELEMENT_UL),
+-            (0, import_server14.getPluginType)(editor, ELEMENT_OL)
++            (0, import_server14.getPluginType)(editor, ELEMENT_OL),
++            'todo'
+           ]
+         },
+         split: true
+@@ -1600,6 +1602,7 @@ var normalizeListItem = (editor, {
+     (0, import_server28.getPluginType)(editor, ELEMENT_UL),
+     (0, import_server28.getPluginType)(editor, ELEMENT_OL),
+     (0, import_server28.getPluginType)(editor, ELEMENT_LIC),
++    'todo',
+     ...validLiChildrenTypes
+   ]);
+   const [, liPath] = listItem;
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 270d896f8120237f2114f6ccf1cce4d52c4cef56..6017935b1284a6e0b422ded07c583952fb51741a 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -87,7 +87,7 @@ var getOrderedListType = (editor) => {
+   return getPluginType2(editor, ELEMENT_OL);
+ };
+ var getListTypes = (editor) => {
+-  return [getOrderedListType(editor), getUnorderedListType(editor)];
++  return [getOrderedListType(editor), getUnorderedListType(editor), 'todo'];
+ };
+ var getListItemType = (editor) => {
+   return getPluginType2(editor, ELEMENT_LI);
+@@ -170,7 +170,8 @@ var getListRoot = (editor, at = editor.selection) => {
+     match: {
+       type: [
+         getPluginType5(editor, ELEMENT_UL),
+-        getPluginType5(editor, ELEMENT_OL)
++        getPluginType5(editor, ELEMENT_OL),
++        'todo'
+       ]
+     }
+   });
+@@ -535,7 +536,8 @@ var unwrapList = (editor, { at } = {}) => {
+         match: {
+           type: [
+             getPluginType9(editor, ELEMENT_UL),
+-            getPluginType9(editor, ELEMENT_OL)
++            getPluginType9(editor, ELEMENT_OL),
++            'todo'
+           ]
+         },
+         split: true
+@@ -1739,6 +1741,7 @@ var normalizeListItem = (editor, {
+     getPluginType20(editor, ELEMENT_UL),
+     getPluginType20(editor, ELEMENT_OL),
+     getPluginType20(editor, ELEMENT_LIC),
++    'todo',
+     ...validLiChildrenTypes
+   ]);
+   const [, liPath] = listItem;

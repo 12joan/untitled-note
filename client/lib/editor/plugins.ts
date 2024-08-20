@@ -19,19 +19,54 @@ import {
   createLinkPlugin,
   createListPlugin,
   createParagraphPlugin,
+  createPluginFactory,
   createPlugins,
   createResetNodePlugin,
   createSoftBreakPlugin,
   createStrikethroughPlugin,
   createTabbablePlugin,
   createTrailingBlockPlugin,
+  ELEMENT_LIC,
+  getBlockAbove,
+  getNode,
+  getNodeParent,
+  isHotkey,
+  isSelectionAtBlockStart,
   PlatePlugin,
+  toDOMNode,
 } from '~/lib/editor/plate';
 import { resetNodeOptions } from '~/lib/editor/resetNode';
 import { createSelectionToolbarPlugin } from '~/lib/editor/selectionToolbar';
 import { softBreakOptions } from '~/lib/editor/softBreak';
 import { createSplitInsertedDataIntoParagraphsPlugin } from '~/lib/editor/splitInsertedDataIntoParagraphs';
 import { tabbableOptions } from '~/lib/editor/tabbable';
+
+const createTodoPlugin = createPluginFactory({
+  key: 'todo',
+  isElement: true,
+  handlers: {
+    onKeyDown: (editor) => (event) => {
+      if (!isHotkey('left', event)) return;
+
+      const licEntry = getBlockAbove(editor, {
+        match: { type: ELEMENT_LIC },
+      });
+      console.log(licEntry);
+      if (!licEntry) return;
+
+      const list = getNode(editor, licEntry[1].slice(0, -2));
+      console.log(list);
+      if (list.type !== 'todo') return;
+
+      console.log('x');
+      if (!isSelectionAtBlockStart(editor)) return;
+
+      const licDomNode = toDOMNode(editor, licEntry[0]);
+      console.log(licDomNode);
+      licDomNode?.querySelector('input[type=checkbox]')?.focus();
+    },
+  },
+});
 
 export type PluginCategory = 'markup' | 'behaviour';
 
@@ -70,6 +105,7 @@ export const usePlugins = ({
       createBlockquotePlugin({ options: disableHotkey }),
       createCodeBlockPlugin({ ...codeBlockOptions, options: disableHotkey }),
       createListPlugin(),
+      createTodoPlugin(),
       createMentionPlugin(),
     ],
     []
