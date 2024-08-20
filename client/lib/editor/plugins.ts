@@ -33,6 +33,7 @@ import {
   isHotkey,
   isSelectionAtBlockStart,
   PlatePlugin,
+  setNodes,
   toDOMNode,
 } from '~/lib/editor/plate';
 import { resetNodeOptions } from '~/lib/editor/resetNode';
@@ -46,8 +47,6 @@ const createTodoPlugin = createPluginFactory({
   isElement: true,
   handlers: {
     onKeyDown: (editor) => (event) => {
-      if (!isHotkey('left', event)) return;
-
       const licEntry = getBlockAbove(editor, {
         match: { type: ELEMENT_LIC },
       });
@@ -58,12 +57,10 @@ const createTodoPlugin = createPluginFactory({
       console.log(list);
       if (list.type !== 'todo') return;
 
-      console.log('x');
-      if (!isSelectionAtBlockStart(editor)) return;
+      if (!isHotkey('meta+enter', event)) return;
+      event.preventDefault()
 
-      const licDomNode = toDOMNode(editor, licEntry[0]);
-      console.log(licDomNode);
-      licDomNode?.querySelector('input[type=checkbox]')?.focus();
+      setNodes(editor, { checked: !licEntry[0].checked }, { at: licEntry[1] });
     },
   },
 });
