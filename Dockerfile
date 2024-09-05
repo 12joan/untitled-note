@@ -1,5 +1,5 @@
 FROM node:20.17.0-alpine AS node
-FROM ruby:3.3.4-alpine
+FROM ruby:3.3.5-alpine
 
 COPY --from=node /usr/lib /usr/lib
 COPY --from=node /usr/local/lib /usr/local/lib
