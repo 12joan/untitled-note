@@ -11,6 +11,8 @@ require 'action_mailer/railtie'
 require 'rails/test_unit/railtie'
 require 'sprockets/railtie'
 
+require_relative '../lib/middleware/honeypot'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -29,6 +31,7 @@ module Note
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.middleware.insert_before 0, Rack::AuthorisedProxy
+    config.middleware.insert_after 0, Middleware::Honeypot
 
     # Change the format of the cache entry.
     config.active_support.cache_format_version = 7.0

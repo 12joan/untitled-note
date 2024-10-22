@@ -13,6 +13,8 @@
     <%= f.hidden_field :remember_me, value: true %>
   <% end %>
 
+  <%= render 'users/shared/honeypot' %>
+
   <div class="actions">
     <%= f.submit 'Sign in', class: 'btn btn-rect btn-primary w-full' %>
   </div>

@@ -34,6 +34,8 @@
   <%= render 'users/shared/email_field', f: f %>
   <%= render 'users/shared/new_password_fields', f: f %>
 
+  <%= render 'users/shared/honeypot' %>
+
   <div class="actions">
     <%= f.submit 'Create account', class: 'btn btn-rect btn-primary w-full' %>
   </div>
