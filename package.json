@@ -73,7 +73,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "@playwright/test": "^1.48.1",
-    "@types/jest": "^29.5.13",
+    "@types/jest": "^29.5.14",
     "@types/lodash": "^4",
     "@types/node": "^18.17.14",
     "@types/rails__actioncable": "^6.1.11",
