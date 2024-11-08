@@ -45,7 +45,7 @@
     "@udecode/plate-tabbable": "^36.0.0",
     "@udecode/plate-trailing-block": "^36.0.0",
     "axios": "^1.7.7",
-    "comlink": "^4.4.1",
+    "comlink": "^4.4.2",
     "compressorjs": "^1.2.1",
     "emoji-mart": "^5.5.2",
     "human-readable": "^0.2.1",
