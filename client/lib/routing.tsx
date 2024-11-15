@@ -113,9 +113,7 @@ const ProjectRoutes = ({ project }: ProjectRoutesProps) => {
     {
       path: '/search',
       element: forwardParams(() => (
-        <ProjectView
-          childView={{ type: 'search', key: 'search', props: {} }}
-        />
+        <ProjectView childView={{ type: 'search', key: 'search', props: {} }} />
       )),
     },
     {
