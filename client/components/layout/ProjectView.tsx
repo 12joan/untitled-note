@@ -35,6 +35,7 @@ import { OverviewView } from '~/components/layout/OverviewView';
 import { ProjectsBar } from '~/components/layout/ProjectsBar';
 import { RecentlyModifiedView } from '~/components/layout/RecentlyModifiedView';
 import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
+import { SearchView } from '~/components/layout/SearchView';
 import { Sidebar } from '~/components/layout/Sidebar';
 import { SnapshotsView } from '~/components/layout/SnapshotsView';
 import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
@@ -53,6 +54,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     {
       awaitRedirect: AwaitRedirect,
       overview: OverviewView,
+      search: SearchView,
       recentlyViewed: RecentlyViewedView,
       recentlyModified: RecentlyModifiedView,
       showTag: TagDocumentsView,
