@@ -70,7 +70,7 @@ body {
     @apply w-5 h-5 shrink-0 appearance-none rounded border bg-page-bg-light dark:bg-page-bg-dark mt-[0.1875rem];
 
     &:checked {
-      @apply bg-primary-500 dark:bg-primary-400 text-white border-transparent ring-offset-2 bg-tick;
+      @apply bg-primary-500 dark:bg-primary-400 text-white border-transparent ring-offset-2 bg-tick bg-no-repeat bg-center;
     }
   }
 

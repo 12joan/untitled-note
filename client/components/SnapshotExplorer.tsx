@@ -73,7 +73,6 @@ export const SnapshotExplorer = ({
         <label className="flex gap-2 items-start">
           <input
             type="checkbox"
-            className="ring-offset-plain-100 dark:ring-offset-plain-800"
             checked={showDiff}
             onChange={(e) => setShowDiff(e.target.checked)}
           />
