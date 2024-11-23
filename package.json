@@ -111,7 +111,7 @@
     "vite": "^5.4.11",
     "vite-plugin-ruby": "^5.1.1"
   },
-  "packageManager": "yarn@4.4.1",
+  "packageManager": "yarn@4.5.2",
   "resolutions": {
     "react-textarea-autosize@^8.4.1": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
     "react-textarea-autosize@^8.3.3": "patch:react-textarea-autosize@npm%3A8.4.1#./.yarn/patches/react-textarea-autosize-npm-8.4.1-f9a819701a.patch",
