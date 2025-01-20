@@ -75,9 +75,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy project' do
-    # assert_difference('Project.count', -1) do
+    assert_difference('Project.count', -1) do
       delete api_v1_project_url(@project)
-    # end
+    end
 
     assert_response :success
   end
@@ -94,9 +94,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'cannot update project belonging to other user' do
     as_user(create(:user))
-
-    assert_raises(ActiveRecord::RecordNotFound) do
-      patch api_v1_project_url(@project), params: { project: { name: 'New name' } }
-    end
+    initial_name = @project.name
+    patch api_v1_project_url(@project), params: { project: { name: 'New name' } }
+    assert_response :not_found
+    @project.reload
+    assert_equal initial_name, @project.name
   end
 end

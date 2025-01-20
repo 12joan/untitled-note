@@ -32,6 +32,7 @@ class ProjectTest < ActiveSupport::TestCase
     tags = create_list(:tag, 1, project: project)
     create(:document, project: project, tags: tags)
     project.destroy!
+    assert_predicate project, :destroyed?
   end
 
   test 'new project has order_string 8 if no other projects exist' do

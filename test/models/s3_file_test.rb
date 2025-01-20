@@ -11,7 +11,7 @@ class S3FileTest < ActiveSupport::TestCase
     mock_s3_objects do |s3_object|
       s3_object.expect(:presigned_post, 'some post object') { true }
       assert_equal 'some post object', @s3_file.presigned_post
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -19,7 +19,7 @@ class S3FileTest < ActiveSupport::TestCase
     mock_s3_objects do |s3_object|
       s3_object.expect(:presigned_url, 'some presigned url') { true }
       assert_equal 'some presigned url', @s3_file.url
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -33,7 +33,7 @@ class S3FileTest < ActiveSupport::TestCase
 
       @s3_file.url
 
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -47,7 +47,7 @@ class S3FileTest < ActiveSupport::TestCase
 
       @s3_file.url
 
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -58,7 +58,7 @@ class S3FileTest < ActiveSupport::TestCase
       s3_object.expect(:exists?, true)
       assert @s3_file.uploaded?, 'uploaded? should be true'
       assert @s3_file.uploaded_cache?, 'uploaded_cache? should be true'
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -80,8 +80,8 @@ class S3FileTest < ActiveSupport::TestCase
 
       assert_equal [s3_file2], S3File.not_uploaded
 
-      s3_object2.verify
-      s3_object3.verify
+      assert_mock s3_object2
+      assert_mock s3_object3
     end
   end
 
@@ -91,7 +91,7 @@ class S3FileTest < ActiveSupport::TestCase
     mock_s3_objects do |s3_object|
       s3_object.expect(:delete, nil)
       @s3_file.destroy
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -101,7 +101,7 @@ class S3FileTest < ActiveSupport::TestCase
     mock_s3_objects do |s3_object|
       s3_object.expect(:exists?, false)
       @s3_file.destroy
-      s3_object.verify
+      assert_mock s3_object
     end
   end
 
@@ -137,6 +137,6 @@ class S3FileTest < ActiveSupport::TestCase
       yield *s3_objects
     end
 
-    s3_bucket.verify
+    assert_mock s3_bucket
   end
 end

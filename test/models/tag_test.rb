@@ -14,8 +14,11 @@ class TagTest < ActiveSupport::TestCase
     project1 = create(:project)
     project2 = create(:project)
 
-    create(:tag, project: project1, text: 'A tag')
-    create(:tag, project: project2, text: 'A tag')
+    tag1 = create(:tag, project: project1, text: 'A tag')
+    tag2 = create(:tag, project: project2, text: 'A tag')
+
+    assert_predicate tag1, :persisted?
+    assert_predicate tag2, :persisted?
   end
 
   test 'documents_count is incremented and decremented when documents are created and destroyed' do

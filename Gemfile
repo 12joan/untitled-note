@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.7'
 
-gem 'rails', '~> 7.0.4'
+gem 'rails', '~> 7.2.2'
 
 # Sprockets is now an optional dependency of Rails
 # TODO: Check if Sprockets can be removed

@@ -28,9 +28,8 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test 'account creation fails when sign up is disabled' do
     with_sign_up_enabled(false) do
       assert_no_difference 'User.count' do
-        assert_raise do
-          try_sign_up
-        end
+        try_sign_up
+        assert_response :error
       end
     end
   end

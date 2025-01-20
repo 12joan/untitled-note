@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TryCreateAutoSnapshotTest < ActiveSupport::TestCase
   test 'does nothing if auto snapshots are disabled' do
-    assert_does_nothing = create_document(
+    assert_does_nothing create_document(
       auto_snapshots_option: 'disabled',
       created_at: 5.years.ago,
     )
