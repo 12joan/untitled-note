@@ -6,7 +6,7 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
-RUN apk add --update --no-cache bash build-base tzdata postgresql-dev yarn curl gcompat
+RUN apk add --update --no-cache bash build-base tzdata postgresql-dev yarn curl gcompat yaml yaml-dev
 
 WORKDIR /app
 
