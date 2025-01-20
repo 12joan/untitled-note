@@ -14,7 +14,7 @@ class Settings < ApplicationRecord
 
   belongs_to :user
 
-  enum recents_type: {
+  enum :recents_type, {
     viewed: 0,
     modified: 1,
   }
