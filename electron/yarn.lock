@@ -631,10 +631,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.26":
-  version: 16.18.12
-  resolution: "@types/node@npm:16.18.12"
-  checksum: 8/fc3271182414f8593018ef8f00b4718116a92f463f619081bd399d9460e7861e1dd7eebc7cf94c23567e418ff397babed077011711aae8d47171b5a81c5bd71d
+"@types/node@npm:^18.11.18":
+  version: 18.19.113
+  resolution: "@types/node@npm:18.19.113"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10/6809b987ecf4a56c9f1bc59a6e530168a8d4145092435082f4e65df99ca5f8c4e3eb2eb8181df3525d95dd2b274c0101abb9b86f79e9a8b92867a8fcbe6873f2
   languageName: node
   linkType: hard
 
@@ -1416,16 +1418,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^22.3.25":
-  version: 22.3.27
-  resolution: "electron@npm:22.3.27"
+"electron@npm:^28.3.2":
+  version: 28.3.3
+  resolution: "electron@npm:28.3.3"
   dependencies:
     "@electron/get": "npm:^2.0.0"
-    "@types/node": "npm:^16.11.26"
+    "@types/node": "npm:^18.11.18"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 8/b9c5ad263c45065b42f612931de95e0e29f9e735d4f47f51298700788492e6a107d72f4982d421afc71f25364660579d5d15061f8198211ac9d507372ca8bbe1
+  checksum: 10/982bb145879722f547ac5619f7b113739e6baea5b4bd09ae8a066995ee080f9e13d5b104e76e01f8b00f8577837dd2411921c9dc4d6e0a6abfc0a7e65ee45f2a
   languageName: node
   linkType: hard
 
@@ -2878,7 +2880,7 @@ __metadata:
     "@electron-forge/maker-squirrel": "npm:^6.0.5"
     "@electron-forge/maker-zip": "npm:^6.0.5"
     "@electron-forge/publisher-github": "npm:^6.0.5"
-    electron: "npm:^22.3.25"
+    electron: "npm:^28.3.2"
     electron-context-menu: "npm:^3.6.1"
     electron-squirrel-startup: "npm:^1.0.0"
     update-electron-app: "npm:^2.0.1"
@@ -3859,6 +3861,13 @@ __metadata:
   version: 0.21.3
   resolution: "type-fest@npm:0.21.3"
   checksum: 8/e6b32a3b3877f04339bae01c193b273c62ba7bfc9e325b8703c4ee1b32dc8fe4ef5dfa54bf78265e069f7667d058e360ae0f37be5af9f153b22382cd55a9afe0
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 
