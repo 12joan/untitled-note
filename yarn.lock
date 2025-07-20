@@ -4445,9 +4445,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "eslint-plugin-prettier@npm:4.2.1"
+"eslint-plugin-prettier@npm:^4.2.4":
+  version: 4.2.4
+  resolution: "eslint-plugin-prettier@npm:4.2.4"
   dependencies:
     prettier-linter-helpers: "npm:^1.0.0"
   peerDependencies:
@@ -4456,7 +4456,7 @@ __metadata:
   peerDependenciesMeta:
     eslint-config-prettier:
       optional: true
-  checksum: 10/d387f85dd1bfcb6bc6b794845fee6afb9ebb2375653de6bcde6e615892fb97f85121a7c012a4651b181fc09953bdf54c9bc70cab7ad297019d89ae87dd007e28
+  checksum: 10/07ec96d0e3e43e8fd1f25344d81bfae0da0349312896d953d79e60f4643153e8d3c1bb9c666a2fdadefaaab2dd5776b88727a89ecef43ec7b9eca7afdd800982
   languageName: node
   linkType: hard
 
@@ -6993,7 +6993,7 @@ __metadata:
     eslint-config-prettier: "npm:^8.10.0"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
-    eslint-plugin-prettier: "npm:^4.2.1"
+    eslint-plugin-prettier: "npm:^4.2.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-simple-import-sort: "npm:^10.0.0"
