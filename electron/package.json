@@ -12,7 +12,7 @@
     "publish-app": "electron-forge publish --arch=universal --platform=darwin"
   },
   "dependencies": {
-    "electron": "^28.3.2",
+    "electron": "^35.7.5",
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "update-electron-app": "^2.0.1"
@@ -24,6 +24,6 @@
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
     "@electron-forge/publisher-github": "^6.0.5",
-    "electron": "^28.3.2"
+    "electron": "^35.7.5"
   }
 }
