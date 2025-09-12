@@ -5821,12 +5821,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"javascript-time-ago@npm:^2.5.11":
-  version: 2.5.11
-  resolution: "javascript-time-ago@npm:2.5.11"
+"javascript-time-ago@npm:^2.5.12":
+  version: 2.5.12
+  resolution: "javascript-time-ago@npm:2.5.12"
   dependencies:
-    relative-time-format: "npm:^1.1.6"
-  checksum: 10/49efd2e546e58871eaa410f2dd1fd9f2eeb00568e0f1814aad64bbc5b769c6b5f586ba331059197cbff2bb57f6d7323ef8705d52b5694ab402c70ace0879c04e
+    relative-time-format: "npm:^1.1.7"
+  checksum: 10/b0d5b8de3f5e3b25f6fde46983b20bf47dc90d8cf0dda608b1018939bf4dc07b80d185e4b43c514c0d7b32aeaa298939f29888823a21fdb3d86c7b18a95b9e08
   languageName: node
   linkType: hard
 
@@ -7001,7 +7001,7 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^10.0.0"
     human-readable: "npm:^0.2.1"
     idb: "npm:^7.1.1"
-    javascript-time-ago: "npm:^2.5.11"
+    javascript-time-ago: "npm:^2.5.12"
     jest: "npm:^29.7.0"
     js-cookie: "npm:^3.0.5"
     lodash: "npm:^4.17.21"
@@ -8170,10 +8170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"relative-time-format@npm:^1.1.6":
-  version: 1.1.6
-  resolution: "relative-time-format@npm:1.1.6"
-  checksum: 10/b14bcca18f8d48c521b716ccb81279ecdc739518a4fb25daf3e60bcbd093cedad9507e4abba43b9fc86b74fef0f72d1bce6bcf99ac1f25730fa42cef3e1b336c
+"relative-time-format@npm:^1.1.7":
+  version: 1.1.7
+  resolution: "relative-time-format@npm:1.1.7"
+  checksum: 10/e6a7b7a5044a3d995948882e9d0ae1702f2b6692cd09933cb9af422dbe04d5068cf46e0156952aba4ea0bba3ba8e670cbb9ed3fd6403747e0765239ab21a35e5
   languageName: node
   linkType: hard
 
