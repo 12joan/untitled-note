@@ -283,7 +283,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rubyzip (2.4.1)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -386,7 +386,7 @@ DEPENDENCIES
   rails (~> 7.2.2)
   redcarpet (~> 3.6)
   redis (~> 4.0)
-  rexml (~> 3.2)
+  rexml (~> 3.4)
   sass-rails (>= 6)
   selenium-webdriver
   spring
