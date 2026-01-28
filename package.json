@@ -44,7 +44,7 @@
     "@udecode/plate-reset-node": "^36.5.2",
     "@udecode/plate-tabbable": "^36.0.0",
     "@udecode/plate-trailing-block": "^36.0.0",
-    "axios": "^1.13.3",
+    "axios": "^1.13.4",
     "comlink": "^4.4.2",
     "compressorjs": "^1.2.1",
     "emoji-mart": "^5.5.2",
