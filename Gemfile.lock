@@ -130,7 +130,7 @@ GEM
       warden (~> 1.2.3)
     drb (2.2.3)
     dry-cli (1.2.0)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     ethon (0.16.0)
       ffi (>= 1.15.0)
