@@ -1,5 +1,9 @@
 # Untitled Note App
 
+
+<!-- AUTO-PACKAGE-BADGES:START -->
+
+<!-- AUTO-PACKAGE-BADGES:END -->
 An open-source app for taking notes that feels awesome to use
 
 ![Demo video](app/assets/videos/demo.mp4)
