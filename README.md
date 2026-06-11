@@ -8,6 +8,13 @@ An open-source app for taking notes that feels awesome to use
 
 ![Demo video](app/assets/videos/demo.mp4)
 
+## Table of Contents
+1. [Self-hosting guide](#self-hosting-guide)
+2. [Development](#development)
+3. [Contributing](#contributing)
+4. [Security](#security)
+5. [Enterprise support](#enterprise-support)
+
 ## Self-hosting guide
 
 Follow these instructions to run your own instance using Docker.
@@ -37,6 +44,7 @@ irb(main):001:0> User.find_by(email: 'user@example.com).update(admin: true)
 To run the tests:
 
 ```bash
+
 # Backend tests
 docker compose web rails test
 
@@ -62,7 +70,7 @@ yarn e2e client/e2e/some-test.spec.ts:LINE_NUMBER --debug --project chromium
 
 Please open a discussion before starting work on a feature you intend to contribute back to this repo. Keep the following guidelines in mind:
 
-- We try to keep the app very minimal, so not all features will be a good fit for inclusion.  
+- We try to keep the app very minimal, so not all features will be a good fit for inclusion.
 - All features must be usable with the keyboard, using a screen reader, and on a mobile device.
 - Features involving generative machine learning models will not be considered.
 
@@ -75,3 +83,4 @@ If you discover a security issue with the app, please contact me directly. All s
 ## Enterprise support
 
 Want help customising Untitled Note App for use in your organisation? Contact me to discuss a consultancy agreement.
+
