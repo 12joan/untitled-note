@@ -9,6 +9,8 @@ import {
 } from '@playwright/test';
 import { getEditable } from './slate';
 
+const { dirname } = import.meta as unknown as { dirname: string };
+
 export const logIn = async (page: Page) => {
   const tryLogIn = async (currentTry: number) => {
     await page.goto('/welcome');
@@ -275,7 +277,7 @@ export const createDataTransfer = async (
   page: Page,
   { filePath, fileName, fileType }: CreateDataTransfer
 ): Promise<JSHandle<DataTransfer>> => {
-  const fileBuffer = readFileSync(resolve(__dirname, filePath));
+  const fileBuffer = readFileSync(resolve(dirname, filePath));
   const encodedFile = fileBuffer.toString('hex');
 
   return page.evaluateHandle(
