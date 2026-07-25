@@ -141,6 +141,10 @@ test.describe('Attachments', () => {
     };
 
     await clickAtPath(page, editorHandle, [1]);
+
+    // Recent Chromium regression: Tabbing fails without a small delay here
+    await page.waitForTimeout(1);
+
     await page.keyboard.press('Tab');
     await expectTabbedIntoAttachment();
 
