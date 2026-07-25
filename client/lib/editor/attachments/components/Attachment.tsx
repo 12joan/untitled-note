@@ -63,6 +63,7 @@ const UploadedAttachment = ({
     FutureServiceResult<S3File, any>
   >(() => pendingFutureServiceResult());
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     promiseToFutureServiceResult(
       retry(() => fetchFile(s3FileId), {

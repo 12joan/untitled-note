@@ -6,11 +6,11 @@ export interface DocumentMention {
   fallbackText: string;
 }
 
-export type MentionSuggestion = {
+export interface MentionSuggestion {
   key: any;
   label: string;
   icon: ReactNode;
   onCommit: () => void;
-};
+}
 
 export interface MentionElement extends TElement, DocumentMention {}

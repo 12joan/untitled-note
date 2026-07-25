@@ -1,11 +1,11 @@
-export type PendingFuture = {
+export interface PendingFuture {
   type: 'pending';
-};
+}
 
-export type ResolvedFuture<T> = {
+export interface ResolvedFuture<T> {
   type: 'resolved';
   data: T;
-};
+}
 
 export type Future<T> = PendingFuture | ResolvedFuture<T>;
 
@@ -96,15 +96,15 @@ export const sequenceFutures = <T extends { [key: string]: any }>(
     resolvedFuture({} as T)
   );
 
-export type SuccessServiceResult<T> = {
+export interface SuccessServiceResult<T> {
   type: 'success';
   data: T;
-};
+}
 
-export type FailureServiceResult<E> = {
+export interface FailureServiceResult<E> {
   type: 'failure';
   error: E;
-};
+}
 
 export type ServiceResult<T, E> =
   | SuccessServiceResult<T>

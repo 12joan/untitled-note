@@ -13,7 +13,7 @@ const registerWindow = (browserWindow, { createWindow }) => {
   // Open external links in the default browser
   webContents.on('will-navigate', (event, url) => {
     if (!linkIsNavigable(url)) {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.warn('Blocked navigation to', url);
       event.preventDefault();
     } else if (linkIsExternal(url)) {
@@ -24,7 +24,7 @@ const registerWindow = (browserWindow, { createWindow }) => {
 
   webContents.setWindowOpenHandler(({ url }) => {
     if (!linkIsNavigable(url)) {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.warn('Blocked navigation to', url);
     } else if (linkIsExternal(url)) {
       shell.openExternal(url);

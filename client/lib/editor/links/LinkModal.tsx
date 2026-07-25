@@ -33,6 +33,7 @@ const LinkModal = ({
   const textInputRef = useRef<HTMLInputElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     (initialText.trim().length > 0
       ? urlInputRef

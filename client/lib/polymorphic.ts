@@ -6,9 +6,9 @@ import type {
   PropsWithChildren,
 } from 'react';
 
-type AsProp<C extends ElementType> = {
+interface AsProp<C extends ElementType> {
   as?: C;
-};
+}
 
 type PropsToOmit<C extends ElementType, P> = keyof (AsProp<C> & P);
 

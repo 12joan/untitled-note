@@ -16,7 +16,7 @@ self.addEventListener('fetch', (event) => {
         cache.put(event.request, response.clone());
         return response;
       } catch (error) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error('Failed to fetch:', error);
 
         return new Response('Network error', {

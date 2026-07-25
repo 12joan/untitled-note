@@ -16,6 +16,7 @@ export const ReplaceWithSpinner = ({
     <div style={{ opacity: isSpinner ? 0 : undefined }}>{children}</div>
 
     {isSpinner && (
+      // biome-ignore lint/a11y/useAriaPropsSupportedByRole: legacy
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         aria-live="polite"

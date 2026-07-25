@@ -1,4 +1,5 @@
 import { type ForwardedRef, forwardRef, type HTMLAttributes } from 'react';
+// biome-ignore lint/suspicious/noImportCycles: works
 import { newDocumentToken } from '~/components/AwaitNewDocument';
 import { Link, type LinkProps } from '~/components/Link';
 import { useAppContext } from '~/lib/appContext';
@@ -7,14 +8,15 @@ export const EditAccountLink = (
   props: Omit<HTMLAttributes<HTMLAnchorElement>, 'href'>
 ) => <a href="/users/edit" target="_blank" {...props} />;
 
-type HasRequiredKeys<T> = Exclude<
-  keyof T,
-  {
-    [K in keyof T]-?: Record<string, never> extends Pick<T, K> ? K : never;
-  }[keyof T]
-> extends never
-  ? false
-  : true;
+type HasRequiredKeys<T> =
+  Exclude<
+    keyof T,
+    {
+      [K in keyof T]-?: Record<string, never> extends Pick<T, K> ? K : never;
+    }[keyof T]
+  > extends never
+    ? false
+    : true;
 
 const createLinkComponent = <
   T extends Record<string, any> & { projectId?: number },
@@ -23,9 +25,10 @@ const createLinkComponent = <
 ) => {
   type WithOptionalProjectId = Omit<T, 'projectId'> & { projectId?: number };
 
-  type ToProp = HasRequiredKeys<WithOptionalProjectId> extends true
-    ? { to: WithOptionalProjectId }
-    : { to?: WithOptionalProjectId };
+  type ToProp =
+    HasRequiredKeys<WithOptionalProjectId> extends true
+      ? { to: WithOptionalProjectId }
+      : { to?: WithOptionalProjectId };
 
   type RouteLinkProps = Omit<LinkProps, 'to'> & ToProp;
 
@@ -49,9 +52,9 @@ const createLinkComponent = <
   );
 };
 
-type ProjectRoute = {
+interface ProjectRoute {
   projectId: number;
-};
+}
 
 type ProjectDocumentRoute = ProjectRoute & {
   documentId: number;

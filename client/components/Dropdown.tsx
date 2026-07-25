@@ -96,6 +96,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       closeOnFocusOut ? close : () => {}
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const popperOptions = useMemo(
       () => ({
         ...propPopperOptions,

@@ -7,6 +7,7 @@ export const useLockedState = (workingDocument: LocalDocument) => {
   const isLocked = workingDocument.locked_at !== null;
   const [isReadOnly, overrideReadOnly] = useOverrideable(isLocked);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const temporarilyUnlock = useCallback(() => {
     if (!isReadOnly) return;
 
@@ -19,6 +20,7 @@ export const useLockedState = (workingDocument: LocalDocument) => {
     });
   }, [isReadOnly]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const resumeLock = useCallback(() => overrideReadOnly(true), []);
 
   return {

@@ -20,11 +20,11 @@ const tagClassName =
 const tagButtonClassName =
   'hover:bg-plain-200 dark:hover:bg-plain-700 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400 rounded-full flex items-center justify-center';
 
-type TagSuggestion = {
+interface TagSuggestion {
   key: string;
   text: string;
   tag: LocalTag;
-};
+}
 
 type LinkForTagOptions = Record<string, any> & {
   tag: LocalTag;
@@ -34,6 +34,7 @@ const linkForTag = ({ tag: { id, text }, ...otherProps }: LinkForTagOptions) =>
   id ? (
     <TagLink to={{ tagId: id }} children={text} {...otherProps} />
   ) : (
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: legacy
     <span tabIndex={0} children={text} {...otherProps} />
   );
 
@@ -67,6 +68,7 @@ export const EditorTags = forwardRef(
     const futureAllTags = useAppContext('futureTags');
     const allTags: LocalTag[] = orDefaultFuture(futureAllTags, []);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const unusedTags = useMemo(
       () => allTags.filter((tag) => !hasTagWithText(tag.text)),
       [futureAllTags, tagTexts]
@@ -86,6 +88,7 @@ export const EditorTags = forwardRef(
       [unusedTags, trimmedInputValue]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const suggestions = useMemo(() => {
       const suggestions: TagSuggestion[] = filteredUnusedTags.map((tag) => ({
         key: tag.text,

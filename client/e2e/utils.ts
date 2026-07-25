@@ -164,7 +164,10 @@ export const dragWithMouse: DragFn = async (page, item, ...destinations) => {
 };
 
 export const dragWithKeyboard: DragFn = async (page, item, ...destinations) => {
-  type Position = { x: number; y: number };
+  interface Position {
+    x: number;
+    y: number;
+  }
 
   const getPosition = async (locator: Locator): Promise<Position> => {
     const box = await locator.boundingBox();
@@ -243,7 +246,7 @@ export const expectSyncState = async (page: Page, state: string) => {
   await page.keyboard.press('Escape');
 };
 
-export const expectUpToDate = async (page: Page) =>
+export const expectUpToDate = (page: Page) =>
   expectSyncState(page, 'Up to date');
 
 export const openDocumentSettingsModal = async (page: Page) => {
@@ -261,11 +264,11 @@ export const openExportHTMLSection = async (page: Page) => {
   await page.getByRole('tab', { name: 'Export HTML' }).click();
 };
 
-export type CreateDataTransfer = {
+export interface CreateDataTransfer {
   filePath: string;
   fileName: string;
   fileType: string;
-};
+}
 
 // https://charliedigital.com/2021/12/20/simulate-drag-and-drop-of-files-with-playwright/
 export const createDataTransfer = async (

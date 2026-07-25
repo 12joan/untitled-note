@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: hook factory */
 import { type DependencyList, useEffect } from 'react';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 

@@ -25,13 +25,13 @@ import { useModal } from '~/lib/useModal';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
 
-type Suggestion = {
+interface Suggestion {
   key: string;
   label: string;
   icon?: ReactNode;
   description?: string | { __html: string };
   onCommit: (altBehaviour: boolean) => IIC;
-};
+}
 
 interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
   getKey: (item: T) => Suggestion['key'];
@@ -171,6 +171,7 @@ const SearchModal = ({
 
   const handleAction = (action: IIC) => mergeIICs(action, liftToIIC(onClose)());
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setFsrSearchResults(pendingFutureServiceResult());
   }, [trimmedSearchQuery]);
@@ -191,6 +192,7 @@ const SearchModal = ({
     }
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const suggestions: Suggestion[] = useMemo(() => {
     const suggestionSources: SuggestionSource[] = [
       commandsSource,
@@ -376,7 +378,7 @@ const SearchModal = ({
                     {typeof description === 'object' && (
                       <div
                         className="text-sm"
-                        // eslint-disable-next-line react/no-danger
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: acceptable risk
                         dangerouslySetInnerHTML={description}
                       />
                     )}

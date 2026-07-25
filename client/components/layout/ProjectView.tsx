@@ -114,6 +114,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     }
   }, [staticSidebarAvailable, toggleStaticSidebar, toggleOffcanvasSidebar]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (staticSidebarAvailable) {
       hideOffcanvasSidebar();
@@ -131,6 +132,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     []
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (staticFormattingToolbar || !isEditor) {
       hideOffcanvasFormattingToolbar();
@@ -161,6 +163,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     close: hideProjectSettingsModal,
   } = useProjectSettingsModal();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     hideSearchModal();
     hideFilesModal();
@@ -168,6 +171,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     hideProjectSettingsModal();
   }, [childView.key, projectId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (!isAwaitRedirect) {
       setLastView(projectId, viewPath);

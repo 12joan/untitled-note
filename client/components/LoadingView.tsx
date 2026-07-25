@@ -28,6 +28,7 @@ export const LoadingView = ({
       {...otherProps}
     >
       {showLoading && (
+        // biome-ignore lint/a11y/useAriaPropsSupportedByRole: legacy
         <div className="flex gap-2" aria-live="polite" aria-label="Loading">
           {[0, 333, 667].map((delay) => (
             <div

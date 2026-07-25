@@ -37,7 +37,7 @@ export const ToastContainer = () => {
       document.querySelectorAll<HTMLDivElement>('.flash-message')
     );
 
-    flashMessages.forEach((el) => {
+    for (const el of flashMessages) {
       const [message, title, autoClose] = el.innerText
         .split('/')
         .map((x) => x.trim());
@@ -47,7 +47,7 @@ export const ToastContainer = () => {
         autoClose: (autoClose ?? 'fast') as any,
       });
       el.remove();
-    });
+    }
   }, []);
 
   return (

@@ -72,11 +72,11 @@ const FileList = ({ files }: FileListProps) => (
   </>
 );
 
-type Badge = {
+interface Badge {
   text: string;
   hint: string;
   color: 'neutral' | 'danger';
-};
+}
 
 const FileEntry = ({
   id,
@@ -170,6 +170,7 @@ const Badge = ({ text, hint, color }: Badge) => (
           danger: 'bg-red-600 text-white',
         }[color],
       })}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: legacy
       tabIndex={0}
     >
       {text}

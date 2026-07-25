@@ -116,6 +116,7 @@ export const RadioCard = <T,>({
       data-active={checked}
       {...props}
     >
+      {/** biome-ignore lint/a11y/useSemanticElements: legacy */}
       <button
         type="button"
         role="radio"

@@ -69,6 +69,7 @@ export const AppearanceSection = () => {
       <div className="space-y-2">
         <h4 className="h3 select-none">Preview</h4>
 
+        {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: legacy */}
         <p
           className={groupedClassNames({
             base: 'p-4 rounded-lg shadow-inner select-none',

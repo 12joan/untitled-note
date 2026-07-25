@@ -8,10 +8,10 @@ import type { Document, LocalDocument } from '~/lib/types';
 import { useEnqueuedPromises } from '~/lib/useEnqueuedPromises';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
-export type UseSyncDocumentOptions = {
+export interface UseSyncDocumentOptions {
   clientId: string;
   initialDocument: Document;
-};
+}
 
 export const useSyncDocument = ({
   clientId,
@@ -50,6 +50,7 @@ export const useSyncDocument = ({
 
   const { enqueuePromise, isDirty, isFailing } = useEnqueuedPromises();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const updateDocument = useCallback(
     (delta: Partial<LocalDocument>) => {
       setChangesSinceLastUpdate((count) => count + 1);

@@ -8,12 +8,12 @@ export interface MakeLocalHistoryOptions {
   key: string;
 }
 
-type MakeLocalHistoryResult<T> = {
+interface MakeLocalHistoryResult<T> {
   touchItem: (item: T) => void;
   removeItem: (item: T) => void;
   getItems: () => T[];
   useItems: () => T[];
-};
+}
 
 export const makeLocalHistory = <T>({
   key,

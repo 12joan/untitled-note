@@ -63,7 +63,7 @@ const createWindow = async ({
 
   // Handle new tab button
   browserWindow.on('new-window-for-tab', () => {
-    createWindow({ parentWindow: browserWindow });
+    void createWindow({ parentWindow: browserWindow });
   });
 
   // Register close behaviour prior to load

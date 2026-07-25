@@ -3,11 +3,11 @@ import { type TimeAgoFormat, timeAgo } from '~/lib/timeAgo';
 const formats: TimeAgoFormat[] = ['long', 'short'];
 
 const bothFormats = (fn: (format: TimeAgoFormat) => void) => {
-  formats.forEach((format) => {
+  for (const format of formats) {
     describe(`when format is ${format}`, () => {
       fn(format);
     });
-  });
+  }
 };
 
 describe('timeAgo', () => {

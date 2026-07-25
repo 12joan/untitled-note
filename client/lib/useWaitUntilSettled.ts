@@ -23,6 +23,7 @@ export const useWaitUntilSettled = <T>(
   const previousValue = useRef(value);
   const getHandleChange = useStableGetter(handleChange);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const maybeFire = useCallback(() => {
     const currentValue = getCurrentValue();
     if (fireEvenIfUnchanged || currentValue !== previousValue.current) {
@@ -33,6 +34,7 @@ export const useWaitUntilSettled = <T>(
 
   useTimeout(maybeFire, debounceTime, [value], { includeFirst: false });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (fireOnMount) {
       getHandleChange()(value);

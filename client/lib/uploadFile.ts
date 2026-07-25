@@ -40,9 +40,9 @@ export const uploadFile = async ({
 
     const formData = new FormData();
 
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries({ ...fields, file })) {
       formData.append(key, value);
-    });
+    }
 
     const uploadResponse = await axios.post(url, formData, {
       signal: abortSignal,
@@ -59,7 +59,7 @@ export const uploadFile = async ({
     }
 
     if (!String(uploadResponse.status).match(/2\d{2}/)) {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.error(uploadResponse);
       throw new Error('Upload failed');
     }
@@ -69,9 +69,9 @@ export const uploadFile = async ({
     return s3File;
   } catch (error) {
     deleteFile(s3File.id).catch((destroyError) => {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.error('Failed to destroy file after upload error');
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.error(destroyError);
     });
 

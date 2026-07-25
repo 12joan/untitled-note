@@ -10,7 +10,7 @@ export const automaticSnapshotsOptions = [
 
 export type AutoSnapshotsOption = (typeof automaticSnapshotsOptions)[number];
 
-export type Project = {
+export interface Project {
   id: number;
   name: string;
   image_url: string | null;
@@ -22,24 +22,24 @@ export type Project = {
   folder_id: number | null;
   created_at: string;
   updated_at: string;
-};
+}
 
-export type ProjectFolder = {
+export interface ProjectFolder {
   id: number;
   name: string;
   order_string: string;
   created_at: string;
   updated_at: string;
-};
+}
 
-export type Tag = {
+export interface Tag {
   id: number;
   text: string;
   project_id: Project['id'];
   documents_count: number;
   created_at: string;
   updated_at: string;
-};
+}
 
 export type LocalTag = Partial<Tag> & {
   localId?: any;
@@ -51,7 +51,7 @@ export type SequenceBeforeAndAfter = [
   Pick<Document, 'id' | 'safe_title'> | null,
 ];
 
-export type Document = {
+export interface Document {
   id: number;
   title: string | null;
   safe_title: string;
@@ -69,7 +69,7 @@ export type Document = {
   updated_at: string;
   pinned_at: string | null;
   locked_at: string | null;
-};
+}
 
 export type LocalDocument = Omit<Document, 'tags'> & {
   tags: LocalTag[];
@@ -90,7 +90,7 @@ export type PartialDocument = Pick<
   | 'locked_at'
 >;
 
-export type DocumentSearchResult = {
+export interface DocumentSearchResult {
   document: {
     id: Document['id'];
     title: Document['title'];
@@ -102,9 +102,9 @@ export type DocumentSearchResult = {
     field: string;
     snippet: string;
   }[];
-};
+}
 
-export type S3File = {
+export interface S3File {
   id: number;
   role: 'project-image' | 'attachment';
   filename: string;
@@ -114,9 +114,9 @@ export type S3File = {
   created_at: string;
   became_unused_at: string | null;
   do_not_delete_unused: boolean;
-};
+}
 
-export type Snapshot = {
+export interface Snapshot {
   id: number;
   name: string;
   manual: boolean;
@@ -125,9 +125,9 @@ export type Snapshot = {
   document_id: Document['id'];
   created_at: string;
   updated_at: string;
-};
+}
 
-export type KeyboardShortcutConfig = {
+export interface KeyboardShortcutConfig {
   key: string;
   keyLabel?: string;
   customComparison?: {
@@ -138,23 +138,23 @@ export type KeyboardShortcutConfig = {
   ctrlKey?: boolean;
   metaKey?: boolean;
   shiftKey?: boolean;
-};
+}
 
-export type Settings = {
+export interface Settings {
   keyboard_shortcut_overrides: {
     [key: string]: KeyboardShortcutConfig | null;
   };
   editor_style: EditorStyle;
   auto_snapshots_option: AutoSnapshotsOption;
   recents_type: 'viewed' | 'modified';
-};
+}
 
-export type StorageQuotaUsage = {
+export interface StorageQuotaUsage {
   quota: number;
   used: number;
-};
+}
 
-export type Toast = {
+export interface Toast {
   id: string;
   title: string;
   message: string | (() => React.ReactNode);
@@ -164,7 +164,7 @@ export type Toast = {
     label: string;
     onClick: () => void;
   };
-};
+}
 
 export type ToastWithoutId = Omit<Toast, 'id'> & {
   id?: string;
@@ -172,13 +172,13 @@ export type ToastWithoutId = Omit<Toast, 'id'> & {
 
 export type Query = 'all' | boolean | { [property: string]: Query };
 
-export type Stream = {
+export interface Stream {
   unsubscribe: () => void;
-};
+}
 
-export type StreamCacheWorkerAPI = {
+export interface StreamCacheWorkerAPI {
   getItem: (key: string) => Promise<string | null>;
   setItem: (key: string, data: string) => Promise<void>;
   removeItem: (key: string) => Promise<void>;
   clear: () => Promise<void>;
-};
+}

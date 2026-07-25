@@ -92,6 +92,7 @@ export const usePlugins = ({
 
   const attachmentPlugins = useAttachmentPlugins();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   return useMemo(
     () =>
       createPlugins(

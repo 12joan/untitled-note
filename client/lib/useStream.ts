@@ -3,11 +3,11 @@ import { type Future, pendingFuture, resolvedFuture } from '~/lib/monads';
 import { streamCache } from '~/lib/streamCacheAdapter';
 import type { Stream } from '~/lib/types';
 
-export type UseStreamOptions<T> = {
+export interface UseStreamOptions<T> {
   getStream: (consumer: (data: T) => void) => Stream;
   cacheKey?: string;
   disableCacheLoad?: boolean;
-};
+}
 
 export const useStream = <T>(
   { getStream, cacheKey, disableCacheLoad = false }: UseStreamOptions<T>,
@@ -23,7 +23,7 @@ export const useStream = <T>(
     if (cacheKey && !disableCacheLoad) {
       streamCache.getItem(cacheKey).then((data) => {
         if (!cacheLoadCancelled && data) {
-          // eslint-disable-next-line no-console
+          // biome-ignore lint/suspicious/noConsole: logging
           console.debug(`Loaded ${cacheKey} from cache`);
           setFuture(resolvedFuture(JSON.parse(data)));
         }
@@ -43,6 +43,7 @@ export const useStream = <T>(
       cacheLoadCancelled = true;
       stream.unsubscribe();
     };
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, dependencies);
 
   return future;

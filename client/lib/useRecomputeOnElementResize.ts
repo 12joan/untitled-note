@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: hook factory */
 import { useEffect, useReducer, useState } from 'react';
 
 export const useRecomputeOnElementResize =

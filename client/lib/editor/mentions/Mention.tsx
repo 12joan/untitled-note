@@ -37,8 +37,10 @@ export const Mention = ({
   const focused = useFocused();
   const selectedAndFocused = selected && focused;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     const doc = orDefaultFuture(futureDocument, undefined);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
     if (!doc) return;
 
     // Once the document exists, it is no longer "just created"

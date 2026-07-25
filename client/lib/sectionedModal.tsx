@@ -10,12 +10,12 @@ import { useModal } from '~/lib/useModal';
 import { useOverrideable } from '~/lib/useOverrideable';
 import type { SubscribableRef } from '~/lib/useSubscribableRef';
 
-export type Section<T extends object> = {
+export interface Section<T extends object> {
   title: string;
   icon: FC<IconProps>;
   component: FC<T>;
   variant?: 'default' | 'danger';
-};
+}
 
 export interface SectionedModalOpenProps<SectionName extends string> {
   initialSection?: SectionName;

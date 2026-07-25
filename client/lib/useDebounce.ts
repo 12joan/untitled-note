@@ -22,6 +22,7 @@ export const useDebounce = <T extends unknown[]>(
         setIsDirty(false);
       }, delay);
     }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, deps);
 
   return [debouncedFunction, isDirty] as const;

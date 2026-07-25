@@ -4,9 +4,9 @@ import { useGlobalEvent } from '~/lib/globalEvents';
 import { overviewPath } from '~/lib/routes';
 import type { Document } from '~/lib/types';
 
-export type UseNavigateAwayOnDeleteOptions = {
+export interface UseNavigateAwayOnDeleteOptions {
   documentId: Document['id'];
-};
+}
 
 export const useNavigateAwayOnDelete = ({
   documentId,

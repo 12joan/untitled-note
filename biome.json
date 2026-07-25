@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -18,7 +18,10 @@
       "react": "recommended"
     },
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
       "complexity": {
         "noForEach": "error",
         "useDateNow": {
@@ -35,19 +38,12 @@
         },
         "useExhaustiveDependencies": "error",
         "useHookAtTopLevel": "error",
-        "useJsxKeyInIterable": "off"
+        "useJsxKeyInIterable": "off",
+        "noChildrenProp": "off"
       },
       "nursery": {
-        "noDeprecatedImports": "error",
         "noFloatingPromises": "error",
-        "noForIn": "error",
-        "noImportCycles": "error",
-        "noMisusedPromises": "error",
-        "noReactForwardRef": "error",
-        "noUnnecessaryConditions": "error",
-        "noUnusedExpressions": "error",
-        "noUselessUndefined": "error",
-        "useConsistentArrowReturn": "error"
+        "noMisusedPromises": "error"
       },
       "style": {
         "noNegationElse": "error",
@@ -63,7 +59,9 @@
         "useNodejsImportProtocol": {
           "level": "error",
           "fix": "safe"
-        }
+        },
+        "useConsistentArrowReturn": "error",
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "off",
@@ -71,7 +69,13 @@
         "noConstantBinaryExpressions": "error",
         "noEvolvingTypes": "error",
         "noExplicitAny": "off",
-        "noUnassignedVariables": "error"
+        "noUnassignedVariables": "error",
+        "noDeprecatedImports": "error",
+        "noForIn": "error",
+        "noImportCycles": "error",
+        "noReactForwardRef": "error",
+        "noUnnecessaryConditions": "error",
+        "noUnusedExpressions": "error"
       }
     }
   },

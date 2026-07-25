@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -9,6 +9,7 @@
   </head>
   <body class="min-h-screen text-ui bg-plain-100 ring-offset-plain-100 dark:bg-page-bg-dark dark:ring-offset-page-bg-dark flex p-5">
     <main class="m-auto lg:narrow space-y-3 text-center">
+      <!-- biome-ignore lint/a11y/noNoninteractiveTabindex: legacy -->
       <img src="../images/sad-face.png" alt="Sad app icon, definitely not a button" class="inline h-20 drop-shadow-lg" id="app-icon" tabindex="0">
       <h1 class="h1">Could not load app</h1>
       <p class="text-lg">Make sure you are connected to the internet and <button type="button" class="btn btn-link underline" id="retry">try again</button>.</p>

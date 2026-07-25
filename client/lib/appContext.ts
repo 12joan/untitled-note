@@ -16,6 +16,7 @@ import type { ProjectSettingsModalOpenProps } from '~/lib/useProjectSettingsModa
 import type { SearchModalOpenProps } from '~/lib/useSearchModal';
 import type { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
+// biome-ignore lint/style/useConsistentTypeDefinitions: cannot use interface
 export type AppContext = {
   settings: Settings;
   setSettings: (delta: Partial<Settings>) => void;

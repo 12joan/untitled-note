@@ -123,7 +123,7 @@ const ImageForm = ({
 
     setState('uploading');
 
-    handleUploadFileError(
+    void handleUploadFileError(
       uploadProjectImage({
         projectId,
         file: originalFile,
@@ -136,7 +136,7 @@ const ImageForm = ({
   const handleRemoveImage = () => {
     setState('removing');
 
-    handleRemoveProjectImageError(
+    void handleRemoveProjectImageError(
       removeProjectImage(projectId).then(() => overrideHasImage(false))
     ).finally(() => setState('idle'));
   };
@@ -292,6 +292,7 @@ const EmojiForm = ({ project, updateProject }: EmojiFormProps) => {
       </div>
 
       {pickerVisible && (
+        // biome-ignore lint/a11y/noStaticElementInteractions: legacy
         <div
           ref={mergeRefs([pickerRef, focusOutRef])}
           {...focusOutProps}

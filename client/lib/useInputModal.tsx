@@ -41,6 +41,7 @@ const InputModal = ({
     normalize: normalizeInput,
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (autoSelect) {
       inputRef.current?.select();

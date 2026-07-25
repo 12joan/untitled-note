@@ -14,6 +14,7 @@ export const useNormalizedInput = ({
   const [value, setValue] = useState(initial);
   const resetValue = () => setValue(initial);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const isValid = useMemo(() => validate(value), [value]);
 
   const normalizeValue = () => {

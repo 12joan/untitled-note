@@ -6,6 +6,7 @@ import type { ChunkPlugin } from './types';
 export const createChunkPlugin = createPluginFactory<ChunkPlugin>({
   key: 'chunk',
   withOverrides: withGetFragmentExcludeProps('chunkCollapsed'),
+  // biome-ignore lint/suspicious/noThenProperty: required for Plate
   then: (_editor, { options: { setExpandedChunks } }) => ({
     inject: {
       aboveComponent: () => (props) => (

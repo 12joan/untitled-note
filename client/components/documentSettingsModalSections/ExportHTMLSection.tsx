@@ -15,6 +15,7 @@ export const ExportHTMLSection = ({
     setLocalStorage('exportHtml:includeTitle', value);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const html = useMemo(
     () =>
       getHtmlForExport(getChildrenForExport(), {

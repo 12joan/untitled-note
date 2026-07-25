@@ -42,7 +42,7 @@ export const useNewSnapshotModal = ({
   const handleSubmit = (name: string) => {
     const createPromise = createSnapshot(projectId, documentId, { name });
 
-    handleCreateSnapshotError(createPromise).then(() => {
+    void handleCreateSnapshotError(createPromise).then(() => {
       if (showToastOnSuccess) {
         createToast({
           title: 'Snapshot created',
@@ -80,7 +80,7 @@ export const useRenameSnapshotModal = ({
 
   const handleSubmit = (name: string) => {
     if (name === snapshot.name) return;
-    handleUpdateSnapshotError(
+    void handleUpdateSnapshotError(
       updateSnapshot(projectId, snapshot.document_id, snapshot.id, { name })
     );
   };
@@ -107,7 +107,7 @@ export const useRestoreSnapshotModal = ({
   const projectId = useAppContext('projectId');
 
   const handleSubmit = (saveCurrent: boolean) => {
-    handleRestoreSnapshotError(
+    void handleRestoreSnapshotError(
       restoreSnapshot(projectId, snapshot.document_id, snapshot.id, {
         saveCurrent,
       })

@@ -75,6 +75,8 @@ export const EditorHeader = memo(
 
     return (
       <>
+        {/** biome-ignore lint/a11y/noStaticElementInteractions: legacy */}
+        {/** biome-ignore lint/a11y/useKeyWithClickEvents: legacy */}
         <div className="cursor-text" onClick={() => titleRef.current?.focus()}>
           <div className="lg:narrow flex gap-2 items-center">
             <EditorTitle
@@ -94,6 +96,8 @@ export const EditorHeader = memo(
               }}
             />
 
+            {/** biome-ignore lint/a11y/noStaticElementInteractions: legacy */}
+            {/** biome-ignore lint/a11y/useKeyWithClickEvents: legacy */}
             <div
               className="contents"
               onClick={(event) => event.stopPropagation()}

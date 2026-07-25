@@ -16,6 +16,7 @@ import '~/lib/registerServiceWorker';
 const ElectronNavigation = () => {
   const navigate = useNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     window.electron.onNavigate((_event, delta) => navigate(delta));
   }, []);

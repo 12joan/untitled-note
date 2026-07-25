@@ -55,7 +55,7 @@ const getMatches = (editor: PlateEditor, query: string) => {
     const text = textNode.text.toLowerCase();
     let offset = 0;
 
-    // eslint-disable-next-line no-constant-condition
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: indefinite loop
     while (true) {
       const index = text.indexOf(lowerCaseQuery, offset);
 
@@ -79,186 +79,189 @@ export interface UseFindOptions {
   setSelection: (range: SlateRange) => void;
 }
 
-export type UseFindResult = {
+export interface UseFindResult {
   findDialog?: ReactNode;
   openFind?: () => void;
-};
+}
 
-export const useFind = ({
-  editor,
-  restoreSelection,
-  setSelection,
-}: UseFindOptions) => {
-  if (!FIND_SUPPORTED) return {};
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const [query, settledQuery, rawSetQuery, setQueryWithoutWaiting] =
-    useStateWhenSettled('', { debounceTime: 200 });
-  const [matches, setMatches] = useState<SlateRange[]>([]);
-  const [currentMatch, setCurrentMatch] = useState<number | null>(null);
-  const [scrollToCurrentMatchKey, scrollToCurrentMatch] = useReducer(
-    (x) => x + 1,
-    0
-  );
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // When the find dialog is opened, focus the input
-  const open = () => {
-    setIsOpen(true);
-    setTimeout(() => inputRef.current?.select(), 0);
-  };
-
-  // When the find dialog is closed, reset the query and matches
-  const close = () => {
-    setIsOpen(false);
-    setQueryWithoutWaiting('');
-    setMatches([]);
-    setCurrentMatch(null);
-
-    // If the current match exists, select it; otherwise, restore the selection
-    const currentMatchRange = currentMatch !== null && matches[currentMatch];
-
-    if (currentMatchRange) {
-      setSelection(currentMatchRange);
-    } else {
-      restoreSelection();
-    }
-  };
-
-  /**
-   * When the user presses Meta+F, open the find dialog. If the find dialog was
-   * already open, close it and let the browser handle the keyboad shortcut.
-   */
-  useLocalKeyboardShortcut(document, 'find', (event) => {
-    if (event.target === inputRef.current) {
-      close();
-    } else {
-      event.preventDefault();
-      open();
-    }
-  });
-
-  // When the query changes, reset the current match
-  const setQuery = (query: string) => {
-    setCurrentMatch(null);
-    rawSetQuery(query);
-  };
-
-  /**
-   * Recompute matches when the query changes or the input gains focus, but only
-   * if the find dialog is open and the input is focused
-   */
-  useEffect(() => {
-    if (editor && isOpen && isFocused) {
-      setMatches(getMatches(editor, settledQuery));
-    }
-  }, [isOpen, isFocused, settledQuery]);
-
-  // If the current match needs to be set, set it to the first match
-  useEffect(() => {
-    if (
-      matches.length > 0 &&
-      (currentMatch === null || currentMatch >= matches.length)
-    ) {
-      setCurrentMatch(0);
-    }
-  }, [matches]);
-
-  const matchDOMRanges: DOMRange[] = useMemo(
-    () =>
-      editor
-        ? matches.map((slateRange) => toDOMRange(editor, slateRange)!)
-        : [],
-    [matches]
-  );
-
-  // Highlight matches
-  useEffect(() => {
-    if (FIND_SUPPORTED && editor) {
-      const currentMatchRange =
-        isFocused && currentMatch !== null
-          ? matchDOMRanges[currentMatch]
-          : null;
-
-      const otherMatchRanges = matchDOMRanges.filter(
-        (_, index) => index !== currentMatch
+export const useFind = FIND_SUPPORTED
+  ? ({ editor, restoreSelection, setSelection }: UseFindOptions) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [isFocused, setIsFocused] = useState(false);
+      const [query, settledQuery, rawSetQuery, setQueryWithoutWaiting] =
+        useStateWhenSettled('', { debounceTime: 200 });
+      const [matches, setMatches] = useState<SlateRange[]>([]);
+      const [currentMatch, setCurrentMatch] = useState<number | null>(null);
+      const [scrollToCurrentMatchKey, scrollToCurrentMatch] = useReducer(
+        (x) => x + 1,
+        0
       );
+      const inputRef = useRef<HTMLInputElement>(null);
 
-      // Only highlight up to HIGHLIGHT_LIMIT matches either side of the current match
-      const limitedOtherMatchRangesStart =
-        currentMatch === null ? 0 : Math.max(0, currentMatch - HIGHLIGHT_LIMIT);
+      // When the find dialog is opened, focus the input
+      const open = () => {
+        setIsOpen(true);
+        setTimeout(() => inputRef.current?.select(), 0);
+      };
 
-      const limitedOtherMatchRangesEnd =
-        currentMatch === null
-          ? matches.length
-          : Math.min(matches.length, currentMatch + HIGHLIGHT_LIMIT);
+      // When the find dialog is closed, reset the query and matches
+      const close = () => {
+        setIsOpen(false);
+        setQueryWithoutWaiting('');
+        setMatches([]);
+        setCurrentMatch(null);
 
-      const limitedOtherMatchRanges = otherMatchRanges.slice(
-        limitedOtherMatchRangesStart,
-        limitedOtherMatchRangesEnd
-      );
+        // If the current match exists, select it; otherwise, restore the selection
+        const currentMatchRange =
+          currentMatch !== null && matches[currentMatch];
 
-      // Passing too many arguments to the Highlight constructor causes an error
-      const otherMatchesHighlight = new Highlight();
-      limitedOtherMatchRanges.forEach((range) =>
-        otherMatchesHighlight.add(range)
-      );
-      CSS.highlights.set('find-result', otherMatchesHighlight);
-
-      if (currentMatchRange) {
-        CSS.highlights.set(
-          'find-result-current',
-          new Highlight(currentMatchRange)
-        );
-      } else {
-        CSS.highlights.delete('find-result-current');
-      }
-    }
-  }, [matchDOMRanges, currentMatch, isFocused]);
-
-  // Scroll to the current match
-  useEffect(() => {
-    const currentMatchRange =
-      currentMatch !== null && matchDOMRanges[currentMatch];
-
-    if (currentMatchRange) {
-      currentMatchRange.startContainer?.parentElement?.scrollIntoView({
-        block: 'center',
-      });
-    }
-  }, [currentMatch, scrollToCurrentMatchKey]);
-
-  const changeMatch = (delta: number) => {
-    if (matches.length === 1) {
-      scrollToCurrentMatch();
-    } else {
-      setCurrentMatch(
-        ((currentMatch ?? 0) + delta + matches.length) % matches.length
-      );
-    }
-  };
-
-  return {
-    findDialog: isOpen && (
-      <FindDialog
-        query={query}
-        setQuery={setQuery}
-        inputRef={inputRef}
-        currentMatch={currentMatch}
-        totalMatches={matches.length}
-        changeMatch={changeMatch}
-        showMatches={
-          settledQuery.length > 0 &&
-          (matches.length === 0 || currentMatch !== null)
+        if (currentMatchRange) {
+          setSelection(currentMatchRange);
+        } else {
+          restoreSelection();
         }
-        setFocused={setIsFocused}
-        onClose={close}
-      />
-    ),
-    openFind: open,
-  };
-};
+      };
+
+      /**
+       * When the user presses Meta+F, open the find dialog. If the find dialog was
+       * already open, close it and let the browser handle the keyboad shortcut.
+       */
+      useLocalKeyboardShortcut(document, 'find', (event) => {
+        if (event.target === inputRef.current) {
+          close();
+        } else {
+          event.preventDefault();
+          open();
+        }
+      });
+
+      // When the query changes, reset the current match
+      const setQuery = (query: string) => {
+        setCurrentMatch(null);
+        rawSetQuery(query);
+      };
+
+      /**
+       * Recompute matches when the query changes or the input gains focus, but only
+       * if the find dialog is open and the input is focused
+       */
+      // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
+      useEffect(() => {
+        if (editor && isOpen && isFocused) {
+          setMatches(getMatches(editor, settledQuery));
+        }
+      }, [isOpen, isFocused, settledQuery]);
+
+      // If the current match needs to be set, set it to the first match
+      // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
+      useEffect(() => {
+        if (
+          matches.length > 0 &&
+          (currentMatch === null || currentMatch >= matches.length)
+        ) {
+          setCurrentMatch(0);
+        }
+      }, [matches]);
+
+      const matchDOMRanges: DOMRange[] = useMemo(
+        () =>
+          editor
+            ? matches.map((slateRange) => toDOMRange(editor, slateRange)!)
+            : [],
+        [matches, editor]
+      );
+
+      // Highlight matches
+      // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
+      useEffect(() => {
+        if (FIND_SUPPORTED && editor) {
+          const currentMatchRange =
+            isFocused && currentMatch !== null
+              ? matchDOMRanges[currentMatch]
+              : null;
+
+          const otherMatchRanges = matchDOMRanges.filter(
+            (_, index) => index !== currentMatch
+          );
+
+          // Only highlight up to HIGHLIGHT_LIMIT matches either side of the current match
+          const limitedOtherMatchRangesStart =
+            currentMatch === null
+              ? 0
+              : Math.max(0, currentMatch - HIGHLIGHT_LIMIT);
+
+          const limitedOtherMatchRangesEnd =
+            currentMatch === null
+              ? matches.length
+              : Math.min(matches.length, currentMatch + HIGHLIGHT_LIMIT);
+
+          const limitedOtherMatchRanges = otherMatchRanges.slice(
+            limitedOtherMatchRangesStart,
+            limitedOtherMatchRangesEnd
+          );
+
+          // Passing too many arguments to the Highlight constructor causes an error
+          const otherMatchesHighlight = new Highlight();
+          for (const range of limitedOtherMatchRanges) {
+            otherMatchesHighlight.add(range);
+          }
+          CSS.highlights.set('find-result', otherMatchesHighlight);
+
+          if (currentMatchRange) {
+            CSS.highlights.set(
+              'find-result-current',
+              new Highlight(currentMatchRange)
+            );
+          } else {
+            CSS.highlights.delete('find-result-current');
+          }
+        }
+      }, [matchDOMRanges, currentMatch, isFocused]);
+
+      // Scroll to the current match
+      // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
+      useEffect(() => {
+        const currentMatchRange =
+          currentMatch !== null && matchDOMRanges[currentMatch];
+
+        if (currentMatchRange) {
+          currentMatchRange.startContainer?.parentElement?.scrollIntoView({
+            block: 'center',
+          });
+        }
+      }, [currentMatch, scrollToCurrentMatchKey]);
+
+      const changeMatch = (delta: number) => {
+        if (matches.length === 1) {
+          scrollToCurrentMatch();
+        } else {
+          setCurrentMatch(
+            ((currentMatch ?? 0) + delta + matches.length) % matches.length
+          );
+        }
+      };
+
+      return {
+        findDialog: isOpen && (
+          <FindDialog
+            query={query}
+            setQuery={setQuery}
+            inputRef={inputRef}
+            currentMatch={currentMatch}
+            totalMatches={matches.length}
+            changeMatch={changeMatch}
+            showMatches={
+              settledQuery.length > 0 &&
+              (matches.length === 0 || currentMatch !== null)
+            }
+            setFocused={setIsFocused}
+            onClose={close}
+          />
+        ),
+        openFind: open,
+      };
+    }
+  : (): UseFindResult => ({});
 
 interface FindDialogProps {
   query: string;
@@ -343,6 +346,7 @@ const FindDialog = ({
     ));
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: legacy
     <div
       ref={containerRef}
       className="fixed sm:sticky z-[15] h-0 max-sm:left-5 max-sm:right-5"

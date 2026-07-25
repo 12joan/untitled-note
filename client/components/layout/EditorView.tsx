@@ -75,6 +75,7 @@ export const EditorView = memo(({ documentId }: EditorViewProps) => {
     updatedAt !== undefined
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setFsrInitialDocument(pendingFutureServiceResult());
 
@@ -110,7 +111,7 @@ export const EditorView = memo(({ documentId }: EditorViewProps) => {
       const doesNotExist = error?.response?.status === 404;
 
       if (!doesNotExist) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error(error);
       }
 

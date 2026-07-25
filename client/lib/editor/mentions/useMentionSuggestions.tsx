@@ -30,6 +30,7 @@ export const useMentionSuggestions = ({
     [futurePartialDocuments, query]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   return useMemo(
     () =>
       [

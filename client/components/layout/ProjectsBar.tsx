@@ -90,7 +90,9 @@ export const ProjectsBar = memo(
       const delta = {
         folder_id: folder ? folder.id : null,
         order_string: findOrderStringBetween(
+          // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
           beforeProject?.order_string ?? null,
+          // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
           afterProject?.order_string ?? null
         ),
       };
@@ -117,7 +119,9 @@ export const ProjectsBar = memo(
     ) => {
       const delta = {
         order_string: findOrderStringBetween(
+          // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
           beforeFolder?.order_string ?? null,
+          // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
           afterFolder?.order_string ?? null
         ),
       };

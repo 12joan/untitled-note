@@ -42,6 +42,7 @@ export const useDocumentSettingsModal = (
 ) => {
   const optionsRef = useSubscribableRef(options);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const useModal = useMemo(
     () =>
       createSectionedModal<

@@ -45,7 +45,7 @@ const MergedIICs = ({
 }): ReactElement => (
   <>
     {iics.map((Component, i) => (
-      // eslint-disable-next-line react/no-array-index-key
+      // biome-ignore lint/suspicious/noArrayIndexKey: legacy
       <Component key={i} {...props} />
     ))}
   </>
@@ -81,7 +81,7 @@ export const useDeployIICs = (): [ReactElement[], (iic: IIC) => void] => {
   };
 
   const iicElements = iics.map((Component, i) => (
-    // eslint-disable-next-line react/no-array-index-key
+    // biome-ignore lint/suspicious/noArrayIndexKey: legacy
     <Component key={i} afterMount={() => removeIIC(Component)} />
   ));
 

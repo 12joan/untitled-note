@@ -1,10 +1,10 @@
 import { type DragEvent, useState } from 'react';
 import type { PartialDocument } from '~/lib/types';
 
-type BaseDragData = {
+interface BaseDragData {
   type: string;
   data: any;
-};
+}
 
 type DocumentDragData = BaseDragData & {
   type: 'document';
@@ -23,6 +23,7 @@ let currentDragData: DragData | null = null;
 
 export const handleDragStartWithData =
   (dragData: DragData) => (event: DragEvent) => {
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: legacy
     if (dragData !== null) {
       currentDragData = dragData;
       event.dataTransfer.setData('text/x-note-drag', 'true');

@@ -10,12 +10,12 @@ import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 
-type QuickFindItem = {
+interface QuickFindItem {
   key: string;
   text: string;
   icon: ReactNode;
   onClick: (newTab: boolean) => void;
-};
+}
 
 export const QuickFind = () => {
   const projectId = useAppContext('projectId');
@@ -31,6 +31,7 @@ export const QuickFind = () => {
 
   const navigateOrOpen = useNavigateOrOpen();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const items: QuickFindItem[] = useMemo(() => {
     const documentItems = partialDocuments
       .filter(({ title }) => title)

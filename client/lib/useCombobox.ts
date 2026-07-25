@@ -21,13 +21,13 @@ export interface UseComboboxOptions<T> {
   hideWhenEmptyQuery?: boolean;
 }
 
-type RenderSuggestionOptions<T> = {
+interface RenderSuggestionOptions<T> {
   suggestion: T;
   active: boolean;
   suggestionProps: HTMLProps<HTMLDivElement>;
-};
+}
 
-type UseComboboxResult<T> = {
+interface UseComboboxResult<T> {
   inputProps: Required<
     Pick<
       InputHTMLAttributes<HTMLInputElement>,
@@ -51,7 +51,7 @@ type UseComboboxResult<T> = {
   mapSuggestions: (
     renderSuggestion: (options: RenderSuggestionOptions<T>) => ReactNode
   ) => ReactNode;
-};
+}
 
 export const useCombobox = <T>({
   query,

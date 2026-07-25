@@ -47,6 +47,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     [editor, documentId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setTimeout(() => {
       if (initialDocument.blank) {

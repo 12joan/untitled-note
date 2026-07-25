@@ -105,6 +105,7 @@ export const ProjectFolder = ({
    * conditional prevents the folder from closing when the user drops the
    * project inside the folder or initiates a drag from within the folder.
    */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (isDraggingSomething) {
       if (isDragOverOrInside) {
@@ -528,6 +529,8 @@ const ProjectButton = ({
   'aria-label': ariaLabel,
 }: ProjectButtonProps) => {
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: legacy
+    // biome-ignore lint/a11y/useKeyWithClickEvents: legacy
     <div className="relative cursor-pointer" onClick={onClick}>
       <Tooltip content={project.name} placement="bottom">
         <ProjectIcon

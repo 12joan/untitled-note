@@ -14,7 +14,7 @@ const performEnqueuedClose = () => {
     queuedToClose.length === BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
 
-  queuedToClose.forEach((browserWindow) => {
+  for (const browserWindow of queuedToClose) {
     if (isLastWindowGroup && browserWindow === focusedWindow) {
       if (browserWindow.isFullScreen()) {
         browserWindow.once('leave-full-screen', () => browserWindow.hide());
@@ -25,7 +25,7 @@ const performEnqueuedClose = () => {
     } else {
       browserWindow.close();
     }
-  });
+  }
 
   performingEnqueuedClose = false;
   queuedToClose = [];
@@ -57,11 +57,11 @@ const registerApp = () => {
   // Show hidden windows on activate (macOS)
   app.on('activate', () => {
     if (isMac) {
-      BrowserWindow.getAllWindows().forEach((browserWindow) => {
+      for (const browserWindow of BrowserWindow.getAllWindows()) {
         if (!browserWindow.isVisible()) {
           browserWindow.show();
         }
-      });
+      }
     }
   });
 

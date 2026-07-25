@@ -13,9 +13,9 @@ export const withGetFragmentExcludeProps =
       const fragment = structuredClone(getFragment());
 
       const removeDiff = (node: TDescendant) => {
-        propNames.forEach((propName) => {
+        for (const propName of propNames) {
           delete node[propName];
-        });
+        }
 
         if (isElement(node)) node.children.forEach(removeDiff);
       };

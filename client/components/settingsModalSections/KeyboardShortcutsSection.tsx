@@ -271,6 +271,8 @@ const KeyboardShortcutDropdown = ({
   onRemove,
   onCancel,
 }: KeyboardShortcutDropdownProps) => (
+  // biome-ignore lint/a11y/noStaticElementInteractions: legacy
+  // biome-ignore lint/a11y/useKeyWithClickEvents: legacy
   <div
     className="contents cursor-default"
     onClick={(event) => event.stopPropagation()}

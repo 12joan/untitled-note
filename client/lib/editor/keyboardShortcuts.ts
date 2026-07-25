@@ -50,7 +50,8 @@ export const EditorKeyboardShortcuts = () => {
   const editorStatic = useEditorRef();
   const getFocused = () => isEditorFocused(editorStatic);
 
-  Object.entries(editorCommands).forEach(([commandId, callback]) => {
+  for (const [commandId, callback] of Object.entries(editorCommands)) {
+    // biome-ignore lint/correctness/useHookAtTopLevel: fixed order
     useLocalKeyboardShortcut(
       document,
       commandId as LocalKeyboardShortcutCommandId,
@@ -61,7 +62,7 @@ export const EditorKeyboardShortcuts = () => {
       },
       true // Use capture to take precedence over other shortcuts
     );
-  });
+  }
 
   const toggleLink = useToggleLink();
 

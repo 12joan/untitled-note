@@ -99,7 +99,7 @@ const createMenu = () => {
       {
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click: (item, focusedWindow) => {
+        click: (_item, focusedWindow) => {
           if (focusedWindow) {
             focusedWindow.reload();
           }

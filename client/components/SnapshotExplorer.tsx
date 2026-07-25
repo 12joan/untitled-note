@@ -41,6 +41,7 @@ export const SnapshotExplorer = ({
     snapshotsAndCurrent.length - 1
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useLayoutEffect(() => {
     if (viewingSnapshotIndex !== unsafeViewingSnapshotIndex) {
       setViewingSnapshotIndex(viewingSnapshotIndex);

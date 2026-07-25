@@ -64,7 +64,9 @@ export const DocumentMenu = ({
   const updateDocument =
     updateDocumentOverride ||
     ((delta) => {
-      handleUpdateDocumentError(updateDocumentAPI(projectId, doc.id, delta));
+      void handleUpdateDocumentError(
+        updateDocumentAPI(projectId, doc.id, delta)
+      );
     });
 
   const copyLink = () => {
@@ -92,7 +94,7 @@ export const DocumentMenu = ({
   });
 
   const deleteDocument = () => {
-    handleDeleteDocumentError(deleteDocumentAPI(projectId, doc.id));
+    void handleDeleteDocumentError(deleteDocumentAPI(projectId, doc.id));
 
     dispatchGlobalEvent('document:delete', { documentId: doc.id });
   };

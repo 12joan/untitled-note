@@ -206,9 +206,8 @@ export const FormattingToolbar = () => {
 
   return (
     <>
-      {formattingButtons.map((props, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <FormattingButton key={index} {...props} />
+      {formattingButtons.map((props) => (
+        <FormattingButton key={props.label} {...props} />
       ))}
     </>
   );

@@ -1,9 +1,9 @@
 import pretty from 'pretty';
 import type { TDescendant, TElement, TText } from '~/lib/editor/plate';
 
-export type GetHTMLForExportOptions = {
+export interface GetHTMLForExportOptions {
   title: string | null;
-};
+}
 
 const plateElementToDomNode = (
   node: TElement,
@@ -48,7 +48,7 @@ const plateElementToDomNode = (
       return null;
 
     default:
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.warn('Unknown element type', node.type);
       return null;
   }
@@ -73,7 +73,7 @@ const plateTextToDomNode = (node: TText): HTMLElement | Text => {
       const wrapperType = wrappersForMarkType[key];
 
       if (!wrapperType) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.warn('Unknown mark type', key);
         return domNode;
       }

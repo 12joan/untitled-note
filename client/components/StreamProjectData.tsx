@@ -74,11 +74,11 @@ export const StreamProjectData = ({
             )
             .map((previousDocument) => previousDocument.id);
 
-          deletedDocumentIds.forEach((deletedDocumentId) =>
+          for (const deletedDocumentId of deletedDocumentIds) {
             dispatchGlobalEvent('document:delete', {
               documentId: deletedDocumentId,
-            })
-          );
+            });
+          }
         })
       )
   );
@@ -125,6 +125,7 @@ export const StreamProjectData = ({
   );
 
   const excludePinned = (futureDocs: Future<PartialDocument[]>) =>
+    // biome-ignore lint/correctness/useHookAtTopLevel: legacy
     useMemo(
       () =>
         mapFuture(futureDocs, (docs) =>

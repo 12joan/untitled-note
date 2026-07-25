@@ -8,7 +8,7 @@ import { ContextMenuDropdown } from '~/components/Dropdown';
 import { PopOutLink } from '~/components/PopOutLink';
 import { type DragData, handleDragStartWithData } from '~/lib/dragData';
 
-export type Item = {
+export interface Item {
   key: any;
   as: ComponentType<any>;
   label: string;
@@ -16,7 +16,7 @@ export type Item = {
   buttonProps: Record<string, any>;
   contextMenu?: ReactNode;
   dragData?: DragData;
-};
+}
 
 export interface ItemIndexProps extends Omit<IndexProps, 'items'> {
   items: Item[];
@@ -59,10 +59,12 @@ export const ItemIndex = ({
   const titleComponent =
     title &&
     (() => {
-      const heading = <h2 className="h2 select-none" children={title} />;
+      const heading = <h2 className="h2 select-none">{title}</h2>;
 
       return showAllLink ? (
-        <PopOutLink as={showAllLink} label="Show all" children={heading} />
+        <PopOutLink as={showAllLink} label="Show all">
+          {heading}
+        </PopOutLink>
       ) : (
         heading
       );
@@ -117,7 +119,7 @@ const CardItem = ({ item, cardPreviewHeight, ...otherProps }: ItemProps) => (
     className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-plain-800 dark:border-transparent"
     {...otherProps}
   >
-    <strong className="block text-lg font-medium" children={item.label} />
+    <strong className="block text-lg font-medium">{item.label}</strong>
 
     <p
       className="text-sm line-clamp-2 text-plain-500 dark:text-plain-400"

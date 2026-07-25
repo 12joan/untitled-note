@@ -37,6 +37,7 @@ const useOverriddenKeyboardShortcutCommands = <
     'keyboard_shortcut_overrides'
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   return useMemo(
     () =>
       keyboardShortcutCommands

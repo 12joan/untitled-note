@@ -24,6 +24,7 @@ export const useModal = <T = undefined>(
 
   type OpenOptions = T extends undefined ? [] : [T];
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const open = useCallback(
     (...args: OpenOptions) => {
       if (!getIsOpen()) {
@@ -35,6 +36,7 @@ export const useModal = <T = undefined>(
     [onOpen]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const close = useCallback(() => {
     if (getIsOpen()) {
       setOpenProps(null);

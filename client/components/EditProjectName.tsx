@@ -24,7 +24,7 @@ export const EditProjectName = () => {
       }
 
       updateProject({ name }).catch((error) => {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error(error);
         resetName();
       });

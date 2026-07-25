@@ -49,13 +49,13 @@ export const createContext = <T extends Record<string, unknown>>(
   const Provider = ({ children, ...values }: ProviderProps<T>): JSX.Element => {
     let wrappedChildren = children as JSX.Element;
 
-    Object.entries(values).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(values)) {
       wrappedChildren = (
         <SingleProvider contextKey={key} value={value}>
           {wrappedChildren}
         </SingleProvider>
       );
-    });
+    }
 
     return wrappedChildren;
   };

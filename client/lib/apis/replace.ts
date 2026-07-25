@@ -1,14 +1,14 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
 
-export type ReplaceOptions = {
+export interface ReplaceOptions {
   find: string;
   replace: string;
-};
+}
 
-export type ReplaceResult = {
+export interface ReplaceResult {
   occurrences: number;
   documents: number;
-};
+}
 
 export const replaceInProject = (projectId: number, options: ReplaceOptions) =>
   fetchAPIEndpoint({

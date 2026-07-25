@@ -27,7 +27,7 @@ export const findDragPath = (editor: PlateEditor, rawEvent: DragEvent) => {
   }
 
   // Resolve a range from the caret position where the drop occured.
-  let domRange;
+  let domRange: Range | null = null;
 
   // COMPAT: In Firefox, `caretRangeFromPoint` doesn't exist. (2016/07/25)
   if (document.caretRangeFromPoint) {

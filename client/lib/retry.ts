@@ -15,7 +15,7 @@ export const retry = <T>(
   }: RetryOptions = {}
 ): Promise<T> =>
   new Promise((resolve, reject) => {
-    const attempt = (retriesLeft: number) =>
+    const attempt = (retriesLeft: number) => {
       func()
         .then((data) => {
           setIsFailing(false);
@@ -26,14 +26,15 @@ export const retry = <T>(
             setIsFailing(true);
             reject(error);
           } else {
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: logging
             console.error(error);
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: logging
             console.warn(`Retrying in ${interval}ms...`);
             setTimeout(() => attempt(retriesLeft - 1), interval);
             setIsFailing(true);
           }
         });
+    };
 
     attempt(maxRetries);
   });

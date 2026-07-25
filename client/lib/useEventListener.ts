@@ -12,5 +12,6 @@ export const useEventListener = <EventName extends keyof DocumentEventMap>(
     target.addEventListener(event, callback as EventListener, useCapture);
     return () =>
       target.removeEventListener(event, callback as EventListener, useCapture);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, dependencies);
 };

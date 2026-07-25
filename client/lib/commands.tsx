@@ -26,11 +26,11 @@ import {
 import type { KeyboardShortcutConfig } from '~/lib/types';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 
-export type BaseCommand = {
+export interface BaseCommand {
   id: string;
   enabled?: boolean;
   label: string;
-};
+}
 
 export type BaseActionCommand = BaseCommand & {
   action: (altBehaviour?: boolean) => IIC;
