@@ -1,8 +1,8 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import { ELEMENT_PARAGRAPH } from '~/lib/editor/plate';
 import {
   clickAtPath,
-  EditorHandle,
+  type EditorHandle,
   getEditorHandle,
   getSlateNodeByPath,
   setSelection,

@@ -1,7 +1,11 @@
-import React, { FormEvent, useEffect, useRef } from 'react';
+import { type FormEvent, useEffect, useRef } from 'react';
+import {
+  ModalTitle,
+  StyledModal,
+  type StyledModalProps,
+} from '~/components/Modal';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
-import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 
 export interface InputModalProps {
   title: string;

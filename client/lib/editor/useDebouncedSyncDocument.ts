@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { PlateEditor } from '~/lib/editor/plate';
+import type { PlateEditor } from '~/lib/editor/plate';
 import {
+  type UseSyncDocumentOptions,
   useSyncDocument,
-  UseSyncDocumentOptions,
 } from '~/lib/editor/useSyncDocument';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { useBeforeUnload } from '~/lib/useBeforeUnload';

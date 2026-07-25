@@ -25,7 +25,7 @@ import {
   createStrikethroughPlugin,
   createTabbablePlugin,
   createTrailingBlockPlugin,
-  PlatePlugin,
+  type PlatePlugin,
 } from '~/lib/editor/plate';
 import { resetNodeOptions } from '~/lib/editor/resetNode';
 import { createSelectionToolbarPlugin } from '~/lib/editor/selectionToolbar';

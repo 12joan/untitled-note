@@ -1,4 +1,4 @@
-import { Snapshot } from '~/lib/types';
+import type { Snapshot } from '~/lib/types';
 
 export const getSnapshotName = (snapshot: Snapshot): string =>
   snapshot.name || getSnapshotDefaultName(snapshot);

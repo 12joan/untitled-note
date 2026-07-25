@@ -1,13 +1,11 @@
-import React, { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
-import { useAppContext } from '~/lib/appContext';
+import { type ForwardedRef, forwardRef, type HTMLAttributes } from 'react';
 import { newDocumentToken } from '~/components/AwaitNewDocument';
-import { Link, LinkProps } from '~/components/Link';
+import { Link, type LinkProps } from '~/components/Link';
+import { useAppContext } from '~/lib/appContext';
 
 export const EditAccountLink = (
   props: Omit<HTMLAttributes<HTMLAnchorElement>, 'href'>
-) => {
-  return <a href="/users/edit" target="_blank" {...props} />;
-};
+) => <a href="/users/edit" target="_blank" {...props} />;
 
 type HasRequiredKeys<T> = Exclude<
   keyof T,
@@ -19,7 +17,7 @@ type HasRequiredKeys<T> = Exclude<
   : true;
 
 const createLinkComponent = <
-  T extends Record<string, any> & { projectId?: number }
+  T extends Record<string, any> & { projectId?: number },
 >(
   getPath: (options: T) => string
 ) => {

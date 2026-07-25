@@ -2,8 +2,8 @@
 /* eslint-disable no-restricted-globals */
 
 import { expose } from 'comlink';
-import { DBSchema, openDB } from 'idb';
-import { StreamCacheWorkerAPI } from '~/lib/types';
+import { type DBSchema, openDB } from 'idb';
+import type { StreamCacheWorkerAPI } from '~/lib/types';
 
 const EXPIRY_TIME = 1000 * 60 * 60 * 24; // 1 day
 

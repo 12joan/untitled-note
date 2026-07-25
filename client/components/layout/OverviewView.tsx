@@ -1,4 +1,12 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
+import { DocumentIndex } from '~/components/DocumentIndex';
+import { LoadingView } from '~/components/LoadingView';
+import { NewDocumentRectButton } from '~/components/NewDocumentRectButton';
+import { NoDocumentsView } from '~/components/NoDocumentsView';
+import { PinnedDragTarget } from '~/components/PinnedDragTarget';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { QuickFind } from '~/components/QuickFind';
+import { TagIndex } from '~/components/TagIndex';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { sequenceFutures, unwrapFuture } from '~/lib/monads';
 import {
@@ -10,14 +18,6 @@ import {
 import { useSettings } from '~/lib/settings';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
-import { DocumentIndex } from '~/components/DocumentIndex';
-import { LoadingView } from '~/components/LoadingView';
-import { NewDocumentRectButton } from '~/components/NewDocumentRectButton';
-import { NoDocumentsView } from '~/components/NoDocumentsView';
-import { PinnedDragTarget } from '~/components/PinnedDragTarget';
-import { ProjectIcon } from '~/components/ProjectIcon';
-import { QuickFind } from '~/components/QuickFind';
-import { TagIndex } from '~/components/TagIndex';
 
 export const OverviewView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();

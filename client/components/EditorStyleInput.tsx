@@ -1,6 +1,6 @@
-import React, { ReactNode, useMemo } from 'react';
-import { EditorStyle } from '~/lib/types';
+import { type ReactNode, useMemo } from 'react';
 import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
+import type { EditorStyle } from '~/lib/types';
 
 const descriptions: Record<EditorStyle, string> = {
   casual: 'The casual style is designed for taking notes and casual writing.',

@@ -1,5 +1,5 @@
 // From https://blog.logrocket.com/build-strongly-typed-polymorphic-components-react-typescript/
-import {
+import type {
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
   ElementType,
@@ -16,13 +16,13 @@ type EmptyObject = Record<string, never>;
 
 type PolyPropsWithoutRef<
   C extends ElementType,
-  Props = EmptyObject
+  Props = EmptyObject,
 > = PropsWithChildren<Props & AsProp<C>> &
   Omit<ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
 
 export type PolyProps<
   C extends ElementType,
-  Props = EmptyObject
+  Props = EmptyObject,
 > = PolyPropsWithoutRef<C, Props> & {
   ref?: PolyRef<C>;
 };

@@ -1,5 +1,5 @@
-import { Active, DroppableContainer, Over } from '@dnd-kit/core';
-import { DraggableData, DroppableData } from './types';
+import type { Active, DroppableContainer, Over } from '@dnd-kit/core';
+import type { DraggableData, DroppableData } from './types';
 
 export const getDraggableData = <T extends Active | undefined | null>(
   active: T
@@ -9,7 +9,7 @@ export const getDraggableData = <T extends Active | undefined | null>(
 };
 
 export const getDroppableData = <
-  T extends Over | DroppableContainer | undefined | null
+  T extends Over | DroppableContainer | undefined | null,
 >(
   over: T
 ): T extends Over | DroppableContainer

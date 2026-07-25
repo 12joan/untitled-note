@@ -1,4 +1,4 @@
-import { ChunkDiffOptions, chunkDiffs } from './chunkDiffs';
+import { type ChunkDiffOptions, chunkDiffs } from './chunkDiffs';
 
 describe('chunkDiffs', () => {
   const options: ChunkDiffOptions<number> = {

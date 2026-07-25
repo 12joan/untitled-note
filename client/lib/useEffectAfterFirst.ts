@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useLayoutEffect, useRef } from 'react';
+import { type DependencyList, useEffect, useLayoutEffect, useRef } from 'react';
 
 const makeUseEffectAfterFirst =
   (useEffectHook: typeof useEffect | typeof useLayoutEffect) =>

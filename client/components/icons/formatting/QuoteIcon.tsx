@@ -1,4 +1,3 @@
-import React from 'react';
 import makeIcon from '../makeIcon';
 
 export default makeIcon(

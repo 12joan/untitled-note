@@ -80,9 +80,11 @@ export const thenFuture = <T>(future: Future<T>, f: (data: T) => void) =>
     resolved: f,
   });
 
-export const sequenceFutures = <T extends { [key: string]: any }>(futures: {
-  [K in keyof T]: Future<T[K]>;
-}): Future<T> =>
+export const sequenceFutures = <T extends { [key: string]: any }>(
+  futures: {
+    [K in keyof T]: Future<T[K]>;
+  }
+): Future<T> =>
   Object.entries(futures).reduce(
     (futureRecord, [key, future]) =>
       bindFuture(futureRecord, (record) =>

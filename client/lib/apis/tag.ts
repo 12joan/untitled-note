@@ -1,7 +1,6 @@
-import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { SequenceBeforeAndAfter, Tag } from '~/lib/types';
-
 import { streamAction } from '~/channels/dataChannel';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import type { SequenceBeforeAndAfter, Tag } from '~/lib/types';
 
 export const updateTag = (projectId: number, id: number, tag: Partial<Tag>) =>
   fetchAPIEndpoint({

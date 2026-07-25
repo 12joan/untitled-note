@@ -19,7 +19,7 @@ const createMenu = () => {
       },
       { type: 'separator' },
       {
-        label: `Hide Untitled Note App`,
+        label: 'Hide Untitled Note App',
         accelerator: 'Cmd+H',
         role: 'hide',
       },

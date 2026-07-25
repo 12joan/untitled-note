@@ -1,5 +1,5 @@
-import { DragEvent, useState } from 'react';
-import { PartialDocument } from '~/lib/types';
+import { type DragEvent, useState } from 'react';
+import type { PartialDocument } from '~/lib/types';
 
 type BaseDragData = {
   type: string;
@@ -14,7 +14,7 @@ type DocumentDragData = BaseDragData & {
 export type DragData = DocumentDragData;
 
 const makeDragData = <T extends DragData>(type: T['type'], data: T['data']) =>
-  ({ type, data } as T);
+  ({ type, data }) as T;
 
 export const makeDocumentDragData = (doc: PartialDocument): DocumentDragData =>
   makeDragData('document', doc);
@@ -29,11 +29,10 @@ export const handleDragStartWithData =
     }
   };
 
-const getDragData = (event: DragEvent): DragData | null => {
-  return event.dataTransfer.types.includes('text/x-note-drag')
+const getDragData = (event: DragEvent): DragData | null =>
+  event.dataTransfer.types.includes('text/x-note-drag')
     ? currentDragData
     : null;
-};
 
 export interface UseDragTargetOptions<T extends DragData> {
   type: T['type'];

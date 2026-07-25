@@ -4,7 +4,7 @@ import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { findDragPath } from './findDragPath';
 import { insertAttachments } from './insertAttachments';
-import { AttachmentPlugin } from './types';
+import type { AttachmentPlugin } from './types';
 import { withAttachments } from './withAttachments';
 
 const setDragCursorPosition = (position: number | null) =>

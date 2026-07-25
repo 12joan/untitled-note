@@ -12,7 +12,7 @@ export interface UseModalOptions {
   onClose?: () => void;
 }
 
-export const useModal = <T = undefined,>(
+export const useModal = <T = undefined>(
   render: (modalProps: UseModalRenderProps, openProps: T) => JSX.Element,
   { onOpen, onClose }: UseModalOptions = {}
 ) => {

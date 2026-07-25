@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 
 const randomEmail = () => `test_${Math.random()}@preview.local`;
 const randomPassword = () => Math.random().toString();

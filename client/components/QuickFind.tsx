@@ -1,4 +1,7 @@
-import React, { ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
+import DocumentIcon from '~/components/icons/DocumentIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import TagIcon from '~/components/icons/TagIcon';
 import { useAppContext } from '~/lib/appContext';
 import { filterPredicate } from '~/lib/filterPredicate';
 import { orDefaultFuture } from '~/lib/monads';
@@ -6,9 +9,6 @@ import { documentPath, tagPath } from '~/lib/routes';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
-import DocumentIcon from '~/components/icons/DocumentIcon';
-import SearchIcon from '~/components/icons/SearchIcon';
-import TagIcon from '~/components/icons/TagIcon';
 
 type QuickFindItem = {
   key: string;

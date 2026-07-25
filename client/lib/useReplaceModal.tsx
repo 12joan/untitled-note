@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
+  ModalTitle,
+  StyledModal,
+  type StyledModalProps,
+} from '~/components/Modal';
+import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
+import { Tooltip } from '~/components/Tooltip';
+import {
+  type ReplaceOptions,
+  type ReplaceResult,
   replaceInDocument,
   replaceInProject,
-  ReplaceOptions,
-  ReplaceResult,
 } from '~/lib/apis/replace';
 import { useAppContext } from '~/lib/appContext';
 import { handleReplaceError } from '~/lib/handleErrors';
 import { pluralize } from '~/lib/pluralize';
 import { createToast } from '~/lib/toasts';
 import { useModal } from '~/lib/useModal';
-import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
-import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
-import { Tooltip } from '~/components/Tooltip';
 
 export interface ReplaceModalProps {
   documentId: number;

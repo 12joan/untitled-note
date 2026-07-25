@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-import { useAppContext } from '~/lib/appContext';
-import { forwardParams } from '~/lib/forwardParams';
-import { removeProjectFromHistory } from '~/lib/projectHistory';
-import { getLastView } from '~/lib/restoreProjectView';
-import { Project } from '~/lib/types';
 import { AwaitNewDocument } from '~/components/AwaitNewDocument';
 import { AwaitRedirect } from '~/components/AwaitRedirect';
 import { ProjectView } from '~/components/layout/ProjectView';
 import { RestoreLastOpenProject } from '~/components/RestoreLastOpenProject';
 import { StreamProjectData } from '~/components/StreamProjectData';
+import { useAppContext } from '~/lib/appContext';
+import { forwardParams } from '~/lib/forwardParams';
+import { removeProjectFromHistory } from '~/lib/projectHistory';
+import { getLastView } from '~/lib/restoreProjectView';
+import type { Project } from '~/lib/types';
 
 /**
  * To keep the component tree consistent, we need to use forwardParams on all

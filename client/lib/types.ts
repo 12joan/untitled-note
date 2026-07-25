@@ -48,7 +48,7 @@ export type LocalTag = Partial<Tag> & {
 
 export type SequenceBeforeAndAfter = [
   Pick<Document, 'id' | 'safe_title'> | null,
-  Pick<Document, 'id' | 'safe_title'> | null
+  Pick<Document, 'id' | 'safe_title'> | null,
 ];
 
 export type Document = {

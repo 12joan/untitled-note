@@ -1,12 +1,3 @@
-import React from 'react';
-import { deleteFile as deleteFileAPI } from '~/lib/apis/file';
-import { useAppContext } from '~/lib/appContext';
-import { filesize } from '~/lib/filesize';
-import { dispatchGlobalEvent } from '~/lib/globalEvents';
-import { groupedClassNames } from '~/lib/groupedClassNames';
-import { handleDeleteFileError } from '~/lib/handleErrors';
-import { sequenceFutures, unwrapFuture } from '~/lib/monads';
-import { S3File } from '~/lib/types';
 import { Dropdown, DropdownItem } from '~/components/Dropdown';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DownloadIcon from '~/components/icons/DownloadIcon';
@@ -14,6 +5,14 @@ import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import { LoadingView } from '~/components/LoadingView';
 import { Meter } from '~/components/Meter';
 import { Tooltip } from '~/components/Tooltip';
+import { deleteFile as deleteFileAPI } from '~/lib/apis/file';
+import { useAppContext } from '~/lib/appContext';
+import { filesize } from '~/lib/filesize';
+import { dispatchGlobalEvent } from '~/lib/globalEvents';
+import { groupedClassNames } from '~/lib/groupedClassNames';
+import { handleDeleteFileError } from '~/lib/handleErrors';
+import { sequenceFutures, unwrapFuture } from '~/lib/monads';
+import type { S3File } from '~/lib/types';
 
 export const FileStorageSection = () => {
   const futureQuotaUsage = useAppContext('futureQuotaUsage');
@@ -63,17 +62,15 @@ interface FileListProps {
   files: S3File[];
 }
 
-const FileList = ({ files }: FileListProps) => {
-  return (
-    <>
-      {files.map((file) => (
-        <FileEntry key={file.id} {...file} />
-      ))}
+const FileList = ({ files }: FileListProps) => (
+  <>
+    {files.map((file) => (
+      <FileEntry key={file.id} {...file} />
+    ))}
 
-      {files.length === 0 && <p>No files uploaded yet</p>}
-    </>
-  );
-};
+    {files.length === 0 && <p>No files uploaded yet</p>}
+  </>
+);
 
 type Badge = {
   text: string;
@@ -163,21 +160,19 @@ const FileEntry = ({
   );
 };
 
-const Badge = ({ text, hint, color }: Badge) => {
-  return (
-    <Tooltip content={hint}>
-      <span
-        className={groupedClassNames({
-          base: 'text-xs rounded-sm px-1 py-0.5 select-none shrink-0',
-          color: {
-            neutral: 'bg-plain-200 dark:bg-plain-600',
-            danger: 'bg-red-600 text-white',
-          }[color],
-        })}
-        tabIndex={0}
-      >
-        {text}
-      </span>
-    </Tooltip>
-  );
-};
+const Badge = ({ text, hint, color }: Badge) => (
+  <Tooltip content={hint}>
+    <span
+      className={groupedClassNames({
+        base: 'text-xs rounded-sm px-1 py-0.5 select-none shrink-0',
+        color: {
+          neutral: 'bg-plain-200 dark:bg-plain-600',
+          danger: 'bg-red-600 text-white',
+        }[color],
+      })}
+      tabIndex={0}
+    >
+      {text}
+    </span>
+  </Tooltip>
+);

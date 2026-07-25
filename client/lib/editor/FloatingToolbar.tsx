@@ -1,9 +1,13 @@
-import React, { ElementType, ReactNode } from 'react';
-import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { PolyProps } from '~/lib/polymorphic';
-import { IconProps } from '~/components/icons/makeIcon';
-import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
+import type React from 'react';
+import type { ElementType, ReactNode } from 'react';
+import type { IconProps } from '~/components/icons/makeIcon';
+import { Tippy, type TippyInstance, type TippyProps } from '~/components/Tippy';
 import { Tooltip } from '~/components/Tooltip';
+import {
+  type GroupedClassNames,
+  groupedClassNames,
+} from '~/lib/groupedClassNames';
+import type { PolyProps } from '~/lib/polymorphic';
 
 export interface FloatingToolbarProps {
   open?: boolean;
@@ -23,32 +27,30 @@ export const FloatingToolbar = ({
   containerProps: { className: containerClassName, ...containerProps } = {},
   items,
   children,
-}: FloatingToolbarProps) => {
-  return (
-    <Tippy
-      placement="top"
-      visible={open}
-      appendTo={document.body}
-      interactive
-      {...tippyProps}
-      render={(attrs) => (
-        <div
-          className={groupedClassNames(
-            'rounded-lg backdrop-blur shadow text-base slate-popover',
-            containerClassName
-          )}
-          contentEditable={false}
-          {...attrs}
-          {...containerProps}
-        >
-          {items}
-        </div>
-      )}
-    >
-      {children}
-    </Tippy>
-  );
-};
+}: FloatingToolbarProps) => (
+  <Tippy
+    placement="top"
+    visible={open}
+    appendTo={document.body}
+    interactive
+    {...tippyProps}
+    render={(attrs) => (
+      <div
+        className={groupedClassNames(
+          'rounded-lg backdrop-blur shadow text-base slate-popover',
+          containerClassName
+        )}
+        contentEditable={false}
+        {...attrs}
+        {...containerProps}
+      >
+        {items}
+      </div>
+    )}
+  >
+    {children}
+  </Tippy>
+);
 
 export type FloatingToolbarItemProps<C extends ElementType> = PolyProps<
   C,

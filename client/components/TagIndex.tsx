@@ -1,9 +1,13 @@
-import React, { ComponentType } from 'react';
+import type { ComponentType } from 'react';
+import {
+  type Item,
+  ItemIndex,
+  type ItemIndexProps,
+} from '~/components/ItemIndex';
+import { TagMenu } from '~/components/TagMenu';
 import { pluralize } from '~/lib/pluralize';
 import { TagLink } from '~/lib/routes';
-import { Tag } from '~/lib/types';
-import { Item, ItemIndex, ItemIndexProps } from '~/components/ItemIndex';
-import { TagMenu } from '~/components/TagMenu';
+import type { Tag } from '~/lib/types';
 
 export interface TagIndexProps
   extends Omit<ItemIndexProps, 'items' | 'cardPreviewHeight'> {

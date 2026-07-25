@@ -1,9 +1,16 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Dropdown, DropdownItem } from '~/components/Dropdown';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import EditIcon from '~/components/icons/EditIcon';
+import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
+import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
+import RestoreSnapshotIcon from '~/components/icons/RestoreSnapshotIcon';
+import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
 import { deleteSnapshot } from '~/lib/apis/snapshot';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { DiffViewer } from '~/lib/editor/diffViewer';
-import { Value } from '~/lib/editor/plate';
+import type { Value } from '~/lib/editor/plate';
 import { useEditorStyle } from '~/lib/editor/useEditorStyle';
 import { getSnapshotName } from '~/lib/getSnapshotName';
 import { handleDeleteSnapshotError } from '~/lib/handleErrors';
@@ -12,14 +19,7 @@ import {
   useRenameSnapshotModal,
   useRestoreSnapshotModal,
 } from '~/lib/snapshotModals';
-import { Document, Snapshot } from '~/lib/types';
-import { Dropdown, DropdownItem } from '~/components/Dropdown';
-import DeleteIcon from '~/components/icons/DeleteIcon';
-import EditIcon from '~/components/icons/EditIcon';
-import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
-import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
-import RestoreSnapshotIcon from '~/components/icons/RestoreSnapshotIcon';
-import { RadioCard, RadioCardGroup } from '~/components/RadioCardGroup';
+import type { Document, Snapshot } from '~/lib/types';
 
 export interface SnapshotExplorerProps {
   document: Document;

@@ -1,12 +1,4 @@
-import React, { memo } from 'react';
-import { streamDocuments } from '~/lib/apis/document';
-import { AppContextProvider, useAppContext } from '~/lib/appContext';
-import { Future, mapFuture, unwrapFuture } from '~/lib/monads';
-import { OverviewLink } from '~/lib/routes';
-import { PartialDocument, Tag } from '~/lib/types';
-import { useElementSize } from '~/lib/useElementSize';
-import { useStream } from '~/lib/useStream';
-import { useTitle } from '~/lib/useTitle';
+import { memo } from 'react';
 import { BackButton } from '~/components/BackButton';
 import { DocumentIndex } from '~/components/DocumentIndex';
 import { Dropdown } from '~/components/Dropdown';
@@ -14,6 +6,14 @@ import CaretDownIcon from '~/components/icons/CaretDownIcon';
 import { LoadingView } from '~/components/LoadingView';
 import { InlinePlaceholder } from '~/components/Placeholder';
 import { TagMenu } from '~/components/TagMenu';
+import { streamDocuments } from '~/lib/apis/document';
+import { AppContextProvider, useAppContext } from '~/lib/appContext';
+import { type Future, mapFuture, unwrapFuture } from '~/lib/monads';
+import { OverviewLink } from '~/lib/routes';
+import type { PartialDocument, Tag } from '~/lib/types';
+import { useElementSize } from '~/lib/useElementSize';
+import { useStream } from '~/lib/useStream';
+import { useTitle } from '~/lib/useTitle';
 
 export interface TagDocumentsViewProps {
   tagId: number;

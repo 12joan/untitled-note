@@ -1,19 +1,19 @@
-import React, {
+import {
   forwardRef,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import CloseIcon from '~/components/icons/CloseIcon';
+import PlusIcon from '~/components/icons/PlusIcon';
 import { useAppContext } from '~/lib/appContext';
 import { filterPredicate } from '~/lib/filterPredicate';
 import { orDefaultFuture } from '~/lib/monads';
 import { TagLink } from '~/lib/routes';
-import { LocalDocument, LocalTag } from '~/lib/types';
+import type { LocalDocument, LocalTag } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
-import CloseIcon from '~/components/icons/CloseIcon';
-import PlusIcon from '~/components/icons/PlusIcon';
 
 const tagClassName =
   'bg-plain-50 dark:bg-plain-800 rounded-full flex items-center justify-center';

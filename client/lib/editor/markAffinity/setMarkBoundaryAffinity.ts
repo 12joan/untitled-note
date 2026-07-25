@@ -1,6 +1,10 @@
-import { Point } from 'slate';
-import { getEndPoint, getNodeProps, PlateEditor } from '~/lib/editor/plate';
-import { MarkBoundary } from './types';
+import type { Point } from 'slate';
+import {
+  getEndPoint,
+  getNodeProps,
+  type PlateEditor,
+} from '~/lib/editor/plate';
+import type { MarkBoundary } from './types';
 
 export const setMarkBoundaryAffinity = (
   editor: PlateEditor,

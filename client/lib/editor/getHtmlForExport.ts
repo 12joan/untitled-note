@@ -1,5 +1,5 @@
 import pretty from 'pretty';
-import { TDescendant, TElement, TText } from '~/lib/editor/plate';
+import type { TDescendant, TElement, TText } from '~/lib/editor/plate';
 
 export type GetHTMLForExportOptions = {
   title: string | null;
@@ -20,24 +20,27 @@ const plateElementToDomNode = (
     case 'h1':
       return document.createElement(title === null ? 'h1' : 'h2');
 
-    case 'a':
+    case 'a': {
       const anchor = document.createElement('a');
       anchor.href = node.url as string;
       return anchor;
+    }
 
     case 'code_block':
       return document.createElement('pre');
 
     // FIXME: We don't currently have a static URL for attachments
-    case 'attachment':
+    case 'attachment': {
       const placeholder = document.createElement('p');
       placeholder.innerText = `<${node.filename}>`;
       return placeholder;
+    }
 
-    case 'mention':
+    case 'mention': {
       const mention = document.createElement('span');
       mention.innerText = node.fallbackText as string;
       return mention;
+    }
 
     case 'lic':
     case 'code_line':

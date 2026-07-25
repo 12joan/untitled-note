@@ -1,10 +1,9 @@
-import React from 'react';
-import { NewDocumentLink } from '~/lib/routes';
-import { Tag } from '~/lib/types';
-import { useRenameTag } from '~/lib/useRenameTag';
 import { DropdownItem } from '~/components/Dropdown';
 import EditIcon from '~/components/icons/EditIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
+import { NewDocumentLink } from '~/lib/routes';
+import type { Tag } from '~/lib/types';
+import { useRenameTag } from '~/lib/useRenameTag';
 
 export interface TagMenuProps {
   tag: Tag;

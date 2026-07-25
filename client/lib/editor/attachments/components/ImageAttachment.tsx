@@ -1,6 +1,5 @@
-import React from 'react';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { ExtantAttachmentProps } from '../types';
+import type { ExtantAttachmentProps } from '../types';
 
 export const ImageAttachment = ({
   s3File,

@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
+import { BackButton } from '~/components/BackButton';
+import { LoadingView } from '~/components/LoadingView';
+import { TagIndex } from '~/components/TagIndex';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { unwrapFuture } from '~/lib/monads';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
-import { BackButton } from '~/components/BackButton';
-import { LoadingView } from '~/components/LoadingView';
-import { TagIndex } from '~/components/TagIndex';
 
 export const AllTagsView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();

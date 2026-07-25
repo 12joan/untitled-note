@@ -3,8 +3,8 @@ import {
   ELEMENT_PARAGRAPH,
   isText,
   KEY_DESERIALIZE_HTML,
-  TDescendant,
-  TElement,
+  type TDescendant,
+  type TElement,
 } from '~/lib/editor/plate';
 
 const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {

@@ -1,4 +1,4 @@
-import { MutableRefObject, RefCallback } from 'react';
+import type { MutableRefObject, RefCallback } from 'react';
 
 export type Ref<T> = RefCallback<T> | MutableRefObject<T>;
 

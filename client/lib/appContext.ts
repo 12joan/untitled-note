@@ -1,7 +1,7 @@
-import { MutableRefObject } from 'react';
-import { createContext, ProviderProps } from '~/lib/context';
-import { Future } from '~/lib/monads';
-import {
+import type { MutableRefObject } from 'react';
+import { createContext, type ProviderProps } from '~/lib/context';
+import type { Future } from '~/lib/monads';
+import type {
   EditorStyle,
   PartialDocument,
   Project,
@@ -11,10 +11,10 @@ import {
   StorageQuotaUsage,
   Tag,
 } from '~/lib/types';
-import { FilesModalOpenProps } from '~/lib/useFilesModal';
-import { ProjectSettingsModalOpenProps } from '~/lib/useProjectSettingsModal';
-import { SearchModalOpenProps } from '~/lib/useSearchModal';
-import { SettingsModalOpenProps } from '~/lib/useSettingsModal';
+import type { FilesModalOpenProps } from '~/lib/useFilesModal';
+import type { ProjectSettingsModalOpenProps } from '~/lib/useProjectSettingsModal';
+import type { SearchModalOpenProps } from '~/lib/useSearchModal';
+import type { SettingsModalOpenProps } from '~/lib/useSettingsModal';
 
 export type AppContext = {
   settings: Settings;

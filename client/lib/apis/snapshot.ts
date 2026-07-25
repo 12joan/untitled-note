@@ -1,7 +1,6 @@
-import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { Snapshot } from '~/lib/types';
-
 import { streamAction } from '~/channels/dataChannel';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import type { Snapshot } from '~/lib/types';
 
 export const createSnapshot = (
   projectId: number,
@@ -56,7 +55,7 @@ export const restoreSnapshot = (
     data: {
       save_current: saveCurrent,
     },
-  }).then(() => undefined) as Promise<void>;
+  }).then(() => {}) as Promise<void>;
 
 export const streamSnapshots = (
   documentId: number,

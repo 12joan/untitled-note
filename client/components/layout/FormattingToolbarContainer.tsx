@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 import { useAppContext } from '~/lib/appContext';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import LargeCloseIcon from '../icons/LargeCloseIcon';

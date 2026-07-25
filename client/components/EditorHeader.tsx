@@ -1,8 +1,4 @@
-import React, { memo, RefObject, useRef, useState } from 'react';
-import { getFilteredChildren } from '~/lib/editor/documentDataForUpload';
-import { PlateEditor } from '~/lib/editor/plate';
-import { setSelection } from '~/lib/editor/restoreSelection';
-import { LocalDocument } from '~/lib/types';
+import { memo, type RefObject, useRef, useState } from 'react';
 import { DocumentMenu } from '~/components/DocumentMenu';
 import { DocumentStatusHeader } from '~/components/DocumentStatusHeader';
 import { Dropdown } from '~/components/Dropdown';
@@ -13,6 +9,10 @@ import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import TagsIcon from '~/components/icons/TagsIcon';
 import UnlockIcon from '~/components/icons/UnlockIcon';
 import { Tooltip } from '~/components/Tooltip';
+import { getFilteredChildren } from '~/lib/editor/documentDataForUpload';
+import type { PlateEditor } from '~/lib/editor/plate';
+import { setSelection } from '~/lib/editor/restoreSelection';
+import type { LocalDocument } from '~/lib/types';
 
 export interface EditorHeaderProps {
   editor: PlateEditor | null;

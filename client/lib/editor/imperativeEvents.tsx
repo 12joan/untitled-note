@@ -1,6 +1,6 @@
-import React, {
-  DependencyList,
-  KeyboardEvent,
+import {
+  type DependencyList,
+  type KeyboardEvent,
   useEffect,
   useMemo,
   useState,
@@ -8,18 +8,18 @@ import React, {
 import {
   createEventEmitter,
   dispatchEvent,
-  EventEmitter,
-  EventListener,
+  type EventEmitter,
+  type EventListener,
   useEvent,
 } from '~/lib/customEvents';
 import {
   createPluginFactory,
-  PlateEditor,
-  PlatePlugin,
+  type PlateEditor,
+  type PlatePlugin,
   useEditorRef,
-  Value,
+  type Value,
 } from '~/lib/editor/plate';
-import { LinkModalProps } from './links/types';
+import type { LinkModalProps } from './links/types';
 
 type ImperativeEventTypes = {
   change: [Value];

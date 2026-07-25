@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { TElement } from '~/lib/editor/plate';
+import type { ReactNode } from 'react';
+import type { TElement } from '~/lib/editor/plate';
 
 export interface DocumentMention {
   documentId: number;

@@ -1,9 +1,9 @@
-import React, { memo, useLayoutEffect, useState } from 'react';
-import { useTimeout } from '~/lib/useTimer';
+import { memo, useLayoutEffect, useState } from 'react';
 import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 import { ProjectsBar } from '~/components/layout/ProjectsBar';
 import { Sidebar } from '~/components/layout/Sidebar';
 import { ModalPanel, ModalRoot } from '~/components/Modal';
+import { useTimeout } from '~/lib/useTimer';
 
 export interface OffcanvasSidebarProps {
   visible: boolean;

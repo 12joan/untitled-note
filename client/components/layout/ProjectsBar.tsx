@@ -1,6 +1,17 @@
-import React, { memo, MouseEvent, useMemo } from 'react';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { Portal } from '@headlessui/react';
+import { type MouseEvent, memo, useMemo } from 'react';
+import { Dropdown, DropdownItem } from '~/components/Dropdown';
+import LargePlusIcon from '~/components/icons/LargePlusIcon';
+import NewProjectFolderIcon from '~/components/icons/NewProjectFolderIcon';
+import { Placeholder } from '~/components/Placeholder';
+import {
+  ProjectFolder,
+  ProjectFolderTrigger,
+} from '~/components/ProjectFolder';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { ProjectListItem } from '~/components/ProjectListItem';
+import { ProjectsBarSubtleButton } from '~/components/ProjectsBarSubtleButton';
 import { updateProject as updateProjectAPI } from '~/lib/apis/project';
 import { updateProjectFolder as updateProjectFolderAPI } from '~/lib/apis/projectFolder';
 import { useAppContext } from '~/lib/appContext';
@@ -27,22 +38,11 @@ import {
   resolvedFuture,
   unwrapFuture,
 } from '~/lib/monads';
-import { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
+import type { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useNewProject } from '~/lib/useNewProject';
 import { useNewProjectFolder } from '~/lib/useNewProjectFolder';
 import { useOverrideable } from '~/lib/useOverrideable';
-import { Dropdown, DropdownItem } from '~/components/Dropdown';
-import LargePlusIcon from '~/components/icons/LargePlusIcon';
-import NewProjectFolderIcon from '~/components/icons/NewProjectFolderIcon';
-import { Placeholder } from '~/components/Placeholder';
-import {
-  ProjectFolder,
-  ProjectFolderTrigger,
-} from '~/components/ProjectFolder';
-import { ProjectIcon } from '~/components/ProjectIcon';
-import { ProjectListItem } from '~/components/ProjectListItem';
-import { ProjectsBarSubtleButton } from '~/components/ProjectsBarSubtleButton';
 
 export interface ProjectsBarProps {
   onButtonClick?: (event: MouseEvent) => void;

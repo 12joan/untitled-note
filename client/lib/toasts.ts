@@ -1,6 +1,6 @@
-import { DependencyList, useEffect, useState } from 'react';
+import { type DependencyList, useEffect, useState } from 'react';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
-import { ToastWithoutId } from '~/lib/types';
+import type { ToastWithoutId } from '~/lib/types';
 
 const getRandomId = () => Math.random().toString(36).slice(2);
 

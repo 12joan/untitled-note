@@ -1,4 +1,4 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import {
   useFocused as useSlateFocused,
   useSelected as useSlateSelected,
@@ -7,10 +7,10 @@ import {
   ELEMENT_PARAGRAPH,
   getEditorString,
   getNode,
-  PlateEditor,
+  type PlateEditor,
   removeNodes,
   someNode,
-  TNode,
+  type TNode,
 } from '~/lib/editor/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
 

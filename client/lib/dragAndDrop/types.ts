@@ -1,4 +1,4 @@
-import { Project, ProjectFolder } from '~/lib/types';
+import type { Project, ProjectFolder } from '~/lib/types';
 
 export type BaseDraggableData = {
   type: string;

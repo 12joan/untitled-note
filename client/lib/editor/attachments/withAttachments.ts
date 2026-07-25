@@ -7,14 +7,14 @@ import {
   isSelectionAtBlockEnd,
   isSelectionAtBlockStart,
   moveSelection,
-  PlateEditor,
+  type PlateEditor,
   removeNodes,
   select,
   unwrapList,
   withoutNormalizing,
 } from '~/lib/editor/plate';
 import { ELEMENT_ATTACHMENT } from './constants';
-import { AttachmentElement } from './types';
+import type { AttachmentElement } from './types';
 import { abortUpload, getUploadIsInProgress } from './uploadsInProgressStore';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 

@@ -1,4 +1,4 @@
-import { DependencyList, useCallback, useRef } from 'react';
+import { type DependencyList, useCallback, useRef } from 'react';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
 export const useDebounce = <T extends unknown[]>(

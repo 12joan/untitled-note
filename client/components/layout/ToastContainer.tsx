@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { createToast } from '~/lib/toasts';
-import { Toast as ToastData } from '~/lib/types';
+import type { Toast as ToastData } from '~/lib/types';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTimeout } from '~/lib/useTimer';
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 const AUTO_CLOSE_DURATION = {
   none: null,

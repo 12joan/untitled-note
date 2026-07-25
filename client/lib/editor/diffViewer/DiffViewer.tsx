@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { EditorBody } from '~/components/EditorBody';
 import {
   computeDiff,
   createPlateEditor,
   getNodeString,
-  PlatePlugin,
-  Value,
+  type PlatePlugin,
+  type Value,
 } from '~/lib/editor/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import { useLayoutEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useObjectVersion } from '~/lib/useObjectVersion';
-import { EditorBody } from '~/components/EditorBody';
 import { collapseBlocksWithoutDiff } from './chunks/collapseBlocksWithoutDiff';
 import { createChunkPlugin } from './chunks/createChunkPlugin';
 import { createDiffPlugin } from './diff/createDiffPlugins';

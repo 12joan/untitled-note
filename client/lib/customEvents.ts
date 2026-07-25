@@ -1,4 +1,4 @@
-import { DependencyList, useEffect } from 'react';
+import { type DependencyList, useEffect } from 'react';
 
 export type EventListener<T extends unknown[]> = (...args: T) => void;
 type EventListenerSet<T extends unknown[]> = Set<EventListener<T>>;
@@ -23,7 +23,7 @@ export type EventEmitter<T extends BaseEventTypes> = {
 };
 
 export const createEventEmitter = <
-  T extends BaseEventTypes
+  T extends BaseEventTypes,
 >(): EventEmitter<T> => {
   const eventListenerMap: EventListenerMap<T> = {} as EventListenerMap<T>;
 

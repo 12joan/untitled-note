@@ -1,4 +1,4 @@
-import React, { ElementType } from 'react';
+import type { ElementType } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Attachment, ELEMENT_ATTACHMENT } from '~/lib/editor/attachments';
 import { LinkComponent } from '~/lib/editor/links/LinkComponent';
@@ -15,24 +15,23 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
 } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
+import { ELEMENT_MENTION, ELEMENT_MENTION_INPUT } from './mentions';
 import { Mention } from './mentions/Mention';
 import { MentionInput } from './mentions/MentionInput';
-import { ELEMENT_MENTION, ELEMENT_MENTION_INPUT } from './mentions';
 
 const makeElementComponent =
   (Component: ElementType, className?: string) =>
-  ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) =>
-    (
-      <Component
-        {...nodeProps}
-        {...attributes}
-        className={twMerge(className, nodeProps.className)}
-        children={children}
-      />
-    );
+  ({ children, nodeProps = {}, attributes }: PlateRenderElementProps) => (
+    <Component
+      {...nodeProps}
+      {...attributes}
+      className={twMerge(className, nodeProps.className)}
+      children={children}
+    />
+  );
 
 const listStyle =
   'pl-[calc(1.5em+var(--list-style-offset,1ch))] marker:em:text-lg/none slate-top-level:list-overflow';

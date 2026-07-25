@@ -1,5 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { KeyboardShortcutCommand } from '~/lib/commands';
+import { useRef, useState } from 'react';
+import {
+  Dropdown,
+  DropdownItem,
+  dropdownItemClassNames,
+} from '~/components/Dropdown';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
+import type { KeyboardShortcutCommand } from '~/lib/commands';
 import { isHotkey } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
@@ -10,18 +18,10 @@ import { useAllKeyboardShortcutCommands } from '~/lib/keyboardShortcuts/overridd
 import { mergeRefs } from '~/lib/refUtils';
 import { useSettings } from '~/lib/settings';
 import { createToast } from '~/lib/toasts';
-import { KeyboardShortcutConfig } from '~/lib/types';
+import type { KeyboardShortcutConfig } from '~/lib/types';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useTemporaryState } from '~/lib/useTemporaryState';
-import {
-  Dropdown,
-  DropdownItem,
-  dropdownItemClassNames,
-} from '~/components/Dropdown';
-import DeleteIcon from '~/components/icons/DeleteIcon';
-import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 type RecordShortcutError =
   | 'noModifier'
@@ -149,22 +149,18 @@ export const KeyboardShortcutsSection = () => {
   return (
     <>
       <ul className="list-group">
-        {commands.map((command) => {
-          return (
-            <KeyboardShortcutItem
-              key={command.id}
-              keyboardShortcutCommand={command}
-              isRecording={recordingId === command.id}
-              setIsRecording={(isRecording) =>
-                setRecordingId(isRecording ? command.id : null)
-              }
-              isShaking={isShaking}
-              removeKeyboardShortcut={() =>
-                setRecordingKeyboardShortcut?.(null)
-              }
-            />
-          );
-        })}
+        {commands.map((command) => (
+          <KeyboardShortcutItem
+            key={command.id}
+            keyboardShortcutCommand={command}
+            isRecording={recordingId === command.id}
+            setIsRecording={(isRecording) =>
+              setRecordingId(isRecording ? command.id : null)
+            }
+            isShaking={isShaking}
+            removeKeyboardShortcut={() => setRecordingKeyboardShortcut?.(null)}
+          />
+        ))}
       </ul>
 
       <div>
@@ -274,48 +270,46 @@ const KeyboardShortcutDropdown = ({
   sequential,
   onRemove,
   onCancel,
-}: KeyboardShortcutDropdownProps) => {
-  return (
+}: KeyboardShortcutDropdownProps) => (
+  <div
+    className="contents cursor-default"
+    onClick={(event) => event.stopPropagation()}
+  >
     <div
-      className="contents cursor-default"
-      onClick={(event) => event.stopPropagation()}
+      className={groupedClassNames(dropdownItemClassNames, {
+        display: 'block',
+        hocusBackgroundColor: undefined,
+        textAlign: 'text-center',
+        padding: 'py-3 px-5',
+      })}
     >
-      <div
-        className={groupedClassNames(dropdownItemClassNames, {
-          display: 'block',
-          hocusBackgroundColor: undefined,
-          textAlign: 'text-center',
-          padding: 'py-3 px-5',
-        })}
-      >
-        <div className="flex items-center justify-center my-1">
-          <div className="rounded-full bg-black/[0.03] dark:bg-white/5 text-plain-500 dark:text-plain-400 p-3">
-            <KeyboardShortcutsIcon noAriaLabel size="1.25em" />
-          </div>
+      <div className="flex items-center justify-center my-1">
+        <div className="rounded-full bg-black/[0.03] dark:bg-white/5 text-plain-500 dark:text-plain-400 p-3">
+          <KeyboardShortcutsIcon noAriaLabel size="1.25em" />
         </div>
-
-        <h3 className="text-lg font-medium">Record shortcut</h3>
-
-        <p className="text-sm text-plain-500 dark:text-plain-400">
-          Type a keyboard shortcut
-        </p>
-
-        {sequential && (
-          <p className="mt-2">
-            <span className="text-xs bg-plain-200 dark:bg-plain-800 rounded px-2 py-1">
-              Must end in 1
-            </span>
-          </p>
-        )}
       </div>
 
-      <DropdownItem icon={DeleteIcon} onClick={onRemove}>
-        Remove shortcut
-      </DropdownItem>
+      <h3 className="text-lg font-medium">Record shortcut</h3>
 
-      <DropdownItem icon={LargeCloseIcon} onClick={onCancel}>
-        Stop recording
-      </DropdownItem>
+      <p className="text-sm text-plain-500 dark:text-plain-400">
+        Type a keyboard shortcut
+      </p>
+
+      {sequential && (
+        <p className="mt-2">
+          <span className="text-xs bg-plain-200 dark:bg-plain-800 rounded px-2 py-1">
+            Must end in 1
+          </span>
+        </p>
+      )}
     </div>
-  );
-};
+
+    <DropdownItem icon={DeleteIcon} onClick={onRemove}>
+      Remove shortcut
+    </DropdownItem>
+
+    <DropdownItem icon={LargeCloseIcon} onClick={onCancel}>
+      Stop recording
+    </DropdownItem>
+  </div>
+);

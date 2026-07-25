@@ -1,6 +1,6 @@
-import React, { HTMLAttributes, ReactNode } from 'react';
+import React, { type HTMLAttributes, type ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { PlateRenderElementProps } from '~/lib/editor/plate';
+import type { PlateRenderElementProps } from '~/lib/editor/plate';
 
 const mergeableProps: (keyof HTMLAttributes<HTMLElement>)[] = ['className'];
 

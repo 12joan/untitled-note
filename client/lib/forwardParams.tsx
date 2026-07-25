@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 
 type FuncType<T> = (params: T) => JSX.Element;

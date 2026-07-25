@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash';
-import { getNodeProps, PlateEditor, TText } from '~/lib/editor/plate';
+import { getNodeProps, type PlateEditor, type TText } from '~/lib/editor/plate';
 import { IS_FIREFOX } from '~/lib/environment';
-import { MarkBoundary } from './types';
+import type { MarkBoundary } from './types';
 
 export const getMarkBoundaryAffinity = (
   editor: PlateEditor,

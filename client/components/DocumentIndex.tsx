@@ -1,9 +1,13 @@
-import React, { ComponentType } from 'react';
+import type { ComponentType } from 'react';
+import { DocumentMenu } from '~/components/DocumentMenu';
+import {
+  type Item,
+  ItemIndex,
+  type ItemIndexProps,
+} from '~/components/ItemIndex';
 import { makeDocumentDragData } from '~/lib/dragData';
 import { DocumentLink } from '~/lib/routes';
-import { PartialDocument } from '~/lib/types';
-import { DocumentMenu } from '~/components/DocumentMenu';
-import { Item, ItemIndex, ItemIndexProps } from '~/components/ItemIndex';
+import type { PartialDocument } from '~/lib/types';
 
 export interface DocumentIndexProps
   extends Omit<ItemIndexProps, 'items' | 'cardPreviewHeight'> {

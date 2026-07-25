@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
+import { BackButton } from '~/components/BackButton';
+import { DocumentIndex } from '~/components/DocumentIndex';
+import { LoadingView } from '~/components/LoadingView';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { unwrapFuture } from '~/lib/monads';
 import { useElementSize } from '~/lib/useElementSize';
 import { useTitle } from '~/lib/useTitle';
-import { BackButton } from '~/components/BackButton';
-import { DocumentIndex } from '~/components/DocumentIndex';
-import { LoadingView } from '~/components/LoadingView';
 
 export const RecentlyModifiedView = memo(() => {
   const [{ width: viewWidth }, viewRef] = useElementSize();

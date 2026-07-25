@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react';
+import { type CSSProperties, useState } from 'react';
 import { useAppContext } from '~/lib/appContext';
 import { useTimeout } from '~/lib/useTimer';
 

@@ -1,4 +1,15 @@
-import React from 'react';
+import type React from 'react';
+import { DropdownItem } from '~/components/Dropdown';
+import CopyIcon from '~/components/icons/CopyIcon';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import LockIcon from '~/components/icons/LockIcon';
+import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
+import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
+import PinIcon from '~/components/icons/PinIcon';
+import ReplaceIcon from '~/components/icons/ReplaceIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import SettingsIcon from '~/components/icons/SettingsIcon';
+import VersionHistoryIcon from '~/components/icons/VersionHistoryIcon';
 import {
   deleteDocument as deleteDocumentAPI,
   updateDocument as updateDocumentAPI,
@@ -14,31 +25,20 @@ import {
 import { isFullDocument } from '~/lib/isFullDocument';
 import {
   DocumentLink,
-  documentPath,
   DocumentVersionHistoryLink,
+  documentPath,
 } from '~/lib/routes';
 import { useNewSnapshotModal } from '~/lib/snapshotModals';
 import {
   toggleDocumentLocked,
   toggleDocumentPinned,
 } from '~/lib/transformDocument';
-import { Document, PartialDocument } from '~/lib/types';
+import type { Document, PartialDocument } from '~/lib/types';
 import {
+  type UseDocumentSettingsModalOptions,
   useDocumentSettingsModal,
-  UseDocumentSettingsModalOptions,
 } from '~/lib/useDocumentSettingsModal';
 import { useReplaceModal } from '~/lib/useReplaceModal';
-import { DropdownItem } from '~/components/Dropdown';
-import CopyIcon from '~/components/icons/CopyIcon';
-import DeleteIcon from '~/components/icons/DeleteIcon';
-import LockIcon from '~/components/icons/LockIcon';
-import NewSnapshotIcon from '~/components/icons/NewSnapshotIcon';
-import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
-import PinIcon from '~/components/icons/PinIcon';
-import ReplaceIcon from '~/components/icons/ReplaceIcon';
-import SearchIcon from '~/components/icons/SearchIcon';
-import SettingsIcon from '~/components/icons/SettingsIcon';
-import VersionHistoryIcon from '~/components/icons/VersionHistoryIcon';
 
 export interface DocumentMenuProps {
   isEditor?: boolean;

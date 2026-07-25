@@ -1,5 +1,5 @@
-import { TDescendant } from '~/lib/editor/plate';
-import { Document } from '~/lib/types';
+import type { TDescendant } from '~/lib/editor/plate';
+import type { Document } from '~/lib/types';
 
 export interface DocumentSettingsModalSectionProps {
   document: Document;

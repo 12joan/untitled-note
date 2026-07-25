@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import { TimeAgo } from '~/components/TimeAgo';
 import { updateDocument as updateDocumentAPI } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
 import { pluralize } from '~/lib/pluralize';
 import { useToast } from '~/lib/toasts';
-import { Document, LocalDocument } from '~/lib/types';
+import type { Document, LocalDocument } from '~/lib/types';
 import { useEnqueuedPromises } from '~/lib/useEnqueuedPromises';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
-import { TimeAgo } from '~/components/TimeAgo';
 
 export type UseSyncDocumentOptions = {
   clientId: string;

@@ -1,10 +1,14 @@
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { PlateEditor } from '~/lib/editor/plate';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
+import {
+  ModalTitle,
+  StyledModal,
+  type StyledModalProps,
+} from '~/components/Modal';
+import type { PlateEditor } from '~/lib/editor/plate';
 import { useModal } from '~/lib/useModal';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
-import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 import { dispatchEditorEvent, useEditorEvent } from '../imperativeEvents';
-import { LinkModalProps } from './types';
+import type { LinkModalProps } from './types';
 
 export const useLinkModal = () => {
   const { modal, open } = useModal<LinkModalProps>((modalProps, openProps) => (

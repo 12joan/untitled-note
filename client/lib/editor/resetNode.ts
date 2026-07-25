@@ -5,7 +5,7 @@ import {
   ELEMENT_PARAGRAPH,
   isSelectionAtBlockStart,
   isSelectionAtCodeBlockStart,
-  ResetNodePlugin,
+  type ResetNodePlugin,
   unwrapCodeBlock,
 } from '~/lib/editor/plate';
 

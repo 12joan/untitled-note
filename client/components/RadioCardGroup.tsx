@@ -1,7 +1,8 @@
-import React, {
+import type React from 'react';
+import {
   createContext,
-  HTMLAttributes,
-  KeyboardEvent,
+  type HTMLAttributes,
+  type KeyboardEvent,
   useCallback,
   useContext,
   useMemo,

@@ -1,7 +1,6 @@
-import React from 'react';
+import ExpandIcon from '~/components/icons/ExpandIcon';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { pluralize } from '~/lib/pluralize';
-import ExpandIcon from '~/components/icons/ExpandIcon';
 
 export interface ExpandChunkButtonProps {
   blockCount: number;
@@ -11,19 +10,17 @@ export interface ExpandChunkButtonProps {
 export const ExpandChunkButton = ({
   blockCount,
   onClick,
-}: ExpandChunkButtonProps) => {
-  return (
-    <button
-      type="button"
-      className={groupedClassNames({
-        btn: 'btn btn-rect btn-secondary w-full',
-        flex: 'flex justify-center gap-2 items-center',
-        reset: 'reset-editor-style',
-      })}
-      onClick={onClick}
-    >
-      <ExpandIcon noAriaLabel />
-      Show {pluralize(blockCount, 'unchanged block')}
-    </button>
-  );
-};
+}: ExpandChunkButtonProps) => (
+  <button
+    type="button"
+    className={groupedClassNames({
+      btn: 'btn btn-rect btn-secondary w-full',
+      flex: 'flex justify-center gap-2 items-center',
+      reset: 'reset-editor-style',
+    })}
+    onClick={onClick}
+  >
+    <ExpandIcon noAriaLabel />
+    Show {pluralize(blockCount, 'unchanged block')}
+  </button>
+);

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 type Callback = () => void;
 type Callbacks = Set<Callback>;

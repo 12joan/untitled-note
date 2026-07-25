@@ -1,7 +1,7 @@
-import { DependencyList, useLayoutEffect, useState } from 'react';
-import { Future, pendingFuture, resolvedFuture } from '~/lib/monads';
+import { type DependencyList, useLayoutEffect, useState } from 'react';
+import { type Future, pendingFuture, resolvedFuture } from '~/lib/monads';
 import { streamCache } from '~/lib/streamCacheAdapter';
-import { Stream } from '~/lib/types';
+import type { Stream } from '~/lib/types';
 
 export type UseStreamOptions<T> = {
   getStream: (consumer: (data: T) => void) => Stream;

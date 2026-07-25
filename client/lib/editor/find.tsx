@@ -1,28 +1,28 @@
-import React, {
-  KeyboardEvent,
-  ReactNode,
-  RefObject,
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
   useEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
 } from 'react';
-import { Path, Range as SlateRange } from 'slate';
+import type { Path, Range as SlateRange } from 'slate';
+import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon';
+import ChevronRightIcon from '~/components/icons/ChevronRightIcon';
+import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 import { useAppContext } from '~/lib/appContext';
 import {
-  PlateEditor,
-  TEditor,
-  TElement,
+  type PlateEditor,
+  type TEditor,
+  type TElement,
+  type TText,
   toDOMRange,
-  TText,
 } from '~/lib/editor/plate';
 import { FIND_SUPPORTED } from '~/lib/environment';
 import { useLocalKeyboardShortcut } from '~/lib/useLocalKeyboardShortcut';
 import { useStateWhenSettled } from '~/lib/useStateWhenSettled';
-import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon';
-import ChevronRightIcon from '~/components/icons/ChevronRightIcon';
-import LargeCloseIcon from '~/components/icons/LargeCloseIcon';
 
 const HIGHLIGHT_LIMIT = 3000;
 

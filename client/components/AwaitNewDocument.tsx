@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { createBlankDocument } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
@@ -9,7 +9,7 @@ import {
 } from '~/lib/browserStorage';
 import { handleCreateDocumentError } from '~/lib/handleErrors';
 import { documentPath, overviewPath } from '~/lib/routes';
-import { Tag } from '~/lib/types';
+import type { Tag } from '~/lib/types';
 
 /**
  * We want to allow creation of new documents via a GET request. To prevent

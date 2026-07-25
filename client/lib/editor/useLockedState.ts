@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { createToast } from '~/lib/toasts';
-import { LocalDocument } from '~/lib/types';
+import type { LocalDocument } from '~/lib/types';
 import { useOverrideable } from '~/lib/useOverrideable';
 
 export const useLockedState = (workingDocument: LocalDocument) => {

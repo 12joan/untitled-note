@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import { useAppContext } from '~/lib/appContext';
-import { filterPredicate } from '~/lib/filterPredicate';
-import { orDefaultFuture } from '~/lib/monads';
+import { useMemo } from 'react';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import DocumentIcon from '~/components/icons/DocumentIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
-import { DocumentMention, MentionSuggestion } from './types';
+import { useAppContext } from '~/lib/appContext';
+import { filterPredicate } from '~/lib/filterPredicate';
+import { orDefaultFuture } from '~/lib/monads';
+import type { DocumentMention, MentionSuggestion } from './types';
 
 export interface UseMentionSuggestionsOptions {
   query: string;

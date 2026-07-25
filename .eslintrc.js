@@ -13,13 +13,7 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  plugins: [
-    'react',
-    'react-hooks',
-    'simple-import-sort',
-    'import',
-    'prettier',
-  ],
+  plugins: ['react', 'react-hooks', 'simple-import-sort', 'import', 'prettier'],
   settings: {
     react: { version: 'detect' },
   },
@@ -102,6 +96,6 @@ module.exports = {
           },
         ],
       },
-    }
+    },
   ],
 };

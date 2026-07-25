@@ -1,5 +1,9 @@
-import { PlateRenderElementProps, TElement, Value } from '~/lib/editor/plate';
-import { S3File } from '~/lib/types';
+import type {
+  PlateRenderElementProps,
+  TElement,
+  Value,
+} from '~/lib/editor/plate';
+import type { S3File } from '~/lib/types';
 
 export interface AttachmentPlugin {
   projectId: number;

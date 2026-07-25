@@ -1,5 +1,5 @@
 import { wrap } from 'comlink';
-import { StreamCacheWorkerAPI } from '~/lib/types';
+import type { StreamCacheWorkerAPI } from '~/lib/types';
 
 import StreamCacheWorker from '~/workers/streamCacheWorker?sharedworker';
 

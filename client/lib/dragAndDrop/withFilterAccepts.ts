@@ -1,4 +1,4 @@
-import { CollisionDetection } from '@dnd-kit/core';
+import type { CollisionDetection } from '@dnd-kit/core';
 import { acceptsMap } from './acceptsMap';
 import { getDraggableData, getDroppableData } from './utils';
 

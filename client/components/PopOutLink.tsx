@@ -1,6 +1,6 @@
-import React, { ElementType, ReactNode } from 'react';
-import { PolyProps } from '~/lib/polymorphic';
+import type { ElementType, ReactNode } from 'react';
 import CaretRightIcon from '~/components/icons/CaretRightIcon';
+import type { PolyProps } from '~/lib/polymorphic';
 
 export type PopOutLinkProps<C extends ElementType> = PolyProps<
   C,

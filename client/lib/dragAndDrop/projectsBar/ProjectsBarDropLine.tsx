@@ -1,8 +1,7 @@
-import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { Project, ProjectFolder } from '~/lib/types';
-import { DroppableData } from '../types';
+import type { Project, ProjectFolder } from '~/lib/types';
+import type { DroppableData } from '../types';
 
 export interface ProjectsBarDropLineProps {
   id: string;
@@ -60,23 +59,21 @@ export const ProjectPositionDropLine = ({
   folder,
   description,
   ...props
-}: ProjectPositionDropLineProps) => {
-  return (
-    <ProjectsBarDropLine
-      id={`project-drop-line-${project.id}-${side}`}
-      data={{
-        type: 'project-position',
-        project,
-        side,
-        folder,
-        description,
-      }}
-      side={side}
-      testId={`project-drop-line-${side}-${project.name}`}
-      {...props}
-    />
-  );
-};
+}: ProjectPositionDropLineProps) => (
+  <ProjectsBarDropLine
+    id={`project-drop-line-${project.id}-${side}`}
+    data={{
+      type: 'project-position',
+      project,
+      side,
+      folder,
+      description,
+    }}
+    side={side}
+    testId={`project-drop-line-${side}-${project.name}`}
+    {...props}
+  />
+);
 
 export interface ProjectFolderPositionDropLineProps
   extends Omit<ProjectsBarDropLineProps, 'id' | 'data'> {
@@ -90,19 +87,17 @@ export const ProjectFolderPositionDropLine = ({
   side,
   description,
   ...props
-}: ProjectFolderPositionDropLineProps) => {
-  return (
-    <ProjectsBarDropLine
-      id={`project-folder-drop-line-${folder.id}-${side}`}
-      data={{
-        type: 'project-folder-position',
-        folder,
-        side,
-        description,
-      }}
-      side={side}
-      testId={`project-folder-drop-line-${side}-${folder.name}`}
-      {...props}
-    />
-  );
-};
+}: ProjectFolderPositionDropLineProps) => (
+  <ProjectsBarDropLine
+    id={`project-folder-drop-line-${folder.id}-${side}`}
+    data={{
+      type: 'project-folder-position',
+      folder,
+      side,
+      description,
+    }}
+    side={side}
+    testId={`project-folder-drop-line-${side}-${folder.name}`}
+    {...props}
+  />
+);

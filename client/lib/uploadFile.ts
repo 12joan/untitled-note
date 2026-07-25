@@ -1,6 +1,6 @@
-import axios, { AxiosProgressEvent, CanceledError } from 'axios';
+import axios, { type AxiosProgressEvent, CanceledError } from 'axios';
 import { allocateFile, deleteFile } from '~/lib/apis/file';
-import { S3File } from '~/lib/types';
+import type { S3File } from '~/lib/types';
 
 export type UploadProgressEvent = AxiosProgressEvent;
 

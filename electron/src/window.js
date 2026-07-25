@@ -1,5 +1,5 @@
 const { BrowserWindow, ipcMain, nativeTheme } = require('electron');
-const path = require('path');
+const path = require('node:path');
 const { isMac } = require('./helpers');
 const { ENV } = require('./env');
 const closeBehaviour = require('./close');

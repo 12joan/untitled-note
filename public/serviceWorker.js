@@ -11,7 +11,8 @@ self.addEventListener('fetch', (event) => {
       if (cachedResponse) return cachedResponse;
 
       try {
-        const response = (await event.preloadResponse) ?? (await fetch(event.request));
+        const response =
+          (await event.preloadResponse) ?? (await fetch(event.request));
         cache.put(event.request, response.clone());
         return response;
       } catch (error) {

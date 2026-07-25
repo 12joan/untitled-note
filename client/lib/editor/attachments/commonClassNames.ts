@@ -1,4 +1,4 @@
-import { GroupedClassNames } from '~/lib/groupedClassNames';
+import type { GroupedClassNames } from '~/lib/groupedClassNames';
 
 export const commonClassNames: GroupedClassNames = {
   border: 'border dark:border-transparent',

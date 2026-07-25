@@ -6,7 +6,7 @@ import {
 import { getMarkBoundary } from './getMarkBoundary';
 import { getMarkBoundaryAffinity } from './getMarkBoundaryAffinity';
 import { setMarkBoundaryAffinity } from './setMarkBoundaryAffinity';
-import { MarkBoundary } from './types';
+import type { MarkBoundary } from './types';
 
 const markBoundaryHasMark = (markBoundary: MarkBoundary, mark: string) => {
   const [backwardLeafEntry, forwardLeafEntry] = markBoundary;

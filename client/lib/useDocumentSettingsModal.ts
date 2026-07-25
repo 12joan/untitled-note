@@ -1,18 +1,18 @@
 import { useMemo } from 'react';
 import {
-  createSectionedModal,
-  SectionedModalOpenProps,
-} from '~/lib/sectionedModal';
-import { useSubscribableRef } from '~/lib/useSubscribableRef';
-import {
   AppearanceSection,
   AutomaticSnapshotsSection,
-  DocumentSettingsModalSectionProps,
+  type DocumentSettingsModalSectionProps,
   ExportHTMLSection,
 } from '~/components/documentSettingsModalSections';
 import AppearanceIcon from '~/components/icons/AppearanceIcon';
 import RichTextIcon from '~/components/icons/RichTextIcon';
 import VersionHistoryIcon from '~/components/icons/VersionHistoryIcon';
+import {
+  createSectionedModal,
+  type SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
+import { useSubscribableRef } from '~/lib/useSubscribableRef';
 
 const sections = {
   appearance: {

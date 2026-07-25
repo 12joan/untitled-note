@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
 import {
   globalKeyboardShortcutCommands,
-  KeyboardShortcutCommand,
+  type KeyboardShortcutCommand,
   keyboardShortcutCommands,
-  LocalKeyboardShortcutCommandId,
+  type LocalKeyboardShortcutCommandId,
   localKeyboardShortcutCommands,
 } from '~/lib/commands';
 import { useSettings } from '~/lib/settings';
-import { Settings } from '~/lib/types';
+import type { Settings } from '~/lib/types';
 
 const keyboardShortcutCommandWithOverrides = <
-  T extends KeyboardShortcutCommand
+  T extends KeyboardShortcutCommand,
 >(
   keyboardShortcutCommand: T,
   overrides: Settings['keyboard_shortcut_overrides']
@@ -29,7 +29,7 @@ const keyboardShortcutCommandWithOverrides = <
 };
 
 const useOverriddenKeyboardShortcutCommands = <
-  T extends KeyboardShortcutCommand
+  T extends KeyboardShortcutCommand,
 >(
   keyboardShortcutCommands: T[]
 ): T[] => {

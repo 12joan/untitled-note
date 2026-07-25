@@ -1,4 +1,4 @@
-import { timeAgo, TimeAgoFormat } from '~/lib/timeAgo';
+import { type TimeAgoFormat, timeAgo } from '~/lib/timeAgo';
 
 const formats: TimeAgoFormat[] = ['long', 'short'];
 

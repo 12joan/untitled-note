@@ -16,7 +16,7 @@ export interface TimeAgoOptions {
 export const timeAgo = ({
   date,
   referenceDate = new Date(),
-  locale = undefined,
+  locale,
   format = 'long',
 }: TimeAgoOptions): string => {
   const isFuture = date > referenceDate;

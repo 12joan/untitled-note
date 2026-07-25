@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.12'
-
 gem 'rails', '~> 7.2.2'
 
 # Sprockets is now an optional dependency of Rails
@@ -19,7 +17,7 @@ gem 'puma', '~> 8.0'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript
-gem 'vite_rails', '~> 3.0'
+gem 'vite_rails', '~> 3.11'
 
 # Use Redis for ActionCable and for caching
 gem 'redis', '~> 4.0'

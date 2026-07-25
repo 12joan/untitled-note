@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { InlinePlaceholder } from '~/components/Placeholder';
 import { deleteProject /* updateProject */ } from '~/lib/apis/project';
 import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
@@ -7,7 +8,6 @@ import { handleDeleteProjectError } from '~/lib/handleErrors';
 import { mapFuture, unwrapFuture } from '~/lib/monads';
 import { pluralize } from '~/lib/pluralize';
 import { removeProjectFromHistory } from '~/lib/projectHistory';
-import { InlinePlaceholder } from '~/components/Placeholder';
 
 export const DeleteSection = () => {
   const project = useAppContext('project');

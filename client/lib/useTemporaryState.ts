@@ -1,7 +1,7 @@
 import {
-  DependencyList,
-  Dispatch,
-  SetStateAction,
+  type DependencyList,
+  type Dispatch,
+  type SetStateAction,
   useCallback,
   useLayoutEffect,
   useState,

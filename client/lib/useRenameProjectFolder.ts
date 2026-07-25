@@ -1,6 +1,6 @@
 import { updateProjectFolder } from '~/lib/apis/projectFolder';
 import { handleUpdateProjectFolderError } from '~/lib/handleErrors';
-import { ProjectFolder } from '~/lib/types';
+import type { ProjectFolder } from '~/lib/types';
 import { useInputModal } from '~/lib/useInputModal';
 
 export const useRenameProjectFolder = (folder: ProjectFolder) =>

@@ -1,12 +1,14 @@
-import React, { ElementType, forwardRef, HTMLAttributes, memo } from 'react';
-import { useAppContext } from '~/lib/appContext';
-import { EditAccountLink, NewDocumentLink } from '~/lib/routes';
-import { useBreakpoints } from '~/lib/useBreakpoints';
-import { Dropdown, DropdownItem, DropdownProps } from '~/components/Dropdown';
+import { type ElementType, forwardRef, type HTMLAttributes, memo } from 'react';
+import { useDisconnected } from '~/channels/connectionStatus';
+import {
+  Dropdown,
+  DropdownItem,
+  type DropdownProps,
+} from '~/components/Dropdown';
 import AccountIcon from '~/components/icons/AccountIcon';
 import FormattingIcon from '~/components/icons/FormattingIcon';
-import { IconProps } from '~/components/icons/makeIcon';
 import MenuIcon from '~/components/icons/MenuIcon';
+import type { IconProps } from '~/components/icons/makeIcon';
 import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
 import OfflineIcon from '~/components/icons/OfflineIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
@@ -15,9 +17,10 @@ import SidebarIcon from '~/components/icons/SidebarIcon';
 import SignOutIcon from '~/components/icons/SignOutIcon';
 import { SignOutButton } from '~/components/SignOutButton';
 import { Tooltip } from '~/components/Tooltip';
+import { useAppContext } from '~/lib/appContext';
+import { EditAccountLink, NewDocumentLink } from '~/lib/routes';
+import { useBreakpoints } from '~/lib/useBreakpoints';
 import StorageIcon from '../icons/StorageIcon';
-
-import { useDisconnected } from '~/channels/connectionStatus';
 
 type Action = Record<string, any> & {
   label: string;
@@ -139,20 +142,18 @@ const NavDropdown = ({
   label,
   actions,
   ...otherProps
-}: NavDropdownProps) => {
-  return (
-    <Dropdown
-      items={actions.map(({ label, ...otherProps }) => (
-        <DropdownItem key={label} children={label} {...otherProps} />
-      ))}
-      placement="bottom-end"
-      className="pointer-events-auto"
-      {...otherProps}
-    >
-      <NavButton icon={icon} label={label} />
-    </Dropdown>
-  );
-};
+}: NavDropdownProps) => (
+  <Dropdown
+    items={actions.map(({ label, ...otherProps }) => (
+      <DropdownItem key={label} children={label} {...otherProps} />
+    ))}
+    placement="bottom-end"
+    className="pointer-events-auto"
+    {...otherProps}
+  >
+    <NavButton icon={icon} label={label} />
+  </Dropdown>
+);
 
 interface NavButtonProps extends HTMLAttributes<HTMLButtonElement> {
   as?: ElementType;

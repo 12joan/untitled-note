@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useMemo, useState } from 'react';
+import { type ChangeEvent, type KeyboardEvent, useMemo, useState } from 'react';
 
 export interface UseNormalizedInputOptions {
   initial: string;

@@ -1,8 +1,7 @@
-import React from 'react';
+import { SignOutButton } from '~/components/SignOutButton';
 import { EditAccountLink } from '~/lib/routes';
 import { useNewProject } from '~/lib/useNewProject';
 import { useTitle } from '~/lib/useTitle';
-import { SignOutButton } from '~/components/SignOutButton';
 
 export const NoProjectsView = () => {
   useTitle('Create a project');

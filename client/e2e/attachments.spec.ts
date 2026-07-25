@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import {
   clickAtPath,
   getDOMNodeByPath,
@@ -127,9 +127,9 @@ test.describe('Attachments', () => {
     );
 
     const expectTabbedIntoAttachment = async () => {
-      const activeElementTestId = await page.evaluate(() => {
-        return document.activeElement?.getAttribute('data-testid');
-      });
+      const activeElementTestId = await page.evaluate(() =>
+        document.activeElement?.getAttribute('data-testid')
+      );
 
       expect(activeElementTestId).toEqual('download-attachment');
     };

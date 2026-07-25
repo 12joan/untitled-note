@@ -1,12 +1,12 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import {
-  ElementHandle,
+  type ElementHandle,
   expect,
-  JSHandle,
-  Locator,
-  Page,
+  type JSHandle,
+  type Locator,
+  type Page,
 } from '@playwright/test';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { getEditable } from './slate';
 
 export const logIn = async (page: Page) => {

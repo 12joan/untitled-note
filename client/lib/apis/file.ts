@@ -1,7 +1,6 @@
-import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { S3File, StorageQuotaUsage } from '~/lib/types';
-
 import { streamAction } from '~/channels/dataChannel';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import type { S3File, StorageQuotaUsage } from '~/lib/types';
 
 export type AllocateFileResult = S3File & {
   presigned_post: {

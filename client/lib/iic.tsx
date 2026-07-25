@@ -1,6 +1,6 @@
-import React, {
-  FC,
-  ReactElement,
+import {
+  type FC,
+  type ReactElement,
   useEffect,
   useLayoutEffect,
   useState,
@@ -53,13 +53,13 @@ const MergedIICs = ({
 
 export const iic =
   (render: IICRenderFn, baseProps: IICRenderProps = {}): IIC =>
-  (props: IICRenderProps) =>
-    <ImmediatelyInvokedComponent render={render} {...baseProps} {...props} />;
+  (props: IICRenderProps) => (
+    <ImmediatelyInvokedComponent render={render} {...baseProps} {...props} />
+  );
 
 export const mergeIICs =
   (...iics: IIC[]): IIC =>
-  (props) =>
-    <MergedIICs iics={iics} {...props} />;
+  (props) => <MergedIICs iics={iics} {...props} />;
 
 export const liftToIIC =
   <Args extends unknown[]>(

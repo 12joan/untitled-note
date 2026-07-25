@@ -4,7 +4,7 @@ import { useAppContext } from '~/lib/appContext';
 import { awaitRedirect } from '~/lib/awaitRedirect';
 import { handleCreateProjectError } from '~/lib/handleErrors';
 import { projectPath } from '~/lib/routes';
-import { ProjectFolder } from '~/lib/types';
+import type { ProjectFolder } from '~/lib/types';
 import { useInputModal } from '~/lib/useInputModal';
 
 export interface UseNewProjectOptions {

@@ -1,5 +1,5 @@
 import { getSnapshotName } from '~/lib/getSnapshotName';
-import { Snapshot } from '~/lib/types';
+import type { Snapshot } from '~/lib/types';
 
 describe('getSnapshotName', () => {
   const snapshotDate = new Date('2021-01-01T00:00:00Z');

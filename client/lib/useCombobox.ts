@@ -1,9 +1,9 @@
 import {
-  HTMLProps,
-  InputHTMLAttributes,
-  KeyboardEvent,
-  MouseEvent,
-  ReactNode,
+  type HTMLProps,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
   useMemo,
   useState,
 } from 'react';

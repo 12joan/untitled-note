@@ -1,30 +1,30 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useSelected } from 'slate-react';
+import CopyIcon from '~/components/icons/CopyIcon';
+import DeleteIcon from '~/components/icons/DeleteIcon';
+import EditIcon from '~/components/icons/EditIcon';
+import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
+import type { TippyInstance } from '~/components/Tippy';
 import { copyText } from '~/lib/copyText';
 import {
   findNodePath,
   focusEditor,
   getNodeString,
   isSelectionExpanded,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
   replaceNodeChildren,
   setNodes,
-  TLinkElement,
+  type TLinkElement,
   unwrapLink,
   useEditorReadOnly,
   usePlateSelectors,
-  Value,
+  type Value,
 } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useElementSize } from '~/lib/useElementSize';
-import CopyIcon from '~/components/icons/CopyIcon';
-import DeleteIcon from '~/components/icons/DeleteIcon';
-import EditIcon from '~/components/icons/EditIcon';
-import OpenInNewTabIcon from '~/components/icons/OpenInNewTabIcon';
-import { TippyInstance } from '~/components/Tippy';
 import { FloatingToolbar, FloatingToolbarItem } from '../FloatingToolbar';
 import { openLinkModal } from './LinkModal';
-import { LinkData } from './types';
+import type { LinkData } from './types';
 
 export const LinkComponent = ({
   editor,

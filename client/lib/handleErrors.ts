@@ -1,6 +1,6 @@
 import { filesize } from '~/lib/filesize';
 import { createToast } from '~/lib/toasts';
-import { ToastWithoutId } from '~/lib/types';
+import type { ToastWithoutId } from '~/lib/types';
 
 const handleErrors =
   (toastForError: (error: any) => ToastWithoutId) =>

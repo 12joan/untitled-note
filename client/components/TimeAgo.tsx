@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { timeAgo, TimeAgoOptions } from '~/lib/timeAgo';
+import { type TimeAgoOptions, timeAgo } from '~/lib/timeAgo';
 
 export const TimeAgo = (options: TimeAgoOptions) => {
   const { date } = options;

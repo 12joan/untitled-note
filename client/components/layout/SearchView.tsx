@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAppContext } from '~/lib/appContext';
-import { overviewPath } from '~/lib/routes';
 import { BackButton } from '~/components/BackButton';
 import ReplaceIcon from '~/components/icons/ReplaceIcon';
 import SearchIcon from '~/components/icons/SearchIcon';
+import { useAppContext } from '~/lib/appContext';
+import { overviewPath } from '~/lib/routes';
 
 export const SearchView = memo(() => {
   const project = useAppContext('project');

@@ -1,4 +1,4 @@
-import { KeyboardShortcutConfig } from '~/lib/types';
+import type { KeyboardShortcutConfig } from '~/lib/types';
 
 export const compareKeyboardShortcut = (
   shortcut: KeyboardShortcutConfig,

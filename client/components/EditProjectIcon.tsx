@@ -1,4 +1,3 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
 import emojiData from '@emoji-mart/data';
 import EmojiPicker from '@emoji-mart/react';
 import {
@@ -8,6 +7,9 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { type ChangeEvent, useRef, useState } from 'react';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 import { useAppContext } from '~/lib/appContext';
 import { isHotkey } from '~/lib/editor/plate';
 import { filesize } from '~/lib/filesize';
@@ -21,14 +23,12 @@ import {
   uploadProjectImage,
 } from '~/lib/projectImageActions';
 import { mergeRefs } from '~/lib/refUtils';
-import { Project } from '~/lib/types';
+import type { Project } from '~/lib/types';
 import { useCSPNonce } from '~/lib/useCSPNonce';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
-import { ProjectIcon } from '~/components/ProjectIcon';
-import { ReplaceWithSpinner } from '~/components/ReplaceWithSpinner';
 
 export const EditProjectIcon = () => {
   const [localProject, updateProject] = useLocalProject();

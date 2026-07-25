@@ -1,4 +1,5 @@
-import React, { MouseEvent, useRef } from 'react';
+import type React from 'react';
+import { type MouseEvent, useRef } from 'react';
 import { csrfToken } from '~/lib/csrfToken';
 import { streamCache } from '~/lib/streamCacheAdapter';
 

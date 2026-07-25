@@ -1,4 +1,4 @@
-import { LocalKeyboardShortcutCommandId } from '~/lib/commands';
+import type { LocalKeyboardShortcutCommandId } from '~/lib/commands';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
@@ -11,7 +11,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  PlateEditor,
+  type PlateEditor,
   toggleCodeBlock,
   toggleList,
   toggleMark,
