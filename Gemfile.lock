@@ -183,7 +183,7 @@ GEM
     minitest (5.27.0)
     minitest-stub-const (0.6)
     minitest-stub_any_instance (1.0.3)
-    msgpack (1.8.0)
+    msgpack (1.8.4)
     mutex_m (0.3.0)
     net-imap (0.6.4.1)
       date
