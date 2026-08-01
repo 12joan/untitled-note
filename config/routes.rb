@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   end
 
   get '/welcome', to: 'welcome#index', as: :welcome
-
+  get '/healthcheck', to: 'healthcheck#healthcheck'
   get '/docs/*page', to: 'docs#show'
 
   root 'app#index', as: :app

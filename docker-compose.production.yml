@@ -1,10 +1,8 @@
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    build: .
     environment: &common-env
-      RAILS_ENV: development
+      RAILS_ENV: production
       DEMO_INSTANCE: 'true'
       DATABASE_URL: postgres://postgres@db
       REDIS_URL: redis://redis:6379
@@ -16,12 +14,11 @@ services:
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY_ID: root
       AWS_SECRET_ACCESS_KEY: minio-password
+      MAILER_HOST: localhost:3000
+      ALLOW_INSECURE_SESSION_COOKIE: true
     env_file: .env
     ports:
       - '3000:3000'
-      - '3035:3035'
-    volumes:
-      - .:/app
     depends_on:
       db:
         condition: service_healthy
@@ -33,17 +30,13 @@ services:
         condition: service_healthy
 
   clockwork:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    build: .
     entrypoint: ''
     command: 'bundle exec clockwork config/clockwork.rb'
     environment:
       <<: *common-env
       SKIP_HEALTHCHECK: true
     env_file: .env
-    volumes:
-      - .:/app
     depends_on:
       db:
         condition: service_healthy
@@ -54,8 +47,6 @@ services:
     image: postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
-    volumes:
-      - pgdata:/var/lib/postgresql
     healthcheck:
       interval: 1s
       retries: 40
@@ -70,8 +61,6 @@ services:
     env_file: .env
     ports:
       - 9000:9000
-    volumes:
-      - minio:/data
     healthcheck:
       interval: 1s
       retries: 40
@@ -84,6 +73,7 @@ services:
       retries: 40
       test: 'redis-cli --raw incr ping'
 
+  # Typesense requires a data directory which must exist
   typesense:
     image: typesense/typesense:0.25.2
     command: '--data-dir /data --api-key=trust'
@@ -95,6 +85,4 @@ services:
       test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/8108"'
 
 volumes:
-  pgdata:
   typesense:
-  minio:
