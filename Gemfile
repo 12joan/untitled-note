@@ -21,7 +21,7 @@ gem 'vite_rails', '~> 3.11'
 
 # Use Redis for ActionCable and for caching
 gem 'redis', '~> 4.0'
-gem 'connection_pool', '~> 2.3'
+gem 'connection_pool', '~> 3.0'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
