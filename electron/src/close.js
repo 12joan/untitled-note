@@ -1,5 +1,5 @@
-const { app, autoUpdater, BrowserWindow } = require('electron');
-const { isMac } = require('./helpers');
+import { app, autoUpdater, BrowserWindow } from 'electron';
+import { isMac } from './helpers.js';
 
 let isQuitting = false;
 let queuedToClose = [];
@@ -32,7 +32,7 @@ const performEnqueuedClose = () => {
 };
 
 // Hide last active window instead of closing (macOS)
-const registerWindow = (browserWindow) => {
+export const registerWindow = (browserWindow) => {
   browserWindow.on('close', (event) => {
     if (!performingEnqueuedClose && !isQuitting && isMac) {
       event.preventDefault();
@@ -46,7 +46,7 @@ const registerWindow = (browserWindow) => {
   });
 };
 
-const registerApp = () => {
+export const registerApp = () => {
   // Quit when all windows are closed (except on macOS)
   app.on('window-all-closed', () => {
     if (!isMac) {
@@ -72,9 +72,4 @@ const registerApp = () => {
   autoUpdater.on('before-quit-for-update', () => {
     isQuitting = true;
   });
-};
-
-module.exports = {
-  registerWindow,
-  registerApp,
 };

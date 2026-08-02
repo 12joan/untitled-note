@@ -1,8 +1,8 @@
-const isMac = process.platform === 'darwin';
+export const isMac = process.platform === 'darwin';
 
 const clamp = (min, max, value) => Math.min(Math.max(min, value), max);
 
-const setZoomFactor = (focusedWindow, valueOrFunction) => {
+export const setZoomFactor = (focusedWindow, valueOrFunction) => {
   const { zoomFactor } = focusedWindow.webContents;
 
   const newZoomFactor =
@@ -14,9 +14,4 @@ const setZoomFactor = (focusedWindow, valueOrFunction) => {
   focusedWindow.webContents.zoomFactor = clampedZoomFactor;
 
   return clampedZoomFactor;
-};
-
-module.exports = {
-  isMac,
-  setZoomFactor,
 };

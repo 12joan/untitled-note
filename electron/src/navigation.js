@@ -1,5 +1,5 @@
-const { shell } = require('electron');
-const { ENV } = require('./env');
+import { shell } from 'electron';
+import { ENV } from './env.js';
 
 const INTERNAL_URL_HOSTS = [ENV.app.host, 'untitlednote.eu.auth0.com'];
 
@@ -7,7 +7,7 @@ const linkIsNavigable = (url) => new URL(url).protocol !== 'file:';
 const linkIsExternal = (url) =>
   !INTERNAL_URL_HOSTS.some((host) => new URL(url).host === host);
 
-const registerWindow = (browserWindow, { createWindow }) => {
+export const registerWindow = (browserWindow, { createWindow }) => {
   const { webContents } = browserWindow;
 
   // Open external links in the default browser
@@ -34,8 +34,4 @@ const registerWindow = (browserWindow, { createWindow }) => {
 
     return { action: 'deny' };
   });
-};
-
-module.exports = {
-  registerWindow,
 };

@@ -1,6 +1,6 @@
-const { Menu, shell } = require('electron');
-const { isMac, setZoomFactor } = require('./helpers');
-const { ENV } = require('./env');
+import { Menu, shell } from 'electron';
+import { isMac, setZoomFactor } from './helpers.js';
+import { ENV } from './env.js';
 
 const withFocusedWindow = (handler) => (item, focusedWindow) => {
   if (focusedWindow) {
@@ -8,7 +8,7 @@ const withFocusedWindow = (handler) => (item, focusedWindow) => {
   }
 };
 
-const createMenu = () => {
+export const createMenu = () => {
   const appMenu = {
     label: 'Untitled Note App',
     submenu: [
@@ -176,8 +176,4 @@ const createMenu = () => {
   return Menu.buildFromTemplate(
     [isMac && appMenu, editMenu, viewMenu, windowMenu, helpMenu].filter(Boolean)
   );
-};
-
-module.exports = {
-  createMenu,
 };

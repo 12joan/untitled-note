@@ -1,9 +1,9 @@
-const { BrowserWindow, ipcMain, nativeTheme } = require('electron');
-const path = require('node:path');
-const { isMac } = require('./helpers');
-const { ENV } = require('./env');
-const closeBehaviour = require('./close');
-const navigationBehaviour = require('./navigation');
+import { BrowserWindow, ipcMain, nativeTheme } from 'electron';
+import path from 'node:path';
+import { isMac } from './helpers.js';
+import { ENV } from './env.js';
+import * as closeBehaviour from './close.js';
+import * as navigationBehaviour from './navigation.js';
 
 const tabsSupported = isMac;
 
@@ -29,27 +29,27 @@ const getWindowSettings = () => ({
   show: false,
   tabbingIdentifier: 'untitled-note',
   webPreferences: {
-    preload: path.join(__dirname, 'preload.js'),
+    preload: path.join(import.meta.dirname, 'preload.cjs'),
     devTools: ENV.devTools,
     scrollBounce: true,
     spellcheck: true,
   },
   backgroundColor: getBackgroundColor(),
-  icon: path.resolve(__dirname, '../icons/app-icon.png'),
+  icon: path.resolve(import.meta.dirname, '../icons/app-icon.png'),
 });
 
 const showErrorPage = (browserWindow) =>
-  browserWindow.loadFile(path.join(__dirname, '../dist/error.html'));
+  browserWindow.loadFile(path.join(import.meta.dirname, '../dist/error.html'));
 
 const loadApp = async (browserWindow, url) => {
-  await browserWindow.loadFile(path.join(__dirname, '../dist/loading.html'));
+  await browserWindow.loadFile(path.join(import.meta.dirname, '../dist/loading.html'));
 
   await browserWindow
     .loadURL(url, { userAgent })
     .catch(() => showErrorPage(browserWindow));
 };
 
-const createWindow = async ({
+export const createWindow = async ({
   url = `${ENV.app.protocol}://${ENV.app.host}`,
   parentWindow = null,
 } = {}) => {
@@ -89,8 +89,4 @@ const createWindow = async ({
 
   // Load navigation behaviour last
   navigationBehaviour.registerWindow(browserWindow, { createWindow });
-};
-
-module.exports = {
-  createWindow,
 };

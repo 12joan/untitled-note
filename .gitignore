@@ -56,7 +56,7 @@ node_modules
 /electron/dist
 /electron/yarn-error.log
 /electron/out
-/electron-credentials.js
+/electron-credentials.cjs
 /electron/.yarn/*
 !/electron/.yarn/patches
 !/electron/.yarn/plugins
