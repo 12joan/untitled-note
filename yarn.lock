@@ -2317,21 +2317,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-diff@npm:^36.0.0":
-  version: 36.0.0
-  resolution: "@udecode/plate-diff@npm:36.0.0"
+"@udecode/plate-diff@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-diff@npm:49.0.0"
   dependencies:
     diff-match-patch-ts: "npm:^0.6.0"
     lodash: "npm:^4.17.21"
   peerDependencies:
-    "@udecode/plate-common": ">=36.0.0"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/f487c2be416b27c383ed89bbc41de743b0d0f20f2fe79344c7f8c57cb04fb22bc2f12c48cd9630c1c09c2ecfc0d00e14df32eff1d824c3b75798f1219da93987
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/d43097f88f5fd4a5b6fcda06db1920d76b3e4dd933bbbc48f87936809c48b5d893d4f21327df7d71c7a78e42f292419839f707383bf57bf815d63f7da4c11376
   languageName: node
   linkType: hard
 
@@ -5648,7 +5644,7 @@ __metadata:
     "@udecode/plate-code-block": "npm:^36.5.6"
     "@udecode/plate-combobox": "npm:^36.0.0"
     "@udecode/plate-common": "npm:^36.5.9"
-    "@udecode/plate-diff": "npm:^36.0.0"
+    "@udecode/plate-diff": "npm:^49.0.0"
     "@udecode/plate-floating": "npm:^36.3.8"
     "@udecode/plate-heading": "npm:^36.0.12"
     "@udecode/plate-link": "npm:^36.5.9"
