@@ -44,6 +44,12 @@ const showErrorPage = (browserWindow) =>
 const loadApp = async (browserWindow, url) => {
   await browserWindow.loadFile(path.join(import.meta.dirname, '../dist/loading.html'));
 
+  /**
+   * Since Electron 40, calling loadURL immediately after loadFile causes loadURL to fail with
+   * ERR_ABORTED.
+   */
+  await new Promise(r => setTimeout(r));
+
   await browserWindow
     .loadURL(url, { userAgent })
     .catch(() => showErrorPage(browserWindow));
