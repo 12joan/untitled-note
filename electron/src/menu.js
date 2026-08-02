@@ -1,6 +1,6 @@
-const { Menu, shell } = require('electron');
-const { isMac, setZoomFactor } = require('./helpers');
-const { ENV } = require('./env');
+import { Menu, shell } from 'electron';
+import { ENV } from './env.js';
+import { isMac, setZoomFactor, tabsSupported } from './helpers.js';
 
 const withFocusedWindow = (handler) => (item, focusedWindow) => {
   if (focusedWindow) {
@@ -8,7 +8,7 @@ const withFocusedWindow = (handler) => (item, focusedWindow) => {
   }
 };
 
-const createMenu = () => {
+export const createMenu = () => {
   const appMenu = {
     label: 'Untitled Note App',
     submenu: [
@@ -19,7 +19,7 @@ const createMenu = () => {
       },
       { type: 'separator' },
       {
-        label: `Hide Untitled Note App`,
+        label: 'Hide Untitled Note App',
         accelerator: 'Cmd+H',
         role: 'hide',
       },
@@ -99,7 +99,7 @@ const createMenu = () => {
       {
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click: (item, focusedWindow) => {
+        click: (_item, focusedWindow) => {
           if (focusedWindow) {
             focusedWindow.reload();
           }
@@ -159,7 +159,18 @@ const createMenu = () => {
         accelerator: 'CmdOrCtrl+W',
         role: 'close',
       },
-    ],
+      { type: 'separator' },
+      tabsSupported && {
+        label: 'Show Previous Tab',
+        accelerator: 'CmdOrCtrl+Shift+[',
+        role: 'selectPreviousTab',
+      },
+      tabsSupported && {
+        label: 'Show Next Tab',
+        accelerator: 'CmdOrCtrl+Shift+]',
+        role: 'selectNextTab',
+      },
+    ].filter(Boolean),
   };
 
   const helpMenu = {
@@ -176,8 +187,4 @@ const createMenu = () => {
   return Menu.buildFromTemplate(
     [isMac && appMenu, editMenu, viewMenu, windowMenu, helpMenu].filter(Boolean)
   );
-};
-
-module.exports = {
-  createMenu,
 };

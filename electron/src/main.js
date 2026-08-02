@@ -1,10 +1,10 @@
-const { app, Menu } = require('electron');
-const updateElectronApp = require('update-electron-app');
-const contextMenu = require('electron-context-menu');
-const { ENV } = require('./env');
-const { createMenu } = require('./menu');
-const { createWindow } = require('./window');
-const closeBehaviour = require('./close');
+import { app, Menu } from 'electron';
+import contextMenu from 'electron-context-menu';
+import { updateElectronApp } from 'update-electron-app';
+import * as closeBehaviour from './close.js';
+import { ENV } from './env.js';
+import { createMenu } from './menu.js';
+import { createWindow } from './window.js';
 
 updateElectronApp({
   repo: '12joan/untitled-note-app-releases',
@@ -19,7 +19,7 @@ contextMenu({
 });
 
 app.whenReady().then(() => {
-  createWindow();
+  void createWindow();
   Menu.setApplicationMenu(createMenu());
   closeBehaviour.registerApp(app);
 });

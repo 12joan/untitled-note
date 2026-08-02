@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import { type ForwardedRef, forwardRef } from 'react';
 import * as ReactRouter from 'react-router-dom';
 
 export interface LinkProps extends ReactRouter.LinkProps {

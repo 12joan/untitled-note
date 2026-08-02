@@ -1,5 +1,5 @@
-import React, { ElementType } from 'react';
-import { DiffOperation, PlateRenderLeafProps } from '~/lib/editor/plate';
+import type { ElementType } from 'react';
+import type { DiffOperation, PlateRenderLeafProps } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 
 export const DiffLeaf = ({

@@ -1,6 +1,6 @@
-import React, {
-  ComponentType,
-  CSSProperties,
+import {
+  type ComponentType,
+  type CSSProperties,
   useCallback,
   useEffect,
   useMemo,
@@ -8,6 +8,20 @@ import React, {
   useState,
 } from 'react';
 import { useLocation } from 'react-router-dom';
+import { AwaitRedirect } from '~/components/AwaitRedirect';
+import { AllTagsView } from '~/components/layout/AllTagsView';
+import { EditorView } from '~/components/layout/EditorView';
+import { FormattingToolbarContainer } from '~/components/layout/FormattingToolbarContainer';
+import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar';
+import { OverviewView } from '~/components/layout/OverviewView';
+import { ProjectsBar } from '~/components/layout/ProjectsBar';
+import { RecentlyModifiedView } from '~/components/layout/RecentlyModifiedView';
+import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
+import { SearchView } from '~/components/layout/SearchView';
+import { Sidebar } from '~/components/layout/Sidebar';
+import { SnapshotsView } from '~/components/layout/SnapshotsView';
+import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
+import { TopBar } from '~/components/layout/TopBar';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { cycleFocus } from '~/lib/cycleFocus';
@@ -26,20 +40,6 @@ import { useProjectSettingsModal } from '~/lib/useProjectSettingsModal';
 import { useSearchModal } from '~/lib/useSearchModal';
 import { useSettingsModal } from '~/lib/useSettingsModal';
 import { useViewportSize } from '~/lib/useViewportSize';
-import { AwaitRedirect } from '~/components/AwaitRedirect';
-import { AllTagsView } from '~/components/layout/AllTagsView';
-import { EditorView } from '~/components/layout/EditorView';
-import { FormattingToolbarContainer } from '~/components/layout/FormattingToolbarContainer';
-import { OffcanavasSidebar } from '~/components/layout/OffcanavasSidebar';
-import { OverviewView } from '~/components/layout/OverviewView';
-import { ProjectsBar } from '~/components/layout/ProjectsBar';
-import { RecentlyModifiedView } from '~/components/layout/RecentlyModifiedView';
-import { RecentlyViewedView } from '~/components/layout/RecentlyViewedView';
-import { SearchView } from '~/components/layout/SearchView';
-import { Sidebar } from '~/components/layout/Sidebar';
-import { SnapshotsView } from '~/components/layout/SnapshotsView';
-import { TagDocumentsView } from '~/components/layout/TagDocumentsView';
-import { TopBar } from '~/components/layout/TopBar';
 
 export interface ProjectViewProps {
   childView: {
@@ -114,6 +114,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     }
   }, [staticSidebarAvailable, toggleStaticSidebar, toggleOffcanvasSidebar]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (staticSidebarAvailable) {
       hideOffcanvasSidebar();
@@ -131,6 +132,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     []
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (staticFormattingToolbar || !isEditor) {
       hideOffcanvasFormattingToolbar();
@@ -161,6 +163,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     close: hideProjectSettingsModal,
   } = useProjectSettingsModal();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     hideSearchModal();
     hideFilesModal();
@@ -168,6 +171,7 @@ export const ProjectView = ({ childView }: ProjectViewProps) => {
     hideProjectSettingsModal();
   }, [childView.key, projectId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (!isAwaitRedirect) {
       setLastView(projectId, viewPath);

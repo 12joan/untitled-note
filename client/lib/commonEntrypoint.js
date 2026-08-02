@@ -25,8 +25,8 @@ if (!isTouchDevice) {
   }, 100);
 }
 
-new MutationObserver((mutations) =>
-  mutations.forEach(({ type, target }) => {
+new MutationObserver((mutations) => {
+  for (const { type, target } of mutations) {
     // childList refers to the addition or removal of nodes in the DOM tree;
     // no relation to ul or ol specifically
     if (type === 'childList') {
@@ -34,13 +34,13 @@ new MutationObserver((mutations) =>
         ? [target]
         : target.querySelectorAll('ol');
 
-      orderedLists.forEach((list) => {
+      for (const list of orderedLists) {
         const digits = Math.max(
           Math.floor(Math.log10(list.children.length)) + 1,
           0
         );
         list.style.setProperty('--list-style-offset', `${digits}ch`);
-      });
+      }
     }
-  })
-).observe(document.body, { childList: true, subtree: true });
+  }
+}).observe(document.body, { childList: true, subtree: true });

@@ -1,4 +1,4 @@
-import { LocalKeyboardShortcutCommandId } from '~/lib/commands';
+import type { LocalKeyboardShortcutCommandId } from '~/lib/commands';
 import { compareKeyboardShortcut } from '~/lib/keyboardShortcuts/compareKeyboardShortcut';
 import { useLocalKeyboardShortcutCommand } from '~/lib/keyboardShortcuts/overridden';
 import { useEventListener } from '~/lib/useEventListener';

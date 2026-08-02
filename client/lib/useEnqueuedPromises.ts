@@ -11,6 +11,7 @@ export const useEnqueuedPromises = () => {
   const [isDirty, setIsDirty] = useStateWhileMounted(false);
   const [isFailing, setIsFailing] = useStateWhileMounted(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const initiatePromise = useCallback((promiseProvider: TPromiseFn) => {
     setIsDirty(true);
 
@@ -26,11 +27,11 @@ export const useEnqueuedPromises = () => {
         }
       })
       .finally(() => {
-        if (enqueuedPromiseProvider.current !== null) {
+        if (enqueuedPromiseProvider.current === null) {
+          inflightPromise.current = null;
+        } else {
           initiatePromise(enqueuedPromiseProvider.current);
           enqueuedPromiseProvider.current = null;
-        } else {
-          inflightPromise.current = null;
         }
       });
   }, []);

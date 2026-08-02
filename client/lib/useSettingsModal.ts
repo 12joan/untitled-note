@@ -1,7 +1,3 @@
-import {
-  createSectionedModal,
-  SectionedModalOpenProps,
-} from '~/lib/sectionedModal';
 import AppearanceIcon from '~/components/icons/AppearanceIcon';
 import KeyboardShortcutsIcon from '~/components/icons/KeyboardShortcutsIcon';
 import SettingsIcon from '~/components/icons/SettingsIcon';
@@ -10,6 +6,10 @@ import {
   GeneralSection,
   KeyboardShortcutsSection,
 } from '~/components/settingsModalSections';
+import {
+  createSectionedModal,
+  type SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
 
 const sections = {
   general: {

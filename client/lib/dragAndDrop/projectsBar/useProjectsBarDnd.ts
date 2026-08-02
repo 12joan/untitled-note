@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import {
   closestCenter,
-  DndContextProps,
-  DragEndEvent,
-  DragStartEvent,
+  type DndContextProps,
+  type DragEndEvent,
+  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { Project, ProjectFolder } from '~/lib/types';
+import { useState } from 'react';
+import type { Project, ProjectFolder } from '~/lib/types';
 import { getDraggableData, getDroppableData } from '../utils';
 import { withFilterAccepts } from '../withFilterAccepts';
 import { announcements, screenReaderInstructions } from './accessibility';

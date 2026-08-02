@@ -1,4 +1,4 @@
-import { Document } from '~/lib/types';
+import type { Document } from '~/lib/types';
 
 export interface TransformDocumentOptions {
   invalidateEditor?: boolean;

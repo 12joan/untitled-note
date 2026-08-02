@@ -1,7 +1,8 @@
-import React, {
+import type React from 'react';
+import {
   createContext,
-  HTMLAttributes,
-  KeyboardEvent,
+  type HTMLAttributes,
+  type KeyboardEvent,
   useCallback,
   useContext,
   useMemo,
@@ -115,6 +116,7 @@ export const RadioCard = <T,>({
       data-active={checked}
       {...props}
     >
+      {/** biome-ignore lint/a11y/useSemanticElements: legacy */}
       <button
         type="button"
         role="radio"

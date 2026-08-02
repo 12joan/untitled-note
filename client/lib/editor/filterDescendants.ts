@@ -1,4 +1,9 @@
-import { isElement, TDescendant, TElement, TNode } from '~/lib/editor/plate';
+import {
+  isElement,
+  type TDescendant,
+  type TElement,
+  type TNode,
+} from '~/lib/editor/plate';
 
 export const filterDescendants = <T extends TElement | TDescendant[]>(
   arg: T,

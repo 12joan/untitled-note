@@ -11,10 +11,10 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
 import { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { PlateEditor } from '~/lib/editor/plate';
+import type { PlateEditor } from '~/lib/editor/plate';
 import { nodeAtPathIsEmptyParagraph } from './utils';
 
 export const findDragPath = (editor: PlateEditor, rawEvent: DragEvent) => {
@@ -27,7 +27,7 @@ export const findDragPath = (editor: PlateEditor, rawEvent: DragEvent) => {
   }
 
   // Resolve a range from the caret position where the drop occured.
-  let domRange;
+  let domRange: Range | null = null;
 
   // COMPAT: In Firefox, `caretRangeFromPoint` doesn't exist. (2016/07/25)
   if (document.caretRangeFromPoint) {

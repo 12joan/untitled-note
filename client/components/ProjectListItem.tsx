@@ -1,21 +1,21 @@
-import React, {
-  KeyboardEvent,
-  MouseEvent,
-  ReactElement,
+import { useDndContext } from '@dnd-kit/core';
+import {
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactElement,
   useRef,
   useState,
 } from 'react';
-import { useDndContext } from '@dnd-kit/core';
+import { ProjectIcon } from '~/components/ProjectIcon';
+import { ProjectsBarActiveIndicator } from '~/components/ProjectsBarActiveIndicator';
+import type { TippyInstance } from '~/components/Tippy';
+import { Tooltip } from '~/components/Tooltip';
 import { useAppContext } from '~/lib/appContext';
 import { useDraggableProject } from '~/lib/dragAndDrop/projectsBar/useDraggableProject';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { mergeRefs } from '~/lib/refUtils';
 import { OverviewLink, ProjectLink } from '~/lib/routes';
-import { Project } from '~/lib/types';
-import { ProjectIcon } from '~/components/ProjectIcon';
-import { ProjectsBarActiveIndicator } from '~/components/ProjectsBarActiveIndicator';
-import { TippyInstance } from '~/components/Tippy';
-import { Tooltip } from '~/components/Tooltip';
+import type { Project } from '~/lib/types';
 
 export const projectListItemClassName = 'size-12 btn text-xl shadow';
 

@@ -1,13 +1,13 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 export interface ErrorBoundaryProps {
   fallback: ReactNode;
   children: ReactNode;
 }
 
-type ErrorBoundaryState = {
+interface ErrorBoundaryState {
   hasError: boolean;
-};
+}
 
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: logging
     console.log(error, errorInfo);
   }
 

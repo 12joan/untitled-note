@@ -1,7 +1,6 @@
-import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { Document, LocalDocument, PartialDocument } from '~/lib/types';
-
 import { streamAction } from '~/channels/dataChannel';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import type { Document, LocalDocument, PartialDocument } from '~/lib/types';
 
 export const createBlankDocument = (
   projectId: number,

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+// biome-ignore lint/suspicious/noImportCycles: works
 import { awaitRedirectPath } from '~/lib/routes';
 
 let promisePath: Promise<string> | null = null;
@@ -25,6 +26,7 @@ export const awaitRedirect = ({
 };
 
 export const useAwaitRedirect = (callback: (path: string) => void) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     (promisePath ?? Promise.reject()).then(
       (path) => callback(path),

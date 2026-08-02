@@ -1,29 +1,33 @@
 {
   "name": "note-electron",
-  "version": "0.4.0",
+  "type": "module",
+  "version": "0.4.1",
   "private": true,
   "main": "src/main.js",
   "scripts": {
     "build": "cd .. && yarn build-electron",
     "start": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env development",
     "start-staging": "ELECTRON_ENABLE_LOGGING=1 electron-forge start -- --env staging",
-    "package": "electron-forge package --arch universal --platform=dawin",
+    "package": "electron-forge package --arch universal --platform=darwin",
     "make": "electron-forge make --arch universal --platform=darwin",
     "publish-app": "electron-forge publish --arch=universal --platform=darwin"
   },
   "dependencies": {
-    "electron": "^39.8.4",
-    "electron-context-menu": "^3.6.1",
-    "electron-squirrel-startup": "^1.0.0",
-    "update-electron-app": "^2.0.1"
+    "electron": "^43.2.0",
+    "electron-context-menu": "^4.1.2",
+    "electron-squirrel-startup": "^1.0.1",
+    "update-electron-app": "^3.3.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.5",
-    "@electron-forge/maker-deb": "^6.0.5",
-    "@electron-forge/maker-rpm": "^6.0.5",
-    "@electron-forge/maker-squirrel": "^6.0.5",
-    "@electron-forge/maker-zip": "^6.0.5",
-    "@electron-forge/publisher-github": "^6.0.5",
-    "electron": "^39.8.4"
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-deb": "^7.11.2",
+    "@electron-forge/maker-rpm": "^7.11.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/publisher-github": "^7.11.2",
+    "electron": "^43.2.0"
+  },
+  "resolutions": {
+    "@electron/asar": "^4.2.1"
   }
 }

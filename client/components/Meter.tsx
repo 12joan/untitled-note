@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface MeterProps extends Record<string, any> {
   max: number;
   value: number;
@@ -11,18 +9,16 @@ export const Meter = ({
   value,
   className = '',
   ...otherProps
-}: MeterProps) => {
-  return (
+}: MeterProps) => (
+  <div
+    className={`w-full rounded-full bg-plain-900/10 dark:bg-plain-50/10 relative overflow-hidden ${className}`}
+    {...otherProps}
+  >
     <div
-      className={`w-full rounded-full bg-plain-900/10 dark:bg-plain-50/10 relative overflow-hidden ${className}`}
-      {...otherProps}
-    >
-      <div
-        className="bg-primary-500 dark:bg-primary-400 h-2"
-        style={{
-          width: `${(value / max) * 100}%`,
-        }}
-      />
-    </div>
-  );
-};
+      className="bg-primary-500 dark:bg-primary-400 h-2"
+      style={{
+        width: `${(value / max) * 100}%`,
+      }}
+    />
+  </div>
+);

@@ -1,9 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.12'
-
-gem 'rails', '~> 7.2.2'
+gem 'rails', '~> 8.1.3.1'
 
 # Sprockets is now an optional dependency of Rails
 # TODO: Check if Sprockets can be removed
@@ -19,7 +17,7 @@ gem 'puma', '~> 8.0'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript
-gem 'vite_rails', '~> 3.0'
+gem 'vite_rails', '~> 3.11'
 
 # Use Redis for ActionCable and for caching
 gem 'redis', '~> 4.0'
@@ -42,12 +40,16 @@ gem 'typesense', '~> 0.14.1'
 # Use Clockwork for recurring events
 gem 'clockwork', '~> 2.0'
 
+# Use Devise for authentication
+gem 'devise', '~> 5.0'
+
+# Use Redcarpet for markdown
+gem 'redcarpet', '~> 3.6'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-
+  gem 'byebug', platforms: [:mri, :windows]
   gem 'pry'
-
   gem 'faker'
 end
 
@@ -76,8 +78,4 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem "devise", "~> 5.0"
-
-gem "redcarpet", "~> 3.6"
+gem 'tzinfo-data', platforms: [:windows, :jruby]

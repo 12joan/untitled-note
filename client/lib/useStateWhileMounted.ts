@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useIsMounted } from '~/lib/useIsMounted';
 
 export const useStateWhileMounted = <T>(initialState: T | (() => T)) => {

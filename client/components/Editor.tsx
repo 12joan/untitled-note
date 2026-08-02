@@ -1,8 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Range } from 'slate';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Range } from 'slate';
+import { BackButton } from '~/components/BackButton';
+import { EditorBody } from '~/components/EditorBody';
+import { EditorHeader } from '~/components/EditorHeader';
+import { SequenceBeforeAndAfter } from '~/components/SequenceBeforeAndAfter';
 import { AppContextProvider } from '~/lib/appContext';
 import { useFind } from '~/lib/editor/find';
-import { isEditorFocused, PlateEditor } from '~/lib/editor/plate';
+import { isEditorFocused, type PlateEditor } from '~/lib/editor/plate';
 import { usePlugins } from '~/lib/editor/plugins';
 import {
   restoreSelection,
@@ -15,12 +19,8 @@ import { useInitialValue } from '~/lib/editor/useInitialValue';
 import { useLockedState } from '~/lib/editor/useLockedState';
 import { useNavigateAwayOnDelete } from '~/lib/editor/useNavigateAwayOnDelete';
 import { useGlobalEvent } from '~/lib/globalEvents';
-import { Document } from '~/lib/types';
+import type { Document } from '~/lib/types';
 import { useTitle } from '~/lib/useTitle';
-import { BackButton } from '~/components/BackButton';
-import { EditorBody } from '~/components/EditorBody';
-import { EditorHeader } from '~/components/EditorHeader';
-import { SequenceBeforeAndAfter } from '~/components/SequenceBeforeAndAfter';
 
 export interface EditorProps {
   clientId: string;
@@ -47,6 +47,7 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
     [editor, documentId]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setTimeout(() => {
       if (initialDocument.blank) {
@@ -101,27 +102,19 @@ export const Editor = ({ clientId, initialDocument }: EditorProps) => {
   // Restore focus when closing modals
   const wasFocusedBeforeModalRef = useRef<boolean>(false);
 
-  useGlobalEvent(
-    'modal:open',
-    () => {
-      wasFocusedBeforeModalRef.current = !!editor && isEditorFocused(editor);
-    },
-    [editor]
-  );
+  useGlobalEvent('modal:open', () => {
+    wasFocusedBeforeModalRef.current = !!editor && isEditorFocused(editor);
+  }, [editor]);
 
-  useGlobalEvent(
-    'modal:close',
-    () => {
-      if (wasFocusedBeforeModalRef.current) {
-        /**
-         * Without setTimeout, the selection sometimes jumps to the top of the
-         * document. Not clear why.
-         */
-        setTimeout(restoreSelectionForEditor);
-      }
-    },
-    [restoreSelectionForEditor]
-  );
+  useGlobalEvent('modal:close', () => {
+    if (wasFocusedBeforeModalRef.current) {
+      /**
+       * Without setTimeout, the selection sometimes jumps to the top of the
+       * document. Not clear why.
+       */
+      setTimeout(restoreSelectionForEditor);
+    }
+  }, [restoreSelectionForEditor]);
 
   return (
     <div className="contents em:space-y-3">

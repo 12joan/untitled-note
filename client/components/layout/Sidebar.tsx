@@ -1,15 +1,24 @@
-import React, {
-  ElementType,
+import {
+  type ElementType,
   forwardRef,
+  type MouseEvent,
   memo,
-  MouseEvent,
-  ReactElement,
-  ReactNode,
+  type ReactElement,
+  type ReactNode,
 } from 'react';
+import { DocumentMenu } from '~/components/DocumentMenu';
+import { ContextMenuDropdown } from '~/components/Dropdown';
+import type { IconProps } from '~/components/icons/makeIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
+import OverviewIcon from '~/components/icons/OverviewIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import { PinnedDragTarget } from '~/components/PinnedDragTarget';
+import { InlinePlaceholder } from '~/components/Placeholder';
+import { TagMenu } from '~/components/TagMenu';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import { handleDragStartWithData, makeDocumentDragData } from '~/lib/dragData';
-import { Future, mapFuture, orDefaultFuture } from '~/lib/monads';
-import { PolyProps, PolyRef } from '~/lib/polymorphic';
+import { type Future, mapFuture, orDefaultFuture } from '~/lib/monads';
+import type { PolyProps, PolyRef } from '~/lib/polymorphic';
 import {
   DocumentLink,
   NewDocumentLink,
@@ -21,16 +30,7 @@ import {
   TagsLink,
 } from '~/lib/routes';
 import { useSettings } from '~/lib/settings';
-import { PartialDocument, Tag } from '~/lib/types';
-import { DocumentMenu } from '~/components/DocumentMenu';
-import { ContextMenuDropdown } from '~/components/Dropdown';
-import { IconProps } from '~/components/icons/makeIcon';
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
-import OverviewIcon from '~/components/icons/OverviewIcon';
-import SearchIcon from '~/components/icons/SearchIcon';
-import { PinnedDragTarget } from '~/components/PinnedDragTarget';
-import { InlinePlaceholder } from '~/components/Placeholder';
-import { TagMenu } from '~/components/TagMenu';
+import type { PartialDocument, Tag } from '~/lib/types';
 
 export interface SidebarProps {
   onButtonClick?: () => void;

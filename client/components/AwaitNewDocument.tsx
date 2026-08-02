@@ -1,15 +1,17 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { createBlankDocument } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
+// biome-ignore lint/suspicious/noImportCycles: works
 import { awaitRedirect } from '~/lib/awaitRedirect';
 import {
   getSessionCookieStorage,
   setSessionCookieStorage,
 } from '~/lib/browserStorage';
 import { handleCreateDocumentError } from '~/lib/handleErrors';
+// biome-ignore lint/suspicious/noImportCycles: works
 import { documentPath, overviewPath } from '~/lib/routes';
-import { Tag } from '~/lib/types';
+import type { Tag } from '~/lib/types';
 
 /**
  * We want to allow creation of new documents via a GET request. To prevent
@@ -32,33 +34,29 @@ export interface AwaitNewDocumentProps {
 export const AwaitNewDocument = ({ tagId }: AwaitNewDocumentProps) => {
   const { hash } = useLocation();
   const projectId = useAppContext('projectId');
-  const [awaitPath, setAwaitPath] = useState<string | null>(null);
-  const fallbackPath = overviewPath({ projectId });
 
-  useLayoutEffect(() => {
+  const [awaitPath] = useState(() => {
     const hashToken = hash.slice(1);
+    const fallbackPath = overviewPath({ projectId });
 
     if (hashToken !== newDocumentToken) {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.error(
         `Invalid token: expected ${JSON.stringify(
           newDocumentToken
         )}, got ${JSON.stringify(hashToken)}`
       );
-      setAwaitPath(fallbackPath);
-      return;
+      return fallbackPath;
     }
 
-    setAwaitPath(
-      awaitRedirect({
-        projectId,
-        promisePath: handleCreateDocumentError(
-          createBlankDocument(projectId, { tagId })
-        ).then(({ id }) => documentPath({ projectId, documentId: id })),
-        fallbackPath,
-      })
-    );
-  }, []);
+    return awaitRedirect({
+      projectId,
+      promisePath: handleCreateDocumentError(
+        createBlankDocument(projectId, { tagId })
+      ).then(({ id }) => documentPath({ projectId, documentId: id })),
+      fallbackPath,
+    });
+  });
 
-  return awaitPath ? <Navigate to={awaitPath} replace /> : null;
+  return <Navigate to={awaitPath} replace />;
 };

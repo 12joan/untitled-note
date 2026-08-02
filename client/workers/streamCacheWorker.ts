@@ -2,8 +2,8 @@
 /* eslint-disable no-restricted-globals */
 
 import { expose } from 'comlink';
-import { DBSchema, openDB } from 'idb';
-import { StreamCacheWorkerAPI } from '~/lib/types';
+import { type DBSchema, openDB } from 'idb';
+import type { StreamCacheWorkerAPI } from '~/lib/types';
 
 const EXPIRY_TIME = 1000 * 60 * 60 * 24; // 1 day
 
@@ -36,7 +36,7 @@ self.addEventListener('connect', (event: any) => {
       if (!result) return null;
 
       if (result.timestamp < Date.now() - EXPIRY_TIME) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.debug('Found expired cache entry', key);
         await this.removeItem(key);
       }
@@ -72,7 +72,7 @@ self.addEventListener('connect', (event: any) => {
 });
 
 // Expire old cache entries
-(async () => {
+void (async () => {
   const cacheDb = await cacheDbPromise;
   const tx = cacheDb.transaction('streamResults', 'readwrite');
   const store = tx.objectStore('streamResults');
@@ -82,7 +82,7 @@ self.addEventListener('connect', (event: any) => {
   let cursor = await index.openCursor(IDBKeyRange.upperBound(expireBefore));
 
   while (cursor) {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: logging
     console.debug('Deleting expired cache entry', cursor.primaryKey);
     await cursor.delete();
     cursor = await cursor.continue();

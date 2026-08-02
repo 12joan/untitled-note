@@ -31,6 +31,4 @@ const environments = {
 const index = process.argv.indexOf('--env');
 const envName = index > -1 ? process.argv[index + 1] : 'production';
 
-module.exports = {
-  ENV: environments[envName],
-};
+export const ENV = environments[envName];

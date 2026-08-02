@@ -1,7 +1,7 @@
-export type LinkData = {
+export interface LinkData {
   url: string;
   text: string;
-};
+}
 
 export interface LinkModalProps {
   initialText?: string;

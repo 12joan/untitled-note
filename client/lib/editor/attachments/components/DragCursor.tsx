@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { cssAdd } from '~/lib/cssAdd';
 import { useGlobalStore } from '~/lib/globalStore';
 

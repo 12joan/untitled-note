@@ -1,7 +1,6 @@
-import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { ProjectFolder } from '~/lib/types';
-
 import { streamAction } from '~/channels/dataChannel';
+import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
+import type { ProjectFolder } from '~/lib/types';
 
 export const createProjectFolder = (
   projectFolder: Partial<ProjectFolder> & {

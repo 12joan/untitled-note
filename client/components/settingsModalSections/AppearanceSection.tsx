@@ -1,4 +1,7 @@
-import React from 'react';
+import { EditorStyleInput } from '~/components/EditorStyleInput';
+import MinusIcon from '~/components/icons/MinusIcon';
+import PlusIcon from '~/components/icons/PlusIcon';
+import { Tooltip } from '~/components/Tooltip';
 import { editorStyleClassNames } from '~/lib/editor/editorStyleClassNames';
 import {
   decreaseEditorFontSize,
@@ -9,10 +12,6 @@ import {
 } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { useSettings } from '~/lib/settings';
-import { EditorStyleInput } from '~/components/EditorStyleInput';
-import MinusIcon from '~/components/icons/MinusIcon';
-import PlusIcon from '~/components/icons/PlusIcon';
-import { Tooltip } from '~/components/Tooltip';
 
 export const AppearanceSection = () => {
   const editorFontSize = useEditorFontSize();
@@ -70,6 +69,7 @@ export const AppearanceSection = () => {
       <div className="space-y-2">
         <h4 className="h3 select-none">Preview</h4>
 
+        {/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: legacy */}
         <p
           className={groupedClassNames({
             base: 'p-4 rounded-lg shadow-inner select-none',

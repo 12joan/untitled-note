@@ -1,21 +1,21 @@
-import React, { FC } from 'react';
-import { groupedClassNames } from '~/lib/groupedClassNames';
-import { useModal } from '~/lib/useModal';
-import { useOverrideable } from '~/lib/useOverrideable';
-import { SubscribableRef } from '~/lib/useSubscribableRef';
-import { IconProps } from '~/components/icons/makeIcon';
+import type { FC } from 'react';
+import type { IconProps } from '~/components/icons/makeIcon';
 import {
   ModalTitleWithCloseButton,
   StyledModal,
-  StyledModalProps,
+  type StyledModalProps,
 } from '~/components/Modal';
+import { groupedClassNames } from '~/lib/groupedClassNames';
+import { useModal } from '~/lib/useModal';
+import { useOverrideable } from '~/lib/useOverrideable';
+import type { SubscribableRef } from '~/lib/useSubscribableRef';
 
-export type Section<T extends object> = {
+export interface Section<T extends object> {
   title: string;
   icon: FC<IconProps>;
   component: FC<T>;
   variant?: 'default' | 'danger';
-};
+}
 
 export interface SectionedModalOpenProps<SectionName extends string> {
   initialSection?: SectionName;
@@ -23,7 +23,7 @@ export interface SectionedModalOpenProps<SectionName extends string> {
 
 export interface CreateSectionedModalOptions<
   SectionName extends string,
-  T extends object
+  T extends object,
 > {
   id: string;
   title: string;
@@ -33,7 +33,7 @@ export interface CreateSectionedModalOptions<
 
 export const createSectionedModal = <
   SectionName extends string,
-  T extends object
+  T extends object,
 >({
   id: sectionedModalId,
   title: sectionedModalTitle,
@@ -58,7 +58,7 @@ export const createSectionedModal = <
 
     const sectionEntries = Object.entries(sections) as [
       SectionName,
-      Section<T>
+      Section<T>,
     ][];
 
     const sectionProps =

@@ -1,12 +1,12 @@
-import React, {
-  CSSProperties,
-  ElementType,
+import {
+  type CSSProperties,
+  type ElementType,
   forwardRef,
-  ReactElement,
+  type ReactElement,
 } from 'react';
 import { abbreviate } from '~/lib/abbreviate';
-import { PolyProps, PolyRef } from '~/lib/polymorphic';
-import { Project } from '~/lib/types';
+import type { PolyProps, PolyRef } from '~/lib/polymorphic';
+import type { Project } from '~/lib/types';
 
 export type ProjectIconProps<C extends ElementType> = PolyProps<
   C,

@@ -1,5 +1,5 @@
-import { Announcements, ScreenReaderInstructions } from '@dnd-kit/core';
-import { Project, ProjectFolder } from '~/lib/types';
+import type { Announcements, ScreenReaderInstructions } from '@dnd-kit/core';
+import type { Project, ProjectFolder } from '~/lib/types';
 import { getDraggableData, getDroppableData } from '../utils';
 
 export const describeProject = ({ name }: Project) => `project "${name}"`;

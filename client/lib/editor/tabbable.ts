@@ -3,9 +3,9 @@ import {
   ELEMENT_LINK,
   findNode,
   getNodeEntry,
-  PlateEditor,
-  TabbableEntry,
-  TabbablePlugin,
+  type PlateEditor,
+  type TabbableEntry,
+  type TabbablePlugin,
 } from '~/lib/editor/plate';
 
 export const tabbableOptions: {
@@ -26,7 +26,7 @@ export const tabbableOptions: {
       const [slateNode, path] = nodeEntry;
 
       return Array.from(document.querySelectorAll('.slate-popover button')).map(
-        (domNode) => ({ domNode, slateNode, path } as TabbableEntry)
+        (domNode) => ({ domNode, slateNode, path }) as TabbableEntry
       );
     },
     globalEventListener: true,

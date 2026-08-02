@@ -1,5 +1,5 @@
 import { fetchAPIEndpoint } from '~/lib/fetchAPIEndpoint';
-import { DocumentSearchResult } from '~/lib/types';
+import type { DocumentSearchResult } from '~/lib/types';
 
 type RawDocumentSearchResult = Omit<DocumentSearchResult, 'document'> & {
   document: Omit<DocumentSearchResult['document'], 'id'> & {

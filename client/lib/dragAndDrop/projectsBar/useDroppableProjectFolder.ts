@@ -1,6 +1,6 @@
 import { useDndContext, useDroppable } from '@dnd-kit/core';
-import { ProjectFolder } from '~/lib/types';
-import { DroppableData } from '../types';
+import type { ProjectFolder } from '~/lib/types';
+import type { DroppableData } from '../types';
 import { getDroppableData } from '../utils';
 
 export const useDroppableProjectFolder = (folder: ProjectFolder) => {

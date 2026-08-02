@@ -1,9 +1,14 @@
-import React, { ComponentType, MouseEvent, ReactNode, useMemo } from 'react';
-import { DragData, handleDragStartWithData } from '~/lib/dragData';
+import {
+  type ComponentType,
+  type MouseEvent,
+  type ReactNode,
+  useMemo,
+} from 'react';
 import { ContextMenuDropdown } from '~/components/Dropdown';
 import { PopOutLink } from '~/components/PopOutLink';
+import { type DragData, handleDragStartWithData } from '~/lib/dragData';
 
-export type Item = {
+export interface Item {
   key: any;
   as: ComponentType<any>;
   label: string;
@@ -11,7 +16,7 @@ export type Item = {
   buttonProps: Record<string, any>;
   contextMenu?: ReactNode;
   dragData?: DragData;
-};
+}
 
 export interface ItemIndexProps extends Omit<IndexProps, 'items'> {
   items: Item[];
@@ -54,10 +59,12 @@ export const ItemIndex = ({
   const titleComponent =
     title &&
     (() => {
-      const heading = <h2 className="h2 select-none" children={title} />;
+      const heading = <h2 className="h2 select-none">{title}</h2>;
 
       return showAllLink ? (
-        <PopOutLink as={showAllLink} label="Show all" children={heading} />
+        <PopOutLink as={showAllLink} label="Show all">
+          {heading}
+        </PopOutLink>
       ) : (
         heading
       );
@@ -85,65 +92,57 @@ interface IndexProps {
   cardPreviewHeight?: string | number;
 }
 
-const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => {
-  return (
-    <div className="flex flex-wrap gap-5">
-      {items.map(({ key, ...item }) => (
-        <CardItem key={key} item={item} cardPreviewHeight={cardPreviewHeight} />
-      ))}
-    </div>
-  );
-};
+const CardIndex = ({ items, cardPreviewHeight }: IndexProps) => (
+  <div className="flex flex-wrap gap-5">
+    {items.map(({ key, ...item }) => (
+      <CardItem key={key} item={item} cardPreviewHeight={cardPreviewHeight} />
+    ))}
+  </div>
+);
 
-const ListIndex = ({ items }: IndexProps) => {
-  return (
-    <div className="list-group">
-      {items.map(({ key, ...item }) => (
-        <ListItem key={key} item={item} />
-      ))}
-    </div>
-  );
-};
+const ListIndex = ({ items }: IndexProps) => (
+  <div className="list-group">
+    {items.map(({ key, ...item }) => (
+      <ListItem key={key} item={item} />
+    ))}
+  </div>
+);
 
 interface ItemProps extends Record<string, any> {
   item: Omit<Item, 'key'>;
   cardPreviewHeight?: string | number;
 }
 
-const CardItem = ({ item, cardPreviewHeight, ...otherProps }: ItemProps) => {
-  return (
-    <Item
-      item={item}
-      className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-plain-800 dark:border-transparent"
-      {...otherProps}
+const CardItem = ({ item, cardPreviewHeight, ...otherProps }: ItemProps) => (
+  <Item
+    item={item}
+    className="shrink-0 btn w-64 space-y-1 p-5 border bg-white dark:bg-plain-800 dark:border-transparent"
+    {...otherProps}
+  >
+    <strong className="block text-lg font-medium">{item.label}</strong>
+
+    <p
+      className="text-sm line-clamp-2 text-plain-500 dark:text-plain-400"
+      style={{ height: cardPreviewHeight }}
     >
-      <strong className="block text-lg font-medium" children={item.label} />
+      {item.preview}
+    </p>
+  </Item>
+);
 
-      <p
-        className="text-sm line-clamp-2 text-plain-500 dark:text-plain-400"
-        style={{ height: cardPreviewHeight }}
-      >
-        {item.preview}
-      </p>
-    </Item>
-  );
-};
+const ListItem = ({ item, ...otherProps }: ItemProps) => (
+  <Item
+    item={item}
+    className="list-group-item btn btn-no-rounded cursor-pointer bg-white dark:bg-plain-800 space-y-1"
+    {...otherProps}
+  >
+    {item.label}
 
-const ListItem = ({ item, ...otherProps }: ItemProps) => {
-  return (
-    <Item
-      item={item}
-      className="list-group-item btn btn-no-rounded cursor-pointer bg-white dark:bg-plain-800 space-y-1"
-      {...otherProps}
-    >
-      {item.label}
-
-      <p className="text-xs text-plain-500 dark:text-plain-400 truncate">
-        {item.preview}
-      </p>
-    </Item>
-  );
-};
+    <p className="text-xs text-plain-500 dark:text-plain-400 truncate">
+      {item.preview}
+    </p>
+  </Item>
+);
 
 const Item = ({
   item: { as: ItemComponent, buttonProps, contextMenu, dragData, ...restItem },

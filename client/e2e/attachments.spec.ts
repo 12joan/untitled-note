@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { Path } from 'slate';
+import type { Path } from 'slate';
 import {
   clickAtPath,
   getDOMNodeByPath,
@@ -127,9 +127,9 @@ test.describe('Attachments', () => {
     );
 
     const expectTabbedIntoAttachment = async () => {
-      const activeElementTestId = await page.evaluate(() => {
-        return document.activeElement?.getAttribute('data-testid');
-      });
+      const activeElementTestId = await page.evaluate(() =>
+        document.activeElement?.getAttribute('data-testid')
+      );
 
       expect(activeElementTestId).toEqual('download-attachment');
     };
@@ -141,6 +141,10 @@ test.describe('Attachments', () => {
     };
 
     await clickAtPath(page, editorHandle, [1]);
+
+    // Recent Chromium regression: Tabbing fails without a small delay here
+    await page.waitForTimeout(1);
+
     await page.keyboard.press('Tab');
     await expectTabbedIntoAttachment();
 

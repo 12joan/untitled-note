@@ -1,4 +1,4 @@
-import { NodeEntry, Path } from 'slate';
+import { type NodeEntry, Path } from 'slate';
 import {
   getNodeEntry,
   getRange,
@@ -6,10 +6,10 @@ import {
   isSelectionExpanded,
   isStartPoint,
   isText,
-  PlateEditor,
-  TText,
+  type PlateEditor,
+  type TText,
 } from '~/lib/editor/plate';
-import { MarkBoundary } from './types';
+import type { MarkBoundary } from './types';
 
 export const getMarkBoundary = (editor: PlateEditor): MarkBoundary | null => {
   const { selection } = editor;

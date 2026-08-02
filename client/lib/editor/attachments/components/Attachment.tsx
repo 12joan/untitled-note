@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchFile } from '~/lib/apis/file';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import {
+  type FutureServiceResult,
   failureFutureServiceResult,
-  FutureServiceResult,
   pendingFutureServiceResult,
   promiseToFutureServiceResult,
   unwrapFutureServiceResult,
 } from '~/lib/monads';
 import { retry } from '~/lib/retry';
-import { S3File } from '~/lib/types';
-import { AttachmentElementProps, BaseAttachmentProps } from '../types';
+import type { S3File } from '~/lib/types';
+import type { AttachmentElementProps, BaseAttachmentProps } from '../types';
 import { getUploadIsInProgress } from '../uploadsInProgressStore';
 import { useSelected } from '../utils';
 import { DeletedAttachment } from './DeletedAttachment';
@@ -63,6 +63,7 @@ const UploadedAttachment = ({
     FutureServiceResult<S3File, any>
   >(() => pendingFutureServiceResult());
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     promiseToFutureServiceResult(
       retry(() => fetchFile(s3FileId), {

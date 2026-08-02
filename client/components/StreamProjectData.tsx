@@ -1,11 +1,11 @@
-import React, { ReactNode, useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import { streamDocuments } from '~/lib/apis/document';
 import { streamTags } from '~/lib/apis/tag';
 import { AppContextProvider } from '~/lib/appContext';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
-import { Future, mapFuture, thenFuture } from '~/lib/monads';
+import { type Future, mapFuture, thenFuture } from '~/lib/monads';
 import { useRecentlyViewedDocuments } from '~/lib/recentlyViewedDocuments';
-import { PartialDocument, Project, Tag } from '~/lib/types';
+import type { PartialDocument, Project, Tag } from '~/lib/types';
 import { useStream } from '~/lib/useStream';
 import { useValueChanged } from '~/lib/useValueChanged';
 
@@ -74,11 +74,11 @@ export const StreamProjectData = ({
             )
             .map((previousDocument) => previousDocument.id);
 
-          deletedDocumentIds.forEach((deletedDocumentId) =>
+          for (const deletedDocumentId of deletedDocumentIds) {
             dispatchGlobalEvent('document:delete', {
               documentId: deletedDocumentId,
-            })
-          );
+            });
+          }
         })
       )
   );
@@ -125,6 +125,7 @@ export const StreamProjectData = ({
   );
 
   const excludePinned = (futureDocs: Future<PartialDocument[]>) =>
+    // biome-ignore lint/correctness/useHookAtTopLevel: legacy
     useMemo(
       () =>
         mapFuture(futureDocs, (docs) =>

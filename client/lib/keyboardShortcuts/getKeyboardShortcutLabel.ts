@@ -1,4 +1,4 @@
-import { KeyboardShortcutConfig } from '~/lib/types';
+import type { KeyboardShortcutConfig } from '~/lib/types';
 import { MODIFIER_LABELS } from './constants';
 
 export const getKeyboardShortcutLabel = ({

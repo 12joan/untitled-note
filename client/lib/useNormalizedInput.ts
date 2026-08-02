@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useMemo, useState } from 'react';
+import { type ChangeEvent, type KeyboardEvent, useMemo, useState } from 'react';
 
 export interface UseNormalizedInputOptions {
   initial: string;
@@ -14,9 +14,11 @@ export const useNormalizedInput = ({
   const [value, setValue] = useState(initial);
   const resetValue = () => setValue(initial);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const isValid = useMemo(() => validate(value), [value]);
 
   const normalizeValue = () => {
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
     if (isValid) {
       setValue(normalize(value));
     } else {

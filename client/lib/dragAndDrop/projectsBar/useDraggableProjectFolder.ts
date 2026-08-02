@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
-import { ProjectFolder } from '~/lib/types';
-import { DraggableData } from '../types';
+import type { ProjectFolder } from '~/lib/types';
+import type { DraggableData } from '../types';
 import { describeProjectFolder } from './accessibility';
 
 export const useDraggableProjectFolder = (folder: ProjectFolder) =>

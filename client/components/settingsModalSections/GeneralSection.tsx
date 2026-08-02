@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSettings } from '~/lib/settings';
 import { RadioCard, RadioCardGroup } from '../RadioCardGroup';
 

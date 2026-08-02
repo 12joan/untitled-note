@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { APP_NAME } from '~/lib/config';
 
-type TitleEntry = {
+interface TitleEntry {
   title: string;
-};
+}
 
 let titleStack: TitleEntry[] = [{ title: APP_NAME }];
 

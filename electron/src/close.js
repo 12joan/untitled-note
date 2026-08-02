@@ -1,5 +1,5 @@
-const { app, autoUpdater, BrowserWindow } = require('electron');
-const { isMac } = require('./helpers');
+import { app, autoUpdater, BrowserWindow } from 'electron';
+import { isMac } from './helpers.js';
 
 let isQuitting = false;
 let queuedToClose = [];
@@ -14,7 +14,7 @@ const performEnqueuedClose = () => {
     queuedToClose.length === BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
 
-  queuedToClose.forEach((browserWindow) => {
+  for (const browserWindow of queuedToClose) {
     if (isLastWindowGroup && browserWindow === focusedWindow) {
       if (browserWindow.isFullScreen()) {
         browserWindow.once('leave-full-screen', () => browserWindow.hide());
@@ -25,14 +25,14 @@ const performEnqueuedClose = () => {
     } else {
       browserWindow.close();
     }
-  });
+  }
 
   performingEnqueuedClose = false;
   queuedToClose = [];
 };
 
 // Hide last active window instead of closing (macOS)
-const registerWindow = (browserWindow) => {
+export const registerWindow = (browserWindow) => {
   browserWindow.on('close', (event) => {
     if (!performingEnqueuedClose && !isQuitting && isMac) {
       event.preventDefault();
@@ -46,7 +46,7 @@ const registerWindow = (browserWindow) => {
   });
 };
 
-const registerApp = () => {
+export const registerApp = () => {
   // Quit when all windows are closed (except on macOS)
   app.on('window-all-closed', () => {
     if (!isMac) {
@@ -57,11 +57,11 @@ const registerApp = () => {
   // Show hidden windows on activate (macOS)
   app.on('activate', () => {
     if (isMac) {
-      BrowserWindow.getAllWindows().forEach((browserWindow) => {
+      for (const browserWindow of BrowserWindow.getAllWindows()) {
         if (!browserWindow.isVisible()) {
           browserWindow.show();
         }
-      });
+      }
     }
   });
 
@@ -72,9 +72,4 @@ const registerApp = () => {
   autoUpdater.on('before-quit-for-update', () => {
     isQuitting = true;
   });
-};
-
-module.exports = {
-  registerWindow,
-  registerApp,
 };

@@ -1,15 +1,15 @@
-import React, {
-  ChangeEvent,
+import {
+  type ChangeEvent,
   forwardRef,
-  KeyboardEvent,
-  Ref,
-  TextareaHTMLAttributes,
+  type KeyboardEvent,
+  type Ref,
+  type TextareaHTMLAttributes,
   useRef,
 } from 'react';
+import { TextareaAutosize } from '~/components/TextareaAutosize';
 import { useAppContext } from '~/lib/appContext';
 import { useEditorFontSizeCSSValue } from '~/lib/editorFontSize';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { TextareaAutosize } from '~/components/TextareaAutosize';
 
 export interface EditorTitleProps {
   initialTitle: string;

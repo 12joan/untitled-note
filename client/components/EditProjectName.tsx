@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useNormalizedInput } from '~/lib/useNormalizedInput';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
@@ -25,7 +24,7 @@ export const EditProjectName = () => {
       }
 
       updateProject({ name }).catch((error) => {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error(error);
         resetName();
       });

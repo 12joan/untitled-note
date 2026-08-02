@@ -1,30 +1,30 @@
-import React, {
+import {
   forwardRef,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import CloseIcon from '~/components/icons/CloseIcon';
+import PlusIcon from '~/components/icons/PlusIcon';
 import { useAppContext } from '~/lib/appContext';
 import { filterPredicate } from '~/lib/filterPredicate';
 import { orDefaultFuture } from '~/lib/monads';
 import { TagLink } from '~/lib/routes';
-import { LocalDocument, LocalTag } from '~/lib/types';
+import type { LocalDocument, LocalTag } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
-import CloseIcon from '~/components/icons/CloseIcon';
-import PlusIcon from '~/components/icons/PlusIcon';
 
 const tagClassName =
   'bg-plain-50 dark:bg-plain-800 rounded-full flex items-center justify-center';
 const tagButtonClassName =
   'hover:bg-plain-200 dark:hover:bg-plain-700 text-plain-400 dark:text-plain-500 hover:text-plain-500 dark:hover:text-plain-400 rounded-full flex items-center justify-center';
 
-type TagSuggestion = {
+interface TagSuggestion {
   key: string;
   text: string;
   tag: LocalTag;
-};
+}
 
 type LinkForTagOptions = Record<string, any> & {
   tag: LocalTag;
@@ -34,6 +34,7 @@ const linkForTag = ({ tag: { id, text }, ...otherProps }: LinkForTagOptions) =>
   id ? (
     <TagLink to={{ tagId: id }} children={text} {...otherProps} />
   ) : (
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: legacy
     <span tabIndex={0} children={text} {...otherProps} />
   );
 
@@ -67,6 +68,7 @@ export const EditorTags = forwardRef(
     const futureAllTags = useAppContext('futureTags');
     const allTags: LocalTag[] = orDefaultFuture(futureAllTags, []);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const unusedTags = useMemo(
       () => allTags.filter((tag) => !hasTagWithText(tag.text)),
       [futureAllTags, tagTexts]
@@ -86,6 +88,7 @@ export const EditorTags = forwardRef(
       [unusedTags, trimmedInputValue]
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const suggestions = useMemo(() => {
       const suggestions: TagSuggestion[] = filteredUnusedTags.map((tag) => ({
         key: tag.text,

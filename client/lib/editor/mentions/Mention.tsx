@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFocused, useSelected } from 'slate-react';
+import { InlinePlaceholder } from '~/components/Placeholder';
 import { useAppContext } from '~/lib/appContext';
 import { useEditorEvent } from '~/lib/editor/imperativeEvents';
 import {
   findNodePath,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
   setNodes,
-  Value,
+  type Value,
 } from '~/lib/editor/plate';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { mapFuture, orDefaultFuture, unwrapFuture } from '~/lib/monads';
 import { DocumentLink } from '~/lib/routes';
-import { InlinePlaceholder } from '~/components/Placeholder';
 import { justCreatedIds } from './justCreatedIds';
-import { MentionElement } from './types';
+import type { MentionElement } from './types';
 
 export const Mention = ({
   attributes,
@@ -37,8 +37,10 @@ export const Mention = ({
   const focused = useFocused();
   const selectedAndFocused = selected && focused;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     const doc = orDefaultFuture(futureDocument, undefined);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
     if (!doc) return;
 
     // Once the document exists, it is no longer "just created"

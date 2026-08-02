@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import CopyIcon from '~/components/icons/CopyIcon';
+import DownloadIcon from '~/components/icons/DownloadIcon';
 import { setLocalStorage, useLocalStorage } from '~/lib/browserStorage';
 import { copyText } from '~/lib/copyText';
 import { getHtmlForExport } from '~/lib/editor/getHtmlForExport';
-import CopyIcon from '~/components/icons/CopyIcon';
-import DownloadIcon from '~/components/icons/DownloadIcon';
-import { DocumentSettingsModalSectionProps } from './types';
+import type { DocumentSettingsModalSectionProps } from './types';
 
 export const ExportHTMLSection = ({
   document: doc,
@@ -15,6 +15,7 @@ export const ExportHTMLSection = ({
     setLocalStorage('exportHtml:includeTitle', value);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const html = useMemo(
     () =>
       getHtmlForExport(getChildrenForExport(), {

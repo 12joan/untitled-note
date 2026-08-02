@@ -1,11 +1,10 @@
-import React from 'react';
+import DownloadIcon from '~/components/icons/DownloadIcon';
+import { Tooltip } from '~/components/Tooltip';
 import { filesize } from '~/lib/filesize';
 import { friendlyMime } from '~/lib/friendlyMime';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import DownloadIcon from '~/components/icons/DownloadIcon';
-import { Tooltip } from '~/components/Tooltip';
 import { commonClassNames } from '../commonClassNames';
-import { ExtantAttachmentProps } from '../types';
+import type { ExtantAttachmentProps } from '../types';
 
 export const GenericAttachment = ({
   s3File,

@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  ModalTitle,
+  StyledModal,
+  type StyledModalProps,
+} from '~/components/Modal';
 import {
   createSnapshot,
   restoreSnapshot,
@@ -14,10 +19,9 @@ import {
 } from '~/lib/handleErrors';
 import { documentVersionHistoryPath } from '~/lib/routes';
 import { createToast } from '~/lib/toasts';
-import { Snapshot } from '~/lib/types';
+import type { Snapshot } from '~/lib/types';
 import { useInputModal } from '~/lib/useInputModal';
 import { useModal } from '~/lib/useModal';
-import { ModalTitle, StyledModal, StyledModalProps } from '~/components/Modal';
 
 export interface UseNewSnapshotModalProps {
   documentId: number;
@@ -38,7 +42,7 @@ export const useNewSnapshotModal = ({
   const handleSubmit = (name: string) => {
     const createPromise = createSnapshot(projectId, documentId, { name });
 
-    handleCreateSnapshotError(createPromise).then(() => {
+    void handleCreateSnapshotError(createPromise).then(() => {
       if (showToastOnSuccess) {
         createToast({
           title: 'Snapshot created',
@@ -76,7 +80,7 @@ export const useRenameSnapshotModal = ({
 
   const handleSubmit = (name: string) => {
     if (name === snapshot.name) return;
-    handleUpdateSnapshotError(
+    void handleUpdateSnapshotError(
       updateSnapshot(projectId, snapshot.document_id, snapshot.id, { name })
     );
   };
@@ -103,7 +107,7 @@ export const useRestoreSnapshotModal = ({
   const projectId = useAppContext('projectId');
 
   const handleSubmit = (saveCurrent: boolean) => {
-    handleRestoreSnapshotError(
+    void handleRestoreSnapshotError(
       restoreSnapshot(projectId, snapshot.document_id, snapshot.id, {
         saveCurrent,
       })

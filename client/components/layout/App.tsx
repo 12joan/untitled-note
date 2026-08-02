@@ -1,4 +1,8 @@
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
+import { ErrorBoundary } from '~/components/ErrorBoundary';
+import { LoadingView } from '~/components/LoadingView';
+import { NoProjectsView } from '~/components/layout/NoProjectsView';
+import { ToastContainer } from '~/components/layout/ToastContainer';
 import { streamFiles, streamQuotaUsage } from '~/lib/apis/file';
 import { streamProjects } from '~/lib/apis/project';
 import { streamProjectFolders } from '~/lib/apis/projectFolder';
@@ -8,10 +12,6 @@ import { mapFuture, unwrapFuture } from '~/lib/monads';
 import { ApplicationRoutes } from '~/lib/routing';
 import { useSettingsProvider } from '~/lib/settings';
 import { useStream } from '~/lib/useStream';
-import { ErrorBoundary } from '~/components/ErrorBoundary';
-import { NoProjectsView } from '~/components/layout/NoProjectsView';
-import { ToastContainer } from '~/components/layout/ToastContainer';
-import { LoadingView } from '~/components/LoadingView';
 
 export const App = () => {
   const [projectsCacheKey, invalidateProjectsCache] = useReducer(

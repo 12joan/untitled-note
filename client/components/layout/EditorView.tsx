@@ -1,9 +1,11 @@
-import React, { memo, useEffect, useMemo, useReducer, useRef } from 'react';
+import { memo, useEffect, useMemo, useReducer, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Editor } from '~/components/Editor';
+import { LoadingView } from '~/components/LoadingView';
 import { fetchDocument } from '~/lib/apis/document';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
 import {
-  FutureServiceResult,
+  type FutureServiceResult,
   mapFuture,
   pendingFutureServiceResult,
   promiseToFutureServiceResult,
@@ -12,11 +14,9 @@ import {
 } from '~/lib/monads';
 import { documentWasViewed } from '~/lib/recentlyViewedDocuments';
 import { OverviewLink } from '~/lib/routes';
-import { Document } from '~/lib/types';
+import type { Document } from '~/lib/types';
 import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
-import { Editor } from '~/components/Editor';
-import { LoadingView } from '~/components/LoadingView';
 
 export interface EditorViewProps {
   documentId: number;
@@ -75,6 +75,7 @@ export const EditorView = memo(({ documentId }: EditorViewProps) => {
     updatedAt !== undefined
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setFsrInitialDocument(pendingFutureServiceResult());
 
@@ -110,7 +111,7 @@ export const EditorView = memo(({ documentId }: EditorViewProps) => {
       const doesNotExist = error?.response?.status === 404;
 
       if (!doesNotExist) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error(error);
       }
 

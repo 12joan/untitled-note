@@ -1,9 +1,9 @@
-import { Project, ProjectFolder } from '~/lib/types';
+import type { Project, ProjectFolder } from '~/lib/types';
 
-export type BaseDraggableData = {
+export interface BaseDraggableData {
   type: string;
   description: string;
-};
+}
 
 export type ProjectDraggableData = BaseDraggableData & {
   type: 'project';
@@ -17,10 +17,10 @@ export type ProjectFolderDraggableData = BaseDraggableData & {
 
 export type DraggableData = ProjectDraggableData | ProjectFolderDraggableData;
 
-export type BaseDroppableData = {
+export interface BaseDroppableData {
   type: string;
   description: string;
-};
+}
 
 export type ProjectPositionDroppableData = BaseDroppableData & {
   type: 'project-position';

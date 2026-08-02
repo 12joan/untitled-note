@@ -1,4 +1,4 @@
-import { ELEMENT_BLOCKQUOTE, SoftBreakPlugin } from '~/lib/editor/plate';
+import { ELEMENT_BLOCKQUOTE, type SoftBreakPlugin } from '~/lib/editor/plate';
 
 export const softBreakOptions: {
   options: SoftBreakPlugin;

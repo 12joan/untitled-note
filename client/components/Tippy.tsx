@@ -1,9 +1,9 @@
-import React, { ComponentType, ForwardedRef, forwardRef } from 'react';
 import UpstreamHeadedTippy, {
-  TippyProps as UpstreamTippyProps,
+  type TippyProps as UpstreamTippyProps,
 } from '@tippyjs/react';
 import UpstreamTippy from '@tippyjs/react/headless';
-import { Instance } from 'tippy.js';
+import { type ComponentType, type ForwardedRef, forwardRef } from 'react';
+import type { Instance } from 'tippy.js';
 import { useAppContext } from '~/lib/appContext';
 import { mapRef } from '~/lib/refUtils';
 

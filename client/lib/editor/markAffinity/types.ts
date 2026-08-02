@@ -1,5 +1,5 @@
-import { NodeEntry } from 'slate';
-import { TText } from '~/lib/editor/plate';
+import type { NodeEntry } from 'slate';
+import type { TText } from '~/lib/editor/plate';
 
 export type MarkBoundary =
   | [NodeEntry<TText>, NodeEntry<TText>]

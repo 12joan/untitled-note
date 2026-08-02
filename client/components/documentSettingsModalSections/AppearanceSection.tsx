@@ -1,7 +1,6 @@
-import React from 'react';
-import { useAppContext } from '~/lib/appContext';
 import { EditorStyleInput } from '~/components/EditorStyleInput';
-import { DocumentSettingsModalSectionProps } from './types';
+import { useAppContext } from '~/lib/appContext';
+import type { DocumentSettingsModalSectionProps } from './types';
 
 export const AppearanceSection = ({
   document: doc,

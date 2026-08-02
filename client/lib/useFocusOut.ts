@@ -1,4 +1,4 @@
-import { FocusEvent, useRef } from 'react';
+import { type FocusEvent, useRef } from 'react';
 
 export const useFocusOut = <T extends HTMLElement>(
   callback: (event: FocusEvent<T>) => void

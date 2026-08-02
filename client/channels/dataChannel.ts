@@ -1,4 +1,4 @@
-import { Stream } from '~/lib/types';
+import type { Stream } from '~/lib/types';
 import { handleSubscriptionStatusChanged } from './connectionStatus';
 import consumer from './consumer';
 

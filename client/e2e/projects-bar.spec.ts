@@ -1,9 +1,9 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import {
   createProject,
   createProjectFolder,
   createProjectInFolder,
-  DragFn,
+  type DragFn,
   dragWithKeyboard,
   dragWithMouse,
   expectCurrentProject,
@@ -153,7 +153,7 @@ test.describe('Projects bar', () => {
   });
 
   test.describe('Reordering projects and folders', () => {
-    dragTypes.forEach(([drag, dragType]) => {
+    for (const [drag, dragType] of dragTypes) {
       test.describe(`Using the ${dragType}`, () => {
         test('reorder unfoldered projects', async ({ page }) => {
           // 1st, 2nd, 3rd -> 2nd, 3rd, 1st -> 3rd, 2nd, 1st
@@ -243,6 +243,6 @@ test.describe('Projects bar', () => {
           await expectFolderIndex(page, 'A Folder', 2);
         });
       });
-    });
+    }
   });
 });

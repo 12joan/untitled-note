@@ -1,24 +1,23 @@
 import { filesize } from '~/lib/filesize';
 import { createToast } from '~/lib/toasts';
-import { ToastWithoutId } from '~/lib/types';
+import type { ToastWithoutId } from '~/lib/types';
 
 const handleErrors =
   (toastForError: (error: any) => ToastWithoutId) =>
-  <T>(promise: Promise<T>): Promise<T> => {
-    return promise.catch((error: any) => {
-      // eslint-disable-next-line no-console
+  <T>(promise: Promise<T>): Promise<T> =>
+    promise.catch((error: any) => {
+      // biome-ignore lint/suspicious/noConsole: logging
       console.log(error);
 
       try {
         createToast(toastForError(error));
       } catch (error) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error('Error while creating toast:', error);
       }
 
       throw error;
     });
-  };
 
 export const handleCreateProjectError = handleErrors(() => ({
   title: 'Failed to create project',

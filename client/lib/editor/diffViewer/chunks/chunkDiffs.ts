@@ -3,15 +3,15 @@ export interface ChunkDiffOptions<Block> {
   paddingBlocks: number;
 }
 
-export type ChunkWithoutDiff<Block> = {
+export interface ChunkWithoutDiff<Block> {
   hasDiff: false;
   blocks: Block[];
-};
+}
 
-export type ChunkWithDiff<Block> = {
+export interface ChunkWithDiff<Block> {
   hasDiff: true;
   blocks: Block[];
-};
+}
 
 export type Chunk<Block> = ChunkWithoutDiff<Block> | ChunkWithDiff<Block>;
 
@@ -51,7 +51,7 @@ export const chunkDiffs = <Block>(
     }
   };
 
-  blocks.forEach((block) => {
+  for (const block of blocks) {
     const blockHasDiff = hasDiff(block);
 
     // Reset the padding below counter if the current block has a diff
@@ -85,7 +85,7 @@ export const chunkDiffs = <Block>(
     if (pendingChunkHasDiff === null) {
       pendingChunkHasDiff = blockHasDiff;
     }
-  });
+  }
 
   commitPendingChunk();
 

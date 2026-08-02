@@ -1,7 +1,3 @@
-import {
-  createSectionedModal,
-  SectionedModalOpenProps,
-} from '~/lib/sectionedModal';
 import AppearanceIcon from '~/components/icons/AppearanceIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import ProjectDetailsIcon from '~/components/icons/ProjectDetailsIcon';
@@ -10,6 +6,10 @@ import {
   DeleteSection,
   ProjectDetailsSection,
 } from '~/components/projectSettingsModalSections';
+import {
+  createSectionedModal,
+  type SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
 
 const sections = {
   nameAndIcon: {

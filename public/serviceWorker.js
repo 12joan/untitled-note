@@ -11,11 +11,12 @@ self.addEventListener('fetch', (event) => {
       if (cachedResponse) return cachedResponse;
 
       try {
-        const response = (await event.preloadResponse) ?? (await fetch(event.request));
+        const response =
+          (await event.preloadResponse) ?? (await fetch(event.request));
         cache.put(event.request, response.clone());
         return response;
       } catch (error) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error('Failed to fetch:', error);
 
         return new Response('Network error', {

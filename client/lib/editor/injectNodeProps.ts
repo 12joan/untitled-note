@@ -1,6 +1,6 @@
-import React, { HTMLAttributes, ReactNode } from 'react';
+import React, { type HTMLAttributes, type ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { PlateRenderElementProps } from '~/lib/editor/plate';
+import type { PlateRenderElementProps } from '~/lib/editor/plate';
 
 const mergeableProps: (keyof HTMLAttributes<HTMLElement>)[] = ['className'];
 
@@ -12,14 +12,14 @@ export const injectNodeProps = (
     if (React.isValidElement(child)) {
       const { nodeProps } = child.props as PlateRenderElementProps;
 
-      Object.keys(props).forEach((key) => {
+      for (const key of Object.keys(props)) {
         const exists = nodeProps && key in nodeProps;
         const mergeable = mergeableProps.includes(key as any);
         if (exists && !mergeable) {
-          // eslint-disable-next-line no-console
+          // biome-ignore lint/suspicious/noConsole: logging
           console.warn('injectNodeProps: Overwriting existing node prop', key);
         }
-      });
+      }
 
       const newProps: Partial<PlateRenderElementProps> = {
         nodeProps: {

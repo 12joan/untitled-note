@@ -1,15 +1,17 @@
-import { DependencyList, useEffect } from 'react';
+import { type DependencyList, useEffect } from 'react';
 
 export type EventListener<T extends unknown[]> = (...args: T) => void;
 type EventListenerSet<T extends unknown[]> = Set<EventListener<T>>;
 
-export type BaseEventTypes = { [key: string]: unknown[] };
+export interface BaseEventTypes {
+  [key: string]: unknown[];
+}
 
 type EventListenerMap<T extends BaseEventTypes> = {
   [K in keyof T]: EventListenerSet<T[K]>;
 };
 
-export type EventEmitter<T extends BaseEventTypes> = {
+export interface EventEmitter<T extends BaseEventTypes> {
   eventListenerMap: EventListenerMap<T>;
   addEventListener<K extends keyof T>(
     eventName: K,
@@ -20,10 +22,10 @@ export type EventEmitter<T extends BaseEventTypes> = {
     listener: EventListener<T[K]>
   ): void;
   dispatchEvent<K extends keyof T>(eventName: K, ...args: T[K]): void;
-};
+}
 
 export const createEventEmitter = <
-  T extends BaseEventTypes
+  T extends BaseEventTypes,
 >(): EventEmitter<T> => {
   const eventListenerMap: EventListenerMap<T> = {} as EventListenerMap<T>;
 
@@ -46,10 +48,8 @@ export const createEventEmitter = <
   };
 
   const dispatchEvent = <K extends keyof T>(eventName: K, ...args: T[K]) => {
-    const listeners = eventListenerMap[eventName];
-
-    if (listeners) {
-      [...listeners].forEach((listener) => listener(...args));
+    for (const listener of eventListenerMap[eventName] ?? []) {
+      listener(...args);
     }
   };
 
@@ -73,6 +73,7 @@ export const useEvent = <T extends BaseEventTypes, K extends keyof T>(
     return () => {
       eventEmitter.removeEventListener(eventName, handler);
     };
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, deps);
 };
 

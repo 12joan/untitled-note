@@ -1,9 +1,8 @@
-import React from 'react';
+import { EditorStyleInput } from '~/components/EditorStyleInput';
 import { useAppContext } from '~/lib/appContext';
 import { useLocalProject } from '~/lib/useLocalProject';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
-import { EditorStyleInput } from '~/components/EditorStyleInput';
 
 export const AppearanceSection = () => {
   const toggleSettingsModal = useAppContext('toggleSettingsModal');

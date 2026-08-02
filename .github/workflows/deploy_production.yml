@@ -1,26 +1,19 @@
-name: Deploy to production
+name: Deploy production
 
 on: workflow_dispatch
 
 jobs:
   deploy_production:
+    name: 'Deploy production'
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: true
+
     steps:
-    - uses: actions/checkout@v2
-
-    # Caching is making builds slower:
-    # https://github.com/satackey/action-docker-layer-caching/issues/305
-    # - uses: satackey/action-docker-layer-caching@v0.0.11
-    #   continue-on-error: true
-
-    - uses: docker/login-action@v3
-      with:
-        registry: ${{ secrets.REGISTRY_URL }}
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-
-    - uses: docker/build-push-action@v6
-      with:
-        push: true
-        tags: ${{ secrets.REGISTRY_URL }}/${{ secrets.REGISTRY_REPO }}:production
+      - uses: actions/checkout@v6
+      - uses: 12joan/build-and-push-image@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

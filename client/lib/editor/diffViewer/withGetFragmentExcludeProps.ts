@@ -1,4 +1,8 @@
-import { isElement, PlateEditor, TDescendant } from '~/lib/editor/plate';
+import {
+  isElement,
+  type PlateEditor,
+  type TDescendant,
+} from '~/lib/editor/plate';
 
 export const withGetFragmentExcludeProps =
   (...propNames: string[]) =>
@@ -9,9 +13,9 @@ export const withGetFragmentExcludeProps =
       const fragment = structuredClone(getFragment());
 
       const removeDiff = (node: TDescendant) => {
-        propNames.forEach((propName) => {
+        for (const propName of propNames) {
           delete node[propName];
-        });
+        }
 
         if (isElement(node)) node.children.forEach(removeDiff);
       };

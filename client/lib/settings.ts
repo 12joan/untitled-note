@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { updateSettings } from '~/lib/apis/settings';
 import { useAppContext } from '~/lib/appContext';
 import { handleUpdateSettingsError } from '~/lib/handleErrors';
-import { Future, orDefaultFuture } from '~/lib/monads';
-import { Settings } from '~/lib/types';
+import { type Future, orDefaultFuture } from '~/lib/monads';
+import type { Settings } from '~/lib/types';
 import { useLocal } from '~/lib/useLocal';
 
 const defaultSettings: Settings = {

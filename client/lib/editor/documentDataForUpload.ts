@@ -3,8 +3,12 @@ import {
   getAttachmentIsUploading,
 } from '~/lib/editor/attachments';
 import { filterDescendants } from '~/lib/editor/filterDescendants';
-import { isElement, PlateEditor, TDescendant } from '~/lib/editor/plate';
-import { AttachmentElement } from './attachments/types';
+import {
+  isElement,
+  type PlateEditor,
+  type TDescendant,
+} from '~/lib/editor/plate';
+import type { AttachmentElement } from './attachments/types';
 import { ELEMENT_MENTION_INPUT } from './mentions';
 
 const excludedTypes = [ELEMENT_MENTION_INPUT];

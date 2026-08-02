@@ -1,6 +1,6 @@
-import { Selection } from 'slate';
+import type { Selection } from 'slate';
 import { normalizeRange } from '~/lib/editor/normalizeRange';
-import { focusEditor, PlateEditor } from '~/lib/editor/plate';
+import { focusEditor, type PlateEditor } from '~/lib/editor/plate';
 
 const selectionForDocument: Record<number, Selection> = {};
 

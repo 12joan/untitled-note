@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { dispatchGlobalEvent, useGlobalEvent } from '~/lib/globalEvents';
 
-export type GlobalStoreTypes = {
+export interface GlobalStoreTypes {
   dragCursorPosition: number | null;
-};
+}
 
 const globalStore: GlobalStoreTypes = {
   dragCursorPosition: null,

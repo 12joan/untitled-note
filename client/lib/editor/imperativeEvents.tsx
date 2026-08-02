@@ -1,6 +1,6 @@
-import React, {
-  DependencyList,
-  KeyboardEvent,
+import {
+  type DependencyList,
+  type KeyboardEvent,
   useEffect,
   useMemo,
   useState,
@@ -8,19 +8,20 @@ import React, {
 import {
   createEventEmitter,
   dispatchEvent,
-  EventEmitter,
-  EventListener,
+  type EventEmitter,
+  type EventListener,
   useEvent,
 } from '~/lib/customEvents';
 import {
   createPluginFactory,
-  PlateEditor,
-  PlatePlugin,
+  type PlateEditor,
+  type PlatePlugin,
   useEditorRef,
-  Value,
+  type Value,
 } from '~/lib/editor/plate';
-import { LinkModalProps } from './links/types';
+import type { LinkModalProps } from './links/types';
 
+// biome-ignore lint/style/useConsistentTypeDefinitions: cannot use interface
 type ImperativeEventTypes = {
   change: [Value];
   keyDown: [KeyboardEvent];
@@ -31,9 +32,9 @@ type ImerativeEventEmitter = EventEmitter<ImperativeEventTypes>;
 
 const editorEventEmitterMap = new WeakMap<PlateEditor, ImerativeEventEmitter>();
 
-export type ImperativeEventsPlugin = {
+export interface ImperativeEventsPlugin {
   imperativeEventEmitter: ImerativeEventEmitter;
-};
+}
 
 export const dispatchEditorEvent = <K extends keyof ImperativeEventTypes>(
   editor: PlateEditor,
@@ -44,7 +45,7 @@ export const dispatchEditorEvent = <K extends keyof ImperativeEventTypes>(
   if (imperativeEventEmitter) {
     dispatchEvent(imperativeEventEmitter, type, ...args);
   } else {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: logging
     console.warn('No imperativeEventEmitter found for editor');
   }
 };
@@ -52,6 +53,7 @@ export const dispatchEditorEvent = <K extends keyof ImperativeEventTypes>(
 const createImperativeEventsPlugin =
   createPluginFactory<ImperativeEventsPlugin>({
     key: 'imperativeEvents',
+    // biome-ignore lint/suspicious/noThenProperty: required for Plate
     then: (editor, { options: { imperativeEventEmitter } }) => ({
       /**
        * The old approach using renderAboveEditable and contexts was causing
@@ -98,6 +100,7 @@ export const useImperativeEventsPlugins = (): PlatePlugin[] => {
     createEventEmitter<ImperativeEventTypes>()
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   return useMemo(
     () => [
       createImperativeEventsPlugin({

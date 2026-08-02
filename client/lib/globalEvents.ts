@@ -1,21 +1,20 @@
-import { DependencyList } from 'react';
+import type { DependencyList } from 'react';
+import type { ConnectionStatus } from '~/channels/connectionStatus';
 import {
-  BaseEventTypes,
+  type BaseEventTypes,
   createEventEmitter,
   dispatchEvent,
-  EventListener,
+  type EventListener,
   useEvent,
 } from '~/lib/customEvents';
-import { GlobalStoreTypes } from '~/lib/globalStore';
-import { Toast } from '~/lib/types';
-import { UploadProgressEvent } from '~/lib/uploadFile';
-
-import { ConnectionStatus } from '~/channels/connectionStatus';
+import type { GlobalStoreTypes } from '~/lib/globalStore';
+import type { Toast } from '~/lib/types';
+import type { UploadProgressEvent } from '~/lib/uploadFile';
 
 export type GlobalEventTypes = BaseEventTypes & {
   'document:delete': [{ documentId: number }];
   's3File:uploadProgress': [
-    { s3FileId: number; progressEvent: UploadProgressEvent }
+    { s3FileId: number; progressEvent: UploadProgressEvent },
   ];
   's3File:uploadComplete': [{ s3FileId: number }];
   's3File:delete': [{ s3FileId: number }];

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { updateDocument } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
 import { useDragTarget } from '~/lib/dragData';

@@ -12,16 +12,16 @@
  */
 
 import {
-  BaseEditor,
-  BaseElement,
+  type BaseEditor,
+  type BaseElement,
   Editor,
   Node,
   Path,
-  Point,
+  type Point,
   Range,
   Text,
 } from 'slate';
-import { PlateEditor } from '~/lib/editor/plate';
+import type { PlateEditor } from '~/lib/editor/plate';
 
 /**
  * Normalize a 'pending point' a.k.a a point based on the dom state before applying

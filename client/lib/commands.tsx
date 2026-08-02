@@ -1,4 +1,10 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import AccountIcon from '~/components/icons/AccountIcon';
+import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
+import OverviewIcon from '~/components/icons/OverviewIcon';
+import RecentIcon from '~/components/icons/RecentIcon';
+import SettingsIcon from '~/components/icons/SettingsIcon';
+import TagsIcon from '~/components/icons/TagsIcon';
 import { useAppContext } from '~/lib/appContext';
 import {
   decreaseEditorFontSize,
@@ -6,7 +12,7 @@ import {
   resetEditorFontSize,
 } from '~/lib/editorFontSize';
 import { envSpecific, FIND_SUPPORTED } from '~/lib/environment';
-import { IIC, iic, liftToIIC } from '~/lib/iic';
+import { type IIC, iic, liftToIIC } from '~/lib/iic';
 import { getSequential } from '~/lib/keyboardShortcuts/getSequential';
 import { parseKeyboardShortcut } from '~/lib/keyboardShortcuts/parseKeyboardShortcut';
 import {
@@ -17,20 +23,14 @@ import {
   recentlyViewedPath,
   tagsPath,
 } from '~/lib/routes';
-import { KeyboardShortcutConfig } from '~/lib/types';
+import type { KeyboardShortcutConfig } from '~/lib/types';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
-import AccountIcon from '~/components/icons/AccountIcon';
-import NewDocumentIcon from '~/components/icons/NewDocumentIcon';
-import OverviewIcon from '~/components/icons/OverviewIcon';
-import RecentIcon from '~/components/icons/RecentIcon';
-import SettingsIcon from '~/components/icons/SettingsIcon';
-import TagsIcon from '~/components/icons/TagsIcon';
 
-export type BaseCommand = {
+export interface BaseCommand {
   id: string;
   enabled?: boolean;
   label: string;
-};
+}
 
 export type BaseActionCommand = BaseCommand & {
   action: (altBehaviour?: boolean) => IIC;

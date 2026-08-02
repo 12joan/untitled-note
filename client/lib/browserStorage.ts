@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 type Callback = () => void;
 type Callbacks = Set<Callback>;
@@ -13,8 +13,11 @@ const makeBrowserStorage = (
 ) => {
   const subscribers = new Map<string, Callbacks>();
 
-  const notifyForKey = (key: string) =>
-    subscribers.get(key)?.forEach((callback) => callback());
+  const notifyForKey = (key: string) => {
+    for (const callback of subscribers.get(key) ?? []) {
+      callback();
+    }
+  };
 
   const getStorage = <T>(key: string): T | null => {
     const value = storage.getItem(key);
@@ -47,6 +50,7 @@ const makeBrowserStorage = (
     const getValue = () => getStorage<T>(key) ?? defaultValue;
     const [value, setValue] = useState<T>(getValue);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     useEffect(() => {
       if (!subscribers.has(key)) {
         subscribers.set(key, new Set());

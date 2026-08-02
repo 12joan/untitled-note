@@ -1,4 +1,4 @@
-import { DependencyList, useCallback, useRef } from 'react';
+import { type DependencyList, useCallback, useRef } from 'react';
 import { useStateWhileMounted } from '~/lib/useStateWhileMounted';
 
 export const useDebounce = <T extends unknown[]>(
@@ -22,6 +22,7 @@ export const useDebounce = <T extends unknown[]>(
         setIsDirty(false);
       }, delay);
     }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, deps);
 
   return [debouncedFunction, isDirty] as const;

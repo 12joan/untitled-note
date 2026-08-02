@@ -25,7 +25,7 @@ import {
   createStrikethroughPlugin,
   createTabbablePlugin,
   createTrailingBlockPlugin,
-  PlatePlugin,
+  type PlatePlugin,
 } from '~/lib/editor/plate';
 import { resetNodeOptions } from '~/lib/editor/resetNode';
 import { createSelectionToolbarPlugin } from '~/lib/editor/selectionToolbar';
@@ -92,6 +92,7 @@ export const usePlugins = ({
 
   const attachmentPlugins = useAttachmentPlugins();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   return useMemo(
     () =>
       createPlugins(

@@ -1,7 +1,7 @@
 import {
-  DependencyList,
-  Dispatch,
-  SetStateAction,
+  type DependencyList,
+  type Dispatch,
+  type SetStateAction,
   useCallback,
   useLayoutEffect,
   useState,
@@ -34,6 +34,7 @@ export const useTemporaryState = <T>(
 
   useTimeout(reset, resetAfter ?? null, [resetAfter, value]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useLayoutEffect(reset, dependencies);
 
   return [value, setValue, reset];

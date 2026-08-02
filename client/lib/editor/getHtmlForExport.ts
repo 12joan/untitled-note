@@ -1,9 +1,9 @@
 import pretty from 'pretty';
-import { TDescendant, TElement, TText } from '~/lib/editor/plate';
+import type { TDescendant, TElement, TText } from '~/lib/editor/plate';
 
-export type GetHTMLForExportOptions = {
+export interface GetHTMLForExportOptions {
   title: string | null;
-};
+}
 
 const plateElementToDomNode = (
   node: TElement,
@@ -20,24 +20,27 @@ const plateElementToDomNode = (
     case 'h1':
       return document.createElement(title === null ? 'h1' : 'h2');
 
-    case 'a':
+    case 'a': {
       const anchor = document.createElement('a');
       anchor.href = node.url as string;
       return anchor;
+    }
 
     case 'code_block':
       return document.createElement('pre');
 
     // FIXME: We don't currently have a static URL for attachments
-    case 'attachment':
+    case 'attachment': {
       const placeholder = document.createElement('p');
       placeholder.innerText = `<${node.filename}>`;
       return placeholder;
+    }
 
-    case 'mention':
+    case 'mention': {
       const mention = document.createElement('span');
       mention.innerText = node.fallbackText as string;
       return mention;
+    }
 
     case 'lic':
     case 'code_line':
@@ -45,7 +48,7 @@ const plateElementToDomNode = (
       return null;
 
     default:
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: logging
       console.warn('Unknown element type', node.type);
       return null;
   }
@@ -70,7 +73,7 @@ const plateTextToDomNode = (node: TText): HTMLElement | Text => {
       const wrapperType = wrappersForMarkType[key];
 
       if (!wrapperType) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.warn('Unknown mark type', key);
         return domNode;
       }

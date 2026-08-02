@@ -1,17 +1,17 @@
-import { MutableRefObject, RefCallback } from 'react';
+import type { MutableRefObject, RefCallback } from 'react';
 
 export type Ref<T> = RefCallback<T> | MutableRefObject<T>;
 
 export const mergeRefs =
   <T>(upstreamRefs: (Ref<T> | undefined)[]) =>
   (current: T) => {
-    upstreamRefs.forEach((ref) => {
+    for (const ref of upstreamRefs) {
       if (typeof ref === 'function') {
         ref(current);
       } else if (ref) {
         ref.current = current;
       }
-    });
+    }
   };
 
 export const mapRef =

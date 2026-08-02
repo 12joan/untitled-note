@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { OverviewLink } from '~/lib/routes';
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
+import { OverviewLink } from '~/lib/routes';
 
 export interface BackButtonProps extends Record<string, any> {
   className?: string;
@@ -14,7 +14,7 @@ export const BackButton = ({
   const linkRef = useRef<any>();
 
   const { state } = useLocation();
-  const { linkOriginator = undefined } = state || {};
+  const { linkOriginator } = state || {};
 
   const label = linkOriginator ?? 'Overview';
 

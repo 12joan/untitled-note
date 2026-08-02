@@ -1,8 +1,10 @@
-import React from 'react';
-import { automaticSnapshotsOptions, AutoSnapshotsOption } from '~/lib/types';
+import {
+  type AutoSnapshotsOption,
+  automaticSnapshotsOptions,
+} from '~/lib/types';
 import { useOverrideable } from '~/lib/useOverrideable';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
-import { DocumentSettingsModalSectionProps } from './types';
+import type { DocumentSettingsModalSectionProps } from './types';
 
 const optionLabels: Record<AutoSnapshotsOption | 'null', string> = {
   null: 'Sync with project',

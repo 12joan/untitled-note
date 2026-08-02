@@ -1,36 +1,22 @@
-import React, {
-  ElementType,
+import { useDndContext } from '@dnd-kit/core';
+import {
+  type ElementType,
   forwardRef,
-  HTMLAttributes,
-  ReactNode,
+  type HTMLAttributes,
+  type ReactNode,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { useDndContext } from '@dnd-kit/core';
-import { deleteProjectFolder as deleteProjectFolderAPI } from '~/lib/apis/projectFolder';
-import { useAppContext } from '~/lib/appContext';
-import { describeProjectPosition } from '~/lib/dragAndDrop/projectsBar/accessibility';
-import { ProjectPositionDropLine } from '~/lib/dragAndDrop/projectsBar/ProjectsBarDropLine';
-import { useDraggableProjectFolder } from '~/lib/dragAndDrop/projectsBar/useDraggableProjectFolder';
-import { useDroppableProjectFolder } from '~/lib/dragAndDrop/projectsBar/useDroppableProjectFolder';
-import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { handleDeleteProjectFolderError } from '~/lib/handleErrors';
-import { mapWithBeforeAndAfter } from '~/lib/mapWithBeforeAndAfter';
-import { mergeRefs } from '~/lib/refUtils';
-import { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
-import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
-import { useNewProject } from '~/lib/useNewProject';
-import { useRenameProjectFolder } from '~/lib/useRenameProjectFolder';
 import { Dropdown, DropdownItem } from '~/components/Dropdown';
 import AddExistingProjectIcon from '~/components/icons/AddExistingProjectIcon';
 import ChevronLeftIcon from '~/components/icons/ChevronLeftIcon';
 import DeleteIcon from '~/components/icons/DeleteIcon';
 import EditIcon from '~/components/icons/EditIcon';
 import LargePlusIcon from '~/components/icons/LargePlusIcon';
-import { IconProps } from '~/components/icons/makeIcon';
 import MinusIcon from '~/components/icons/MinusIcon';
+import type { IconProps } from '~/components/icons/makeIcon';
 import OverflowMenuIcon from '~/components/icons/OverflowMenuIcon';
 import PlusIcon from '~/components/icons/PlusIcon';
 import RemoveProjectIcon from '~/components/icons/RemoveProjectIcon';
@@ -41,9 +27,26 @@ import {
 } from '~/components/ProjectListItem';
 import { ProjectsBarActiveIndicator } from '~/components/ProjectsBarActiveIndicator';
 import { ProjectsBarSubtleButton } from '~/components/ProjectsBarSubtleButton';
-import { TippyInstance } from '~/components/Tippy';
+import type { TippyInstance } from '~/components/Tippy';
 import { Tooltip } from '~/components/Tooltip';
 import { WithCloseButton } from '~/components/WithCloseButton';
+import { deleteProjectFolder as deleteProjectFolderAPI } from '~/lib/apis/projectFolder';
+import { useAppContext } from '~/lib/appContext';
+import { describeProjectPosition } from '~/lib/dragAndDrop/projectsBar/accessibility';
+import { ProjectPositionDropLine } from '~/lib/dragAndDrop/projectsBar/ProjectsBarDropLine';
+import { useDraggableProjectFolder } from '~/lib/dragAndDrop/projectsBar/useDraggableProjectFolder';
+import { useDroppableProjectFolder } from '~/lib/dragAndDrop/projectsBar/useDroppableProjectFolder';
+import {
+  type GroupedClassNames,
+  groupedClassNames,
+} from '~/lib/groupedClassNames';
+import { handleDeleteProjectFolderError } from '~/lib/handleErrors';
+import { mapWithBeforeAndAfter } from '~/lib/mapWithBeforeAndAfter';
+import { mergeRefs } from '~/lib/refUtils';
+import type { Project, ProjectFolder as TProjectFolder } from '~/lib/types';
+import { useEffectAfterFirst } from '~/lib/useEffectAfterFirst';
+import { useNewProject } from '~/lib/useNewProject';
+import { useRenameProjectFolder } from '~/lib/useRenameProjectFolder';
 
 export interface ProjectFolderProps {
   folder: TProjectFolder;
@@ -102,6 +105,7 @@ export const ProjectFolder = ({
    * conditional prevents the folder from closing when the user drops the
    * project inside the folder or initiates a drag from within the folder.
    */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     if (isDraggingSomething) {
       if (isDragOverOrInside) {
@@ -195,41 +199,38 @@ export const ProjectFolderTrigger = forwardRef<
       ...props
     },
     ref
-  ) => {
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={groupedClassNames(
-          {
-            size: 'size-12',
-            btn: 'btn',
-            border:
-              'border border-dashed border-plain-400 dark:border-plain-500',
-            padding: 'p-1.5',
-            grid: 'grid gap-1 grid-cols-2',
-            touchNoDrag: 'touch-none',
-            over: isDragOver && 'focus-ring ring-offset-2',
-            dragging: isDragging && 'opacity-50',
-          },
-          className
-        )}
-        aria-label={folder.name}
-        data-testid={`project-folder-${folder.name}`}
-        {...props}
-      >
-        {projects.slice(0, 4).map((project) => (
-          <ProjectIcon
-            key={project.id}
-            project={project}
-            className="aspect-square rounded shadow-sm"
-            textScale={0.5}
-            aria-hidden="true"
-          />
-        ))}
-      </button>
-    );
-  }
+  ) => (
+    <button
+      ref={ref}
+      type="button"
+      className={groupedClassNames(
+        {
+          size: 'size-12',
+          btn: 'btn',
+          border: 'border border-dashed border-plain-400 dark:border-plain-500',
+          padding: 'p-1.5',
+          grid: 'grid gap-1 grid-cols-2',
+          touchNoDrag: 'touch-none',
+          over: isDragOver && 'focus-ring ring-offset-2',
+          dragging: isDragging && 'opacity-50',
+        },
+        className
+      )}
+      aria-label={folder.name}
+      data-testid={`project-folder-${folder.name}`}
+      {...props}
+    >
+      {projects.slice(0, 4).map((project) => (
+        <ProjectIcon
+          key={project.id}
+          project={project}
+          className="aspect-square rounded shadow-sm"
+          textScale={0.5}
+          aria-hidden="true"
+        />
+      ))}
+    </button>
+  )
 );
 
 interface ProjectFolderContentProps {
@@ -528,6 +529,8 @@ const ProjectButton = ({
   'aria-label': ariaLabel,
 }: ProjectButtonProps) => {
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: legacy
+    // biome-ignore lint/a11y/useKeyWithClickEvents: legacy
     <div className="relative cursor-pointer" onClick={onClick}>
       <Tooltip content={project.name} placement="bottom">
         <ProjectIcon

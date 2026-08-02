@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { useFocused } from 'slate-react';
 import {
   createPluginFactory,

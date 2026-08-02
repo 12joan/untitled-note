@@ -1,4 +1,4 @@
-import { Document, PartialDocument } from '~/lib/types';
+import type { Document, PartialDocument } from '~/lib/types';
 
 export const isFullDocument = (
   doc: Document | PartialDocument

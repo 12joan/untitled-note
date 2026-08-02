@@ -1,7 +1,6 @@
-import React from 'react';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { commonClassNames } from '../commonClassNames';
-import { BaseAttachmentProps } from '../types';
+import type { BaseAttachmentProps } from '../types';
 
 export const DeletedAttachment = ({
   className: classNameProp,

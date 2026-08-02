@@ -1,11 +1,16 @@
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import DocumentIcon from '~/components/icons/DocumentIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import TagIcon from '~/components/icons/TagIcon';
+import { StyledModal, type StyledModalProps } from '~/components/Modal';
+import { ProjectIcon } from '~/components/ProjectIcon';
 import { fetchSearchResults } from '~/lib/apis/search';
 import { useAppContext } from '~/lib/appContext';
 import { searchCommands } from '~/lib/commands';
 import { filterPredicate } from '~/lib/filterPredicate';
-import { IIC, liftToIIC, mergeIICs, useDeployIICs } from '~/lib/iic';
+import { type IIC, liftToIIC, mergeIICs, useDeployIICs } from '~/lib/iic';
 import {
-  FutureServiceResult,
+  type FutureServiceResult,
   orDefaultFuture,
   orDefaultFutureServiceResult,
   pendingFutureServiceResult,
@@ -14,24 +19,19 @@ import {
   unwrapFutureServiceResult,
 } from '~/lib/monads';
 import { documentPath, projectPath, tagPath } from '~/lib/routes';
-import { DocumentSearchResult } from '~/lib/types';
+import type { DocumentSearchResult } from '~/lib/types';
 import { useCombobox } from '~/lib/useCombobox';
 import { useModal } from '~/lib/useModal';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
 import { useWaitUntilSettled } from '~/lib/useWaitUntilSettled';
-import DocumentIcon from '~/components/icons/DocumentIcon';
-import SearchIcon from '~/components/icons/SearchIcon';
-import TagIcon from '~/components/icons/TagIcon';
-import { StyledModal, StyledModalProps } from '~/components/Modal';
-import { ProjectIcon } from '~/components/ProjectIcon';
 
-type Suggestion = {
+interface Suggestion {
   key: string;
   label: string;
   icon?: ReactNode;
   description?: string | { __html: string };
   onCommit: (altBehaviour: boolean) => IIC;
-};
+}
 
 interface MakeDynamicSuggestionOptions<T> extends Partial<Suggestion> {
   getKey: (item: T) => Suggestion['key'];
@@ -77,11 +77,10 @@ const makeListSource =
     include = () => true,
     ...rest
   }: MakeListSourceOptions<T>): SuggestionSource =>
-  (searchQuery, handleAction) => {
-    return list
+  (searchQuery, handleAction) =>
+    list
       .filter((item) => include(item, searchQuery))
       .map((item) => makeDynamicSuggestion(item, handleAction, rest));
-  };
 
 interface MakeFilteredListSourceOptions<T> extends MakeListSourceOptions<T> {
   getFilterable: (item: T) => string;
@@ -172,6 +171,7 @@ const SearchModal = ({
 
   const handleAction = (action: IIC) => mergeIICs(action, liftToIIC(onClose)());
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     setFsrSearchResults(pendingFutureServiceResult());
   }, [trimmedSearchQuery]);
@@ -192,6 +192,7 @@ const SearchModal = ({
     }
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const suggestions: Suggestion[] = useMemo(() => {
     const suggestionSources: SuggestionSource[] = [
       commandsSource,
@@ -377,7 +378,7 @@ const SearchModal = ({
                     {typeof description === 'object' && (
                       <div
                         className="text-sm"
-                        // eslint-disable-next-line react/no-danger
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: acceptable risk
                         dangerouslySetInnerHTML={description}
                       />
                     )}

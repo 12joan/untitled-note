@@ -1,8 +1,8 @@
-import React, {
-  Context,
+import {
   createContext as _createContext,
-  ReactNode,
   useContext as _useContext,
+  type Context,
+  type ReactNode,
   useMemo,
 } from 'react';
 import { transformValues } from '~/lib/transformValues';
@@ -13,9 +13,9 @@ export type ProviderProps<T> = Partial<T> & {
   children: ReactNode;
 };
 
-export const createContext = <
-  T extends Record<string, unknown>
->(defaultValues: { [K in keyof T]: WrappedValue<T[K]> }) => {
+export const createContext = <T extends Record<string, unknown>>(
+  defaultValues: { [K in keyof T]: WrappedValue<T[K]> }
+) => {
   const contexts = transformValues<
     { [K in keyof T]: WrappedValue<T[K]> },
     { [K in keyof T]: Context<WrappedValue<T[K]>> }
@@ -49,13 +49,13 @@ export const createContext = <
   const Provider = ({ children, ...values }: ProviderProps<T>): JSX.Element => {
     let wrappedChildren = children as JSX.Element;
 
-    Object.entries(values).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(values)) {
       wrappedChildren = (
         <SingleProvider contextKey={key} value={value}>
           {wrappedChildren}
         </SingleProvider>
       );
-    });
+    }
 
     return wrappedChildren;
   };

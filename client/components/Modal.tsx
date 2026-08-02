@@ -1,8 +1,11 @@
-import React, { ReactNode } from 'react';
 import { Dialog } from '@headlessui/react';
-import { AppContextProvider } from '~/lib/appContext';
-import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
+import type { ReactNode } from 'react';
 import { WithCloseButton } from '~/components/WithCloseButton';
+import { AppContextProvider } from '~/lib/appContext';
+import {
+  type GroupedClassNames,
+  groupedClassNames,
+} from '~/lib/groupedClassNames';
 
 export interface ModalRootProps extends Record<string, any> {
   open: boolean;
@@ -40,20 +43,18 @@ export interface ModalTitleProps {
   children: ReactNode;
 }
 
-export const ModalTitle = ({ className, children }: ModalTitleProps) => {
-  return (
-    <Dialog.Title
-      className={groupedClassNames(
-        {
-          heading: 'h2',
-          select: 'select-none',
-        },
-        className
-      )}
-      children={children}
-    />
-  );
-};
+export const ModalTitle = ({ className, children }: ModalTitleProps) => (
+  <Dialog.Title
+    className={groupedClassNames(
+      {
+        heading: 'h2',
+        select: 'select-none',
+      },
+      className
+    )}
+    children={children}
+  />
+);
 
 export interface ModalTitleWithCloseButtonProps extends ModalTitleProps {
   onClose: () => void;
@@ -62,13 +63,11 @@ export interface ModalTitleWithCloseButtonProps extends ModalTitleProps {
 export const ModalTitleWithCloseButton = ({
   onClose,
   ...otherProps
-}: ModalTitleWithCloseButtonProps) => {
-  return (
-    <WithCloseButton onClose={onClose}>
-      <ModalTitle {...otherProps} />
-    </WithCloseButton>
-  );
-};
+}: ModalTitleWithCloseButtonProps) => (
+  <WithCloseButton onClose={onClose}>
+    <ModalTitle {...otherProps} />
+  </WithCloseButton>
+);
 
 export const ModalPanel = Dialog.Panel;
 

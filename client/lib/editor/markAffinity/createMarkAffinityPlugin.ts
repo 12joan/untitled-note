@@ -6,14 +6,11 @@ import {
 import { getMarkBoundary } from './getMarkBoundary';
 import { getMarkBoundaryAffinity } from './getMarkBoundaryAffinity';
 import { setMarkBoundaryAffinity } from './setMarkBoundaryAffinity';
-import { MarkBoundary } from './types';
+import type { MarkBoundary } from './types';
 
 const markBoundaryHasMark = (markBoundary: MarkBoundary, mark: string) => {
   const [backwardLeafEntry, forwardLeafEntry] = markBoundary;
-  return (
-    (backwardLeafEntry && backwardLeafEntry[0][mark]) ||
-    (forwardLeafEntry && forwardLeafEntry[0][mark])
-  );
+  return backwardLeafEntry?.[0][mark] || forwardLeafEntry?.[0][mark];
 };
 
 export const KEY_MARK_AFFINITY = 'mark-affinity';

@@ -3,19 +3,20 @@ import {
   createPlateEditor,
   deserializeHtml,
   ELEMENT_PARAGRAPH,
-  PlatePlugin,
+  type PlatePlugin,
 } from '~/lib/editor/plate';
-import { Document } from '~/lib/types';
+import type { Document } from '~/lib/types';
 
-export type UseInitialValueOptions = {
+export interface UseInitialValueOptions {
   initialDocument: Document;
   plugins: PlatePlugin[];
-};
+}
 
 export const useInitialValue = ({
   initialDocument,
   plugins,
 }: UseInitialValueOptions) =>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useMemo(() => {
     const bodyFormat = initialDocument.body_type.split('/')[0];
     const emptyDocument = [

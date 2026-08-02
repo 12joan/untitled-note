@@ -1,6 +1,6 @@
 import {
   createPluginFactory,
-  TriggerComboboxPlugin,
+  type TriggerComboboxPlugin,
   withTriggerCombobox,
 } from '~/lib/editor/plate';
 

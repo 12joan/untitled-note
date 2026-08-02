@@ -1,23 +1,26 @@
-import React, {
-  CSSProperties,
-  ElementType,
+import type { Modifier } from '@popperjs/core';
+import maxSize from 'popper-max-size-modifier';
+import {
+  type CSSProperties,
+  type ElementType,
   forwardRef,
-  MouseEvent,
-  ReactNode,
+  type MouseEvent,
+  type ReactNode,
   useMemo,
   useRef,
 } from 'react';
-import { Modifier } from '@popperjs/core';
-import maxSize from 'popper-max-size-modifier';
 import { followCursor } from 'tippy.js';
+import type { IconProps } from '~/components/icons/makeIcon';
+import { Tippy, type TippyInstance, type TippyProps } from '~/components/Tippy';
 import { AppContextProvider, useAppContext } from '~/lib/appContext';
-import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import { PolyProps } from '~/lib/polymorphic';
-import { mergeRefs, Ref } from '~/lib/refUtils';
+import {
+  type GroupedClassNames,
+  groupedClassNames,
+} from '~/lib/groupedClassNames';
+import type { PolyProps } from '~/lib/polymorphic';
+import { mergeRefs, type Ref } from '~/lib/refUtils';
 import { useEventListener } from '~/lib/useEventListener';
 import { useFocusOut } from '~/lib/useFocusOut';
-import { IconProps } from '~/components/icons/makeIcon';
-import { Tippy, TippyInstance, TippyProps } from '~/components/Tippy';
 
 const applyMaxSize: Modifier<any, any> = {
   name: 'applyMaxSize',
@@ -93,6 +96,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       closeOnFocusOut ? close : () => {}
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
     const popperOptions = useMemo(
       () => ({
         ...propPopperOptions,
@@ -198,19 +202,17 @@ export const DropdownItem = <C extends ElementType = 'button'>({
 export const ContextMenuDropdown = ({
   popperOptions,
   ...dropdownProps
-}: DropdownProps) => {
-  return (
-    <Dropdown
-      plugins={[followCursor]}
-      followCursor="initial"
-      trigger="contextmenu"
-      placement="bottom-start"
-      offset={[0, 0]}
-      popperOptions={{
-        ...popperOptions,
-        strategy: 'fixed',
-      }}
-      {...dropdownProps}
-    />
-  );
-};
+}: DropdownProps) => (
+  <Dropdown
+    plugins={[followCursor]}
+    followCursor="initial"
+    trigger="contextmenu"
+    placement="bottom-start"
+    offset={[0, 0]}
+    popperOptions={{
+      ...popperOptions,
+      strategy: 'fixed',
+    }}
+    {...dropdownProps}
+  />
+);

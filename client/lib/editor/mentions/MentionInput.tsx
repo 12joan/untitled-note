@@ -1,13 +1,13 @@
-import React, {
+import {
   forwardRef,
-  InputHTMLAttributes,
+  type InputHTMLAttributes,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { PointRef } from 'slate';
+import type { PointRef } from 'slate';
 import { createDocument } from '~/lib/apis/document';
 import { useAppContext } from '~/lib/appContext';
 import {
@@ -17,7 +17,7 @@ import {
   insertNodes,
   insertText,
   moveSelection,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
   setSelection,
   useComboboxInput,
   useHTMLInputCursorState,
@@ -28,7 +28,7 @@ import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import { justCreatedIds } from './justCreatedIds';
 import { ELEMENT_MENTION } from './plugin';
-import { DocumentMention } from './types';
+import type { DocumentMention } from './types';
 import { useMentionSuggestions } from './useMentionSuggestions';
 
 const trigger = '@';
@@ -219,26 +219,24 @@ export const MentionInput = ({
 const AutoSizingInput = forwardRef<
   HTMLInputElement,
   InputHTMLAttributes<HTMLInputElement>
->(({ value, ...props }, ref) => {
-  return (
-    <>
-      @
-      <span className="relative min-h-[1lh]">
-        <span
-          className="invisible overflow-hidden text-nowrap"
-          aria-hidden="true"
-        >
-          {value || '\u200B'}
-        </span>
-
-        <input
-          ref={ref}
-          type="input"
-          value={value}
-          className="absolute left-0 top-0 size-full bg-transparent no-focus-ring"
-          {...props}
-        />
+>(({ value, ...props }, ref) => (
+  <>
+    @
+    <span className="relative min-h-[1lh]">
+      <span
+        className="invisible overflow-hidden text-nowrap"
+        aria-hidden="true"
+      >
+        {value || '\u200B'}
       </span>
-    </>
-  );
-});
+
+      <input
+        ref={ref}
+        type="input"
+        value={value}
+        className="absolute left-0 top-0 size-full bg-transparent no-focus-ring"
+        {...props}
+      />
+    </span>
+  </>
+));

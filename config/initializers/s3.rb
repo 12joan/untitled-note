@@ -43,7 +43,12 @@ else
   internal_bucket = internal_s3.bucket(bucket_name)
   external_bucket = external_s3.bucket(bucket_name)
 
-  internal_bucket.create unless internal_bucket.exists?
+  begin
+    internal_bucket.create unless internal_bucket.exists?
+  rescue Aws::S3::Errors::BucketAlreadyOwnedByYou
+    # This has been causing errors in CI
+    Rails.logger.warn('Bucket already exists even though internal_bucket.exists? returned true')
+  end
 
   Rails.application.config.s3_bucket = internal_bucket
   Rails.application.config.external_s3_bucket = external_bucket

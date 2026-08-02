@@ -1,11 +1,8 @@
-x-healthcheck: &healthcheck
-  interval: 1s
-  retries: 40
-
 services:
   web:
-    build: .
-    command: 'yarn dev'
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     environment: &common-env
       RAILS_ENV: development
       DEMO_INSTANCE: 'true'
@@ -34,15 +31,16 @@ services:
         condition: service_healthy
       typesense:
         condition: service_healthy
-    healthcheck:
-      <<: *healthcheck
-      test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/3000"'
 
   clockwork:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     entrypoint: ''
-    command: 'clockwork config/clockwork.rb'
-    environment: *common-env
+    command: 'bundle exec clockwork config/clockwork.rb'
+    environment:
+      <<: *common-env
+      SKIP_HEALTHCHECK: true
     env_file: .env
     volumes:
       - .:/app
@@ -59,13 +57,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
     healthcheck:
-      <<: *healthcheck
+      interval: 1s
+      retries: 40
       test: '/usr/bin/pg_isready -U postgres'
 
   minio:
     image: minio/minio
     command: 'server /data'
-    environment: 
+    environment:
       MINIO_ROOT_USER: root
       MINIO_ROOT_PASSWORD: minio-password
     env_file: .env
@@ -74,13 +73,15 @@ services:
     volumes:
       - minio:/data
     healthcheck:
-      <<: *healthcheck
+      interval: 1s
+      retries: 40
       test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/9000"'
 
   redis:
     image: redis
     healthcheck:
-      <<: *healthcheck
+      interval: 1s
+      retries: 40
       test: 'redis-cli --raw incr ping'
 
   typesense:
@@ -89,7 +90,8 @@ services:
     volumes:
       - typesense:/data
     healthcheck:
-      <<: *healthcheck
+      interval: 1s
+      retries: 40
       test: 'timeout 1 bash -c "</dev/tcp/127.0.0.1/8108"'
 
 volumes:

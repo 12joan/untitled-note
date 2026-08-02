@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Meter } from '~/components/Meter';
 import { filesize } from '~/lib/filesize';
 import { useGlobalEvent } from '~/lib/globalEvents';
 import { groupedClassNames } from '~/lib/groupedClassNames';
-import { Meter } from '~/components/Meter';
 import { commonClassNames } from '../commonClassNames';
-import { AttachmentElementProps } from '../types';
+import type { AttachmentElementProps } from '../types';
 import { useSelected } from '../utils';
 
 export const UploadingAttachment = ({

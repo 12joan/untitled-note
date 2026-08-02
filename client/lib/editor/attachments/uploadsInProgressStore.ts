@@ -1,6 +1,6 @@
-export type UploadState = {
+export interface UploadState {
   abortController: AbortController;
-};
+}
 
 const uploadsInProgress: Record<number, UploadState> = {};
 

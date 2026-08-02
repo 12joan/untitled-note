@@ -1,4 +1,4 @@
-import { LocalKeyboardShortcutCommandId } from '~/lib/commands';
+import type { LocalKeyboardShortcutCommandId } from '~/lib/commands';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
@@ -11,7 +11,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  PlateEditor,
+  type PlateEditor,
   toggleCodeBlock,
   toggleList,
   toggleMark,
@@ -50,7 +50,8 @@ export const EditorKeyboardShortcuts = () => {
   const editorStatic = useEditorRef();
   const getFocused = () => isEditorFocused(editorStatic);
 
-  Object.entries(editorCommands).forEach(([commandId, callback]) => {
+  for (const [commandId, callback] of Object.entries(editorCommands)) {
+    // biome-ignore lint/correctness/useHookAtTopLevel: fixed order
     useLocalKeyboardShortcut(
       document,
       commandId as LocalKeyboardShortcutCommandId,
@@ -61,7 +62,7 @@ export const EditorKeyboardShortcuts = () => {
       },
       true // Use capture to take precedence over other shortcuts
     );
-  });
+  }
 
   const toggleLink = useToggleLink();
 

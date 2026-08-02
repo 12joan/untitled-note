@@ -1,0 +1,75 @@
+name: On push
+
+on: push
+
+jobs:
+  docker:
+    name: 'Test production Docker image'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: echo "SECRET_KEY_BASE=$(openssl rand -hex 64)" > .env
+      - run: docker compose -f docker-compose.production.yml up -d --build --wait
+      - if: always()
+        run: docker compose logs web
+      - run: curl -Is http://localhost:3000/healthcheck
+      - name: Ensure assets are served correctly
+        run: wget --page-requisites http://localhost:3000
+
+  docker_dev:
+    name: 'Test development Docker image'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: echo "SECRET_KEY_BASE=$(openssl rand -hex 64)" > .env
+      - run: docker compose up -d --build --wait
+      - if: always()
+        run: docker compose logs web
+      - run: curl -Is http://localhost:3000/healthcheck
+      - name: Ensure assets are served correctly
+        run: wget --page-requisites http://localhost:3000
+      - run: docker compose exec web bundle exec rails test
+
+  typecheck:
+    name: 'Typecheck'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+      - run: yarn install
+      - run: yarn typecheck
+
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+      - run: yarn install
+      - run: yarn lint
+
+  frontend_tests:
+    name: 'Frontend tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+      - run: yarn install
+      - run: yarn test
+
+  deploy_staging:
+    name: 'Deploy staging'
+    needs: [docker, docker_dev, typecheck, lint, frontend_tests]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: 12joan/build-and-push-image@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: ghcr.io/12joan/untitled-note:staging

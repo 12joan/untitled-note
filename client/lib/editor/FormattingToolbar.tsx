@@ -1,4 +1,18 @@
-import React, { ElementType } from 'react';
+import type { ElementType } from 'react';
+import BoldIcon from '~/components/icons/formatting/BoldIcon';
+import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
+import CodeBlockIcon from '~/components/icons/formatting/CodeBlockIcon';
+import CodeIcon from '~/components/icons/formatting/CodeIcon';
+import HeadingOneIcon from '~/components/icons/formatting/HeadingOneIcon';
+import IndentIcon from '~/components/icons/formatting/IndentIcon';
+import ItalicIcon from '~/components/icons/formatting/ItalicIcon';
+import LinkIcon from '~/components/icons/formatting/LinkIcon';
+import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon';
+import QuoteIcon from '~/components/icons/formatting/QuoteIcon';
+import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon';
+import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
+import type { IconProps } from '~/components/icons/makeIcon';
+import { Tooltip } from '~/components/Tooltip';
 import { isLinkInSelection } from '~/lib/editor/links/isLinkInSelection';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -15,7 +29,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  PlateEditor,
+  type PlateEditor,
   someNode,
   toDOMNode,
   toggleCodeBlock,
@@ -28,21 +42,10 @@ import {
   useEditorRef,
   useEditorSelector,
 } from '~/lib/editor/plate';
-import { GroupedClassNames, groupedClassNames } from '~/lib/groupedClassNames';
-import BoldIcon from '~/components/icons/formatting/BoldIcon';
-import BulletedListIcon from '~/components/icons/formatting/BulletedListIcon';
-import CodeBlockIcon from '~/components/icons/formatting/CodeBlockIcon';
-import CodeIcon from '~/components/icons/formatting/CodeIcon';
-import HeadingOneIcon from '~/components/icons/formatting/HeadingOneIcon';
-import IndentIcon from '~/components/icons/formatting/IndentIcon';
-import ItalicIcon from '~/components/icons/formatting/ItalicIcon';
-import LinkIcon from '~/components/icons/formatting/LinkIcon';
-import NumberedListIcon from '~/components/icons/formatting/NumberedListIcon';
-import QuoteIcon from '~/components/icons/formatting/QuoteIcon';
-import StrikethroughIcon from '~/components/icons/formatting/StrikethroughIcon';
-import UnindentIcon from '~/components/icons/formatting/UnindentIcon';
-import { IconProps } from '~/components/icons/makeIcon';
-import { Tooltip } from '~/components/Tooltip';
+import {
+  type GroupedClassNames,
+  groupedClassNames,
+} from '~/lib/groupedClassNames';
 import { useToggleLink } from './links/useToggleLink';
 
 const usePluginType = (key: string) =>
@@ -203,9 +206,8 @@ export const FormattingToolbar = () => {
 
   return (
     <>
-      {formattingButtons.map((props, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <FormattingButton key={index} {...props} />
+      {formattingButtons.map((props) => (
+        <FormattingButton key={props.label} {...props} />
       ))}
     </>
   );

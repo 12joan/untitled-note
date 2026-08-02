@@ -54,7 +54,7 @@ services:
   clockwork:
     build: ./untitled-note
     entrypoint: ''
-    command: 'clockwork config/clockwork.rb'
+    command: 'bundle exec clockwork config/clockwork.rb'
     env_file: .env
     depends_on:
       db:
@@ -119,9 +119,6 @@ In the same directory, create a `.env` file containing your environment variable
 # Application
 SECRET_KEY_BASE="" # See docs
 MAILER_HOST="example.com"
-RAILS_ENV="production"
-RAILS_LOG_TO_STDOUT="true"
-RAILS_SERVE_STATIC_FILES="true"
 # DEFAULT_STORAGE_QUOTA="" # Optional (defaults to 10485760 bytes)
 # DEMO_INSTANCE="true" # Optional (defaults to false)
 # SIGN_UP_ENABLED="false" # Optional (defaults to true)

@@ -1,6 +1,6 @@
-import { ElementHandle, JSHandle, Locator, Page } from '@playwright/test';
-import { Path, Range } from 'slate';
-import { PlateEditor, TNode } from '~/lib/editor/plate';
+import type { ElementHandle, JSHandle, Locator, Page } from '@playwright/test';
+import type { Path, Range } from 'slate';
+import type { PlateEditor, TNode } from '~/lib/editor/plate';
 
 import '../lib/globals.d';
 

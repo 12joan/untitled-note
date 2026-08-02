@@ -45,7 +45,7 @@ export const uploadProjectImage = async ({
       const setImageResponse = await updateProjectImage(projectId, s3File.id);
 
       if (!setImageResponse.ok) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: logging
         console.error(setImageResponse);
         throw new Error('Failed to set project image');
       }

@@ -1,15 +1,15 @@
 import {
   getPluginOptions,
   insertNodes,
-  PlateEditor,
+  type PlateEditor,
   removeNodes,
   withoutNormalizing,
 } from '~/lib/editor/plate';
 import { dispatchGlobalEvent } from '~/lib/globalEvents';
 import { handleUploadFileError } from '~/lib/handleErrors';
-import { uploadFile, UploadProgressEvent } from '~/lib/uploadFile';
+import { type UploadProgressEvent, uploadFile } from '~/lib/uploadFile';
 import { ELEMENT_ATTACHMENT } from './constants';
-import { AttachmentElement, AttachmentPlugin } from './types';
+import type { AttachmentElement, AttachmentPlugin } from './types';
 import { deregisterUpload, registerUpload } from './uploadsInProgressStore';
 import { nodeAtPathIsEmptyParagraph, removeAllAttachmentNodes } from './utils';
 

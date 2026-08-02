@@ -1,9 +1,9 @@
-import {
-  createSectionedModal,
-  SectionedModalOpenProps,
-} from '~/lib/sectionedModal';
 import { FileStorageSection } from '~/components/filesModalSections';
 import StorageIcon from '~/components/icons/StorageIcon';
+import {
+  createSectionedModal,
+  type SectionedModalOpenProps,
+} from '~/lib/sectionedModal';
 
 const sections = {
   fileStorage: {

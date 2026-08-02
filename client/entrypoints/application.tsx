@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -6,8 +6,8 @@ import {
   ScrollRestoration,
   useNavigate,
 } from 'react-router-dom';
-import { IS_ELECTRON } from '~/lib/environment';
 import { App } from '~/components/layout/App';
+import { IS_ELECTRON } from '~/lib/environment';
 
 import '~/channels';
 import '~/lib/commonEntrypoint';
@@ -16,6 +16,7 @@ import '~/lib/registerServiceWorker';
 const ElectronNavigation = () => {
   const navigate = useNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   useEffect(() => {
     window.electron.onNavigate((_event, delta) => navigate(delta));
   }, []);

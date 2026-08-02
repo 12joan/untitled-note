@@ -3,8 +3,8 @@ import {
   ELEMENT_PARAGRAPH,
   isText,
   KEY_DESERIALIZE_HTML,
-  TDescendant,
-  TElement,
+  type TDescendant,
+  type TElement,
 } from '~/lib/editor/plate';
 
 const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {
@@ -31,11 +31,11 @@ const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {
 
     const children = nodeIsText ? [node] : node.children;
 
-    children.forEach((child) => {
+    for (const child of children) {
       // Only split text nodes
       if (!isText(child)) {
         appendToLastParagraph(child);
-        return;
+        continue;
       }
 
       const { text, ...textNodeProps } = child;
@@ -47,11 +47,11 @@ const splitFragmentIntoParagraphs = (fragment: TDescendant[]) => {
 
       appendToLastParagraph({ text: firstParagraph, ...textNodeProps });
 
-      restParagraphs.forEach((text) => {
+      for (const text of restParagraphs) {
         newParagraph();
         appendToLastParagraph({ text, ...textNodeProps });
-      });
-    });
+      }
+    }
 
     return paragraphs;
   });

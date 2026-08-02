@@ -1,17 +1,16 @@
-import React from 'react';
+import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
+import CaretRightIcon from '~/components/icons/CaretRightIcon';
 import { streamSequenceBeforeAndAfter } from '~/lib/apis/tag';
 import { useAppContext } from '~/lib/appContext';
 import { groupedClassNames } from '~/lib/groupedClassNames';
 import { orDefaultFuture } from '~/lib/monads';
 import { DocumentLink, NewDocumentLink } from '~/lib/routes';
-import {
+import type {
   LocalDocument,
   SequenceBeforeAndAfter as SequenceBeforeAndAfterType,
   Tag,
 } from '~/lib/types';
 import { useStream } from '~/lib/useStream';
-import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
-import CaretRightIcon from '~/components/icons/CaretRightIcon';
 
 export interface SequenceBeforeAndAfterProps {
   workingDocument: LocalDocument & {
@@ -90,21 +89,17 @@ const BeforeAfterLink = ({
   documentId,
   label,
   direction,
-}: BeforeAfterLinkProps) => {
-  return (
-    <DocumentLink
-      to={{ documentId }}
-      className={groupedClassNames({
-        base: 'btn btn-link font-medium flex items-center gap-1',
-        direction: direction === 'before' ? 'mr-auto' : 'ml-auto',
-      })}
-      aria-label={
-        direction === 'before' ? 'Previous document' : 'Next document'
-      }
-    >
-      {direction === 'before' && <CaretLeftIcon noAriaLabel />}
-      {label}
-      {direction === 'after' && <CaretRightIcon noAriaLabel />}
-    </DocumentLink>
-  );
-};
+}: BeforeAfterLinkProps) => (
+  <DocumentLink
+    to={{ documentId }}
+    className={groupedClassNames({
+      base: 'btn btn-link font-medium flex items-center gap-1',
+      direction: direction === 'before' ? 'mr-auto' : 'ml-auto',
+    })}
+    aria-label={direction === 'before' ? 'Previous document' : 'Next document'}
+  >
+    {direction === 'before' && <CaretLeftIcon noAriaLabel />}
+    {label}
+    {direction === 'after' && <CaretRightIcon noAriaLabel />}
+  </DocumentLink>
+);

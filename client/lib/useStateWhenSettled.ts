@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
+  type UseWaitUntilSettledOptions,
   useWaitUntilSettled,
-  UseWaitUntilSettledOptions,
 } from '~/lib/useWaitUntilSettled';
 
 export const useStateWhenSettled = <T>(

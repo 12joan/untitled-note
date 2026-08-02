@@ -1,18 +1,18 @@
-import React, { memo } from 'react';
-import { streamDocument } from '~/lib/apis/document';
-import { streamSnapshots } from '~/lib/apis/snapshot';
-import { Future, sequenceFutures, unwrapFuture } from '~/lib/monads';
-import { DocumentLink, OverviewLink } from '~/lib/routes';
-import { Document, Snapshot } from '~/lib/types';
-import { useStream } from '~/lib/useStream';
-import { useTitle } from '~/lib/useTitle';
+import { memo } from 'react';
 import CaretLeftIcon from '~/components/icons/CaretLeftIcon';
 import { LoadingView } from '~/components/LoadingView';
 import { InlinePlaceholder } from '~/components/Placeholder';
 import {
   SnapshotExplorer,
-  SnapshotExplorerProps,
+  type SnapshotExplorerProps,
 } from '~/components/SnapshotExplorer';
+import { streamDocument } from '~/lib/apis/document';
+import { streamSnapshots } from '~/lib/apis/snapshot';
+import { type Future, sequenceFutures, unwrapFuture } from '~/lib/monads';
+import { DocumentLink, OverviewLink } from '~/lib/routes';
+import type { Document, Snapshot } from '~/lib/types';
+import { useStream } from '~/lib/useStream';
+import { useTitle } from '~/lib/useTitle';
 
 export interface SnapshotsViewProps {
   documentId: number;

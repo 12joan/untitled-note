@@ -4,7 +4,7 @@ import { DragCursor } from './components/DragCursor';
 import { ELEMENT_ATTACHMENT } from './constants';
 import { findDragPath } from './findDragPath';
 import { insertAttachments } from './insertAttachments';
-import { AttachmentPlugin } from './types';
+import type { AttachmentPlugin } from './types';
 import { withAttachments } from './withAttachments';
 
 const setDragCursorPosition = (position: number | null) =>
@@ -63,7 +63,7 @@ const createAttachmentPlugin = createPluginFactory<AttachmentPlugin>({
 
       if (files.length > 0) {
         const path = findDragPath(editor, event);
-        insertAttachments(editor, path[0], files);
+        void insertAttachments(editor, path[0], files);
       }
     },
 
@@ -87,7 +87,7 @@ const createAttachmentPlugin = createPluginFactory<AttachmentPlugin>({
           editor.selection.anchor.path[0] +
           (editor.selection.anchor.offset === 0 ? 0 : 1);
 
-        insertAttachments(editor, blockIndex, files);
+        void insertAttachments(editor, blockIndex, files);
       }
     },
   },

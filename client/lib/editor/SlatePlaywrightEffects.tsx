@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {
   addMark,
   getNode,
-  PlateEditor,
+  type PlateEditor,
   toDOMNode,
   useEditorRef,
 } from '~/lib/editor/plate';

@@ -1,5 +1,6 @@
 import { useRecomputeOnElementResize } from '~/lib/useRecomputeOnElementResize';
 
+// biome-ignore lint/correctness/useHookAtTopLevel: hook factory
 export const useElementBounds = useRecomputeOnElementResize((element) => {
   const {
     top = 0,

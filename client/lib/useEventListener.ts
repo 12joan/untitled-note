@@ -1,4 +1,4 @@
-import { DependencyList, useEffect } from 'react';
+import { type DependencyList, useEffect } from 'react';
 
 export const useEventListener = <EventName extends keyof DocumentEventMap>(
   target: EventTarget | null,
@@ -12,5 +12,6 @@ export const useEventListener = <EventName extends keyof DocumentEventMap>(
     target.addEventListener(event, callback as EventListener, useCapture);
     return () =>
       target.removeEventListener(event, callback as EventListener, useCapture);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   }, dependencies);
 };

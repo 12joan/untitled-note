@@ -1,4 +1,7 @@
-import React, { ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
+import DocumentIcon from '~/components/icons/DocumentIcon';
+import SearchIcon from '~/components/icons/SearchIcon';
+import TagIcon from '~/components/icons/TagIcon';
 import { useAppContext } from '~/lib/appContext';
 import { filterPredicate } from '~/lib/filterPredicate';
 import { orDefaultFuture } from '~/lib/monads';
@@ -6,16 +9,13 @@ import { documentPath, tagPath } from '~/lib/routes';
 import { useCombobox } from '~/lib/useCombobox';
 import { useComboboxFloating } from '~/lib/useComboboxFloating';
 import { useNavigateOrOpen } from '~/lib/useNavigateOrOpen';
-import DocumentIcon from '~/components/icons/DocumentIcon';
-import SearchIcon from '~/components/icons/SearchIcon';
-import TagIcon from '~/components/icons/TagIcon';
 
-type QuickFindItem = {
+interface QuickFindItem {
   key: string;
   text: string;
   icon: ReactNode;
   onClick: (newTab: boolean) => void;
-};
+}
 
 export const QuickFind = () => {
   const projectId = useAppContext('projectId');
@@ -31,6 +31,7 @@ export const QuickFind = () => {
 
   const navigateOrOpen = useNavigateOrOpen();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: legacy
   const items: QuickFindItem[] = useMemo(() => {
     const documentItems = partialDocuments
       .filter(({ title }) => title)
