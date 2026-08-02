@@ -16,7 +16,7 @@ export const useNavigateAwayOnDelete = ({
 
   useGlobalEvent('document:delete', ({ documentId: deletedDocumentId }) => {
     if (deletedDocumentId === documentId) {
-      navigate(overviewPath({ projectId }));
+      void navigate(overviewPath({ projectId }));
     }
   });
 };

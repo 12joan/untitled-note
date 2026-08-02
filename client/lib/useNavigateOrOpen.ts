@@ -9,7 +9,7 @@ export const useNavigateOrOpen = () => {
       if (newTab) {
         window.open(path, '_blank');
       } else {
-        navigate(path);
+        void navigate(path);
       }
     },
     [navigate]

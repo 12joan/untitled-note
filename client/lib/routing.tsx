@@ -63,6 +63,7 @@ const WithProject = ({ projectId, children }: WithProject): JSX.Element => {
     [projects, projectId]
   );
 
+  // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
   return project ? (
     children(project)
   ) : (

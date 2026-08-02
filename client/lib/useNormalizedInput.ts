@@ -18,6 +18,7 @@ export const useNormalizedInput = ({
   const isValid = useMemo(() => validate(value), [value]);
 
   const normalizeValue = () => {
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: false positive
     if (isValid) {
       setValue(normalize(value));
     } else {
