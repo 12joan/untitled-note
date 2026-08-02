@@ -1,10 +1,10 @@
 import { app, Menu } from 'electron';
-import { updateElectronApp } from 'update-electron-app';
 import contextMenu from 'electron-context-menu';
+import { updateElectronApp } from 'update-electron-app';
+import * as closeBehaviour from './close.js';
 import { ENV } from './env.js';
 import { createMenu } from './menu.js';
 import { createWindow } from './window.js';
-import * as closeBehaviour from './close.js';
 
 updateElectronApp({
   repo: '12joan/untitled-note-app-releases',

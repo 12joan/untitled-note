@@ -1,11 +1,9 @@
-import { BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import path from 'node:path';
-import { isMac } from './helpers.js';
-import { ENV } from './env.js';
+import { BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import * as closeBehaviour from './close.js';
+import { ENV } from './env.js';
+import { isMac, tabsSupported } from './helpers.js';
 import * as navigationBehaviour from './navigation.js';
-
-const tabsSupported = isMac;
 
 const userAgent = [
   'Electron',
@@ -42,13 +40,15 @@ const showErrorPage = (browserWindow) =>
   browserWindow.loadFile(path.join(import.meta.dirname, '../dist/error.html'));
 
 const loadApp = async (browserWindow, url) => {
-  await browserWindow.loadFile(path.join(import.meta.dirname, '../dist/loading.html'));
+  await browserWindow.loadFile(
+    path.join(import.meta.dirname, '../dist/loading.html')
+  );
 
   /**
    * Since Electron 40, calling loadURL immediately after loadFile causes loadURL to fail with
    * ERR_ABORTED.
    */
-  await new Promise(r => setTimeout(r));
+  await new Promise((r) => setTimeout(r));
 
   await browserWindow
     .loadURL(url, { userAgent })

@@ -1,6 +1,6 @@
 import { Menu, shell } from 'electron';
-import { isMac, setZoomFactor } from './helpers.js';
 import { ENV } from './env.js';
+import { isMac, setZoomFactor, tabsSupported } from './helpers.js';
 
 const withFocusedWindow = (handler) => (item, focusedWindow) => {
   if (focusedWindow) {
@@ -159,7 +159,18 @@ export const createMenu = () => {
         accelerator: 'CmdOrCtrl+W',
         role: 'close',
       },
-    ],
+      { type: 'separator' },
+      tabsSupported && {
+        label: 'Show Previous Tab',
+        accelerator: 'CmdOrCtrl+Shift+[',
+        role: 'selectPreviousTab',
+      },
+      tabsSupported && {
+        label: 'Show Next Tab',
+        accelerator: 'CmdOrCtrl+Shift+]',
+        role: 'selectNextTab',
+      },
+    ].filter(Boolean),
   };
 
   const helpMenu = {
