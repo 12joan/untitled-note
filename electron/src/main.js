@@ -19,7 +19,7 @@ contextMenu({
 });
 
 app.whenReady().then(() => {
-  createWindow();
+  void createWindow();
   Menu.setApplicationMenu(createMenu());
   closeBehaviour.registerApp(app);
 });
