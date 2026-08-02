@@ -36,5 +36,5 @@ ENV RAILS_SERVE_STATIC_FILES=true
 
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 
-HEALTHCHECK --start-period=1s --start-interval=1s \
+HEALTHCHECK --start-period=30s --start-interval=1s \
   CMD test -n "$SKIP_HEALTHCHECK" || curl -f http://localhost:3000/healthcheck || exit 1

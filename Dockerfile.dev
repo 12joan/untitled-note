@@ -28,5 +28,6 @@ EXPOSE 3035
 
 CMD ["yarn", "dev"]
 
-HEALTHCHECK --start-period=1s --start-interval=1s \
+# Longer start period in development due to the extra work in entrypoint.sh
+HEALTHCHECK --start-period=45s --start-interval=1s \
   CMD test -n "$SKIP_HEALTHCHECK" || curl -f http://localhost:3000/healthcheck || exit 1
