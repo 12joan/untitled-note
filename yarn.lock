@@ -2187,18 +2187,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-basic-marks@npm:^36.0.0":
-  version: 36.0.0
-  resolution: "@udecode/plate-basic-marks@npm:36.0.0"
+"@udecode/plate-basic-marks@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-basic-marks@npm:49.0.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.0.0"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/3914c700c4d5b972f4f623a0f6bc6f85d507736483db1d9d5977a7caa7afa0a4f400db164a4c69e4c06913fc116fa44e46951b3a64643d322bcade547ab53ff4
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/75d254cd663317520319a6d22c1462b0141b97e5d33f2e6fa7c37139906fd057e32a2bb6fd3d3106a86dd4c7e805cc64f4f5f5247de509a0d1825d7368b3d4e0
   languageName: node
   linkType: hard
 
@@ -5642,7 +5638,7 @@ __metadata:
     "@types/react-dom": "npm:^19.2.4"
     "@types/runes": "npm:^0.4.3"
     "@udecode/plate-autoformat": "npm:^36.5.6"
-    "@udecode/plate-basic-marks": "npm:^36.0.0"
+    "@udecode/plate-basic-marks": "npm:^49.0.0"
     "@udecode/plate-block-quote": "npm:^36.0.0"
     "@udecode/plate-break": "npm:^36.5.6"
     "@udecode/plate-code-block": "npm:^36.5.6"
