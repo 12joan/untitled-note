@@ -31,7 +31,7 @@
     "@types/js-cookie": "^3.0.6",
     "@udecode/plate-autoformat": "^36.5.6",
     "@udecode/plate-basic-marks": "^36.0.0",
-    "@udecode/plate-block-quote": "^36.0.0",
+    "@udecode/plate-block-quote": "^49.0.0",
     "@udecode/plate-break": "^36.5.6",
     "@udecode/plate-code-block": "^36.5.6",
     "@udecode/plate-combobox": "^36.0.0",
