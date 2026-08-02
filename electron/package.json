@@ -28,6 +28,7 @@
     "electron": "^43.2.0"
   },
   "resolutions": {
-    "@electron/asar": "^4.2.1"
+    "@electron/asar": "^4.2.1",
+    "tar": "^7.5.22"
   }
 }
