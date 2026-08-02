@@ -2217,18 +2217,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-break@npm:^36.5.6":
-  version: 36.5.6
-  resolution: "@udecode/plate-break@npm:36.5.6"
+"@udecode/plate-break@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-break@npm:49.0.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.3.9"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/3109494631e4a881d51818dbd76ec8efbd6abe667511a9e146e3ff22a7c96687f0b4b9472c96ee22a78cb5892efa0544a41abb1011eadd051693a70bd75b6044
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/9f1051ad79ef1a5ba5a52e6f6a0a066b51d5dd2e395e9d1d819c94c829d76fab86e6e090a7bfcad8ac1192a347829b7a45c9bb77f29bcce46374afc63e623717
   languageName: node
   linkType: hard
 
@@ -5644,7 +5640,7 @@ __metadata:
     "@udecode/plate-autoformat": "npm:^36.5.6"
     "@udecode/plate-basic-marks": "npm:^36.0.0"
     "@udecode/plate-block-quote": "npm:^36.0.0"
-    "@udecode/plate-break": "npm:^36.5.6"
+    "@udecode/plate-break": "npm:^49.0.0"
     "@udecode/plate-code-block": "npm:^36.5.6"
     "@udecode/plate-combobox": "npm:^36.0.0"
     "@udecode/plate-common": "npm:^36.5.9"
