@@ -2170,20 +2170,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-autoformat@npm:^36.5.6":
-  version: 36.5.6
-  resolution: "@udecode/plate-autoformat@npm:36.5.6"
+"@udecode/plate-autoformat@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-autoformat@npm:49.0.0"
   dependencies:
     lodash: "npm:^4.17.21"
   peerDependencies:
-    "@udecode/plate-common": ">=36.3.9"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/bd4196d8a933cca82d57781d5fc698174389f1cdc7dd0b272170a2325c3cdc61807604b8fcd458d05b3e5ff654eefd0e11efc879777012ad302caece1d0f6a08
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/3b75f062eb324b41488624f01eb4afd0ee2f8005b771534abc462c5528de2e816dd37ebf0f17553db1b57e68372293b15375262395b558e5e95deca7e41dba64
   languageName: node
   linkType: hard
 
@@ -5641,7 +5637,7 @@ __metadata:
     "@types/react": "npm:^18.0.35"
     "@types/react-dom": "npm:^19.2.4"
     "@types/runes": "npm:^0.4.3"
-    "@udecode/plate-autoformat": "npm:^36.5.6"
+    "@udecode/plate-autoformat": "npm:^49.0.0"
     "@udecode/plate-basic-marks": "npm:^36.0.0"
     "@udecode/plate-block-quote": "npm:^36.0.0"
     "@udecode/plate-break": "npm:^36.5.6"
