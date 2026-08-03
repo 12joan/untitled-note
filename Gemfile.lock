@@ -296,10 +296,7 @@ GEM
       rbs (>= 4.0.0)
       tsort
     redcarpet (3.6.1)
-    redis (6.0.0)
-      redis-client (= 0.30.1)
-    redis-client (0.30.1)
-      connection_pool
+    redis (4.8.1)
     regexp_parser (2.10.0)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -409,7 +406,7 @@ DEPENDENCIES
   rack_authorised_proxy
   rails (~> 8.1.3.1)
   redcarpet (~> 3.6)
-  redis (~> 6.0)
+  redis (~> 4.0)
   rexml (~> 3.4)
   sass-rails (>= 6)
   selenium-webdriver
