@@ -2439,18 +2439,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-trailing-block@npm:^36.0.0":
-  version: 36.0.0
-  resolution: "@udecode/plate-trailing-block@npm:36.0.0"
+"@udecode/plate-trailing-block@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-trailing-block@npm:49.0.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.0.0"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/1d47b16c19be5390f374a9f764667f339345d673d95a838718ead6822559a8cdda2e3ead77231f5bc4774eb8b3111d02f9d55ff1239cdf478016965aaf9623de
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/b59ff315f393dde02ffe83256e560b2213d83bfe28db10e529edb7a9ab2e8638dd85017729eb7f823e3cea2ae5e69b88b529732172bdc283da148f75261da281
   languageName: node
   linkType: hard
 
@@ -5651,7 +5647,7 @@ __metadata:
     "@udecode/plate-paragraph": "npm:^36.0.0"
     "@udecode/plate-reset-node": "npm:^36.5.2"
     "@udecode/plate-tabbable": "npm:^36.0.0"
-    "@udecode/plate-trailing-block": "npm:^36.0.0"
+    "@udecode/plate-trailing-block": "npm:^49.0.0"
     "@vitejs/plugin-react": "npm:^6.0.5"
     autoprefixer: "npm:^10.4.14"
     axios: "npm:^1.19.0"
