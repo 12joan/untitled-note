@@ -38,7 +38,7 @@
     "@udecode/plate-common": "^36.5.9",
     "@udecode/plate-diff": "^36.0.0",
     "@udecode/plate-floating": "^36.3.8",
-    "@udecode/plate-heading": "^36.0.12",
+    "@udecode/plate-heading": "^49.0.0",
     "@udecode/plate-link": "^36.5.9",
     "@udecode/plate-list": "^36.5.2",
     "@udecode/plate-paragraph": "^36.0.0",

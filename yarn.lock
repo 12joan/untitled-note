@@ -2353,18 +2353,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-heading@npm:^36.0.12":
-  version: 36.0.12
-  resolution: "@udecode/plate-heading@npm:36.0.12"
+"@udecode/plate-heading@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-heading@npm:49.0.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.0.6"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/efd915c080ffaa51d2f407092b35429bd8e1c1ea154c39f06dee948e43ecb306e813029f81f7fa91a04abe9a3b51af99cb70167e87c6482f2234d8da95b4f0f2
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/9e59fb54e675c21a48af7d2eed3a466d0c7e6a8f7be6b65d9b98c5e578037f5fd4be55c3798c766080a53b4adbe1f73e0a9e3f2ad091569f85c442799819b4a0
   languageName: node
   linkType: hard
 
@@ -5650,7 +5646,7 @@ __metadata:
     "@udecode/plate-common": "npm:^36.5.9"
     "@udecode/plate-diff": "npm:^36.0.0"
     "@udecode/plate-floating": "npm:^36.3.8"
-    "@udecode/plate-heading": "npm:^36.0.12"
+    "@udecode/plate-heading": "npm:^49.0.0"
     "@udecode/plate-link": "npm:^36.5.9"
     "@udecode/plate-list": "npm:^36.5.2"
     "@udecode/plate-paragraph": "npm:^36.0.0"
