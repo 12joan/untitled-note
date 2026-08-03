@@ -2368,6 +2368,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@udecode/plate-indent@npm:49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-indent@npm:49.0.0"
+  peerDependencies:
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/23d682806a4fa46535109d49a8c1f37f3ad950317d9425acdd995a3c95ff1f28093d68c92a0e63114f69a06fe599680e2d7f02bdd8504646dd6ee1d3f5c6433f
+  languageName: node
+  linkType: hard
+
 "@udecode/plate-link@npm:^36.5.9":
   version: 36.5.9
   resolution: "@udecode/plate-link@npm:36.5.9"
@@ -2386,21 +2397,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-list@npm:^36.5.2":
-  version: 36.5.2
-  resolution: "@udecode/plate-list@npm:36.5.2"
+"@udecode/plate-list@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-list@npm:49.0.0"
   dependencies:
-    "@udecode/plate-reset-node": "npm:36.5.2"
-    lodash: "npm:^4.17.21"
+    "@udecode/plate-indent": "npm:49.0.0"
+    clsx: "npm:^2.1.1"
   peerDependencies:
-    "@udecode/plate-common": ">=36.3.9"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/eb8a2286a090c54638a6ce8de5dc586bb689bf0b46e95c063e661ba44d0fda1d2aac33e2aabb3190d91c98e141b6ea727dd0af0cb33eedf0bb8215ce102d5333
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/926eb8b702f5e05171d56ac8bdb3e530a42665b54c031984460675277c4269db5071787f3469f156be0852f50f3a0d0ada86b3d0dc4f8291de4ba7b78165f8fc
   languageName: node
   linkType: hard
 
@@ -2436,7 +2443,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-reset-node@npm:36.5.2, @udecode/plate-reset-node@npm:^36.5.2":
+"@udecode/plate-reset-node@npm:^36.5.2":
   version: 36.5.2
   resolution: "@udecode/plate-reset-node@npm:36.5.2"
   peerDependencies:
@@ -3219,7 +3226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.0.0":
+"clsx@npm:^2.0.0, clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10/cdfb57fa6c7649bbff98d9028c2f0de2f91c86f551179541cf784b1cfdc1562dcb951955f46d54d930a3879931a980e32a46b598acaea274728dbe068deca919
@@ -5652,7 +5659,7 @@ __metadata:
     "@udecode/plate-floating": "npm:^36.3.8"
     "@udecode/plate-heading": "npm:^36.0.12"
     "@udecode/plate-link": "npm:^36.5.9"
-    "@udecode/plate-list": "npm:^36.5.2"
+    "@udecode/plate-list": "npm:^49.0.0"
     "@udecode/plate-paragraph": "npm:^36.0.0"
     "@udecode/plate-reset-node": "npm:^36.5.2"
     "@udecode/plate-tabbable": "npm:^36.0.0"
