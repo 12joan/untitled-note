@@ -2451,20 +2451,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-tabbable@npm:^36.0.0":
-  version: 36.0.0
-  resolution: "@udecode/plate-tabbable@npm:36.0.0"
+"@udecode/plate-tabbable@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-tabbable@npm:49.0.0"
   dependencies:
     tabbable: "npm:^6.2.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.0.0"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/926881376ae63d7d7e1e411af1ed7107d9a072307701642880c1da639a76e4ab634b11f63e16ad1dec5b604d4d04751d96aa73667b9c050acba14bf5303de518
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/aa18eb29f9b2d967b6d90ec080c0ae2ebf7c4f54221a0b5eed06a993b0c4d9fdb3fd47c7c3f40511fe40eedf645cbc274ba7bf6d39b1168b201be410a75784ef
   languageName: node
   linkType: hard
 
@@ -5655,7 +5651,7 @@ __metadata:
     "@udecode/plate-list": "npm:^36.5.2"
     "@udecode/plate-paragraph": "npm:^36.0.0"
     "@udecode/plate-reset-node": "npm:^36.5.2"
-    "@udecode/plate-tabbable": "npm:^36.0.0"
+    "@udecode/plate-tabbable": "npm:^49.0.0"
     "@udecode/plate-trailing-block": "npm:^36.0.0"
     "@vitejs/plugin-react": "npm:^4.7.0"
     autoprefixer: "npm:^10.4.14"
