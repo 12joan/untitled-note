@@ -63,7 +63,7 @@
     "react-textarea-autosize": "^8.4.1",
     "runes": "^0.4.3",
     "scheduler": "^0.27.0",
-    "slate": "^0.126.0",
+    "slate": "^0.103.0",
     "slate-history": "^0.100.0",
     "slate-hyperscript": "^0.100.0",
     "slate-react": "^0.106.0",
