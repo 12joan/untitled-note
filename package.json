@@ -82,7 +82,7 @@
     "@types/react": "^18.0.35",
     "@types/react-dom": "^19.2.4",
     "@types/runes": "^0.4.3",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.0.5",
     "autoprefixer": "^10.4.14",
     "concurrently": "^7.6.0",
     "css-has-pseudo": "^4.0.2",
