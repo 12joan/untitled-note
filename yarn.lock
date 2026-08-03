@@ -645,13 +645,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/selector-specificity@npm:^2.0.0, @csstools/selector-specificity@npm:^2.0.1, @csstools/selector-specificity@npm:^2.0.2":
+"@csstools/selector-specificity@npm:^2.0.0, @csstools/selector-specificity@npm:^2.0.2":
   version: 2.0.2
   resolution: "@csstools/selector-specificity@npm:2.0.2"
   peerDependencies:
     postcss: ^8.2
     postcss-selector-parser: ^6.0.10
   checksum: 10/23cddfc930b0d37641c10a1e3c7514732ce3d7f50a474a8f028cfc7d0829bc7dabf5ebd00a112a0bdcaa214c274bffdf81ebc3652ba08b3654c309ae4a3e0f20
+  languageName: node
+  linkType: hard
+
+"@csstools/selector-specificity@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@csstools/selector-specificity@npm:6.0.0"
+  peerDependencies:
+    postcss-selector-parser: ^7.1.1
+  checksum: 10/56790acc910b516df87bf6fd43389a88da1922ffb004de4d6099559ece48c88a8185e29439c570d1102a414bbecbb34e33f1aeace76a63e9f72e0794517cf7d7
   languageName: node
   linkType: hard
 
@@ -3397,16 +3406,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-has-pseudo@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "css-has-pseudo@npm:4.0.2"
+"css-has-pseudo@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "css-has-pseudo@npm:8.0.1"
   dependencies:
-    "@csstools/selector-specificity": "npm:^2.0.1"
-    postcss-selector-parser: "npm:^6.0.10"
+    "@csstools/selector-specificity": "npm:^6.0.0"
+    postcss-selector-parser: "npm:^7.1.1"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
-    postcss: ^8.2
-  checksum: 10/5160746baeb99cf7f76370b04c89badf10bb60799c120a7da4c4e75ef0538ddbf9fd4fee11bcfcdbe38fcf4f72a59061a924431f5592dace443eca5501694067
+    postcss: ^8.4
+  checksum: 10/7dbe9f316140e52482c8ce7701a83055608130bdc9d82bda71c0fd12dcb088406cc74a661082eb2188aee3917cebd9bcf3b25a386049fbd03bfb8bfb17b162c4
   languageName: node
   linkType: hard
 
@@ -5658,7 +5667,7 @@ __metadata:
     comlink: "npm:^4.4.2"
     compressorjs: "npm:^1.3.0"
     concurrently: "npm:^10.0.4"
-    css-has-pseudo: "npm:^4.0.2"
+    css-has-pseudo: "npm:^8.0.1"
     emoji-mart: "npm:^5.5.2"
     esbuild: "npm:^0.28.1"
     human-readable: "npm:^0.2.1"
@@ -6340,6 +6349,16 @@ __metadata:
     cssesc: "npm:^3.0.0"
     util-deprecate: "npm:^1.0.2"
   checksum: 10/190034c94d809c115cd2f32ee6aade84e933450a43ec3899c3e78e7d7b33efd3a2a975bb45d7700b6c5b196c06a7d9acf3f1ba6f1d87032d9675a29d8bca1dd3
+  languageName: node
+  linkType: hard
+
+"postcss-selector-parser@npm:^7.1.1":
+  version: 7.1.4
+  resolution: "postcss-selector-parser@npm:7.1.4"
+  dependencies:
+    cssesc: "npm:^3.0.0"
+    util-deprecate: "npm:^1.0.2"
+  checksum: 10/c6d36b37defd387d65b5e0b778cd441303d147eb4a4b7135c6a0452fa777310027218db3ff71a19fb831d067bcdf45a776c6ed71d83bd2ced8afc2e3d5b03385
   languageName: node
   linkType: hard
 
