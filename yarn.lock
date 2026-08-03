@@ -994,7 +994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.6.0, @floating-ui/core@npm:^1.8.0":
+"@floating-ui/core@npm:^1.6.0, @floating-ui/core@npm:^1.6.9, @floating-ui/core@npm:^1.8.0":
   version: 1.8.0
   resolution: "@floating-ui/core@npm:1.8.0"
   dependencies:
@@ -1025,7 +1025,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:^2.1.2":
+"@floating-ui/react-dom@npm:^2.1.2, @floating-ui/react-dom@npm:^2.1.9":
   version: 2.1.9
   resolution: "@floating-ui/react-dom@npm:2.1.9"
   dependencies:
@@ -1062,6 +1062,20 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 10/7f8e6b27db48b68ca94756687af21857be04e7360ac922d7c8e22411f2895df6384af7bd40f4b48663d3cc5809bb5c6574cd9c9ea15543ec747b9a8e1c8c3008
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:^0.27.8":
+  version: 0.27.20
+  resolution: "@floating-ui/react@npm:0.27.20"
+  dependencies:
+    "@floating-ui/react-dom": "npm:^2.1.9"
+    "@floating-ui/utils": "npm:^0.2.12"
+    tabbable: "npm:^6.0.0"
+  peerDependencies:
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 10/1102efe7e3317d88c537517a66a4a9f7c981d3191dea4edc993f0e2be21335892a43f7b8e6852e91e1d6d817a1b03962e751fbca4dffd4afe7d69cef85441180
   languageName: node
   linkType: hard
 
@@ -2335,7 +2349,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-floating@npm:36.3.8, @udecode/plate-floating@npm:^36.3.8":
+"@udecode/plate-floating@npm:49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-floating@npm:49.0.0"
+  dependencies:
+    "@floating-ui/core": "npm:^1.6.9"
+    "@floating-ui/react": "npm:^0.27.8"
+  peerDependencies:
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/b4233d7f24a34e4f9caa64331fd024d15cac9ea9d7856a212ef30a6dc8d19dcb4ed9513e20e6dbcd2bfd9726fa9821452695288cd57f2986073963886e7d4085
+  languageName: node
+  linkType: hard
+
+"@udecode/plate-floating@npm:^36.3.8":
   version: 36.3.8
   resolution: "@udecode/plate-floating@npm:36.3.8"
   dependencies:
@@ -2368,21 +2396,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@udecode/plate-link@npm:^36.5.9":
-  version: 36.5.9
-  resolution: "@udecode/plate-link@npm:36.5.9"
+"@udecode/plate-link@npm:^49.0.0":
+  version: 49.0.0
+  resolution: "@udecode/plate-link@npm:49.0.0"
   dependencies:
-    "@udecode/plate-floating": "npm:36.3.8"
-    "@udecode/plate-normalizers": "npm:36.5.6"
+    "@udecode/plate-floating": "npm:49.0.0"
   peerDependencies:
-    "@udecode/plate-common": ">=36.5.9"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/a5b1dd550c5a50d1a22fa0a28648e078494d7274e778b39f2fe3a63b27eaa25c07c5b27057958c53e91cec943abb9b73d10f48a4597086683e8f7fb5518e081d
+    "@udecode/plate": ">=49.0.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10/2902854480c6ebe4a4a4e79ab69e483983120a72a663970c086a157df74d6954f792f37de9823cfc9ea9d66110a5f9d547c0513f746067c5324cb427c323dd0c
   languageName: node
   linkType: hard
 
@@ -2401,23 +2424,6 @@ __metadata:
     slate-hyperscript: ">=0.66.0"
     slate-react: ">=0.99.0"
   checksum: 10/eb8a2286a090c54638a6ce8de5dc586bb689bf0b46e95c063e661ba44d0fda1d2aac33e2aabb3190d91c98e141b6ea727dd0af0cb33eedf0bb8215ce102d5333
-  languageName: node
-  linkType: hard
-
-"@udecode/plate-normalizers@npm:36.5.6":
-  version: 36.5.6
-  resolution: "@udecode/plate-normalizers@npm:36.5.6"
-  dependencies:
-    lodash: "npm:^4.17.21"
-  peerDependencies:
-    "@udecode/plate-common": ">=36.3.9"
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-    slate: ">=0.94.0"
-    slate-history: ">=0.93.0"
-    slate-hyperscript: ">=0.66.0"
-    slate-react: ">=0.99.0"
-  checksum: 10/baef268239e8a211d50de989d0d35b00f861ccbbbc358deb4809b7a24d4e96124132a6d8c0e0cf0a73234a1d271ebed41ccc32e65043f93b62f6dadd8424270c
   languageName: node
   linkType: hard
 
@@ -5651,7 +5657,7 @@ __metadata:
     "@udecode/plate-diff": "npm:^36.0.0"
     "@udecode/plate-floating": "npm:^36.3.8"
     "@udecode/plate-heading": "npm:^36.0.12"
-    "@udecode/plate-link": "npm:^36.5.9"
+    "@udecode/plate-link": "npm:^49.0.0"
     "@udecode/plate-list": "npm:^36.5.2"
     "@udecode/plate-paragraph": "npm:^36.0.0"
     "@udecode/plate-reset-node": "npm:^36.5.2"
