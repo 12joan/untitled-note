@@ -4270,10 +4270,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"idb@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "idb@npm:7.1.1"
-  checksum: 10/8e33eaebf21055129864acb89932e0739b8c96788e559df24c253ce114d8c6deb977a3b30ea47a9bb8a2ae8a55964861c3df65f360d95745e341cee40d5c17f4
+"idb@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "idb@npm:8.0.3"
+  checksum: 10/e2beccb0be7c6af562a5e92b209363358571a770aecdc68e891d1141d994d8f1e8f34b79dafa309ed7467d0f4df2b7b4c15f67cfd0611100282bfc3d85f9c73c
   languageName: node
   linkType: hard
 
@@ -5671,7 +5671,7 @@ __metadata:
     emoji-mart: "npm:^5.5.2"
     esbuild: "npm:^0.28.1"
     human-readable: "npm:^0.2.1"
-    idb: "npm:^7.1.1"
+    idb: "npm:^8.0.3"
     javascript-time-ago: "npm:^2.6.4"
     jest: "npm:^30.0.0"
     jest-util: "npm:^30.0.5"
