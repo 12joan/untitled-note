@@ -5691,7 +5691,7 @@ __metadata:
     react-textarea-autosize: "npm:^8.4.1"
     runes: "npm:^0.4.3"
     sass: "npm:^1.102.0"
-    scheduler: "npm:^0.23.2"
+    scheduler: "npm:^0.27.0"
     scriptjs: "npm:^2.5.9"
     slate: "npm:^0.103.0"
     slate-history: "npm:^0.100.0"
@@ -6872,6 +6872,13 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10/e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.27.0":
+  version: 0.27.0
+  resolution: "scheduler@npm:0.27.0"
+  checksum: 10/eab3c3a8373195173e59c147224fc30dabe6dd453f248f5e610e8458512a5a2ee3a06465dc400ebfe6d35c9f5b7f3bb6b2e41c88c86fd177c25a73e7286a1e06
   languageName: node
   linkType: hard
 
