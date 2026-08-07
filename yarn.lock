@@ -6116,7 +6116,7 @@ __metadata:
     tippy.js: "npm:^6.3.7"
     ts-jest: "npm:^29.4.10"
     typescript: "npm:^5.9.3"
-    typescript-language-server: "npm:^3.3.2"
+    typescript-language-server: "npm:^5.3.0"
     vite: "npm:^8.2.1"
     vite-plugin-ruby: "npm:^5.2.0"
   languageName: unknown
@@ -7901,12 +7901,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-language-server@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "typescript-language-server@npm:3.3.2"
+"typescript-language-server@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "typescript-language-server@npm:5.3.0"
   bin:
     typescript-language-server: lib/cli.mjs
-  checksum: 10/9aec15fa556a27734ad7c9bbfde2120aef66bd11e856645242e8f60e037c093d833b2272a87ef08e44c90fc13a93a02c6f6a45120d24837ce7fa230d4d87d1d9
+  checksum: 10/9c55e3fcb402b9c047c82efa6e8113537bf6d6c5ab6612723a6b0a39c439f4957333c90058f9714c4e141aecbc1076ce5054cbeb108550042060a9ccd68d4307
   languageName: node
   linkType: hard
 
