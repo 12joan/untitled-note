@@ -6128,7 +6128,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
-    react-router-dom: "npm:7.18.2"
+    react-router-dom: "npm:7.18.3"
     react-textarea-autosize: "npm:^8.4.1"
     runes: "npm:^0.4.3"
     sass: "npm:^1.103.1"
@@ -7020,21 +7020,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:7.18.2":
-  version: 7.18.2
-  resolution: "react-router-dom@npm:7.18.2"
+"react-router-dom@npm:7.18.3":
+  version: 7.18.3
+  resolution: "react-router-dom@npm:7.18.3"
   dependencies:
-    react-router: "npm:7.18.2"
+    react-router: "npm:7.18.3"
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10/354a7af84963fe7acaf32c583f180b636b5071d9cf1f83090dba8ff2616ac65bba82aaf8e3cfa425d2a523a3318df3cfcf526462a154211c8abbf7ee70045a07
+  checksum: 10/910592ba98ab777e3fd0f05d80c5e4ad41cc372655f14d8fee84fa25f473d5f92a3f50fdd039db16aa4dce63571faa27fff0401683da0a620e42146dacc99dfe
   languageName: node
   linkType: hard
 
-"react-router@npm:7.18.2":
-  version: 7.18.2
-  resolution: "react-router@npm:7.18.2"
+"react-router@npm:7.18.3":
+  version: 7.18.3
+  resolution: "react-router@npm:7.18.3"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -7044,7 +7044,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10/e68aa655e5ec2d4143f66ab3b745c50b8588152d89e4ec66c099625357c6a16dfaee5a7e963a9f4f9fbe0adaa37cf9731d63a108a2c4abfaa00124a06da16c24
+  checksum: 10/b7393d5f5b044cda9c922b3f96629abc442d6b1b85224c28d4aa292cda45ef4cf26792b613f2bc0742701da3ddc77dd0d4a181e7e5b85d1abd6982c9eba278f2
   languageName: node
   linkType: hard
 
