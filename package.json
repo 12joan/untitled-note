@@ -92,7 +92,7 @@
     "postcss": "^8.5.23",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^17.0.0",
-    "postcss-preset-env": "^11.5.0",
+    "postcss-preset-env": "^11.5.1",
     "prettier": "^3.9.6",
     "sass": "^1.103.1",
     "scriptjs": "^2.5.9",
