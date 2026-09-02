@@ -77,7 +77,7 @@
     "@playwright/test": "^1.62.1",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4",
-    "@types/node": "^18.17.14",
+    "@types/node": "^26.4.1",
     "@types/rails__actioncable": "^8.0.3",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^19.2.5",
