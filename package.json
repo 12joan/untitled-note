@@ -79,7 +79,7 @@
     "@types/lodash": "^4",
     "@types/node": "^18.17.14",
     "@types/rails__actioncable": "^8.0.3",
-    "@types/react": "^18.0.35",
+    "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/runes": "^0.4.3",
     "@vitejs/plugin-react": "^6.1.1",
