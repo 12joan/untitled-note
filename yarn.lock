@@ -2562,12 +2562,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19.2.7":
-  version: 19.2.7
-  resolution: "@types/react-dom@npm:19.2.7"
+"@types/react-dom@npm:^19.3.0":
+  version: 19.3.0
+  resolution: "@types/react-dom@npm:19.3.0"
   peerDependencies:
-    "@types/react": ^19.2.0
-  checksum: 10/84079ed3b5470b7fafe4478c9180c2b0f19f8c5aebe666091e1ee5bc15464acb248909553769bd338de5f508afe96fec353997aed0457bb0d3a1e6246bcafcb8
+    "@types/react": ^19.3.0
+  checksum: 10/e24ee9948dc3a6c81e8aa4acf120a1194d3a3b68e97205b1e5e24e087b9f0c0c2e40b128fd258663ccb5889c852aeee558c0daa3255c3d82e0fc1c5d64c4b69a
   languageName: node
   linkType: hard
 
@@ -6066,7 +6066,7 @@ __metadata:
     "@types/node": "npm:^18.17.14"
     "@types/rails__actioncable": "npm:^8.0.3"
     "@types/react": "npm:^18.0.35"
-    "@types/react-dom": "npm:^19.2.7"
+    "@types/react-dom": "npm:^19.3.0"
     "@types/runes": "npm:^0.4.3"
     "@udecode/plate-autoformat": "npm:^36.5.6"
     "@udecode/plate-basic-marks": "npm:^36.0.0"
