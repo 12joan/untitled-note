@@ -62,7 +62,7 @@ services:
       test: '/usr/bin/pg_isready -U postgres'
 
   minio:
-    image: minio/minio
+    image: ghcr.io/coollabsio/minio:latest@sha256:7520deab26e83d3a36231bb449f86548a4b9ab2507eb388f87d1f70ef5e8c1f3
     command: 'server /data'
     environment:
       MINIO_ROOT_USER: root
