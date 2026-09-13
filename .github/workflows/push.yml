@@ -61,15 +61,11 @@ jobs:
     name: 'Deploy staging'
     needs: [docker, docker_dev, typecheck, lint, frontend_tests]
     if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-
+    uses: 12joan/build-and-push-image/.github/workflows/build-and-push-image.yml@main
+    with:
+      tags: ghcr.io/12joan/untitled-note:staging
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
     concurrency:
       group: deploy-staging
       cancel-in-progress: true
-
-    steps:
-      - uses: actions/checkout@v6
-      - uses: 12joan/build-and-push-image@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tags: ghcr.io/12joan/untitled-note:staging
