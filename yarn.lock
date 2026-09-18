@@ -6128,7 +6128,7 @@ __metadata:
     typescript: "npm:^5.9.3"
     typescript-language-server: "npm:^6.0.0"
     vite: "npm:^8.3.0"
-    vite-plugin-ruby: "npm:^5.2.3"
+    vite-plugin-ruby: "npm:^5.2.4"
   languageName: unknown
   linkType: soft
 
@@ -8143,15 +8143,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-ruby@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "vite-plugin-ruby@npm:5.2.3"
+"vite-plugin-ruby@npm:^5.2.4":
+  version: 5.2.4
+  resolution: "vite-plugin-ruby@npm:5.2.4"
   dependencies:
     obug: "npm:^2.0"
     tinyglobby: "npm:^0.2.12"
   peerDependencies:
     vite: ">=5.0.0"
-  checksum: 10/7f6b213d7ed3157e393987ec6103c6dbfc968e0f896cc12e6709acc394c0f8c9d3a2d9d584955e1e6797deec8062a064d2ef7569ec163180c81a02fdb95ef885
+  checksum: 10/1879eaf363cbe085a5a01802f6fd0ef7bda54e34567ea31a0104b31ed429c03cead6cb1b6596852eef9b991bbcd562474988be990fba921df81241831e903e00
   languageName: node
   linkType: hard
 
