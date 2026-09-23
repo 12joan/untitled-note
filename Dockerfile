@@ -1,5 +1,5 @@
 FROM node:24.21.0-alpine AS node
-FROM ruby:4.0.5-alpine AS builder
+FROM ruby:4.0.7-alpine AS builder
 COPY --from=node /usr/lib /usr/lib
 COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
@@ -14,7 +14,7 @@ RUN yarn install --immutable
 COPY . .
 RUN bin/precompile.sh
 
-FROM ruby:4.0.5-alpine
+FROM ruby:4.0.7-alpine
 RUN apk add --update --no-cache build-base tzdata postgresql-dev curl gcompat yaml yaml-dev libffi-dev
 WORKDIR /app
 COPY . .
