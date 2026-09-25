@@ -2206,10 +2206,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/actioncable@npm:^7.2.302":
-  version: 7.2.302
-  resolution: "@rails/actioncable@npm:7.2.302"
-  checksum: 10/b20cc1ed506781fbf63fffa7b304ba73750ad19d16f53818fd6c8040b8df20d2cbf67bbf7678260195927b62f225a39be03353880dbc13ba98041b4b9830bc6c
+"@rails/actioncable@npm:^8.1.400":
+  version: 8.1.400
+  resolution: "@rails/actioncable@npm:8.1.400"
+  checksum: 10/bd3354998573fc61377dfa60075b8b89f5769c832b06470576e5cb246c7a89e5e6a0e6ba1c19e976f9ac2ae0eb5678a87822feb385a370743bf765e33cf945fd
   languageName: node
   linkType: hard
 
@@ -6059,7 +6059,7 @@ __metadata:
     "@headlessui/react": "npm:^2.2.10"
     "@playwright/test": "npm:^1.63.0"
     "@popperjs/core": "npm:^2.11.6"
-    "@rails/actioncable": "npm:^7.2.302"
+    "@rails/actioncable": "npm:^8.1.400"
     "@tippyjs/react": "npm:^4.2.6"
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3.0.6"
