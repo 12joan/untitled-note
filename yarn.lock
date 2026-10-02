@@ -3766,13 +3766,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compressorjs@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "compressorjs@npm:1.3.0"
+"compressorjs@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "compressorjs@npm:1.4.0"
   dependencies:
     blueimp-canvas-to-blob: "npm:^3.29.0"
     is-blob: "npm:^2.1.0"
-  checksum: 10/dced8c45c21ca69f893b12363e5f9f65d7c85bcbd097060d8a25f8f949c5b510084c2724c06b537a274f2e5bea78b1ea1b8ac4c6476e1f8fc1891439390bda60
+  checksum: 10/0996776c257d8735a9cf2ee2a736d5e842c9ecb96b9187ad9b9837b54c0089a265d63b72b8b903f7e23432fcc894010aeac1f019add029ae3003be9ac8cc71a2
   languageName: node
   linkType: hard
 
@@ -6089,7 +6089,7 @@ __metadata:
     autoprefixer: "npm:^10.4.14"
     axios: "npm:^1.20.0"
     comlink: "npm:^4.4.2"
-    compressorjs: "npm:^1.3.0"
+    compressorjs: "npm:^1.4.0"
     concurrently: "npm:^10.0.5"
     css-has-pseudo: "npm:^8.0.1"
     emoji-mart: "npm:^5.5.2"
