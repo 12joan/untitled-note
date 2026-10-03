@@ -73,6 +73,7 @@ group :test do
 
   gem 'factory_bot_rails', '~> 6.2'
 
+  gem 'minitest', '~> 5'
   gem 'minitest-stub_any_instance'
   gem 'minitest-stub-const'
 end
