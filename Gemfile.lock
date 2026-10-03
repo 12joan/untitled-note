@@ -398,6 +398,7 @@ DEPENDENCIES
   devise (~> 5.0)
   factory_bot_rails (~> 6.2)
   faker
+  json (~> 2.21)
   listen (~> 3.3)
   minitest (~> 5)
   minitest-stub-const
