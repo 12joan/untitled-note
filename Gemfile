@@ -5,7 +5,7 @@ gem 'rails', '~> 8.1.3.1'
 
 # Sprockets is now an optional dependency of Rails
 # TODO: Check if Sprockets can be removed
-gem 'sprockets-rails', '~> 3.4.2'
+gem 'sprockets-rails', '~> 3.5.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
