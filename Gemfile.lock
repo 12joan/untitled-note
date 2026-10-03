@@ -399,6 +399,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   faker
   listen (~> 3.3)
+  minitest (~> 5)
   minitest-stub-const
   minitest-stub_any_instance
   pg (~> 1.1)
