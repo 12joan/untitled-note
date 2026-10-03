@@ -38,7 +38,7 @@ gem 'rack_authorised_proxy'
 gem 'typesense', '~> 0.14.1'
 
 # Use Clockwork for recurring events
-gem 'clockwork', '~> 2.0'
+gem 'clockwork', '~> 4.0'
 
 # Use Devise for authentication
 gem 'devise', '~> 5.0'
