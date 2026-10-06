@@ -1169,12 +1169,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/selector-specificity@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@csstools/selector-specificity@npm:6.0.0"
+"@csstools/selector-specificity@npm:^6.0.0, @csstools/selector-specificity@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@csstools/selector-specificity@npm:6.0.1"
   peerDependencies:
     postcss-selector-parser: ^7.1.1
-  checksum: 10/56790acc910b516df87bf6fd43389a88da1922ffb004de4d6099559ece48c88a8185e29439c570d1102a414bbecbb34e33f1aeace76a63e9f72e0794517cf7d7
+  checksum: 10/1dfe1af0a272b7f63779b70e5ee89b5c47ed6241cb2bf105b7925ce9b219c0d597f5975d614255d1f4db1e0cc31298cad1dbe59ff35c2dc8eb9a0c5cf470d2d4
   languageName: node
   linkType: hard
 
@@ -3901,16 +3901,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-has-pseudo@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "css-has-pseudo@npm:8.0.1"
+"css-has-pseudo@npm:^8.0.1, css-has-pseudo@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "css-has-pseudo@npm:8.0.2"
   dependencies:
-    "@csstools/selector-specificity": "npm:^6.0.0"
+    "@csstools/selector-specificity": "npm:^6.0.1"
     postcss-selector-parser: "npm:^7.1.1"
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     postcss: ^8.4
-  checksum: 10/7dbe9f316140e52482c8ce7701a83055608130bdc9d82bda71c0fd12dcb088406cc74a661082eb2188aee3917cebd9bcf3b25a386049fbd03bfb8bfb17b162c4
+  checksum: 10/0fa6907a41a07041bf891eeba85ac88838cfbcd45c6418da1d6ac779a7c77c2bdcd951a1615ef099cbb1d55e87a5b921c6c5ce77dbfa2cb6d45c08dabbbc7ac8
   languageName: node
   linkType: hard
 
@@ -6128,7 +6128,7 @@ __metadata:
     comlink: "npm:^4.4.2"
     compressorjs: "npm:^1.4.0"
     concurrently: "npm:^10.0.5"
-    css-has-pseudo: "npm:^8.0.1"
+    css-has-pseudo: "npm:^8.0.2"
     emoji-mart: "npm:^5.5.2"
     esbuild: "npm:^0.28.2"
     human-readable: "npm:^0.2.1"
