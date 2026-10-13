@@ -6156,7 +6156,7 @@ __metadata:
     scriptjs: "npm:^2.5.9"
     slate: "npm:^0.103.0"
     slate-history: "npm:^0.100.0"
-    slate-hyperscript: "npm:^0.100.0"
+    slate-hyperscript: "npm:^0.133.3"
     slate-react: "npm:^0.106.0"
     string-comparison: "npm:^1.3.0"
     tailwind-merge: "npm:^3.7.0"
@@ -7457,14 +7457,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate-hyperscript@npm:^0.100.0":
-  version: 0.100.0
-  resolution: "slate-hyperscript@npm:0.100.0"
-  dependencies:
-    is-plain-object: "npm:^5.0.0"
+"slate-hyperscript@npm:^0.133.3":
+  version: 0.133.3
+  resolution: "slate-hyperscript@npm:0.133.3"
   peerDependencies:
-    slate: ">=0.65.3"
-  checksum: 10/4ec39c04675b89db313c102dc19de0351aedd666d5e6ca37b6aa4850ef547fe849cc01aae4db6304c86a1db61aa1b428717fade59e349cf3fdd301bf88648ec6
+    slate: ">=0.114.3"
+  checksum: 10/0f79ec5ba84497bbb2b25d604615d3000b35fc423ac72d7ed9e5991b552e5017f453c96fa61a2eb533d39afaef5562e583f83efa56f6b454d0d2e0d2aa4384df
   languageName: node
   linkType: hard
 
