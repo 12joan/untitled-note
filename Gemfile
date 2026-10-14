@@ -47,7 +47,7 @@ gem 'devise', '~> 5.0'
 gem 'redcarpet', '~> 3.6'
 
 # Pin JSON to prevent breaking changes in v3
-gem 'json', '~> 2.21'
+gem 'json', '~> 3.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
