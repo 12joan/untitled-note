@@ -163,7 +163,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.21.2)
+    json (3.1.0)
     listen (3.10.1)
       logger
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -397,7 +397,7 @@ DEPENDENCIES
   devise (~> 5.0)
   factory_bot_rails (~> 6.2)
   faker
-  json (~> 2.21)
+  json (~> 3.1)
   listen (~> 3.3)
   minitest (~> 5)
   minitest-stub-const
