@@ -91,7 +91,7 @@
     "jest-util": "^30.0.5",
     "postcss": "^8.5.23",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-import": "^17.0.0",
+    "postcss-import": "^17.0.1",
     "postcss-preset-env": "^11.6.1",
     "prettier": "^3.9.10",
     "sass": "^1.105.1",
