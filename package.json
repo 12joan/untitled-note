@@ -101,7 +101,7 @@
     "typescript": "^5.9.3",
     "typescript-language-server": "^6.0.2",
     "vite": "^8.3.4",
-    "vite-plugin-ruby": "^5.2.5"
+    "vite-plugin-ruby": "^5.2.6"
   },
   "packageManager": "yarn@4.5.2",
   "resolutions": {
