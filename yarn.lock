@@ -6155,7 +6155,7 @@ __metadata:
     scheduler: "npm:^0.28.0"
     scriptjs: "npm:^2.5.9"
     slate: "npm:^0.103.0"
-    slate-history: "npm:^0.100.0"
+    slate-history: "npm:^0.144.0"
     slate-hyperscript: "npm:^0.100.0"
     slate-react: "npm:^0.106.0"
     string-comparison: "npm:^1.3.0"
@@ -7446,14 +7446,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slate-history@npm:^0.100.0":
-  version: 0.100.0
-  resolution: "slate-history@npm:0.100.0"
-  dependencies:
-    is-plain-object: "npm:^5.0.0"
+"slate-history@npm:^0.144.0":
+  version: 0.144.0
+  resolution: "slate-history@npm:0.144.0"
   peerDependencies:
-    slate: ">=0.65.3"
-  checksum: 10/a751a9e4a227b28e861b4fc94e1faa2fedb98356874bee75b45791f916a14be0845b4a6b36530b728db59307121b61f18fb4963dcb2b548b6bde924335cca9f2
+    slate: ">=0.114.3"
+  checksum: 10/9da79306259f11e5f4c2a43b3b6373d81af3639cf36ca4579447af5fbe8622d0b9ea383b90567fd0537a9d4b46d42aacebf03050853d745f6d98badec80eb94b
   languageName: node
   linkType: hard
 
