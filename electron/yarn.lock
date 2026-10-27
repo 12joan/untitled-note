@@ -2083,9 +2083,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^43.7.6":
-  version: 43.7.6
-  resolution: "electron@npm:43.7.6"
+"electron@npm:^43.8.1":
+  version: 43.8.1
+  resolution: "electron@npm:43.8.1"
   dependencies:
     "@electron-internal/extract-zip": "npm:^1.0.1"
     "@electron/get": "npm:^5.0.0"
@@ -2093,7 +2093,7 @@ __metadata:
   bin:
     electron: cli.js
     install-electron: install.js
-  checksum: 10/f9cd51e73f640ab1ce902ad4fa2976722bee857463cfe5529ab6bf0f9f97340183c86444a8a06bffaddbd0a00dc60b791f9c4488997a906753f210016d850fdf
+  checksum: 10/8f3692572d4e6c208ce09372b553e7d502cf7a82d398503eb71fbfa58d6110739ad08f81e2e8b10759bbdcf1d3e11691853833171a887fd22dbd20d8b96d5a75
   languageName: node
   linkType: hard
 
@@ -3733,7 +3733,7 @@ __metadata:
     "@electron-forge/maker-squirrel": "npm:^7.11.2"
     "@electron-forge/maker-zip": "npm:^7.11.2"
     "@electron-forge/publisher-github": "npm:^7.11.2"
-    electron: "npm:^43.7.6"
+    electron: "npm:^43.8.1"
     electron-context-menu: "npm:^4.1.2"
     electron-squirrel-startup: "npm:^1.0.1"
     update-electron-app: "npm:^3.3.0"
