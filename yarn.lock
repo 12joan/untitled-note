@@ -6151,7 +6151,7 @@ __metadata:
     react-router-dom: "npm:7.18.5"
     react-textarea-autosize: "npm:^8.4.1"
     runes: "npm:^0.4.3"
-    sass: "npm:^1.107.0"
+    sass: "npm:^1.107.1"
     scheduler: "npm:^0.28.0"
     scriptjs: "npm:^2.5.9"
     slate: "npm:^0.103.0"
@@ -7328,9 +7328,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.107.0":
-  version: 1.107.0
-  resolution: "sass@npm:1.107.0"
+"sass@npm:^1.107.1":
+  version: 1.107.1
+  resolution: "sass@npm:1.107.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -7341,7 +7341,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/29df4f6e4c4fdf971fafe3d76d0a8d958b85847d6f63ff62caecf5a2babaf25ca5fe6729a5068882fc9bb9ed83d17048a38a4076d7885f8bd94179947affb0f9
+  checksum: 10/d6799e29c66f223462dadf06366888f2c6320d30ea58028ed7861fd3edbbdfece55f39b75fe99ffa1b4c5531950632981053fbd7b29ddfec5505d4057a22d70a
   languageName: node
   linkType: hard
 
