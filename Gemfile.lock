@@ -183,7 +183,9 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.27.0)
+    minitest (6.1.0)
+      drb (~> 2.0)
+      prism (>= 1.5, < 3)
     minitest-stub-const (0.6)
     minitest-stub_any_instance (1.0.3)
     msgpack (1.8.5)
@@ -407,7 +409,7 @@ DEPENDENCIES
   faker
   json (~> 3.1)
   listen (~> 3.3)
-  minitest (~> 5)
+  minitest (~> 6)
   minitest-stub-const
   minitest-stub_any_instance
   pg (~> 1.1)
