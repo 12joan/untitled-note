@@ -84,7 +84,7 @@
     "@types/runes": "^0.4.3",
     "@vitejs/plugin-react": "^6.2.1",
     "autoprefixer": "^10.4.14",
-    "concurrently": "^10.0.6",
+    "concurrently": "^10.0.7",
     "css-has-pseudo": "^8.0.2",
     "esbuild": "^0.28.2",
     "jest": "^30.5.2",
