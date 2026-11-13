@@ -35,7 +35,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'rack_authorised_proxy'
 
 # Use Typesense for search
-gem 'typesense', '~> 0.14.1'
+gem 'typesense', '~> 5.1.0'
 
 # Use Clockwork for recurring events
 gem 'clockwork', '~> 4.0'
